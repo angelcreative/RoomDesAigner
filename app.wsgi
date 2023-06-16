@@ -1,10 +1,7 @@
-import sys
-from os.path import abspath, dirname
+from app import app
 
-# Add the directory containing the app.py file to the system path
-sys.path.insert(0, abspath(dirname(__file__)))
+# Create an instance of the Flask application
+application = app
 
-# Import the Flask application object from app.py
-from app import app as application
-
-
+if __name__ == "__main__":
+    application.run()
