@@ -1,4 +1,4 @@
-from app import app
+from app.py import app
 
 # Create an instance of the Flask application
 application = app
