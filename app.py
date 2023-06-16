@@ -22,4 +22,3 @@ def generate_images():
 
 if __name__ == '__main__':
     app.run()
-
