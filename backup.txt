@@ -1,0 +1,1172 @@
+ // Function to handle the form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+      uploadImage();
+    }
+
+    // Function to upload the image
+    function uploadImage() {
+      const fileInput = document.getElementById("imageDisplayUrl");
+      const file = fileInput.files[0];
+
+      if (file) {
+        // Image file is selected
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
+        const uploadUrl = "https://api.imgbb.com/1/upload";
+
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+
+        fetch(uploadUrl, {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Image uploaded successfully
+              const imageUrl = data.data.medium.url; // Extract the medium display URL
+              generateJSON(imageUrl);
+            } else {
+              // Image upload failed
+              console.error("Image upload failed:", data.error.message);
+              generateJSON();
+            }
+          })
+          .catch(error => {
+            console.error("Error uploading image:", error);
+            generateJSON();
+          });
+      } else {
+        // Image file is not selected
+        generateJSON();
+      }
+    }
+
+    // Function to generate the JSON content and display in a modal window
+    function generateJSON(imageUrl = "") {
+      const promptInit = `${imageUrl}, Editorial-photography::1 Interior-design::1 3D-render::1`;
+      const selectedValues = {
+        photography_level_shot: document.getElementById("photography_level_shot").value,
+        magazine: document.getElementById("magazine").value,
+        design_style: document.getElementById("design_style").value,
+        vendors: document.getElementById("vendors").value,
+        color_palette: document.getElementById("color_palette").value,
+        room_shape: document.getElementById("room_shape").value,
+        size: document.getElementById("size").value,
+        home_area: document.getElementById("home_area").value,
+        child_room: document.getElementById("child_room").value,
+        illumination: document.getElementById("illumination").value,
+        doors: document.getElementById("doors").value,
+        windows: document.getElementById("windows").value,
+        floors: document.getElementById("floors").value,
+        roofs: document.getElementById("roofs").value,
+        roof_height: document.getElementById("roof_height").value,
+        aspectRatio: document.getElementById("aspectRatio").value,
+        stylizeRange: document.getElementById("stylizeRange").value,
+        imageWeight: document.getElementById("imageWeight").value,
+        imageUrl: imageUrl // Add the image URL to the selected values
+      };
+
+      const promptEnd = `--no illustration ${selectedValues.aspectRatio} ${selectedValues.stylizeRange}`;
+
+      const promptText = `INSTRUCTIONS:\nWrite a text-to-image prompt using interior design and architectural language in no more than 200 words based on this data:\n\nMANDATORY AT THE BEGINNING:\n${promptInit}\n\nPROMPT FROM HERE:\n${JSON.stringify(
+        selectedValues,
+        null,
+        2
+      )}\n\nMANDATORY AT THE END:\n${promptEnd}`;
+
+      showModal(promptText);
+    }
+
+    // Function to display the prompt text in a modal window
+    function showModal(promptText) {
+      const modal = document.getElementById("myModal");
+      const contentElement = document.getElementById("modalContent");
+      contentElement.textContent = promptText;
+      modal.style.display = "block";
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      const modal = document.getElementById("myModal");
+      modal.style.display = "none";
+    }
+
+  // Function to copy the content to the clipboard
+function copyToClipboard() {
+  const preElement = document.getElementById("modalContent");
+  const text = preElement.textContent;
+
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      // Update button text to "Copied 🦄"
+      const copyButton = document.getElementById("copyButton");
+      copyButton.textContent = "Copied 🦄";
+
+      // Reset button text to "Copy" after a delay
+      setTimeout(() => {
+        copyButton.textContent = "Copy";
+      }, 2000);
+    })
+    .catch(error => {
+      console.error("Error copying to clipboard:", error);
+    });
+}
+
+    // Event listener for form submission
+    const form = document.getElementById("imageUploadForm");
+    form.addEventListener("submit", handleSubmit);
+
+    // Close modal when clicking on the "X" symbol
+    const closeBtn = document.getElementsByClassName("close")[0];
+    closeBtn.addEventListener("click", closeModal);
+
+
+
+===
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Design Interiors</title>
+  <link rel="apple-touch-icon" sizes="57x57" href="img/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="img/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="img/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="img/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="img/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="img/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="style.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+
+<body class="gradient-background ">
+  <!-- Add this element to your HTML -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h1>Your prompt base was generated!</h1>
+    <p>Copy the code you find below to chatGPT to get a text-to-image prompt. The prompt is intended to be used on Midjourney, but you can try services as Typex.ai</p>
+
+    <pre id="modalContent"></pre>
+    <!-- HTML -->
+    <button id="copyButton" class="buttonExt" type="submit" onclick="copyToClipboard()">Copy code to clipboard</button>
+
+  </div>
+</div>
+
+<div id="loader">Loading...</div>
+
+  <!-- ID STYLES -->
+  <!-- Add the necessary HTML structure for the modal window -->
+  <fieldset>
+    <h1> <span class="unicorn">🦄</span>Interior Design JSON generator code for text-to-image prompt base</h1>
+
+<form id="imageUploadForm">
+
+      <div class="group">
+        <h4>Upload your sketch, picture, ...</h4>
+        
+  <input type="file" id="imageDisplayUrl" accept="image/*" />
+               <br> <sub>JPG, PNG, GIF formats allowed.</sub>
+        <sub>Upload and image is not mandatory</sub>
+
+        <h4>Photography shot</h4>
+        <!-- ID LEVEL SHOT-->
+        <select id="photography_level_shot">
+          <option value="">Select a photography level shot</option>
+          <option value="Eye Level"
+            title="The camera is positioned at the same level as the subject, resulting in a neutral and straightforward perspective.">
+            Eye Level</option>
+          <option value="High Angle"
+            title="The camera is positioned above the subject, looking downward. This angle can create a sense of vulnerability or diminish the subject's importance.">
+            High Angle</option>
+          <option value="Low Angle"
+            title="The camera is positioned below the subject, looking upward. This angle can make the subject appear more powerful, dominant, or heroic.">
+            Low Angle</option>
+          <option value="Bird's Eye View"
+            title="The camera is positioned directly overhead, capturing a scene from a top-down perspective. This angle provides an overview and can be useful for capturing patterns or symmetrical compositions.">
+            Bird's Eye View</option>
+          <option value="Worm's Eye View"
+            title="The camera is positioned on or near the ground, looking upward. This angle can create a sense of awe, exaggerate height, or highlight architectural details.">
+            Worm's Eye View</option>
+          <option value="Dutch Angle"
+            title="The camera is intentionally tilted to create a diagonal or slanted composition. This angle is often used to evoke a sense of unease, disorientation, or chaos.">
+            Dutch Angle</option>
+          <option value="Oblique Angle"
+            title="The camera is positioned at an angle between eye level and a true Dutch angle. It adds a dynamic and diagonal perspective to the image.">
+            Oblique Angle</option>
+          <option value="Flat Lay"
+            title="The camera is positioned directly above the subject, capturing it from a horizontal and flat perspective. This angle is commonly used for product photography or capturing arrangements of objects.">
+            Flat Lay</option>
+          <option value="Split-Level"
+            title="The camera is partially submerged in water, capturing both the underwater and above-water scenes simultaneously. This angle is popular in underwater photography.">
+            Split-Level</option>
+          <option value="Over-the-Shoulder"
+            title="The camera is positioned behind a subject, capturing the scene from their perspective. This angle is commonly used for portraits or to create a sense of being immersed in the subject's point of view.">
+            Over-the-Shoulder</option>
+
+        </select>
+        <!-- ID MAGAZINES -->
+
+        <h4>Design influence</h4>
+
+        <select id="magazine">
+          <option value="">Select an interior design magazine</option>
+          <option value="Architectural Digest"
+            title="Architectural Digest is a prestigious international magazine that showcases luxurious homes, architectural marvels, and innovative interior design.">
+            Architectural Digest</option>
+          <option value="Elle Decor"
+            title="Elle Decor is a leading interior design magazine that offers inspiration and ideas for stylish living spaces. It covers a wide range of design styles, from modern to traditional, and provides tips on home decoration, furniture, color schemes, and more.">
+            Elle Decor</option>
+          <option value="Houzz" title="Houzz serves as a comprehensive online resource for home design and improvement, offering inspiration, information, and a platform for connecting with professionals and fellow enthusiasts.">Houzz</option>
+          <option value="House Beautiful"
+            title="House Beautiful is a classic interior design magazine that focuses on creating beautiful and functional living spaces. It features practical advice, design ideas, and expert tips on home decor, renovation, and DIY projects.">
+            House Beautiful</option>
+          <option value="Dwell"
+            title="Dwell is a magazine that celebrates modern architecture and design. It showcases innovative and sustainable homes, cutting-edge furniture, and contemporary interior design concepts.">
+            Dwell</option>
+          <option value="Interior Design"
+            title="Interior Design is a prominent industry magazine that showcases the latest trends, projects, and innovations in interior design. It features stunning visuals, profiles of renowned designers, and coverage of residential, commercial, and hospitality spaces.">
+            Interior Design</option>
+          <option value="Veranda"
+            title="Veranda is a magazine that focuses on elegant and sophisticated interior design. It highlights luxurious homes, timeless aesthetics, and refined decorating ideas. Veranda also covers outdoor living spaces, travel, and entertaining.">
+            Veranda</option>
+          <option value="Wallpaper*"
+            title="Wallpaper* is a global design magazine that covers not only interior design but also architecture, fashion, art, and lifestyle. It showcases cutting-edge designs, exclusive interviews with designers, and unique perspectives on contemporary culture.">
+            Wallpaper*</option>
+          <option value="AD España"
+            title="AD España is the Spanish edition of Architectural Digest. It features exceptional Spanish and international design projects, interviews with renowned designers, and trends in architecture and interior design.">
+            AD España</option>
+          <option value="World of Interiors"
+            title="World of Interiors is a prestigious British magazine that explores the world of interior design with an emphasis on creativity, craftsmanship, and unique design objects. It presents eclectic interiors, unusual homes, and rare decorative pieces.">
+            World of Interiors</option>
+          <option value="Luxe Interiors + Design"
+            title="Luxe Interiors + Design is a high-end magazine that showcases luxurious interiors, high-quality craftsmanship, and sophisticated design. It covers residential and commercial projects, offering insights into the world of luxury design.">
+            Luxe Interiors + Design</option>
+          <option value="House & Garden"
+            title="House & Garden is a prestigious magazine that combines interior design, gardening, and lifestyle. It features elegant homes, beautiful gardens, and expert advice on interior decoration, landscaping, and entertaining.">
+            House & Garden</option>
+          <option value="Traditional Home"
+            title="Traditional Home celebrates classic and timeless design. It showcases traditional and transitional interiors, highlighting refined furnishings, elegant architecture, and enduring design elements.">
+            Traditional Home</option>
+          <option value="Interior Design Today"
+            title="Interior Design Today is a UK-based magazine that focuses on contemporary interior design trends, products, and projects. It provides industry insights, interviews with leading designers, and inspiration for modern living spaces.">
+            Interior Design Today</option>
+          <option value="Home & Design"
+            title="Home & Design is a regional magazine that highlights exceptional homes and design projects in specific areas. It showcases local architecture, interior design, and landscape design, providing insights into regional design trends and talents.">
+            Home & Design</option>
+          <option value="Period Living"
+            title="Period Living is a magazine dedicated to traditional homes and interiors. It features historic houses, restoration projects, and design ideas inspired by different architectural periods and styles.">
+            Period Living</option>
+          <option value="Better Homes & Gardens"
+            title="Better Homes & Gardens is a popular magazine that offers practical advice, DIY projects, and affordable design solutions for creating beautiful and functional homes. It covers a wide range of topics, including home improvement, gardening, and entertaining.">
+            Better Homes & Gardens</option>
+          <option value="Real Living"
+            title="Real Living is an Australian magazine that focuses on contemporary and affordable interior design. It provides achievable design ideas, budget-friendly tips, and inspiring home tours for modern living.">
+            Real Living</option>
+          <option value="Veranda Interiors"
+            title="Veranda Interiors is a digital publication by Veranda magazine, dedicated to showcasing exceptional interior design projects. It offers exclusive access to designer portfolios, insider tips, and in-depth features on luxurious interiors.">
+            Veranda Interiors</option>
+          <option value="Beautiful Kitchens & Baths"
+            title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces.">
+            Beautiful Kitchens & Baths</option>
+          <option value="Belle"
+            title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects.">
+            Belle</option>
+        </select>
+
+
+        <!-- ID STYLES-->
+        <select id="design_style">
+          <option value="">Select a design style</option>
+          <option value="Scandinavian"
+            title="Scandinavian design emphasizes simplicity, minimalism, and functionality. It features clean lines, natural materials, light colors, and an overall sense of warmth.">
+            Scandinavian</option>
+          <option value="Modern"
+            title="Modern design is characterized by a sleek and clean aesthetic. It focuses on simplicity, open spaces, and the use of industrial materials such as metal and glass.">
+            Modern</option>
+          <option value="Contemporary"
+            title="Contemporar oki design refers to the current design trends. It often incorporates a mix of different styles and emphasizes comfort, bold colors, and unconventional shapes.">
+            Contemporary</option>
+          <option value="Industrial"
+            title="Industrial design draws inspiration from old factories and industrial spaces. It showcases exposed brick walls, metal accents, concrete floors, and a rough, unfinished look.">
+            Industrial</option>
+          <option value="Mid-Century Modern"
+            title="This style emerged in the mid-20th century and features clean lines, organic shapes, and a blend of simplicity and functionality. It often incorporates retro furniture and vibrant colors.">
+            Mid-Century Modern</option>
+          <option value="Traditional"
+            title="Traditional design is influenced by classic European styles. It includes rich and ornate details, formal furniture arrangements, elegant fabrics, and a sense of symmetry.">
+            Traditional</option>
+          <option value="Rustic"
+            title="Rustic design is inspired by nature and rural elements. It uses raw and natural materials like wood and stone, featuring warm colors, textured surfaces, and a cozy, welcoming atmosphere.">
+            Rustic</option>
+          <option value="Bohemian"
+            title="Bohemian design is eclectic and free-spirited. It incorporates vibrant colors, patterns, and textures from around the world, with a mix of vintage and handcrafted items.">
+            Bohemian</option>
+          <option value="Coastal"
+            title="Coastal design brings the relaxed vibe of the beach into the home. It often features light and breezy colors, natural materials like wicker and rattan, and nautical elements.">
+            Coastal</option>
+          <option value="Art Deco"
+            title="Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet. It exudes elegance and glamour.">
+            Art Deco</option>
+          <option value="Minimalist"
+            title="Minimalist design follows the principle of 'less is more.' It focuses on simplicity, clean lines, and a clutter-free environment, often with a neutral color palette.">
+            Minimalist</option>
+          <option value="Japanese"
+            title="Japanese design emphasizes simplicity, balance, and harmony. It incorporates natural materials, such as wood and bamboo, and showcases clean lines, minimal furniture, and a Zen-like atmosphere.">
+            Japanese</option>
+          <option value="Eclectic"
+            title="Eclectic design is a mix of different styles, creating a unique and personalized space. It combines elements from various periods, cultures, and aesthetics to create an eclectic and visually stimulating environment.">
+            Eclectic</option>
+          <option value="Mediterranean"
+            title="Mediterranean design takes inspiration from the coastal regions of Greece, Italy, and Spain. It incorporates warm colors, textured walls, rustic furniture, and natural materials like stone and terracotta.">
+            Mediterranean</option>
+          <option value="Victorian"
+            title="Victorian design is characterized by ornate details, intricate patterns, and a sense of opulence. It often features rich colors, heavy draperies, decorative moldings, and antique furniture.">
+            Victorian</option>
+          <option value="Art Nouveau"
+            title="Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms. It features flowing lines, floral motifs, stained glass, and decorative elements inspired by nature.">
+            Art Nouveau</option>
+          <option value="Hollywood Glam"
+            title="Hollywood Glam design embodies the glitz and glamour of the golden age of Hollywood. It includes luxurious materials like velvet and satin, bold colors, mirrored surfaces, and dramatic lighting.">
+            Hollywood Glam</option>
+          <option value="Boho Chic"
+            title="Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance. It features a mix of patterns, textures, and colors, layered textiles, vintage furniture, and global-inspired accents.">
+            Boho Chic</option>
+          <option value="Scandinavian Minimalism"
+            title="Scandinavian Minimalism is a pared-down version of Scandinavian design that emphasizes clean lines, functionality, and a minimalistic approach. It focuses on simplicity, neutral colors, uncluttered spaces, and an abundance of natural light.">
+            Scandinavian Minimalism</option>
+          <option value="Farmhouse"
+            title="Farmhouse design is inspired by rural farmhouses and evokes a cozy, rustic feel. It incorporates reclaimed wood, distressed finishes, vintage elements, open shelving, and a palette of neutral and muted colors.">
+            Farmhouse</option>
+          <option value="Retro"
+            title="Retro design draws inspiration from past decades, particularly the 1950s, 1960s, and 1970s. It features bold colors, geometric patterns, vintage furniture, and nostalgic accents to create a fun and nostalgic atmosphere.">
+            Retro</option>
+          <option value="Industrial Chic"
+            title="Industrial Chic design takes the raw and utilitarian elements of industrial design and combines them with more refined and polished touches. It includes exposed brick walls, metal accents, vintage industrial furniture, and soft textiles to balance the ruggedness with elegance.">
+            Industrial Chic</option>
+          <option value="Moroccan"
+            title="Moroccan design reflects the rich and vibrant culture of Morocco. It showcases intricate geometric patterns, vibrant colors like blues and oranges, ornate tile work, plush cushions and rugs, and decorative metal lanterns, creating an exotic and luxurious atmosphere.">
+            Moroccan</option>
+          <option value="Zen"
+            title="Zen design is inspired by Japanese aesthetics and focuses on creating a serene and tranquil space. It features natural materials, minimal clutter, clean lines, neutral colors, and an emphasis on balance and harmony to promote relaxation and mindfulness.">
+            Zen</option>
+          <option value="Shabby Chic"
+            title="Shabby Chic design embraces a vintage and worn-in look with a touch of femininity. It combines distressed furniture, floral patterns, pastel colors, and soft textures to create a romantic and charming atmosphere.">
+            Shabby Chic</option>
+          <option value="Transitional"
+            title="Transitional design strikes a balance between traditional and contemporary styles. It combines classic elements with modern touches, creating a timeless and sophisticated look. It features a mix of furniture styles, neutral colors, and subtle textures.">
+            Transitional</option>
+          <option value="Coastal Farmhouse"
+            title="Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design. It incorporates natural materials, light and airy colors, nautical accents, and vintage-inspired furniture for a laid-back and inviting atmosphere.">
+            Coastal Farmhouse</option>
+          <option value="Retro Modern"
+            title="Retro Modern design combines the nostalgia of retro style with the clean lines and simplicity of modern design. It incorporates vintage furniture pieces, bold patterns, vibrant colors, and retro-inspired accessories for a playful and nostalgic aesthetic.">
+            Retro Modern</option>
+          <option value="Tribal"
+            title="Tribal design draws inspiration from indigenous cultures around the world. It features bold patterns, tribal prints, earthy tones, natural materials like wood and rattan, and handcrafted elements to create a unique and culturally rich space.">
+            Tribal</option>
+          <option value="Mediterranean Revival"
+            title="Mediterranean Revival design is influenced by the architecture of the Mediterranean region, particularly Spain and Italy. It showcases ornate details, arched doorways, wrought iron accents, colorful tiles, and warm earthy tones for a luxurious and timeless look.">
+            Mediterranean Revival</option>
+          <option value="Artistic Industrial"
+            title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements.">
+            Artistic Industrial</option>
+          <option value="Hollywood Regency"
+            title="Hollywood Regency design captures the glamour and elegance of the Hollywood Golden Era. It features luxurious fabrics, bold colors, geometric patterns, mirrored surfaces, and ornate details to create a lavish and theatrical atmosphere.">
+            Hollywood Regency</option>
+          <option value="Global Fusion"
+            title="Global Fusion design embraces a diverse mix of cultural influences from around the world. It incorporates elements, patterns, and textures from different cultures, such as Moroccan, Indian, African, and Asian, resulting in a vibrant and eclectic space.">
+            Global Fusion</option>
+        </select>
+
+        <!-- ID VENDORS -->
+    <select id="vendors">
+          <option value="">Select a furniture vendor</option>   
+<option value="IKEA" title="Affordable and stylish furniture for home and office">IKEA - <a href="https://www.ikea.com">https://www.ikea.com</a></option>
+<option value="JYSK" title="Scandinavian-inspired furniture and home decor">JYSK - <a href="https://www.jysk.com">https://www.jysk.com</a></option>
+<option value="Ashley Furniture" title="Wide range of furniture styles for every room">Ashley Furniture - <a href="https://www.ashleyfurniture.com">https://www.ashleyfurniture.com</a></option>
+<option value="Wayfair" title="Online furniture and home decor store">Wayfair - <a href="https://www.wayfair.com">https://www.wayfair.com</a></option>
+<option value="West Elm" title="Modern furniture and home decor">West Elm - <a href="https://www.westelm.com">https://www.westelm.com</a></option>
+<option value="Crate &amp; Barrel" title="Contemporary furniture and home accessories">Crate &amp; Barrel - <a href="https://www.crateandbarrel.com">https://www.crateandbarrel.com</a></option>
+<option value="Pottery Barn" title="Classic and timeless furniture and home decor">Pottery Barn - <a href="https://www.potterybarn.com">https://www.potterybarn.com</a></option>
+<option value="Restoration Hardware" title="Luxury home furnishings and decor">Restoration Hardware - <a href="https://www.restorationhardware.com">https://www.restorationhardware.com</a></option>
+<option value="Ethan Allen" title="High-quality furniture and home accessories">Ethan Allen - <a href="https://www.ethanallen.com">https://www.ethanallen.com</a></option>
+<option value="Room &amp; Board" title="Modern and contemporary furniture for home and office">Room &amp; Board - <a href="https://www.roomandboard.com">https://www.roomandboard.com</a></option>
+<option value="Design Within Reach" title="Modern furniture and lighting designs">Design Within Reach - <a href="https://www.dwr.com">https://www.dwr.com</a></option>
+<option value="CB2" title="Modern furniture and home decor for apartments and small spaces">CB2 - <a href="https://www.cb2.com">https://www.cb2.com</a></option>
+<option value="BoConcept" title="Contemporary and Danish-designed furniture">BoConcept - <a href="https://www.boconcept.com">https://www.boconcept.com</a></option>
+<option value="Structube" title="Affordable and modern furniture">Structube - <a href="https://www.structube.com">https://www.structube.com</a></option>
+<option value="HAY" title="Modern furniture and accessories">HAY - <a href="https://www.hay.com">https://www.hay.com</a></option>
+<option value="Muuto" title="Scandinavian furniture and lighting designs">Muuto - <a href="https://www.muuto.com">https://www.muuto.com</a></option>
+<option value="Roche Bobois" title="Luxury contemporary furniture and accessories">Roche Bobois - <a href="https://www.roche-bobois.com">https://www.roche-bobois.com</a></option>
+<option value="Ligne Roset" title="Contemporary French furniture and accessories">Ligne Roset - <a href="https://www.ligne-roset.com">https://www.ligne-roset.com</a></option>
+<option value="Herman Miller" title="High-end ergonomic furniture and office solutions">Herman Miller - <a href="https://www.hermanmiller.com">https://www.hermanmiller.com</a></option>
+<option value="Knoll" title="Modern furniture and design classics">Knoll - <a href="https://www.knoll.com">https://www.knoll.com</a></option>
+<option value="Modsy" title="Virtual interior design services and curated furniture">Modsy - <a href="https://www.modsy.com">https://www.modsy.com</a></option>
+<option value="Scandinavian Designs" title="Modern and contemporary furniture inspired by Scandinavian design">Scandinavian Designs - <a href="https://www.scandinaviandesigns.com">https://www.scandinaviandesigns.com</a></option>
+<option value="Raymour &amp; Flanigan" title="Wide selection of furniture for every room">Raymour &amp; Flanigan - <a href="https://www.raymourflanigan.com">https://www.raymourflanigan.com</a></option>
+<option value="Bob's Discount Furniture" title="Affordable furniture and home decor">Bob's Discount Furniture - <a href="https://www.mybobs.com">https://www.mybobs.com</a></option>
+<option value="Havertys" title="Quality furniture and home accessories">Havertys - <a href="https://www.havertys.com">https://www.havertys.com</a></option>
+<option value="La-Z-Boy" title="Comfortable and stylish furniture">La-Z-Boy - <a href="https://www.la-z-boy.com">https://www.la-z-boy.com</a></option>
+<option value="Bernhardt Furniture" title="High-quality furniture and home decor">Bernhardt Furniture - <a href="https://www.bernhardt.com">https://www.bernhardt.com</a></option>
+<option value="HomeGoods" title="Home decor and furnishings at discounted prices">HomeGoods - <a href="https://www.homegoods.com">https://www.homegoods.com</a></option>
+<option value="AllModern" title="Modern furniture and home decor">AllModern - <a href="https://www.allmodern.com">https://www.allmodern.com</a></option>
+<option value="RH (formerly Restoration Hardware)" title="Luxury home furnishings and decor">RH (formerly Restoration Hardware) - <a href="https://www.rh.com">https://www.rh.com</a></option>
+<option value="Joybird" title="Customizable and mid-century modern furniture">Joybird - <a href="https://www.joybird.com">https://www.joybird.com</a></option>
+<option value="Article" title="Modern and Scandinavian-inspired furniture">Article - <a href="https://www.article.com">https://www.article.com</a></option>
+<option value="Nebraska Furniture Mart" title="Wide selection of furniture, flooring, and appliances">Nebraska Furniture Mart - <a href="https://www.nfm.com">https://www.nfm.com</a></option>
+<option value="Pier 1 Imports" title="Eclectic furniture and home decor">Pier 1 Imports - <a href="https://www.pier1.com">https://www.pier1.com</a></option>
+<option value="Broyhill Furniture" title="Quality furniture and home decor">Broyhill Furniture - <a href="https://www.broyhillfurniture.com">https://www.broyhillfurniture.com</a></option>
+<option value="Cymax" title="Affordable furniture and home decor">Cymax - <a href="https://www.cymax.com">https://www.cymax.com</a></option>
+<option value="Lexington Home Brands" title="Upscale furniture and home decor">Lexington Home Brands - <a href="https://www.lexington.com">https://www.lexington.com</a></option>
+</select>
+
+
+
+        
+      </div>
+
+      <div class="group">
+        <!-- ID COLOR PALETTES -->
+        <h4>Color, shape and sizes</h4>
+        <select id="color_palette">
+          <option value="">Select color palette</option>
+          <!-- Interior Design Color Palettes -->
+          <optgroup label="Interior Design Color Palettes">
+            <option value="Monochromatic"
+              title="Monochromatic: Consists of varying shades and tones of a single color. Creates a harmonious and soothing effect.">
+              Monochromatic</option>
+            <option value="Analogous"
+              title="Analogous: Combines colors that are adjacent to each other on the color wheel. Creates a sense of harmony and is pleasing to the eye.">
+              Analogous</option>
+            <option value="Complementary"
+              title="Complementary: Involves pairing colors that are opposite each other on the color wheel. Creates a high contrast and energetic look.">
+              Complementary</option>
+            <option value="Triadic"
+              title="Triadic: Utilizes three colors that are evenly spaced on the color wheel. Creates a vibrant and balanced color scheme.">
+              Triadic</option>
+            <option value="Split-Complementary"
+              title="Split-Complementary: Involves a base color paired with two colors adjacent to its complementary color. Offers a balanced yet dynamic color combination.">
+              Split-Complementary</option>
+            <option value="Tetradic"
+              title="Tetradic: Combines four colors arranged in two complementary color pairs. Provides a diverse and visually striking color scheme.">
+              Tetradic</option>
+            <option value="Neutral"
+              title="Neutral: Utilizes neutral colors such as whites, grays, and beiges. Creates a clean, timeless, and versatile look.">
+              Neutral</option>
+            <option value="Pastel"
+              title="Pastel: Involves soft and light shades of colors. Creates a delicate and soothing ambiance.">Pastel
+            </option>
+            <option value="Bold and Vibrant"
+              title="Bold and Vibrant: Uses bright and saturated colors to create a bold and energetic atmosphere. Adds a sense of excitement and drama.">
+              Bold and Vibrant</option>
+            <option value="Earthy and Natural"
+              title="Earthy and Natural: Draws inspiration from nature, featuring warm earth tones such as browns, greens, and terracotta. Creates a grounded and calming environment.">
+              Earthy and Natural</option>
+            <option value="Black and White"
+              title="Black and White: Focuses on the contrast between black and white, creating a sophisticated and timeless look.">
+              Black and White</option>
+            <option value="Metallic"
+              title="Metallic: Incorporates metallic hues like gold, silver, and copper. Adds a touch of glamour and elegance to the space.">
+              Metallic</option>
+            <option value="High-Contrast"
+              title="High-Contrast: Combines colors with a stark contrast, such as black and white or bold colors against a neutral backdrop. Creates a dramatic and visually impactful effect.">
+              High-Contrast</option>
+            <option value="Muted and Subtle"
+              title="Muted and Subtle: Features soft and desaturated colors, offering a muted and understated color palette. Creates a calming and sophisticated atmosphere.">
+              Muted and Subtle</option>
+            <option value="Coastal"
+              title="Coastal: Inspired by the seaside, it includes shades of blue, sandy beige, and white. Evokes a breezy and relaxed coastal vibe.">
+              Coastal</option>
+            <option value="Retro" title="Retro: Draws inspiration from past eras, utilizing vibrant and nostalgic colors such as mustard yellow, avocado green,
+
+ and burnt orange. Creates a fun and nostalgic ambiance.">Retro</option>
+            <option value="Industrial"
+              title="Industrial: Incorporates shades of gray, black, and metallic tones. Reflects an urban and raw aesthetic inspired by industrial materials.">
+              Industrial</option>
+            <option value="Scandinavian"
+              title="Scandinavian: Characterized by a minimalist and light color palette, featuring whites, pale grays, and natural wood tones. Creates a clean and airy Scandinavian-inspired look.">
+              Scandinavian</option>
+            <option value="Zen"
+              title="Zen: Inspired by Eastern aesthetics, it features soft, muted tones like pale greens, blush pinks, and earthy neutrals. Creates a calm and balanced atmosphere.">
+              Zen</option>
+            <option value="Desert"
+              title="Desert: Draws inspiration from arid landscapes, utilizing warm, sandy tones, terracotta, and burnt oranges. Evokes a sense of warmth and rugged beauty.">
+              Desert</option>
+            <option value="Tropical"
+              title="Tropical: Reflects the vibrant colors found in tropical settings, including bright greens, yellows, blues, and pinks. Creates a lively and tropical ambiance.">
+              Tropical</option>
+            <option value="Moody"
+              title="Moody: Features deep, rich hues like navy blues, emerald greens, and dark purples. Creates a mysterious and dramatic atmosphere.">
+              Moody</option>
+            <option value="French Country"
+              title="French Country: Incorporates soft pastels, such as pale blues, lavender, and creamy yellows, combined with rustic elements. Evokes a charming and rustic French countryside feel.">
+              French Country</option>
+            <option value="Urban Jungle"
+              title="Urban Jungle: Combines shades of green, ranging from deep emerald to bright lime, with natural wood tones. Creates a lush and vibrant indoor jungle vibe.">
+              Urban Jungle</option>
+            <option value="Beachy"
+              title="Beachy: Reflects the colors of the beach, featuring shades of aqua, sandy beige, and soft blues. Creates a relaxed and coastal atmosphere.">
+              Beachy</option>
+            <option value="Scandinavian Minimalism"
+              title="Scandinavian Minimalism: Focuses on a clean and minimal color palette, including whites, pale grays, and light woods. Creates a serene and clutter-free environment.">
+              Scandinavian Minimalism</option>
+            <option value="Romantic"
+              title="Romantic: Utilizes soft, feminine colors like blush pinks, dusty roses, and muted purples. Creates a romantic and dreamy ambiance.">
+              Romantic</option>
+            <option value="Rustic Farmhouse"
+              title="Rustic Farmhouse: Incorporates warm, earthy tones like browns, creams, and deep reds. Creates a cozy and nostalgic farmhouse feel.">
+              Rustic Farmhouse</option>
+            <option value="Art Deco"
+              title="Art Deco: Features bold and luxurious colors like deep jewel tones, golds, and blacks. Creates a glamorous and opulent atmosphere.">
+              Art Deco</option>
+            <option value="Scandinavian Pop"
+              title="Scandinavian Pop: Combines the clean lines of Scandinavian design with pops of bold and vibrant colors like yellows, blues, and pinks. Creates a playful and modern look.">
+              Scandinavian Pop</option>
+            <option value="Bohemian"
+              title="Bohemian: Incorporates a mix of vibrant and eclectic colors like oranges, purples, and greens, combined with rich textiles and patterns. Creates a free-spirited and artistic vibe.">
+              Bohemian
+
+            </option>
+            <option value="Mid-Century Modern"
+              title="Mid-Century Modern: Features colors like mustard yellows, olive greens, and teals, inspired by the retro aesthetics of the mid-20th century. Creates a sleek and vintage vibe.">
+              Mid-Century Modern</option>
+            <option value="Industrial Chic"
+              title="Industrial Chic: Combines cool, urban tones like grays, blacks, and metallics with accents of warm browns or exposed brick. Creates a modern and edgy industrial look.">
+              Industrial Chic</option>
+            <option value="Nordic White"
+              title="Nordic White: Focuses on a crisp and clean white color palette, enhanced with natural textures and materials. Creates a fresh and minimalist Scandinavian-inspired atmosphere.">
+              Nordic White</option>
+            <option value="Pop Art"
+              title="Pop Art: Utilizes bold primary colors like reds, yellows, and blues, often combined with black and white geometric patterns. Creates a vibrant and playful environment.">
+              Pop Art</option>
+            <option value="Mediterranean"
+              title="Mediterranean: Features warm earth tones like terracotta, sandy beige, and deep blues, inspired by the colors of the Mediterranean region. Creates a relaxed and rustic feel.">
+              Mediterranean</option>
+            <option value="Cottagecore"
+              title="Cottagecore: Incorporates soft, pastel colors like muted greens, pinks, and blues, combined with floral patterns and vintage elements. Creates a cozy and nostalgic cottage-inspired atmosphere.">
+              Cottagecore</option>
+            <option value="Retro Pastels"
+              title="Retro Pastels: Draws inspiration from the 1950s and 1960s, featuring soft pastel shades like mint greens, baby blues, and pale pinks. Creates a retro and nostalgic vibe.">
+              Retro Pastels</option>
+          </optgroup>
+        </select>
+
+        <!-- ID ROOM SHAPE -->
+        <select id="room_shape">
+          <option value="">Select a room shape</option>
+          <!-- Room Shapes -->
+          <option value="Square Room" title="A room with equal sides, providing a balanced and symmetrical space.">
+            Square
+            Room</option>
+          <option value="Rectangular Room"
+            title="A room with longer length and width, offering flexibility in furniture placement.">Rectangular Room
+          </option>
+          <option value="Circular Room" title="A room with a rounded shape, creating a sense of flow and openness.">
+            Circular Room</option>
+          <option value="Oval Room"
+            title="A room with an elongated and rounded shape, combining elements of circles and rectangles.">Oval Room
+          </option>
+          <option value="L-Shaped Room"
+            title="A room with an L-shaped layout, allowing for distinct areas or zones within the space.">L-Shaped Room
+          </option>
+          <option value="U-Shaped Room"
+            title="A room with a U-shaped layout, providing ample space for multiple functions or activities.">U-Shaped
+            Room</option>
+          <option value="T-Shaped Room"
+            title="A room with a T-shaped layout, offering unique design opportunities for focal points or divisions.">
+            T-Shaped Room</option>
+          <option value="H-Shaped Room"
+            title="A room with an H-shaped layout, often found in larger or more intricate floor plans.">H-Shaped Room
+          </option>
+          <option value="Octagonal Room" title="A room with eight sides, featuring a distinctive and dynamic shape.">
+            Octagonal Room</option>
+          <option value="Polygonal Room"
+            title="A room with more than four sides, offering architectural interest and unique design possibilities.">
+            Polygonal Room</option>
+          <option value="Irregular-shaped Room"
+            title="A room with a non-standard shape, adding character and challenging traditional design concepts.">
+            Irregular-shaped Room</option>
+          <option value="Open Floor Plan"
+            title="A room or space without walls or partitions, promoting a seamless flow and connection between areas.">
+            Open Floor Plan</option>
+          <option value="Loft Space"
+            title="A room located in the upper part of a building, often characterized by high ceilings and an open layout.">
+            Loft Space</option>
+          <option value="Attic Room"
+            title="A room located in the topmost part of a house, typically under a pitched roof.">Attic Room</option>
+          <option value="Basement Room"
+            title="A room located below ground level, often used for additional living space or storage.">Basement Room
+          </option>
+          <option value="Sunken Room"
+            title="A room located at a lower level than the surrounding area, creating a cozy and intimate atmosphere.">
+            Sunken Room</option>
+          <option value="Atrium"
+            title="An open and central space within a building, usually featuring a skylight and surrounded by other rooms or areas.">
+            Atrium</option>
+          <option value="Conservatory"
+            title="A room primarily made of glass, designed for the cultivation and display of plants.">Conservatory
+          </option>
+          <option value="Mezzanine Level"
+            title="An intermediate level between floors, often used to create additional functional space.">Mezzanine
+            Level</option>
+          <option value="Split-level Room"
+            title="A room with multiple levels, typically connected by a short flight of stairs.">Split-level Room
+          </option>
+        </select>
+
+        <!--ID ROOM SIZE-->
+        <select id="size">
+          <option value="">Select room size</option>
+          <option value="compact">Compact</option>
+          <option value="moderate">Moderate</option>
+          <option value="generous">Generous</option>
+          <option value="spacious">Spacious</option>
+          <option value="petite">Petite</option>
+          <option value="standard">Standard</option>
+          <option value="tall">Tall</option>
+          <option value="grand">Grand</option>
+          <option value="oversized">Oversized</option>
+          <option value="miniature">Miniature</option>
+          <option value="mid-sized">Mid-sized</option>
+          <option value="large-scale">Large-scale</option>
+          <option value="extra-small">Extra-small</option>
+          <option value="small-scale">Small-scale</option>
+          <option value="medium-sized">Medium-sized</option>
+          <option value="large">Large</option>
+          <option value="extra-large">Extra-large</option>
+          <option value="massive">Massive</option>
+          <option value="towering">Towering</option>
+          <option value="monumental">Monumental</option>
+        </select>
+        <h4>Home area</h4>
+        <!-- ID stanze -->
+        <select id="home_area">
+          <option value="">Select a home area</option>
+          <!-- Home Areas -->
+          <option value="Entryway">Entryway</option>
+          <option value="Foyer">Foyer</option>
+          <option value="Living Room">Living Room</option>
+          <option value="Dining Room">Dining Room</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Breakfast Nook">Breakfast Nook</option>
+          <option value="Pantry">Pantry</option>
+          <option value="Home Office">Home Office</option>
+          <option value="Study">Study</option>
+          <option value="Library">Library</option>
+          <option value="Family Room">Family Room</option>
+          <option value="Home Theater">Home Theater</option>
+          <option value="Game Room">Game Room</option>
+          <option value="Bar Area">Bar Area</option>
+          <option value="Wine Cellar">Wine Cellar</option>
+          <option value="Mudroom">Mudroom</option>
+          <option value="Laundry Room">Laundry Room</option>
+          <option value="Powder Room">Powder Room/Half Bath</option>
+          <option value="Staircase">Staircase</option>
+          <option value="Landing">Landing</option>
+          <option value="Master Bedroom">Master Bedroom</option>
+          <option value="Master Bathroom">Master Bathroom</option>
+          <option value="Walk-in Closet">Walk-in Closet</option>
+          <option value="Nursery">Nursery</option>
+          <option value="Children's Bedroom">Children's Bedroom</option>
+          <option value="Teenager's Bedroom">Teenager's Bedroom</option>
+          <option value="Guest Bedroom">Guest Bedroom</option>
+          <option value="Guest Bathroom">Guest Bathroom</option>
+          <option value="Home Gym">Home Gym</option>
+          <option value="Indoor Pool">Indoor Pool</option>
+          <option value="Sauna">Sauna</option>
+          <option value="Spa/Relaxation Room">Spa/Relaxation Room</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Garage">Garage</option>
+<option value="Porch">Porch</option>
+
+          <option value="Patio">Patio</option>
+          <option value="Deck">Deck</option>
+          <option value="Terrace">Terrace</option>
+          <option value="Balcony">Balcony</option>
+          <option value="Garden">Garden</option>
+          <option value="Courtyard">Courtyard</option>
+        </select>
+
+        <!--ID child room -->
+        <select id="child_room">
+          <option value="">Select a children room type</option>
+          <option value="Nursery">Nursery</option>
+          <option value="Baby's Room">Baby's Room</option>
+          <option value="Toddler's Room">Toddler's Room</option>
+          <option value="Preschooler's Room">Preschooler's Room</option>
+          <option value="Elementary Schooler's Room">Elementary Schooler's Room</option>
+          <option value="Preteen's Room">Preteen's Room</option>
+          <option value="Teenager's Room">Teenager's Room</option>
+          <option value="Playroom">Playroom</option>
+          <option value="Study Room">Study Room</option>
+          <option value="Homework Room">Homework Room</option>
+          <option value="Creative Studio">Creative Studio</option>
+          <option value="Game Room">Game Room</option>
+          <option value="Music Room">Music Room</option>
+          <option value="Sports Room">Sports Room</option>
+          <option value="Reading Nook">Reading Nook</option>
+          <option value="Craft Room">Craft Room</option>
+          <option value="Dressing Room">Dressing Room</option>
+          <option value="Sleepover Room">Sleepover Room</option>
+          <option value="Sibling's Room">Sibling's Room</option>
+          <option value="Shared Room">Shared Room</option>
+          <option value="Two storey apartment">Two storey apartment</option>
+        </select>
+      </div>
+
+
+      <div class="group">
+        <h4>Architectural tokens</h4>
+        <!--ID lightning-->
+        <select id="illumination">
+          <option value="">Select a lighting option</option>
+          <!-- Lighting Options -->
+          <option value="Ambient Lighting"
+            title="General, overall illumination that provides a uniform level of light throughout a space.">Ambient
+            Lighting</option>
+          <option value="Natural Lighting"
+            title="Utilizing natural light from windows, skylights, or other openings to illuminate the interior.">
+            Natural
+            Lighting</option>
+          <option value="Task Lighting"
+            title="Focused lighting designed to provide illumination for specific tasks or activities, such as reading or cooking.">
+            Task Lighting</option>
+          <option value="Accent Lighting"
+            title="Used to highlight or accentuate specific objects, architectural features, or artwork within a space.">
+            Accent Lighting</option>
+          <option value="Pendant Lighting"
+            title="Lighting fixtures suspended from the ceiling, typically used for task lighting or decorative purposes.">
+            Pendant Lighting</option>
+          <option value="Chandelier"
+            title="A decorative lighting fixture typically featuring multiple arms and lights, often used as a focal point in grand spaces.">
+            Chandelier</option>
+          <option value="Track Lighting"
+            title="A system of lights mounted on a track that can be adjusted to direct light to different areas of a room.">
+            Track Lighting</option>
+          <option value="Wall Sconces"
+            title="Lighting fixtures attached to walls, providing both functional and decorative lighting.">Wall Sconces
+          </option>
+          <option value="Table Lamps"
+            title="Portable lamps placed on tables or other surfaces, often used for localized lighting.">Table Lamps
+          </option>
+          <option value="Floor Lamps"
+            title="Tall standing lamps that provide ambient or task lighting, often used to complement other lighting sources.">
+            Floor Lamps</option>
+          <option value="Recessed Lighting"
+            title="Lighting fixtures installed into the ceiling, creating a streamlined and unobtrusive lighting effect.">
+            Recessed Lighting</option>
+          <option value="Cove Lighting"
+            title="Concealed lighting fixtures installed in a recess or ledge, casting indirect light upwards towards the ceiling.">
+            Cove Lighting</option>
+          <option value="Under Cabinet Lighting"
+            title="Lighting fixtures installed underneath kitchen cabinets, providing task lighting for countertops.">
+            Under Cabinet Lighting</option>
+          <option value="Picture Lights"
+            title="Designed to illuminate artwork or photographs, often mounted on the wall or frame.">Picture Lights
+          </option>
+          <option value="LED Strip Lights"
+            title="Flexible strips of LED lights that can be installed along surfaces or objects for decorative or accent lighting.">
+            LED Strip Lights</option>
+          <option value="Pendant Cluster Lights"
+            title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement.">
+            Pendant Cluster Lights</option>
+          <option value="Candlelight"
+            title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere.">
+            Candlelight</option>
+        </select>
+
+        <!-- ID architectural items-->
+        <!-- Doors -->
+        <select id="doors">
+          <option value="">Select a door</option>
+           <option value="No Doors at all" title="No doors">No Doors</option>
+          <option value="Panel Doors" title="Traditional doors with raised or recessed panels.">Panel Doors</option>
+          <option value="French Doors" title="Double doors with glass panes extending for most of their height.">French
+            Doors</option>
+          <option value="Sliding Doors" title="Doors that open horizontally by sliding along a track.">Sliding Doors
+          </option>
+          <option value="Barn Doors" title="Rustic-style doors mounted on a track and slide to the side.">Barn Doors
+          </option>
+          <option value="Pocket Doors" title="Doors that slide into a wall cavity, saving space.">Pocket Doors</option>
+          <option value="Dutch Doors"
+            title="Divided horizontally, allowing the top and bottom sections to open independently.">Dutch Doors
+          </option>
+          <option value="Pivot Doors" title="Doors that rotate on a central pivot point instead of swinging on hinges.">
+            Pivot Doors</option>
+          <option value="Glass Doors"
+            title="Doors predominantly made of glass, allowing natural light to pass through.">
+            Glass Doors</option>
+          <option value="Folding Doors" title="Doors that fold like an accordion to create a wide opening.">Folding
+            Doors
+          </option>
+          <option value="Revolving Doors"
+            title="Circular doors that rotate on a central axis, often used in large public buildings.">Revolving Doors
+          </option>
+        </select>
+
+        <!-- Windows -->
+        <select id="windows">
+          <option value="">Select a window</option>
+          <option value="No Windows at all" title="No windows needed">No Windows
+          </option>
+          <option value="Casement Windows" title="Hinged windows that open outward from the side.">Casement Windows
+          </option>
+          <option value="Double-Hung Windows" title="Windows with two vertically sliding sashes.">Double-Hung Windows
+          </option>
+          <option value="Bay Windows" title="Windows that project outward from the main walls, creating a bay area.">Bay
+            Windows</option>
+          <option value="Bow Windows" title="Curved windows that create a gentle outward arc from the main walls.">Bow
+            Windows</option>
+          <option value="Picture Windows" title="Large fixed windows that offer unobstructed views.">Picture Windows
+          </option>
+          <option value="Awning Windows" title="Hinged at the top and open outward from the bottom.">Awning Windows
+          </option>
+          <option value="Skylights" title="Windows installed on the roof, allowing natural light to enter from above.">
+            Skylights</option>
+          <option value="Sliding Windows" title="Windows that open horizontally by sliding along a track.">Sliding
+            Windows
+          </option>
+          <option value="Arched Windows" title="Windows with a curved or arched top section.">Arched Windows</option>
+          <option value="Clerestory Windows"
+            title="Windows placed high on a wall to let in light while maintaining privacy.">Clerestory Windows</option>
+        </select>
+
+        <!-- Floors -->
+        <select id="floors">
+          <option value="">Select a floor</option>
+          <option value="Hardwood Floors" title="Solid wood flooring, available in various species and finishes.">
+            Hardwood
+            Floors</option>
+          <option value="Laminate Flooring" title="Synthetic flooring that mimics the appearance of hardwood.">Laminate
+            Flooring</option>
+          <option value="Vinyl Flooring" title="Resilient flooring available in sheets, tiles, or planks.">Vinyl
+            Flooring
+          </option>
+          <option value="Tile Flooring" title="Durable flooring made of ceramic, porcelain, or natural stone.">Tile
+            Flooring</option>
+          <option value="Carpet Flooring" title="Soft and warm flooring made of woven or tufted fibers.">Carpet Flooring
+          </option>
+          <option value="Concrete Floors" title="Durable and versatile flooring made of concrete.">Concrete Floors
+          </option>
+          <option value="Bamboo Flooring" title="Eco-friendly flooring made from bamboo stalks.">Bamboo Flooring
+          </option>
+          <option value="Cork Flooring" title="Flooring made from the bark of cork oak trees.">Cork Flooring</option>
+          <option value="Terrazzo Flooring"
+            title="Composite material made of marble, quartz, or other chips embedded in cement or resin.">Terrazzo
+            Flooring</option>
+          <option value="Engineered Wood Flooring"
+            title="Flooring made of layers of wood veneer with a plywood or high-density fiberboard (HDF) core.">
+            Engineered Wood Flooring</option>
+        </select>
+
+        <!-- Roofs -->
+        <select id="roofs">
+          <option value="">Select a roof</option>
+          <option value="Gable Roof" title="A roof with two sloping sides that form a triangle at the top.">Gable Roof
+          </option>
+          <option value="Hip Roof" title="A roof with four sloping sides that meet at a ridge.">Hip Roof</option>
+          <option value="Mansard Roof"
+            title="A roof with two slopes on all four sides, creating additional living space in the attic.">Mansard
+            Roof
+          </option>
+          <option value="Flat Roof"
+            title="A roof with little to no slope, often used in modern or contemporary architecture.">Flat Roof
+          </option>
+          <option value="Shed Roof" title="A single sloping roof that is attached to a higher wall or roofline.">Shed
+            Roof
+          </option>
+          <option value="Gambrel Roof" title="A roof with two slopes on each side, resembling a barn roof.">Gambrel Roof
+          </option>
+          <option value="Butterfly Roof"
+            title="A roof with two sections that slope downward and meet in the middle, resembling the wings of a butterfly.">
+            Butterfly Roof</option>
+          <option value="Saltbox Roof" title="A long, sloping roof with one side significantly longer than the other.">
+            Saltbox Roof</option>
+          <option value="Dome Roof"
+            title="A roof that forms a hemispherical shape, often seen in architectural landmarks.">Dome Roof</option>
+          <option value="Sawtooth Roof"
+            title="A roof with a series of ridges and vertical glass panels, allowing natural light into industrial buildings.">
+            Sawtooth Roof</option>
+        </select>
+
+        <!-- roof height-->
+
+        <select id="roof_height">
+          <option value="">Select a roof height</option>
+          <option value="low_roof"
+            title="A low roof refers to a roof that is relatively close to the floor level. It provides a compact and cozy feel to the space below.">
+            Low Roof</option>
+          <option value="standard_roof"
+            title="A standard roof height represents a typical or average height for residential or commercial buildings. It offers adequate space for ventilation, insulation, and structural elements.">
+            Standard Roof</option>
+          <option value="high_roof"
+            title="A high roof signifies an increased vertical distance from the floor to the roof's highest point. It creates a sense of openness and spaciousness, allowing for larger interior volumes and vertical design features.">
+            High Roof</option>
+          <option value="cathedral_ceiling"
+            title="A cathedral ceiling features a steeply sloped or vaulted roof that rises to a significant height. It often creates an impressive and airy interior space, commonly found in churches, cathedrals, or grand residential settings.">
+            Cathedral Ceiling</option>
+          <option value="double_height_roof"
+            title="A double-height roof refers to a design where the roof extends vertically across two floor levels. This architectural feature creates a dramatic effect and provides ample vertical space for tall windows, lighting fixtures, or vertical design elements.">
+            Double-Height Roof</option>
+          <option value="skyscraper_roof"
+            title="A skyscraper roof represents the pinnacle of height in urban architecture. These roofs soar to great heights, defining the skyline of cities. They often feature elaborate designs, observation decks, or unique structural elements.">
+            Skyscraper Roof</option>
+          <option value="atrium_roof"
+            title="An atrium roof is characterized by a large central space with a roof that covers multiple floors. The height of the atrium roof can vary, but it typically allows for natural light to permeate the interior, creating a vibrant and visually stunning gathering area.">
+            Atrium Roof</option>
+        </select>
+
+      </div>
+      <!-- ID MJ -->
+
+      <div class="group">
+        <h4> Midjourney variables </h4>
+        <select id="aspectRatio" name="aspectRatio">
+          <option value="">Select an aspect ratio</option>
+          <option value="--ar 1:1">--ar 1:1</option>
+          <option value="--ar 3:2">--ar 3:2</option>
+          <option value="--ar 16:9">--ar 16:9</option>
+          <option value="--ar 9:16">--ar 9:16</option>
+          <option value="--ar 24:10">--ar 24:10</option>
+        </select>
+
+
+        <select id="stylizeRange">
+          <option value="">Select a stylize range</option>
+          <option value="--stylize 0">0</option>
+          <option value="--stylize 50">50</option>
+          <option value="--stylize 100">100 * default</option>
+          <option value="--stylize 150">150</option>
+          <option value="--stylize 200">200</option>
+          <option value="--stylize 250">250</option>
+          <option value="--stylize 300">300</option>
+          <option value="--stylize 350">350</option>
+          <option value="--stylize 400">400</option>
+          <option value="--stylize 450">450</option>
+          <option value="--stylize 500">500</option>
+          <option value="--stylize 550">550</option>
+          <option value="--stylize 600">600</option>
+          <option value="--stylize 650">650</option>
+          <option value="--stylize 700">700</option>
+          <option value="--stylize 750">750</option>
+          <option value="--stylize 800">800</option>
+          <option value="--stylize 850">850</option>
+          <option value="--stylize 900">900</option>
+          <option value="--stylize 950">950</option>
+          <option value="--stylize 1000">1000</option>
+        </select>
+        <select id="imageWeight">
+          <option value="">Select an image weight</option>
+          <option value="--iw .5">--iw .5</option>
+          <option value="--iw .75">--iw .75</option>
+          <option value="--iw 1">--iw 1</option>
+          <option value="--iw 1.25">--iw 1.25</option>
+          <option value="--iw 1.5">--iw 1.5</option>
+          <option value="--iw 1.75">--iw 1.75</option>
+          <option value="--iw 2">--iw 2</option>
+        </select>
+
+        <button class="buttonExt" type="submit">Generate Prompt Base 🦄</button>
+      </div>
+
+
+    </form>
+</fieldset>
+
+<script src="script.js"></script>
+  <SUB style="color:white">By Gemma and Angel Sanchez </SUB>
+
+</body>
+
+</html>
+
+
+
+====
+
+
+ AppInteriorDesign % /Library/Frameworks/Python.framework/Versions/3.11/bin/python3 app.py
+
+
+===
+
+JS BACKUP 15.6.19.11
+
+
+   // Function to handle the form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+      const fileInput = document.getElementById("imageDisplayUrl");
+      const file = fileInput.files[0];
+
+      if (file) {
+        // Image file is selected
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
+        const uploadUrl = "https://api.imgbb.com/1/upload";
+
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+
+        fetch(uploadUrl, {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Image uploaded successfully
+              const imageUrl = data.data.medium.url; // Extract the medium display URL
+              const selectedValues = getSelectedValues(); // Get the selected form values
+              generateImages(imageUrl, selectedValues);
+            } else {
+              // Image upload failed
+              console.error("Image upload failed:", data.error.message);
+            }
+          })
+          .catch(error => {
+            console.error("Error uploading image:", error);
+          });
+      } else {
+        // Image file is not selected
+        const selectedValues = getSelectedValues(); // Get the selected form values
+        generateImages(null, selectedValues);
+      }
+    }
+// Function to get the selected form values
+function getSelectedValues() {
+  return {
+    // Replace with your form field IDs and corresponding values
+    photography_level_shot: document.getElementById("photography_level_shot").value,
+    magazine: document.getElementById("magazine").value,
+    design_style: document.getElementById("design_style").value,
+    vendors: document.getElementById("vendors").value,
+    color_palette: document.getElementById("color_palette").value,
+    room_shape: document.getElementById("room_shape").value,
+    size: document.getElementById("size").value,
+    home_area: document.getElementById("home_area").value,
+    child_room: document.getElementById("child_room").value,
+    illumination: document.getElementById("illumination").value,
+    doors: document.getElementById("doors").value,
+    windows: document.getElementById("windows").value,
+    floors: document.getElementById("floors").value,
+    roofs: document.getElementById("roofs").value,
+    roof_height: document.getElementById("roof_height").value,
+    aspectRatio: document.getElementById("aspectRatio").value,
+    stylizeRange: document.getElementById("stylizeRange").value,
+    imageWeight: document.getElementById("imageWeight").value,
+    imageUrl: document.getElementById("imageDisplayUrl").src
+  };
+}
+
+
+  // Function to generate images using Stable Diffusion API
+function generateImages(imageUrl, selectedValues) {
+  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
+
+  const prompt = {
+    key: apiKey,
+    prompt: JSON.stringify(selectedValues), // Use the selected form values as the prompt
+    negative_prompt: "YOUR_NEGATIVE_PROMPT",
+    width: "512",
+    height: "512",
+    samples: "4",
+    num_inference_steps: "20",
+    seed: null,
+    guidance_scale: 7.5,
+    webhook: null,
+    track_id: null,
+    safety_checker: null,
+    enhance_prompt: null,
+    multi_lingual: null,
+    panorama: null,
+    self_attention: null,
+    upscale: null,
+    embeddings_model: null
+  };
+
+  // Set the image URL as the init_image in the prompt
+  prompt.init_image = imageUrl;
+
+  // Make an API request to Stable Diffusion API with the prompt
+fetch('/generate-images', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(prompt),
+})
+
+  .then(response => response.json())
+  .then(data => {
+    // Handle the API response and display the generated images
+    if (data.status === "success" && data.output) {
+      const imageUrls = data.output.map(url => url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com"));
+      showModal(imageUrls);
+    } else {
+      console.error("Failed to generate images:", data.error);
+    }
+  })
+  .catch(error => {
+    console.error("Error generating images:", error);
+  });
+
+}
+    // Function to display the generated images in a modal
+    function showModal(imageUrls) {
+      const modal = document.getElementById("modal");
+      const imageGrid = document.getElementById("imageGrid");
+
+      // Clear previous images
+      imageGrid.innerHTML = "";
+
+      // Display the generated images
+      imageUrls.forEach(imageUrl => {
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        imageGrid.appendChild(image);
+      });
+
+      // Show the modal
+      modal.style.display = "block";
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      const modal = document.getElementById("modal");
+      modal.style.display = "none";
+    }
+
+    // Add event listener to the form submission
+    const form = document.getElementById("imageGenerationForm");
+    form.addEventListener("submit", handleSubmit);
+
+    // Add event listener to the close button of the modal
+    const closeButton = document.getElementsByClassName("close")[0];
+    closeButton.addEventListener("click", closeModal);

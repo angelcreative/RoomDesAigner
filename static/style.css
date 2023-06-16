@@ -1,0 +1,296 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-image: url('img/bg-body.png');
+  background-size: cover;
+  font-family: sans-serif;
+}
+
+#modal {
+    display: none;
+    position: absolute;
+    z-index: 9;
+    top: 10%;
+    left: 0;
+    width: 100%;
+}
+
+ #overlay {
+    background: #341391e8;
+    position: absolute;
+    width: 100%;
+    height: auto;
+    display: none;
+    z-index: 8;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+#myModal {
+  display: none;
+  background: #b5ac9f78;
+  margin: 0;
+  width: 60%;
+  box-shadow: #372c1cb8 0px 0px 24px;
+  position: absolute;
+  padding: 2% 20% 10%;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(11px);
+}
+
+.modal-content {
+    background: #fdfdfd;
+    padding: 1rem 2rem 2rem 2rem;
+    border-radius: 2rem;
+    position: relative;
+    display: block;
+    width: 620px;
+    margin: 0 auto;
+}
+
+.modal-content p {
+    padding: 10px 30px;
+    font-size: 16px;
+    background: #673ab717;
+    border-radius: 1rem;
+    color: #673AB7;
+    text-align: center;
+    font-weight: bold;
+}
+
+.col-r {
+  width: 20%;
+}
+
+.modal-col {
+  width: 80%;
+}
+
+span.close {
+  background: #54524c;
+  border-radius: 900rem;
+  padding: 4px 10px 6px 10px;
+  position: absolute;
+  cursor: pointer;
+  color: #fff;
+  top: 20px;
+  right: 20px;
+}
+
+pre {
+  border-radius: 1rem;
+  white-space: pre-line;
+  background: #efefef;
+  padding: 2rem;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+#loader {
+  display: none;
+  /* Add your desired styles for the loader here */
+}
+
+img#replitBadge {
+  display: none;
+}
+
+h1 {
+  color: #fff;
+  font-size: 1.3rem;
+  background-repeat: no-repeat;
+  background-size: 24px;
+  text-align: center;
+}
+
+.unicorn {
+  display: inline-block;
+  margin-right: 0.5rem;
+  font-size: 36px;
+}
+
+.modal-content h1 {
+  color: #1f1f1f;
+}
+
+h4 {
+  color: #1f1f1f;
+  font-size: 1rem;
+}
+
+.group {
+  background: white;
+  padding: 1rem;
+}
+
+sub {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+fieldset {
+  max-width: fit-content;
+  margin: 50px auto;
+  border: 1px solid #fff0d5;
+  display: flex;
+  flex-direction: column;
+  background: #fdfdfd47;
+  border-radius: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+
+
+select {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+    border-radius: 900rem;
+    padding: 0.5rem 0.5rem;
+    border: 1px solid #f3f3f3;
+    background: #fbfbfb;
+    box-shadow: inset 0px 4px 16px rgba(0, 0, 0, 0.07);
+    color: #545454;
+    width: 200px;
+}
+
+
+.buttons {
+   display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: -70px;
+}
+
+button {
+  margin: 1rem 0.5rem;
+  border-radius: 900rem;
+  border: none;
+  background: #1f1f1f;
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+}
+
+#clearAllButton, #downloadJsonButton {
+border: 1px solid #ffffff42;
+    color: #ffffffb8;
+    background: #2030db17;
+}
+
+ 
+
+
+option {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+option[title]:hover:after {
+  content: attr(title);
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: #0d0d0d;
+  color: white;
+}
+
+.gradient-background {
+  background: linear-gradient(300deg, deepskyblue, darkviolet, blue);
+  background-size: 180% 180%;
+  animation: gradient-animation 5s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+#imageGenerationForm {
+    display: flex;
+    flex-direction: row;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+
+.imageGrid {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 16px;
+}
+
+
+.thumbnail {
+    width: 300px;
+    height: 150px;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity ease-out 30ms;
+}
+
+.thumbnail:hover {
+    opacity: .7;
+    transform: scale(1.05);
+}
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  /* CSS styles for screens up to 600px */
+  #imageGenerationForm {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .group {
+    background: white;
+    padding: 0 1rem;
+  }
+
+  #myModal {
+    width: 100%;
+    padding: 0 60px;
+  }
+}
