@@ -21,5 +21,5 @@ def generate_images():
     return jsonify(response.json())
 
 if __name__ == '__main__':
-    app.run()
 
+    app.run()
