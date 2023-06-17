@@ -82,8 +82,8 @@ function getSelectedValues() {
     floors: document.getElementById("floors").value,
     roofs: document.getElementById("roofs").value,
     roof_height: document.getElementById("roof_height").value,
-    lenses: document.getElementById("lenses").value,
-    cameras: document.getElementById("cameras").value,
+    lenses: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
+    cameras: document.getElementById("camera_used_to_take_the_shot").value,
     imageUrl: document.getElementById("imageDisplayUrl").src
   };
 }
