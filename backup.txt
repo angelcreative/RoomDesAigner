@@ -1,4 +1,17 @@
- // Function to handle the form submission
+from app import app
+
+# Create an instance of the Flask application
+application = app
+
+if __name__ == "__main__":
+    application.run()
+
+=======nno 
+
+
+
+
+// Function to handle the form submission
     function handleSubmit(event) {
       event.preventDefault();
       uploadImage();

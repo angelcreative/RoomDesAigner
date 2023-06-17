@@ -1,7 +1,6 @@
-from app import app
+import sys
+import os
 
-# Create an instance of the Flask application
-application = app
+sys.path.insert(0, os.path.dirname(__file__))
 
-if __name__ == "__main__":
-    application.run()
+from app import app as application
