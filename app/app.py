@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, render_template/Users/angelsanchez/Desktop/AppInteriorDesign/app/app.wsgi
+from flask import Flask, jsonify, request, render_template
+
 from flask_cors import CORS
 import requests
 
