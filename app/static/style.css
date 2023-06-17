@@ -183,11 +183,36 @@ select {
 }
 
 
+.groupContainer {
+    
+    display: flex;
+    flex-direction: row;
+    overflow:hidden;
+    border-radius:1rem;
+}
+
+.buttonsCont {
+    display: flex;
+    justify-content: space-between;
+}
+
 .buttons {
    display: flex;
     flex-direction: row;
     position: absolute;
     bottom: -70px;
+}
+
+.buttonsR {
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.buttonsL {
+    display: flex;
+    flex-direction: row;
+    
 }
 
 button {
@@ -244,7 +269,7 @@ option[title]:hover:after {
 
 #imageGenerationForm {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     border-radius: 1rem;
     overflow: hidden;
 }
