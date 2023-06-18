@@ -1,3 +1,33 @@
+// Variable to store the current state of the button
+let buttonProgress = 0;
+
+// Function to change the background color of the button progressively
+function changeButtonColor() {
+  const button = document.querySelector(".buttonExt");
+  const color = `linear-gradient(to right, #1f1f1f ${buttonProgress}%, #8A2BE2 ${buttonProgress}%)`;
+  
+  // Add transition properties to smoothly animate the background color change
+  button.style.transition = "background 0.5s ease";
+  button.style.background = color;
+  
+  // Increment the button progress by a certain value (adjust this value according to your needs)
+  buttonProgress += 2;
+
+  if (buttonProgress <= 100) {
+    // If the progress has not reached 100%, schedule the next color update
+    setTimeout(changeButtonColor, 100); // Adjust the update time according to your needs
+  } else {
+    // When 100% progress is reached, reset and restore the button
+    buttonProgress = 0;
+    button.style.background = "#1f1f1f";
+    
+    // Remove the transition properties after the color change is complete
+    button.style.transition = "none";
+  }
+}
+
+
+
 // Function to handle the form submission
 function handleSubmit(event) {
   event.preventDefault();
@@ -37,7 +67,7 @@ function handleSubmit(event) {
     const selectedValues = getSelectedValues(); // Get the selected form values
     generateImages(null, selectedValues);
   }
-  
+    
   // Update the download JSON button with the selected form values
   const selectedValues = getSelectedValues();
   updateDownloadButton(selectedValues);
@@ -84,7 +114,7 @@ function getSelectedValues() {
     roof_height: document.getElementById("roof_height").value,
     lenses: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
     cameras: document.getElementById("camera_used_to_take_the_shot").value,
-    imageUrl: document.getElementById("imageDisplayUrl").src
+    imageUrl: document.getElementById("imageDisplayUrl").value
   };
 }
 
@@ -116,6 +146,9 @@ function generateImages(imageUrl, selectedValues) {
   // Set the image URL as the init_image in the prompt
   prompt.init_image = imageUrl;
 
+  // Change the button color before making the API request
+  changeButtonColor();
+
   // Make an API request to Stable Diffusion API with the prompt
   fetch("/generate-images", {
     method: "POST",
@@ -142,6 +175,7 @@ function generateImages(imageUrl, selectedValues) {
     });
 }
 
+
 // Function to show the modal overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay");
@@ -158,22 +192,83 @@ function showModal(imageUrls) {
 
   // Display the generated images
   imageUrls.forEach(imageUrl => {
+    const imageContainer = document.createElement("div");
+
+    // Create image element
     const image = document.createElement("img");
     image.src = imageUrl;
     image.alt = "Generated Image";
     image.classList.add("thumbnail");
-    image.addEventListener("click", () => openImageInNewTab(imageUrl)); // Add click event listener
-    imageGrid.appendChild(image);
+
+    // Create buttons container
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
+
+    // Create copy URL button
+    const copyButton = document.createElement("button");
+    copyButton.textContent = "Copy URL";
+    copyButton.addEventListener("click", () => {
+      copyImageUrlToClipboard(imageUrl);
+    });
+
+    // Create download button
+    const downloadButton = document.createElement("button");
+    downloadButton.textContent = "Download";
+    downloadButton.addEventListener("click", () => {
+      downloadImage(imageUrl);
+    });
+
+    // Append buttons to buttons container
+    buttonsContainer.appendChild(copyButton);
+    buttonsContainer.appendChild(downloadButton);
+
+    // Append image and buttons container to image container
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(buttonsContainer);
+
+    // Append image container to image grid
+    imageGrid.appendChild(imageContainer);
   });
 
   // Show the modal
   modal.style.display = "block";
 }
 
+
 // Function to open the image in a new tab
 function openImageInNewTab(imageUrl) {
   window.open(imageUrl, "_blank");
 }
+
+
+// Function to copy the image URL to clipboard
+function copyImageUrlToClipboard(imageUrl) {
+  const tempInput = document.createElement("input");
+  tempInput.value = imageUrl;
+  document.body.appendChild(tempInput);
+  tempInput.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempInput);
+  alert("Image URL copied to clipboard!");
+}
+
+// Function to download the image (or open in a new tab if not possible to download)
+function downloadImage(imageUrl) {
+  const link = document.createElement("a");
+  link.href = imageUrl;
+  link.target = "_blank";
+
+  // Check if the browser supports the "download" attribute
+  if ("download" in link) {
+    link.download = "generated_image.png";
+    link.click();
+  } else {
+    // Fallback: Open the image in a new tab if download is not supported
+    window.open(imageUrl, "_blank");
+  }
+}
+
+
 
 // Function to close the modal
 function closeModal() {

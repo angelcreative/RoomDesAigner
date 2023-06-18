@@ -37,20 +37,18 @@
 <body class="gradient-background ">
   <!-- Add this element to your HTML -->
 <!-- Modal Window -->
+
 <div id="overlay"></div>
-<div id="modal" class="modal">
+<div id="modal" class="modal" style="display: none;">
   <div class="modal-content">
     <p id="message">🎉 Your creation is ready 🎉</p>
     <div class="imageGrid" id="imageGrid"></div>
-    <div id="loadingBar" style="display: none;">
-      <div id="progressBarContainer">
-        <div id="progressBar"></div>
-      </div>
-    </div>
     <div id="resultContainer"></div>
     <span class="close">&times;</span>
   </div>
 </div>
+
+
 
 
   <!-- ID STYLES -->
@@ -60,7 +58,7 @@
           <img src="{{ url_for('static', filename='img/logo-web.svg') }}" title="Room DesAigner" width="140" height="auto" >
       </h1>
 
-<form id="imageGenerationForm">
+<form id="imageGenerationForm" onsubmit="handleSubmit(event)">
 
     <div class="groupContainer">
       <div class="group">
@@ -932,6 +930,7 @@
 
     </form>
 </fieldset>
+
   <!-- script to make things run --->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <!-- //end script - dont delete it -->
