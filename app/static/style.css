@@ -196,6 +196,7 @@ select {
     justify-content: space-between;
 }
 
+
 .buttons {
    display: flex;
     flex-direction: row;
@@ -232,7 +233,12 @@ border: 1px solid #ffffff42;
 }
 
  
-
+.credits {
+    color: white;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+}
 
 option {
   position: relative;
