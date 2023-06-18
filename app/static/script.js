@@ -11,7 +11,7 @@ function changeButtonColor() {
   button.style.background = color;
   
   // Increment the button progress by a certain value (adjust this value according to your needs)
-  buttonProgress += 2;
+  buttonProgress += 1;
 
   if (buttonProgress <= 100) {
     // If the progress has not reached 100%, schedule the next color update

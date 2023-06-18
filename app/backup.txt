@@ -266,6 +266,45 @@ closeButton.addEventListener("click", closeModal);
 const clearAllButton = document.getElementById("clearAllButton");
 clearAllButton.addEventListener("click", clearAll);
 
+==
+
+// Check if the copy button event listener has already been added
+let copyButtonEventListenerAdded = false;
+
+// Function to update the copy JSON button
+function updateCopyButton(selectedValues) {
+  const copyJsonButton = document.getElementById("copyJsonButton");
+  
+  // Check if the event listener has already been added
+  if (!copyButtonEventListenerAdded) {
+    copyJsonButton.addEventListener("click", () => {
+      const jsonData = transformJsonToPlainText(selectedValues);
+      copyToClipboard(jsonData);
+      alert("Formatted JSON copied to clipboard!");
+    });
+    
+    copyButtonEventListenerAdded = true;
+  }
+}
+
+
+// Function to transform JSON to plain text with desired formatting
+function transformJsonToPlainText(data) {
+  let plainText = "";
+
+  for (const key in data) {
+    if (data[key] && data[key] !== "") {
+      const formattedKey = key.replace(/_/g, " ");
+      const formattedValue = data[key];
+      plainText += `${formattedKey}: ${formattedValue}, `;
+    }
+  }
+
+  // Remove trailing comma and whitespace
+  plainText = plainText.slice(0, -2);
+
+  return plainText;
+}
 
 
 ==
