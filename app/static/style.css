@@ -344,7 +344,11 @@ width: 300px;
     transform: rotate(360deg);
   }
 }
-
+select#materials {
+    width: 100%;
+    height: 120px;
+    border-radius: 1rem;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
