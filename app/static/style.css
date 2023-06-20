@@ -535,17 +535,7 @@ select#materials {
       flex-direction: column;
   }
  
- html {
- overflow: hidden;
- width: 100%;
- }
- body {
- height: 100%;
- position: fixed;
- overflow-y: scroll;
- -webkit-overflow-scrolling: touch;
- }
- 
+
 }
 
 
@@ -566,14 +556,5 @@ select#materials {
         margin: 0 auto;
     }
     
-    html {
-    overflow: hidden;
-    width: 100%;
-    }
-    body {
-    height: 100%;
-    position: fixed;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
-    }
+  
 }
