@@ -143,6 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return {
       // Replace with your form field IDs and corresponding values
       photography_level_shot: document.getElementById("photography_level_shot").value,
+        camera_shot: document.getElementById("camera_shot").value,
       magazine: document.getElementById("magazine").value,
       design_style: document.getElementById("design_style").value,
       vendors: document.getElementById("vendors").value,
@@ -344,6 +345,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Display the generated images
       imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
+    
 
         // Create image element
         const image = document.createElement("img");

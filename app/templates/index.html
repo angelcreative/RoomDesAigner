@@ -49,7 +49,8 @@
 <div id="overlay"></div>
 <div id="modal" class="modal" style="display: none;">
   <div class="modal-content">
-    <p id="message">🎉 Your creation is ready 🎉</p>
+      <img class="buddy" src="{{ url_for('static', filename='img/buddy.png') }}">
+          <h1 id="message">🪄 Your creations are ready ✨</h1>
     <div class="imageGrid" id="imageGrid"></div>
     <div id="resultContainer"></div>
     <span class="close">&times;</span>
@@ -107,6 +108,22 @@
             title="The camera is positioned behind a subject, capturing the scene from their perspective. This angle is commonly used for portraits or to create a sense of being immersed in the subject's point of view.">
             Over-the-Shoulder</option>
 
+        </select>
+        
+        
+        <select id="camera_shot">
+            
+            <option value=" ">Camera distance</option>
+          <option value="Extreme Wide Shot (ELS)" title="Captures a wide view of the entire scene, emphasizing the surroundings.">Extreme Wide Shot (ELS)</option>
+          <option value="Long Shot (LS) / Wide Shot (WS)" title="Shows the subject from a distance, providing context to the scene.">Long Shot (LS) / Wide Shot (WS)</option>
+          <option value="Full Shot (FS)" title="Displays the entire subject from head to toe or from top to bottom.">Full Shot (FS)</option>
+          <option value="Medium Long Shot (MLS) / Medium Wide Shot (MWS)" title="Frames the subject from a moderate distance, showing more of the background.">Medium Long Shot (MLS) / Medium Wide Shot (MWS)</option>
+          <option value="Cowboy Shot" title="A shot that frames the subject from the mid-thigh level, typically featuring a gun holster in the frame.">Cowboy Shot</option>
+          <option value="Medium Shot (MS)" title="Shows the subject from the waist up or knees up, allowing for more focus on the subject.">Medium Shot (MS)</option>
+          <option value="Medium Close Up (MCU)" title="Focuses on the subject's face and shoulders, revealing facial expressions and emotions.">Medium Close Up (MCU)</option>
+          <option value="Close Up (CU)" title="Presents a detailed view of the subject's face or a specific object, capturing fine details.">Close Up (CU)</option>
+          <option value="Extreme Close Up (ECU)" title="Zooms in on a specific part of the subject, highlighting minute details or emotions.">Extreme Close Up (ECU)</option>
+          <option value="Establishing Shot" title="Introduces the setting or location, providing a context for the following scene.">Establishing Shot</option>
         </select>
 
 <!-- ID CAMERAS-->
