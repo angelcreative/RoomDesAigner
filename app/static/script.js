@@ -1,68 +1,121 @@
+// Function to show the waiting overlay and loading message with progress bar
+function showWaitingOverlay() {
+  const waiting = document.getElementById("waiting");
+  waiting.style.display = "block";
+
+  var loadingMessage = document.getElementById('loadingMessage');
+  loadingMessage.style.display = "block";
+
+  var progressBar = document.getElementById('progressBar');
+  var progressLabel = document.getElementById('progressLabel');
+  var progress = 0;
+
+  var intervalId = setInterval(function() {
+    progress += 3;
+    progressBar.style.width = progress + '%';
+    progressLabel.textContent = 'Generating your images... ' + progress + '%';
+
+    if (progress >= 100) {
+      clearInterval(intervalId);
+      hideWaitingOverlay();
+      showOverlay();
+    }
+  }, 300);
+}
+
+// Function to hide the waiting overlay and loading message
+function hideWaitingOverlay() {
+  const waiting = document.getElementById("waiting");
+  waiting.style.display = "none";
+}
+
+// Function to show the overlay
+function showOverlay() {
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "block";
+}
+
+// Function to hide the overlay
+function hideOverlay() {
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "none";
+}
+
+// Example usage when "Make the Magic" button is clicked
+const magicButton = document.getElementById("magicButton");
+magicButton.addEventListener("click", function() {
+  showWaitingOverlay();
+});
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
-
+    
  
-   // Function to handle the form submission
-  function handleSubmit(event) {
-    event.preventDefault();
+    // Function to handle the form submission
+    function handleSubmit(event) {
+      event.preventDefault();
 
-    // Disable the "Make the Magic" button to prevent multiple clicks
-    const magicButton = document.getElementById("magicButton");
-    magicButton.disabled = true;
+      // Disable the "Make the Magic" button to prevent multiple clicks
+      const magicButton = document.getElementById("magicButton");
+      magicButton.disabled = true;
 
-    // Check if the form is being reset
-    if (event.submitter.id === "clearAllButton") {
-      clearAll();
-      return;
-    }
+      // Check if the form is being reset
+      if (event.submitter.id === "clearAllButton") {
+        clearAll();
+        return;
+      }
 
-    const fileInput = document.getElementById("imageDisplayUrl");
-    const file = fileInput.files[0];
+      showOverlay(); // Show the overlay and loading message
 
-    if (file) {
-      // Image file is selected
-      const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
-      const uploadUrl = "https://api.imgbb.com/1/upload";
+      const fileInput = document.getElementById("imageDisplayUrl");
+      const file = fileInput.files[0];
 
-      const formData = new FormData();
-      formData.append("key", apiKey);
-      formData.append("image", file);
+      if (file) {
+        // Image file is selected
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
+        const uploadUrl = "https://api.imgbb.com/1/upload";
 
-      fetch(uploadUrl, {
-        method: "POST",
-        body: formData
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // Image uploaded successfully
-            const imageUrl = data.data && data.data.medium && data.data.medium.url;
-            const selectedValues = getSelectedValues(); // Get the selected form values
-            generateImages(imageUrl, selectedValues);
-          } else {
-            // Image upload failed
-            console.error("Image upload failed:", data.error.message);
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+
+        fetch(uploadUrl, {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Image uploaded successfully
+              const imageUrl = data.data && data.data.medium && data.data.medium.url;
+              const selectedValues = getSelectedValues(); // Get the selected form values
+              generateImages(imageUrl, selectedValues);
+            } else {
+              // Image upload failed
+              console.error("Image upload failed:", data.error.message);
+              // Enable the "Make the Magic" button to allow another attempt
+              magicButton.disabled = false;
+              hideOverlay(); // Hide the overlay and loading message
+            }
+          })
+          .catch(error => {
+            console.error("Error uploading image:", error);
             // Enable the "Make the Magic" button to allow another attempt
             magicButton.disabled = false;
-          }
-        })
-        .catch(error => {
-          console.error("Error uploading image:", error);
-          // Enable the "Make the Magic" button to allow another attempt
-          magicButton.disabled = false;
-        });
-    } else {
-      // Image file is not selected
-      const selectedValues = getSelectedValues(); // Get the selected form values
-      generateImages(null, selectedValues);
+            hideOverlay(); // Hide the overlay and loading message
+          });
+      } else {
+        // Image file is not selected
+        const selectedValues = getSelectedValues(); // Get the selected form values
+        generateImages(null, selectedValues);
+        hideOverlay(); // Hide the overlay and loading message
+      }
+
+      // Update the download JSON button with the selected form values
+      const selectedValues = getSelectedValues();
+      updateDownloadButton(selectedValues);
     }
-
-
-
-    // Update the download JSON button with the selected form values
-    const selectedValues = getSelectedValues();
-    updateDownloadButton(selectedValues);
-  }
 
 
   // Function to update the download JSON button
@@ -117,8 +170,12 @@ document.addEventListener("DOMContentLoaded", function() {
     };
   }
 
+    
+    
+    
+    
   // Function to generate images using Stable Diffusion API
-  function generateImages(imageUrl, selectedValues) {
+  /*<!--function generateImages(imageUrl, selectedValues) {
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
     // Update the promptInit variable
@@ -133,6 +190,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Combine the promptInit with the plain text representation
     const promptText = `${promptInit} ${plainText}`;
 
+      showOverlay(); // Show the overlay and loading message
+       showWaitingOverlayUntilModalReady(); // Show the waiting overlay until the modal is ready
+
+      
     const prompt = {
       key: apiKey,
       prompt: JSON.stringify(promptText),
@@ -174,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function() {
           const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
           );
+            hideOverlay(); // Hide the overlay and loading message
           showModal(imageUrls);
           showOverlay(); // Show the overlay
         } else {
@@ -183,67 +245,147 @@ document.addEventListener("DOMContentLoaded", function() {
       .catch(error => {
         console.error("Error generating images:", error);
       });
-  }
+  }*/
+    function generateImages(imageUrl, selectedValues) {
+      const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
+
+      // Update the promptInit variable
+      const promptInit = `${imageUrl}, High resolution photography interior design, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
+
+      // Generate the plain text representation of the selected values
+      let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+
+      // Combine the promptInit with the plain text representation
+      const promptText = `${promptInit} ${plainText}`;
+
+      showOverlay(); // Show the overlay and loading message
+      showWaitingOverlay(); // Show the waiting overlay
+
+      const prompt = {
+        key: apiKey,
+        prompt: JSON.stringify(promptText),
+        negative_prompt: "YOUR_NEGATIVE_PROMPT",
+        width: "1024",
+        height: "512",
+        samples: "4",
+        num_inference_steps: "20",
+        seed: null,
+        guidance_scale: 7.5,
+        webhook: null,
+        track_id: null,
+        safety_checker: null,
+        enhance_prompt: null,
+        multi_lingual: null,
+        panorama: null,
+        self_attention: null,
+        upscale: null,
+        embeddings_model: null
+      };
+
+      // Set the image URL as the init_image in the prompt
+      prompt.init_image = imageUrl;
+
+      // Make an API request to Stable Diffusion API with the prompt
+      fetch("/generate-images", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+      })
+        .then(response => response.json())
+        .then(data => {
+          // Handle the API response and display the generated images
+          if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+              url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+            );
+            hideWaitingOverlay(); // Hide the waiting overlay
+            showModal(imageUrls);
+          } else {
+            console.error("Failed to generate images:", data.error);
+          }
+          hideOverlay(); // Hide the overlay and loading message
+        })
+        .catch(error => {
+          console.error("Error generating images:", error);
+          hideWaitingOverlay(); // Hide the waiting overlay
+          hideOverlay(); // Hide the overlay and loading message
+        });
+    }
+
+    function showWaitingOverlay() {
+      const waiting = document.getElementById("waiting");
+      waiting.style.display = "block";
+    }
+
+    function hideWaitingOverlay() {
+      const waiting = document.getElementById("waiting");
+      waiting.style.display = "none";
+    }
 
 
+    // Function to show the overlay
+    function showOverlay() {
+      const overlay = document.getElementById("overlay");
+      overlay.style.display = "block";
+    }
+    // Function to display the generated images in a modal
+    function showModal(imageUrls) {
+      const modal = document.getElementById("modal");
+      const imageGrid = document.getElementById("imageGrid");
 
-  // Function to show the modal overlay
-  function showOverlay() {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
-  }
+      // Clear previous images
+      imageGrid.innerHTML = "";
 
-  // Function to display the generated images in a modal
-  function showModal(imageUrls) {
-    const modal = document.getElementById("modal");
-    const imageGrid = document.getElementById("imageGrid");
+      // Display the generated images
+      imageUrls.forEach(imageUrl => {
+        const imageContainer = document.createElement("div");
 
-    // Clear previous images
-    imageGrid.innerHTML = "";
+        // Create image element
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
 
-    // Display the generated images
-    imageUrls.forEach(imageUrl => {
-      const imageContainer = document.createElement("div");
+        // Create buttons container
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
 
-      // Create image element
-      const image = document.createElement("img");
-      image.src = imageUrl;
-      image.alt = "Generated Image";
-      image.classList.add("thumbnail");
+        // Create copy URL button
+        const copyButton = document.createElement("button");
+        copyButton.textContent = "Copy URL";
+        copyButton.addEventListener("click", () => {
+          copyImageUrlToClipboard(imageUrl);
+        });
 
-      // Create buttons container
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.classList.add("image-buttons");
+        // Create download button
+        const downloadButton = document.createElement("button");
+        downloadButton.textContent = "Download";
+        downloadButton.addEventListener("click", () => {
+          downloadImage(imageUrl);
+        });
 
-      // Create copy URL button
-      const copyButton = document.createElement("button");
-      copyButton.textContent = "Copy URL";
-      copyButton.addEventListener("click", () => {
-        copyImageUrlToClipboard(imageUrl);
+        // Append buttons to buttons container
+        buttonsContainer.appendChild(copyButton);
+        buttonsContainer.appendChild(downloadButton);
+
+        // Append image and buttons container to image container
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+
+        // Append image container to image grid
+        imageGrid.appendChild(imageContainer);
       });
 
-      // Create download button
-      const downloadButton = document.createElement("button");
-      downloadButton.textContent = "Download";
-      downloadButton.addEventListener("click", () => {
-        downloadImage(imageUrl);
-      });
+      // Show the modal
+      modal.style.display = "block";
+      showOverlay(); // Show the overlay
+    }
 
-      // Append buttons to buttons container
-      buttonsContainer.appendChild(copyButton);
-      buttonsContainer.appendChild(downloadButton);
-
-      // Append image and buttons container to image container
-      imageContainer.appendChild(image);
-      imageContainer.appendChild(buttonsContainer);
-
-      // Append image container to image grid
-      imageGrid.appendChild(imageContainer);
-    });
-
-    // Show the modal
-    modal.style.display = "block";
-  }
 
 
   // Function to open the image in a new tab
