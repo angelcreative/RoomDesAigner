@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
         
-        const promptEndy = `-ar 3:2 --stylize 800 --iw 1.75 `
+        const promptEndy = `--ar 3:2 --stylize 800 --iw 1.75 `
 
       // Combine the promptInit with the plain text representation
       const promptText = `${promptInit} ${plainText} ${promptEndy}`;
