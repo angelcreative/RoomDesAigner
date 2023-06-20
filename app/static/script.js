@@ -173,80 +173,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
     
-    
-    
-  // Function to generate images using Stable Diffusion API
-  /*<!--function generateImages(imageUrl, selectedValues) {
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
-
-    // Update the promptInit variable
-    const promptInit = `${imageUrl}, High resolution photography interior design, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
-
-    // Generate the plain text representation of the selected values
-    let plainText = Object.entries(selectedValues)
-      .filter(([key, value]) => value && key !== "imageUrl")
-      .map(([key, value]) => `${key}: ${value}`)
-      .join(", ");
-
-    // Combine the promptInit with the plain text representation
-    const promptText = `${promptInit} ${plainText}`;
-
-      showOverlay(); // Show the overlay and loading message
-       showWaitingOverlayUntilModalReady(); // Show the waiting overlay until the modal is ready
-
-      
-    const prompt = {
-      key: apiKey,
-      prompt: JSON.stringify(promptText),
-      negative_prompt: "YOUR_NEGATIVE_PROMPT",
-      width: "1024",
-      height: "512",
-      samples: "4",
-      num_inference_steps: "20",
-      seed: null,
-      guidance_scale: 7.5,
-      webhook: null,
-      track_id: null,
-      safety_checker: null,
-      enhance_prompt: null,
-      multi_lingual: null,
-      panorama: null,
-      self_attention: null,
-      upscale: null,
-      embeddings_model: null
-    };
-
-    // Set the image URL as the init_image in the prompt
-    prompt.init_image = imageUrl;
-
-   
-
-    // Make an API request to Stable Diffusion API with the prompt
-    fetch("/generate-images", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(prompt)
-    })
-      .then(response => response.json())
-      .then(data => {
-        // Handle the API response and display the generated images
-        if (data.status === "success" && data.output) {
-          const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-          );
-            hideOverlay(); // Hide the overlay and loading message
-          showModal(imageUrls);
-          showOverlay(); // Show the overlay
-        } else {
-          console.error("Failed to generate images:", data.error);
-        }
-      })
-      .catch(error => {
-        console.error("Error generating images:", error);
-      });
-  }*/
+ 
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
@@ -305,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function() {
               url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
             );
             hideWaitingOverlay(); // Hide the waiting overlay
-            showModal(imageUrls);
+            showModal(imageUrls, promptText);
           } else {
             console.error("Failed to generate images:", data.error);
           }
@@ -334,8 +261,31 @@ document.addEventListener("DOMContentLoaded", function() {
       const overlay = document.getElementById("overlay");
       overlay.style.display = "block";
     }
+
+    // Function to copy text to clipboard
+    function copyTextToClipboard(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Text copied to clipboard!");
+    }
+
+    // Function to copy image URL to clipboard
+    function copyImageUrlToClipboard(imageUrl) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = imageUrl;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      alert("Image URL copied to clipboard!");
+    }
+
     // Function to display the generated images in a modal
-    function showModal(imageUrls) {
+    function showModal(imageUrls, promptText) {
       const modal = document.getElementById("modal");
       const imageGrid = document.getElementById("imageGrid");
 
@@ -345,13 +295,16 @@ document.addEventListener("DOMContentLoaded", function() {
       // Display the generated images
       imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
-    
-
         // Create image element
         const image = document.createElement("img");
         image.src = imageUrl;
         image.alt = "Generated Image";
         image.classList.add("thumbnail");
+          
+          // Attach click event listener to open image in new tab
+              image.addEventListener("click", () => {
+                openImageInNewTab(imageUrl);
+              });
 
         // Create buttons container
         const buttonsContainer = document.createElement("div");
@@ -364,16 +317,16 @@ document.addEventListener("DOMContentLoaded", function() {
           copyImageUrlToClipboard(imageUrl);
         });
 
-        // Create download button
-        const downloadButton = document.createElement("button");
-        downloadButton.textContent = "Download";
-        downloadButton.addEventListener("click", () => {
-          downloadImage(imageUrl);
+        // Create copy prompt button
+        const copyPromptButton = document.createElement("button");
+        copyPromptButton.textContent = "Copy Prompt";
+        copyPromptButton.addEventListener("click", () => {
+          copyTextToClipboard(promptText);
         });
 
         // Append buttons to buttons container
         buttonsContainer.appendChild(copyButton);
-        buttonsContainer.appendChild(downloadButton);
+        buttonsContainer.appendChild(copyPromptButton);
 
         // Append image and buttons container to image container
         imageContainer.appendChild(image);
@@ -387,7 +340,6 @@ document.addEventListener("DOMContentLoaded", function() {
       modal.style.display = "block";
       showOverlay(); // Show the overlay
     }
-
 
 
   // Function to open the image in a new tab

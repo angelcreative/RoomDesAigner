@@ -63,7 +63,10 @@ body {
     border-radius: 1rem;
     color: #673AB7;
     text-align: center;
-    font-weight: bold;
+    font-weight: lighter;
+    margin: 0 auto;
+    display: block;
+    max-width: fit-content;
 }
 
 .col-r {
@@ -306,6 +309,9 @@ option[title]:hover:after {
     cursor: pointer;
     opacity: 1;
     transition: opacity ease-out 30ms, transform 300ms ease-in;
+    box-shadow: 0px 12px 20px 2px rgb(15 15 27 / 76%);
+    border: 1px solid #ffffff47;
+    border-top: none;
 }
 .thumbnail:hover {
     opacity: .7;
@@ -506,6 +512,9 @@ select#materials {
       cursor: pointer;
       opacity: 1;
       transition: opacity ease-out 30ms, transform 300ms ease-in;
+      box-shadow: 0px 12px 20px 2px rgb(15 15 27 / 76%);
+      border: 1px solid #ffffff47;
+      border-top: none;
   }
   
   .buttonsCont {
