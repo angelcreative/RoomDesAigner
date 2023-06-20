@@ -185,9 +185,11 @@ document.addEventListener("DOMContentLoaded", function() {
         .filter(([key, value]) => value && key !== "imageUrl")
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
+        
+        const promptEndy = `-ar 3:2 --stylize 800 --iw 1.75 `
 
       // Combine the promptInit with the plain text representation
-      const promptText = `${promptInit} ${plainText}`;
+      const promptText = `${promptInit} ${plainText} ${promptEndy}`;
 
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay
