@@ -534,13 +534,24 @@ select#materials {
       display: flex;
       flex-direction: column;
   }
-  
+ 
+ html {
+ overflow: hidden;
+ width: 100%;
+ }
+ body {
+ height: 100%;
+ position: fixed;
+ overflow-y: scroll;
+ -webkit-overflow-scrolling: touch;
+ }
+ 
 }
 
 
 
 
-/* Extra small devices (phones, 600px and down) */
+/* Extra small devices (phones, 1024px and down) */
 @media only screen and (max-width: 1024px) {
   /* CSS styles for screens up to 1024 */
     
@@ -553,5 +564,16 @@ select#materials {
         max-width: 90%;
         justify-content: center;
         margin: 0 auto;
+    }
+    
+    html {
+    overflow: hidden;
+    width: 100%;
+    }
+    body {
+    height: 100%;
+    position: fixed;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
     }
 }
