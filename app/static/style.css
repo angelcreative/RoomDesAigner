@@ -20,7 +20,7 @@ body {
 }
 
 .modal-content {
-    background: #fdfdfd;
+    background: #0c0c22;
         padding:2rem  .5rem;
         position: relative;
         display: block;
@@ -58,7 +58,7 @@ body {
 
 .modal-content p {
     padding: 10px 30px;
-    font-size: 16px;
+    font-size: 13px;
     background: #673ab717;
     border-radius: 1rem;
     color: #673AB7;
@@ -78,14 +78,14 @@ body {
 }
 
 span.close {
-  background: #54524c;
-  border-radius: 900rem;
-  padding: 4px 10px 6px 10px;
-  position: absolute;
-  cursor: pointer;
-  color: #fff;
-  top: 20px;
-  right: 20px;
+    background: #151030;
+    border-radius: 900rem;
+    padding: 4px 10px 6px 10px;
+    position: absolute;
+    cursor: pointer;
+    color: #673ab7;
+    top: 20px;
+    right: 20px;
 }
 
 pre {
@@ -144,7 +144,9 @@ h1 {
 }
 
 .modal-content h1 {
-  color: #8f33ff57;
+    color: #a9fff5;
+    margin: 2rem 0;
+    font-weight: lighter;
 }
 
 h4 {
@@ -481,7 +483,7 @@ select#materials {
   }
   
   .modal-content {
-      background: #fdfdfd;
+      background: #0c0c22;
       padding: 2rem;
       position: relative;
       display: block;
