@@ -58,6 +58,7 @@
       <h1>
         <img src="{{ url_for('static', filename='img/logo-web.svg') }}" title="Room DesAigner" width="140" height="auto">
       </h1>
+      <!--<div class="gtranslate_wrapper"></div>-->
       <form id="imageGenerationForm" onsubmit="handleSubmit(event)">
         <div class="groupContainer">
           <div class="group">
@@ -115,8 +116,9 @@
             <h4>Upload your sketch, picture, ...</h4>
             <input type="file" id="imageDisplayUrl" accept="image/*" />
             <br>
-            <sub>JPG, PNG, GIF formats allowed.</sub>
-            <sub>Upload and image is not mandatory</sub>
+            <sub>JPG, PNG, GIF formats allowed.</sub><br>
+            <sub>Upload and image is not mandatory</sub><br>
+            <sub>File name must be simple and short</sub>
             <h4>Design influence</h4>
             <select id="magazine">
               <option value="">Select a design magazine</option>
@@ -452,9 +454,6 @@
               <option value="Master Bedroom">Master Bedroom</option>
               <option value="Master Bathroom">Master Bathroom</option>
               <option value="Walk-in Closet">Walk-in Closet</option>
-              <option value="Nursery">Nursery</option>
-              <option value="Children's Bedroom">Children's Bedroom</option>
-              <option value="Teenager's Bedroom">Teenager's Bedroom</option>
               <option value="Guest Bedroom">Guest Bedroom</option>
               <option value="Guest Bathroom">Guest Bathroom</option>
               <option value="Home Gym">Home Gym</option>
@@ -468,7 +467,6 @@
               <option value="Deck">Deck</option>
               <option value="Terrace">Terrace</option>
               <option value="Balcony">Balcony</option>
-              <option value="Garden">Garden</option>
               <option value="Courtyard">Courtyard</option>
             </select>
             <!--ID child room -->
@@ -496,6 +494,35 @@
               <option value="Shared Room">Shared Room</option>
               
             </select>
+            
+        <select id="pool">
+              <option value="">Select a pool style</option>
+              <option value="contemporary pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
+              <option value="mediterranean pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
+              <option value="naturalistic pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
+              <option value="tropical pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
+              <option value="modern pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
+              <option value="rustic pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
+              <option value="zen pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+              <option value="resort pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
+            </select>
+        
+        <select id="garden">
+            
+              <option value="">Select a garden style</option>
+              <option value="english" title="Lush, romantic, and informal garden with abundant flowers and neatly trimmed hedges">English Garden</option>
+              <option value="japanese" title="Serene and harmonious garden with Zen rock gardens, water features, and carefully pruned trees">Japanese Garden</option>
+              <option value="mediterranean" title="Inspired by Southern European coastal regions with vibrant colors, drought-tolerant plants, and terracotta pots">Mediterranean Garden</option>
+              <option value="cottage" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
+              <option value="modern" title="Minimalist garden design with clean lines, geometric shapes, and carefully selected plantings">Modern Garden</option>
+              <option value="tropical" title="Exotic and lush garden with large-leaved plants, vibrant flowers, and water features">Tropical Garden</option>
+              <option value="desert" title="Drought-tolerant garden with succulents, cacti, rocks, and gravel for arid climates">Desert Garden</option>
+              <option value="formal" title="Symmetrical and structured garden with well-manicured hedges, topiaries, and geometric patterns">Formal Garden</option>
+              <option value="contemporary" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
+              <option value="rooftop" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
+            </select>
+
+
           </div>
           <div class="group">
             <h4>Architectural tokens</h4>
@@ -689,9 +716,9 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <!-- //end script - dont delete it -->
     <sub class="credits">By Gemma and Angel Sanchez </sub>
-    <div class="gtranslate_wrapper"></div>
-    <script>window.gtranslateSettings = {"default_language":"en","languages":["en","es"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"right","vertical_position":"bottom"}</script>
-    <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
+    
+    <!--<script>window.gtranslateSettings = {"default_language":"en","languages":["en","es"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"right","vertical_position":"bottom"}</script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>-->
     
   </body>
 </html>
