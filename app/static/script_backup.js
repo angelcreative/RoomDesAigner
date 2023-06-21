@@ -11,7 +11,7 @@ function showWaitingOverlay() {
   var progress = 0;
 
   var intervalId = setInterval(function() {
-    progress += 3;
+    progress += 1;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
 
@@ -20,7 +20,7 @@ function showWaitingOverlay() {
       hideWaitingOverlay();
       showOverlay();
     }
-  }, 300);
+  }, 1000);
 }
 
 // Function to hide the waiting overlay and loading message
@@ -138,41 +138,41 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
 
-  // Function to get the selected form values
+    // Function to get the selected form values
     function getSelectedValues(imageUrl = "") {
-      const selectedValues = {
-      // Replace with your form field IDs and corresponding values
-    photography_level_shot: document.getElementById("photography_level_shot").value,
-    camera_shot: document.getElementById("camera_shot").value,
-    camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
-    lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
-    home_area: document.getElementById("home_area").value,
-    size: document.getElementById("size").value,
-    pool: document.getElementById("pool").value,
-    garden: document.getElementById("garden").value,
-    child_room: document.getElementById("child_room").value,
-    room_shape: document.getElementById("room_shape").value,
-    doors: document.getElementById("doors").value,
-    windows: document.getElementById("windows").value,
-    floors: document.getElementById("floors").value,
-    roofs: document.getElementById("roofs").value,
-    roof_height: document.getElementById("roof_height").value,
-    illumination: document.getElementById("illumination").value,
-    material: document.getElementById("material").value,
-    ceramic_material: document.getElementById("ceramic_material").value,
-    fabric: document.getElementById("fabric").value,
-    stone_material: document.getElementById("stone_material").value,
-    marble_material: document.getElementById("marble_material").value,
-    wood_material: document.getElementById("wood_material").value,
-    color_palette: document.getElementById("color_palette").value,
-    magazine: document.getElementById("magazine").value,
-    design_style: document.getElementById("design_style").value,
-    vendors: document.getElementById("vendors").value,
-    designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
-     imageUrl: document.getElementById("imageDisplayUrl").value
-    };
-  }
-
+       return {
+        // Replace with your form field IDs and corresponding values
+      photography_level_shot: document.getElementById("photography_level_shot").value,
+      camera_shot: document.getElementById("camera_shot").value,
+      camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
+      lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
+       space_to_be_designed: document.getElementById("space_to_be_designed").value,
+      home_area: document.getElementById("home_area").value,
+      size: document.getElementById("size").value,
+      pool: document.getElementById("pool").value,
+      garden: document.getElementById("garden").value,
+      child_room: document.getElementById("child_room").value,
+      room_shape: document.getElementById("room_shape").value,
+      doors: document.getElementById("doors").value,
+      windows: document.getElementById("windows").value,
+      floors: document.getElementById("floors").value,
+      roofs: document.getElementById("roofs").value,
+      roof_height: document.getElementById("roof_height").value,
+      illumination: document.getElementById("illumination").value,
+      material: document.getElementById("material").value,
+      ceramic_material: document.getElementById("ceramic_material").value,
+      fabric: document.getElementById("fabric").value,
+      stone_material: document.getElementById("stone_material").value,
+      marble_material: document.getElementById("marble_material").value,
+      wood_material: document.getElementById("wood_material").value,
+      color_palette: document.getElementById("color_palette").value,
+      magazine: document.getElementById("magazine").value,
+      design_style: document.getElementById("design_style").value,
+      vendors: document.getElementById("vendors").value,
+      designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
+       imageUrl: document.getElementById("imageDisplayUrl").value
+      };
+    }
     
     
  
@@ -180,13 +180,21 @@ document.addEventListener("DOMContentLoaded", function() {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, HD photography, interior design::1, Editorial photography shot, Octane render, sharp details, 8K, cinematic lightning, `;
+      const promptInit = `${imageUrl}, High resolution photography, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
 
-      // Generate the plain text representation of the selected values
-      let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
+        // Generate the plain text representation of the selected values
+        let plainText = Object.entries(selectedValues)
+          .filter(([key, value]) => value && key !== "imageUrl")
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(", ");
+
+        // Check if imageUrl is present, and append it to plainText if it exists
+        if (imageUrl) {
+          plainText += `, imageUrl: ${imageUrl}`;
+        } else {
+          plainText += ', imageUrl: ';
+        }
+
         
         const promptEndy = `--ar 3:2 --stylize 800 --iw 1.75 `
 
@@ -239,11 +247,13 @@ document.addEventListener("DOMContentLoaded", function() {
             showModal(imageUrls, promptText);
           } else {
             console.error("Failed to generate images:", data.error);
+              alert("Something was wrong from our side, try it again.");
           }
           hideOverlay(); // Hide the overlay and loading message
         })
         .catch(error => {
           console.error("Error generating images:", error);
+            alert("Something was wrong from our side, try it again.");
           hideWaitingOverlay(); // Hide the waiting overlay
           hideOverlay(); // Hide the overlay and loading message
         });
@@ -266,6 +276,30 @@ document.addEventListener("DOMContentLoaded", function() {
       overlay.style.display = "block";
     }
 
+    
+    // Function to generate message
+
+    function generateMessageDiv(message) {
+      var messageDiv = document.createElement('div');
+      messageDiv.id = 'message';
+      messageDiv.innerHTML = `
+        <div class="message-content">
+      
+              <img class="imgLoader" src="/static/img/copy.png">
+          <p class="message-microcopy">${message}</p>
+          <button class="message-close-btn" onclick="closeMessage()">Close</button>
+        </div>
+      `;
+      document.body.appendChild(messageDiv);
+    }
+
+    window.closeMessage = function () {
+      var messageDiv = document.getElementById('message');
+      if (messageDiv) {
+        messageDiv.remove();
+      }
+    }
+
     // Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
@@ -274,7 +308,8 @@ document.addEventListener("DOMContentLoaded", function() {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      alert("Text copied to clipboard!");
+      
+      generateMessageDiv("Prompt copied to clipboard!");
     }
 
     // Function to copy image URL to clipboard
@@ -285,8 +320,10 @@ document.addEventListener("DOMContentLoaded", function() {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      alert("Image URL copied to clipboard!");
+      
+      generateMessageDiv("Image URL copied to clipboard!");
     }
+
 
     // Function to display the generated images in a modal
     function showModal(imageUrls, promptText) {
@@ -351,17 +388,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.open(imageUrl, "_blank");
   }
 
-
-  // Function to copy the image URL to clipboard
-  function copyImageUrlToClipboard(imageUrl) {
-    const tempInput = document.createElement("input");
-    tempInput.value = imageUrl;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-    alert("Image URL copied to clipboard!");
-  }
 
   // Function to download the image (or open in a new tab if not possible to download)
   function downloadImage(imageUrl) {
