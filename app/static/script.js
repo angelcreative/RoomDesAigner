@@ -11,7 +11,7 @@ function showWaitingOverlay() {
   var progress = 0;
 
   var intervalId = setInterval(function() {
-    progress += 3;
+    progress += 1;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
 
@@ -20,7 +20,7 @@ function showWaitingOverlay() {
       hideWaitingOverlay();
       showOverlay();
     }
-  }, 300);
+  }, 1000);
 }
 
 // Function to hide the waiting overlay and loading message
@@ -146,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
       camera_shot: document.getElementById("camera_shot").value,
       camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
       lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
+       space_to_be_designed: document.getElementById("space_to_be_designed").value,
       home_area: document.getElementById("home_area").value,
       size: document.getElementById("size").value,
       pool: document.getElementById("pool").value,
@@ -179,13 +180,21 @@ document.addEventListener("DOMContentLoaded", function() {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, High resolution photography interior design, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
+      const promptInit = `${imageUrl}, High resolution photography, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
 
-      // Generate the plain text representation of the selected values
-      let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
+        // Generate the plain text representation of the selected values
+        let plainText = Object.entries(selectedValues)
+          .filter(([key, value]) => value && key !== "imageUrl")
+          .map(([key, value]) => `${key}: ${value}`)
+          .join(", ");
+
+        // Check if imageUrl is present, and append it to plainText if it exists
+        if (imageUrl) {
+          plainText += `, imageUrl: ${imageUrl}`;
+        } else {
+          plainText += ', imageUrl: ';
+        }
+
         
         const promptEndy = `--ar 3:2 --stylize 800 --iw 1.75 `
 
@@ -238,11 +247,13 @@ document.addEventListener("DOMContentLoaded", function() {
             showModal(imageUrls, promptText);
           } else {
             console.error("Failed to generate images:", data.error);
+              alert("Something was wrong from our side, try it again.");
           }
           hideOverlay(); // Hide the overlay and loading message
         })
         .catch(error => {
           console.error("Error generating images:", error);
+            alert("Something was wrong from our side, try it again.");
           hideWaitingOverlay(); // Hide the waiting overlay
           hideOverlay(); // Hide the overlay and loading message
         });
@@ -265,6 +276,30 @@ document.addEventListener("DOMContentLoaded", function() {
       overlay.style.display = "block";
     }
 
+    
+    // Function to generate message
+
+    function generateMessageDiv(message) {
+      var messageDiv = document.createElement('div');
+      messageDiv.id = 'message';
+      messageDiv.innerHTML = `
+        <div class="message-content">
+      
+              <img class="imgLoader" src="/static/img/copy.png">
+          <p class="message-microcopy">${message}</p>
+          <button class="message-close-btn" onclick="closeMessage()">Close</button>
+        </div>
+      `;
+      document.body.appendChild(messageDiv);
+    }
+
+    window.closeMessage = function () {
+      var messageDiv = document.getElementById('message');
+      if (messageDiv) {
+        messageDiv.remove();
+      }
+    }
+
     // Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
@@ -273,7 +308,8 @@ document.addEventListener("DOMContentLoaded", function() {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      alert("Text copied to clipboard!");
+      
+      generateMessageDiv("Prompt copied to clipboard!");
     }
 
     // Function to copy image URL to clipboard
@@ -284,8 +320,10 @@ document.addEventListener("DOMContentLoaded", function() {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      alert("Image URL copied to clipboard!");
+      
+      generateMessageDiv("Image URL copied to clipboard!");
     }
+
 
     // Function to display the generated images in a modal
     function showModal(imageUrls, promptText) {
@@ -350,17 +388,6 @@ document.addEventListener("DOMContentLoaded", function() {
     window.open(imageUrl, "_blank");
   }
 
-
-  // Function to copy the image URL to clipboard
-  function copyImageUrlToClipboard(imageUrl) {
-    const tempInput = document.createElement("input");
-    tempInput.value = imageUrl;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-    alert("Image URL copied to clipboard!");
-  }
 
   // Function to download the image (or open in a new tab if not possible to download)
   function downloadImage(imageUrl) {

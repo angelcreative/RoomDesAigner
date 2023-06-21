@@ -29,9 +29,13 @@
   <body class="gradient-background ">
     <!-- Add this element to your HTML -->
     <!-- Modal Window -->
+    
+    </div>
+
+    <div id="errorContainer"></div>
     <div id="waiting">
       <div id="loadingMessage">
-        <img src="{{ url_for('static', filename='img/buddy.png') }}">
+        <img class="imgLoader" src="{{ url_for('static', filename='img/generating.png') }}">
         <h1>The magic is happening now!</h1>
         <p>Magical things takes a bit of time, relax, this will be done soon.</p>
         <div>
@@ -43,8 +47,8 @@
     <div id="overlay"></div>
     <div id="modal" class="modal" style="display: none;">
       <div class="modal-content">
-          <img src="{{ url_for('static', filename='img/logo-web.svg') }}" title="Room DesAigner" width="140" height="auto">
-        <h1 id="message">Your dream room is here</h1>
+          <img src="{{ url_for('static', filename='img/logo-web.svg') }}" title="Room DesAigner" width="140" height="auto" style="margin-left:40px">
+        <h1>Your dream room is here</h1>
         <p>Tip: use copy url + copy prompt to paste it on Midjourney to generate even more images based on the original.</p>
         <br>
         <div class="imageGrid" id="imageGrid"></div>
@@ -110,6 +114,16 @@
               <option value="Fujifilm GF 110mm f/2 R LM WR">Fujifilm GF 110mm f/2 R LM WR: Incredible portraits</option>
               <option value="Leica APO-Summicron-M 50mm f/2 ASPH">Leica APO-Summicron-M 50mm f/2 ASPH: High-performance, sharp lens</option>
             </select>
+            
+            
+            <h4>Interior / Outdoor design</h4>
+           
+            <select id="space_to_be_designed">
+              <option value="interior design" selected>Interior design</option>
+              <option value="outdoor design">Outdoor design</option>
+              </select>
+            <sub>By default is selected interior design, if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
+            
           </div>
           <div class="group">
             <!-- ID MAGAZINES -->
@@ -426,7 +440,7 @@
               <option value="towering">Towering</option>
               <option value="monumental">Monumental</option>
             </select>
-            <h4>Home area</h4>
+            <h4>Indoor spaces</h4>
             <!-- ID stanze -->
             <select id="home_area">
               <option value="">Select a home area</option>
@@ -494,7 +508,7 @@
               <option value="Shared Room">Shared Room</option>
               
             </select>
-            
+            <h4>Outdoor spaces</h4>
         <select id="pool">
               <option value="">Select a pool style</option>
               <option value="contemporary pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
@@ -703,11 +717,11 @@
         <!-- end group container -->
         <div class="buttonsCont">
           <div class="buttonsL">
-            <button id="clearAllButton">Clear All 🧹</button>
+            <button id="clearAllButton">Clear All</button>
             <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
           </div>
           <div class="buttonsR">
-            <button class="buttonExt" type="submit" id="magicButton">Make the magic! 🦄</button>
+            <button class="buttonExt" type="submit" id="magicButton">Make the magic!</button>
           </div>
         </div>
       </form>
