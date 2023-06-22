@@ -203,7 +203,7 @@ select {
     border: 1px solid #000000;
     background: #0e0e0e;
     box-shadow: inset 0px 4px 16px rgb(0 0 0);
-    color: #4a4a4a;
+    color: #808080;
     width: 200px;
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
 }
