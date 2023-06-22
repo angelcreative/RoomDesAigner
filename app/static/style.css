@@ -499,7 +499,7 @@ select#materials {
   width: 0%;
   height: 5px;
  
-  background: #a9fff5
+  background: #a9fff5;
   border-radius: 10px;
   transition: width 0.3s ease-in-out;
 }
