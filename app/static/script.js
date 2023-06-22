@@ -477,3 +477,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
 });
+
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var splash = document.getElementById('splash');
+    var content = document.getElementById('content');
+
+    splash.style.display = 'none'; // Hide the splash screen
+    content.style.display = 'block'; // Show the website content
+  }, 4000); // 4 seconds (4000 milliseconds)
+});
