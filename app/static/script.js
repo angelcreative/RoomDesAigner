@@ -11,7 +11,7 @@ function showWaitingOverlay() {
   var progress = 0;
 
   var intervalId = setInterval(function() {
-    progress += 1;
+    progress += 1.8;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
 
