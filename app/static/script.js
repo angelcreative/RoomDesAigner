@@ -405,6 +405,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+    // Green dot
+    function toggleGreenDot(selectId) {
+      var selectElement = document.getElementById(selectId);
+      var dotElement = document.querySelector('#' + selectId + '+ span.dot');
+
+      if (selectElement.value === '') {
+        dotElement.style.display = 'none';
+      } else {
+        dotElement.style.display = 'block';
+      }
+    }
+
+    // Attach event listeners to all select elements
+    var selectElements = document.querySelectorAll('select');
+    selectElements.forEach(function(selectElement) {
+      selectElement.addEventListener('change', function() {
+        var selectId = this.id;
+        toggleGreenDot(selectId);
+      });
+    });
 
 
   // Function to close the modal
@@ -421,14 +441,29 @@ document.addEventListener("DOMContentLoaded", function() {
     // Reset the form and event listeners
     resetFormAndEventListeners();
   }
-  // Function to clear all form values and reset the image display
-  function clearAll(event) {
-    event.preventDefault(); // Prevent form submission
-    const fileInput = document.getElementById("imageDisplayUrl");
-    fileInput.value = ""; // Clear the file input
-    const form = document.getElementById("imageGenerationForm");
-    form.reset(); // Reset the form to its initial state
-  }
+    // Function to clear all form values and reset the image display
+    function clearAll(event) {
+      event.preventDefault(); // Prevent form submission
+      const fileInput = document.getElementById("imageDisplayUrl");
+      fileInput.value = ""; // Clear the file input
+      const form = document.getElementById("imageGenerationForm");
+      form.reset(); // Reset the form
+
+      // Hide all green dots
+      const selectElements = document.querySelectorAll('select');
+      selectElements.forEach(function(selectElement) {
+        const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
+        dotElement.style.display = 'none';
+      });
+
+      // Enable the "Make the Magic" button
+      const magicButton = document.getElementById("magicButton");
+      magicButton.disabled = false;
+
+      // Reset the form and event listeners
+      resetFormAndEventListeners();
+    }
+
 
   // Add event listener to the form submission
   const form = document.getElementById("imageGenerationForm");

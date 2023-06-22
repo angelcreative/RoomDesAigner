@@ -81,6 +81,8 @@
               <option value="Split-Level" title="The camera is partially submerged in water, capturing both the underwater and above-water scenes simultaneously. This angle is popular in underwater photography."> Split-Level</option>
               <option value="Over-the-Shoulder" title="The camera is positioned behind a subject, capturing the scene from their perspective. This angle is commonly used for portraits or to create a sense of being immersed in the subject's point of view."> Over-the-Shoulder</option>
             </select>
+            <span class="dot"></span>
+            
             <select id="camera_shot">
               <option value=" ">Camera distance</option>
               <option value="Extreme Wide Shot (ELS)" title="Captures a wide view of the entire scene, emphasizing the surroundings.">Extreme Wide Shot (ELS)</option>
@@ -94,6 +96,8 @@
               <option value="Extreme Close Up (ECU)" title="Zooms in on a specific part of the subject, highlighting minute details or emotions.">Extreme Close Up (ECU)</option>
               <option value="Establishing Shot" title="Introduces the setting or location, providing a context for the following scene.">Establishing Shot</option>
             </select>
+            <span class="dot"></span>
+            
             <!-- ID CAMERAS-->
             <h4>High quality Cameras</h4>
             <select id="camera_used_to_take_the_shot">
@@ -104,6 +108,8 @@
               <option value="Hasselblad X2D 100C">Hasselblad X2D 100C: Ultra-high resolution images</option>
               <option value="Leica M10-R">Leica M10-R: Exceptional build quality and image</option>
             </select>
+            <span class="dot"></span>
+
             <!-- ID LENSES -->
             <h4>High performance lenses</h4>
             <select id="lens_used_with_the_camera_to_take_the_shot">
@@ -114,15 +120,22 @@
               <option value="Fujifilm GF 110mm f/2 R LM WR">Fujifilm GF 110mm f/2 R LM WR: Incredible portraits</option>
               <option value="Leica APO-Summicron-M 50mm f/2 ASPH">Leica APO-Summicron-M 50mm f/2 ASPH: High-performance, sharp lens</option>
             </select>
-            
+            <span class="dot"></span>
+
             
             <h4>Interior / Outdoor design</h4>
            
             <select id="space_to_be_designed">
+                <option value=" " selected>Select the space to design</option>
               <option value="interior design" selected>Interior design</option>
               <option value="outdoor design">Outdoor design</option>
               </select>
-            <sub>By default is selected interior design, <br>if you want to design an outdoor pool or <br>garden, select the outdoor design option.</sub>
+            <span class="dot"></span>
+
+            <sub>Select interior design for indoor<br>
+                 designs if you want to design an<br>
+                 outdoor pool or garden, select the<br>
+                 outdoor design option.</sub>
             
           </div>
           <div class="group">
@@ -158,6 +171,8 @@
               <option value="Beautiful Kitchens & Baths" title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces."> Beautiful Kitchens & Baths</option>
               <option value="Belle" title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects."> Belle</option>
             </select>
+            <span class="dot"></span>
+
             <!-- ID STYLES-->
             <select id="design_style">
               <option value="">Select a design style</option>
@@ -235,6 +250,8 @@
               <option value="Wabi-Sabi Style" title="Derived from Japanese aesthetics, the Wabi-Sabi style embraces imperfection, simplicity, and the beauty of natural materials. It creates a rustic and unpretentious ambiance that appreciates the transient nature of things."> Wabi-Sabi Style</option>
               <option value="Zen Style" title="Zen style draws inspiration from Japanese design and focuses on creating a serene and minimalist space. It features clean lines, natural materials, a neutral color palette, and a sense of tranquility, promoting relaxation and mindfulness."> Zen Style</option>
             </select>
+            <span class="dot"></span>
+
             <!-- ID VENDORS -->
             <select id="vendors">
               <option value="">Select a furniture vendor</option>
@@ -313,6 +330,8 @@
               <option value="Lexington Home Brands" title="Upscale furniture and home decor">Lexington Home Brands - <a href="https://www.lexington.com">https://www.lexington.com</a>
               </option>
             </select>
+            <span class="dot"></span>
+
             <select id="designed_by_this_architect">
               <option value="">Select a famous architect</option>
               <option value="Frank Lloyd Wright" title="Guggenheim Museum, Skyscraper Vase, Spindle Cube Chair, Side Chair, Taliesin Line of Decorative Wallpapers, Armchair, Design 105">Frank Lloyd Wright</option>
@@ -339,6 +358,8 @@
               <option value="Renzo Piano" title="Centre Georges Pompidou, The Shard">Renzo Piano</option>
               <option value="Philip Johnson" title="Glass House, 550 Madison Avenue">Philip Johnson</option>
             </select>
+            <span class="dot"></span>
+
           </div>
           <div class="group">
             <!-- ID COLOR PALETTES -->
@@ -346,7 +367,6 @@
             <select id="color_palette">
               <option value="">Select color palette</option>
               <!-- Interior Design Color Palettes -->
-              <optgroup label="Interior Design Color Palettes">
                 <option value="Monochromatic" title="Monochromatic: Consists of varying shades and tones of a single color. Creates a harmonious and soothing effect."> Monochromatic</option>
                 <option value="Analogous" title="Analogous: Combines colors that are adjacent to each other on the color wheel. Creates a sense of harmony and is pleasing to the eye."> Analogous</option>
                 <option value="Complementary" title="Complementary: Involves pairing colors that are opposite each other on the color wheel. Creates a high contrast and energetic look."> Complementary</option>
@@ -388,8 +408,8 @@
                 <option value="Cottagecore" title="Cottagecore: Incorporates soft, pastel colors like muted greens, pinks, and blues, combined with floral patterns and vintage elements. Creates a cozy and nostalgic cottage-inspired atmosphere."> Cottagecore</option>
                 <option value="Retro Pastels" title="Retro Pastels: Draws inspiration from the 1950s and 1960s, featuring soft pastel shades like mint greens, baby blues, and pale pinks. Creates a retro and nostalgic vibe."> Retro Pastels</option>
             </select>
-            </optgroup>
-            </select>
+            <span class="dot"></span>
+
             <!-- ID ROOM SHAPE -->
             <select id="room_shape">
               <option value="">Select a room shape</option>
@@ -416,6 +436,8 @@
               <option value="Split-level Room" title="A room with multiple levels, typically connected by a short flight of stairs.">Split-level Room </option>
               <option value="Two storey apartment">Two storey apartment</option>
             </select>
+            <span class="dot"></span>
+
             <!--ID ROOM SIZE-->
             <select id="size">
               <option value="">Select room size</option>
@@ -440,6 +462,8 @@
               <option value="towering">Towering</option>
               <option value="monumental">Monumental</option>
             </select>
+            <span class="dot"></span>
+
             <h4>Indoor spaces</h4>
             <!-- ID stanze -->
             <select id="home_area">
@@ -483,6 +507,8 @@
               <option value="Balcony">Balcony</option>
               <option value="Courtyard">Courtyard</option>
             </select>
+            <span class="dot"></span>
+
             <!--ID child room -->
             <select id="child_room">
               <option value="">Select a children room type</option>
@@ -508,6 +534,8 @@
               <option value="Shared Room">Shared Room</option>
               
             </select>
+            <span class="dot"></span>
+
             <h4>Outdoor spaces</h4>
         <select id="pool">
               <option value="">Select a pool style</option>
@@ -520,6 +548,8 @@
               <option value="zen pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
               <option value="resort pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
             </select>
+        <span class="dot"></span>
+
         
         <select id="garden">
             
@@ -535,6 +565,8 @@
               <option value="contemporary" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
               <option value="rooftop" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
             </select>
+        <span class="dot"></span>
+
 
 
           </div>
@@ -562,6 +594,8 @@
               <option value="Pendant Cluster Lights" title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement."> Pendant Cluster Lights</option>
               <option value="Candlelight" title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere."> Candlelight</option>
             </select>
+            <span class="dot"></span>
+
             <!-- ID architectural items-->
             <!-- Doors -->
             <select id="doors">
@@ -578,6 +612,8 @@
               <option value="Folding Doors" title="Doors that fold like an accordion to create a wide opening.">Folding Doors </option>
               <option value="Revolving Doors" title="Circular doors that rotate on a central axis, often used in large public buildings.">Revolving Doors </option>
             </select>
+            <span class="dot"></span>
+
             <!-- Windows -->
             <select id="windows">
               <option value="">Select a window</option>
@@ -593,6 +629,8 @@
               <option value="Arched Windows" title="Windows with a curved or arched top section.">Arched Windows</option>
               <option value="Clerestory Windows" title="Windows placed high on a wall to let in light while maintaining privacy.">Clerestory Windows</option>
             </select>
+            <span class="dot"></span>
+
             <!-- Floors -->
             <select id="floors">
               <option value="">Select a floor</option>
@@ -607,6 +645,8 @@
               <option value="Terrazzo Flooring" title="Composite material made of marble, quartz, or other chips embedded in cement or resin.">Terrazzo Flooring</option>
               <option value="Engineered Wood Flooring" title="Flooring made of layers of wood veneer with a plywood or high-density fiberboard (HDF) core."> Engineered Wood Flooring</option>
             </select>
+            <span class="dot"></span>
+
             <!-- Roofs -->
             <select id="roofs">
               <option value="">Select a roof</option>
@@ -621,6 +661,8 @@
               <option value="Dome Roof" title="A roof that forms a hemispherical shape, often seen in architectural landmarks.">Dome Roof</option>
               <option value="Sawtooth Roof" title="A roof with a series of ridges and vertical glass panels, allowing natural light into industrial buildings."> Sawtooth Roof</option>
             </select>
+            <span class="dot"></span>
+
             <!-- roof height-->
             <select id="roof_height">
               <option value="">Select a roof height</option>
@@ -632,6 +674,8 @@
               <option value="skyscraper_roof" title="A skyscraper roof represents the pinnacle of height in urban architecture. These roofs soar to great heights, defining the skyline of cities. They often feature elaborate designs, observation decks, or unique structural elements."> Skyscraper Roof</option>
               <option value="atrium_roof" title="An atrium roof is characterized by a large central space with a roof that covers multiple floors. The height of the atrium roof can vary, but it typically allows for natural light to permeate the interior, creating a vibrant and visually stunning gathering area."> Atrium Roof</option>
             </select>
+            <span class="dot"></span>
+
           </div>
           <div class="group">
             <h4>Architectural materials</h4>
@@ -655,6 +699,8 @@
               <option value="hickory wood" title="Hickory wood is tough and shock-resistant, commonly used for tool handles and flooring.">Hickory</option>
               <option value="balsa wood" title="Balsa wood is lightweight and easy to work with, commonly used for model building and crafts.">Balsa</option>
             </select>
+            <span class="dot"></span>
+
             <select id="marble_material">
               <option value="">Select a marble type</option>
               <option value="carrara marble" title="Carrara marble is a white and gray natural stone commonly used in sculptures and interior design.">Carrara</option>
@@ -668,6 +714,8 @@
               <option value="breccia marble" title="Breccia marble is characterized by its broken fragments and is prized for its unique visual appeal.">Breccia</option>
               <option value="pink italia marble" title="Pink Italia marble is a pink-colored stone with subtle veining, adding elegance to interior spaces.">Pink Italia</option>
             </select>
+            <span class="dot"></span>
+
             <select id="stone_material">
               <option value="">Select a stone type</option>
               <option value="granite stone" title="Granite is a durable natural stone with a wide range of colors, commonly used for countertops and flooring.">Granite</option>
@@ -679,6 +727,8 @@
               <option value="basalt stone" title="Basalt is a dark-colored volcanic rock used for flooring, wall cladding, and even in sculpture.">Basalt</option>
               <option value="soapstone stone" title="Soapstone is a soft and heat-resistant stone that is often used for countertops and sinks.">Soapstone</option>
             </select>
+            <span class="dot"></span>
+
             <select id="fabric">
               <option value="">Select a textile fabric</option>
               <option value="cotton" title="Cotton fabric is a natural, soft, and breathable material, commonly used in upholstery and drapery.">Cotton</option>
@@ -692,6 +742,8 @@
               <option value="microfiber" title="Microfiber fabric is soft, lightweight, and easy to clean, often used in upholstery and home furnishings.">Microfiber</option>
               <option value="chenille" title="Chenille fabric is characterized by its velvety and textured appearance, commonly used in upholstery and decorative pillows.">Chenille</option>
             </select>
+            <span class="dot"></span>
+
             <select id="ceramic_material">
               <option value="">Select a ceramic type</option>
               <option value="porcelain" title="Porcelain is a ceramic material known for its strength, durability, and glass-like appearance, commonly used for tableware and tiles.">Porcelain</option>
@@ -704,6 +756,8 @@
               <option value="faience" title="Faience is a glazed ceramic known for its vibrant colors and intricate designs, popular in decorative tiles and pottery.">Faience</option>
               <option value="fine_china" title="Fine china is a high-quality and translucent ceramic often used for formal dining and special occasions.">Fine China</option>
             </select>
+            <span class="dot"></span>
+
             <select id="material">
               <option value="">Select a misc material</option>
               <option value="glass" title="Glass is a transparent and brittle material often used for windows, containers, and decorative objects.">Glass</option>
@@ -711,6 +765,8 @@
               <option value="plastic" title="Plastic is a synthetic material known for its versatility and wide range of applications in industries and everyday products.">Plastic</option>
               <option value="concrete" title="Concrete is a composite material made of cement, aggregates, and water, widely used in construction for its strength and durability.">Concrete</option>
             </select>
+            <span class="dot"></span>
+
           </div>
         </div>
         </div>
