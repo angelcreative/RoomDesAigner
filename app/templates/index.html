@@ -85,6 +85,13 @@
         <div class="groupContainer">
           <div class="group">
             <h4>Photography shot</h4>
+            <select id="camera_location">
+              <option value="">Select the location of the camera</option>
+            <option value="the_camera_is_located_indoor">Indoor</option>
+                <option value="the_camera_is_located_outdoor">Outdoor</option>
+                </select>
+            <span class="dot"></span>
+
             <!-- ID LEVEL SHOT-->
             <select id="photography_level_shot">
               <option value="">Select a level shot</option>
@@ -102,7 +109,7 @@
             <span class="dot"></span>
             
             <select id="camera_shot">
-              <option value=" ">Camera distance</option>
+              <option value="">Camera distance</option>
               <option value="Extreme Wide Shot (ELS)" title="Captures a wide view of the entire scene, emphasizing the surroundings.">Extreme Wide Shot (ELS)</option>
               <option value="Long Shot (LS) / Wide Shot (WS)" title="Shows the subject from a distance, providing context to the scene.">Long Shot (LS) / Wide Shot (WS)</option>
               <option value="Full Shot (FS)" title="Displays the entire subject from head to toe or from top to bottom.">Full Shot (FS)</option>
@@ -144,7 +151,7 @@
             <h4>Interior / Outdoor design</h4>
            
             <select id="space_to_be_designed">
-                <option value=" " selected>Select the space to design</option>
+                <option value=" ">Select the space to design</option>
               <option value="interior design">Interior design</option>
               <option value="outdoor design">Outdoor design</option>
               <option value="facade design">Facade design</option>
@@ -351,31 +358,111 @@
             </select>
             <span class="dot"></span>
 
+            
+            <select id="designed_by_this_interior_designer">
+                <option value="">Select interior designer</option>
+              <optgroup label="European Interior Designers">
+                <option value="Philippe Starck" title="Modern and Contemporary">Philippe Starck</option>
+                <option value="Kelly Hoppen" title="Luxurious and Minimalistic">Kelly Hoppen</option>
+                <option value="Patricia Urquiola" title="Contemporary and Eclectic">Patricia Urquiola</option>
+                <option value="Piet Boon" title="Minimalistic and Rustic">Piet Boon</option>
+                <option value="Ilse Crawford" title="Scandinavian and Warm Modern">Ilse Crawford</option>
+                <option value="Marcel Wanders" title="Avant-Garde and Playful">Marcel Wanders</option>
+                <option value="India Mahdavi" title="Colorful and Artistic">India Mahdavi</option>
+                <option value="Tom Dixon" title="Industrial and Futuristic">Tom Dixon</option>
+                <option value="Jaime Hayon" title="Whimsical and Surreal">Jaime Hayon</option>
+                <option value="Vincent Van Duysen" title="Timeless and Refined">Vincent Van Duysen</option>
+              </optgroup>
+              <optgroup label="Japanese Interior Designers">
+                <option value="Masamichi Katayama" title="Contemporary and Urban">Masamichi Katayama</option>
+                <option value="Kenya Hara" title="Minimalistic and Zen">Kenya Hara</option>
+                <option value="Shinichiro Ogata" title="Traditional and Wabi-Sabi">Shinichiro Ogata</option>
+                <option value="Nendo (Oki Sato)" title="Minimalistic and Conceptual">Nendo (Oki Sato)</option>
+                <option value="Shigeru Ban" title="Sustainable and Innovative">Shigeru Ban</option>
+                <option value="Sou Fujimoto" title="Organic and Ethereal">Sou Fujimoto</option>
+                <option value="Tadao Ando" title="Modernist and Minimalistic">Tadao Ando</option>
+                <option value="Yukio Hashimoto" title="Zen and Nature-inspired">Yukio Hashimoto</option>
+                <option value="Fumihiko Maki" title="Contemporary and Elegant">Fumihiko Maki</option>
+                <option value="Ryu Kosaka" title="Minimalistic and Serene">Ryu Kosaka</option>
+              </optgroup>
+              <optgroup label="American Interior Designers">
+                <option value="Kelly Wearstler" title="Glamorous and Eclectic">Kelly Wearstler</option>
+                <option value="Jonathan Adler" title="Colorful and Quirky">Jonathan Adler</option>
+                <option value="Nate Berkus" title="Transitional and Timeless">Nate Berkus</option>
+                <option value="Bunny Williams" title="Classic and Traditional">Bunny Williams</option>
+                <option value="Thom Filicia" title="Casual and Comfortable">Thom Filicia</option>
+                <option value="Victoria Hagan" title="Elegant and Sophisticated">Victoria Hagan</option>
+                <option value="Martyn Lawrence Bullard" title="Global and Exotic">Martyn Lawrence Bullard</option>
+                <option value="Ryan Korban" title="Luxurious and Edgy">Ryan Korban</option>
+                <option value="Windsor Smith" title="Timeless and Tailored">Windsor Smith</option>
+                <option value="Miles Redd" title="Bold and Glamorous">Miles Redd</option>
+              </optgroup>
+              <optgroup label="Latin American Interior Designers">
+                <option value="Diego Revollo" title="Contemporary and Chic">Diego Revollo</option>
+                <option value="Adriana Hoyos" title="Modern and Organic">Adriana Hoyos</option>
+                <option value="Sig Bergamin" title="Colorful and Eclectic">Sig Bergamin</option>
+                <option value="Fernando Diaz" title="Minimalistic and Sleek">Fernando Diaz</option>
+                <option value="Juan Montoya" title="Luxurious and Artistic">Juan Montoya</option>
+                <option value="Jorge Elias" title="Sophisticated and Elegant">Jorge Elias</option>
+                <option value="Guilherme Torres" title="Industrial and Contemporary">Guilherme Torres</option>
+                <option value="Giselle Macedo" title="Modern and Vibrant">Giselle Macedo</option>
+                <option value="Patricia Bustos" title="Playful and Whimsical">Patricia Bustos</option>
+                <option value="Mauricio Arruda" title="Sustainable and Urban">Mauricio Arruda</option>
+              </optgroup>
+            </select>
+<span class="dot"></span>
             <select id="designed_by_this_architect">
-              <option value="">Select a famous architect</option>
-              <option value="Frank Lloyd Wright" title="Guggenheim Museum, Skyscraper Vase, Spindle Cube Chair, Side Chair, Taliesin Line of Decorative Wallpapers, Armchair, Design 105">Frank Lloyd Wright</option>
-              <option value="Frank Gehry" title="San Francisco Museum of Modern Art, Serpentine Galleries, Dallas Museum of Art">Frank Gehry</option>
-              <option value="Álvaro Siza" title="Iberê Camargo Foundation, The Serralves">Álvaro Siza</option>
-              <option value="Alvar Alto" title="Villa Mairea, The Baker House">Alvar Alto</option>
-              <option value="Le Corbusier" title="Abstract Composition, Still Life Filled with Space, Villa Savoye, Esprit Nouveau Pavilion">Le Corbusier</option>
-              <option value="Antoni Gaudí" title="Sagrada Família, Casa Batlló">Antoni Gaudí</option>
-              <option value="Zaha Hadid" title="Horizontal Tektonik, Malevich’s Tektonik, London, Serpentine Galleries, San Francisco Museum of Modern Art, High Museum of Art">Zaha Hadid</option>
-              <option value="Ben Van Berkel" title="Erasmus Bridge, Moebius House">Ben Van Berkel</option>
-              <option value="Bernard Tschumi" title="Blue Condominium, Acropolis Museum">Bernard Tschumi</option>
-              <option value="Norman Foster" title="A30 St Mary Axe, Willis Faber and Dumas Headquarters">Norman Foster</option>
-              <option value="Jean Nouvel" title="Louvre Abu Dhabi, Agbar Tower">Jean Nouvel</option>
-              <option value="Bjarke Ingels" title="Mountain Dwellings, VM Houses">Bjarke Ingels</option>
-              <option value="Ludwig Mies van der Rohe" title="Barcelona chair, Brno chair, Armchair (MR20), Tugendhat chair, Court House, “Barcelona,” Model MR 90 Chair">Ludwig Mies van der Rohe</option>
-              <option value="César Pelli" title="Porta Nuova Garibaldi Complex, Petronas Towers">César Pelli</option>
-              <option value="Daniel Libeskind" title="Imperial War Museum, Grand Canal Theatre">Daniel Libeskind</option>
-              <option value="Moshe Safdie" title="Habitat 67">Moshe Safdie</option>
-              <option value="Frank Gehry" title="The Walt Disney Concert Hall, Marqués de Riscal Vineyard Hotel">Frank Gehry</option>
-              <option value="Santiago Calatrava" title="Infinite Spirit, Times Capsule, Il Dente, Eye, Fruit, Wave, Bou, Palme, Bird I, Torso">Santiago Calatrava</option>
-              <option value="Louis Kahn" title="Center of Philadelphia, Urban and Traffic Study">Louis Kahn</option>
-              <option value="Richard Neutra" title="Lovell House, Kauffmann Desert house">Richard Neutra</option>
-              <option value="Harry Seidler" title="Rose Seidler House, Blues Point Tower">Harry Seidler</option>
-              <option value="Renzo Piano" title="Centre Georges Pompidou, The Shard">Renzo Piano</option>
-              <option value="Philip Johnson" title="Glass House, 550 Madison Avenue">Philip Johnson</option>
+                <option value="">Select home architect</label>
+        
+                  <optgroup label="European Home Architects">
+                    <option value="Frank Gehry" title="Deconstructivist and Avant-Garde">Frank Gehry</option>
+                    <option value="Bjarke Ingels" title="Futuristic and Sustainable">Bjarke Ingels</option>
+                    <option value="Alvar Aalto" title="Organic and Human-Centered">Alvar Aalto</option>
+                    <option value="Norman Foster" title="Contemporary and Technological">Norman Foster</option>
+                    <option value="Jean Nouvel" title="Innovative and Contextual">Jean Nouvel</option>
+                    <option value="Massimiliano Fuksas" title="Experimental and Sculptural">Massimiliano Fuksas</option>
+                    <option value="David Chipperfield" title="Minimalistic and Timeless">David Chipperfield</option>
+                    <option value="Peter Zumthor" title="Elemental and Ethereal">Peter Zumthor</option>
+                    <option value="Rem Koolhaas" title="Bold and Conceptual">Rem Koolhaas</option>
+                    <option value="Renzo Piano" title="Elegant and Sustainable">Renzo Piano</option>
+                  </optgroup>
+                  <optgroup label="Japanese Home Architects">
+                    <option value="Tadao Ando" title="Minimalistic and Zen">Tadao Ando</option>
+                    <option value="Kengo Kuma" title="Natural and Sustainable">Kengo Kuma</option>
+                    <option value="Sou Fujimoto" title="Organic and Transparent">Sou Fujimoto</option>
+                    <option value="Shigeru Ban" title="Humanitarian and Sustainable">Shigeru Ban</option>
+                    <option value="Hiroshi Nakamura" title="Innovative and Spatial">Hiroshi Nakamura</option>
+                    <option value="Toyo Ito" title="Fluid and Sensuous">Toyo Ito</option>
+                    <option value="Kazuyo Sejima" title="Minimalistic and Serene">Kazuyo Sejima</option>
+                    <option value="Ryue Nishizawa" title="Light and Ethereal">Ryue Nishizawa</option>
+                    <option value="Kisho Kurokawa" title="Metabolist and Futuristic">Kisho Kurokawa</option>
+                    <option value="Arata Isozaki" title="Sculptural and Dynamic">Arata Isozaki</option>
+                  </optgroup>
+                  <optgroup label="American Home Architects">
+                    <option value="Richard Meier" title="Minimalistic and Light-Filled">Richard Meier</option>
+                    <option value="Frank Lloyd Wright" title="Organic and Prairie Style">Frank Lloyd Wright</option>
+                    <option value="Robert A.M. Stern" title="Classical and Traditional">Robert A.M. Stern</option>
+                    <option value="Steven Holl" title="Experimental and Poetic">Steven Holl</option>
+                    <option value="Richard Neutra" title="Mid-Century Modern and Functional">Richard Neutra</option>
+                    <option value="Charles Gwathmey" title="Contemporary and Geometric">Charles Gwathmey</option>
+                    <option value="Zaha Hadid" title="Fluid and Dynamic">Zaha Hadid</option>
+                    <option value="Jeanne Gang" title="Sustainable and Community-Oriented">Jeanne Gang</option>
+                    <option value="Renzo Zecchetto" title="Industrial and Sustainable">Renzo Zecchetto</option>
+                    <option value="Glenn Murcutt" title="Contextual and Sustainable">Glenn Murcutt</option>
+                  </optgroup>
+                  <optgroup label="Latin American Home Architects">
+                    <option value="Luis Barragán" title="Modernist and Colorful">Luis Barragán</option>
+                    <option value="Oscar Niemeyer" title="Organic and Curvaceous">Oscar Niemeyer</option>
+                    <option value="Rogelio Salmona" title="Brickwork and Landscapes">Rogelio Salmona</option>
+                    <option value="Isay Weinfeld" title="Contemporary and Luxurious">Isay Weinfeld</option>
+                    <option value="Bernardes Arquitetura" title="Tropical and Beachfront">Bernardes Arquitetura</option>
+                    <option value="Fernando Romero" title="Futuristic and Dynamic">Fernando Romero</option>
+                    <option value="Diego Villaseñor" title="Sustainable and Contextual">Diego Villaseñor</option>
+                    <option value="Marcio Kogan" title="Minimalistic and Open">Marcio Kogan</option>
+                    <option value="Ciro Najle" title="Eco-Conscious and Innovative">Ciro Najle</option>
+                    <option value="José Cruz Ovalle" title="Adaptive and Resourceful">José Cruz Ovalle</option>
+                  </optgroup>
+               
             </select>
             <span class="dot"></span>
 
@@ -383,50 +470,25 @@
           <div class="group">
             <!-- ID COLOR PALETTES -->
             <h4>Color, shape and sizes</h4>
-            <select id="color_palette">
-              <option value="">Select color palette</option>
-              <!-- Interior Design Color Palettes -->
-                <option value="Monochromatic" title="Monochromatic: Consists of varying shades and tones of a single color. Creates a harmonious and soothing effect."> Monochromatic</option>
-                <option value="Analogous" title="Analogous: Combines colors that are adjacent to each other on the color wheel. Creates a sense of harmony and is pleasing to the eye."> Analogous</option>
-                <option value="Complementary" title="Complementary: Involves pairing colors that are opposite each other on the color wheel. Creates a high contrast and energetic look."> Complementary</option>
-                <option value="Triadic" title="Triadic: Utilizes three colors that are evenly spaced on the color wheel. Creates a vibrant and balanced color scheme."> Triadic</option>
-                <option value="Split-Complementary" title="Split-Complementary: Involves a base color paired with two colors adjacent to its complementary color. Offers a balanced yet dynamic color combination."> Split-Complementary</option>
-                <option value="Tetradic" title="Tetradic: Combines four colors arranged in two complementary color pairs. Provides a diverse and visually striking color scheme."> Tetradic</option>
-                <option value="Neutral" title="Neutral: Utilizes neutral colors such as whites, grays, and beiges. Creates a clean, timeless, and versatile look."> Neutral</option>
-                <option value="Pastel" title="Pastel: Involves soft and light shades of colors. Creates a delicate and soothing ambiance.">Pastel </option>
-                <option value="Bold and Vibrant" title="Bold and Vibrant: Uses bright and saturated colors to create a bold and energetic atmosphere. Adds a sense of excitement and drama."> Bold and Vibrant</option>
-                <option value="Earthy and Natural" title="Earthy and Natural: Draws inspiration from nature, featuring warm earth tones such as browns, greens, and terracotta. Creates a grounded and calming environment."> Earthy and Natural</option>
-                <option value="Black and White" title="Black and White: Focuses on the contrast between black and white, creating a sophisticated and timeless look."> Black and White</option>
-                <option value="Metallic" title="Metallic: Incorporates metallic hues like gold, silver, and copper. Adds a touch of glamour and elegance to the space."> Metallic</option>
-                <option value="High-Contrast" title="High-Contrast: Combines colors with a stark contrast, such as black and white or bold colors against a neutral backdrop. Creates a dramatic and visually impactful effect."> High-Contrast</option>
-                <option value="Muted and Subtle" title="Muted and Subtle: Features soft and desaturated colors, offering a muted and understated color palette. Creates a calming and sophisticated atmosphere."> Muted and Subtle</option>
-                <option value="Coastal" title="Coastal: Inspired by the seaside, it includes shades of blue, sandy beige, and white. Evokes a breezy and relaxed coastal vibe."> Coastal</option>
-                <option value="Retro" title="Retro: Draws inspiration from past eras, utilizing vibrant and nostalgic colors such as mustard yellow, avocado green,
+        <div class="colorPalette">
+            <div class="colorPalette_60">
+                <input type="color" id="dominant_color" class="colorPicker">
 
- and burnt orange. Creates a fun and nostalgic ambiance.">Retro</option>
-                <option value="Industrial" title="Industrial: Incorporates shades of gray, black, and metallic tones. Reflects an urban and raw aesthetic inspired by industrial materials."> Industrial</option>
-                <option value="Scandinavian" title="Scandinavian: Characterized by a minimalist and light color palette, featuring whites, pale grays, and natural wood tones. Creates a clean and airy Scandinavian-inspired look."> Scandinavian</option>
-                <option value="Zen" title="Zen: Inspired by Eastern aesthetics, it features soft, muted tones like pale greens, blush pinks, and earthy neutrals. Creates a calm and balanced atmosphere."> Zen</option>
-                <option value="Desert" title="Desert: Draws inspiration from arid landscapes, utilizing warm, sandy tones, terracotta, and burnt oranges. Evokes a sense of warmth and rugged beauty."> Desert</option>
-                <option value="Tropical" title="Tropical: Reflects the vibrant colors found in tropical settings, including bright greens, yellows, blues, and pinks. Creates a lively and tropical ambiance."> Tropical</option>
-                <option value="Moody" title="Moody: Features deep, rich hues like navy blues, emerald greens, and dark purples. Creates a mysterious and dramatic atmosphere."> Moody</option>
-                <option value="French Country" title="French Country: Incorporates soft pastels, such as pale blues, lavender, and creamy yellows, combined with rustic elements. Evokes a charming and rustic French countryside feel."> French Country</option>
-                <option value="Urban Jungle" title="Urban Jungle: Combines shades of green, ranging from deep emerald to bright lime, with natural wood tones. Creates a lush and vibrant indoor jungle vibe."> Urban Jungle</option>
-                <option value="Beachy" title="Beachy: Reflects the colors of the beach, featuring shades of aqua, sandy beige, and soft blues. Creates a relaxed and coastal atmosphere."> Beachy</option>
-                <option value="Scandinavian Minimalism" title="Scandinavian Minimalism: Focuses on a clean and minimal color palette, including whites, pale grays, and light woods. Creates a serene and clutter-free environment."> Scandinavian Minimalism</option>
-                <option value="Romantic" title="Romantic: Utilizes soft, feminine colors like blush pinks, dusty roses, and muted purples. Creates a romantic and dreamy ambiance."> Romantic</option>
-                <option value="Rustic Farmhouse" title="Rustic Farmhouse: Incorporates warm, earthy tones like browns, creams, and deep reds. Creates a cozy and nostalgic farmhouse feel."> Rustic Farmhouse</option>
-                <option value="Art Deco" title="Art Deco: Features bold and luxurious colors like deep jewel tones, golds, and blacks. Creates a glamorous and opulent atmosphere."> Art Deco</option>
-                <option value="Scandinavian Pop" title="Scandinavian Pop: Combines the clean lines of Scandinavian design with pops of bold and vibrant colors like yellows, blues, and pinks. Creates a playful and modern look."> Scandinavian Pop</option>
-                <option value="Bohemian" title="Bohemian: Incorporates a mix of vibrant and eclectic colors like oranges, purples, and greens, combined with rich textiles and patterns. Creates a free-spirited and artistic vibe."> Bohemian </option>
-                <option value="Mid-Century Modern" title="Mid-Century Modern: Features colors like mustard yellows, olive greens, and teals, inspired by the retro aesthetics of the mid-20th century. Creates a sleek and vintage vibe."> Mid-Century Modern</option>
-                <option value="Industrial Chic" title="Industrial Chic: Combines cool, urban tones like grays, blacks, and metallics with accents of warm browns or exposed brick. Creates a modern and edgy industrial look."> Industrial Chic</option>
-                <option value="Nordic White" title="Nordic White: Focuses on a crisp and clean white color palette, enhanced with natural textures and materials. Creates a fresh and minimalist Scandinavian-inspired atmosphere."> Nordic White</option>
-                <option value="Pop Art" title="Pop Art: Utilizes bold primary colors like reds, yellows, and blues, often combined with black and white geometric patterns. Creates a vibrant and playful environment."> Pop Art</option>
-                <option value="Mediterranean" title="Mediterranean: Features warm earth tones like terracotta, sandy beige, and deep blues, inspired by the colors of the Mediterranean region. Creates a relaxed and rustic feel."> Mediterranean</option>
-                <option value="Cottagecore" title="Cottagecore: Incorporates soft, pastel colors like muted greens, pinks, and blues, combined with floral patterns and vintage elements. Creates a cozy and nostalgic cottage-inspired atmosphere."> Cottagecore</option>
-                <option value="Retro Pastels" title="Retro Pastels: Draws inspiration from the 1950s and 1960s, featuring soft pastel shades like mint greens, baby blues, and pale pinks. Creates a retro and nostalgic vibe."> Retro Pastels</option>
-            </select>
+        <label for="dominant_color">Dominant Color</label>
+</div>
+            <div class="colorPalette_60">
+                <input type="color" id="secondary_color" class="colorPicker">
+        <label for="secondary_color">Select Secondary Color</label>
+       
+            </div>
+            <div class="colorPalette_60">
+                <input type="color" id="accent_color" class="colorPicker">
+
+        <label for="accent_color">Select Accent Color</label>
+            
+            </div>
+        </div>
+        
             <span class="dot"></span>
 
             <!-- ID ROOM SHAPE -->
@@ -460,25 +522,16 @@
             <!--ID ROOM SIZE-->
             <select id="size">
               <option value="">Select room size</option>
+              <option value="very-small">Very Small</option>
+              <option value="small">Small</option>
+              <option value="modest">Modest</option>
               <option value="compact">Compact</option>
-              <option value="moderate">Moderate</option>
-              <option value="generous">Generous</option>
+              <option value="cozy">Cozy</option>
+              <option value="medium">Medium</option>
+              <option value="average">Average</option>
               <option value="spacious">Spacious</option>
-              <option value="petite">Petite</option>
-              <option value="standard">Standard</option>
-              <option value="tall">Tall</option>
-              <option value="grand">Grand</option>
-              <option value="oversized">Oversized</option>
-              <option value="miniature">Miniature</option>
-              <option value="mid-sized">Mid-sized</option>
-              <option value="large-scale">Large-scale</option>
-              <option value="extra-small">Extra-small</option>
-              <option value="small-scale">Small-scale</option>
-              <option value="medium-sized">Medium-sized</option>
               <option value="large">Large</option>
-              <option value="extra-large">Extra-large</option>
-              <option value="massive">Massive</option>
-              <option value="towering">Towering</option>
+              <option value="huge">Huge</option>
               <option value="monumental">Monumental</option>
             </select>
             <span class="dot"></span>
@@ -592,29 +645,7 @@
           <div class="group">
             <h4>Architectural tokens</h4>
             <!--ID lightning-->
-            <select id="illumination">
-              <option value="">Select a lighting option</option>
-              <!-- Lighting Options -->
-              <option value="Ambient Lighting" title="General, overall illumination that provides a uniform level of light throughout a space.">Ambient Lighting</option>
-              <option value="Natural Lighting" title="Utilizing natural light from windows, skylights, or other openings to illuminate the interior."> Natural Lighting</option>
-              <option value="Task Lighting" title="Focused lighting designed to provide illumination for specific tasks or activities, such as reading or cooking."> Task Lighting</option>
-              <option value="Accent Lighting" title="Used to highlight or accentuate specific objects, architectural features, or artwork within a space."> Accent Lighting</option>
-              <option value="Pendant Lighting" title="Lighting fixtures suspended from the ceiling, typically used for task lighting or decorative purposes."> Pendant Lighting</option>
-              <option value="Chandelier" title="A decorative lighting fixture typically featuring multiple arms and lights, often used as a focal point in grand spaces."> Chandelier</option>
-              <option value="Track Lighting" title="A system of lights mounted on a track that can be adjusted to direct light to different areas of a room."> Track Lighting</option>
-              <option value="Wall Sconces" title="Lighting fixtures attached to walls, providing both functional and decorative lighting.">Wall Sconces </option>
-              <option value="Table Lamps" title="Portable lamps placed on tables or other surfaces, often used for localized lighting.">Table Lamps </option>
-              <option value="Floor Lamps" title="Tall standing lamps that provide ambient or task lighting, often used to complement other lighting sources."> Floor Lamps</option>
-              <option value="Recessed Lighting" title="Lighting fixtures installed into the ceiling, creating a streamlined and unobtrusive lighting effect."> Recessed Lighting</option>
-              <option value="Cove Lighting" title="Concealed lighting fixtures installed in a recess or ledge, casting indirect light upwards towards the ceiling."> Cove Lighting</option>
-              <option value="Under Cabinet Lighting" title="Lighting fixtures installed underneath kitchen cabinets, providing task lighting for countertops."> Under Cabinet Lighting</option>
-              <option value="Picture Lights" title="Designed to illuminate artwork or photographs, often mounted on the wall or frame.">Picture Lights </option>
-              <option value="LED Strip Lights" title="Flexible strips of LED lights that can be installed along surfaces or objects for decorative or accent lighting."> LED Strip Lights</option>
-              <option value="Pendant Cluster Lights" title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement."> Pendant Cluster Lights</option>
-              <option value="Candlelight" title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere."> Candlelight</option>
-            </select>
-            <span class="dot"></span>
-
+           
             <!-- ID architectural items-->
             <!-- Doors -->
             <select id="doors">
@@ -695,7 +726,45 @@
             </select>
             <span class="dot"></span>
 
-          </div>
+            <h4>Lights</h4>
+
+            <select id="time_of_day">
+              <option value="">Select the time of day</option>
+              <option value="sunrise">Sunrise</option>
+              <option value="morning">Morning</option>
+              <option value="mid-morning">Mid-Morning</option>
+              <option value="noon">Noon</option>
+              <option value="afternoon">Afternoon</option>
+              <option value="evening">Evening</option>
+              <option value="sunset">Sunset</option>
+              <option value="dusk">Dusk</option>
+              <option value="night">Night</option>
+            </select>
+            <span class="dot"></span>
+            <select id="illumination">
+              <option value="">Select a lighting option</option>
+              <!-- Lighting Options -->
+              <option value="Ambient Lighting" title="General, overall illumination that provides a uniform level of light throughout a space.">Ambient Lighting</option>
+              <option value="Natural Lighting" title="Utilizing natural light from windows, skylights, or other openings to illuminate the interior."> Natural Lighting</option>
+              <option value="Task Lighting" title="Focused lighting designed to provide illumination for specific tasks or activities, such as reading or cooking."> Task Lighting</option>
+              <option value="Accent Lighting" title="Used to highlight or accentuate specific objects, architectural features, or artwork within a space."> Accent Lighting</option>
+              <option value="Pendant Lighting" title="Lighting fixtures suspended from the ceiling, typically used for task lighting or decorative purposes."> Pendant Lighting</option>
+              <option value="Chandelier" title="A decorative lighting fixture typically featuring multiple arms and lights, often used as a focal point in grand spaces."> Chandelier</option>
+              <option value="Track Lighting" title="A system of lights mounted on a track that can be adjusted to direct light to different areas of a room."> Track Lighting</option>
+              <option value="Wall Sconces" title="Lighting fixtures attached to walls, providing both functional and decorative lighting.">Wall Sconces </option>
+              <option value="Table Lamps" title="Portable lamps placed on tables or other surfaces, often used for localized lighting.">Table Lamps </option>
+              <option value="Floor Lamps" title="Tall standing lamps that provide ambient or task lighting, often used to complement other lighting sources."> Floor Lamps</option>
+              <option value="Recessed Lighting" title="Lighting fixtures installed into the ceiling, creating a streamlined and unobtrusive lighting effect."> Recessed Lighting</option>
+              <option value="Cove Lighting" title="Concealed lighting fixtures installed in a recess or ledge, casting indirect light upwards towards the ceiling."> Cove Lighting</option>
+              <option value="Under Cabinet Lighting" title="Lighting fixtures installed underneath kitchen cabinets, providing task lighting for countertops."> Under Cabinet Lighting</option>
+              <option value="Picture Lights" title="Designed to illuminate artwork or photographs, often mounted on the wall or frame.">Picture Lights </option>
+              <option value="LED Strip Lights" title="Flexible strips of LED lights that can be installed along surfaces or objects for decorative or accent lighting."> LED Strip Lights</option>
+              <option value="Pendant Cluster Lights" title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement."> Pendant Cluster Lights</option>
+              <option value="Candlelight" title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere."> Candlelight</option>
+            </select>
+            <span class="dot"></span>
+
+            </div>
           <div class="group">
             <h4>Architectural materials</h4>
             <select id="wood_material">

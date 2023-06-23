@@ -49,6 +49,8 @@ magicButton.addEventListener("click", function() {
 
 
 
+
+
 document.addEventListener("DOMContentLoaded", function() {
     
  
@@ -137,42 +139,46 @@ document.addEventListener("DOMContentLoaded", function() {
     link.click();
   }
 
-
-    // Function to get the selected form values
     function getSelectedValues(imageUrl = "") {
-       return {
-        // Replace with your form field IDs and corresponding values
-      photography_level_shot: document.getElementById("photography_level_shot").value,
-      camera_shot: document.getElementById("camera_shot").value,
-      camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
-      lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
-       space_to_be_designed: document.getElementById("space_to_be_designed").value,
-      home_area: document.getElementById("home_area").value,
-      size: document.getElementById("size").value,
-      pool: document.getElementById("pool").value,
-      garden: document.getElementById("garden").value,
-      child_room: document.getElementById("child_room").value,
-      room_shape: document.getElementById("room_shape").value,
-      doors: document.getElementById("doors").value,
-      windows: document.getElementById("windows").value,
-      floors: document.getElementById("floors").value,
-      roofs: document.getElementById("roofs").value,
-      roof_height: document.getElementById("roof_height").value,
-      illumination: document.getElementById("illumination").value,
-      material: document.getElementById("material").value,
-      ceramic_material: document.getElementById("ceramic_material").value,
-      fabric: document.getElementById("fabric").value,
-      stone_material: document.getElementById("stone_material").value,
-      marble_material: document.getElementById("marble_material").value,
-      wood_material: document.getElementById("wood_material").value,
-      color_palette: document.getElementById("color_palette").value,
-      magazine: document.getElementById("magazine").value,
-      design_style: document.getElementById("design_style").value,
-      vendors: document.getElementById("vendors").value,
+      return {
+        photography_level_shot: document.getElementById("photography_level_shot").value,
+          camera_location: document.getElementById("camera_location").value,
+        camera_shot: document.getElementById("camera_shot").value,
+        camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
+        lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
+        space_to_be_designed: document.getElementById("space_to_be_designed").value,
+        home_area: document.getElementById("home_area").value,
+        size: document.getElementById("size").value,
+        pool: document.getElementById("pool").value,
+        garden: document.getElementById("garden").value,
+        child_room: document.getElementById("child_room").value,
+        room_shape: document.getElementById("room_shape").value,
+        doors: document.getElementById("doors").value,
+        windows: document.getElementById("windows").value,
+        floors: document.getElementById("floors").value,
+        roofs: document.getElementById("roofs").value,
+        roof_height: document.getElementById("roof_height").value,
+        illumination: document.getElementById("illumination").value,
+        time_of_day: document.getElementById("time_of_day").value,
+        material: document.getElementById("material").value,
+        ceramic_material: document.getElementById("ceramic_material").value,
+        fabric: document.getElementById("fabric").value,
+        stone_material: document.getElementById("stone_material").value,
+        marble_material: document.getElementById("marble_material").value,
+        wood_material: document.getElementById("wood_material").value,
+        dominant_color: document.getElementById("dominant_color").value,
+        secondary_color: document.getElementById("secondary_color").value,
+        accent_color: document.getElementById("accent_color").value,
+        magazine: document.getElementById("magazine").value,
+        design_style: document.getElementById("design_style").value,
+        vendors: document.getElementById("vendors").value,
+      designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
       designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
-       imageUrl: document.getElementById("imageDisplayUrl").value
+imageUrl: document.getElementById("imageDisplayUrl").value
       };
     }
+
+
     
     
  
@@ -180,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, High resolution photography, Editorial photography shot, Octane render,  high res, sharp details, 8K, cinematic lightning`;
+      const promptInit = `${imageUrl}, High resolution photography, Editorial photography shot, Octane render,  high res, sharp details, 8K, intrincated details. `;
 
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
@@ -196,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         
-        const promptEndy = `--ar 3:2 --stylize 800 --iw 1.75 `
+        const promptEndy = `--ar 3:2 --stylize 100 --iw 1.75 `
 
       // Combine the promptInit with the plain text representation
       const promptText = `${promptInit} ${plainText} ${promptEndy}`;
