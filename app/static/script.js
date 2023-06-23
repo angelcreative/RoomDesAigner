@@ -118,9 +118,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 return {
                 the_shot_was_taken_at: document.getElementById("the_shot_was_taken_at").value,
                 illumination: document.getElementById("illumination").value,
-                dominant_color: document.getElementById("dominant_color").value,
+                primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
-                accent_color: document.getElementById("accent_color").value,
+                tertiary_color: document.getElementById("tertiary_color").value,
                 inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
                 design_style: document.getElementById("design_style").value,
                 furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, Editorial photography shot,Editorial photography shot, 60-30-10-interior-design-color-rule::1 interior-design::1 `;
+      const promptInit = `${imageUrl}, Editorial photography shot, interior-design::1 `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
@@ -169,6 +169,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         const promptEndy = `--ar 3:2 --stylize 100 --iw 1.75 `
+        
+
+        
       // Combine the promptInit with the plain text representation
       const promptText = `${promptInit} ${plainText} ${promptEndy}`;
       showOverlay(); // Show the overlay and loading message
@@ -239,6 +242,13 @@ document.addEventListener("DOMContentLoaded", function() {
       overlay.style.display = "block";
     }
     
+    
+    
+
+    
+    
+    
+    
     // Function to generate message
     function generateMessageDiv(message) {
       var messageDiv = document.createElement('div');
@@ -270,6 +280,58 @@ document.addEventListener("DOMContentLoaded", function() {
       
       generateMessageDiv("Prompt copied to clipboard!");
     }
+    
+//   upscale
+    
+    function getBase64Image(image) {
+      const canvas = document.createElement("canvas");
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const context = canvas.getContext("2d");
+      context.drawImage(image, 0, 0);
+      const dataURL = canvas.toDataURL("image/jpeg");
+      return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
+    }
+
+    const upscaleImage = async (imageUrl) => {
+      try {
+        // Load the image
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src = imageUrl;
+
+        image.onload = async () => {
+          // Convert image to Base64
+          const base64Image = getBase64Image(image);
+
+          const url = 'https://super-image1.p.rapidapi.com/run';
+          const options = {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
+              'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
+            },
+            body: JSON.stringify({
+              upscale: 2,
+              image: base64Image
+            })
+          };
+
+          const response = await fetch(url, options);
+          const data = await response.json();
+          console.log(data);
+          // Handle the response here
+        };
+      } catch (error) {
+        console.error(error);
+        // Handle error here
+      }
+    };
+
+
+
+    
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
       const tempInput = document.createElement("textarea");
@@ -295,35 +357,52 @@ document.addEventListener("DOMContentLoaded", function() {
         image.src = imageUrl;
         image.alt = "Generated Image";
         image.classList.add("thumbnail");
-          
-          // Attach click event listener to open image in new tab
-              image.addEventListener("click", () => {
-                openImageInNewTab(imageUrl);
-              });
+
+        // Attach click event listener to open image in new tab
+        image.addEventListener("click", () => {
+          openImageInNewTab(imageUrl);
+        });
+
         // Create buttons container
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
+
         // Create copy URL button
         const copyButton = document.createElement("button");
         copyButton.textContent = "Copy URL";
         copyButton.addEventListener("click", () => {
           copyImageUrlToClipboard(imageUrl);
         });
+
         // Create copy prompt button
         const copyPromptButton = document.createElement("button");
         copyPromptButton.textContent = "Copy Prompt";
         copyPromptButton.addEventListener("click", () => {
           copyTextToClipboard(promptText);
         });
+
+        // Create upscale button
+          // Create upscale button
+          const upscaleButton = document.createElement("button");
+          upscaleButton.textContent = "Upscale";
+          upscaleButton.addEventListener("click", () => {
+            upscaleImage(imageUrl);
+          });
+
+
         // Append buttons to buttons container
         buttonsContainer.appendChild(copyButton);
         buttonsContainer.appendChild(copyPromptButton);
+        buttonsContainer.appendChild(upscaleButton);
+
         // Append image and buttons container to image container
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
+
         // Append image container to image grid
         imageGrid.appendChild(imageContainer);
       });
+
       // Show the modal
       modal.style.display = "block";
       showOverlay(); // Show the overlay

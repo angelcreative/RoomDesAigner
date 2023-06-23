@@ -64,7 +64,9 @@
         <h1>Your dream room is here</h1>
         <p>Tip: use copy url + copy prompt to paste it on Midjourney to generate even more images based on the original.</p>
         <br>
-        <div class="imageGrid" id="imageGrid"></div>
+        <div class="imageGrid" id="imageGrid">
+        <button>Upscale</button>
+        </div>
         <div id="resultContainer"></div>
         <span class="close">&times;</span>
       </div>
@@ -151,7 +153,7 @@
             <h4>Interior / Outdoor design</h4>
            
           <select id="space_to_be_designed">
-                <option value=" ">Select the space to design</option>
+                <option value="">Select the space to design</option>
               <option value="interior design">Interior design</option>
               <option value="outdoor design">Outdoor design</option>
               <option value="facade design">Facade design</option>
@@ -490,19 +492,18 @@
             <h4>Color, shape and sizes</h4>
         <div class="colorPalette">
             <div class="colorPalette_60">
-                <input type="color" id="dominant_color" class="colorPicker">
+                <input type="color" id="primary_color" class="colorPicker">
 
-        <label for="dominant_color">Color one</label>
+        <label for="primary_color">Primary color</label>
 </div>
             <div class="colorPalette_60">
                 <input type="color" id="secondary_color" class="colorPicker">
-        <label for="secondary_color">Color two</label>
-       
-            </div>
+        <label for="secondary_color">Secondary color</label>
+    </div>
             <div class="colorPalette_60">
-                <input type="color" id="accent_color" class="colorPicker">
+                <input type="color" id="tertiary_color" class="colorPicker">
 
-        <label for="accent_color">Color three</label>
+        <label for="tertiary_color">Tertiary color</label>
             
             </div>
         </div>
