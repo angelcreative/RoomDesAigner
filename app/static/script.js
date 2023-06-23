@@ -293,12 +293,12 @@ document.addEventListener("DOMContentLoaded", function() {
       return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
     }
 
-    const upscaleImage = async (imageUrl) => {
+  /*  const upscaleImage = async (imageUrl) => {
       try {
         // Load the image
         const image = new Image();
         image.crossOrigin = "anonymous";
-          image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+        image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
 
         image.onload = async () => {
           // Convert image to Base64
@@ -321,13 +321,106 @@ document.addEventListener("DOMContentLoaded", function() {
           const response = await fetch(url, options);
           const data = await response.json();
           console.log(data);
-          // Handle the response here
+
+          // Open the upscaled image in a new browser tab
+          const newTab = window.open(data.output_url, '_blank');
+          newTab.focus();
         };
       } catch (error) {
         console.error(error);
         // Handle error here
       }
     };
+   
+   */
+
+    
+    function showModalWithProgressBar() {
+      // Create modal element
+      const modalUpscale = document.createElement("div");
+      modalUpscale.id = "modalUpscale";
+
+      // Create container element
+      const containerUpscale = document.createElement("div");
+      containerUpscale.classList.add("containerUpscale");
+
+      // Create message element
+      const message = document.createElement("h1");
+      message.textContent = "Upscaling your image, it could take a moment...";
+
+      // Create microcopy element
+      const microcopy = document.createElement("p");
+      microcopy.textContent = "The image will be automatically downloaded";
+
+      // Create progress bar element
+      const progressBar = document.createElement("div");
+      progressBar.classList.add("progress-bar");
+
+      // Append message and microcopy to container
+      containerUpscale.appendChild(message);
+      containerUpscale.appendChild(microcopy);
+
+      // Append container and progress bar to modal
+      modalUpscale.appendChild(containerUpscale);
+      modalUpscale.appendChild(progressBar);
+
+      // Append modal to the document body
+      document.body.appendChild(modalUpscale);
+    }
+
+    function hideModal() {
+      // Remove the modal from the document body
+      const modalUpscale = document.getElementById("modalUpscale");
+      if (modalUpscale) {
+        document.body.removeChild(modalUpscale);
+      }
+    }
+
+    const upscaleImage = async (imageUrl) => {
+      try {
+        showModalWithProgressBar();
+
+        // Load the image
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+
+        image.onload = async () => {
+          // Convert image to Base64
+          const base64Image = getBase64Image(image);
+
+          const url = 'https://super-image1.p.rapidapi.com/run';
+          const options = {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
+              'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
+            },
+            body: JSON.stringify({
+              upscale: 2,
+              image: base64Image
+            })
+          };
+
+          const response = await fetch(url, options);
+          const data = await response.json();
+          console.log(data);
+
+          // Open the upscaled image in a new browser tab
+          const newTab = window.open(data.output_url, '_blank');
+          newTab.focus();
+
+          hideModal();
+        };
+      } catch (error) {
+        console.error(error);
+        // Handle error here
+        hideModal();
+      }
+    };
+
+    
 
 
 
@@ -381,13 +474,15 @@ document.addEventListener("DOMContentLoaded", function() {
           copyTextToClipboard(promptText);
         });
 
-        // Create upscale button
+        
           // Create upscale button
           const upscaleButton = document.createElement("button");
           upscaleButton.textContent = "Upscale";
           upscaleButton.addEventListener("click", () => {
             upscaleImage(imageUrl);
           });
+          
+        
 
 
         // Append buttons to buttons container
