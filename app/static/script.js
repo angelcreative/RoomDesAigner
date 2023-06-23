@@ -114,13 +114,13 @@ document.addEventListener("DOMContentLoaded", function() {
         hideOverlay(); // Hide the overlay and loading message
       }
 
-      // Update the download JSON button with the selected form values
+        /* // Update the download JSON button with the selected form values
       const selectedValues = getSelectedValues();
       updateDownloadButton(selectedValues);
     }
 
 
-  // Function to update the download JSON button
+  Function to update the download JSON button
   function updateDownloadButton(selectedValues) {
     const downloadJsonButton = document.getElementById("downloadJsonButton");
     downloadJsonButton.addEventListener("click", () => {
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
     link.href = url;
     link.download = filename;
     link.click();
-  }
+  }*/
 
     function getSelectedValues(imageUrl = "") {
       return {
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
         roofs: document.getElementById("roofs").value,
         roof_height: document.getElementById("roof_height").value,
         illumination: document.getElementById("illumination").value,
-        time_of_day: document.getElementById("time_of_day").value,
+        time: document.getElementById("time").value,
         material: document.getElementById("material").value,
         ceramic_material: document.getElementById("ceramic_material").value,
         fabric: document.getElementById("fabric").value,
@@ -497,7 +497,7 @@ window.addEventListener('load', function() {
 
     setTimeout(function() {
       splash.style.display = 'none'; // Hide the splash screen
-      content.style.display = 'block'; // Show the website content
+      //content.style.display = 'block'; // Show the website content
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
