@@ -484,12 +484,20 @@ imageUrl: document.getElementById("imageDisplayUrl").value
   clearAllButton.addEventListener("click", clearAll);
 });
 
+
+
+
 window.addEventListener('load', function() {
   setTimeout(function() {
     var splash = document.getElementById('splash');
     var content = document.getElementById('content');
 
-    splash.style.display = 'none'; // Hide the splash screen
-    content.style.display = 'block'; // Show the website content
+    splash.style.transition = 'top 0.5s ease-in-out'; // Add transition effect
+    splash.style.top = '-100%'; // Move the splash screen to the top
+
+    setTimeout(function() {
+      splash.style.display = 'none'; // Hide the splash screen
+      content.style.display = 'block'; // Show the website content
+    }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
