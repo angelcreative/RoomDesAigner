@@ -9,6 +9,54 @@ body {
   font-family: sans-serif;
 }
 
+.menuButton {
+  position: relative;
+  display: inline-block;
+}
+
+.menuButton label {
+  display: block;
+}
+.menuButton:hover > .menuDropdown {
+  display: block
+}
+.menuDropdown {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  background-color: #fff;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+}
+
+.menuDropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.menuDropdown li:hover {
+  background-color: #f5f5f5;
+}
+
+.menuDropdown li.menuVoice {
+  font-weight: bold;
+}
+
+.menuDropdown li.active {
+  background-color: #f8f8f8;
+}
+
+.menuDropdown li:focus {
+  outline: none;
+  background-color: #f5f5f5;
+}
+
+.menuDropdown.show {
+  display: block;
+}
+
 
 .colorPicker {
     border-radius: 0.5rem;
@@ -54,9 +102,33 @@ body {
    /* Adjust the size of the logo */
 }
 
+.buttonExt[disabled] {
+    background-color: lightgray;
+    cursor:not-allowed;
+    color: gray;
+}
+
+.buttonExt[disabled]:hover {
+    background: lightgray;
+    cursor:not-allowed;
+    
+}
 
 
+.buttonExt[disabled]:hover::after {
 
+content:"Select some options first!" ;
+display:inline-block;
+position:absolute;
+top:-50px;
+    left:-40px;
+    background:#fffad1;
+    padding:1rem .5rem;
+    border-left:5px solid yellow;
+    color:#6e6016
+}
+
+.content {}
 
 #content {
   display: none; /* Hide the content initially */
@@ -221,7 +293,8 @@ h4 {
 
 .group {
     background: #171616;
-    padding: 1rem;
+    width: auto;
+    padding: 1rem 0;
 }
 
 sub {
@@ -280,11 +353,16 @@ select:hover {
 }
 
 .groupContainer {
-    
     display: flex;
     flex-direction: row;
-    overflow:hidden;
-    border-radius:1rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: #171616;
+    column-gap: 1rem;
+    padding: 0 1rem 2rem 1rem;
 }
 
 .buttonsCont {
@@ -536,7 +614,7 @@ select#materials {
 #waiting {
 
              background: #1f1f1f95;
-             position: absolute;
+             position: fixed;
              width: 100%;
              height: auto;
              display: none;
@@ -550,13 +628,12 @@ select#materials {
 
 /* Loading message styles */
 #loadingMessage {
-   
     display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    width: 450px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 230px;
     background: #fff;
     padding: 1rem;
     border-radius: 1rem;
@@ -579,8 +656,7 @@ select#materials {
 
 .progress-bar {
   width: 0%;
-  height: 5px;
- 
+height: 3px;
   background: #a9fff5;
   border-radius: 10px;
   transition: width 0.3s ease-in-out;
@@ -5256,9 +5332,14 @@ svg.active .gen-160 {
   
   .groupContainer {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       overflow: hidden;
       border-radius: 1rem;
+      flex-wrap: wrap;
+      background: #171616;
+      padding: 1rem 2rem;
+      column-gap: 5rem;
+      justify-content: flex-start;
   }
   
   .buddy {

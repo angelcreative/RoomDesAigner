@@ -85,7 +85,7 @@
         <div class="groupContainer">
           <div class="group">
             <h4>Photography shot</h4>
-            <select id="camera_location">
+            <select id="photography_shot_location">
               <option value="">Select the location of the camera</option>
             <option value="the_camera_is_located_indoor">Indoor</option>
                 <option value="the_camera_is_located_outdoor">Outdoor</option>
@@ -99,6 +99,7 @@
               <option value="High Angle" title="The camera is positioned above the subject, looking downward. This angle can create a sense of vulnerability or diminish the subject's importance."> High Angle</option>
               <option value="Low Angle" title="The camera is positioned below the subject, looking upward. This angle can make the subject appear more powerful, dominant, or heroic."> Low Angle</option>
               <option value="Bird's Eye View" title="The camera is positioned directly overhead, capturing a scene from a top-down perspective. This angle provides an overview and can be useful for capturing patterns or symmetrical compositions."> Bird's Eye View</option>
+              <option value="Drone's View" title="The camera is positioned very high, capturing a scene from a top-down perspective. This angle provides an overview and can be useful for capturing patterns or symmetrical compositions."> Drone's' view</option>
               <option value="Worm's Eye View" title="The camera is positioned on or near the ground, looking upward. This angle can create a sense of awe, exaggerate height, or highlight architectural details."> Worm's Eye View</option>
               <option value="Dutch Angle" title="The camera is intentionally tilted to create a diagonal or slanted composition. This angle is often used to evoke a sense of unease, disorientation, or chaos."> Dutch Angle</option>
               <option value="Oblique Angle" title="The camera is positioned at an angle between eye level and a true Dutch angle. It adds a dynamic and diagonal perspective to the image."> Oblique Angle</option>
@@ -108,55 +109,65 @@
             </select>
             <span class="dot"></span>
             
-            <select id="camera_shot">
-              <option value="">Camera distance</option>
-              <option value="Extreme Wide Shot (ELS)" title="Captures a wide view of the entire scene, emphasizing the surroundings.">Extreme Wide Shot (ELS)</option>
-              <option value="Long Shot (LS) / Wide Shot (WS)" title="Shows the subject from a distance, providing context to the scene.">Long Shot (LS) / Wide Shot (WS)</option>
-              <option value="Full Shot (FS)" title="Displays the entire subject from head to toe or from top to bottom.">Full Shot (FS)</option>
-              <option value="Medium Long Shot (MLS) / Medium Wide Shot (MWS)" title="Frames the subject from a moderate distance, showing more of the background.">Medium Long Shot (MLS) / Medium Wide Shot (MWS)</option>
+            <select id="shot">
+              <option value="">Camera proximity</option>
+              <option value="Extreme Wide Shot" title="Captures a wide view of the entire scene, emphasizing the surroundings.">Extreme Wide Shot</option>
+              <option value="Wide Shot" title="Shows the subject from a distance, providing context to the scene.">Wide Shot</option>
+              <option value="Full Shot" title="Displays the entire subject from head to toe or from top to bottom.">Full Shot </option>
+              <option value="Medium Wide Shot" title="Frames the subject from a moderate distance, showing more of the background.">Medium Wide Shot</option>
               <option value="Cowboy Shot" title="A shot that frames the subject from the mid-thigh level, typically featuring a gun holster in the frame.">Cowboy Shot</option>
-              <option value="Medium Shot (MS)" title="Shows the subject from the waist up or knees up, allowing for more focus on the subject.">Medium Shot (MS)</option>
-              <option value="Medium Close Up (MCU)" title="Focuses on the subject's face and shoulders, revealing facial expressions and emotions.">Medium Close Up (MCU)</option>
-              <option value="Close Up (CU)" title="Presents a detailed view of the subject's face or a specific object, capturing fine details.">Close Up (CU)</option>
-              <option value="Extreme Close Up (ECU)" title="Zooms in on a specific part of the subject, highlighting minute details or emotions.">Extreme Close Up (ECU)</option>
+              <option value="Medium Shot (MS)" title="Shows the subject from the waist up or knees up, allowing for more focus on the subject.">Medium Shot</option>
+              <option value="Medium Close Up" title="Focuses on the subject's face and shoulders, revealing facial expressions and emotions.">Medium Close Up</option>
+              <option value="Close-Up" title="Presents a detailed view of the subject's face or a specific object, capturing fine details.">Close-Up</option>
+              <option value="Extreme Close-Up" title="Zooms in on a specific part of the subject, highlighting minute details or emotions.">Extreme Close-Up</option>
               <option value="Establishing Shot" title="Introduces the setting or location, providing a context for the following scene.">Establishing Shot</option>
             </select>
             <span class="dot"></span>
             
             <!-- ID CAMERAS-->
-            <h4>High quality Cameras</h4>
-            <select id="camera_used_to_take_the_shot">
-              <option value="">Select a camera</option>
-              <option value="Canon EOS 5D Mark IV">High Definition Camera Canon EOS 5D Mark IV: Reliable DSLR</option>
-              <option value="Sony A1">Sony A1: High-speed shooting and 8K video capabilities</option>
-              <option value="Nikon Z9">Nikon Z9: Excellent for high-speed shooting</option>
-              <option value="Hasselblad X2D 100C">Hasselblad X2D 100C: Ultra-high resolution images</option>
-              <option value="Leica M10-R">Leica M10-R: Exceptional build quality and image</option>
-            </select>
+            <h4>Film stock (use this to give a personal<br> touch to the final render)</h4>
+            <select id="film_used_to_take_the_shot">
+                <option value="">Select a film for your shot</option>
+
+    <option value="AgfaColor_Neu" title="Known for soft color rendering and fine grain">AgfaColor Neu</option>
+    <option value="Anscochrome" title="Early color slide film known for saturated colors, but requiring complex processing">Anscochrome</option>
+    <option value="Fujifilm_Velvia_100" title="Known for extremely saturated colors, especially in the green-blue part of the spectrum.">Fujifilm Velvia 100</option>
+    <option value="Polaroid_Instant_Film" title="Known for its instant development and high contrast">Polaroid Instant Film</option>
+    <option value="Agfa_APX" title="A classic black and white film, known for its high contrast and pronounced grain">Agfa APX</option>
+    <option value="Agfa_CT_Precisa" title="A color slide film known for its sharpness and fine grain">Agfa CT Precisa</option>
+    <option value="Fujifilm Superia" title="A color film known for its fine grain and vivid color rendition">Fujifilm Superia</option>
+    <option value="Kodak_Portra_400" title="A popular colour negative film stock. It’s excellent for daylight and indoor low light conditions">Kodak Portra 400</option>
+    <option value="Fujifilm_Superia_X-Tra_400" title="A brilliant stock proven to be a popular choice for those looking for an everyday option">Fujifilm Superia X-Tra 400</option>
+    <option value="Kodak_Tri-X_400" title="A film that’s ideal for indoor and outdoor shooting conditions and is incredibly flexible even in lower light">Kodak Tri-X 400</option>
+    <option value="Ilford_HP5_Plus_400" title="A black and white film that delivers a medium level of contrast, nice tonal range with a gorgeous mid-level of grain">Ilford HP5 Plus 400</option>
+    <option value="Kodak_Ektachrome_100" title="Ideal for good lighting conditions, or the results will be muddy at best">Kodak Ektachrome 100</option>
+    <option value="E-6_Colour_Reversal" title="It displays a positive image on the film rather than showing a negative">E-6 Colour Reversal</option>
+    <option value="Fujifilm_FujiColour_200 " title="Suit everyday happy snaps where people are not looking for superb image quality or colour reproduction">Fujifilm FujiColour 200 </option>
+    </select>
             <span class="dot"></span>
 
-            <!-- ID LENSES -->
-            <h4>High performance lenses</h4>
-            <select id="lens_used_with_the_camera_to_take_the_shot">
-              <option value="">Select a lens</option>
-              <option value="Canon EF 24-70mm f/2.8L II USM">Canon EF 24-70mm f/2.8L II USM: Versatile, outstanding image quality</option>
-              <option value="Nikon AF-S NIKKOR 70-200mm f/2.8E FL ED VR">Nikon AF-S NIKKOR 70-200mm f/2.8E FL ED VR: Premium telephoto lens</option>
-              <option value="Sony FE 16-35mm f/2.8 GM">Sony FE 16-35mm f/2.8 GM: Wide-angle zoom lens</option>
-              <option value="Fujifilm GF 110mm f/2 R LM WR">Fujifilm GF 110mm f/2 R LM WR: Incredible portraits</option>
-              <option value="Leica APO-Summicron-M 50mm f/2 ASPH">Leica APO-Summicron-M 50mm f/2 ASPH: High-performance, sharp lens</option>
-            </select>
-            <span class="dot"></span>
-
+        
             
             <h4>Interior / Outdoor design</h4>
            
-            <select id="space_to_be_designed">
+          <select id="space_to_be_designed">
                 <option value=" ">Select the space to design</option>
               <option value="interior design">Interior design</option>
               <option value="outdoor design">Outdoor design</option>
               <option value="facade design">Facade design</option>
               </select>
             <span class="dot"></span>
+           <!-- <div class="menuButton">
+                <label>Select the space to design</label>
+                <ul id="space_to_be_designed" class="menuDropdown">
+                    <li value=" " class="menuVoice">Select the space to design</li>
+                    <li value="interior design">Interior design</li>
+                    <li value="outdoor design">Outdoor design</li>
+                    <li value="facade design">Facade design</li>
+                </ul>
+            </div>
+-->
+
 
             <sub>Select interior design for indoor<br>
                  designs if you want to design an<br>
@@ -173,30 +184,73 @@
             <sub>Upload and image is not mandatory</sub><br>
             <sub>File name must be simple and short</sub>
             <h4>Design influence</h4>
-            <select id="magazine">
-              <option value="">Select a design magazine</option>
-              <option value="Architectural Digest" title="Architectural Digest is a prestigious international magazine that showcases luxurious homes, architectural marvels, and innovative interior design."> Architectural Digest</option>
-              <option value="Elle Decor" title="Elle Decor is a leading interior design magazine that offers inspiration and ideas for stylish living spaces. It covers a wide range of design styles, from modern to traditional, and provides tips on home decoration, furniture, color schemes, and more."> Elle Decor</option>
-              <option value="Houzz" title="Houzz serves as a comprehensive online resource for home design and improvement, offering inspiration, information, and a platform for connecting with professionals and fellow enthusiasts.">Houzz</option>
-              <option value="House Beautiful" title="House Beautiful is a classic interior design magazine that focuses on creating beautiful and functional living spaces. It features practical advice, design ideas, and expert tips on home decor, renovation, and DIY projects."> House Beautiful</option>
-              <option value="Dwell" title="Dwell is a magazine that celebrates modern architecture and design. It showcases innovative and sustainable homes, cutting-edge furniture, and contemporary interior design concepts."> Dwell</option>
-              <option value="Interior Design" title="Interior Design is a prominent industry magazine that showcases the latest trends, projects, and innovations in interior design. It features stunning visuals, profiles of renowned designers, and coverage of residential, commercial, and hospitality spaces."> Interior Design</option>
-              <option value="Veranda" title="Veranda is a magazine that focuses on elegant and sophisticated interior design. It highlights luxurious homes, timeless aesthetics, and refined decorating ideas. Veranda also covers outdoor living spaces, travel, and entertaining."> Veranda</option>
-              <option value="Wallpaper*" title="Wallpaper* is a global design magazine that covers not only interior design but also architecture, fashion, art, and lifestyle. It showcases cutting-edge designs, exclusive interviews with designers, and unique perspectives on contemporary culture."> Wallpaper*</option>
-              <option value="AD España" title="AD España is the Spanish edition of Architectural Digest. It features exceptional Spanish and international design projects, interviews with renowned designers, and trends in architecture and interior design."> AD España</option>
-              <option value="World of Interiors" title="World of Interiors is a prestigious British magazine that explores the world of interior design with an emphasis on creativity, craftsmanship, and unique design objects. It presents eclectic interiors, unusual homes, and rare decorative pieces."> World of Interiors</option>
-              <option value="Luxe Interiors + Design" title="Luxe Interiors + Design is a high-end magazine that showcases luxurious interiors, high-quality craftsmanship, and sophisticated design. It covers residential and commercial projects, offering insights into the world of luxury design."> Luxe Interiors + Design</option>
-              <option value="House & Garden" title="House & Garden is a prestigious magazine that combines interior design, gardening, and lifestyle. It features elegant homes, beautiful gardens, and expert advice on interior decoration, landscaping, and entertaining."> House & Garden</option>
-              <option value="Traditional Home" title="Traditional Home celebrates classic and timeless design. It showcases traditional and transitional interiors, highlighting refined furnishings, elegant architecture, and enduring design elements."> Traditional Home</option>
-              <option value="Interior Design Today" title="Interior Design Today is a UK-based magazine that focuses on contemporary interior design trends, products, and projects. It provides industry insights, interviews with leading designers, and inspiration for modern living spaces."> Interior Design Today</option>
-              <option value="Home & Design" title="Home & Design is a regional magazine that highlights exceptional homes and design projects in specific areas. It showcases local architecture, interior design, and landscape design, providing insights into regional design trends and talents."> Home & Design</option>
-              <option value="Period Living" title="Period Living is a magazine dedicated to traditional homes and interiors. It features historic houses, restoration projects, and design ideas inspired by different architectural periods and styles."> Period Living</option>
-              <option value="Better Homes & Gardens" title="Better Homes & Gardens is a popular magazine that offers practical advice, DIY projects, and affordable design solutions for creating beautiful and functional homes. It covers a wide range of topics, including home improvement, gardening, and entertaining."> Better Homes & Gardens</option>
-              <option value="Real Living" title="Real Living is an Australian magazine that focuses on contemporary and affordable interior design. It provides achievable design ideas, budget-friendly tips, and inspiring home tours for modern living."> Real Living</option>
-              <option value="Veranda Interiors" title="Veranda Interiors is a digital publication by Veranda magazine, dedicated to showcasing exceptional interior design projects. It offers exclusive access to designer portfolios, insider tips, and in-depth features on luxurious interiors."> Veranda Interiors</option>
-              <option value="Beautiful Kitchens & Baths" title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces."> Beautiful Kitchens & Baths</option>
-              <option value="Belle" title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects."> Belle</option>
+            <select id="inspired_by_this_interior_design_magazine">
+              <option value="">Select an interior design magazine</option>
+              <option value="AD España"
+                title="AD España is the Spanish edition of Architectural Digest. It features exceptional Spanish and international design projects, interviews with renowned designers, and trends in architecture and interior design.">
+                AD España</option>
+              <option value="Architectural Digest"
+                title="Architectural Digest is a prestigious international magazine that showcases luxurious homes, architectural marvels, and innovative interior design.">
+                Architectural Digest</option>
+              <option value="Beautiful Kitchens & Baths"
+                title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces.">
+                Beautiful Kitchens & Baths</option>
+              <option value="Belle"
+                title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects.">
+                Belle</option>
+              <option value="Better Homes & Gardens"
+                title="Better Homes & Gardens is a popular magazine that offers practical advice, DIY projects, and affordable design solutions for creating beautiful and functional homes. It covers a wide range of topics, including home improvement, gardening, and entertaining.">
+                Better Homes & Gardens</option>
+              <option value="Dwell"
+                title="Dwell is a magazine that celebrates modern architecture and design. It showcases innovative and sustainable homes, cutting-edge furniture, and contemporary interior design concepts.">
+                Dwell</option>
+              <option value="Elle Decor"
+                title="Elle Decor is a leading interior design magazine that offers inspiration and ideas for stylish living spaces. It covers a wide range of design styles, from modern to traditional, and provides tips on home decoration, furniture, color schemes, and more.">
+                Elle Decor</option>
+              <option value="Home & Design"
+                title="Home & Design is a regional magazine that highlights exceptional homes and design projects in specific areas. It showcases local architecture, interior design, and landscape design, providing insights into regional design trends and talents.">
+                Home & Design</option>
+              <option value="House & Garden"
+                title="House & Garden is a prestigious magazine that combines interior design, gardening, and lifestyle. It features elegant homes, beautiful gardens, and expert advice on interior decoration, landscaping, and entertaining.">
+                House & Garden</option>
+              <option value="House Beautiful"
+                title="House Beautiful is a classic interior design magazine that focuses on creating beautiful and functional living spaces. It features practical advice, design ideas, and expert tips on home decor, renovation, and DIY projects.">
+                House Beautiful</option>
+              <option value="Houzz"
+                title="Houzz serves as a comprehensive online resource for home design and improvement, offering inspiration, information, and a platform for connecting with professionals and fellow enthusiasts.">
+                Houzz</option>
+              <option value="Interior Design"
+                title="Interior Design is a prominent industry magazine that showcases the latest trends, projects, and innovations in interior design. It features stunning visuals, profiles of renowned designers, and coverage of residential, commercial, and hospitality spaces.">
+                Interior Design</option>
+              <option value="Interior Design Today"
+                title="Interior Design Today is a UK-based magazine that focuses on contemporary interior design trends, products, and projects. It provides industry insights, interviews with leading designers, and inspiration for modern living spaces.">
+                Interior Design Today</option>
+              <option value="Luxe Interiors + Design"
+                title="Luxe Interiors + Design is a high-end magazine that showcases luxurious interiors, high-quality craftsmanship, and sophisticated design. It covers residential and commercial projects, offering insights into the world of luxury design.">
+                Luxe Interiors + Design</option>
+              <option value="Period Living"
+                title="Period Living is a magazine dedicated to traditional homes and interiors. It features historic houses, restoration projects, and design ideas inspired by different architectural periods and styles.">
+                Period Living</option>
+              <option value="Real Living"
+                title="Real Living is an Australian magazine that focuses on contemporary and affordable interior design. It provides achievable design ideas, budget-friendly tips, and inspiring home tours for modern living.">
+                Real Living</option>
+              <option value="Traditional Home"
+                title="Traditional Home celebrates classic and timeless design. It showcases traditional and transitional interiors, highlighting refined furnishings, elegant architecture, and enduring design elements.">
+                Traditional Home</option>
+              <option value="Veranda"
+                title="Veranda is a magazine that focuses on elegant and sophisticated interior design. It highlights luxurious homes, timeless aesthetics, and refined decorating ideas. Veranda also covers outdoor living spaces, travel, and entertaining.">
+                Veranda</option>
+              <option value="Veranda Interiors"
+                title="Veranda Interiors is a digital publication by Veranda magazine, dedicated to showcasing exceptional interior design projects. It offers exclusive access to designer portfolios, insider tips, and in-depth features on luxurious interiors.">
+                Veranda Interiors</option>
+              <option value="Wallpaper*"
+                title="Wallpaper* is a global design magazine that covers not only interior design but also architecture, fashion, art, and lifestyle. It showcases cutting-edge designs, exclusive interviews with designers, and unique perspectives on contemporary culture.">
+                Wallpaper*</option>
+              <option value="World of Interiors"
+                title="World of Interiors is a prestigious British magazine that explores the world of interior design with an emphasis on creativity, craftsmanship, and unique design objects. It presents eclectic interiors, unusual homes, and rare decorative pieces.">
+                World of Interiors</option>
             </select>
+
             <span class="dot"></span>
 
             <!-- ID STYLES-->
@@ -279,83 +333,47 @@
             <span class="dot"></span>
 
             <!-- ID VENDORS -->
-            <select id="vendors">
+            <select id="furniture_provided_by_this_vendor">
               <option value="">Select a furniture vendor</option>
-              <option value="IKEA" title="Affordable and stylish furniture for home and office">IKEA - <a href="https://www.ikea.com">https://www.ikea.com</a>
-              </option>
-              <option value="JYSK" title="Scandinavian-inspired furniture and home decor">JYSK - <a href="https://www.jysk.com">https://www.jysk.com</a>
-              </option>
-              <option value="Ashley Furniture" title="Wide range of furniture styles for every room">Ashley Furniture - <a href="https://www.ashleyfurniture.com">https://www.ashleyfurniture.com</a>
-              </option>
-              <option value="Wayfair" title="Online furniture and home decor store">Wayfair - <a href="https://www.wayfair.com">https://www.wayfair.com</a>
-              </option>
-              <option value="West Elm" title="Modern furniture and home decor">West Elm - <a href="https://www.westelm.com">https://www.westelm.com</a>
-              </option>
-              <option value="Crate &amp; Barrel" title="Contemporary furniture and home accessories">Crate &amp; Barrel - <a href="https://www.crateandbarrel.com">https://www.crateandbarrel.com</a>
-              </option>
-              <option value="Pottery Barn" title="Classic and timeless furniture and home decor">Pottery Barn - <a href="https://www.potterybarn.com">https://www.potterybarn.com</a>
-              </option>
-              <option value="Restoration Hardware" title="Luxury home furnishings and decor">Restoration Hardware - <a href="https://www.restorationhardware.com">https://www.restorationhardware.com</a>
-              </option>
-              <option value="Ethan Allen" title="High-quality furniture and home accessories">Ethan Allen - <a href="https://www.ethanallen.com">https://www.ethanallen.com</a>
-              </option>
-              <option value="Room &amp; Board" title="Modern and contemporary furniture for home and office">Room &amp; Board - <a href="https://www.roomandboard.com">https://www.roomandboard.com</a>
-              </option>
-              <option value="Design Within Reach" title="Modern furniture and lighting designs">Design Within Reach - <a href="https://www.dwr.com">https://www.dwr.com</a>
-              </option>
-              <option value="CB2" title="Modern furniture and home decor for apartments and small spaces">CB2 - <a href="https://www.cb2.com">https://www.cb2.com</a>
-              </option>
-              <option value="BoConcept" title="Contemporary and Danish-designed furniture">BoConcept - <a href="https://www.boconcept.com">https://www.boconcept.com</a>
-              </option>
-              <option value="Structube" title="Affordable and modern furniture">Structube - <a href="https://www.structube.com">https://www.structube.com</a>
-              </option>
-              <option value="HAY" title="Modern furniture and accessories">HAY - <a href="https://www.hay.com">https://www.hay.com</a>
-              </option>
-              <option value="Muuto" title="Scandinavian furniture and lighting designs">Muuto - <a href="https://www.muuto.com">https://www.muuto.com</a>
-              </option>
-              <option value="Roche Bobois" title="Luxury contemporary furniture and accessories">Roche Bobois - <a href="https://www.roche-bobois.com">https://www.roche-bobois.com</a>
-              </option>
-              <option value="Ligne Roset" title="Contemporary French furniture and accessories">Ligne Roset - <a href="https://www.ligne-roset.com">https://www.ligne-roset.com</a>
-              </option>
-              <option value="Herman Miller" title="High-end ergonomic furniture and office solutions">Herman Miller - <a href="https://www.hermanmiller.com">https://www.hermanmiller.com</a>
-              </option>
-              <option value="Knoll" title="Modern furniture and design classics">Knoll - <a href="https://www.knoll.com">https://www.knoll.com</a>
-              </option>
-              <option value="Modsy" title="Virtual interior design services and curated furniture">Modsy - <a href="https://www.modsy.com">https://www.modsy.com</a>
-              </option>
-              <option value="Scandinavian Designs" title="Modern and contemporary furniture inspired by Scandinavian design">Scandinavian Designs - <a href="https://www.scandinaviandesigns.com">https://www.scandinaviandesigns.com</a>
-              </option>
-              <option value="Raymour &amp; Flanigan" title="Wide selection of furniture for every room">Raymour &amp; Flanigan - <a href="https://www.raymourflanigan.com">https://www.raymourflanigan.com</a>
-              </option>
-              <option value="Bob's Discount Furniture" title="Affordable furniture and home decor">Bob's Discount Furniture - <a href="https://www.mybobs.com">https://www.mybobs.com</a>
-              </option>
-              <option value="Havertys" title="Quality furniture and home accessories">Havertys - <a href="https://www.havertys.com">https://www.havertys.com</a>
-              </option>
-              <option value="La-Z-Boy" title="Comfortable and stylish furniture">La-Z-Boy - <a href="https://www.la-z-boy.com">https://www.la-z-boy.com</a>
-              </option>
-              <option value="Bernhardt Furniture" title="High-quality furniture and home decor">Bernhardt Furniture - <a href="https://www.bernhardt.com">https://www.bernhardt.com</a>
-              </option>
-              <option value="HomeGoods" title="Home decor and furnishings at discounted prices">HomeGoods - <a href="https://www.homegoods.com">https://www.homegoods.com</a>
-              </option>
-              <option value="AllModern" title="Modern furniture and home decor">AllModern - <a href="https://www.allmodern.com">https://www.allmodern.com</a>
-              </option>
-              <option value="RH (formerly Restoration Hardware)" title="Luxury home furnishings and decor">RH (formerly Restoration Hardware) - <a href="https://www.rh.com">https://www.rh.com</a>
-              </option>
-              <option value="Joybird" title="Customizable and mid-century modern furniture">Joybird - <a href="https://www.joybird.com">https://www.joybird.com</a>
-              </option>
-              <option value="Article" title="Modern and Scandinavian-inspired furniture">Article - <a href="https://www.article.com">https://www.article.com</a>
-              </option>
-              <option value="Nebraska Furniture Mart" title="Wide selection of furniture, flooring, and appliances">Nebraska Furniture Mart - <a href="https://www.nfm.com">https://www.nfm.com</a>
-              </option>
-              <option value="Pier 1 Imports" title="Eclectic furniture and home decor">Pier 1 Imports - <a href="https://www.pier1.com">https://www.pier1.com</a>
-              </option>
-              <option value="Broyhill Furniture" title="Quality furniture and home decor">Broyhill Furniture - <a href="https://www.broyhillfurniture.com">https://www.broyhillfurniture.com</a>
-              </option>
-              <option value="Cymax" title="Affordable furniture and home decor">Cymax - <a href="https://www.cymax.com">https://www.cymax.com</a>
-              </option>
-              <option value="Lexington Home Brands" title="Upscale furniture and home decor">Lexington Home Brands - <a href="https://www.lexington.com">https://www.lexington.com</a>
-              </option>
+              <option value="AllModern" title="Modern furniture and home decor">AllModern</option>
+              <option value="Article" title="Modern and Scandinavian-inspired furniture">Article</option>
+              <option value="Ashley Furniture" title="Wide range of furniture styles for every room">Ashley Furniture</option>
+              <option value="Bernhardt Furniture" title="High-quality furniture and home decor">Bernhardt Furniture</option>
+              <option value="Bob's Discount Furniture" title="Affordable furniture and home decor">Bob's Discount Furniture</option>
+              <option value="BoConcept" title="Contemporary and Danish-designed furniture">BoConcept</option>
+              <option value="Broyhill Furniture" title="Quality furniture and home decor">Broyhill Furniture</option>
+              <option value="CB2" title="Modern furniture and home decor for apartments and small spaces">CB2</option>
+              <option value="Crate &amp; Barrel" title="Contemporary furniture and home accessories">Crate &amp; Barrel</option>
+              <option value="Cymax" title="Affordable furniture and home decor">Cymax</option>
+              <option value="Design Within Reach" title="Modern furniture and lighting designs">Design Within Reach</option>
+              <option value="Ethan Allen" title="High-quality furniture and home accessories">Ethan Allen</option>
+              <option value="Havertys" title="Quality furniture and home accessories">Havertys</option>
+              <option value="HAY" title="Modern furniture and accessories">HAY</option>
+              <option value="Herman Miller" title="High-end ergonomic furniture and office solutions">Herman Miller</option>
+              <option value="HomeGoods" title="Home decor and furnishings at discounted prices">HomeGoods</option>
+              <option value="IKEA" title="Affordable and stylish furniture for home and office">IKEA</option>
+              <option value="JYSK" title="Scandinavian-inspired furniture and home decor">JYSK</option>
+              <option value="Joybird" title="Customizable and mid-century modern furniture">Joybird</option>
+              <option value="Knoll" title="Modern furniture and design classics">Knoll</option>
+              <option value="La-Z-Boy" title="Comfortable and stylish furniture">La-Z-Boy</option>
+              <option value="Lexington Home Brands" title="Upscale furniture and home decor">Lexington Home Brands</option>
+              <option value="Ligne Roset" title="Contemporary French furniture and accessories">Ligne Roset</option>
+              <option value="Modsy" title="Virtual interior design services and curated furniture">Modsy</option>
+              <option value="Muuto" title="Scandinavian furniture and lighting designs">Muuto</option>
+              <option value="Nebraska Furniture Mart" title="Wide selection of furniture, flooring, and appliances">Nebraska Furniture Mart</option>
+              <option value="Pottery Barn" title="Classic and timeless furniture and home decor">Pottery Barn</option>
+              <option value="Pier 1 Imports" title="Eclectic furniture and home decor">Pier 1 Imports</option>
+              <option value="Raymour &amp; Flanigan" title="Wide selection of furniture for every room">Raymour &amp; Flanigan</option>
+              <option value="Restoration Hardware" title="Luxury home furnishings and decor">Restoration Hardware</option>
+              <option value="Roche Bobois" title="Luxury contemporary furniture and accessories">Roche Bobois</option>
+              <option value="Room &amp; Board" title="Modern and contemporary furniture for home and office">Room &amp; Board</option>
+              <option value="RH (formerly Restoration Hardware)" title="Luxury home furnishings and decor">RH (formerly Restoration Hardware)</option>
+              <option value="Scandinavian Designs" title="Modern and contemporary furniture inspired by Scandinavian design">Scandinavian Designs</option>
+              <option value="Structube" title="Affordable and modern furniture">Structube</option>
+              <option value="West Elm" title="Modern furniture and home decor">West Elm</option>
+              <option value="Wayfair" title="Online furniture and home decor store">Wayfair</option>
             </select>
+
             <span class="dot"></span>
 
             
@@ -474,17 +492,17 @@
             <div class="colorPalette_60">
                 <input type="color" id="dominant_color" class="colorPicker">
 
-        <label for="dominant_color">Dominant Color</label>
+        <label for="dominant_color">Color one</label>
 </div>
             <div class="colorPalette_60">
                 <input type="color" id="secondary_color" class="colorPicker">
-        <label for="secondary_color">Secondary Color</label>
+        <label for="secondary_color">Color two</label>
        
             </div>
             <div class="colorPalette_60">
                 <input type="color" id="accent_color" class="colorPicker">
 
-        <label for="accent_color">Accent Color</label>
+        <label for="accent_color">Color three</label>
             
             </div>
         </div>
@@ -520,7 +538,7 @@
             <span class="dot"></span>
 
             <!--ID ROOM SIZE-->
-            <select id="size">
+            <select id="room_size">
               <option value="">Select room size</option>
               <option value="very-small">Very Small</option>
               <option value="small">Small</option>
@@ -538,7 +556,7 @@
 
             <h4>Indoor spaces</h4>
             <!-- ID stanze -->
-            <select id="home_area">
+            <select id="design_this_home_room">
               <option value="">Select a home area</option>
               <!-- Home Areas -->
               <option value="Entryway">Entryway</option>
@@ -728,7 +746,7 @@
 
             <h4>Lights</h4>
 
-            <select id="time">
+            <select id="the_shot_was_taken_at">
               <option value="">Select the time of day</option>
               <option value="sunrise">Sunrise</option>
               <option value="morning">Morning</option>

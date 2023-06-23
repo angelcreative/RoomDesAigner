@@ -2,19 +2,15 @@
 function showWaitingOverlay() {
   const waiting = document.getElementById("waiting");
   waiting.style.display = "block";
-
   var loadingMessage = document.getElementById('loadingMessage');
   loadingMessage.style.display = "block";
-
   var progressBar = document.getElementById('progressBar');
   var progressLabel = document.getElementById('progressLabel');
   var progress = 0;
-
   var intervalId = setInterval(function() {
     progress += 2;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
-
     if (progress >= 100) {
       clearInterval(intervalId);
       hideWaitingOverlay();
@@ -22,66 +18,50 @@ function showWaitingOverlay() {
     }
   }, 1000);
 }
-
 // Function to hide the waiting overlay and loading message
 function hideWaitingOverlay() {
   const waiting = document.getElementById("waiting");
   waiting.style.display = "none";
 }
-
 // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay");
   overlay.style.display = "block";
 }
-
 // Function to hide the overlay
 function hideOverlay() {
   const overlay = document.getElementById("overlay");
   overlay.style.display = "none";
 }
-
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton");
 magicButton.addEventListener("click", function() {
   showWaitingOverlay();
 });
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", function() {
     
  
     // Function to handle the form submission
     function handleSubmit(event) {
       event.preventDefault();
-
       // Disable the "Make the Magic" button to prevent multiple clicks
       const magicButton = document.getElementById("magicButton");
       magicButton.disabled = true;
-
       // Check if the form is being reset
       if (event.submitter.id === "clearAllButton") {
         clearAll();
         return;
       }
-
       showOverlay(); // Show the overlay and loading message
-
       const fileInput = document.getElementById("imageDisplayUrl");
       const file = fileInput.files[0];
-
       if (file) {
         // Image file is selected
         const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
         const uploadUrl = "https://api.imgbb.com/1/upload";
-
         const formData = new FormData();
         formData.append("key", apiKey);
         formData.append("image", file);
-
         fetch(uploadUrl, {
           method: "POST",
           body: formData
@@ -113,14 +93,11 @@ document.addEventListener("DOMContentLoaded", function() {
         generateImages(null, selectedValues);
         hideOverlay(); // Hide the overlay and loading message
       }
-
-        /* // Update the download JSON button with the selected form values
+      // Update the download JSON button with the selected form values
       const selectedValues = getSelectedValues();
       updateDownloadButton(selectedValues);
     }
-
-
-  Function to update the download JSON button
+  // Function to update the download JSON button
   function updateDownloadButton(selectedValues) {
     const downloadJsonButton = document.getElementById("downloadJsonButton");
     downloadJsonButton.addEventListener("click", () => {
@@ -128,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function() {
       downloadFile(jsonData, "selected_values.json");
     });
   }
-
   // Function to download the JSON file
   function downloadFile(data, filename) {
     const blob = new Blob([data], { type: "application/json" });
@@ -137,79 +113,66 @@ document.addEventListener("DOMContentLoaded", function() {
     link.href = url;
     link.download = filename;
     link.click();
-  }*/
-
+  }
     function getSelectedValues(imageUrl = "") {
-      return {
-        photography_level_shot: document.getElementById("photography_level_shot").value,
-          camera_location: document.getElementById("camera_location").value,
-        camera_shot: document.getElementById("camera_shot").value,
-        camera_used_to_take_the_shot: document.getElementById("camera_used_to_take_the_shot").value,
-        lens_used_with_the_camera_to_take_the_shot: document.getElementById("lens_used_with_the_camera_to_take_the_shot").value,
-        space_to_be_designed: document.getElementById("space_to_be_designed").value,
-        home_area: document.getElementById("home_area").value,
-        size: document.getElementById("size").value,
-        pool: document.getElementById("pool").value,
-        garden: document.getElementById("garden").value,
-        child_room: document.getElementById("child_room").value,
-        room_shape: document.getElementById("room_shape").value,
-        doors: document.getElementById("doors").value,
-        windows: document.getElementById("windows").value,
-        floors: document.getElementById("floors").value,
-        roofs: document.getElementById("roofs").value,
-        roof_height: document.getElementById("roof_height").value,
-        illumination: document.getElementById("illumination").value,
-        time: document.getElementById("time").value,
-        material: document.getElementById("material").value,
-        ceramic_material: document.getElementById("ceramic_material").value,
-        fabric: document.getElementById("fabric").value,
-        stone_material: document.getElementById("stone_material").value,
-        marble_material: document.getElementById("marble_material").value,
-        wood_material: document.getElementById("wood_material").value,
-        dominant_color: document.getElementById("dominant_color").value,
-        secondary_color: document.getElementById("secondary_color").value,
-        accent_color: document.getElementById("accent_color").value,
-        magazine: document.getElementById("magazine").value,
-        design_style: document.getElementById("design_style").value,
-        vendors: document.getElementById("vendors").value,
-      designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
-      designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
-imageUrl: document.getElementById("imageDisplayUrl").value
-      };
+                return {
+                the_shot_was_taken_at: document.getElementById("the_shot_was_taken_at").value,
+                illumination: document.getElementById("illumination").value,
+                dominant_color: document.getElementById("dominant_color").value,
+                secondary_color: document.getElementById("secondary_color").value,
+                accent_color: document.getElementById("accent_color").value,
+                inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
+                design_style: document.getElementById("design_style").value,
+                furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
+                designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
+                designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
+                film_used_to_take_the_shot: document.getElementById("film_used_to_take_the_shot").value,
+                shot: document.getElementById("shot").value,
+                room_size: document.getElementById("room_size").value,
+                roof_height: document.getElementById("roof_height").value,
+                design_this_home_room: document.getElementById("design_this_home_room").value,
+                space_to_be_designed: document.getElementById("space_to_be_designed").value,
+                child_room: document.getElementById("child_room").value,
+                pool: document.getElementById("pool").value,
+                garden: document.getElementById("garden").value,
+                room_shape: document.getElementById("room_shape").value,
+                doors: document.getElementById("doors").value,
+                windows: document.getElementById("windows").value,
+                floors: document.getElementById("floors").value,
+                roofs: document.getElementById("roofs").value,
+                material: document.getElementById("material").value,
+                ceramic_material: document.getElementById("ceramic_material").value,
+                fabric: document.getElementById("fabric").value,
+                stone_material: document.getElementById("stone_material").value,
+                marble_material: document.getElementById("marble_material").value,
+                wood_material: document.getElementById("wood_material").value,
+                imageUrl: document.getElementById("imageDisplayUrl").value
+                };
     }
-
-
     
     
  
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
-
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, High resolution photography, Editorial photography shot, Octane render,  high res, sharp details, 8K, intrincated details. `;
-
+      const promptInit = `${imageUrl}, Editorial photography shot,Editorial photography shot, 60-30-10-interior-design-color-rule::1 interior-design::1 `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
           .map(([key, value]) => `${key}: ${value}`)
           .join(", ");
-
         // Check if imageUrl is present, and append it to plainText if it exists
         if (imageUrl) {
           plainText += `, imageUrl: ${imageUrl}`;
         } else {
           plainText += ', imageUrl: ';
         }
-
         
         const promptEndy = `--ar 3:2 --stylize 100 --iw 1.75 `
-
       // Combine the promptInit with the plain text representation
       const promptText = `${promptInit} ${plainText} ${promptEndy}`;
-
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay
-
       const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
@@ -230,10 +193,8 @@ imageUrl: document.getElementById("imageDisplayUrl").value
         upscale: null,
         embeddings_model: null
       };
-
       // Set the image URL as the init_image in the prompt
       prompt.init_image = imageUrl;
-
       // Make an API request to Stable Diffusion API with the prompt
       fetch("/generate-images", {
         method: "POST",
@@ -264,27 +225,21 @@ imageUrl: document.getElementById("imageDisplayUrl").value
           hideOverlay(); // Hide the overlay and loading message
         });
     }
-
     function showWaitingOverlay() {
       const waiting = document.getElementById("waiting");
       waiting.style.display = "block";
     }
-
     function hideWaitingOverlay() {
       const waiting = document.getElementById("waiting");
       waiting.style.display = "none";
     }
-
-
     // Function to show the overlay
     function showOverlay() {
       const overlay = document.getElementById("overlay");
       overlay.style.display = "block";
     }
-
     
     // Function to generate message
-
     function generateMessageDiv(message) {
       var messageDiv = document.createElement('div');
       messageDiv.id = 'message';
@@ -298,14 +253,12 @@ imageUrl: document.getElementById("imageDisplayUrl").value
       `;
       document.body.appendChild(messageDiv);
     }
-
     window.closeMessage = function () {
       var messageDiv = document.getElementById('message');
       if (messageDiv) {
         messageDiv.remove();
       }
     }
-
     // Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
@@ -317,7 +270,6 @@ imageUrl: document.getElementById("imageDisplayUrl").value
       
       generateMessageDiv("Prompt copied to clipboard!");
     }
-
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
       const tempInput = document.createElement("textarea");
@@ -329,16 +281,12 @@ imageUrl: document.getElementById("imageDisplayUrl").value
       
       generateMessageDiv("Image URL copied to clipboard!");
     }
-
-
     // Function to display the generated images in a modal
     function showModal(imageUrls, promptText) {
       const modal = document.getElementById("modal");
       const imageGrid = document.getElementById("imageGrid");
-
       // Clear previous images
       imageGrid.innerHTML = "";
-
       // Display the generated images
       imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
@@ -352,55 +300,43 @@ imageUrl: document.getElementById("imageDisplayUrl").value
               image.addEventListener("click", () => {
                 openImageInNewTab(imageUrl);
               });
-
         // Create buttons container
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
-
         // Create copy URL button
         const copyButton = document.createElement("button");
         copyButton.textContent = "Copy URL";
         copyButton.addEventListener("click", () => {
           copyImageUrlToClipboard(imageUrl);
         });
-
         // Create copy prompt button
         const copyPromptButton = document.createElement("button");
         copyPromptButton.textContent = "Copy Prompt";
         copyPromptButton.addEventListener("click", () => {
           copyTextToClipboard(promptText);
         });
-
         // Append buttons to buttons container
         buttonsContainer.appendChild(copyButton);
         buttonsContainer.appendChild(copyPromptButton);
-
         // Append image and buttons container to image container
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
-
         // Append image container to image grid
         imageGrid.appendChild(imageContainer);
       });
-
       // Show the modal
       modal.style.display = "block";
       showOverlay(); // Show the overlay
     }
-
-
   // Function to open the image in a new tab
   function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
   }
-
-
   // Function to download the image (or open in a new tab if not possible to download)
   function downloadImage(imageUrl) {
     const link = document.createElement("a");
     link.href = imageUrl;
     link.target = "_blank";
-
     // Check if the browser supports the "download" attribute
     if ("download" in link) {
       link.download = "generated_image.png";
@@ -410,19 +346,16 @@ imageUrl: document.getElementById("imageDisplayUrl").value
       window.open(imageUrl, "_blank");
     }
   }
-
     // Green dot
     function toggleGreenDot(selectId) {
       var selectElement = document.getElementById(selectId);
       var dotElement = document.querySelector('#' + selectId + '+ span.dot');
-
       if (selectElement.value === '') {
         dotElement.style.display = 'none';
       } else {
         dotElement.style.display = 'block';
       }
     }
-
     // Attach event listeners to all select elements
     var selectElements = document.querySelectorAll('select');
     selectElements.forEach(function(selectElement) {
@@ -431,19 +364,15 @@ imageUrl: document.getElementById("imageDisplayUrl").value
         toggleGreenDot(selectId);
       });
     });
-
-
   // Function to close the modal
   function closeModal() {
     const modal = document.getElementById("modal");
     const overlay = document.getElementById("overlay");
     modal.style.display = "none";
     overlay.style.display = "none";
-
     // Enable the "Make the Magic" button
     const magicButton = document.getElementById("magicButton");
     magicButton.disabled = false;
-
     // Reset the form and event listeners
     resetFormAndEventListeners();
   }
@@ -454,31 +383,24 @@ imageUrl: document.getElementById("imageDisplayUrl").value
       fileInput.value = ""; // Clear the file input
       const form = document.getElementById("imageGenerationForm");
       form.reset(); // Reset the form
-
       // Hide all green dots
       const selectElements = document.querySelectorAll('select');
       selectElements.forEach(function(selectElement) {
         const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
         dotElement.style.display = 'none';
       });
-
       // Enable the "Make the Magic" button
       const magicButton = document.getElementById("magicButton");
       magicButton.disabled = false;
-
       // Reset the form and event listeners
       resetFormAndEventListeners();
     }
-
-
   // Add event listener to the form submission
   const form = document.getElementById("imageGenerationForm");
   form.addEventListener("submit", handleSubmit);
-
   // Add event listener to the close button of the modal
   const closeButton = document.getElementsByClassName("close")[0];
   closeButton.addEventListener("click", closeModal);
-
   // Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
@@ -497,7 +419,7 @@ window.addEventListener('load', function() {
 
     setTimeout(function() {
       splash.style.display = 'none'; // Hide the splash screen
-      //content.style.display = 'block'; // Show the website content
+      content.style.display = 'block'; // Show the website content
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
