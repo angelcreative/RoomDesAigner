@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Load the image
         const image = new Image();
         image.crossOrigin = "anonymous";
-        image.src = imageUrl;
+          image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
 
         image.onload = async () => {
           // Convert image to Base64

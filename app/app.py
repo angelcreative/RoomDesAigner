@@ -1,5 +1,4 @@
-from flask import Flask, jsonify, request, render_template
-
+from flask import Flask, jsonify, request, render_template, Response
 from flask_cors import CORS
 import requests
 
@@ -21,6 +20,19 @@ def generate_images():
     # Return the API response to the client
     return jsonify(response.json())
 
-if __name__ == '__main__':
+@app.route('/proxy-image', methods=['GET'])
+def proxy_image():
+    # Extract the image URL from the query parameters
+    image_url = request.args.get('url')
 
+    # Fetch the image from the remote server
+    image_response = requests.get(image_url, stream=True)
+
+    # Set the appropriate content type for the image
+    headers = {'Content-Type': image_response.headers['Content-Type']}
+
+    # Return the image as a response
+    return Response(image_response.iter_content(chunk_size=1024), headers=headers)
+
+if __name__ == '__main__':
     app.run()
