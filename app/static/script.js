@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
       // Update the promptInit variable
-      const promptInit = `${imageUrl}, Editorial photography shot, interior-design::1 `;
+      const promptInit = `${imageUrl}, Editorial photography shot,  `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
