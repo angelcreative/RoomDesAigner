@@ -100,29 +100,29 @@
             <span class="dot"></span>
 
             <!-- ID LEVEL SHOT-->
-            <select id="photography_level_shot">
+            <select id="point_of_view">
               <option value="">Select a level shot</option>
-              <option value="eye-level-shot">Eye level shot</option>
-              <option value="medium-shot">Medium shot</option>
-              <option value="close-up-shot">Close-up shot</option>
-              <option value="extreme-close-up-shot">Extreme close-up shot</option>
-              <option value="wide-shot">Wide shot</option>
-              <option value="extreme-wide-shot">Extreme wide shot</option>
-              <option value="low-angle-shot">Low angle shot</option>
-              <option value="high-angle-shot">High angle shot</option>
-              <option value="dutch-angle-shot">Dutch angle shot</option>
-              <option value="rule-of-hirds-shot">Rule of Thirds shot</option>
-              <option value="bird's-eye-view-shot">Drone shot</option>
-              <option value="establishing-shot">Establishing shot</option>
-              <option value="point-of-view-shot">Point of view shot</option>
-              <option value="low-angle-shot">Low angle shot</option>
+              <option value="eye-level">Eye level shot</option>
+              <option value="medium">Medium shot</option>
+              <option value="close-up">Close-up shot</option>
+              <option value="extreme-close-up">Extreme close-up shot</option>
+              <option value="wide">Wide shot</option>
+              <option value="extreme-wide">Extreme wide shot</option>
+              <option value="low-angle">Low angle shot</option>
+              <option value="high-angle">High angle shot</option>
+              <option value="dutch-angle">Dutch angle shot</option>
+              <option value="rule-of-hirds">Rule of Thirds shot</option>
+           <option value="bird's-eye-view">Bird's eye shot</option>
+           <option value="drone's-camera">Drone's camera shot</option>
+ <option value="establishing">Establishing shot</option>
+              <option value="point-of-view">Point of view shot</option>
               
             </select>
             <span class="dot"></span>
         
             
             <!-- ID CAMERAS-->
-            <h4>Film stock (use this to give a personal<br> touch to the final render)</h4>
+            <h4>Film stock)</h4>
             <select id="film_used_to_take_the_shot">
                 <option value="">Select a film for your shot</option>
 
@@ -141,6 +141,7 @@
     <option value="E-6_Colour_Reversal" title="It displays a positive image on the film rather than showing a negative">E-6 Colour Reversal</option>
     <option value="Fujifilm_FujiColour_200 " title="Suit everyday happy snaps where people are not looking for superb image quality or colour reproduction">Fujifilm FujiColour 200 </option>
     </select>
+            <sub>Use this to give a personal<br> touch to the final render.</sub>
             <span class="dot"></span>
 
         
@@ -480,31 +481,32 @@
                
             </select>
             <span class="dot"></span>
-
-          </div>
-          <div class="group">
+            
             <!-- ID COLOR PALETTES -->
-            <h4>Color, shape and sizes</h4>
+            <h4>Color palette</h4>
         <div class="colorPalette">
             <div class="colorPalette_60">
                 <input type="color" id="primary_color" class="colorPicker">
 
-        <label for="primary_color">Primary color</label>
 </div>
             <div class="colorPalette_60">
                 <input type="color" id="secondary_color" class="colorPicker">
-        <label for="secondary_color">Secondary color</label>
+      
     </div>
             <div class="colorPalette_60">
                 <input type="color" id="tertiary_color" class="colorPicker">
 
-        <label for="tertiary_color">Tertiary color</label>
             
             </div>
         </div>
-        
+        <sub>Colors are for reference, RoomDesAigner <br>will try to use them. </sub>
             <span class="dot"></span>
 
+
+          </div>
+          <div class="group">
+           
+            <h4>Room shape</h4>
             <!-- ID ROOM SHAPE -->
             <select id="room_shape">
               <option value="">Select a room shape</option>
@@ -534,6 +536,8 @@
             <span class="dot"></span>
 
             <!--ID ROOM SIZE-->
+            
+            <h4>Room size</h4>
             <select id="room_size">
               <option value="">Select room size</option>
               <option value="very-small">Very Small</option>
@@ -558,6 +562,7 @@
               <option value="Entryway">Entryway</option>
               <option value="Foyer">Foyer</option>
               <option value="Living Room">Living Room</option>
+              <option value="Living Room with a Fireplace">Living Room with a Fireplace</option>
               <option value="Dining Room">Dining Room</option>
               <option value="Kitchen">Kitchen</option>
               <option value="Breakfast Nook">Breakfast Nook</option>
@@ -709,12 +714,14 @@
               <option value="Terrazzo-Flooring" title="Composite material made of marble, quartz, or other chips embedded in cement or resin.">Terrazzo Flooring</option>
               <option value="Engineered Wood Flooring" title="Flooring made of layers of wood veneer with a plywood or high-density fiberboard (HDF) core."> Engineered Wood Flooring</option>
               <option value="Marble-Flooring" title="Marble is a natural stone commonly used in and interior design">Marble Flooring</option>
+              <option value="Patterned-tiles-flooring" title="Cement tile flooring is a versatile and visually striking option that adds charm and character to any space">Cement Tile Flooring</option>
             </select>
             <span class="dot"></span>
 
             <!-- Roofs -->
             <select id="roofs">
               <option value="">Select a roof</option>
+              <option value="Catalan vault" title="A Catalan vault, also known as a "boveda catalana" in Spanish, is an architectural technique used in traditional Catalan construction. It is a method of creating self-supporting, arched ceilings or vaults using a combination of layers of tiles or bricks.">Catalan vault </option>
               <option value="Gable Roof" title="A roof with two sloping sides that form a triangle at the top.">Gable Roof </option>
               <option value="Hip Roof" title="A roof with four sloping sides that meet at a ridge.">Hip Roof</option>
               <option value="Mansard Roof" title="A roof with two slopes on all four sides, creating additional living space in the attic.">Mansard Roof </option>
@@ -742,8 +749,8 @@
             <span class="dot"></span>
 
             <h4>Lights</h4>
-
-            <select id="the_sky_has_the_color_of_the">
+<sub>Ai will try to set the daytime but it <br>will prefer the final render than<br> focus on this value</sub>
+            <select id="shot_was_taken_at">
               <option value="">Select the time of day</option>
               <option value="sunrise">Sunrise</option>
               <option value="morning">Morning</option>
@@ -782,6 +789,7 @@
             </div>
           <div class="group">
             <h4>Architectural materials</h4>
+            <sub>These values will have strong <br>influence in the final render</sub>
             <select id="wood_material">
               <option value="">Select a wood type</option>
               <option value="bamboo wood" title="Sustainable and versatile material with natural grain patterns and eco-friendly properties.">Bamboo</option>
@@ -867,7 +875,7 @@
               <option value="metal" title="Metal refers to a wide range of materials with high strength and durability, commonly used in various applications.">Metal</option>
               <option value="plastic" title="Plastic is a synthetic material known for its versatility and wide range of applications in industries and everyday products.">Plastic</option>
               <option value="concrete" title="Concrete is a composite material made of cement, aggregates, and water, widely used in construction for its strength and durability.">Concrete</option>
-              <option value="old_red_brick" title="Simple old english style red brick">Old Red Brick</option>
+              <option value="old_ochre_brick" title="Simple old english style red brick">Old bricks ochre</option>
               <option value="old_washed_white_brick" title="Simple old washed white brick">Old Washed White Brick</option>
             </select>
             <span class="dot"></span>

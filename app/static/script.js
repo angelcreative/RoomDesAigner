@@ -117,9 +117,9 @@ document.addEventListener("DOMContentLoaded", function() {
     function getSelectedValues(imageUrl = "") {
                 return {
                 //day time
-                the_sky_has_the_color_of_the: document.getElementById("the_sky_has_the_color_of_the").value,
+                shot_was_taken_at: document.getElementById("shot_was_taken_at").value,
                 //level shot
-                photography_level_shot: document.getElementById("photography_level_shot").value,
+                point_of_view: document.getElementById("point_of_view").value,
                 //colors
                 primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
           plainText += ', imageUrl: ';
         }
         
-        const promptEndy = `--ar 3:2 --stylize 100 --iw 1.75 `
+        const promptEndy = `--ar 3:2 --stylize 100 --iw 2 `
         
 
         
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function() {
         height: "512",
         samples: "4",
         num_inference_steps: "20",
-        seed: null,
+        seed: 19071975,
         guidance_scale: 7.5,
         webhook: null,
         track_id: null,
@@ -568,4 +568,3 @@ window.addEventListener('load', function() {
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
-

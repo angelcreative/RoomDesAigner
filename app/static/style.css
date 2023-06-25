@@ -61,18 +61,26 @@ body {
   display: block;
 }
 
+.colorPalette {
+    display: flex;
+    column-gap: 1rem;
+}
+
 
 .colorPicker {
-    border-radius: 0.5rem;
     height: 36px;
     width: 36px;
     border-width: 0;
     overflow: hidden;
     margin-top: 4px;
-    border: #151515 5px inset;
-    background: transparent;
+    border: none;
     padding: 0;
-    margin-right:8px;
+    margin-right: 8px;
+    background: none;
+}
+
+.colorPicker:hover {
+    cursor: pointer;
 }
 
 .colorPalette_60 {
@@ -309,9 +317,7 @@ sub {
 
     fieldset {
         max-width: 100%;
-        margin: 24px
-    px
-     auto;
+        margin: 24px 0px auto;
         display: flex;
         border: none;
         flex-direction: column;
