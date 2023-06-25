@@ -179,7 +179,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         const promptEndy = `--ar 3:2 --stylize 100 --iw 2 `
-        
+        const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+        const width = aspectRatio === 'portrait' ? 512 : 1024;
+         const height = aspectRatio === 'portrait' ? 1024 : 512;
 
         
       // Combine the promptInit with the plain text representation
@@ -190,8 +192,8 @@ document.addEventListener("DOMContentLoaded", function() {
         key: apiKey,
         prompt: JSON.stringify(promptText),
         negative_prompt: "YOUR_NEGATIVE_PROMPT",
-        width: "1024",
-        height: "512",
+        width: width,
+        height: height,
         samples: "4",
         num_inference_steps: "20",
         seed: 19071975,

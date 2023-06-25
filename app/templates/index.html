@@ -93,12 +93,31 @@
               
             <h4>Photography shot</h4>
             <select id="photography_shot_location">
-              <option value="">Select the location of the camera</option>
+              <option value="">Camera location</option>
             <option value="the_camera_is_located_indoor">Indoor</option>
                 <option value="the_camera_is_located_outdoor">Outdoor</option>
                 </select>
             <span class="dot"></span>
-
+            
+            
+            <!-- ratio -->
+            <h4>Apect ratio</h4>
+            <div class="aspectRatioShot">
+            <label class="aspectRatio">
+                  Portrait
+                  <label class="switch">
+                    <input type="radio" name="aspectRatio" value="portrait" checked>
+                    <span class="slider round"></span>
+                  </label>
+                </label>
+            <label class="aspectRatio">
+                  Landscape
+                  <label class="switch">
+                    <input type="radio" name="aspectRatio" value="landscape">
+                    <span class="slider round"></span>
+                  </label>
+                </label>
+</div>
             <!-- ID LEVEL SHOT-->
             <select id="point_of_view">
               <option value="">Select a level shot</option>
@@ -122,7 +141,8 @@
         
             
             <!-- ID CAMERAS-->
-            <h4>Film stock)</h4>
+            <h4>Film stock</h4>
+            <sub>Use this to give a personal<br> touch to the final render.</sub>
             <select id="film_used_to_take_the_shot">
                 <option value="">Select a film for your shot</option>
 
@@ -141,13 +161,16 @@
     <option value="E-6_Colour_Reversal" title="It displays a positive image on the film rather than showing a negative">E-6 Colour Reversal</option>
     <option value="Fujifilm_FujiColour_200 " title="Suit everyday happy snaps where people are not looking for superb image quality or colour reproduction">Fujifilm FujiColour 200 </option>
     </select>
-            <sub>Use this to give a personal<br> touch to the final render.</sub>
+           
             <span class="dot"></span>
 
         
             
             <h4>Interior / Outdoor design</h4>
-           
+            <sub>Select interior design for indoor<br>
+                 designs if you want to design an<br>
+                 outdoor pool or garden, select the<br>
+                 outdoor design option.</sub>
           <select id="space_to_be_designed">
                 <option value="">Select the space to design</option>
               <option value="interior design">Interior design</option>
@@ -167,10 +190,7 @@
 -->
 
 
-            <sub>Select interior design for indoor<br>
-                 designs if you want to design an<br>
-                 outdoor pool or garden, select the<br>
-                 outdoor design option.</sub>
+         
             
           </div>
           <div class="group">
@@ -484,6 +504,7 @@
             
             <!-- ID COLOR PALETTES -->
             <h4>Color palette</h4>
+            <sub>Colors are for reference, RoomDesAigner <br>will try to use them. </sub>
         <div class="colorPalette">
             <div class="colorPalette_60">
                 <input type="color" id="primary_color" class="colorPicker">
@@ -499,7 +520,7 @@
             
             </div>
         </div>
-        <sub>Colors are for reference, RoomDesAigner <br>will try to use them. </sub>
+        
             <span class="dot"></span>
 
 
