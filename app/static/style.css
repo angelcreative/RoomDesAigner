@@ -9,6 +9,10 @@ body {
   font-family: sans-serif;
 }
 
+.logoWeb {
+    margin: 0 auto;
+}
+
 .menuButton {
   position: relative;
   display: inline-block;
@@ -302,12 +306,17 @@ sub {
     color: #424242;
 }
 
-fieldset {
-    max-width: fit-content;
-        margin: 24px auto;
+
+    fieldset {
+        max-width: 100%;
+        margin: 24px
+    px
+     auto;
         display: flex;
         border: none;
         flex-direction: column;
+        padding: 0;
+    }
     
  /* max-width: fit-content;
   margin: 50px auto;
@@ -317,7 +326,7 @@ fieldset {
   background: #fdfdfd47;
   border-radius: 1rem;
   backdrop-filter: blur(10px);*/
-}
+
 .hidden {
     display:none;
 }
@@ -524,9 +533,10 @@ option[title]:hover:after {
 
 #imageGenerationForm {
     display: flex;
-    flex-direction: column;
-    border-radius: 1rem;
-    overflow: hidden;
+        flex-direction: column;
+        border-radius: 1rem;
+        overflow: hidden;
+        align-items: center;
 }
 
 
@@ -5359,7 +5369,6 @@ svg.active .gen-160 {
       border-radius: 1rem;
       flex-wrap: wrap;
       background: #171616;
-      padding: 1rem 2rem;
       column-gap: 5rem;
       justify-content: flex-start;
   }
@@ -5427,9 +5436,10 @@ svg.active .gen-160 {
   
   .buttonsCont {
       display: flex;
-      justify-content: space-between;
-      flex-direction: column-reverse;
+          width: 70%;
+          justify-content: space-between;
   }
+  
   
   .buttonsL {
       display: flex;
@@ -5443,7 +5453,7 @@ svg.active .gen-160 {
  
  
  select {
-     width:100%
+     width:220px;
  }
 
 }

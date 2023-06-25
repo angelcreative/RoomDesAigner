@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
       showOverlay(); // Show the overlay and loading message
-      const fileInput = document.getElementById("imageDisplayUrl");
-      const file = fileInput.files[0];
+    const fileInput = document.getElementById("imageDisplayUrl");
+      const file = fileInput.files[1];
       if (file) {
         // Image file is selected
         const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
@@ -116,25 +116,34 @@ document.addEventListener("DOMContentLoaded", function() {
   }
     function getSelectedValues(imageUrl = "") {
                 return {
-                the_shot_was_taken_at: document.getElementById("the_shot_was_taken_at").value,
+                //day time
+                the_sky_has_the_color_of_the: document.getElementById("the_sky_has_the_color_of_the").value,
+                //level shot
+                photography_level_shot: document.getElementById("photography_level_shot").value,
+                //colors
                 primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
                 tertiary_color: document.getElementById("tertiary_color").value,
+                //design style
                 design_style: document.getElementById("design_style").value,
+                //room size
                 room_size: document.getElementById("room_size").value,
+                //room design
                 design_this_home_room: document.getElementById("design_this_home_room").value,
                 space_to_be_designed: document.getElementById("space_to_be_designed").value,
                 child_room: document.getElementById("child_room").value,
                 pool: document.getElementById("pool").value,
                 garden: document.getElementById("garden").value,
                 room_shape: document.getElementById("room_shape").value,
+                //inspiration
                 inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
                 furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
                 designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
                 designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
+                //film
                 film_used_to_take_the_shot: document.getElementById("film_used_to_take_the_shot").value,
-                shot: document.getElementById("shot").value,
                 illumination: document.getElementById("illumination").value,
+                //architecture
                 roof_height: document.getElementById("roof_height").value,
                 doors: document.getElementById("doors").value,
                 windows: document.getElementById("windows").value,
@@ -145,8 +154,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 fabric: document.getElementById("fabric").value,
                 stone_material: document.getElementById("stone_material").value,
                 marble_material: document.getElementById("marble_material").value,
-                wood_material: document.getElementById("wood_material").value,
-                imageUrl: document.getElementById("imageDisplayUrl").value
+                wood_material: document.getElementById("wood_material").value
+                //image link
+                //imageUrl: document.getElementById("imageDisplayUrl").value
                 };
     }
     
@@ -293,46 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
       return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
     }
 
-  /*  const upscaleImage = async (imageUrl) => {
-      try {
-        // Load the image
-        const image = new Image();
-        image.crossOrigin = "anonymous";
-        image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
-
-        image.onload = async () => {
-          // Convert image to Base64
-          const base64Image = getBase64Image(image);
-
-          const url = 'https://super-image1.p.rapidapi.com/run';
-          const options = {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
-              'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
-            },
-            body: JSON.stringify({
-              upscale: 2,
-              image: base64Image
-            })
-          };
-
-          const response = await fetch(url, options);
-          const data = await response.json();
-          console.log(data);
-
-          // Open the upscaled image in a new browser tab
-          const newTab = window.open(data.output_url, '_blank');
-          newTab.focus();
-        };
-      } catch (error) {
-        console.error(error);
-        // Handle error here
-      }
-    };
-   
-   */
+ 
 
     
     function showModalWithProgressBar() {
@@ -552,9 +523,9 @@ document.addEventListener("DOMContentLoaded", function() {
   }
     // Function to clear all form values and reset the image display
     function clearAll(event) {
-      event.preventDefault(); // Prevent form submission
+      /*event.preventDefault(); // Prevent form submission
       const fileInput = document.getElementById("imageDisplayUrl");
-      fileInput.value = ""; // Clear the file input
+      fileInput.value = ""; // Clear the file input*/
       const form = document.getElementById("imageGenerationForm");
       form.reset(); // Reset the form
       // Hide all green dots
@@ -597,3 +568,4 @@ window.addEventListener('load', function() {
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
+
