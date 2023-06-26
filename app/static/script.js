@@ -116,8 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
     function getSelectedValues(imageUrl = "") {
                 return {
-                //day time
-                shot_was_taken_at: document.getElementById("shot_was_taken_at").value,
+        
                 //level shot
                 point_of_view: document.getElementById("point_of_view").value,
                 //colors

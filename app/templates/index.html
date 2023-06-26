@@ -103,20 +103,22 @@
             <!-- ratio -->
             <h4>Apect ratio</h4>
             <div class="aspectRatioShot">
+                
+                <label class="aspectRatio">
+                      Landscape
+                      <label class="switch">
+                        <input type="radio" name="aspectRatio" value="landscape" checked>
+                        <span class="slider round"></span>
+                      </label>
+                    </label>
             <label class="aspectRatio">
                   Portrait
                   <label class="switch">
-                    <input type="radio" name="aspectRatio" value="portrait" checked>
+                    <input type="radio" name="aspectRatio" value="portrait" >
                     <span class="slider round"></span>
                   </label>
                 </label>
-            <label class="aspectRatio">
-                  Landscape
-                  <label class="switch">
-                    <input type="radio" name="aspectRatio" value="landscape">
-                    <span class="slider round"></span>
-                  </label>
-                </label>
+            
 </div>
             <!-- ID LEVEL SHOT-->
             <select id="point_of_view">
@@ -769,21 +771,7 @@
             </select>
             <span class="dot"></span>
 
-            <h4>Lights</h4>
-<sub>Ai will try to set the daytime but it <br>will prefer the final render than<br> focus on this value</sub>
-            <select id="shot_was_taken_at">
-              <option value="">Select the time of day</option>
-              <option value="sunrise">Sunrise</option>
-              <option value="morning">Morning</option>
-              <option value="mid-morning">Mid-Morning</option>
-              <option value="noon">Noon</option>
-              <option value="afternoon">Afternoon</option>
-              <option value="evening">Evening</option>
-              <option value="sunset">Sunset</option>
-              <option value="dusk">Dusk</option>
-              <option value="night">Night</option>
-            </select>
-            <span class="dot"></span>
+           
             <select id="illumination">
               <option value="">Select a lighting option</option>
               <!-- Lighting Options -->
