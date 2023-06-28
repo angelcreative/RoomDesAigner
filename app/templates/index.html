@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <!-- icons for mobile -->
-    <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png') }}">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png') }}">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='img/apple-icon-72x72.png') }}">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon-76x76.png') }}">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-icon-114x114.png') }}">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='img/apple-icon-120x120.png') }}">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='img/apple-icon-144x144.png') }}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-icon-180x180.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/android-icon-192x192.png') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='img/favicon-96x96.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
-    <meta name="theme-color" content="#ffffff">
-    <!-- //end icons for mobile -->
-    <title>R - Room DesAInger</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-       
-  </head>
+    <head>
+        <meta charset="utf-8">
+            <!-- icons for mobile -->
+            <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png') }}">
+             <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png') }}">
+            <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='img/apple-icon-72x72.png') }}">
+                <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon-76x76.png') }}">
+                            <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-icon-114x114.png') }}">
+                                <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='img/apple-icon-120x120.png') }}">
+                                    <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='img/apple-icon-144x144.png') }}">
+                                        <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}">
+                                            <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-icon-180x180.png') }}">
+                                                <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/android-icon-192x192.png') }}">
+                                                    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+                                                        <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='img/favicon-96x96.png') }}">
+                                                            <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+                                                                <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+                                                                    <meta name="msapplication-TileColor" content="#ffffff">
+                                                                        <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
+                                                                            <meta name="theme-color" content="#ffffff">
+                                                                                <!-- //end icons for mobile -->
+                                                                                <title>R - Room DesAInger</title>
+                                                                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+                                                                                        <link rel="preconnect" href="https://fonts.googleapis.com">
+                                                                                            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                                                                                                <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+                                                                                                    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+                                                                                                    
+    </head>
   <body class="gradient-background ">
     <!-- Add this element to your HTML -->
     <!-- Modal Window -->
@@ -63,6 +67,8 @@
 
         <h1>Your dream room is here</h1>
         <p>Tip: use copy url + copy prompt to paste it on Midjourney to generate even more images based on the original.</p>
+        
+        <div id="chipsSV"></div>
         <br>
         <div class="imageGrid" id="imageGrid">
         <button>Upscale</button>
@@ -91,13 +97,7 @@
               
               <input type="file" id="imageDisplayUrl" accept="image/*" style="visibility:hidden; display:block; width:1px; height:1px; overflow:hidden;"/>
               
-            <h4>Photography shot</h4>
-            <select id="photography_shot_location">
-              <option value="">Camera location</option>
-            <option value="the_camera_is_located_indoor">Indoor</option>
-                <option value="the_camera_is_located_outdoor">Outdoor</option>
-                </select>
-            <span class="dot"></span>
+           <h1><img class="iconH1" src="/static/img/icon-shot.svg"/>Shot tokens</h1>
             
             
             <!-- ratio -->
@@ -120,7 +120,33 @@
                 </label>
             
 </div>
+            
+            <!-- seed -->
+            <h4>Seed</h4>
+            <div class="switchContainer">
+              <label class="switchLabel">
+                  Seed
+                  <label class="switch">
+                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
+                <span class="slider round"></span>
+                </label>
+              </label>
+              
+            </div>
+            <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
+            
+            
+            <h4>Photography shot</h4>
+            <select id="photography_shot_location">
+              <option value="">Camera location</option>
+            <option value="the_camera_is_located_indoor">Indoor</option>
+                <option value="the_camera_is_located_outdoor">Outdoor</option>
+                </select>
+            <span class="dot"></span>
+            
             <!-- ID LEVEL SHOT-->
+            <h4>Point of view</h4>
+
             <select id="point_of_view">
               <option value="">Select a level shot</option>
               <option value="eye-level">Eye level shot</option>
@@ -144,7 +170,6 @@
             
             <!-- ID CAMERAS-->
             <h4>Film stock</h4>
-            <sub>Use this to give a personal<br> touch to the final render.</sub>
             <select id="film_used_to_take_the_shot">
                 <option value="">Select a film for your shot</option>
 
@@ -165,21 +190,11 @@
     </select>
            
             <span class="dot"></span>
+            <sub>Use this to give a personal touch to the final render.</sub>
 
         
             
-            <h4>Interior / Outdoor design</h4>
-            <sub>Select interior design for indoor<br>
-                 designs if you want to design an<br>
-                 outdoor pool or garden, select the<br>
-                 outdoor design option.</sub>
-          <select id="space_to_be_designed">
-                <option value="">Select the space to design</option>
-              <option value="interior design">Interior design</option>
-              <option value="outdoor design">Outdoor design</option>
-              <option value="front-of-the-house">Facade design</option>
-              </select>
-            <span class="dot"></span>
+           
            <!-- <div class="menuButton">
                 <label>Select the space to design</label>
                 <ul id="space_to_be_designed" class="menuDropdown">
@@ -196,6 +211,8 @@
             
           </div>
           <div class="group">
+              <h1><img class="iconH1" src="/static/img/icon-design.svg"/>Design tokens</h1>
+
             <!-- ID MAGAZINES
             <h4>Upload your sketch, picture, ...</h4>
             <input type="file" id="imageDisplayUrl" accept="image/*" />
@@ -277,78 +294,75 @@
             <!-- ID STYLES-->
             <select id="design_style">
               <option value="">Select a design style</option>
-              <option value="Artisan Style" title="Celebrating handcrafted details and materials, the Artisan style showcases the beauty of craftsmanship. It features unique, one-of-a-kind pieces, natural materials, and a sense of authenticity and individuality."> Artisan Style</option>
-              <option value="Artisanal Style" title="Celebrating traditional craftsmanship and handmade techniques, the Artisanal style features artisan-made products, natural materials, and a sense of authenticity and uniqueness. It creates a warm and personal ambiance with a connection to the artisans' skills and traditions."> Artisanal Style</option>
-              <option value="Artistic Style" title="An artistic style embraces creativity, self-expression, and a sense of experimentation. It features bold colors, unconventional shapes, and unique artistic elements. It creates a vibrant and visually stimulating ambiance that reflects the personality of the artist.">Artistic Style</option>
-              <option value="Artistic Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
-              <option value="Art Brut Style" title="Also known as Outsider Art, this style embraces unconventional and raw artistic expressions. It features untrained artists, naive aesthetics, and a sense of authenticity and individuality. It creates a unique and thought-provoking ambiance."> Art Brut Style</option>
-              <option value="Art Deco" title="Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet. It exudes elegance and glamour."> Art Deco</option>
-              <option value="Art Nouveau" title="Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms. It features flowing lines, floral motifs, stained glass, and decorative elements inspired by nature."> Art Nouveau</option>
-              <option value="Artistic Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
-              <option value="Asian Zen Style" title="Inspired by Eastern philosophies, this style promotes peace, harmony, and balance. It features natural materials, clean lines, and a minimalist approach. It creates a serene and tranquil environment that promotes relaxation and mindfulness."> Asian Zen Style</option>
+              <option value="Artisan_Style" title="Celebrating handcrafted details and materials, the Artisan style showcases the beauty of craftsmanship. It features unique, one-of-a-kind pieces, natural materials, and a sense of authenticity and individuality."> Artisan Style</option>
+              <option value="Artisanal_Style" title="Celebrating traditional craftsmanship and handmade techniques, the Artisanal style features artisan-made products, natural materials, and a sense of authenticity and uniqueness. It creates a warm and personal ambiance with a connection to the artisans' skills and traditions."> Artisanal Style</option>
+              <option value="Artistic_Style" title="An artistic style embraces creativity, self-expression, and a sense of experimentation. It features bold colors, unconventional shapes, and unique artistic elements. It creates a vibrant and visually stimulating ambiance that reflects the personality of the artist.">Artistic Style</option>
+              <option value="Artistic_Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
+              <option value="Art_Brut_Style" title="Also known as Outsider Art, this style embraces unconventional and raw artistic expressions. It features untrained artists, naive aesthetics, and a sense of authenticity and individuality. It creates a unique and thought-provoking ambiance."> Art Brut Style</option>
+              <option value="Art_Deco" title="Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet. It exudes elegance and glamour."> Art Deco</option>
+              <option value="Art_Nouveau" title="Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms. It features flowing lines, floral motifs, stained glass, and decorative elements inspired by nature."> Art Nouveau</option>
+              <option value="Artistic_Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
+              <option value="Asian_Zen Style" title="Inspired by Eastern philosophies, this style promotes peace, harmony, and balance. It features natural materials, clean lines, and a minimalist approach. It creates a serene and tranquil environment that promotes relaxation and mindfulness."> Asian Zen Style</option>
               <option value="Bohemian" title="Bohemian design is eclectic and free-spirited. It incorporates vibrant colors, patterns, and textures from around the world, with a mix of vintage and handcrafted items."> Bohemian</option>
-              <option value="Boho Chic" title="Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance. It features a mix of patterns, textures, and colors, layered textiles, vintage furniture, and global-inspired accents."> Boho Chic</option>
-              <option value="Craftsman Style" title="Rooted in craftsmanship and natural materials, this style showcases the beauty of handcrafted woodwork, exposed beams, and detailed craftsmanship. It features warm, earthy tones and an emphasis on functionality and comfort."> Craftsman Style</option>
-              <option value="Cabin Style" title="Rooted in the rustic charm of cabins and lodges, this style features natural materials, cozy textiles, and a warm, earthy color palette. It creates a relaxed and inviting atmosphere with a connection to nature."> Cabin Style</option>
-              <option value="Chinese Modern Style" title="Blending traditional Chinese elements with modern designs, the Chinese Modern style combines classic aesthetics with contemporary sensibilities. It creates a fusion of East and West, past and present, resulting in a harmonious and unique ambiance."> Chinese Modern Style</option>
-              <option value="Chinoiserie Style" title="Influenced by East Asian art and design, the Chinoiserie style features decorative patterns, exotic motifs, and a sense of whimsy. It creates an enchanting and romantic ambiance with a touch of exoticism and fantasy."> Chinoiserie Style</option>
-              <option value="Colonial Style" title="Drawing inspiration from the colonial era, this style features symmetrical designs, classic proportions, and traditional details. It creates a sense of historical charm and elegance reminiscent of early American architecture."> Colonial Style</option>
+              <option value="Boho_Chic" title="Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance. It features a mix of patterns, textures, and colors, layered textiles, vintage furniture, and global-inspired accents."> Boho Chic</option>
+              <option value="Craftsman_Style" title="Rooted in craftsmanship and natural materials, this style showcases the beauty of handcrafted woodwork, exposed beams, and detailed craftsmanship. It features warm, earthy tones and an emphasis on functionality and comfort."> Craftsman Style</option>
+              <option value="Cabin_Style" title="Rooted in the rustic charm of cabins and lodges, this style features natural materials, cozy textiles, and a warm, earthy color palette. It creates a relaxed and inviting atmosphere with a connection to nature."> Cabin Style</option>
+              <option value="Chinese_Modern Style" title="Blending traditional Chinese elements with modern designs, the Chinese Modern style combines classic aesthetics with contemporary sensibilities. It creates a fusion of East and West, past and present, resulting in a harmonious and unique ambiance."> Chinese Modern Style</option>
+              <option value="Chinoiserie_Style" title="Influenced by East Asian art and design, the Chinoiserie style features decorative patterns, exotic motifs, and a sense of whimsy. It creates an enchanting and romantic ambiance with a touch of exoticism and fantasy."> Chinoiserie Style</option>
+              <option value="Colonial_Style" title="Drawing inspiration from the colonial era, this style features symmetrical designs, classic proportions, and traditional details. It creates a sense of historical charm and elegance reminiscent of early American architecture."> Colonial Style</option>
               <option value="Coastal" title="Coastal design brings the relaxed vibe of the beach into the home. It often features light and breezy colors, natural materials like wicker and rattan, and nautical elements."> Coastal</option>
-              <option value="Coastal Farmhouse" title="Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design. It incorporates natural materials, light and airy colors, nautical accents, and vintage-inspired furniture for a laid-back and inviting atmosphere."> Coastal Farmhouse</option>
-              <option value="Contemporary Style" title="A blend of the latest trends, the Contemporary style is ever-evolving. It features clean, architectural lines, a neutral palette, and a focus on balance and harmony. Materials and textures play a key role, adding depth and interest to the space."> Contemporary Style</option>
-              <option value="Cottage Style" title="Charming and cozy, the Cottage style evokes a sense of comfort and relaxation. It features soft colors, floral prints, and vintage-inspired furnishings. It creates a warm and inviting atmosphere reminiscent of a countryside retreat."> Cottage Style</option>
+              <option value="Coastal_Farmhouse" title="Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design. It incorporates natural materials, light and airy colors, nautical accents, and vintage-inspired furniture for a laid-back and inviting atmosphere."> Coastal Farmhouse</option>
+              <option value="Contemporary_Style" title="A blend of the latest trends, the Contemporary style is ever-evolving. It features clean, architectural lines, a neutral palette, and a focus on balance and harmony. Materials and textures play a key role, adding depth and interest to the space."> Contemporary Style</option>
+              <option value="Cottage_Style" title="Charming and cozy, the Cottage style evokes a sense of comfort and relaxation. It features soft colors, floral prints, and vintage-inspired furnishings. It creates a warm and inviting atmosphere reminiscent of a countryside retreat."> Cottage Style</option>
               <option value="Eclectic" title="Eclectic design is a mix of different styles, creating a unique and personalized space. It combines elements from various periods, cultures, and aesthetics to create an eclectic and visually stimulating environment."> Eclectic</option>
-              <option value="English Country Style" title="Inspired by the English countryside, this style features floral patterns, traditional furnishings, and a mix of rustic and refined elements. It creates a cozy and charming atmosphere reminiscent of a country cottage."> English Country Style</option>
-              <option value="Farmhouse" title="Farmhouse design is inspired by rural farmhouses and evokes a cozy, rustic feel. It incorporates reclaimed wood, distressed finishes, vintage elements, open shelving, and a palette of neutral and muted colors."> Farmhouse</option>
-              <option value="Farmhouse Style" title="Farmhouse style brings the warmth and simplicity of rural farmhouses into the home. It features natural materials, rustic finishes, vintage-inspired decor, and a mix of textures for a cozy and inviting atmosphere."> Farmhouse Style</option>
-              <option value="French Country Style" title="French Country style is inspired by the charm of rural France. It combines elegance with rustic elements, featuring ornate furniture, delicate patterns, natural materials, and a soft color palette."> French Country Style</option>
-              <option value="Futuristic Style" title="Looking ahead to the future, the Futuristic style embraces innovative designs, futuristic materials, and sleek, streamlined shapes. It creates a sense of technology, progress, and forward-thinking."> Futuristic Style</option>
-              <option value="Georgian Style" title="Originating from the 18th century, the Georgian style features symmetrical designs, elegant proportions, and refined details. It embraces classical elements and creates a sense of sophistication and timeless elegance."> Georgian Style</option>
-              <option value="Glam Style" title="Glamorous and luxurious, the Glam style embraces elegance, sparkle, and opulence. It features metallic accents, plush textures, and statement pieces. It creates a lavish and extravagant ambiance with a touch of Hollywood glamour."> Glam Style</option>
-              <option value="Global Fusion" title="Global Fusion design draws inspiration from cultures around the world. It blends elements, colors, patterns, and textures from different regions, creating a vibrant and multicultural ambiance."> Global Fusion</option>
-              <option value="Gothic Style" title="Dark and dramatic, the Gothic style draws inspiration from medieval architecture. It features pointed arches, elaborate ornamentation, and a sense of mystery and grandeur. It creates a bold and dramatic ambiance with a touch of romanticism."> Gothic Style</option>
-              <option value="Greek Revival Style" title="Inspired by ancient Greek architecture, this style features symmetrical designs, grand columns, and classical motifs. It creates a sense of timeless beauty and elegance with a nod to the architectural heritage of ancient Greece."> Greek Revival Style</option>
-              <option value="Hamptons Style" title="Elegant and sophisticated, the Hamptons style draws inspiration from the luxurious beachside homes of Long Island. It features a timeless color palette, natural textures, and a blend of classic and contemporary elements."> Hamptons Style</option>
-              <option value="Hollywood Glam" title="Hollywood Glam design captures the elegance and opulence of old Hollywood. It features luxurious materials, such as velvet and gold accents, plush furniture, dramatic lighting, and reflective surfaces, creating a glamorous and sophisticated atmosphere."> Hollywood Glam</option>
-              <option value="Hollywood Regency" title="Hollywood Regency design is characterized by its bold and glamorous aesthetic. It combines elements from various styles, including neoclassical and art deco, featuring bold colors, luxurious textures, geometric patterns, and mirrored surfaces."> Hollywood Regency</option>
+              <option value="English_Country_Style" title="Inspired by the English countryside, this style features floral patterns, traditional furnishings, and a mix of rustic and refined elements. It creates a cozy and charming atmosphere reminiscent of a country cottage."> English Country Style</option>
+              <option value="Farmhouse_Style" title="Farmhouse style brings the warmth and simplicity of rural farmhouses into the home. It features natural materials, rustic finishes, vintage-inspired decor, and a mix of textures for a cozy and inviting atmosphere."> Farmhouse Style</option>
+              <option value="French_Country_Style" title="French Country style is inspired by the charm of rural France. It combines elegance with rustic elements, featuring ornate furniture, delicate patterns, natural materials, and a soft color palette."> French Country Style</option>
+              <option value="Futuristic_Style" title="Looking ahead to the future, the Futuristic style embraces innovative designs, futuristic materials, and sleek, streamlined shapes. It creates a sense of technology, progress, and forward-thinking."> Futuristic Style</option>
+              <option value="Georgian_Style" title="Originating from the 18th century, the Georgian style features symmetrical designs, elegant proportions, and refined details. It embraces classical elements and creates a sense of sophistication and timeless elegance."> Georgian Style</option>
+              <option value="Glam_Style" title="Glamorous and luxurious, the Glam style embraces elegance, sparkle, and opulence. It features metallic accents, plush textures, and statement pieces. It creates a lavish and extravagant ambiance with a touch of Hollywood glamour."> Glam Style</option>
+              <option value="Global_Fusion" title="Global Fusion design draws inspiration from cultures around the world. It blends elements, colors, patterns, and textures from different regions, creating a vibrant and multicultural ambiance."> Global Fusion</option>
+              <option value="Gothic_Style" title="Dark and dramatic, the Gothic style draws inspiration from medieval architecture. It features pointed arches, elaborate ornamentation, and a sense of mystery and grandeur. It creates a bold and dramatic ambiance with a touch of romanticism."> Gothic Style</option>
+              <option value="Greek_RevivalvStyle" title="Inspired by ancient Greek architecture, this style features symmetrical designs, grand columns, and classical motifs. It creates a sense of timeless beauty and elegance with a nod to the architectural heritage of ancient Greece."> Greek Revival Style</option>
+              <option value="Hamptons_Style" title="Elegant and sophisticated, the Hamptons style draws inspiration from the luxurious beachside homes of Long Island. It features a timeless color palette, natural textures, and a blend of classic and contemporary elements."> Hamptons Style</option>
+              <option value="Hollywood_Glam" title="Hollywood Glam design captures the elegance and opulence of old Hollywood. It features luxurious materials, such as velvet and gold accents, plush furniture, dramatic lighting, and reflective surfaces, creating a glamorous and sophisticated atmosphere."> Hollywood Glam</option>
               <option value="Hollywood Regency Style" title="Hollywood Regency style captures the glitz and glamour of the golden age of Hollywood. It features bold colors, luxurious materials, geometric patterns, and ornate detailing, creating a glamorous and extravagant atmosphere."> Hollywood Regency Style</option>
-              <option value="Hygge Style" title="Hygge style embraces the Danish concept of coziness and well-being. It emphasizes warmth, comfort, and a sense of simplicity. It features soft lighting, natural materials, cozy textiles, and a neutral color palette, creating a cozy and inviting atmosphere."> Hygge Style</option>
-              <option value="Industrial Chic" title="Industrial Chic design takes inspiration from old factories and industrial spaces. It features raw and unfinished materials, exposed brick and pipes, salvaged wood, and metal accents, blending rustic and urban elements to create a stylish and edgy look."> Industrial Chic</option>
-              <option value="Industrial Style" title="Industrial style draws inspiration from old factories and industrial spaces. It features raw and utilitarian elements, such as exposed brick, metal, and concrete, with a focus on functionality. The design often incorporates salvaged and repurposed materials."> Industrial Style</option>
-              <option value="Japanese" title="Japanese design is characterized by simplicity, minimalism, and harmony with nature. It features natural materials, clean lines, a neutral color palette, and a sense of tranquility, creating a serene and Zen-like atmosphere."> Japanese</option>
-              <option value="Mid-Century Modern Style" title="Mid-Century Modern style emerged in the mid-20th century and is known for its clean lines, organic forms, and functionality. It features a mix of natural and modern materials, vibrant colors, and iconic furniture pieces."> Mid-Century Modern Style</option>
-              <option value="Mediterranean" title="Mediterranean design takes inspiration from the coastal regions of Southern Europe. It features warm colors, natural textures, rustic elements, and an abundance of natural light, creating a relaxed and inviting ambiance."> Mediterranean</option>
-              <option value="Mediterranean Revival" title="Mediterranean Revival design is influenced by the architecture and design of the Mediterranean region. It features elements such as stucco walls, terracotta roof tiles, wrought iron accents, and colorful tiles, creating a vibrant and timeless aesthetic."> Mediterranean Revival</option>
-              <option value="Minimalist Style" title="Defined by simplicity, the Minimalist style embraces functionality over decoration. It features clean lines, a monochromatic palette, and uncluttered spaces. Every element is intentional, creating a serene and harmonious environment."> Minimalist Style</option>
-              <option value="Modern Style" title="Embodying simplicity and functionality, the Modern style features clean lines, neutral colors, and minimal decor. It leverages natural light and open floor plans for a spacious, tranquil feel. It's a sophisticated dance of form following function."> Modern Style</option>
-              <option value="Modern Farmhouse Style" title="Combining modern elements with rustic charm, the Modern Farmhouse style features clean lines, neutral colors, and natural textures. It creates a warm and inviting atmosphere with a contemporary twist on a traditional farmhouse aesthetic."> Modern Farmhouse Style</option>
-              <option value="Moroccan Style" title="Moroccan style is inspired by the vibrant culture and design of Morocco. It features rich colors, intricate patterns, and ornate details. Moroccan design often incorporates mosaic tiles, carved wood, and textured fabrics, creating an exotic and inviting atmosphere."> Moroccan Style</option>
-              <option value="Muji Style" title="Inspired by the Japanese retail brand Muji, the Muji style embodies simplicity, functionality, and a focus on natural materials. It creates a clean and uncluttered ambiance with an emphasis on organization and a minimalist aesthetic."> Muji Style</option>
-              <option value="Nautical" title="Nautical design draws inspiration from the sea and coastal life. It features a blue and white color palette, stripes, rope accents, and nautical motifs, creating a fresh and maritime atmosphere."> Nautical</option>
-              <option value="Neo-Classical Style" title="Drawing inspiration from classical Greek and Roman architecture, the Neo-Classical style features grandeur, symmetry, and classical motifs. It creates a sense of elegance and timelessness with a contemporary interpretation of classical design."> Neo-Classical Style</option>
-              <option value="Provence Style" title="Evoking the charm of the French countryside, the Provence style features soft colors, rustic elements, and a mix of antique and vintage pieces. It creates a warm and inviting ambiance reminiscent of a relaxed provincial lifestyle."> Provence Style</option>
-              <option value="Ranch Style" title="Popular in the American West, the Ranch style features a single-story design, an open floor plan, and a connection to the outdoors. It embraces simplicity, natural materials, and a casual, laid-back aesthetic."> Ranch Style</option>
-              <option value="Renaissance Style" title="Inspired by the artistic and intellectual movement of the Renaissance period, this style features opulent details, classical elements, and a sense of grandeur. It creates a lavish and elegant ambiance reminiscent of historical palaces and estates."> Renaissance Style</option>
-              <option value="Retro Modern" title="Retro Modern design combines the nostalgia of retro style with the clean lines and simplicity of modern design. It incorporates vintage furniture pieces, bold patterns, vibrant colors, and retro-inspired accessories for a playful and nostalgic aesthetic."> Retro Modern</option>
-              <option value="Rococo Style" title="Originating from the 18th century, the Rococo style is characterized by elaborate ornamentation, soft colors, and asymmetrical designs. It creates a sense of whimsy, grace, and elegance with a focus on intricate details."> Rococo Style</option>
-              <option value="Rustic" title="Rustic design embraces natural elements and a sense of ruggedness. It features raw and unfinished materials, earthy colors, and a cozy and inviting ambiance. Rustic design often incorporates wood, stone, and organic textures."> Rustic</option>
-              <option value="Scandinavian Style" title="Known for its simplicity, functionality, and beauty, this style features clean lines, muted tones, and an emphasis on natural materials. Light is important, with a focus on creating warm, cozy spaces. It's minimalism at its most warm and inviting."> Scandinavian Style</option>
-              <option value="Shabby Chic" title="Shabby Chic design blends vintage and feminine elements to create a soft and romantic ambiance. It features distressed furniture, floral patterns, pastel colors, and delicate decor, evoking a sense of nostalgia and charm."> Shabby Chic</option>
-              <option value="Shaker Style" title="Rooted in the Shaker religious community, this style embraces simplicity, functionality, and craftsmanship. It features clean lines, muted colors, and minimal ornamentation. It creates a serene and timeless atmosphere with a focus on quality and utility."> Shaker Style</option>
-              <option value="Southwestern Style" title="Inspired by the American Southwest, this style features warm desert colors, Native American patterns, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Western charm."> Southwestern Style</option>
-              <option value="Steampunk Style" title="A blend of Victorian elegance and industrial elements, the Steampunk style features vintage machinery, gears, and brass accents. It creates a sense of adventure, imagination, and an alternate history where steam-powered technology prevails."> Steampunk Style</option>
-              <option value="Traditional" title="Traditional design refers to classic and timeless styles that have stood the test of time. It often features ornate details, rich colors, and elegant furnishings, creating a formal and sophisticated atmosphere."> Traditional</option>
-              <option value="Traditional Chinese Style" title="Rooted in Chinese culture and history, the Traditional Chinese style features ornate details, vibrant colors, and a harmonious balance of elements. It creates a rich and opulent ambiance with a deep appreciation for symbolism and tradition."> Traditional Chinese Style</option>
-              <option value="Transitional" title="Transitional design combines elements of both traditional and contemporary styles. It strikes a balance between classic and modern, incorporating clean lines, neutral colors, and a mix of traditional and contemporary furniture and decor."> Transitional</option>
-              <option value="Tribal" title="Tribal design draws inspiration from indigenous cultures around the world. It features bold patterns, tribal prints, earthy tones, natural materials like wood and rattan, and handcrafted elements to create a unique and culturally rich space."> Tribal</option>
-              <option value="Tropical Style" title="Bringing the essence of the tropics indoors, this style features vibrant colors, botanical prints, and natural materials like bamboo and rattan. It creates a lively and exotic atmosphere that evokes a sense of paradise."> Tropical Style</option>
-              <option value="Tuscan Style" title="Drawing inspiration from the Italian region of Tuscany, this style features warm earth tones, textured walls, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Mediterranean charm."> Tuscan Style</option>
-              <option value="Urban Style" title="Embracing the energy and vibrancy of city living, the Urban style features contemporary designs, industrial elements, and a mix of textures and materials. It creates a modern and edgy ambiance with a cosmopolitan flair."> Urban Style</option>
-              <option value="Tropical Style" title="Tropical style brings the exotic feel of the tropics into the home. It features vibrant colors, lush foliage, natural materials, and a relaxed and breezy atmosphere, evoking a sense of vacation and tropical paradise."> Tropical Style</option>
-              <option value="Victorian Style" title="Victorian style is inspired by the design and architecture of the Victorian era. It features ornate details, rich colors, and a sense of opulence. Victorian design often incorporates antiques, luxurious fabrics, and intricate patterns."> Victorian Style</option>
-              <option value="Vintage" title="Vintage design incorporates elements from different eras and evokes a sense of nostalgia. It features antique or vintage-inspired furniture, retro patterns, and distressed finishes, creating a charming and lived-in atmosphere."> Vintage</option>
-              <option value="Wabi-Sabi Style" title="Derived from Japanese aesthetics, the Wabi-Sabi style embraces imperfection, simplicity, and the beauty of natural materials. It creates a rustic and unpretentious ambiance that appreciates the transient nature of things."> Wabi-Sabi Style</option>
-              <option value="Zen Style" title="Zen style draws inspiration from Japanese design and focuses on creating a serene and minimalist space. It features clean lines, natural materials, a neutral color palette, and a sense of tranquility, promoting relaxation and mindfulness."> Zen Style</option>
+              <option value="Hygge_Style" title="Hygge style embraces the Danish concept of coziness and well-being. It emphasizes warmth, comfort, and a sense of simplicity. It features soft lighting, natural materials, cozy textiles, and a neutral color palette, creating a cozy and inviting atmosphere."> Hygge Style</option>
+              <option value="Industrial_Chic_style" title="Industrial Chic design takes inspiration from old factories and industrial spaces. It features raw and unfinished materials, exposed brick and pipes, salvaged wood, and metal accents, blending rustic and urban elements to create a stylish and edgy look."> Industrial Chic</option>
+              <option value="Industrial_Style" title="Industrial style draws inspiration from old factories and industrial spaces. It features raw and utilitarian elements, such as exposed brick, metal, and concrete, with a focus on functionality. The design often incorporates salvaged and repurposed materials."> Industrial Style</option>
+              <option value="Japanese_style" title="Japanese design is characterized by simplicity, minimalism, and harmony with nature. It features natural materials, clean lines, a neutral color palette, and a sense of tranquility, creating a serene and Zen-like atmosphere."> Japanese</option>
+              <option value="Mid_Century_Modern_Style" title="Mid-Century Modern style emerged in the mid-20th century and is known for its clean lines, organic forms, and functionality. It features a mix of natural and modern materials, vibrant colors, and iconic furniture pieces."> Mid-Century Modern Style</option>
+              <option value="Mediterranean_style" title="Mediterranean design takes inspiration from the coastal regions of Southern Europe. It features warm colors, natural textures, rustic elements, and an abundance of natural light, creating a relaxed and inviting ambiance."> Mediterranean</option>
+              <option value="Mediterranean_Revival" title="Mediterranean Revival design is influenced by the architecture and design of the Mediterranean region. It features elements such as stucco walls, terracotta roof tiles, wrought iron accents, and colorful tiles, creating a vibrant and timeless aesthetic."> Mediterranean Revival</option>
+              <option value="Minimalist_Style" title="Defined by simplicity, the Minimalist style embraces functionality over decoration. It features clean lines, a monochromatic palette, and uncluttered spaces. Every element is intentional, creating a serene and harmonious environment."> Minimalist Style</option>
+              <option value="Modern_Style" title="Embodying simplicity and functionality, the Modern style features clean lines, neutral colors, and minimal decor. It leverages natural light and open floor plans for a spacious, tranquil feel. It's a sophisticated dance of form following function."> Modern Style</option>
+              <option value="Modern_Farmhouse_Style" title="Combining modern elements with rustic charm, the Modern Farmhouse style features clean lines, neutral colors, and natural textures. It creates a warm and inviting atmosphere with a contemporary twist on a traditional farmhouse aesthetic."> Modern Farmhouse Style</option>
+              <option value="Moroccan_Style" title="Moroccan style is inspired by the vibrant culture and design of Morocco. It features rich colors, intricate patterns, and ornate details. Moroccan design often incorporates mosaic tiles, carved wood, and textured fabrics, creating an exotic and inviting atmosphere."> Moroccan Style</option>
+              <option value="Muji_Style" title="Inspired by the Japanese retail brand Muji, the Muji style embodies simplicity, functionality, and a focus on natural materials. It creates a clean and uncluttered ambiance with an emphasis on organization and a minimalist aesthetic."> Muji Style</option>
+              <option value="Nautical_style" title="Nautical design draws inspiration from the sea and coastal life. It features a blue and white color palette, stripes, rope accents, and nautical motifs, creating a fresh and maritime atmosphere."> Nautical</option>
+              <option value="Neo_Classical_Style" title="Drawing inspiration from classical Greek and Roman architecture, the Neo-Classical style features grandeur, symmetry, and classical motifs. It creates a sense of elegance and timelessness with a contemporary interpretation of classical design."> Neo-Classical Style</option>
+              <option value="Provence_Style" title="Evoking the charm of the French countryside, the Provence style features soft colors, rustic elements, and a mix of antique and vintage pieces. It creates a warm and inviting ambiance reminiscent of a relaxed provincial lifestyle."> Provence Style</option>
+              <option value="Ranch_Style" title="Popular in the American West, the Ranch style features a single-story design, an open floor plan, and a connection to the outdoors. It embraces simplicity, natural materials, and a casual, laid-back aesthetic."> Ranch Style</option>
+              <option value="Renaissance_Style" title="Inspired by the artistic and intellectual movement of the Renaissance period, this style features opulent details, classical elements, and a sense of grandeur. It creates a lavish and elegant ambiance reminiscent of historical palaces and estates."> Renaissance Style</option>
+              <option value="Retro_Modern_style" title="Retro Modern design combines the nostalgia of retro style with the clean lines and simplicity of modern design. It incorporates vintage furniture pieces, bold patterns, vibrant colors, and retro-inspired accessories for a playful and nostalgic aesthetic."> Retro Modern</option>
+              <option value="Rococo_Style" title="Originating from the 18th century, the Rococo style is characterized by elaborate ornamentation, soft colors, and asymmetrical designs. It creates a sense of whimsy, grace, and elegance with a focus on intricate details."> Rococo Style</option>
+              <option value="Rustic_style" title="Rustic design embraces natural elements and a sense of ruggedness. It features raw and unfinished materials, earthy colors, and a cozy and inviting ambiance. Rustic design often incorporates wood, stone, and organic textures."> Rustic</option>
+              <option value="Scandinavian_Style" title="Known for its simplicity, functionality, and beauty, this style features clean lines, muted tones, and an emphasis on natural materials. Light is important, with a focus on creating warm, cozy spaces. It's minimalism at its most warm and inviting."> Scandinavian Style</option>
+              <option value="Shabby_Chic_style" title="Shabby Chic design blends vintage and feminine elements to create a soft and romantic ambiance. It features distressed furniture, floral patterns, pastel colors, and delicate decor, evoking a sense of nostalgia and charm."> Shabby Chic</option>
+              <option value="Shaker_Style" title="Rooted in the Shaker religious community, this style embraces simplicity, functionality, and craftsmanship. It features clean lines, muted colors, and minimal ornamentation. It creates a serene and timeless atmosphere with a focus on quality and utility."> Shaker Style</option>
+              <option value="Southwestern_Style" title="Inspired by the American Southwest, this style features warm desert colors, Native American patterns, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Western charm."> Southwestern Style</option>
+              <option value="Steampunk_Style" title="A blend of Victorian elegance and industrial elements, the Steampunk style features vintage machinery, gears, and brass accents. It creates a sense of adventure, imagination, and an alternate history where steam-powered technology prevails."> Steampunk Style</option>
+              <option value="Traditional_style" title="Traditional design refers to classic and timeless styles that have stood the test of time. It often features ornate details, rich colors, and elegant furnishings, creating a formal and sophisticated atmosphere."> Traditional</option>
+              <option value="Traditional_Chinese Style" title="Rooted in Chinese culture and history, the Traditional Chinese style features ornate details, vibrant colors, and a harmonious balance of elements. It creates a rich and opulent ambiance with a deep appreciation for symbolism and tradition."> Traditional Chinese Style</option>
+              <option value="Transitional_style" title="Transitional design combines elements of both traditional and contemporary styles. It strikes a balance between classic and modern, incorporating clean lines, neutral colors, and a mix of traditional and contemporary furniture and decor."> Transitional</option>
+              <option value="Tribal_style" title="Tribal design draws inspiration from indigenous cultures around the world. It features bold patterns, tribal prints, earthy tones, natural materials like wood and rattan, and handcrafted elements to create a unique and culturally rich space."> Tribal</option>
+              <option value="Tropical_Style" title="Bringing the essence of the tropics indoors, this style features vibrant colors, botanical prints, and natural materials like bamboo and rattan. It creates a lively and exotic atmosphere that evokes a sense of paradise."> Tropical Style</option>
+              <option value="Tuscan_Style" title="Drawing inspiration from the Italian region of Tuscany, this style features warm earth tones, textured walls, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Mediterranean charm."> Tuscan Style</option>
+              <option value="Urban_Style" title="Embracing the energy and vibrancy of city living, the Urban style features contemporary designs, industrial elements, and a mix of textures and materials. It creates a modern and edgy ambiance with a cosmopolitan flair."> Urban Style</option>
+              <option value="Victorian_Style" title="Victorian style is inspired by the design and architecture of the Victorian era. It features ornate details, rich colors, and a sense of opulence. Victorian design often incorporates antiques, luxurious fabrics, and intricate patterns."> Victorian Style</option>
+              <option value="Vintage_style" title="Vintage design incorporates elements from different eras and evokes a sense of nostalgia. It features antique or vintage-inspired furniture, retro patterns, and distressed finishes, creating a charming and lived-in atmosphere."> Vintage</option>
+              <option value="Wabi_Sabi_Style" title="Derived from Japanese aesthetics, the Wabi-Sabi style embraces imperfection, simplicity, and the beauty of natural materials. It creates a rustic and unpretentious ambiance that appreciates the transient nature of things."> Wabi-Sabi Style</option>
+              <option value="Zen_Style" title="Zen style draws inspiration from Japanese design and focuses on creating a serene and minimalist space. It features clean lines, natural materials, a neutral color palette, and a sense of tranquility, promoting relaxation and mindfulness."> Zen Style</option>
             </select>
             <span class="dot"></span>
 
@@ -506,7 +520,6 @@
             
             <!-- ID COLOR PALETTES -->
             <h4>Color palette</h4>
-            <sub>Colors are for reference, RoomDesAigner <br>will try to use them. </sub>
         <div class="colorPalette">
             <div class="colorPalette_60">
                 <input type="color" id="primary_color" class="colorPicker">
@@ -522,39 +535,51 @@
             
             </div>
         </div>
-        
+        <sub>Colors are for reference, RoomDesAigner will try to use them. </sub>
+
+            <h4>Interior / Outdoor design</h4>
+           
+          <select id="space_to_be_designed">
+                <option value="">Select the space to design</option>
+              <option value="interior design">Interior design</option>
+              <option value="outdoor design">Outdoor design</option>
+              <option value="front-of-the-house">Facade design</option>
+              </select>
             <span class="dot"></span>
-
-
+            <sub>Select interior design for indoor
+                 designs if you want to design an
+                 outdoor pool or garden, select the
+                 outdoor design option.</sub>
           </div>
           <div class="group">
-           
+              <h1><img class="iconH1" src="/static/img/icon-area.svg"/>Area & Space</h1>
+
             <h4>Room shape</h4>
             <!-- ID ROOM SHAPE -->
             <select id="room_shape">
               <option value="">Select a room shape</option>
               <!-- Room Shapes -->
-              <option value="Square Room" title="A room with equal sides, providing a balanced and symmetrical space."> Square Room</option>
-              <option value="Rectangular Room" title="A room with longer length and width, offering flexibility in furniture placement.">Rectangular Room </option>
-              <option value="Circular Room" title="A room with a rounded shape, creating a sense of flow and openness."> Circular Room</option>
-              <option value="Oval Room" title="A room with an elongated and rounded shape, combining elements of circles and rectangles.">Oval Room </option>
-              <option value="L-Shaped Room" title="A room with an L-shaped layout, allowing for distinct areas or zones within the space.">L-Shaped Room </option>
-              <option value="U-Shaped Room" title="A room with a U-shaped layout, providing ample space for multiple functions or activities.">U-Shaped Room</option>
-              <option value="T-Shaped Room" title="A room with a T-shaped layout, offering unique design opportunities for focal points or divisions."> T-Shaped Room</option>
-              <option value="H-Shaped Room" title="A room with an H-shaped layout, often found in larger or more intricate floor plans.">H-Shaped Room </option>
-              <option value="Octagonal Room" title="A room with eight sides, featuring a distinctive and dynamic shape."> Octagonal Room</option>
-              <option value="Polygonal Room" title="A room with more than four sides, offering architectural interest and unique design possibilities."> Polygonal Room</option>
-              <option value="Irregular-shaped Room" title="A room with a non-standard shape, adding character and challenging traditional design concepts."> Irregular-shaped Room</option>
-              <option value="Open Floor Plan" title="A room or space without walls or partitions, promoting a seamless flow and connection between areas."> Open Floor Plan</option>
-              <option value="Loft Space" title="A room located in the upper part of a building, often characterized by high ceilings and an open layout."> Loft Space</option>
-              <option value="Attic Room" title="A room located in the topmost part of a house, typically under a pitched roof.">Attic Room</option>
-              <option value="Basement Room" title="A room located below ground level, often used for additional living space or storage.">Basement Room </option>
-              <option value="Sunken Room" title="A room located at a lower level than the surrounding area, creating a cozy and intimate atmosphere."> Sunken Room</option>
+              <option value="Square_Room" title="A room with equal sides, providing a balanced and symmetrical space."> Square Room</option>
+              <option value="Rectangular_Room" title="A room with longer length and width, offering flexibility in furniture placement.">Rectangular Room </option>
+              <option value="Circular_Room" title="A room with a rounded shape, creating a sense of flow and openness."> Circular Room</option>
+              <option value="Oval_Room" title="A room with an elongated and rounded shape, combining elements of circles and rectangles.">Oval Room </option>
+              <option value="L-Shaped_Room" title="A room with an L-shaped layout, allowing for distinct areas or zones within the space.">L-Shaped Room </option>
+              <option value="U-Shaped_Room" title="A room with a U-shaped layout, providing ample space for multiple functions or activities.">U-Shaped Room</option>
+              <option value="T-Shaped_Room" title="A room with a T-shaped layout, offering unique design opportunities for focal points or divisions."> T-Shaped Room</option>
+              <option value="H-Shaped_Room" title="A room with an H-shaped layout, often found in larger or more intricate floor plans.">H-Shaped Room </option>
+              <option value="Octagonal_Room" title="A room with eight sides, featuring a distinctive and dynamic shape."> Octagonal Room</option>
+              <option value="Polygonal_Room" title="A room with more than four sides, offering architectural interest and unique design possibilities."> Polygonal Room</option>
+              <option value="Irregular_shaped_Room" title="A room with a non-standard shape, adding character and challenging traditional design concepts."> Irregular-shaped Room</option>
+              <option value="Open_Floor_Plan" title="A room or space without walls or partitions, promoting a seamless flow and connection between areas."> Open Floor Plan</option>
+              <option value="Loft_Space" title="A room located in the upper part of a building, often characterized by high ceilings and an open layout."> Loft Space</option>
+              <option value="Attic_Room" title="A room located in the topmost part of a house, typically under a pitched roof.">Attic Room</option>
+              <option value="Basement_Room" title="A room located below ground level, often used for additional living space or storage.">Basement Room </option>
+              <option value="Sunken_Room" title="A room located at a lower level than the surrounding area, creating a cozy and intimate atmosphere."> Sunken Room</option>
               <option value="Atrium" title="An open and central space within a building, usually featuring a skylight and surrounded by other rooms or areas."> Atrium</option>
               <option value="Conservatory" title="A room primarily made of glass, designed for the cultivation and display of plants.">Conservatory </option>
-              <option value="Mezzanine Level" title="An intermediate level between floors, often used to create additional functional space.">Mezzanine Level</option>
-              <option value="Split-level Room" title="A room with multiple levels, typically connected by a short flight of stairs.">Split-level Room </option>
-              <option value="Two storey apartment">Two storey apartment</option>
+              <option value="Mezzanine_Level" title="An intermediate level between floors, often used to create additional functional space.">Mezzanine Level</option>
+              <!--<option value="Split-level Room" title="A room with multiple levels, typically connected by a short flight of stairs.">Split-level Room </option>
+              <option value="Two storey apartment">Two storey apartment</option>-->
             </select>
             <span class="dot"></span>
 
@@ -563,7 +588,7 @@
             <h4>Room size</h4>
             <select id="room_size">
               <option value="">Select room size</option>
-              <option value="very-small">Very Small</option>
+              <option value="very small">Very Small</option>
               <option value="small">Small</option>
               <option value="modest">Modest</option>
               <option value="compact">Compact</option>
@@ -585,30 +610,30 @@
               <option value="Entryway">Entryway</option>
               <option value="Foyer">Foyer</option>
               <option value="Living Room">Living Room</option>
-              <option value="Living Room with a Fireplace">Living Room with a Fireplace</option>
-              <option value="Dining Room">Dining Room</option>
+              <option value="Living_Room_with_a_Fireplace">Living Room with a Fireplace</option>
+              <option value="Dining_Room">Dining Room</option>
               <option value="Kitchen">Kitchen</option>
-              <option value="Breakfast Nook">Breakfast Nook</option>
+              <option value="Breakfast_Nook">Breakfast Nook</option>
               <option value="Pantry">Pantry</option>
-              <option value="Home Office">Home Office</option>
+              <option value="Home_Office">Home Office</option>
               <option value="Study">Study</option>
               <option value="Library">Library</option>
-              <option value="Family Room">Family Room</option>
-              <option value="Home Theater">Home Theater</option>
-              <option value="Game Room">Game Room</option>
-              <option value="Bar Area">Bar Area</option>
-              <option value="Wine Cellar">Wine Cellar</option>
+              <option value="Family_Room">Family Room</option>
+              <option value="Home_Theater">Home Theater</option>
+              <option value="Game_Room">Game Room</option>
+              <option value="Bar_Area">Bar Area</option>
+              <option value="Wine_Cellar">Wine Cellar</option>
               <option value="Mudroom">Mudroom</option>
-              <option value="Laundry Room">Laundry Room</option>
-              <option value="Powder Room">Powder Room/Half Bath</option>
+              <option value="Laundry_Room">Laundry Room</option>
+              <option value="Powder_Room">Powder Room/Half Bath</option>
               <option value="Staircase">Staircase</option>
               <option value="Landing">Landing</option>
-              <option value="Master Bedroom">Master Bedroom</option>
-              <option value="Master Bathroom">Master Bathroom</option>
-              <option value="Walk-in Closet">Walk-in Closet</option>
-              <option value="Guest Bedroom">Guest Bedroom</option>
-              <option value="Guest Bathroom">Guest Bathroom</option>
-              <option value="Home Gym">Home Gym</option>
+              <option value="Master_Bedroom">Master Bedroom</option>
+              <option value="Master_Bathroom">Master Bathroom</option>
+              <option value="Walk_in_Closet">Walk-in Closet</option>
+              <option value="Guest_Bedroom">Guest Bedroom</option>
+              <option value="Guest_Bathroom">Guest Bathroom</option>
+              <option value="Home_Gym">Home Gym</option>
               <option value="Indoor Pool">Indoor Pool</option>
               <option value="Sauna">Sauna</option>
               <option value="Spa/Relaxation Room">Spa/Relaxation Room</option>
@@ -627,25 +652,25 @@
             <select id="child_room">
               <option value="">Select a children room type</option>
               <option value="Nursery">Nursery</option>
-              <option value="Baby's Room">Baby's Room</option>
-              <option value="Toddler's Room">Toddler's Room</option>
-              <option value="Preschooler's Room">Preschooler's Room</option>
-              <option value="Elementary Schooler's Room">Elementary Schooler's Room</option>
-              <option value="Preteen's Room">Preteen's Room</option>
-              <option value="Teenager's Room">Teenager's Room</option>
+              <option value="Baby's_Room">Baby's Room</option>
+              <option value="Toddler's_Room">Toddler's Room</option>
+              <option value="Preschooler's_Room">Preschooler's Room</option>
+              <option value="Elementary_Schooler's Room">Elementary Schooler's Room</option>
+              <option value="Preteen's_Room">Preteen's Room</option>
+              <option value="Teenager's_Room">Teenager's Room</option>
               <option value="Playroom">Playroom</option>
-              <option value="Study Room">Study Room</option>
-              <option value="Homework Room">Homework Room</option>
-              <option value="Creative Studio">Creative Studio</option>
-              <option value="Game Room">Game Room</option>
-              <option value="Music Room">Music Room</option>
-              <option value="Sports Room">Sports Room</option>
-              <option value="Reading Nook">Reading Nook</option>
-              <option value="Craft Room">Craft Room</option>
-              <option value="Dressing Room">Dressing Room</option>
-              <option value="Sleepover Room">Sleepover Room</option>
-              <option value="Sibling's Room">Sibling's Room</option>
-              <option value="Shared Room">Shared Room</option>
+              <option value="Study_Room">Study Room</option>
+              <option value="Homework_Room">Homework Room</option>
+              <option value="Creative_Studio">Creative Studio</option>
+              <option value="Game_Room">Game Room</option>
+              <option value="Music_Room">Music Room</option>
+              <option value="Sports_Room">Sports Room</option>
+              <option value="Reading_Nook">Reading Nook</option>
+              <option value="Craft_Room">Craft Room</option>
+              <option value="Dressing_Room">Dressing Room</option>
+              <option value="Sleepover_Room">Sleepover Room</option>
+              <option value="Sibling's_Room">Sibling's Room</option>
+              <option value="Shared_Room">Shared Room</option>
               
             </select>
             <span class="dot"></span>
@@ -653,14 +678,14 @@
             <h4>Outdoor spaces</h4>
         <select id="pool">
               <option value="">Select a pool style</option>
-              <option value="contemporary pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
-              <option value="mediterranean pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
-              <option value="naturalistic pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
-              <option value="tropical pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
-              <option value="modern pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
-              <option value="rustic pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
-              <option value="zen pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
-              <option value="resort pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
+              <option value="contemporary_pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
+              <option value="mediterranean_pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
+              <option value="naturalistic_pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
+              <option value="tropical_pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
+              <option value="modern_pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
+              <option value="rustic_pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
+              <option value="zen_pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+              <option value="resort_pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
             </select>
         <span class="dot"></span>
 
@@ -668,16 +693,16 @@
         <select id="garden">
             
               <option value="">Select a garden style</option>
-              <option value="english" title="Lush, romantic, and informal garden with abundant flowers and neatly trimmed hedges">English Garden</option>
-              <option value="japanese" title="Serene and harmonious garden with Zen rock gardens, water features, and carefully pruned trees">Japanese Garden</option>
-              <option value="mediterranean" title="Inspired by Southern European coastal regions with vibrant colors, drought-tolerant plants, and terracotta pots">Mediterranean Garden</option>
-              <option value="cottage" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
-              <option value="modern" title="Minimalist garden design with clean lines, geometric shapes, and carefully selected plantings">Modern Garden</option>
-              <option value="tropical" title="Exotic and lush garden with large-leaved plants, vibrant flowers, and water features">Tropical Garden</option>
-              <option value="desert" title="Drought-tolerant garden with succulents, cacti, rocks, and gravel for arid climates">Desert Garden</option>
-              <option value="formal" title="Symmetrical and structured garden with well-manicured hedges, topiaries, and geometric patterns">Formal Garden</option>
-              <option value="contemporary" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
-              <option value="rooftop" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
+              <option value="english_garden" title="Lush, romantic, and informal garden with abundant flowers and neatly trimmed hedges">English Garden</option>
+              <option value="japanese_garden" title="Serene and harmonious garden with Zen rock gardens, water features, and carefully pruned trees">Japanese Garden</option>
+              <option value="mediterranean_garden" title="Inspired by Southern European coastal regions with vibrant colors, drought-tolerant plants, and terracotta pots">Mediterranean Garden</option>
+              <option value="cottage_garden" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
+              <option value="modern_garden" title="Minimalist garden design with clean lines, geometric shapes, and carefully selected plantings">Modern Garden</option>
+              <option value="tropical_garden" title="Exotic and lush garden with large-leaved plants, vibrant flowers, and water features">Tropical Garden</option>
+              <option value="desert_garden" title="Drought-tolerant garden with succulents, cacti, rocks, and gravel for arid climates">Desert Garden</option>
+              <option value="formal_garden" title="Symmetrical and structured garden with well-manicured hedges, topiaries, and geometric patterns">Formal Garden</option>
+              <option value="contemporary_garden" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
+              <option value="rooftop_garden" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
             </select>
         <span class="dot"></span>
 
@@ -685,6 +710,8 @@
 
           </div>
           <div class="group">
+              <h1><img class="iconH1" src="/static/img/icon-architecture.svg"/>Building tokens</h1>
+
             <h4>Architectural tokens</h4>
             <!--ID lightning-->
            
@@ -693,16 +720,16 @@
             <select id="doors">
               <option value="">Select a door</option>
               <option value="No Doors at all" title="No doors">No Doors</option>
-              <option value="Panel Doors" title="Traditional doors with raised or recessed panels.">Panel Doors</option>
-              <option value="French Doors" title="Double doors with glass panes extending for most of their height.">French Doors</option>
-              <option value="Sliding Doors" title="Doors that open horizontally by sliding along a track.">Sliding Doors </option>
-              <option value="Barn Doors" title="Rustic-style doors mounted on a track and slide to the side.">Barn Doors </option>
-              <option value="Pocket Doors" title="Doors that slide into a wall cavity, saving space.">Pocket Doors</option>
-              <option value="Dutch Doors" title="Divided horizontally, allowing the top and bottom sections to open independently.">Dutch Doors </option>
-              <option value="Pivot Doors" title="Doors that rotate on a central pivot point instead of swinging on hinges."> Pivot Doors</option>
-              <option value="Glass Doors" title="Doors predominantly made of glass, allowing natural light to pass through."> Glass Doors</option>
-              <option value="Folding Doors" title="Doors that fold like an accordion to create a wide opening.">Folding Doors </option>
-              <option value="Revolving Doors" title="Circular doors that rotate on a central axis, often used in large public buildings.">Revolving Doors </option>
+              <option value="Panel_Doors" title="Traditional doors with raised or recessed panels.">Panel Doors</option>
+              <option value="French_Doors" title="Double doors with glass panes extending for most of their height.">French Doors</option>
+              <option value="Sliding_Doors" title="Doors that open horizontally by sliding along a track.">Sliding Doors </option>
+              <option value="Barn_Doors" title="Rustic-style doors mounted on a track and slide to the side.">Barn Doors </option>
+              <option value="Pocket_Doors" title="Doors that slide into a wall cavity, saving space.">Pocket Doors</option>
+              <option value="Dutch_Doors" title="Divided horizontally, allowing the top and bottom sections to open independently.">Dutch Doors </option>
+              <option value="Pivot_Doors" title="Doors that rotate on a central pivot point instead of swinging on hinges."> Pivot Doors</option>
+              <option value="Glass_Doors" title="Doors predominantly made of glass, allowing natural light to pass through."> Glass Doors</option>
+              <option value="Folding_Doors" title="Doors that fold like an accordion to create a wide opening.">Folding Doors </option>
+              <option value="Revolving_Doors" title="Circular doors that rotate on a central axis, often used in large public buildings.">Revolving Doors </option>
             </select>
             <span class="dot"></span>
 
@@ -710,51 +737,51 @@
             <select id="windows">
               <option value="">Select a window</option>
               <option value="No Windows at all" title="No windows needed">No Windows </option>
-              <option value="Casement Windows" title="Hinged windows that open outward from the side.">Casement Windows </option>
-              <option value="Double-Hung Windows" title="Windows with two vertically sliding sashes.">Double-Hung Windows </option>
-              <option value="Bay Windows" title="Windows that project outward from the main walls, creating a bay area.">Bay Windows</option>
-              <option value="Bow Windows" title="Curved windows that create a gentle outward arc from the main walls.">Bow Windows</option>
-              <option value="Picture Windows" title="Large fixed windows that offer unobstructed views.">Picture Windows </option>
-              <option value="Awning Windows" title="Hinged at the top and open outward from the bottom.">Awning Windows </option>
+              <option value="Casement_Windows" title="Hinged windows that open outward from the side.">Casement Windows </option>
+              <option value="Double_Hung_Windows" title="Windows with two vertically sliding sashes.">Double-Hung Windows </option>
+              <option value="Bay_Windows" title="Windows that project outward from the main walls, creating a bay area.">Bay Windows</option>
+              <option value="Bow_Windows" title="Curved windows that create a gentle outward arc from the main walls.">Bow Windows</option>
+              <option value="Picture_Windows" title="Large fixed windows that offer unobstructed views.">Picture Windows </option>
+              <option value="Awning_Windows" title="Hinged at the top and open outward from the bottom.">Awning Windows </option>
               <option value="Skylights" title="Windows installed on the roof, allowing natural light to enter from above."> Skylights</option>
-              <option value="Sliding Windows" title="Windows that open horizontally by sliding along a track.">Sliding Windows </option>
-              <option value="Arched Windows" title="Windows with a curved or arched top section.">Arched Windows</option>
-              <option value="Clerestory Windows" title="Windows placed high on a wall to let in light while maintaining privacy.">Clerestory Windows</option>
+              <option value="Sliding_Windows" title="Windows that open horizontally by sliding along a track.">Sliding Windows </option>
+              <option value="Arched_Windows" title="Windows with a curved or arched top section.">Arched Windows</option>
+              <option value="Clerestory_Windows" title="Windows placed high on a wall to let in light while maintaining privacy.">Clerestory Windows</option>
             </select>
             <span class="dot"></span>
 
             <!-- Floors -->
             <select id="floors">
               <option value="">Select a floor</option>
-              <option value="Hardwood-Floors" title="Solid wood flooring, available in various species and finishes."> Hardwood Floors</option>
-              <option value="Laminate-Flooring" title="Synthetic flooring that mimics the appearance of hardwood.">Laminate Flooring</option>
-              <option value="Vinyl-Flooring" title="Resilient flooring available in sheets, tiles, or planks.">Vinyl Flooring </option>
-              <option value="Tile-Flooring" title="Durable flooring made of ceramic, porcelain, or natural stone.">Tile Flooring</option>
-              <option value="Carpet-Flooring" title="Soft and warm flooring made of woven or tufted fibers.">Carpet Flooring </option>
-              <option value="Concrete-Floors" title="Durable and versatile flooring made of concrete.">Concrete Floors </option>
-              <option value="Bamboo-Flooring" title="Eco-friendly flooring made from bamboo stalks.">Bamboo Flooring </option>
-              <option value="Cork-Flooring" title="Flooring made from the bark of cork oak trees.">Cork Flooring</option>
-              <option value="Terrazzo-Flooring" title="Composite material made of marble, quartz, or other chips embedded in cement or resin.">Terrazzo Flooring</option>
-              <option value="Engineered Wood Flooring" title="Flooring made of layers of wood veneer with a plywood or high-density fiberboard (HDF) core."> Engineered Wood Flooring</option>
-              <option value="Marble-Flooring" title="Marble is a natural stone commonly used in and interior design">Marble Flooring</option>
-              <option value="Patterned-tiles-flooring" title="Cement tile flooring is a versatile and visually striking option that adds charm and character to any space">Cement Tile Flooring</option>
+              <option value="Hardwood_Flooring" title="Solid wood flooring, available in various species and finishes."> Hardwood Floors</option>
+              <option value="Laminate_Flooring" title="Synthetic flooring that mimics the appearance of hardwood.">Laminate Flooring</option>
+              <option value="Vinyl_Flooring" title="Resilient flooring available in sheets, tiles, or planks.">Vinyl Flooring </option>
+              <option value="Tile_Flooring" title="Durable flooring made of ceramic, porcelain, or natural stone.">Tile Flooring</option>
+              <option value="Carpet_Flooring" title="Soft and warm flooring made of woven or tufted fibers.">Carpet Flooring </option>
+              <option value="Concrete_Floors" title="Durable and versatile flooring made of concrete.">Concrete Floors </option>
+              <option value="Bamboo_Flooring" title="Eco-friendly flooring made from bamboo stalks.">Bamboo Flooring </option>
+              <option value="Cork_Flooring" title="Flooring made from the bark of cork oak trees.">Cork Flooring</option>
+              <option value="Terrazzo_Flooring" title="Composite material made of marble, quartz, or other chips embedded in cement or resin.">Terrazzo Flooring</option>
+              <option value="Engineered_WoodvFlooring" title="Flooring made of layers of wood veneer with a plywood or high-density fiberboard (HDF) core."> Engineered Wood Flooring</option>
+              <option value="Marble_Flooring" title="Marble is a natural stone commonly used in and interior design">Marble Flooring</option>
+              <option value="Patterned_tiles_flooring" title="Cement tile flooring is a versatile and visually striking option that adds charm and character to any space">Cement Tile Flooring</option>
             </select>
             <span class="dot"></span>
 
             <!-- Roofs -->
             <select id="roofs">
               <option value="">Select a roof</option>
-              <option value="Catalan vault" title="A Catalan vault, also known as a "boveda catalana" in Spanish, is an architectural technique used in traditional Catalan construction. It is a method of creating self-supporting, arched ceilings or vaults using a combination of layers of tiles or bricks.">Catalan vault </option>
-              <option value="Gable Roof" title="A roof with two sloping sides that form a triangle at the top.">Gable Roof </option>
-              <option value="Hip Roof" title="A roof with four sloping sides that meet at a ridge.">Hip Roof</option>
-              <option value="Mansard Roof" title="A roof with two slopes on all four sides, creating additional living space in the attic.">Mansard Roof </option>
-              <option value="Flat Roof" title="A roof with little to no slope, often used in modern or contemporary architecture.">Flat Roof </option>
-              <option value="Shed Roof" title="A single sloping roof that is attached to a higher wall or roofline.">Shed Roof </option>
-              <option value="Gambrel Roof" title="A roof with two slopes on each side, resembling a barn roof.">Gambrel Roof </option>
-              <option value="Butterfly Roof" title="A roof with two sections that slope downward and meet in the middle, resembling the wings of a butterfly."> Butterfly Roof</option>
-              <option value="Saltbox Roof" title="A long, sloping roof with one side significantly longer than the other."> Saltbox Roof</option>
-              <option value="Dome Roof" title="A roof that forms a hemispherical shape, often seen in architectural landmarks.">Dome Roof</option>
-              <option value="Sawtooth Roof" title="A roof with a series of ridges and vertical glass panels, allowing natural light into industrial buildings."> Sawtooth Roof</option>
+              <option value="Catalan_vault" title="A Catalan vault, also known as a "boveda catalana" in Spanish, is an architectural technique used in traditional Catalan construction. It is a method of creating self-supporting, arched ceilings or vaults using a combination of layers of tiles or bricks.">Catalan vault </option>
+              <option value="Gable_Roof" title="A roof with two sloping sides that form a triangle at the top.">Gable Roof </option>
+              <option value="Hip_Roof" title="A roof with four sloping sides that meet at a ridge.">Hip Roof</option>
+              <option value="Mansard_Roof" title="A roof with two slopes on all four sides, creating additional living space in the attic.">Mansard Roof </option>
+              <option value="Flat_Roof" title="A roof with little to no slope, often used in modern or contemporary architecture.">Flat Roof </option>
+              <option value="Shed_Roof" title="A single sloping roof that is attached to a higher wall or roofline.">Shed Roof </option>
+              <option value="Gambrel_Roof" title="A roof with two slopes on each side, resembling a barn roof.">Gambrel Roof </option>
+              <option value="Butterfly_Roof" title="A roof with two sections that slope downward and meet in the middle, resembling the wings of a butterfly."> Butterfly Roof</option>
+              <option value="Saltbox_Roof" title="A long, sloping roof with one side significantly longer than the other."> Saltbox Roof</option>
+              <option value="Dome_Roof" title="A roof that forms a hemispherical shape, often seen in architectural landmarks.">Dome Roof</option>
+              <option value="Sawtooth_Roof" title="A roof with a series of ridges and vertical glass panels, allowing natural light into industrial buildings."> Sawtooth Roof</option>
             </select>
             <span class="dot"></span>
 
@@ -775,77 +802,79 @@
             <select id="illumination">
               <option value="">Select a lighting option</option>
               <!-- Lighting Options -->
-              <option value="Ambient Lighting" title="General, overall illumination that provides a uniform level of light throughout a space.">Ambient Lighting</option>
-              <option value="Natural Lighting" title="Utilizing natural light from windows, skylights, or other openings to illuminate the interior."> Natural Lighting</option>
-              <option value="Task Lighting" title="Focused lighting designed to provide illumination for specific tasks or activities, such as reading or cooking."> Task Lighting</option>
-              <option value="Accent Lighting" title="Used to highlight or accentuate specific objects, architectural features, or artwork within a space."> Accent Lighting</option>
-              <option value="Pendant Lighting" title="Lighting fixtures suspended from the ceiling, typically used for task lighting or decorative purposes."> Pendant Lighting</option>
+              <option value="Ambient_Lighting" title="General, overall illumination that provides a uniform level of light throughout a space.">Ambient Lighting</option>
+              <option value="Natural_Lighting" title="Utilizing natural light from windows, skylights, or other openings to illuminate the interior."> Natural Lighting</option>
+              <option value="Task_Lighting" title="Focused lighting designed to provide illumination for specific tasks or activities, such as reading or cooking."> Task Lighting</option>
+              <option value="Accent_Lighting" title="Used to highlight or accentuate specific objects, architectural features, or artwork within a space."> Accent Lighting</option>
+              <option value="Pendant_Lighting" title="Lighting fixtures suspended from the ceiling, typically used for task lighting or decorative purposes."> Pendant Lighting</option>
               <option value="Chandelier" title="A decorative lighting fixture typically featuring multiple arms and lights, often used as a focal point in grand spaces."> Chandelier</option>
-              <option value="Track Lighting" title="A system of lights mounted on a track that can be adjusted to direct light to different areas of a room."> Track Lighting</option>
-              <option value="Wall Sconces" title="Lighting fixtures attached to walls, providing both functional and decorative lighting.">Wall Sconces </option>
-              <option value="Table Lamps" title="Portable lamps placed on tables or other surfaces, often used for localized lighting.">Table Lamps </option>
-              <option value="Floor Lamps" title="Tall standing lamps that provide ambient or task lighting, often used to complement other lighting sources."> Floor Lamps</option>
-              <option value="Recessed Lighting" title="Lighting fixtures installed into the ceiling, creating a streamlined and unobtrusive lighting effect."> Recessed Lighting</option>
-              <option value="Cove Lighting" title="Concealed lighting fixtures installed in a recess or ledge, casting indirect light upwards towards the ceiling."> Cove Lighting</option>
-              <option value="Under Cabinet Lighting" title="Lighting fixtures installed underneath kitchen cabinets, providing task lighting for countertops."> Under Cabinet Lighting</option>
-              <option value="Picture Lights" title="Designed to illuminate artwork or photographs, often mounted on the wall or frame.">Picture Lights </option>
-              <option value="LED Strip Lights" title="Flexible strips of LED lights that can be installed along surfaces or objects for decorative or accent lighting."> LED Strip Lights</option>
-              <option value="Pendant Cluster Lights" title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement."> Pendant Cluster Lights</option>
+              <option value="Track_Lighting" title="A system of lights mounted on a track that can be adjusted to direct light to different areas of a room."> Track Lighting</option>
+              <option value="Wall_Sconces" title="Lighting fixtures attached to walls, providing both functional and decorative lighting.">Wall Sconces </option>
+              <option value="Table_Lamps" title="Portable lamps placed on tables or other surfaces, often used for localized lighting.">Table Lamps </option>
+              <option value="Floor_Lamps" title="Tall standing lamps that provide ambient or task lighting, often used to complement other lighting sources."> Floor Lamps</option>
+              <option value="Recessed_Lighting" title="Lighting fixtures installed into the ceiling, creating a streamlined and unobtrusive lighting effect."> Recessed Lighting</option>
+              <option value="Cove_Lighting" title="Concealed lighting fixtures installed in a recess or ledge, casting indirect light upwards towards the ceiling."> Cove Lighting</option>
+              <option value="Under_Cabinet_Lighting" title="Lighting fixtures installed underneath kitchen cabinets, providing task lighting for countertops."> Under Cabinet Lighting</option>
+              <option value="Picture_Lights" title="Designed to illuminate artwork or photographs, often mounted on the wall or frame.">Picture Lights </option>
+              <option value="LED_Strip_Lights" title="Flexible strips of LED lights that can be installed along surfaces or objects for decorative or accent lighting."> LED Strip Lights</option>
+              <option value="Pendant_Cluster_Lights" title="Multiple pendant lights grouped together in a cluster, creating a visually striking lighting arrangement."> Pendant Cluster Lights</option>
               <option value="Candlelight" title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere."> Candlelight</option>
             </select>
             <span class="dot"></span>
 
             </div>
           <div class="group">
+              <h1><i class="fa-regular fa-eye"></i>&nbsp;</h1>
+
             <h4>Architectural materials</h4>
-            <sub>These values will have strong <br>influence in the final render</sub>
             <select id="wood_material">
               <option value="">Select a wood type</option>
-              <option value="bamboo wood" title="Sustainable and versatile material with natural grain patterns and eco-friendly properties.">Bamboo</option>
-              <option value="oak wood" title="Oak wood is known for its strength and durability.">Oak</option>
-              <option value="maple wood" title="Maple wood has a smooth and even texture, often used for furniture.">Maple</option>
-              <option value="cherry wood" title="Cherry wood has a rich reddish-brown color and is highly valued for its beauty.">Cherry</option>
-              <option value="walnut wood" title="Walnut wood is prized for its dark brown color and attractive grain patterns.">Walnut</option>
-              <option value="mahogany wood" title="Mahogany is a hardwood with a deep reddish-brown color, commonly used in high-end furniture.">Mahogany</option>
-              <option value="teak wood" title="Teak wood is durable, weather-resistant, and commonly used in outdoor furniture.">Teak</option>
-              <option value="birch wood" title="Birch wood has a light color and smooth texture, often used in cabinetry and plywood.">Birch</option>
-              <option value="pine wood" title="Pine wood is lightweight and commonly used in construction and furniture making.">Pine</option>
-              <option value="cedar wood" title="Cedar wood has a pleasant aroma and natural resistance to decay, used for outdoor projects and closets.">Cedar</option>
-              <option value="ebony wood" title="Ebony wood is known for its dark black color and is highly valued for its aesthetics.">Ebony</option>
-              <option value="ash wood" title="Ash wood is light-colored and has excellent strength properties, commonly used for furniture and flooring.">Ash</option>
-              <option value="beech wood" title="Beech wood is pale and fine-grained, often used for making cabinets and wooden utensils.">Beech</option>
-              <option value="poplar wood" title="Poplar wood is light and economical, used for construction, plywood, and furniture frames.">Poplar</option>
-              <option value="rosewood wood" title="Rosewood is a dense hardwood with a distinct reddish-brown color, used in high-quality furniture and musical instruments.">Rosewood</option>
-              <option value="hickory wood" title="Hickory wood is tough and shock-resistant, commonly used for tool handles and flooring.">Hickory</option>
-              <option value="balsa wood" title="Balsa wood is lightweight and easy to work with, commonly used for model building and crafts.">Balsa</option>
+              <option value="bamboo_wood" title="Sustainable and versatile material with natural grain patterns and eco-friendly properties.">Bamboo</option>
+              <option value="oak_wood" title="Oak wood is known for its strength and durability.">Oak</option>
+              <option value="maple_wood" title="Maple wood has a smooth and even texture, often used for furniture.">Maple</option>
+              <option value="cherry_wood" title="Cherry wood has a rich reddish-brown color and is highly valued for its beauty.">Cherry</option>
+              <option value="walnut_wood" title="Walnut wood is prized for its dark brown color and attractive grain patterns.">Walnut</option>
+              <option value="mahogany_wood" title="Mahogany is a hardwood with a deep reddish-brown color, commonly used in high-end furniture.">Mahogany</option>
+              <option value="teak_wood" title="Teak wood is durable, weather-resistant, and commonly used in outdoor furniture.">Teak</option>
+              <option value="birch_wood" title="Birch wood has a light color and smooth texture, often used in cabinetry and plywood.">Birch</option>
+              <option value="pine_wood" title="Pine wood is lightweight and commonly used in construction and furniture making.">Pine</option>
+              <option value="cedar_wood" title="Cedar wood has a pleasant aroma and natural resistance to decay, used for outdoor projects and closets.">Cedar</option>
+              <option value="ebony_wood" title="Ebony wood is known for its dark black color and is highly valued for its aesthetics.">Ebony</option>
+              <option value="ash_wood" title="Ash wood is light-colored and has excellent strength properties, commonly used for furniture and flooring.">Ash</option>
+              <option value="beech_wood" title="Beech wood is pale and fine-grained, often used for making cabinets and wooden utensils.">Beech</option>
+              <option value="poplar_wood" title="Poplar wood is light and economical, used for construction, plywood, and furniture frames.">Poplar</option>
+              <option value="rosewood_wood" title="Rosewood is a dense hardwood with a distinct reddish-brown color, used in high-quality furniture and musical instruments.">Rosewood</option>
+              <option value="hickory_wood" title="Hickory wood is tough and shock-resistant, commonly used for tool handles and flooring.">Hickory</option>
+              <option value="balsa_wood" title="Balsa wood is lightweight and easy to work with, commonly used for model building and crafts.">Balsa</option>
             </select>
             <span class="dot"></span>
 
+
             <select id="marble_material">
               <option value="">Select a marble type</option>
-              <option value="carrara marble" title="Carrara marble is a white and gray natural stone commonly used in sculptures and interior design.">Carrara</option>
-              <option value="calacatta marble" title="Calacatta marble is a luxurious white marble with bold veins, often used in high-end applications.">Calacatta</option>
-              <option value="statuario marble" title="Statuario marble is a high-quality white marble known for its distinctive veining patterns.">Statuario</option>
-              <option value="emperador marble" title="Emperador marble is a rich brown marble with lighter veining, often used for countertops and flooring.">Emperador</option>
-              <option value="nero_marquina marble" title="Nero Marquina marble is a black marble with white veins, used for elegant and dramatic design elements.">Nero Marquina</option>
-              <option value="verde_alpi marble" title="Verde Alpi marble is a green marble with distinctive white veining, popular for adding a touch of nature to interiors.">Verde Alpi</option>
-              <option value="travertine marble" title="Travertine is a type of limestone formed around mineral springs, commonly used in flooring and wall cladding.">Travertine</option>
-              <option value="onyx marble" title="Onyx is a translucent stone with beautiful patterns and colors, often used for decorative accents and backlighting.">Onyx</option>
-              <option value="breccia marble" title="Breccia marble is characterized by its broken fragments and is prized for its unique visual appeal.">Breccia</option>
-              <option value="pink italia marble" title="Pink Italia marble is a pink-colored stone with subtle veining, adding elegance to interior spaces.">Pink Italia</option>
+              <option value="carrara_marble" title="Carrara marble is a white and gray natural stone commonly used in sculptures and interior design.">Carrara</option>
+              <option value="calacatta_marble" title="Calacatta marble is a luxurious white marble with bold veins, often used in high-end applications.">Calacatta</option>
+              <option value="statuario_marble" title="Statuario marble is a high-quality white marble known for its distinctive veining patterns.">Statuario</option>
+              <option value="emperador_marble" title="Emperador marble is a rich brown marble with lighter veining, often used for countertops and flooring.">Emperador</option>
+              <option value="nero_marquina_marble" title="Nero Marquina marble is a black marble with white veins, used for elegant and dramatic design elements.">Nero Marquina</option>
+              <option value="verde_alpi_marble" title="Verde Alpi marble is a green marble with distinctive white veining, popular for adding a touch of nature to interiors.">Verde Alpi</option>
+              <option value="travertine_marble" title="Travertine is a type of limestone formed around mineral springs, commonly used in flooring and wall cladding.">Travertine</option>
+              <option value="onyx_marble" title="Onyx is a translucent stone with beautiful patterns and colors, often used for decorative accents and backlighting.">Onyx</option>
+              <option value="breccia_marble" title="Breccia marble is characterized by its broken fragments and is prized for its unique visual appeal.">Breccia</option>
+              <option value="pink-italia_marble" title="Pink Italia marble is a pink-colored stone with subtle veining, adding elegance to interior spaces.">Pink Italia</option>
             </select>
             <span class="dot"></span>
 
             <select id="stone_material">
               <option value="">Select a stone type</option>
-              <option value="granite stone" title="Granite is a durable natural stone with a wide range of colors, commonly used for countertops and flooring.">Granite</option>
-              <option value="slate stone" title="Slate is a fine-grained metamorphic rock that offers a rustic and natural appearance, suitable for flooring and roofing.">Slate</option>
-              <option value="limestone  stone" title="Limestone is a sedimentary rock available in various textures and colors, often used in architectural applications.">Limestone</option>
-              <option value="sandstone stone" title="Sandstone is a sedimentary rock formed from sand-sized grains, popular for its warm and earthy tones.">Sandstone</option>
-              <option value="travertine stone" title="Travertine is a type of limestone formed around mineral springs, commonly used in flooring and wall cladding.">Travertine</option>
-              <option value="quartzite stone" title="Quartzite is a hard metamorphic rock with quartz crystals, suitable for countertops and wall cladding.">Quartzite</option>
-              <option value="basalt stone" title="Basalt is a dark-colored volcanic rock used for flooring, wall cladding, and even in sculpture.">Basalt</option>
-              <option value="soapstone stone" title="Soapstone is a soft and heat-resistant stone that is often used for countertops and sinks.">Soapstone</option>
+              <option value="granite_stone" title="Granite is a durable natural stone with a wide range of colors, commonly used for countertops and flooring.">Granite</option>
+              <option value="slate_stone" title="Slate is a fine-grained metamorphic rock that offers a rustic and natural appearance, suitable for flooring and roofing.">Slate</option>
+              <option value="limestone_stone" title="Limestone is a sedimentary rock available in various textures and colors, often used in architectural applications.">Limestone</option>
+              <option value="sandstone_stone" title="Sandstone is a sedimentary rock formed from sand-sized grains, popular for its warm and earthy tones.">Sandstone</option>
+              <option value="travertine_stone" title="Travertine is a type of limestone formed around mineral springs, commonly used in flooring and wall cladding.">Travertine</option>
+              <option value="quartzite_stone" title="Quartzite is a hard metamorphic rock with quartz crystals, suitable for countertops and wall cladding.">Quartzite</option>
+              <option value="basalt_stone" title="Basalt is a dark-colored volcanic rock used for flooring, wall cladding, and even in sculpture.">Basalt</option>
+              <option value="soapstone_stone" title="Soapstone is a soft and heat-resistant stone that is often used for countertops and sinks.">Soapstone</option>
             </select>
             <span class="dot"></span>
 
@@ -888,6 +917,7 @@
               <option value="old_washed_white_brick" title="Simple old washed white brick">Old Washed White Brick</option>
             </select>
             <span class="dot"></span>
+            <sub>These values will have strong influence in the final render</sub>
 
           </div>
         </div>
@@ -903,14 +933,15 @@
           </div>
         </div>
       </form>
+      
     </fieldset>
+   
     <!-- script to make things run --->
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <!-- //end script - dont delete it -->
-    <sub class="credits">By Gemma and Angel Sanchez </sub>
-    
-    <!--<script>window.gtranslateSettings = {"default_language":"en","languages":["en","es"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"right","vertical_position":"bottom"}</script>
-    <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>-->
-    
+    <sub class="credits">Made with ♥️ by Gemma and Angel Sanchez </sub>
+  
+    <script>window.gtranslateSettings = {"default_language":"en","languages":["en","es"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"right","vertical_position":"bottom"}</script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
   </body>
 </html>

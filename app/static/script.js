@@ -177,14 +177,47 @@ document.addEventListener("DOMContentLoaded", function() {
           plainText += ', imageUrl: ';
         }
         
+        
         const promptEndy = `--ar 3:2 --stylize 100 --iw 2 `
         const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
         const width = aspectRatio === 'portrait' ? 512 : 1024;
          const height = aspectRatio === 'portrait' ? 1024 : 512;
 
         
+        
+        const seedSwitch = document.getElementById("seedSwitch");
+        const seedEnabled = seedSwitch.checked;
+        const seedValue = seedEnabled ? null : "19071975"; // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
+
+        // Combine the promptInit with the plain text representation
+              const promptText = `${promptInit} ${plainText} ${promptEndy}`;
+              showOverlay(); // Show the overlay and loading message
+              showWaitingOverlay(); // Show the waiting overlay
+              const prompt = {
+          key: apiKey,
+          prompt: JSON.stringify(promptText),
+          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature,",
+          width: width,
+          height: height,
+          samples: "4",
+          num_inference_steps: "20",
+          seed: seedValue, // Set the seed value based on the switch state
+          guidance_scale: 7.5,
+          webhook: null,
+          track_id: null,
+          safety_checker: null,
+          enhance_prompt: null,
+          multi_lingual: null,
+          panorama: null,
+          self_attention: null,
+          upscale: null,
+          embeddings_model: null
+        };
+
+        
+        
       // Combine the promptInit with the plain text representation
-      const promptText = `${promptInit} ${plainText} ${promptEndy}`;
+     /* const promptText = `${promptInit} ${plainText} ${promptEndy}`;
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay
       const prompt = {
@@ -195,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function() {
         height: height,
         samples: "4",
         num_inference_steps: "20",
-        seed: 19071975,
+        seed: null,
         guidance_scale: 7.5,
         webhook: null,
         track_id: null,
@@ -206,7 +239,71 @@ document.addEventListener("DOMContentLoaded", function() {
         self_attention: null,
         upscale: null,
         embeddings_model: null
-      };
+      };*/
+        
+        /*const chipsSV = document.getElementById("chipsSV");
+          chipsSV.innerHTML = ""; // Clear the existing content
+
+          for (const [key, value] of Object.entries(selectedValues)) {
+            if (value) {
+              const chip = document.createElement("span");
+              chip.classList.add("chipSV");
+              chip.textContent = value;
+              chipsSV.appendChild(chip);
+            }
+          }
+        
+     // Set chips
+        
+        const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+            
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = value;
+            } else {
+              chip.textContent = value;
+            }
+            
+            chipsSV.appendChild(chip);
+          }
+        }*/
+        
+        const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = value;
+            } else {
+              chip.textContent = value;
+            }
+
+            if (value.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }
+
+
+
+    
       // Set the image URL as the init_image in the prompt
       prompt.init_image = imageUrl;
       // Make an API request to Stable Diffusion API with the prompt
@@ -239,6 +336,8 @@ document.addEventListener("DOMContentLoaded", function() {
           hideOverlay(); // Hide the overlay and loading message
         });
     }
+    
+    
     function showWaitingOverlay() {
       const waiting = document.getElementById("waiting");
       waiting.style.display = "block";
@@ -316,6 +415,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const containerUpscale = document.createElement("div");
       containerUpscale.classList.add("containerUpscale");
 
+        
       // Create message element
       const message = document.createElement("h1");
       message.textContent = "Upscaling your image, it could take a moment...";
@@ -551,6 +651,39 @@ document.addEventListener("DOMContentLoaded", function() {
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
 });
+
+
+
+//disable MB
+
+const selectElements = document.querySelectorAll("select");
+
+// Function to check if all select options have empty values
+function areAllOptionsEmpty() {
+  for (const select of selectElements) {
+    if (select.value !== "") {
+      return false; // At least one option has a non-empty value
+    }
+  }
+  return true; // All options have empty values
+}
+
+// Function to handle changes in select elements
+function handleSelectChange() {
+  const allOptionsEmpty = areAllOptionsEmpty();
+  magicButton.disabled = allOptionsEmpty; // Disable magicButton if all options have empty values
+}
+
+// Listen for changes in select elements
+for (const select of selectElements) {
+  select.addEventListener("change", handleSelectChange);
+}
+
+// Initial check on page load
+handleSelectChange();
+
+
+
 
 
 

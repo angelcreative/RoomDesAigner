@@ -6,7 +6,11 @@ html {
 body {
   background-image: url('img/bg-body.png');
   background-size: cover;
-  font-family: sans-serif;
+  font-family: 'Varela Round', sans-serif;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Lato', sans-serif;
 }
 
 .logoWeb {
@@ -277,13 +281,34 @@ img#replitBadge {
   display: none;
 }
 
+
 h1 {
-  color: #fff;
-  font-size: 1.3rem;
-  background-repeat: no-repeat;
-  background-size: 24px;
-  text-align: center;
+   
+    font-size: 1.3rem;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
 }
+
+.groupContainer h1 {
+    color: #a9fff554;
+    font-size: 1.25rem;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    text-align: left;
+    font-family: 'Lato', sans-serif;
+}
+
+
+.iconH1 {
+    filter: invert(98%) sepia(62%) saturate(0%) hue-rotate(248deg) brightness(41%) contrast(100%);
+    width: 28px;
+    height: auto;
+    vertical-align: middle;
+    margin: -8px 8px 0 0;
+}
+
 
 .unicorn {
   display: inline-block;
@@ -313,6 +338,9 @@ h4 {
 sub {
     font-size: 10px;
     color: #424242;
+    display: block;
+    width: 200px;
+    margin: 4px 0 0 0;
 }
 
 
@@ -341,7 +369,8 @@ sub {
 
 /* switch */
 
-.aspectRatioShot {
+.aspectRatioShot,
+.switchContainer {
     background: black;
     display: flex;
     flex-direction: column;
@@ -351,7 +380,8 @@ sub {
     padding: 1rem;
 }
 
-.aspectRatio {
+.aspectRatio,
+.switchLabel{
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -361,6 +391,19 @@ sub {
     color: grey;
     font-size: 13px;
 }
+
+.switchLabel input:checked + .slider {
+  background-color: #a9fff552;
+}
+
+.switchLabel input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.switchLabel input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
 
 .switch {
     position: relative;
@@ -424,6 +467,7 @@ sub {
 
 select {
     display: flex;
+    font-family:'Varela Round', sans-serif;
     flex-direction: column;
     margin: 0.5rem 0;
     border-radius: 0.5rem;
@@ -467,7 +511,8 @@ select:hover {
 
 .buttonsCont {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-direction: row;
 }
 
 
@@ -620,6 +665,34 @@ option[title]:hover:after {
   100% {
     background-position: 0% 50%;
   }
+}
+
+
+#chipsSV {
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width:1000px
+}
+
+.chipSV {
+    text-transform: lowercase;
+    color: white;
+    background: #a9fff54f;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 900rem;
+    border: 1px solid #ffffff29;
+    margin: 0.5rem;
+}
+
+.hexDot {
+    width: 5px;
+    height: 12px;
 }
 
 #imageGenerationForm {
