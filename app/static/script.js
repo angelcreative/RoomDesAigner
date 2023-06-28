@@ -306,6 +306,17 @@ document.addEventListener("DOMContentLoaded", function() {
           }
         }
 
+        // Get the <span> element by its class name
+        var spanElement = document.querySelector('.chipSV');
+
+        // Get the text content of the <span> element
+        var text = spanElement.textContent;
+
+        // Replace all underscore characters with non-breaking spaces
+        var modifiedText = text.replace(/_/g, '&nbsp;');
+
+        // Update the text content of the <span> element
+        spanElement.textContent = modifiedText;
 
 
     
@@ -371,7 +382,7 @@ document.addEventListener("DOMContentLoaded", function() {
       messageDiv.innerHTML = `
         <div class="message-content">
       
-              <img class="imgLoader" src="/static/img/copy.png">
+              <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
           <p class="message-microcopy">${message}</p>
           <button class="message-close-btn" onclick="closeMessage()">Close</button>
         </div>
@@ -420,7 +431,12 @@ document.addEventListener("DOMContentLoaded", function() {
       const containerUpscale = document.createElement("div");
       containerUpscale.classList.add("containerUpscale");
 
-        
+      // Create <img> element
+      const imgElement = document.createElement("img");
+      imgElement.src = "static/img/modal_img/scaling.svg";
+      imgElement.setAttribute("alt", "Image");
+      imgElement.classList.add("imgLoader");
+
       // Create message element
       const message = document.createElement("h1");
       message.textContent = "Upscaling your image, it could take a moment...";
@@ -433,7 +449,8 @@ document.addEventListener("DOMContentLoaded", function() {
       const progressBar = document.createElement("div");
       progressBar.classList.add("progress-bar");
 
-      // Append message and microcopy to container
+      // Append elements to container
+      containerUpscale.appendChild(imgElement);
       containerUpscale.appendChild(message);
       containerUpscale.appendChild(microcopy);
 
