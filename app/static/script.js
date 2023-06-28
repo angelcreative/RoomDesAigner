@@ -116,13 +116,14 @@ document.addEventListener("DOMContentLoaded", function() {
   }
     function getSelectedValues(imageUrl = "") {
                 return {
-        
+                
                 //level shot
                 point_of_view: document.getElementById("point_of_view").value,
                 //colors
                 primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
                 tertiary_color: document.getElementById("tertiary_color").value,
+                
                 //design style
                 design_style: document.getElementById("design_style").value,
                 //room size
@@ -153,7 +154,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 fabric: document.getElementById("fabric").value,
                 stone_material: document.getElementById("stone_material").value,
                 marble_material: document.getElementById("marble_material").value,
-                wood_material: document.getElementById("wood_material").value
+                wood_material: document.getElementById("wood_material").value,
+                    //render
+                    picture: document.getElementById("picture").value
                 //image link
                 //imageUrl: document.getElementById("imageDisplayUrl").value
                 };
@@ -163,22 +166,24 @@ document.addEventListener("DOMContentLoaded", function() {
  
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
-      // Update the promptInit variable
-      const promptInit = `${imageUrl}, Editorial photography shot,  `;
+        // Update the promptInit variable based on the selected value from the "Render" select input
+        const pictureSelect = document.getElementById("picture");
+        const selectedPicture = pictureSelect.value;
+        const promptInit = /*`${imageUrl}, */`interior-design::1, ${selectedPicture}, `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
           .map(([key, value]) => `${key}: ${value}`)
           .join(", ");
         // Check if imageUrl is present, and append it to plainText if it exists
-        if (imageUrl) {
+       /* if (imageUrl) {
           plainText += `, imageUrl: ${imageUrl}`;
         } else {
           plainText += ', imageUrl: ';
         }
+        */
         
-        
-        const promptEndy = `--ar 3:2 --stylize 100 --iw 2 `
+        const promptEndy = `${selectedPicture} --ar 3:2 --stylize 100 --iw 2 --style raw `
         const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
         const width = aspectRatio === 'portrait' ? 512 : 1024;
          const height = aspectRatio === 'portrait' ? 1024 : 512;
@@ -196,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
               const prompt = {
           key: apiKey,
           prompt: JSON.stringify(promptText),
-          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature,",
+          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature",
           width: width,
           height: height,
           samples: "4",
