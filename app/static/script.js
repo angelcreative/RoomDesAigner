@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
                 tertiary_color: document.getElementById("tertiary_color").value,
-                
+                    color_scheme: document.getElementById("color_scheme").value,
                 //design style
                 design_style: document.getElementById("design_style").value,
                 //room size
