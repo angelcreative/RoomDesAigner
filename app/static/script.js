@@ -38,6 +38,26 @@ const magicButton = document.getElementById("magicButton");
 magicButton.addEventListener("click", function() {
   showWaitingOverlay();
 });
+
+// modal P
+document.getElementById('password-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    var passwordInput = document.getElementById('password');
+    var errorMessage = document.getElementById('error-message');
+    
+    if (passwordInput.value === '4yVd4nt3') {
+        // Password is correct, close the modal or perform desired actions
+        var modalP = document.querySelector('.modalP');
+        modalP.style.display = 'none';
+    } else {
+        // Password is incorrect, display error message
+        errorMessage.textContent = 'Invalid password. Schedule a call.';
+    }
+});
+
+//end modal P
+
 document.addEventListener("DOMContentLoaded", function() {
     
  

@@ -9,6 +9,101 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
+
+/*   MODAL P */
+
+.modalP {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1f1f1f;
+}
+
+.modalP-content {
+    display: flex;
+    max-width: 800px;
+    width: 100%;
+    background-color: #171616;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    overflow: hidden;
+    height: 500px;
+}
+.modalP h1 {
+    text-align: left;
+    margin-bottom: 3rem;
+    color:#476360
+}
+
+.modalP h1 h1 svg {
+    max-width: 140px;
+}
+
+.left-section {
+    flex: 1;
+    padding: 20px;
+}
+
+.right-section {
+    flex: 1;
+    padding: 20px;
+    background: url(https://cdn.stablediffusionapi.com/generations/f8b60ccc-001d-42b2-8cbd-09f1cd6a9eaa-3.png);
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    background-position: center center;
+}
+
+.modalPform {
+    max-width: 70%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    align-items: stretch;
+    margin-top: 40%;
+}
+
+.modalPlabel {
+    color: #8c8c8c;
+    font-size: 0.8rem;
+    font-weight: lighter;
+}
+
+.modalP input {
+    border-radius: 0.5rem;
+        padding: 0.5rem 0.5rem;
+        border: 1px solid #000000;
+        background: #0e0e0e;
+        box-shadow: inset 0px 4px 16px rgb(0 0 0);
+        color: #808080;
+}
+
+.modalPbutton {
+    background: #a9fff5;
+        border-radius: 0.5rem;
+        color: #1f1f1f;
+        transition: animation ease-in-out 3ms;
+        z-index: 2;
+        font-size: 13px;
+}
+
+.modalPbutton {
+    background: linear-gradient(256deg,#a9fff5,#11e9d1,#00ffe3);
+    background-size: 180% 180%;
+    animation: gradient-animation 3s ease infinite;
+}
+
+.error {
+    color: red;
+    margin-top: 5px;
+}
+
+
+/* END */
+
 h1, h2, h3, h4 {
     font-family: 'Lato', sans-serif;
 }
