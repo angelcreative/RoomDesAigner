@@ -182,6 +182,37 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
     }
     
+    /*
+//    select pickers
+    // Function to disable/enable the colorPalette inputs
+      function toggleColorPalette(disable) {
+        const colorInputs = document.querySelectorAll('.colorPicker');
+        for (const input of colorInputs) {
+          input.disabled = disable;
+        }
+      }
+
+      // Function to handle the change event of the color_scheme dropdown
+      function onColorSchemeChange() {
+        const colorSchemeSelect = document.getElementById('color_scheme');
+        const selectedValue = colorSchemeSelect.value;
+
+        if (selectedValue === '') {
+          // No color scheme selected, enable the colorPalette inputs
+          toggleColorPalette(false);
+        } else {
+          // A color scheme is selected, disable the colorPalette inputs
+          toggleColorPalette(true);
+        }
+      }
+
+      // Add an event listener to the color_scheme dropdown
+      const colorSchemeSelect = document.getElementById('color_scheme');
+      colorSchemeSelect.addEventListener('change', onColorSchemeChange);
+    
+    */
+    
+//    end select pickers
     
  
     function generateImages(imageUrl, selectedValues) {
