@@ -8,7 +8,7 @@ function showWaitingOverlay() {
   var progressLabel = document.getElementById('progressLabel');
   var progress = 0;
   var intervalId = setInterval(function() {
-    progress += 2;
+    progress += 1.5;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
     if (progress >= 100) {
@@ -18,6 +18,10 @@ function showWaitingOverlay() {
     }
   }, 1000);
 }
+
+
+
+
 // Function to hide the waiting overlay and loading message
 function hideWaitingOverlay() {
   const waiting = document.getElementById("waiting");
@@ -420,7 +424,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     
-    
+    // Function to reroll the images
+    function rerollImages() {
+      const rerollButton = document.getElementById("rerollButton");
+      //rerollButton.disabled = true;
+      const selectedValues = getSelectedValues();
+      generateImages(null, selectedValues);
+    }
+
+    // Add event listener to the rerollButton
+    const rerollButton = document.getElementById("rerollButton");
+    rerollButton.addEventListener("click", rerollImages);
+
 
     
     
@@ -627,8 +642,7 @@ document.addEventListener("DOMContentLoaded", function() {
             upscaleImage(imageUrl);
           });
           
-        
-
+          
 
         // Append buttons to buttons container
         buttonsContainer.appendChild(copyButton);

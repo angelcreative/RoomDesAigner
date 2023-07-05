@@ -312,14 +312,14 @@ top:-50px;
 .modal-content p {
     padding: 10px 30px;
     font-size: 13px;
-    background: #181719;
+    background: transparent;
     border-radius: 0.5rem;
     color: #ffffff75;
     text-align: center;
     font-weight: lighter;
-    margin: 0 auto;
+    margin: 1rem auto 0 auto;
     display: block;
-    max-width: fit-content;
+    max-width: 100%;
 }
 
 .col-r {
@@ -897,7 +897,7 @@ select#materials {
              width: 100%;
              height: auto;
              display: none;
-             z-index: 8;
+             z-index: 10;
              left: 0;
              top: 0;
              bottom: 0;
@@ -5640,6 +5640,8 @@ svg.active .gen-160 {
       background: #171616;
       column-gap: 5rem;
       justify-content: flex-start;
+      padding-top: 1rem;
+      padding-bottom: 4rem;
   }
   
   .buddy {
@@ -5674,7 +5676,13 @@ svg.active .gen-160 {
           left: 0;
   }
   
-  
+  .modal-content > svg {
+      position: absolute;
+          left: 0.8rem;
+          top: 0.4rem;
+          width: 100px;
+          height:auto;
+  }
   
   .imageGrid {
       display: flex;
@@ -5705,8 +5713,12 @@ svg.active .gen-160 {
   
   .buttonsCont {
       display: flex;
-          width: 70%;
-          justify-content: space-between;
+      width: 100%;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0;
+      background: #1f1f1f;
+      box-shadow: -1px 1px 20px 14px #0000006e;
   }
   
   
