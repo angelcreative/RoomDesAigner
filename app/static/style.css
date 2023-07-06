@@ -570,7 +570,7 @@ sub {
 
 
 
-select {
+select, textarea {
     display: flex;
     font-family:'Varela Round', sans-serif;
     flex-direction: column;

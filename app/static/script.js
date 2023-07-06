@@ -221,10 +221,13 @@ document.addEventListener("DOMContentLoaded", function() {
  
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
+        
+        // Retrieve the value of the custom text area
+        const customText = document.getElementById("customText").value;
         // Update the promptInit variable based on the selected value from the "Render" select input
         const pictureSelect = document.getElementById("picture");
         const selectedPicture = pictureSelect.value;
-        const promptInit = /*`${imageUrl}, */`interior-design::1, ${selectedPicture}, `;
+    const promptInit = /*`${imageUrl}, */`(interior-design), (((anatomically perfect))), (ultra realistic), ${selectedPicture}, `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
@@ -238,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         */
         
-        const promptEndy = `${selectedPicture} --ar 3:2 --stylize 100 --iw 2 --style raw `
+        const promptEndy = `${selectedPicture}`
         const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
         const width = aspectRatio === 'portrait' ? 512 : 1024;
          const height = aspectRatio === 'portrait' ? 1024 : 512;
@@ -250,13 +253,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const seedValue = seedEnabled ? null : "19071975"; // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
 
         // Combine the promptInit with the plain text representation
-              const promptText = `${promptInit} ${plainText} ${promptEndy}`;
+        const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} `;
+
               showOverlay(); // Show the overlay and loading message
               showWaitingOverlay(); // Show the waiting overlay
               const prompt = {
           key: apiKey,
           prompt: JSON.stringify(promptText),
-          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature",
+          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, blurry, draft, grainy ",
           width: width,
           height: height,
           samples: "4",
