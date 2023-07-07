@@ -585,6 +585,13 @@ select, textarea {
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
 }
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
 select:hover {
     background: black;
     color: #a5a5a5;

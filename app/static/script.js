@@ -147,13 +147,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 primary_color: document.getElementById("primary_color").value,
                 secondary_color: document.getElementById("secondary_color").value,
                 tertiary_color: document.getElementById("tertiary_color").value,
-                    color_scheme: document.getElementById("color_scheme").value,
+                color_scheme: document.getElementById("color_scheme").value,
                 //design style
                 design_style: document.getElementById("design_style").value,
                 //room size
                 room_size: document.getElementById("room_size").value,
                 //room design
-                design_this_home_room: document.getElementById("design_this_home_room").value,
+                home_room: document.getElementById("home_room").value,
                 space_to_be_designed: document.getElementById("space_to_be_designed").value,
                 child_room: document.getElementById("child_room").value,
                 pool: document.getElementById("pool").value,
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Update the promptInit variable based on the selected value from the "Render" select input
         const pictureSelect = document.getElementById("picture");
         const selectedPicture = pictureSelect.value;
-    const promptInit = /*`${imageUrl}, */`(interior-design), (((anatomically perfect))), (ultra realistic), ${selectedPicture}, `;
+    const promptInit = /*`${imageUrl}, */`(((ultra realistic))), ${selectedPicture}, `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         */
         
-        const promptEndy = `${selectedPicture}`
+        const promptEndy = ` ((interiordesign, homedecor, architecture,homedesign)) , ${selectedPicture} `
         const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
         const width = aspectRatio === 'portrait' ? 512 : 1024;
          const height = aspectRatio === 'portrait' ? 1024 : 512;
