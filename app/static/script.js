@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Update the promptInit variable based on the selected value from the "Render" select input
         const pictureSelect = document.getElementById("picture");
         const selectedPicture = pictureSelect.value;
-    const promptInit = /*`${imageUrl}, */`(((ultra realistic))), ${selectedPicture}, `;
+    const promptInit = /*`${imageUrl}, */` ${selectedPicture}, `;
         // Generate the plain text representation of the selected values
         let plainText = Object.entries(selectedValues)
           .filter(([key, value]) => value && key !== "imageUrl")
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         */
         
-        const promptEndy = ` ((interiordesign, homedecor, architecture,homedesign)) , ${selectedPicture} `
+        const promptEndy = ` interiordesign, homedecor, architecture,homedesign, ${selectedPicture}, `
         const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
         const width = aspectRatio === 'portrait' ? 512 : 1024;
          const height = aspectRatio === 'portrait' ? 1024 : 512;
@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function() {
               const prompt = {
           key: apiKey,
           prompt: JSON.stringify(promptText),
-          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame,  deformed, blurry,   bad proportions,  gross proportions,  username, watermark, signature, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, blurry, draft, grainy ",
+          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
           width: width,
           height: height,
           samples: "4",
