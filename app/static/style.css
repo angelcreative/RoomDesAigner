@@ -5617,6 +5617,63 @@ svg.active .gen-160 {
 
 
 
+#errorGenerating {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    backdrop-filter: blur(8px);
+}
+
+   .errorCard {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background-color: #fff;
+     width: 400px;
+     padding: 20px;
+     text-align: center;
+     border-radius: 10px;
+   }
+
+   .errorCard img {
+     width: 100px;
+   }
+
+   .errorCard h1 {
+     font-size: 24px;
+     margin-top: 10px;
+   }
+
+   .errorCard p {
+     margin: 10px 0;
+   }
+
+   .errorCard button {
+
+   }
+
+
+#cancelButton {
+    border-radius: 0.5rem;
+}
+
+span.closeError {
+    background: #181719;
+        border-radius: 900rem;
+        padding: 4px 10px 6px 10px;
+        position: absolute;
+        cursor: pointer;
+        color: #ffffff75;
+        top: 20px;
+        right: 40px;
+}
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */

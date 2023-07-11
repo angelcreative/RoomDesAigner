@@ -8,7 +8,7 @@ function showWaitingOverlay() {
   var progressLabel = document.getElementById('progressLabel');
   var progress = 0;
   var intervalId = setInterval(function() {
-    progress += 1.5;
+    progress += 1;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
     if (progress >= 100) {
@@ -180,119 +180,54 @@ document.addEventListener("DOMContentLoaded", function() {
                 marble_material: document.getElementById("marble_material").value,
                 wood_material: document.getElementById("wood_material").value,
                     //render
-                    picture: document.getElementById("picture").value
+                picture: document.getElementById("picture").value
                 //image link
                 //imageUrl: document.getElementById("imageDisplayUrl").value
                 };
     }
     
-    /*
-//    select pickers
-    // Function to disable/enable the colorPalette inputs
-      function toggleColorPalette(disable) {
-        const colorInputs = document.querySelectorAll('.colorPicker');
-        for (const input of colorInputs) {
-          input.disabled = disable;
-        }
-      }
-
-      // Function to handle the change event of the color_scheme dropdown
-      function onColorSchemeChange() {
-        const colorSchemeSelect = document.getElementById('color_scheme');
-        const selectedValue = colorSchemeSelect.value;
-
-        if (selectedValue === '') {
-          // No color scheme selected, enable the colorPalette inputs
-          toggleColorPalette(false);
-        } else {
-          // A color scheme is selected, disable the colorPalette inputs
-          toggleColorPalette(true);
-        }
-      }
-
-      // Add an event listener to the color_scheme dropdown
-      const colorSchemeSelect = document.getElementById('color_scheme');
-      colorSchemeSelect.addEventListener('change', onColorSchemeChange);
-    
-    */
-    
-//    end select pickers
+   
     
  
     function generateImages(imageUrl, selectedValues) {
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
-        
-        // Retrieve the value of the custom text area
-        const customText = document.getElementById("customText").value;
-        // Update the promptInit variable based on the selected value from the "Render" select input
-        const pictureSelect = document.getElementById("picture");
-        const selectedPicture = pictureSelect.value;
-    const promptInit = /*`${imageUrl}, */` ${selectedPicture}, `;
-        // Generate the plain text representation of the selected values
-        let plainText = Object.entries(selectedValues)
-          .filter(([key, value]) => value && key !== "imageUrl")
-          .map(([key, value]) => `${key}: ${value}`)
-          .join(", ");
-        // Check if imageUrl is present, and append it to plainText if it exists
-       /* if (imageUrl) {
-          plainText += `, imageUrl: ${imageUrl}`;
-        } else {
-          plainText += ', imageUrl: ';
-        }
-        */
-        
-        const promptEndy = ` interiordesign, homedecor, architecture,homedesign, ${selectedPicture}, `
-        const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-        const width = aspectRatio === 'portrait' ? 512 : 1024;
-         const height = aspectRatio === 'portrait' ? 1024 : 512;
 
-        
-        
-        const seedSwitch = document.getElementById("seedSwitch");
-        const seedEnabled = seedSwitch.checked;
-        const seedValue = seedEnabled ? null : "19071975"; // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
+      // Retrieve the value of the custom text area
+      const customText = document.getElementById("customText").value;
+      // Update the promptInit variable based on the selected value from the "Render" select input
+      const pictureSelect = document.getElementById("picture");
+      const selectedPicture = pictureSelect.value;
+      const promptInit = ` ${selectedPicture}, `;
 
-        // Combine the promptInit with the plain text representation
-        const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} `;
+      // Generate the plain text representation of the selected values
+      let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
 
-              showOverlay(); // Show the overlay and loading message
-              showWaitingOverlay(); // Show the waiting overlay
-              const prompt = {
-          key: apiKey,
-          prompt: JSON.stringify(promptText),
-          negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
-          width: width,
-          height: height,
-          samples: "4",
-          num_inference_steps: "20",
-          seed: seedValue, // Set the seed value based on the switch state
-          guidance_scale: 7.5,
-          webhook: null,
-          track_id: null,
-          safety_checker: null,
-          enhance_prompt: null,
-          multi_lingual: null,
-          panorama: null,
-          self_attention: null,
-          upscale: null,
-          embeddings_model: null
-        };
+      const promptEndy = ` interiordesign, homedecor, architecture,homedesign, ${selectedPicture}, `;
+      const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+      const width = aspectRatio === "portrait" ? 512 : 1024;
+      const height = aspectRatio === "portrait" ? 1024 : 512;
 
-        
-        
+      const seedSwitch = document.getElementById("seedSwitch");
+      const seedEnabled = seedSwitch.checked;
+      const seedValue = seedEnabled ? null : "19071975"; // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
+
       // Combine the promptInit with the plain text representation
-     /* const promptText = `${promptInit} ${plainText} ${promptEndy}`;
+      const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
+
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay
       const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
-        negative_prompt: "YOUR_NEGATIVE_PROMPT",
+        negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
         width: width,
         height: height,
         samples: "4",
         num_inference_steps: "20",
-        seed: null,
+        seed: seedValue, // Set the seed value based on the switch state
         guidance_scale: 7.5,
         webhook: null,
         track_id: null,
@@ -302,116 +237,100 @@ document.addEventListener("DOMContentLoaded", function() {
         panorama: null,
         self_attention: null,
         upscale: null,
-        embeddings_model: null
-      };*/
-        
-        /*const chipsSV = document.getElementById("chipsSV");
-          chipsSV.innerHTML = ""; // Clear the existing content
+        embeddings_model: null,
+      };
 
-          for (const [key, value] of Object.entries(selectedValues)) {
-            if (value) {
-              const chip = document.createElement("span");
-              chip.classList.add("chipSV");
-              chip.textContent = value;
-              chipsSV.appendChild(chip);
-            }
+      const chipsSV = document.getElementById("chipsSV");
+      chipsSV.innerHTML = ""; // Clear the existing content
+
+      for (const [key, value] of Object.entries(selectedValues)) {
+        if (value) {
+          const chip = document.createElement("span");
+          chip.classList.add("chipSV");
+
+          // Check if the value is a valid hex color
+          const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
+          if (isHexColor) {
+            chip.classList.add("hexDot"); // Add the "hexDot" class
+            chip.style.backgroundColor = value;
+          } else {
+            chip.textContent = value;
           }
-        
-     // Set chips
-        
-        const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
 
-        for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
-            
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = value;
-            } else {
-              chip.textContent = value;
-            }
-            
-            chipsSV.appendChild(chip);
+          if (value.includes("_")) {
+            chip.style.visibility = "visible"; // Hide "_" character
           }
-        }*/
+
+          chipsSV.appendChild(chip);
+        }
+      }
+
+      // Get the <span> element by its class name
+      var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+      var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+      var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+      spanElement.textContent = modifiedText;
+
+      // Set the image URL as the init_image in the prompt
+//      prompt.init_image = imageUrl;
+
+      // Make an API request to Stable Diffusion API with the prompt
+        fetch("/generate-images", {
+           method: "POST",
+           headers: {
+             "Content-Type": "application/json"
+           },
+           body: JSON.stringify(prompt)
+         })
+           .then(response => response.json())
+           .then(data => {
+             // Handle the API response and display the generated images
+             if (data.status === "success" && data.output) {
+               const imageUrls = data.output.map(url =>
+                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+               );
+               hideWaitingOverlay(); // Hide the waiting overlay
+               showModal(imageUrls, promptText);
+             } else {
+               // Display error modal window
+               displayErrorModal();
+             }
+             hideOverlay(); // Hide the overlay and loading message
+           })
+           .catch(error => {
+             console.error("Error generating images:", error);
+             // Display error modal window
+             displayErrorModal();
+             hideWaitingOverlay(); // Hide the waiting overlay
+             hideOverlay(); // Hide the overlay and loading message
+           });
+
         
-        const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
+        // Function to display the error modal window
+        function displayErrorModal() {
+          const errorModal = document.getElementById("errorGenerating");
+          errorModal.style.display = "block";
 
-        for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
+          const tryAgainButton = document.getElementById("errorButton");
+          tryAgainButton.addEventListener("click", () => {
+            errorModal.style.display = "none";
+            generateImages(imageUrl, selectedValues); // Relaunch the query
+          });
 
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = value;
-            } else {
-              chip.textContent = value;
-            }
-
-            if (value.includes("_")) {
-              chip.style.visibility = "visible"; // Hide "_" character
-            }
-
-            chipsSV.appendChild(chip);
-          }
+          const closeButton = document.querySelector("#errorGenerating .closeError");
+          closeButton.addEventListener("click", () => {
+            errorModal.style.display = "none";
+          });
         }
 
-        // Get the <span> element by its class name
-        var spanElement = document.querySelector('.chipSV');
+        }
 
-        // Get the text content of the <span> element
-        var text = spanElement.textContent;
-
-        // Replace all underscore characters with non-breaking spaces
-        var modifiedText = text.replace(/_/g, '&nbsp;');
-
-        // Update the text content of the <span> element
-        spanElement.textContent = modifiedText;
-
-
-    
-      // Set the image URL as the init_image in the prompt
-      prompt.init_image = imageUrl;
-      // Make an API request to Stable Diffusion API with the prompt
-      fetch("/generate-images", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-      })
-        .then(response => response.json())
-        .then(data => {
-          // Handle the API response and display the generated images
-          if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-              url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-            );
-            hideWaitingOverlay(); // Hide the waiting overlay
-            showModal(imageUrls, promptText);
-          } else {
-            console.error("Failed to generate images:", data.error);
-              alert("Something was wrong from our side, try it again.");
-          }
-          hideOverlay(); // Hide the overlay and loading message
-        })
-        .catch(error => {
-          console.error("Error generating images:", error);
-            alert("Something was wrong from our side, try it again.");
-          hideWaitingOverlay(); // Hide the waiting overlay
-          hideOverlay(); // Hide the overlay and loading message
-        });
-    }
-    
     
     function showWaitingOverlay() {
       const waiting = document.getElementById("waiting");
