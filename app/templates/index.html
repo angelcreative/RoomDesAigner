@@ -16,13 +16,14 @@
         <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
         <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='img/favicon-96x96.png') }}">
         <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
-        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+       
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
         <meta name="theme-color" content="#ffffff">
         <!-- //end icons for mobile -->
         <title>Room DesAigner</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,6 +95,8 @@
                     <div class="progress-label" id="progressLabel"></div>
                 </div>
             </div>
+            <span class="closeGen" onclick="hideWaitingOverlay()">x</span>
+
         </div>
         <div id="overlay"></div>
         <div id="modal" class="modal" style="display: none;">
@@ -227,14 +230,8 @@
                     </div>
                     <div class="group">
                         <h1><img class="iconH1" src="/static/img/icon-design.svg"/>Design tokens</h1>
-                        <!-- ID MAGAZINES
-                            <h4>Upload your sketch, picture, ...</h4>
-                            <input type="file" id="imageDisplayUrl" accept="image/*" />
-                            <br>
-                            <sub>JPG, PNG, GIF formats allowed.</sub><br>
-                            <sub>Upload and image is not mandatory</sub><br>
-                            <sub>File name must be simple and short</sub>
-                            -->
+                        
+                           
                         <h4>Design influence</h4>
                         <select id="inspired_by_this_interior_design_magazine">
                             <option value="">Select an interior design magazine</option>
@@ -848,6 +845,14 @@
                             <option value="Candlelight" title="The soft and warm light emitted by candles, often used for creating a cozy and intimate atmosphere."> Candlelight</option>
                         </select>
                         <span class="dot"></span>
+                        
+                        <!-- ID IMAGE
+                            <h4>Upload your sketch, picture, ...</h4>
+                            <input type="file" id="imageDisplayUrl" accept="image/*" />
+                            <br>
+                            <sub>JPG, PNG, GIF formats allowed.</sub><br>
+                            <sub>Upload and image is not mandatory</sub><br>
+                            <sub>File name must be simple and short</sub>-->
                     </div>
                     <div class="group">
                         <h1><i class="fa-regular fa-eye"></i>&nbsp;</h1>
@@ -957,6 +962,8 @@
                 </div>
             </form>
         </fieldset>
+        
+       
         <!-- script to make things run --->
         <script src="{{ url_for('static', filename='script.js') }}"></script>
         <!-- //end script - dont delete it -->

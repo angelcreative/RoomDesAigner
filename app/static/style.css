@@ -5674,6 +5674,28 @@ span.closeError {
         right: 40px;
 }
 
+span.closeGen {
+    background: #181719;
+        border-radius: 900rem;
+        padding: 4px 10px 6px 10px;
+        position: absolute;
+        cursor: pointer;
+        color: #ffffff75;
+        top: 20px;
+        right: 40px;
+}
+
+.imageGenLastGrid {
+     display: grid;
+     grid-template-columns: repeat(4, 1fr);
+     gap: 10px;
+   }
+ 
+   .imageGenImg {
+     width: 100%;
+     height: auto;
+   }
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
