@@ -279,37 +279,43 @@ document.addEventListener("DOMContentLoaded", function() {
 //      prompt.init_image = imageUrl;
 
       // Make an API request to Stable Diffusion API with the prompt
+        // Make an API request to Stable Diffusion API with the prompt
         fetch("/generate-images", {
-           method: "POST",
-           headers: {
-             "Content-Type": "application/json"
-           },
-           body: JSON.stringify(prompt)
-         })
-           .then(response => response.json())
-           .then(data => {
-             // Handle the API response and display the generated images
-             if (data.status === "success" && data.output) {
-               const imageUrls = data.output.map(url =>
-                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-               );
-               hideWaitingOverlay(); // Hide the waiting overlay
-               showModal(imageUrls, promptText);
-             } else {
-               // Display error modal window
-               displayErrorModal();
-             }
-             hideOverlay(); // Hide the overlay and loading message
-           })
-           .catch(error => {
-             console.error("Error generating images:", error);
-             // Display error modal window
-             displayErrorModal();
-             hideWaitingOverlay(); // Hide the waiting overlay
-             hideOverlay(); // Hide the overlay and loading message
-           });
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(prompt)
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to generate images. Status: " + response.status);
+            }
+          })
+          .then(data => {
+            // Handle the API response and display the generated images
+            if (data.status === "success" && data.output) {
+              const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+              );
+              hideWaitingOverlay(); // Hide the waiting overlay
+              showModal(imageUrls, promptText);
+            } else {
+              console.error("Error generating images:", data);
+              displayErrorModal();
+              hideWaitingOverlay(); // Hide the waiting overlay
+              hideOverlay(); // Hide the overlay and loading message
+            }
+          })
+          .catch(error => {
+            console.error("Error generating images:", error);
+            displayErrorModal();
+            hideWaitingOverlay(); // Hide the waiting overlay
+            hideOverlay(); // Hide the overlay and loading message
+          });
 
-        
         // Function to display the error modal window
         function displayErrorModal() {
           const errorModal = document.getElementById("errorGenerating");
@@ -326,6 +332,7 @@ document.addEventListener("DOMContentLoaded", function() {
             errorModal.style.display = "none";
           });
         }
+
 
         }
 
@@ -747,5 +754,3 @@ window.addEventListener('load', function() {
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
-
-
