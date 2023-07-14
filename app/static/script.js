@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     // Function to generate message
-  /* old one  function generateMessageDiv(message) {
+ function generateMessageDiv(message) {
       var messageDiv = document.createElement('div');
       messageDiv.id = 'message';
       messageDiv.innerHTML = `
@@ -388,26 +388,8 @@ document.addEventListener("DOMContentLoaded", function() {
       if (messageDiv) {
         messageDiv.remove();
       }
-    }*/
-    
-    function generateMessageDiv(message) {
-      // Check if the message element already exists and remove it
-      const existingMessageDiv = document.getElementById('message');
-      if (existingMessageDiv) {
-        existingMessageDiv.remove();
-      }
-
-      const messageDiv = document.createElement('div');
-      messageDiv.id = 'message';
-      messageDiv.innerHTML = `
-        <div class="message-content">
-          <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
-          <p class="message-microcopy">${message}</p>
-          <button class="message-close-btn" onclick="closeMessage()">Close</button>
-        </div>
-      `;
-      document.body.appendChild(messageDiv);
     }
+    
 
     // Function to copy text to clipboard
     function copyTextToClipboard(text) {
