@@ -20,8 +20,6 @@ function showWaitingOverlay() {
 }
 
 
-
-
 // Function to hide the waiting overlay and loading message
 function hideWaitingOverlay() {
   const waiting = document.getElementById("waiting");
@@ -118,26 +116,26 @@ document.addEventListener("DOMContentLoaded", function() {
         hideOverlay(); // Hide the overlay and loading message
       }
       // Update the download JSON button with the selected form values
-      const selectedValues = getSelectedValues();
-      updateDownloadButton(selectedValues);
+//      const selectedValues = getSelectedValues();
+//      updateDownloadButton(selectedValues);
     }
   // Function to update the download JSON button
-  function updateDownloadButton(selectedValues) {
-    const downloadJsonButton = document.getElementById("downloadJsonButton");
-    downloadJsonButton.addEventListener("click", () => {
-      const jsonData = JSON.stringify(selectedValues, null, 2);
-      downloadFile(jsonData, "selected_values.json");
-    });
-  }
+//  function updateDownloadButton(selectedValues) {
+//    const downloadJsonButton = document.getElementById("downloadJsonButton");
+//    downloadJsonButton.addEventListener("click", () => {
+//      const jsonData = JSON.stringify(selectedValues, null, 2);
+//      downloadFile(jsonData, "selected_values.json");
+//    });
+//  }
   // Function to download the JSON file
-  function downloadFile(data, filename) {
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = filename;
-    link.click();
-  }
+//  function downloadFile(data, filename) {
+//    const blob = new Blob([data], { type: "application/json" });
+//    const url = URL.createObjectURL(blob);
+//    const link = document.createElement("a");
+//    link.href = url;
+//    link.download = filename;
+//    link.click();
+//  }
     function getSelectedValues(imageUrl = "") {
                 return {
                 
@@ -205,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-      const promptEndy = ` interiordesign, homedecor, architecture,homedesign, ${selectedPicture}, `;
+      const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  ${selectedPicture}, `;
       const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
       const width = aspectRatio === "portrait" ? 512 : 1024;
       const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -365,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     
     // Function to generate message
-    function generateMessageDiv(message) {
+  /* old one  function generateMessageDiv(message) {
       var messageDiv = document.createElement('div');
       messageDiv.id = 'message';
       messageDiv.innerHTML = `
@@ -383,7 +381,27 @@ document.addEventListener("DOMContentLoaded", function() {
       if (messageDiv) {
         messageDiv.remove();
       }
+    }*/
+    
+    function generateMessageDiv(message) {
+      // Check if the message element already exists and remove it
+      const existingMessageDiv = document.getElementById('message');
+      if (existingMessageDiv) {
+        existingMessageDiv.remove();
+      }
+
+      const messageDiv = document.createElement('div');
+      messageDiv.id = 'message';
+      messageDiv.innerHTML = `
+        <div class="message-content">
+          <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
+          <p class="message-microcopy">${message}</p>
+          <button class="message-close-btn" onclick="closeMessage()">Close</button>
+        </div>
+      `;
+      document.body.appendChild(messageDiv);
     }
+
     // Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
@@ -620,6 +638,27 @@ document.addEventListener("DOMContentLoaded", function() {
         toggleGreenDot(selectId);
       });
     });
+    
+    // Function to reset form
+
+    function resetFormAndEventListeners() {
+      // Reset form values
+      const form = document.getElementById("imageGenerationForm");
+      form.reset();
+
+      // Remove event listeners from select elements
+      const selectElements = document.querySelectorAll("select");
+      selectElements.forEach(function (select) {
+        select.removeEventListener("change", handleSelectChange);
+      });
+
+      // Add event listeners back to select elements
+      selectElements.forEach(function (select) {
+        select.addEventListener("change", handleSelectChange);
+      });
+    }
+
+    
   // Function to close the modal
   function closeModal() {
     const modal = document.getElementById("modal");
@@ -694,10 +733,6 @@ handleSelectChange();
 
 
 
-
-
-
-
 window.addEventListener('load', function() {
   setTimeout(function() {
     var splash = document.getElementById('splash');
@@ -708,7 +743,9 @@ window.addEventListener('load', function() {
 
     setTimeout(function() {
       splash.style.display = 'none'; // Hide the splash screen
-      content.style.display = 'block'; // Show the website content
+//      content.style.display = 'block'; // Show the website content
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
+
+

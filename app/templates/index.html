@@ -132,7 +132,7 @@
 
             </h1>
             <!--<div class="gtranslate_wrapper"></div>-->
-            <form id="imageGenerationForm" onsubmit="handleSubmit(event)">
+            <form id="imageGenerationForm">
                 <div class="groupContainer">
                     <div class="group">
                         <input type="file" id="imageDisplayUrl" accept="image/*" style="visibility:hidden; display:block; width:1px; height:1px; overflow:hidden;"/>
@@ -442,13 +442,16 @@
                         <select id="designed_by_this_interior_designer">
                             <option value="">Select interior designer</option>
                             <optgroup label="European Interior Designers">
+                                <option value="Giovanni 'Gio' Ponti" title="industrial designer, furniture designer, artist, teacher, writer and publisher">Giovanni "Gio" Ponti</option>
                                 <option value="Philippe Starck" title="Modern and Contemporary">Philippe Starck</option>
+                                <option value="Aldo Rossi" title="leading proponents of the postmodern movement and achieved international recognition in architectural and product design">Aldo Rossi </option>
                                 <option value="Kelly Hoppen" title="Luxurious and Minimalistic">Kelly Hoppen</option>
                                 <option value="Patricia Urquiola" title="Contemporary and Eclectic">Patricia Urquiola</option>
                                 <option value="Piet Boon" title="Minimalistic and Rustic">Piet Boon</option>
                                 <option value="Ilse Crawford" title="Scandinavian and Warm Modern">Ilse Crawford</option>
                                 <option value="Marcel Wanders" title="Avant-Garde and Playful">Marcel Wanders</option>
                                 <option value="India Mahdavi" title="Colorful and Artistic">India Mahdavi</option>
+                                <option value="Verner Panton" title="nnovative and futuristic designs in a variety of materials, especially plastics, and in vibrant and exotic colors">Verner Panton</option>
                                 <option value="Tom Dixon" title="Industrial and Futuristic">Tom Dixon</option>
                                 <option value="Jaime Hayon" title="Whimsical and Surreal">Jaime Hayon</option>
                                 <option value="Vincent Van Duysen" title="Timeless and Refined">Vincent Van Duysen</option>
@@ -494,8 +497,15 @@
                         <select id="designed_by_this_architect">
                             <option value="">Select home architect</label>
                             <optgroup label="European Home Architects">
+                                Ettore Sottsass
+                                <option  value="Ettore Sottsass" title="Noted for designing furniture, jewelry, glass, lighting, home and office wares, as well as numerous buildings and interiors - often defined by bold colors">Ettore Sottsass</option>
+                                <option  value="John Pawson" title="Known for his signature white, pared-back aesthetic that celebrates space over clutter">John Pawson</option>
+                                <option  value="Alessandro Mendini" title="Eclectic, postmodern style">Alessandro Mendini</option>
+                                <option  value="Arne Jacobsen" title="Modernism">Arne Jacobsen</option>
+                                <option  value="Jørn Utzon" title="Curving roof forms">Jørn Utzon</option>
                                 <option value="Frank Gehry" title="Deconstructivist and Avant-Garde">Frank Gehry</option>
                                 <option value="Bjarke Ingels" title="Futuristic and Sustainable">Bjarke Ingels</option>
+                                <option value="David Adjaye" title="He is known for having designed many notable buildings around the world,">David Adjaye Ingels</option>
                                 <option value="Alvar Aalto" title="Organic and Human-Centered">Alvar Aalto</option>
                                 <option value="Norman Foster" title="Contemporary and Technological">Norman Foster</option>
                                 <option value="Jean Nouvel" title="Innovative and Contextual">Jean Nouvel</option>
@@ -503,7 +513,9 @@
                                 <option value="David Chipperfield" title="Minimalistic and Timeless">David Chipperfield</option>
                                 <option value="Peter Zumthor" title="Elemental and Ethereal">Peter Zumthor</option>
                                 <option value="Rem Koolhaas" title="Bold and Conceptual">Rem Koolhaas</option>
+                                <option value="Ron Arad" title=" experimentation with the boundaries and possibilities of materials, from metals to composites, and his radical re-conception of the form and structure of objects and buildings">Ron Arad</option>
                                 <option value="Renzo Piano" title="Elegant and Sustainable">Renzo Piano</option>
+                                <option value="Peter Zumthor" title="Uncompromising and minimalist">Peter Zumthor</option>
                             </optgroup>
                             <optgroup label="Japanese Home Architects">
                                 <option value="Tadao Ando" title="Minimalistic and Zen">Tadao Ando</option>
@@ -547,13 +559,13 @@
                         <h4>Color palette</h4>
                         <div class="colorPalette">
                             <div class="colorPalette 60">
-                                <input type="color" id="primary_color" class="colorPicker">
+                                <input type="color" id="primary_color" placeholder="#000000" class="colorPicker">
                             </div>
                             <div class="colorPalette 60">
-                                <input type="color" id="secondary_color" class="colorPicker">
+                                <input type="color" id="secondary_color" placeholder="#000000" class="colorPicker">
                             </div>
                             <div class="colorPalette 60">
-                                <input type="color" id="tertiary_color" class="colorPicker">
+                                <input type="color" id="tertiary_color" placeholder="#000000" class="colorPicker">
                             </div>
                         </div>
                         <sub>Colors are for reference, RoomDesAigner will try to use them. </sub>
