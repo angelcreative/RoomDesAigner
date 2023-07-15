@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Handle the API response and display the generated images
             if (data.status === "success" && data.output) {
               const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com/api/v4/dreambooth/fetch")
               );
               hideWaitingOverlay(); // Hide the waiting overlay
               showModal(imageUrls, promptText);
