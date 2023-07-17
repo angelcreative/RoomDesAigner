@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Update the promptInit variable based on the selected value from the "Render" select input
       const pictureSelect = document.getElementById("picture");
       const selectedPicture = pictureSelect.value;
-      const promptInit = ` ${selectedPicture}, `;
+      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD, `;
 
       // Generate the plain text representation of the selected values
       let plainText = Object.entries(selectedValues)
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-      const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  ${selectedPicture}, `;
+      const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
       const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
       const width = aspectRatio === "portrait" ? 512 : 1024;
       const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Handle the API response and display the generated images
             if (data.status === "success" && data.output) {
               const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com/api/v4/dreambooth/fetch")
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
               );
               hideWaitingOverlay(); // Hide the waiting overlay
               showModal(imageUrls, promptText);
