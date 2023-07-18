@@ -160,17 +160,45 @@ document.addEventListener("DOMContentLoaded", function() {
                 //inspiration
                 inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
                 furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
+                    furniture_color: document.getElementById("furniture_color").value,
                 designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
                 designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
                 //film
                 film_used_to_take_the_shot: document.getElementById("film_used_to_take_the_shot").value,
                 illumination: document.getElementById("illumination").value,
                 //architecture
-                roof_height: document.getElementById("roof_height").value,
-                doors: document.getElementById("doors").value,
+                door: document.getElementById("door").value,
                 windows: document.getElementById("windows").value,
+                ceiling_design: document.getElementById("ceiling_design").value,
+                roof_material: document.getElementById("roof_material").value,
+                roof_height: document.getElementById("roof_height").value,
+                wall_type: document.getElementById("wall_type").value,
+                wall_cladding: document.getElementById("wall_cladding").value,
+                exterior_finish: document.getElementById("exterior_finish").value,
+                exterior_trim_molding: document.getElementById("exterior_trim_molding").value,
+                exterior_paint_color: document.getElementById("exterior_paint_color").value,
+                facade_pattern: document.getElementById("facade_pattern").value,
                 floors: document.getElementById("floors").value,
-                roofs: document.getElementById("roofs").value,
+
+                    
+                    //interior
+                staircase_design: document.getElementById("staircase_design").value,
+                railing_style: document.getElementById("railing_style").value,
+                kitchen_layout: document.getElementById("kitchen_layout").value,
+                countertop_material: document.getElementById("countertop_material").value,
+                backsplash_design: document.getElementById("backsplash_design").value,
+                cabinet_storage_design: document.getElementById("cabinet_storage_design").value,
+                appliance_style_finish: document.getElementById("appliance_style_finish").value,
+                bathroom_fixture_style: document.getElementById("bathroom_fixture_style").value,
+                bathroom_tile_design: document.getElementById("bathroom_tile_design").value,
+                bathroom_vanity_style: document.getElementById("bathroom_vanity_style").value,
+                shower_bathtub_design: document.getElementById("shower_bathtub_design").value,
+                bathroom_lighting_fixtures: document.getElementById("bathroom_lighting_fixtures").value,
+                fireplace_design: document.getElementById("fireplace_design").value,
+                balcony_design: document.getElementById("balcony_design").value,
+
+
+                    
                 material: document.getElementById("material").value,
                 ceramic_material: document.getElementById("ceramic_material").value,
                 fabric: document.getElementById("fabric").value,
@@ -649,6 +677,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
   // Function to close the modal
+
+  
+    
   function closeModal() {
     const modal = document.getElementById("modal");
     const overlay = document.getElementById("overlay");
@@ -658,7 +689,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const magicButton = document.getElementById("magicButton");
     magicButton.disabled = false;
     // Reset the form and event listeners
-    resetFormAndEventListeners();
+//    resetFormAndEventListeners();
   }
     // Function to clear all form values and reset the image display
     function clearAll(event) {

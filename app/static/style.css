@@ -114,9 +114,26 @@ body {
 
 /* END */
 
-h1, h2, h3, h4 {
-    font-family: 'Lato', sans-serif;
+h1, h2, h3, h4, h5 {
+        color: #8c8c8c;
+        margin-top: 2rem;
+        font-weight: lighter;
 }
+
+h5 {
+    font-size:.75rem
+}
+
+h4 {
+    font-size: 1rem
+}
+
+
+.groupSpacer {
+    margin-top: 6.7rem;
+}
+
+
 
 .logoWeb {
     margin: 0 auto;
@@ -427,12 +444,7 @@ h1 {
     font-weight: lighter;
 }
 
-h4 {
-    color: #8c8c8c;
-    font-size: 0.8rem;
-    margin-top: 2rem;
-    font-weight: lighter;
-}
+
 
 .group {
     background: #171616;
