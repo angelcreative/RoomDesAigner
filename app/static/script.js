@@ -137,7 +137,14 @@ document.addEventListener("DOMContentLoaded", function() {
 //    link.click();
 //  }
     function getSelectedValues(imageUrl = "") {
+          const designStyleValue = document.getElementById("design_style").value;
+          const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
+
+          const wrappedDesignStyle = "(((" + designStyleValue + ")))";
+          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";
+        
                 return {
+                    
                 
                 //level shot
                 point_of_view: document.getElementById("point_of_view").value,
@@ -146,8 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 secondary_color: document.getElementById("secondary_color").value,
                 tertiary_color: document.getElementById("tertiary_color").value,
                 color_scheme: document.getElementById("color_scheme").value,
-                //design style
-                design_style: document.getElementById("design_style").value,
+               
                 //room size
                 room_size: document.getElementById("room_size").value,
                 //room design
@@ -206,7 +212,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 marble_material: document.getElementById("marble_material").value,
                 wood_material: document.getElementById("wood_material").value,
                     //render
-                picture: document.getElementById("picture").value
+                picture: document.getElementById("picture").value,
+                    
+                    //design style
+                    design_style: wrappedDesignStyle,
+                    impossible_architecture: wrappedImpossibleArchitecture
+                    
                 //image link
                 //imageUrl: document.getElementById("imageDisplayUrl").value
                 };
@@ -223,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Update the promptInit variable based on the selected value from the "Render" select input
       const pictureSelect = document.getElementById("picture");
       const selectedPicture = pictureSelect.value;
-      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD, `;
+      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
 
       // Generate the plain text representation of the selected values
       let plainText = Object.entries(selectedValues)
