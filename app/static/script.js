@@ -137,11 +137,11 @@ document.addEventListener("DOMContentLoaded", function() {
 //    link.click();
 //  }
     function getSelectedValues(imageUrl = "") {
-          const designStyleValue = document.getElementById("design_style").value;
+         /* const designStyleValue = document.getElementById("design_style").value;
           const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
 
           const wrappedDesignStyle = "(((" + designStyleValue + ")))";
-          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";
+          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";*/
         
                 return {
                     
@@ -213,10 +213,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 wood_material: document.getElementById("wood_material").value,
                     //render
                 picture: document.getElementById("picture").value,
-                    
-                    //design style
+                    design_style:   document.getElementById("design_style").value
+                    /*design style
                     design_style: wrappedDesignStyle,
-                    impossible_architecture: wrappedImpossibleArchitecture
+                    impossible_architecture: wrappedImpossibleArchitecture*/
                     
                 //image link
                 //imageUrl: document.getElementById("imageDisplayUrl").value
@@ -224,9 +224,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
    
-    
+    // Function to generate the optional text
+    function generateOptionalText() {
+      return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
+    }
+
  
     function generateImages(imageUrl, selectedValues) {
+      const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
+
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
       // Retrieve the value of the custom text area
@@ -242,17 +248,24 @@ document.addEventListener("DOMContentLoaded", function() {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-      const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
+const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
       const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
       const width = aspectRatio === "portrait" ? 512 : 1024;
       const height = aspectRatio === "portrait" ? 1024 : 512;
 
       const seedSwitch = document.getElementById("seedSwitch");
       const seedEnabled = seedSwitch.checked;
-      const seedValue = seedEnabled ? null : "19071975"; // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
+      const seedValue = seedEnabled ? null : "19071975";
+        // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
 
+       
+        const optionalText = includeOptionalText ? generateOptionalText() : "";
+        const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
+
+
+        
       // Combine the promptInit with the plain text representation
-      const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
+//   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
 
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay

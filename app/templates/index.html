@@ -322,14 +322,14 @@
                     <span class="dot"></span>
                     
 
-                    
+                    <!--
                     <div class="switchContainer">
                         <label class="switchLabel"> Impossible Architecture <label class="switch">
                                 <input type="checkbox" name="switchLabel" id="impossible_architecture" value="impossible architecture">
                                 <span class="slider round"></span>
                             </label>
                         </label>
-                    </div>
+                    </div>-->
                     
                     
                     
@@ -603,6 +603,8 @@
                         <option value="Muted" title="Muted colors">Muted</option>
                     </select>
                     <span class="dot"></span>
+                    
+                    
                     <h4>Interior / Outdoor design</h4>
                     <select id="space_to_be_designed">
                         <option value="">Space to design</option>
@@ -612,6 +614,21 @@
                     </select>
                     <span class="dot"></span>
                     <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
+                    
+                    <h4>Special organic style</h4>
+                
+                    <div class="switchContainer">
+                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>
+                    <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
+                    
+                    
+                
+                  
                 </div>
                 <!-- AREA AND SPACE -->
                 <div class="group">
@@ -776,6 +793,7 @@
                         <option value="Reflecting Pool">Reflecting Pool</option>
                         <option value="Fountain Feature">Fountain Feature</option>
                         <option value="Wading Pool">Wading Pool</option>
+                        <option value="Rounded organic pool">Rounded organic pool </option>
                     </select>
                     <span class="dot"></span>
                     <select id="landscaping_options" name="landscaping_options">
