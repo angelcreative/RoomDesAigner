@@ -617,7 +617,7 @@ select:hover {
     position: relative;
     top: -30px;
     left: -4px;
-    margin:0;
+    margin:0 0 -16px 0;
 }
 
 .groupContainer {
