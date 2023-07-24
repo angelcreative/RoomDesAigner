@@ -62,6 +62,36 @@ document.getElementById('password-form').addEventListener('submit', function(eve
 
 document.addEventListener("DOMContentLoaded", function() {
     
+    
+    // Function to convert text to image using the Stable Diffusion API
+    async function convertTextToImage(text) {
+      const apiKey = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'; // Replace 'YOUR_API_KEY' with your actual API key
+
+      const data = {
+        text: text,
+        api_key: apiKey,
+      };
+
+      try {
+        const response = await fetch('https://stablediffusionapi.com/api/v3/text2img', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to convert text to image.');
+        }
+
+        const imageData = await response.json();
+        return imageData; // This will be the generated image data in the response
+      } catch (error) {
+        console.error('Error:', error);
+        return null;
+      }
+    }
  
     // Function to handle the form submission
     function handleSubmit(event) {
@@ -76,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
       showOverlay(); // Show the overlay and loading message
     const fileInput = document.getElementById("imageDisplayUrl");
-      const file = fileInput.files[1];
+      const file = fileInput.files[0];
       if (file) {
         // Image file is selected
         const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
@@ -115,33 +145,11 @@ document.addEventListener("DOMContentLoaded", function() {
         generateImages(null, selectedValues);
         hideOverlay(); // Hide the overlay and loading message
       }
-      // Update the download JSON button with the selected form values
-//      const selectedValues = getSelectedValues();
-//      updateDownloadButton(selectedValues);
+    
     }
-  // Function to update the download JSON button
-//  function updateDownloadButton(selectedValues) {
-//    const downloadJsonButton = document.getElementById("downloadJsonButton");
-//    downloadJsonButton.addEventListener("click", () => {
-//      const jsonData = JSON.stringify(selectedValues, null, 2);
-//      downloadFile(jsonData, "selected_values.json");
-//    });
-//  }
-  // Function to download the JSON file
-//  function downloadFile(data, filename) {
-//    const blob = new Blob([data], { type: "application/json" });
-//    const url = URL.createObjectURL(blob);
-//    const link = document.createElement("a");
-//    link.href = url;
-//    link.download = filename;
-//    link.click();
-//  }
+  
     function getSelectedValues(imageUrl = "") {
-         /* const designStyleValue = document.getElementById("design_style").value;
-          const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
-
-          const wrappedDesignStyle = "(((" + designStyleValue + ")))";
-          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";*/
+       
         
                 return {
                     
@@ -223,6 +231,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 };
     }
     
+    
+    
    
     // Function to generate the optional text
     function generateOptionalText() {
@@ -231,45 +241,45 @@ document.addEventListener("DOMContentLoaded", function() {
 
  
     function generateImages(imageUrl, selectedValues) {
-      const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
-
-      const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
-
-      // Retrieve the value of the custom text area
-      const customText = document.getElementById("customText").value;
-      // Update the promptInit variable based on the selected value from the "Render" select input
-      const pictureSelect = document.getElementById("picture");
-      const selectedPicture = pictureSelect.value;
-      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
-
-      // Generate the plain text representation of the selected values
-      let plainText = Object.entries(selectedValues)
+        const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
+        
+        const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
+        
+        // Retrieve the value of the custom text area
+        const customText = document.getElementById("customText").value;
+        // Update the promptInit variable based on the selected value from the "Render" select input
+        const pictureSelect = document.getElementById("picture");
+        const selectedPicture = pictureSelect.value;
+        const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
+        
+        // Generate the plain text representation of the selected values
+        let plainText = Object.entries(selectedValues)
         .filter(([key, value]) => value && key !== "imageUrl")
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
-
-const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
-      const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-      const width = aspectRatio === "portrait" ? 512 : 1024;
-      const height = aspectRatio === "portrait" ? 1024 : 512;
-
-      const seedSwitch = document.getElementById("seedSwitch");
-      const seedEnabled = seedSwitch.checked;
-      const seedValue = seedEnabled ? null : "19071975";
+        
+        const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
+        const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+        const width = aspectRatio === "portrait" ? 512 : 1024;
+        const height = aspectRatio === "portrait" ? 1024 : 512;
+        
+        const seedSwitch = document.getElementById("seedSwitch");
+        const seedEnabled = seedSwitch.checked;
+        const seedValue = seedEnabled ? null : "19071975";
         // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
-
-       
+        
+        
         const optionalText = includeOptionalText ? generateOptionalText() : "";
         const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
-
-
         
-      // Combine the promptInit with the plain text representation
-//   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
-
-      showOverlay(); // Show the overlay and loading message
-      showWaitingOverlay(); // Show the waiting overlay
-      const prompt = {
+        
+        
+        // Combine the promptInit with the plain text representation
+        //   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
+        
+        showOverlay(); // Show the overlay and loading message
+        showWaitingOverlay(); // Show the waiting overlay
+        const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
         negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
@@ -288,87 +298,132 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         self_attention: null,
         upscale: null,
         embeddings_model: null,
-      };
-
-      const chipsSV = document.getElementById("chipsSV");
-      chipsSV.innerHTML = ""; // Clear the existing content
-
-      for (const [key, value] of Object.entries(selectedValues)) {
-        if (value) {
-          const chip = document.createElement("span");
-          chip.classList.add("chipSV");
-
-          // Check if the value is a valid hex color
-          const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
-          if (isHexColor) {
-            chip.classList.add("hexDot"); // Add the "hexDot" class
-            chip.style.backgroundColor = value;
-          } else {
-            chip.textContent = value;
-          }
-
-          if (value.includes("_")) {
-            chip.style.visibility = "visible"; // Hide "_" character
-          }
-
-          chipsSV.appendChild(chip);
+        };
+        
+        const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+        
+        for (const [key, value] of Object.entries(selectedValues)) {
+            if (value) {
+                const chip = document.createElement("span");
+                chip.classList.add("chipSV");
+                
+                // Check if the value is a valid hex color
+                const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
+                if (isHexColor) {
+                    chip.classList.add("hexDot"); // Add the "hexDot" class
+                    chip.style.backgroundColor = value;
+                } else {
+                    chip.textContent = value;
+                }
+                
+                if (value.includes("_")) {
+                    chip.style.visibility = "visible"; // Hide "_" character
+                }
+                
+                chipsSV.appendChild(chip);
+            }
         }
-      }
-
-      // Get the <span> element by its class name
-      var spanElement = document.querySelector(".chipSV");
-
-      // Get the text content of the <span> element
-      var text = spanElement.textContent;
-
-      // Replace all underscore characters with non-breaking spaces
-      var modifiedText = text.replace(/_/g, "&nbsp;");
-
-      // Update the text content of the <span> element
-      spanElement.textContent = modifiedText;
-
-      // Set the image URL as the init_image in the prompt
-//      prompt.init_image = imageUrl;
-
-      // Make an API request to Stable Diffusion API with the prompt
+        
+        // Get the <span> element by its class name
+        var spanElement = document.querySelector(".chipSV");
+        
+        // Get the text content of the <span> element
+        var text = spanElement.textContent;
+        
+        // Replace all underscore characters with non-breaking spaces
+        var modifiedText = text.replace(/_/g, "&nbsp;");
+        
+        // Update the text content of the <span> element
+        spanElement.textContent = modifiedText;
+        
+        // Set the image URL as the init_image in the prompt
+        //      prompt.init_image = imageUrl;
+        
+        // Make an API request to Stable Diffusion API with the prompt
         // Make an API request to Stable Diffusion API with the prompt
         fetch("/generate-images", {
-          method: "POST",
-          headers: {
+        method: "POST",
+        headers: {
             "Content-Type": "application/json"
-          },
-          body: JSON.stringify(prompt)
+        },
+        body: JSON.stringify(prompt)
         })
-          .then(response => {
+        .then(response => {
             if (response.ok) {
-              return response.json();
+                return response.json();
             } else {
-              throw new Error("Failed to generate images. Status: " + response.status);
+                throw new Error("Failed to generate images. Status: " + response.status);
             }
-          })
-          .then(data => {
+        })
+        .then(data => {
             // Handle the API response and display the generated images
-            if (data.status === "success" && data.output) {
-              const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-              );
-              hideWaitingOverlay(); // Hide the waiting overlay
-              showModal(imageUrls, promptText);
+            if (data.status === "processing") {
+                // If the images are still processing, store the fetch_result link
+                const fetchResultLink = data.fetch_result;
+                // Wait for the estimated time (27 seconds) before fetching the images
+                setTimeout(() => fetchGeneratedImages(fetchResultLink), 27000);
+            } else if (data.status === "success" && data.output && data.output.length > 0) {
+                // If the images are successfully generated, proceed to display them
+                const imageUrls = data.output.map(url =>
+                                                  url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+                                                  );
+                hideWaitingOverlay(); // Hide the waiting overlay
+                showModal(imageUrls, promptText);
             } else {
-              console.error("Error generating images:", data);
-              displayErrorModal();
-              hideWaitingOverlay(); // Hide the waiting overlay
-              hideOverlay(); // Hide the overlay and loading message
+                // If there was an error in image generation, display an error message
+                console.error("Error generating images:", data);
+                displayErrorModal();
+                hideWaitingOverlay(); // Hide the waiting overlay
+                hideOverlay(); // Hide the overlay and loading message
             }
-          })
-          .catch(error => {
+        })
+        .catch(error => {
             console.error("Error generating images:", error);
             displayErrorModal();
             hideWaitingOverlay(); // Hide the waiting overlay
             hideOverlay(); // Hide the overlay and loading message
-          });
+        });
+        
+    }
+        // Function to fetch the generated images using the fetch_result link
+    function fetchGeneratedImages(fetchResultLink) {
+        // Make an API request to fetch the images using the provided link
+        fetch(fetchResultLink)
+        .then(response => {
+            if (response.ok) {
+            return response.json();
+            } else {
+            throw new Error("Failed to fetch generated images. Status: " + response.status);
+            }
+        })
+        .then(data => {
+            // Handle the fetched images and display them to the user
+            if (data.status === "success" && data.output && data.output.length > 0) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+            );
+            hideWaitingOverlay(); // Hide the waiting overlay
+            showModal(imageUrls, promptText);
+            } else {
+            // If there was an error in fetching the images, display an error message
+            console.error("Error fetching generated images:", data);
+            displayErrorModal();
+            hideWaitingOverlay(); // Hide the waiting overlay
+            hideOverlay(); // Hide the overlay and loading message
+            }
+        })
+        .catch(error => {
+            // If there was an error in the API request, display an error message
+            console.error("Error fetching generated images:", error);
+            displayErrorModal();
+            hideWaitingOverlay(); // Hide the waiting overlay
+            hideOverlay(); // Hide the overlay and loading message
+        });
+    }
 
-        // Function to display the error modal window
+    
+ // Function to display the error modal window
         function displayErrorModal() {
           const errorModal = document.getElementById("errorGenerating");
           errorModal.style.display = "block";
@@ -386,7 +441,6 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         }
 
 
-        }
 
     
     function showWaitingOverlay() {

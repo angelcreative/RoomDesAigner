@@ -9,6 +9,35 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
+/*  languages */
+
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc {
+    visibility:hidden;
+}
+
+.gtranslate_wrapper {
+    position: relative;
+    width: 100%;
+}
+
+select.gt_selector.notranslate {
+  
+    width: auto;
+}
+.gt_selector, .gt_selector:hover {
+    background-image: url(./img/language.svg);
+    background-repeat: no-repeat;
+    background-position: 7px 6px;
+    padding-left: 34px;
+    background-size: 20px;
+}
+
+.gt_switcher_wrapper {
+    position: absolute !important ;
+    top: 0 !important;
+    right: 0 !important;
+    z-index: 1 !important ;
+}
 
 /*   MODAL P */
 
@@ -49,6 +78,8 @@ body {
 .modalP h1  svg {
     max-width: 140px;
 }
+
+
 
 .left-section {
     flex: 1;
@@ -415,11 +446,12 @@ h1 {
 
 .groupContainer h1 {
     color: #a9fff554;
-    font-size: 1.25rem;
+    font-size: 1rem;
     background-repeat: no-repeat;
     background-size: 24px;
     text-align: left;
     font-family: 'Lato', sans-serif;
+    text-transform:uppercase;
 }
 
 
@@ -602,6 +634,8 @@ select {
   -moz-appearance: none;
   text-indent: 1px;
   text-overflow: '';
+  text-transform: math-auto;
+  cursor:pointer;
 }
 
 select:hover {
