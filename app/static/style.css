@@ -1030,6 +1030,30 @@ height: 3px;
     display:none;
 }
 
+/* Indeterminate animation */
+/* Indeterminate animation */
+@keyframes indeterminate {
+  0% {
+    width: 0%;
+  }
+  25% {
+    width: 100%;
+  }
+  50% {
+    width: 0%;
+  }
+  75% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+.indeterminate {
+  animation: indeterminate 2s infinite;
+}
+
 
 #message {
     position: fixed;

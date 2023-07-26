@@ -1,4 +1,5 @@
 // Function to show the waiting overlay and loading message with progress bar
+// JavaScript function to show the waiting overlay with indeterminate loading bar
 function showWaitingOverlay() {
   const waiting = document.getElementById("waiting");
   waiting.style.display = "block";
@@ -6,18 +7,23 @@ function showWaitingOverlay() {
   loadingMessage.style.display = "block";
   var progressBar = document.getElementById('progressBar');
   var progressLabel = document.getElementById('progressLabel');
-  var progress = 0;
-  var intervalId = setInterval(function() {
-    progress += 1;
-    progressBar.style.width = progress + '%';
-    progressLabel.textContent = 'Generating your images... ' + progress + '%';
-    if (progress >= 100) {
-      clearInterval(intervalId);
-      hideWaitingOverlay();
-      showOverlay();
-    }
-  }, 1000);
+
+  // Set initial width to 100% to make it look like it's growing
+  progressBar.style.width = "0%";
+  progressLabel.textContent = 'Generating your images...';
+
+  // Add the 'indeterminate' class to apply the indeterminate animation
+  progressBar.classList.add("indeterminate");
+
+  // Your other code to handle the actual processing can go here
 }
+
+// Function to hide the waiting overlay
+function hideWaitingOverlay() {
+  const waiting = document.getElementById("waiting");
+  waiting.style.display = "none";
+}
+
 
 
 // Function to hide the waiting overlay and loading message
@@ -169,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 space_to_be_designed: document.getElementById("space_to_be_designed").value,
                 child_room: document.getElementById("child_room").value,
                 pool: document.getElementById("pool").value,
+                pool_size: document.getElementById("pool_size").value,
                 garden: document.getElementById("garden").value,
                 room_shape: document.getElementById("room_shape").value,
                 //inspiration
@@ -282,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
-        negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
+        negative_prompt: "(((duplicate fireplaces, two fireplaces))), (((duplicated or double bathtub))) split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
         width: width,
         height: height,
         samples: "4",
