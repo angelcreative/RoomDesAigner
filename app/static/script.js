@@ -5,15 +5,15 @@ function showWaitingOverlay() {
   waiting.style.display = "block";
   var loadingMessage = document.getElementById('loadingMessage');
   loadingMessage.style.display = "block";
-  var progressBar = document.getElementById('progressBar');
+//  var progressBar = document.getElementById('progressBar');
   var progressLabel = document.getElementById('progressLabel');
 
   // Set initial width to 100% to make it look like it's growing
-  progressBar.style.width = "0%";
+//  progressBar.style.width = "0%";
   progressLabel.textContent = 'Generating your images...';
 
   // Add the 'indeterminate' class to apply the indeterminate animation
-  progressBar.classList.add("indeterminate");
+//  progressBar.classList.add("indeterminate");
 
   // Your other code to handle the actual processing can go here
 }
@@ -174,8 +174,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 home_room: document.getElementById("home_room").value,
                 space_to_be_designed: document.getElementById("space_to_be_designed").value,
                 child_room: document.getElementById("child_room").value,
-                pool: document.getElementById("pool").value,
+                    //pool design
+
+                pool_style: document.getElementById("pool_style").value,
+                    
                 pool_size: document.getElementById("pool_size").value,
+                    landscaping_options: document.getElementById("landscaping_options").value,
                 garden: document.getElementById("garden").value,
                 room_shape: document.getElementById("room_shape").value,
                 //inspiration
@@ -198,6 +202,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 exterior_finish: document.getElementById("exterior_finish").value,
                 exterior_trim_molding: document.getElementById("exterior_trim_molding").value,
                 exterior_paint_color: document.getElementById("exterior_paint_color").value,
+                interior_paint_color: document.getElementById("interior_paint_color").value,
+               
                 facade_pattern: document.getElementById("facade_pattern").value,
                 floors: document.getElementById("floors").value,
 
@@ -289,7 +295,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
-        negative_prompt: "(((duplicate fireplaces, two fireplaces))), (((duplicated or double bathtub))) split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
+        negative_prompt: " split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, tiling,out of frame ",
         width: width,
         height: height,
         samples: "4",
@@ -805,6 +811,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
 });
+
+
 
 
 

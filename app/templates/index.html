@@ -72,7 +72,10 @@
                 <h1>Something was wrong from our side, try it again</h1>
                 <p>Sometimes technology doesn't work as intended.</p>
                 <div class="errorButtons">
-                    <button id="errorButton" class="modalPbutton">Try again now</button>
+                    <button id="errorButton" class="modalPbutton" style="visibility: hidden;
+    height: 0px;
+    padding: 0;
+    margin: 0;">Try again now</button>
                 </div>
         </div>
         <span class="closeError">×</span>
@@ -83,7 +86,14 @@
                 <h1>The magic is happening now!</h1>
                 <p>Magical things takes a bit of time, relax, this will be done soon.</p>
                 <div>
-                    <div id="progressBar" class="progress-bar indeterminate"></div>
+                    <!--<div id="progressBar" class="progress-bar indeterminate"></div>-->
+                    <div class="bar">
+                      <div class="progress">
+                        <div class="left"></div>
+                        <div class="center"></div>
+                        <div class="right"></div>
+                      </div>
+                    </div>
 
                     <div class="progress-label" id="progressLabel"></div>
                 </div>
@@ -449,10 +459,14 @@
                         <option value="Structube - Affordable and Modern" title="Affordable and modern furniture">Structube - Affordable and Modern</option>
                         <option value="West Elm - Modern and Trendy" title="Modern furniture and home decor">West Elm - Modern and Trendy</option>
                         <option value="Wayfair - Furniture and Home Decor" title="Online furniture and home decor store">Wayfair - Furniture and Home Decor</option>
+                        
+                        <option value="Ledge Lounger - High-quality in-pool and outdoor furniturer" title="High-quality in-pool and outdoor furniture, including pool floats, chaise loungers, umbrellas, barstools, and other poolside accessories">Ledge Lounger - High-quality in-pool and outdoor furniture</option>
+
                     </select>
                     <span class="dot"></span>
                     
-                    <select id="furniture_color">
+                    <h5>Furniture color </h5>
+                   <select id="furniture_color">
                         <option value="">Furniture color</option>
                         <option value="White Furniture">White Furniture</option>
                         <option value="Black Furniture">Black Furniture</option>
@@ -753,17 +767,17 @@
                     <!--ID ROOM SIZE-->
                     <select id="room_size">
                         <option value="">Room size</option>
-                        <option value="very small">Very Small</option>
+                        <option value="miniature">Miniature</option>
                         <option value="small">Small</option>
-                        <option value="modest">Modest</option>
-                        <option value="compact">Compact</option>
-                        <option value="cozy">Cozy</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
                         <option value="medium">Medium</option>
-                        <option value="average">Average</option>
                         <option value="spacious">Spacious</option>
                         <option value="large">Large</option>
                         <option value="huge">Huge</option>
                         <option value="monumental">Monumental</option>
+                        
                     </select>
                     <span class="dot"></span>
                     <h4>Indoor spaces</h4>
@@ -871,36 +885,46 @@
                     </select>
                     <span class="dot"></span>
                     <h4>Outdoor spaces</h4>
-                    <select id="pool">
+                    <select id="pool_style">
                         <option value="">Pool style</option>
-                        <option value="contemporary pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
-                        <option value="mediterranean pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
-                        <option value="naturalistic pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
-                        <option value="tropical pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
-                        <option value="modern pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
-                        <option value="rustic pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
-                        <option value="zen pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
-                        <option value="resort pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
-                        <option value="Infinity Pool">Infinity Pool</option>
-                        <option value="Lap Pool">Lap Pool</option>
-                        <option value="Freeform Pool">Freeform Pool</option>
-                        <option value="Plunge Pool">Plunge Pool</option>
-                        <option value="Hot Tub or Spa">Hot Tub or Spa</option>
-                        <option value="Waterfall Feature">Waterfall Feature</option>
-                        <option value="Koi Pond">Koi Pond</option>
-                 
-                        <option value="Reflecting Pool">Reflecting Pool</option>
-                        <option value="Fountain Feature">Fountain Feature</option>
-                        <option value="Wading Pool">Wading Pool</option>
-                        <option value="Rounded organic pool">Rounded organic pool </option>
+                        <option value="contemporary pool - Emphasizes clean lines, sleek materials, and a minimalist aesthetic" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
+                        <option value="mediterranean pool - Incorporates colorful mosaic tiles, decorative water features, and lush landscaping" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
+                        <option value="naturalistic pool - Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
+                        <option value="tropical pool - Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
+                        <option value="modern pool - Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
+                        <option value="rustic pool - Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
+                        <option value="zen pool - Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+                        <option value="resort pool - Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
+                        <option value="Infinity Pool - Infinity edge design with a vanishing edge, creating the illusion of the pool merging with the horizon" title="Infinity edge design with a vanishing edge, creating the illusion of the pool merging with the horizon">Infinity Pool</option>
+                        <option value="Lap Pool - Designed for swimming laps and exercise, featuring a long and narrow shape" title="Designed for swimming laps and exercise, featuring a long and narrow shape">Lap Pool</option>
+                        <option value="Freeform Pool - Irregular and organic shape, often with curves and flowing lines" title="Irregular and organic shape, often with curves and flowing lines">Freeform Pool</option>
+                        <option value="Plunge Pool - Small and deep pool designed for quick dips and cooling off" title="Small and deep pool designed for quick dips and cooling off">Plunge Pool</option>
+                        <option value="Hot Tub or Spa - Small heated pool with built-in jets for relaxation and hydrotherapy" title="Small heated pool with built-in jets for relaxation and hydrotherapy">Hot Tub or Spa</option>
+                        <option value="Waterfall Feature - Pool with a cascading waterfall or water feature" title="Pool with a cascading waterfall or water feature">Waterfall Feature</option>
+                        <option value="Koi Pond - Decorative pool with Koi fish and aquatic plants, often in a garden setting" title="Decorative pool with Koi fish and aquatic plants, often in a garden setting">Koi Pond</option>
+                        <option value="Reflecting Pool - Still and shallow pool that reflects its surroundings, often used in formal landscapes" title="Still and shallow pool that reflects its surroundings, often used in formal landscapes">Reflecting Pool</option>
+                        <option value="Fountain Feature - Pool with a central fountain or water spout" title="Pool with a central fountain or water spout">Fountain Feature</option>
+                        <option value="Wading Pool - Shallow pool designed for wading and playing in the water" title="Shallow pool designed for wading and playing in the water">Wading Pool</option>
+                        <option value="Rounded organic pool - Organic-shaped pool with rounded edges, blending harmoniously with the natural environment" title="Organic-shaped pool with rounded edges, blending harmoniously with the natural environment">Rounded organic pool</option>
+                        <option value="Mediterranean alberca - Above-ground traditional Reservoirs with a Mediterranean-inspired design" title="Above-ground small pool with a Mediterranean-inspired design">Mediterranean alberca</option>
                     </select>
+
                     <span class="dot"></span>
+                    
+                 
                     
                     <select id="pool_size">
                         <option value="">Pool size</option>
-                        <option value="Very small pool">Very small</option>
-                        <option value="Mid size pool">Mid size</option>
-                        <option value="Large pool">Large</option>
+                        <option value="miniature">Miniature</option>
+                        <option value="small">Small</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                        <option value="medium">Medium</option>
+                        <option value="spacious">Spacious</option>
+                        <option value="large">Large</option>
+                        <option value="huge">Huge</option>
+                        <option value="monumental">Monumental</option>
                         </select>
                     <span class="dot"></span>
                     <select id="landscaping_options" name="landscaping_options">
@@ -1109,7 +1133,28 @@
                         <option value="column capitals">Column Capitals</option>
                     </select>
                     <span class="dot"></span>
-                    <select id="exterior_paint_color" name="exterior_paint_color">
+                    
+                    <h5>Interior walls color </h5>
+                    <select id="interior_paint_color" name="interior_paint_color">
+                            <option value="">Walls color</option>
+                            
+                            <option value="neutral tones">Neutral Tones</option>
+                            <option value="earthy tones">Earthy Tones</option>
+                            <option value="pastel colors">Pastel Colors</option>
+                            <option value="vibrant colors">Vibrant Colors</option>
+                            <option value="monochromatic colors">Monochromatic Colors</option>
+                            <option value="classic white">Classic White</option>
+                            <option value="cool gray tones">Cool Gray Tones</option>
+                            <option value="warm beige tones">Warm Beige Tones</option>
+                            <option value="bold accent colors">Bold Accent Colors</option>
+                            <option value="dark dramatic colors">Dark and Dramatic Colors</option>
+                        </select>
+                        <span class="dot"></span>
+                    
+                    <h5>Exterior walls color </h5>
+                  
+                    
+                <select id="exterior_paint_color" name="exterior_paint_color">
                         <option value="">Walls color</option>
                         
                         <option value="neutral tones">Neutral Tones</option>
