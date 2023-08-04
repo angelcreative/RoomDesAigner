@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html>
 
@@ -49,12 +46,14 @@
                 <form class="modalPform" id="password-form">
                     <label class="modalPlabel" for="password">Enter the beta tester password:</label>
                     <input type="password" id="password" required>
-                        <p id="error-message" class="error"></p>
-                        <button class="modalPbutton" type="submit">Submit</button>
+                    <p id="error-message" class="error"></p>
+                    <button class="modalPbutton" type="submit">Submit</button>
                 </form>
             </div>
             <div class="right-section">
-                <!-- Add your content for the right section here-->
+                <!-- Add your content for the right section here
+                        <h2>Welcome to Room Designer!</h2>
+                        <p>Start designing your dream room now.</p>-->
             </div>
         </div>
     </div>
@@ -72,34 +71,23 @@
     <div id="errorGenerating">
         <div class="errorCard">
             <img src="{{ url_for('static', filename='img/error.png') }}">
-                <h1>Something was wrong from our side, try it again</h1>
-                <p>Sometimes technology doesn't work as intended.</p>
-                <div class="errorButtons">
-                    <button id="errorButton" class="modalPbutton" style="visibility: hidden;
-    height: 0px;
-    padding: 0;
-    margin: 0;">Try again now</button>
-                </div>
+            <h1>Something was wrong from our side, try it again</h1>
+            <p>Sometimes technology doesn't work as intended.</p>
+            <div class="errorButtons">
+                <button id="errorButton" class="modalPbutton">Try again now</button>
+            </div>
         </div>
         <span class="closeError">×</span>
     </div>
     <div id="waiting">
         <div id="loadingMessage">
             <img class="imgLoader" src="{{ url_for('static', filename='img/modal_img/designing.svg') }}">
-                <h1>The magic is happening now!</h1>
-                <p>Magical things takes a bit of time, relax, this will be done soon.</p>
-                <div>
-                    <!--<div id="progressBar" class="progress-bar indeterminate"></div>-->
-                    <div class="bar">
-                      <div class="progress">
-                        <div class="left"></div>
-                        <div class="center"></div>
-                        <div class="right"></div>
-                      </div>
-                    </div>
-
-                    <div class="progress-label" id="progressLabel"></div>
-                </div>
+            <h1>The magic is happening now!</h1>
+            <p>Magical things takes a bit of time, relax, this will be done soon.</p>
+            <div>
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-label" id="progressLabel"></div>
+            </div>
         </div>
         <span class="closeGen" onclick="hideWaitingOverlay()">x</span>
     </div>
@@ -109,9 +97,9 @@
             <svg style="position: absolute;
                     left: 1rem;
                     top: 1rem;" width="168" height="45" viewBox="0 0 446 136" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M130 65.2404V130H6V6H130V29.365L107.371 51.9941" stroke="#A9FFF5" stroke-width="5.79228" class="svg-elem-1"></path>
-                    <path d="M179.902 46.0427C181.624 46.0427 183.206 46.2775 184.646 46.7472C186.118 47.1856 187.386 47.8588 188.45 48.7668C189.546 49.6435 190.392 50.7394 190.987 52.0545C191.613 53.3383 191.926 54.8412 191.926 56.5634C191.926 57.9098 191.722 59.2248 191.315 60.5086C190.94 61.7924 190.298 62.9666 189.39 64.0312C188.482 65.0644 187.292 65.9098 185.82 66.5674C184.38 67.1936 182.595 67.5067 180.466 67.5067H175.44V80H170.885V46.0427H179.902ZM180.372 63.1388C181.718 63.1388 182.83 62.9352 183.707 62.5282C184.615 62.1212 185.319 61.6045 185.82 60.9783C186.321 60.3207 186.681 59.6162 186.9 58.8648C187.12 58.1133 187.229 57.4088 187.229 56.7512C187.229 56.0624 187.104 55.3579 186.853 54.6377C186.634 53.8862 186.259 53.1974 185.726 52.5712C185.225 51.9449 184.552 51.4283 183.707 51.0212C182.893 50.6142 181.891 50.4107 180.701 50.4107H175.44V63.1388H180.372ZM185.961 65.722L194.838 80H189.578L180.56 65.8629L185.961 65.722ZM198.997 63.0448C198.997 60.6965 199.435 58.489 200.312 56.4225C201.22 54.3246 202.473 52.4772 204.069 50.8803C205.666 49.2521 207.498 47.984 209.565 47.076C211.663 46.1366 213.917 45.667 216.328 45.667C218.708 45.667 220.931 46.1366 222.997 47.076C225.095 47.984 226.943 49.2521 228.539 50.8803C230.168 52.4772 231.436 54.3246 232.344 56.4225C233.252 58.489 233.706 60.6965 233.706 63.0448C233.706 65.4558 233.252 67.7102 232.344 69.8081C231.436 71.906 230.168 73.7534 228.539 75.3502C226.943 76.9158 225.095 78.1526 222.997 79.0607C220.931 79.9374 218.708 80.3757 216.328 80.3757C213.917 80.3757 211.663 79.9374 209.565 79.0607C207.498 78.1839 205.666 76.9628 204.069 75.3972C202.473 73.8316 201.22 71.9999 200.312 69.9021C199.435 67.8042 198.997 65.5184 198.997 63.0448ZM203.694 63.0918C203.694 64.8766 204.023 66.5517 204.68 68.1173C205.338 69.6516 206.246 71.0136 207.404 72.2034C208.563 73.3933 209.909 74.3326 211.443 75.0215C212.978 75.679 214.637 76.0078 216.422 76.0078C218.175 76.0078 219.819 75.679 221.353 75.0215C222.888 74.3326 224.218 73.3933 225.346 72.2034C226.473 71.0136 227.365 69.6516 228.023 68.1173C228.68 66.5517 229.009 64.8609 229.009 63.0448C229.009 61.2601 228.68 59.5849 228.023 58.0193C227.365 56.4225 226.457 55.0291 225.299 53.8393C224.14 52.6494 222.794 51.7257 221.259 51.0682C219.725 50.3794 218.081 50.0349 216.328 50.0349C214.543 50.0349 212.884 50.3794 211.349 51.0682C209.815 51.7571 208.469 52.6964 207.31 53.8862C206.152 55.0761 205.259 56.4694 204.633 58.0663C204.007 59.6319 203.694 61.3071 203.694 63.0918ZM239.268 63.0448C239.268 60.6965 239.706 58.489 240.583 56.4225C241.491 54.3246 242.743 52.4772 244.34 50.8803C245.937 49.2521 247.769 47.984 249.835 47.076C251.933 46.1366 254.188 45.667 256.599 45.667C258.978 45.667 261.201 46.1366 263.268 47.076C265.366 47.984 267.213 49.2521 268.81 50.8803C270.438 52.4772 271.706 54.3246 272.614 56.4225C273.522 58.489 273.976 60.6965 273.976 63.0448C273.976 65.4558 273.522 67.7102 272.614 69.8081C271.706 71.906 270.438 73.7534 268.81 75.3502C267.213 76.9158 265.366 78.1526 263.268 79.0607C261.201 79.9374 258.978 80.3757 256.599 80.3757C254.188 80.3757 251.933 79.9374 249.835 79.0607C247.769 78.1839 245.937 76.9628 244.34 75.3972C242.743 73.8316 241.491 71.9999 240.583 69.9021C239.706 67.8042 239.268 65.5184 239.268 63.0448ZM243.964 63.0918C243.964 64.8766 244.293 66.5517 244.951 68.1173C245.608 69.6516 246.516 71.0136 247.675 72.2034C248.833 73.3933 250.18 74.3326 251.714 75.0215C253.248 75.679 254.908 76.0078 256.693 76.0078C258.446 76.0078 260.09 75.679 261.624 75.0215C263.158 74.3326 264.489 73.3933 265.616 72.2034C266.744 71.0136 267.636 69.6516 268.293 68.1173C268.951 66.5517 269.28 64.8609 269.28 63.0448C269.28 61.2601 268.951 59.5849 268.293 58.0193C267.636 56.4225 266.728 55.0291 265.569 53.8393C264.411 52.6494 263.064 51.7257 261.53 51.0682C259.996 50.3794 258.352 50.0349 256.599 50.0349C254.814 50.0349 253.154 50.3794 251.62 51.0682C250.086 51.7571 248.739 52.6964 247.581 53.8862C246.422 55.0761 245.53 56.4694 244.904 58.0663C244.278 59.6319 243.964 61.3071 243.964 63.0918ZM281.652 80V44.9625H281.699L299.499 70.2308L297.574 69.8551L315.327 44.9625H315.421V80H310.913V55.2953L311.194 57.5966L298.372 75.726H298.278L285.268 57.5966L286.067 55.4831V80H281.652ZM170.885 134V100.043H180.137C183.487 100.043 186.337 100.559 188.685 101.593C191.065 102.626 192.975 103.988 194.415 105.679C195.855 107.37 196.904 109.248 197.562 111.315C198.251 113.35 198.595 115.385 198.595 117.421C198.595 119.988 198.141 122.29 197.233 124.325C196.356 126.36 195.135 128.098 193.57 129.538C192.004 130.978 190.204 132.09 188.169 132.873C186.165 133.624 184.035 134 181.781 134H170.885ZM175.44 129.632H180.889C182.767 129.632 184.489 129.35 186.055 128.787C187.652 128.223 189.03 127.409 190.188 126.344C191.378 125.28 192.302 123.98 192.959 122.446C193.617 120.88 193.945 119.111 193.945 117.139C193.945 115.041 193.601 113.209 192.912 111.644C192.223 110.047 191.284 108.716 190.094 107.651C188.904 106.587 187.558 105.788 186.055 105.256C184.552 104.692 182.971 104.411 181.311 104.411H175.44V129.632ZM206.248 100.043H228.322V104.411H210.803V114.743H226.443V119.111H210.803V129.632H228.98V134H206.248V100.043ZM254.452 106.101C253.294 105.507 252.025 104.99 250.648 104.552C249.27 104.113 247.924 103.894 246.609 103.894C244.792 103.894 243.337 104.317 242.241 105.162C241.176 106.008 240.644 107.135 240.644 108.544C240.644 109.608 240.988 110.516 241.677 111.268C242.366 111.988 243.274 112.614 244.401 113.147C245.528 113.679 246.702 114.18 247.924 114.65C248.988 115.057 250.037 115.511 251.07 116.012C252.104 116.513 253.027 117.139 253.842 117.89C254.687 118.642 255.344 119.565 255.814 120.661C256.315 121.757 256.566 123.119 256.566 124.747C256.566 126.532 256.112 128.16 255.204 129.632C254.327 131.104 253.059 132.262 251.399 133.108C249.74 133.953 247.767 134.376 245.481 134.376C243.978 134.376 242.538 134.204 241.16 133.859C239.814 133.515 238.562 133.076 237.403 132.544C236.244 131.98 235.211 131.401 234.303 130.806L236.323 127.237C237.074 127.769 237.935 128.286 238.906 128.787C239.877 129.256 240.894 129.648 241.959 129.961C243.023 130.243 244.057 130.384 245.059 130.384C246.123 130.384 247.172 130.196 248.205 129.82C249.27 129.413 250.147 128.802 250.836 127.988C251.524 127.174 251.869 126.094 251.869 124.747C251.869 123.589 251.556 122.634 250.93 121.882C250.335 121.1 249.536 120.442 248.534 119.91C247.532 119.346 246.468 118.845 245.34 118.407C244.276 118 243.196 117.561 242.1 117.092C241.004 116.591 239.986 115.996 239.047 115.307C238.107 114.587 237.356 113.71 236.792 112.677C236.229 111.644 235.947 110.391 235.947 108.92C235.947 107.135 236.37 105.585 237.215 104.27C238.092 102.923 239.282 101.874 240.785 101.123C242.288 100.34 244.01 99.9175 245.951 99.8548C248.143 99.8548 250.068 100.121 251.728 100.653C253.419 101.186 254.906 101.843 256.19 102.626L254.452 106.101ZM336.856 131.088C336.386 131.495 335.729 131.902 334.883 132.309C334.038 132.685 333.099 133.029 332.065 133.342C331.063 133.656 330.014 133.906 328.919 134.094C327.854 134.282 326.852 134.376 325.913 134.376C323.189 134.376 320.731 133.953 318.539 133.108C316.378 132.262 314.515 131.088 312.95 129.585C311.415 128.082 310.226 126.313 309.38 124.278C308.566 122.243 308.159 120.035 308.159 117.655C308.159 114.837 308.613 112.317 309.521 110.094C310.46 107.839 311.729 105.945 313.325 104.411C314.954 102.845 316.817 101.671 318.915 100.888C321.012 100.074 323.236 99.667 325.584 99.667C327.557 99.667 329.388 99.9018 331.079 100.371C332.77 100.841 334.257 101.436 335.541 102.156L333.991 106.336C333.365 105.961 332.582 105.616 331.643 105.303C330.735 104.99 329.795 104.739 328.825 104.552C327.854 104.332 326.946 104.223 326.101 104.223C324.097 104.223 322.281 104.536 320.652 105.162C319.024 105.757 317.631 106.634 316.472 107.792C315.314 108.92 314.421 110.297 313.795 111.925C313.169 113.522 312.856 115.323 312.856 117.327C312.856 119.174 313.169 120.865 313.795 122.399C314.421 123.933 315.314 125.264 316.472 126.391C317.631 127.487 319.008 128.348 320.605 128.975C322.234 129.569 324.018 129.867 325.96 129.867C327.118 129.867 328.261 129.757 329.388 129.538C330.515 129.288 331.486 128.943 332.3 128.505V121.742H325.537V117.374H336.856V131.088ZM374.945 135.08L348.691 108.45L350.006 108.779L350.1 134H345.544V99.0094H345.779L371.752 125.734L370.671 125.499L370.577 100.043H375.086V135.08H374.945ZM384.851 100.043H406.926V104.411H389.407V114.743H405.047V119.111H389.407V129.632H407.583V134H384.851V100.043ZM424.508 100.043C426.23 100.043 427.811 100.278 429.252 100.747C430.723 101.186 431.991 101.859 433.056 102.767C434.152 103.644 434.997 104.739 435.592 106.055C436.218 107.338 436.531 108.841 436.531 110.563C436.531 111.91 436.328 113.225 435.921 114.509C435.545 115.792 434.903 116.967 433.995 118.031C433.087 119.064 431.897 119.91 430.426 120.567C428.985 121.194 427.201 121.507 425.071 121.507H420.046V134H415.49V100.043H424.508ZM424.978 117.139C426.324 117.139 427.435 116.935 428.312 116.528C429.22 116.121 429.925 115.605 430.426 114.978C430.927 114.321 431.287 113.616 431.506 112.865C431.725 112.113 431.835 111.409 431.835 110.751C431.835 110.062 431.709 109.358 431.459 108.638C431.24 107.886 430.864 107.197 430.332 106.571C429.831 105.945 429.158 105.428 428.312 105.021C427.498 104.614 426.496 104.411 425.306 104.411H420.046V117.139H424.978ZM430.567 119.722L439.443 134H434.183L425.165 119.863L430.567 119.722Z" fill="white" class="svg-elem-2"></path>
-                    <path d="M259.902 134L275.495 98.0701H275.871L291.464 134H283.573L273.616 108.732L278.548 105.35L266.618 134H259.902ZM270.563 121.507H280.943L283.338 127.237H268.45L270.563 121.507ZM295.423 113.475H301.998V134H295.423V113.475ZM295.282 106.195C295.282 105.225 295.657 104.426 296.409 103.8C297.192 103.174 298.021 102.861 298.898 102.861C299.775 102.861 300.573 103.174 301.293 103.8C302.045 104.426 302.421 105.225 302.421 106.195C302.421 107.166 302.045 107.965 301.293 108.591C300.573 109.186 299.775 109.483 298.898 109.483C298.021 109.483 297.192 109.186 296.409 108.591C295.657 107.965 295.282 107.166 295.282 106.195Z" fill="#A9FFF5" class="svg-elem-3"></path>
+                <path d="M130 65.2404V130H6V6H130V29.365L107.371 51.9941" stroke="#A9FFF5" stroke-width="5.79228" class="svg-elem-1"></path>
+                <path d="M179.902 46.0427C181.624 46.0427 183.206 46.2775 184.646 46.7472C186.118 47.1856 187.386 47.8588 188.45 48.7668C189.546 49.6435 190.392 50.7394 190.987 52.0545C191.613 53.3383 191.926 54.8412 191.926 56.5634C191.926 57.9098 191.722 59.2248 191.315 60.5086C190.94 61.7924 190.298 62.9666 189.39 64.0312C188.482 65.0644 187.292 65.9098 185.82 66.5674C184.38 67.1936 182.595 67.5067 180.466 67.5067H175.44V80H170.885V46.0427H179.902ZM180.372 63.1388C181.718 63.1388 182.83 62.9352 183.707 62.5282C184.615 62.1212 185.319 61.6045 185.82 60.9783C186.321 60.3207 186.681 59.6162 186.9 58.8648C187.12 58.1133 187.229 57.4088 187.229 56.7512C187.229 56.0624 187.104 55.3579 186.853 54.6377C186.634 53.8862 186.259 53.1974 185.726 52.5712C185.225 51.9449 184.552 51.4283 183.707 51.0212C182.893 50.6142 181.891 50.4107 180.701 50.4107H175.44V63.1388H180.372ZM185.961 65.722L194.838 80H189.578L180.56 65.8629L185.961 65.722ZM198.997 63.0448C198.997 60.6965 199.435 58.489 200.312 56.4225C201.22 54.3246 202.473 52.4772 204.069 50.8803C205.666 49.2521 207.498 47.984 209.565 47.076C211.663 46.1366 213.917 45.667 216.328 45.667C218.708 45.667 220.931 46.1366 222.997 47.076C225.095 47.984 226.943 49.2521 228.539 50.8803C230.168 52.4772 231.436 54.3246 232.344 56.4225C233.252 58.489 233.706 60.6965 233.706 63.0448C233.706 65.4558 233.252 67.7102 232.344 69.8081C231.436 71.906 230.168 73.7534 228.539 75.3502C226.943 76.9158 225.095 78.1526 222.997 79.0607C220.931 79.9374 218.708 80.3757 216.328 80.3757C213.917 80.3757 211.663 79.9374 209.565 79.0607C207.498 78.1839 205.666 76.9628 204.069 75.3972C202.473 73.8316 201.22 71.9999 200.312 69.9021C199.435 67.8042 198.997 65.5184 198.997 63.0448ZM203.694 63.0918C203.694 64.8766 204.023 66.5517 204.68 68.1173C205.338 69.6516 206.246 71.0136 207.404 72.2034C208.563 73.3933 209.909 74.3326 211.443 75.0215C212.978 75.679 214.637 76.0078 216.422 76.0078C218.175 76.0078 219.819 75.679 221.353 75.0215C222.888 74.3326 224.218 73.3933 225.346 72.2034C226.473 71.0136 227.365 69.6516 228.023 68.1173C228.68 66.5517 229.009 64.8609 229.009 63.0448C229.009 61.2601 228.68 59.5849 228.023 58.0193C227.365 56.4225 226.457 55.0291 225.299 53.8393C224.14 52.6494 222.794 51.7257 221.259 51.0682C219.725 50.3794 218.081 50.0349 216.328 50.0349C214.543 50.0349 212.884 50.3794 211.349 51.0682C209.815 51.7571 208.469 52.6964 207.31 53.8862C206.152 55.0761 205.259 56.4694 204.633 58.0663C204.007 59.6319 203.694 61.3071 203.694 63.0918ZM239.268 63.0448C239.268 60.6965 239.706 58.489 240.583 56.4225C241.491 54.3246 242.743 52.4772 244.34 50.8803C245.937 49.2521 247.769 47.984 249.835 47.076C251.933 46.1366 254.188 45.667 256.599 45.667C258.978 45.667 261.201 46.1366 263.268 47.076C265.366 47.984 267.213 49.2521 268.81 50.8803C270.438 52.4772 271.706 54.3246 272.614 56.4225C273.522 58.489 273.976 60.6965 273.976 63.0448C273.976 65.4558 273.522 67.7102 272.614 69.8081C271.706 71.906 270.438 73.7534 268.81 75.3502C267.213 76.9158 265.366 78.1526 263.268 79.0607C261.201 79.9374 258.978 80.3757 256.599 80.3757C254.188 80.3757 251.933 79.9374 249.835 79.0607C247.769 78.1839 245.937 76.9628 244.34 75.3972C242.743 73.8316 241.491 71.9999 240.583 69.9021C239.706 67.8042 239.268 65.5184 239.268 63.0448ZM243.964 63.0918C243.964 64.8766 244.293 66.5517 244.951 68.1173C245.608 69.6516 246.516 71.0136 247.675 72.2034C248.833 73.3933 250.18 74.3326 251.714 75.0215C253.248 75.679 254.908 76.0078 256.693 76.0078C258.446 76.0078 260.09 75.679 261.624 75.0215C263.158 74.3326 264.489 73.3933 265.616 72.2034C266.744 71.0136 267.636 69.6516 268.293 68.1173C268.951 66.5517 269.28 64.8609 269.28 63.0448C269.28 61.2601 268.951 59.5849 268.293 58.0193C267.636 56.4225 266.728 55.0291 265.569 53.8393C264.411 52.6494 263.064 51.7257 261.53 51.0682C259.996 50.3794 258.352 50.0349 256.599 50.0349C254.814 50.0349 253.154 50.3794 251.62 51.0682C250.086 51.7571 248.739 52.6964 247.581 53.8862C246.422 55.0761 245.53 56.4694 244.904 58.0663C244.278 59.6319 243.964 61.3071 243.964 63.0918ZM281.652 80V44.9625H281.699L299.499 70.2308L297.574 69.8551L315.327 44.9625H315.421V80H310.913V55.2953L311.194 57.5966L298.372 75.726H298.278L285.268 57.5966L286.067 55.4831V80H281.652ZM170.885 134V100.043H180.137C183.487 100.043 186.337 100.559 188.685 101.593C191.065 102.626 192.975 103.988 194.415 105.679C195.855 107.37 196.904 109.248 197.562 111.315C198.251 113.35 198.595 115.385 198.595 117.421C198.595 119.988 198.141 122.29 197.233 124.325C196.356 126.36 195.135 128.098 193.57 129.538C192.004 130.978 190.204 132.09 188.169 132.873C186.165 133.624 184.035 134 181.781 134H170.885ZM175.44 129.632H180.889C182.767 129.632 184.489 129.35 186.055 128.787C187.652 128.223 189.03 127.409 190.188 126.344C191.378 125.28 192.302 123.98 192.959 122.446C193.617 120.88 193.945 119.111 193.945 117.139C193.945 115.041 193.601 113.209 192.912 111.644C192.223 110.047 191.284 108.716 190.094 107.651C188.904 106.587 187.558 105.788 186.055 105.256C184.552 104.692 182.971 104.411 181.311 104.411H175.44V129.632ZM206.248 100.043H228.322V104.411H210.803V114.743H226.443V119.111H210.803V129.632H228.98V134H206.248V100.043ZM254.452 106.101C253.294 105.507 252.025 104.99 250.648 104.552C249.27 104.113 247.924 103.894 246.609 103.894C244.792 103.894 243.337 104.317 242.241 105.162C241.176 106.008 240.644 107.135 240.644 108.544C240.644 109.608 240.988 110.516 241.677 111.268C242.366 111.988 243.274 112.614 244.401 113.147C245.528 113.679 246.702 114.18 247.924 114.65C248.988 115.057 250.037 115.511 251.07 116.012C252.104 116.513 253.027 117.139 253.842 117.89C254.687 118.642 255.344 119.565 255.814 120.661C256.315 121.757 256.566 123.119 256.566 124.747C256.566 126.532 256.112 128.16 255.204 129.632C254.327 131.104 253.059 132.262 251.399 133.108C249.74 133.953 247.767 134.376 245.481 134.376C243.978 134.376 242.538 134.204 241.16 133.859C239.814 133.515 238.562 133.076 237.403 132.544C236.244 131.98 235.211 131.401 234.303 130.806L236.323 127.237C237.074 127.769 237.935 128.286 238.906 128.787C239.877 129.256 240.894 129.648 241.959 129.961C243.023 130.243 244.057 130.384 245.059 130.384C246.123 130.384 247.172 130.196 248.205 129.82C249.27 129.413 250.147 128.802 250.836 127.988C251.524 127.174 251.869 126.094 251.869 124.747C251.869 123.589 251.556 122.634 250.93 121.882C250.335 121.1 249.536 120.442 248.534 119.91C247.532 119.346 246.468 118.845 245.34 118.407C244.276 118 243.196 117.561 242.1 117.092C241.004 116.591 239.986 115.996 239.047 115.307C238.107 114.587 237.356 113.71 236.792 112.677C236.229 111.644 235.947 110.391 235.947 108.92C235.947 107.135 236.37 105.585 237.215 104.27C238.092 102.923 239.282 101.874 240.785 101.123C242.288 100.34 244.01 99.9175 245.951 99.8548C248.143 99.8548 250.068 100.121 251.728 100.653C253.419 101.186 254.906 101.843 256.19 102.626L254.452 106.101ZM336.856 131.088C336.386 131.495 335.729 131.902 334.883 132.309C334.038 132.685 333.099 133.029 332.065 133.342C331.063 133.656 330.014 133.906 328.919 134.094C327.854 134.282 326.852 134.376 325.913 134.376C323.189 134.376 320.731 133.953 318.539 133.108C316.378 132.262 314.515 131.088 312.95 129.585C311.415 128.082 310.226 126.313 309.38 124.278C308.566 122.243 308.159 120.035 308.159 117.655C308.159 114.837 308.613 112.317 309.521 110.094C310.46 107.839 311.729 105.945 313.325 104.411C314.954 102.845 316.817 101.671 318.915 100.888C321.012 100.074 323.236 99.667 325.584 99.667C327.557 99.667 329.388 99.9018 331.079 100.371C332.77 100.841 334.257 101.436 335.541 102.156L333.991 106.336C333.365 105.961 332.582 105.616 331.643 105.303C330.735 104.99 329.795 104.739 328.825 104.552C327.854 104.332 326.946 104.223 326.101 104.223C324.097 104.223 322.281 104.536 320.652 105.162C319.024 105.757 317.631 106.634 316.472 107.792C315.314 108.92 314.421 110.297 313.795 111.925C313.169 113.522 312.856 115.323 312.856 117.327C312.856 119.174 313.169 120.865 313.795 122.399C314.421 123.933 315.314 125.264 316.472 126.391C317.631 127.487 319.008 128.348 320.605 128.975C322.234 129.569 324.018 129.867 325.96 129.867C327.118 129.867 328.261 129.757 329.388 129.538C330.515 129.288 331.486 128.943 332.3 128.505V121.742H325.537V117.374H336.856V131.088ZM374.945 135.08L348.691 108.45L350.006 108.779L350.1 134H345.544V99.0094H345.779L371.752 125.734L370.671 125.499L370.577 100.043H375.086V135.08H374.945ZM384.851 100.043H406.926V104.411H389.407V114.743H405.047V119.111H389.407V129.632H407.583V134H384.851V100.043ZM424.508 100.043C426.23 100.043 427.811 100.278 429.252 100.747C430.723 101.186 431.991 101.859 433.056 102.767C434.152 103.644 434.997 104.739 435.592 106.055C436.218 107.338 436.531 108.841 436.531 110.563C436.531 111.91 436.328 113.225 435.921 114.509C435.545 115.792 434.903 116.967 433.995 118.031C433.087 119.064 431.897 119.91 430.426 120.567C428.985 121.194 427.201 121.507 425.071 121.507H420.046V134H415.49V100.043H424.508ZM424.978 117.139C426.324 117.139 427.435 116.935 428.312 116.528C429.22 116.121 429.925 115.605 430.426 114.978C430.927 114.321 431.287 113.616 431.506 112.865C431.725 112.113 431.835 111.409 431.835 110.751C431.835 110.062 431.709 109.358 431.459 108.638C431.24 107.886 430.864 107.197 430.332 106.571C429.831 105.945 429.158 105.428 428.312 105.021C427.498 104.614 426.496 104.411 425.306 104.411H420.046V117.139H424.978ZM430.567 119.722L439.443 134H434.183L425.165 119.863L430.567 119.722Z" fill="white" class="svg-elem-2"></path>
+                <path d="M259.902 134L275.495 98.0701H275.871L291.464 134H283.573L273.616 108.732L278.548 105.35L266.618 134H259.902ZM270.563 121.507H280.943L283.338 127.237H268.45L270.563 121.507ZM295.423 113.475H301.998V134H295.423V113.475ZM295.282 106.195C295.282 105.225 295.657 104.426 296.409 103.8C297.192 103.174 298.021 102.861 298.898 102.861C299.775 102.861 300.573 103.174 301.293 103.8C302.045 104.426 302.421 105.225 302.421 106.195C302.421 107.166 302.045 107.965 301.293 108.591C300.573 109.186 299.775 109.483 298.898 109.483C298.021 109.483 297.192 109.186 296.409 108.591C295.657 107.965 295.282 107.166 295.282 106.195Z" fill="#A9FFF5" class="svg-elem-3"></path>
             </svg>
             <h1>Your dream room is here</h1>
             <div id="chipsSV"></div>
@@ -136,36 +124,31 @@
         </h1>
         <form id="imageGenerationForm">
             <div class="groupContainer">
-                <div class="gtranslate_wrapper" id="language"> <span class="dot"></span></div>
-               
-
                 <!-- SHOT TOKENS -->
                 <div class="group">
-                    
                     <input type="file" id="imageDisplayUrl" accept="image/*" style="visibility:hidden; display:block; width:1px; height:1px; overflow:hidden;" />
-                    
-                    <h1><img class="iconH1" src="/static/img/icon-shot.svg" />Photo tokens</h1>
+                    <h1><img class="iconH1" src="/static/img/icon-shot.svg" />Shot tokens</h1>
                     <!-- ratio -->
                     <h4>Apect ratio</h4>
                     <div class="aspectRatioShot">
                         <label class="aspectRatio"> Landscape <label class="switch">
-                            <input type="radio" name="aspectRatio" value="landscape" checked>
+                                <input type="radio" name="aspectRatio" value="landscape" checked>
                                 <span class="slider round"></span>
-                        </label>
+                            </label>
                         </label>
                         <label class="aspectRatio"> Portrait <label class="switch">
-                            <input type="radio" name="aspectRatio" value="portrait">
+                                <input type="radio" name="aspectRatio" value="portrait">
                                 <span class="slider round"></span>
-                        </label>
+                            </label>
                         </label>
                     </div>
                     <!-- seed -->
                     <h4>Seed</h4>
                     <div class="switchContainer">
                         <label class="switchLabel"> Seed <label class="switch">
-                            <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
+                                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
                                 <span class="slider round"></span>
-                        </label>
+                            </label>
                         </label>
                     </div>
                     <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
@@ -220,15 +203,15 @@
                     <span class="dot"></span>
                     <sub>Use this to give a personal touch to the final render.</sub>
                     <!-- <div class="menuButton">
-                    <label>Select the space to design</label>
-                    <ul id="space to be designed" class="menuDropdown">
-                    <li value=" " class="menuVoice">Select the space to design</li>
-                    <li value="interior design">Interior design</li>
-                    <li value="outdoor design">Outdoor design</li>
-                    <li value="facade design">Facade design</li>
-                    </ul>
-                    </div>
-                    -->
+                            <label>Select the space to design</label>
+                            <ul id="space to be designed" class="menuDropdown">
+                            <li value=" " class="menuVoice">Select the space to design</li>
+                            <li value="interior design">Interior design</li>
+                            <li value="outdoor design">Outdoor design</li>
+                            <li value="facade design">Facade design</li>
+                            </ul>
+                            </div>
+                            -->
                 </div>
                 <!-- DESIGN TOKENS -->
                 <div class="group">
@@ -260,163 +243,81 @@
                     </select>
                     <span class="dot"></span>
                     <!-- ID STYLES-->
-                    <!--<select id="design_style">
-                        <option value="">Design style</option>
-                        <option value="Artisan Style" title="Celebrating handcrafted details and materials, the Artisan style showcases the beauty of craftsmanship. It features unique, one-of-a-kind pieces, natural materials, and a sense of authenticity and individuality."> Artisan Style</option>
-                        <option value="Artisanal Style" title="Celebrating traditional craftsmanship and handmade techniques, the Artisanal style features artisan-made products, natural materials, and a sense of authenticity and uniqueness. It creates a warm and personal ambiance with a connection to the artisans' skills and traditions."> Artisanal Style</option>
-                        <option value="Artistic Style" title="An artistic style embraces creativity, self-expression, and a sense of experimentation. It features bold colors, unconventional shapes, and unique artistic elements. It creates a vibrant and visually stimulating ambiance that reflects the personality of the artist.">Artistic Style</option>
-                        <option value="Artistic Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
-                        <option value="Art Brut Style" title="Also known as Outsider Art, this style embraces unconventional and raw artistic expressions. It features untrained artists, naive aesthetics, and a sense of authenticity and individuality. It creates a unique and thought-provoking ambiance."> Art Brut Style</option>
-                        <option value="Art Deco" title="Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet. It exudes elegance and glamour."> Art Deco</option>
-                        <option value="Art Nouveau" title="Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms. It features flowing lines, floral motifs, stained glass, and decorative elements inspired by nature."> Art Nouveau</option>
-                        <option value="Artistic Industrial" title="Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches. It features industrial materials like exposed brick, concrete, and metal alongside unique artwork, sculptures, and unconventional design elements."> Artistic Industrial</option>
-                        <option value="Asian Zen Style" title="Inspired by Eastern philosophies, this style promotes peace, harmony, and balance. It features natural materials, clean lines, and a minimalist approach. It creates a serene and tranquil environment that promotes relaxation and mindfulness."> Asian Zen Style</option>
-                        <option value="Bohemian" title="Bohemian design is eclectic and free-spirited. It incorporates vibrant colors, patterns, and textures from around the world, with a mix of vintage and handcrafted items."> Bohemian</option>
-                        <option value="Boho Chic" title="Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance. It features a mix of patterns, textures, and colors, layered textiles, vintage furniture, and global-inspired accents."> Boho Chic</option>
-                        <option value="Craftsman Style" title="Rooted in craftsmanship and natural materials, this style showcases the beauty of handcrafted woodwork, exposed beams, and detailed craftsmanship. It features warm, earthy tones and an emphasis on functionality and comfort."> Craftsman Style</option>
-                        <option value="Cabin Style" title="Rooted in the rustic charm of cabins and lodges, this style features natural materials, cozy textiles, and a warm, earthy color palette. It creates a relaxed and inviting atmosphere with a connection to nature."> Cabin Style</option>
-                        <option value="Chinese Modern Style" title="Blending traditional Chinese elements with modern designs, the Chinese Modern style combines classic aesthetics with contemporary sensibilities. It creates a fusion of East and West, past and present, resulting in a harmonious and unique ambiance."> Chinese Modern Style</option>
-                        <option value="Chinoiserie Style" title="Influenced by East Asian art and design, the Chinoiserie style features decorative patterns, exotic motifs, and a sense of whimsy. It creates an enchanting and romantic ambiance with a touch of exoticism and fantasy."> Chinoiserie Style</option>
-                        <option value="Colonial Style" title="Drawing inspiration from the colonial era, this style features symmetrical designs, classic proportions, and traditional details. It creates a sense of historical charm and elegance reminiscent of early American architecture."> Colonial Style</option>
-                        <option value="Coastal" title="Coastal design brings the relaxed vibe of the beach into the home. It often features light and breezy colors, natural materials like wicker and rattan, and nautical elements."> Coastal</option>
-                        <option value="Coastal Farmhouse" title="Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design. It incorporates natural materials, light and airy colors, nautical accents, and vintage-inspired furniture for a laid-back and inviting atmosphere."> Coastal Farmhouse</option>
-                        <option value="Contemporary Style" title="A blend of the latest trends, the Contemporary style is ever-evolving. It features clean, architectural lines, a neutral palette, and a focus on balance and harmony. Materials and textures play a key role, adding depth and interest to the space."> Contemporary Style</option>
-                        <option value="Cottage Style" title="Charming and cozy, the Cottage style evokes a sense of comfort and relaxation. It features soft colors, floral prints, and vintage-inspired furnishings. It creates a warm and inviting atmosphere reminiscent of a countryside retreat."> Cottage Style</option>
-                        <option value="Eclectic" title="Eclectic design is a mix of different styles, creating a unique and personalized space. It combines elements from various periods, cultures, and aesthetics to create an eclectic and visually stimulating environment."> Eclectic</option>
-                        <option value="English Country Style" title="Inspired by the English countryside, this style features floral patterns, traditional furnishings, and a mix of rustic and refined elements. It creates a cozy and charming atmosphere reminiscent of a country cottage."> English Country Style</option>
-                        <option value="Farmhouse Style" title="Farmhouse style brings the warmth and simplicity of rural farmhouses into the home. It features natural materials, rustic finishes, vintage-inspired decor, and a mix of textures for a cozy and inviting atmosphere."> Farmhouse Style</option>
-                        <option value="French Country Style" title="French Country style is inspired by the charm of rural France. It combines elegance with rustic elements, featuring ornate furniture, delicate patterns, natural materials, and a soft color palette."> French Country Style</option>
-                        <option value="Futuristic Style" title="Looking ahead to the future, the Futuristic style embraces innovative designs, futuristic materials, and sleek, streamlined shapes. It creates a sense of technology, progress, and forward-thinking."> Futuristic Style</option>
-                        <option value="Georgian Style" title="Originating from the 18th century, the Georgian style features symmetrical designs, elegant proportions, and refined details. It embraces classical elements and creates a sense of sophistication and timeless elegance."> Georgian Style</option>
-                        <option value="Glam Style" title="Glamorous and luxurious, the Glam style embraces elegance, sparkle, and opulence. It features metallic accents, plush textures, and statement pieces. It creates a lavish and extravagant ambiance with a touch of Hollywood glamour."> Glam Style</option>
-                        <option value="Global Fusion" title="Global Fusion design draws inspiration from cultures around the world. It blends elements, colors, patterns, and textures from different regions, creating a vibrant and multicultural ambiance."> Global Fusion</option>
-                        <option value="Gothic Style" title="Dark and dramatic, the Gothic style draws inspiration from medieval architecture. It features pointed arches, elaborate ornamentation, and a sense of mystery and grandeur. It creates a bold and dramatic ambiance with a touch of romanticism."> Gothic Style</option>
-                        <option value="Greek RevivalvStyle" title="Inspired by ancient Greek architecture, this style features symmetrical designs, grand columns, and classical motifs. It creates a sense of timeless beauty and elegance with a nod to the architectural heritage of ancient Greece."> Greek Revival Style</option>
-                        <option value="Hamptons Style" title="Elegant and sophisticated, the Hamptons style draws inspiration from the luxurious beachside homes of Long Island. It features a timeless color palette, natural textures, and a blend of classic and contemporary elements."> Hamptons Style</option>
-                        <option value="Hollywood Glam" title="Hollywood Glam design captures the elegance and opulence of old Hollywood. It features luxurious materials, such as velvet and gold accents, plush furniture, dramatic lighting, and reflective surfaces, creating a glamorous and sophisticated atmosphere."> Hollywood Glam</option>
-                        <option value="Hollywood Regency Style" title="Hollywood Regency style captures the glitz and glamour of the golden age of Hollywood. It features bold colors, luxurious materials, geometric patterns, and ornate detailing, creating a glamorous and extravagant atmosphere."> Hollywood Regency Style</option>
-                        <option value="Hygge Style" title="Hygge style embraces the Danish concept of coziness and well-being. It emphasizes warmth, comfort, and a sense of simplicity. It features soft lighting, natural materials, cozy textiles, and a neutral color palette, creating a cozy and inviting atmosphere."> Hygge Style</option>
-                        <option value="Industrial Chic style" title="Industrial Chic design takes inspiration from old factories and industrial spaces. It features raw and unfinished materials, exposed brick and pipes, salvaged wood, and metal accents, blending rustic and urban elements to create a stylish and edgy look."> Industrial Chic</option>
-                        <option value="Industrial Style" title="Industrial style draws inspiration from old factories and industrial spaces. It features raw and utilitarian elements, such as exposed brick, metal, and concrete, with a focus on functionality. The design often incorporates salvaged and repurposed materials."> Industrial Style</option>
-                        <option value="Japanese style" title="Japanese design is characterized by simplicity, minimalism, and harmony with nature. It features natural materials, clean lines, a neutral color palette, and a sense of tranquility, creating a serene and Zen-like atmosphere."> Japanese</option>
-                        <option value="Mid Century Modern Style" title="Mid-Century Modern style emerged in the mid-20th century and is known for its clean lines, organic forms, and functionality. It features a mix of natural and modern materials, vibrant colors, and iconic furniture pieces."> Mid-Century Modern Style</option>
-                        <option value="Mediterranean style" title="Mediterranean design takes inspiration from the coastal regions of Southern Europe. It features warm colors, natural textures, rustic elements, and an abundance of natural light, creating a relaxed and inviting ambiance."> Mediterranean</option>
-                        <option value="Mediterranean Revival" title="Mediterranean Revival design is influenced by the architecture and design of the Mediterranean region. It features elements such as stucco walls, terracotta roof tiles, wrought iron accents, and colorful tiles, creating a vibrant and timeless aesthetic."> Mediterranean Revival</option>
-                        <option value="Minimalist Style" title="Defined by simplicity, the Minimalist style embraces functionality over decoration. It features clean lines, a monochromatic palette, and uncluttered spaces. Every element is intentional, creating a serene and harmonious environment."> Minimalist Style</option>
-                        <option value="Modern Style" title="Embodying simplicity and functionality, the Modern style features clean lines, neutral colors, and minimal decor. It leverages natural light and open floor plans for a spacious, tranquil feel. It's a sophisticated dance of form following function."> Modern Style</option>
-                        
-                        <option value="Modernist Organic Architecture" title="Structures often feature flowing, curvilinear lines and shapes, inspired by the forms found in nature. ">Modernist Organic Architecture</option>
-                        <option value="Modern Farmhouse Style" title="Combining modern elements with rustic charm, the Modern Farmhouse style features clean lines, neutral colors, and natural textures. It creates a warm and inviting atmosphere with a contemporary twist on a traditional farmhouse aesthetic."> Modern Farmhouse Style</option>
-                        <option value="Moroccan Style" title="Moroccan style is inspired by the vibrant culture and design of Morocco. It features rich colors, intricate patterns, and ornate details. Moroccan design often incorporates mosaic tiles, carved wood, and textured fabrics, creating an exotic and inviting atmosphere."> Moroccan Style</option>
-                        <option value="Muji Style" title="Inspired by the Japanese retail brand Muji, the Muji style embodies simplicity, functionality, and a focus on natural materials. It creates a clean and uncluttered ambiance with an emphasis on organization and a minimalist aesthetic."> Muji Style</option>
-                        <option value="Nautical style" title="Nautical design draws inspiration from the sea and coastal life. It features a blue and white color palette, stripes, rope accents, and nautical motifs, creating a fresh and maritime atmosphere."> Nautical</option>
-                        <option value="Neo Classical Style" title="Drawing inspiration from classical Greek and Roman architecture, the Neo-Classical style features grandeur, symmetry, and classical motifs. It creates a sense of elegance and timelessness with a contemporary interpretation of classical design."> Neo-Classical Style</option>
-                        <option value="Organic Architecure Style" title="
-                                Organic architecture integrates buildings with nature, using natural materials and flowing lines. It creates harmonious, sustainable spaces inspired by nature's forms and principles. By blending with the environment, it promotes well-being and ecological sensitivity.">Organic Style</option>
-                        <option value="Provence Style" title="Evoking the charm of the French countryside, the Provence style features soft colors, rustic elements, and a mix of antique and vintage pieces. It creates a warm and inviting ambiance reminiscent of a relaxed provincial lifestyle."> Provence Style</option>
-                        <option value="Ranch Style" title="Popular in the American West, the Ranch style features a single-story design, an open floor plan, and a connection to the outdoors. It embraces simplicity, natural materials, and a casual, laid-back aesthetic."> Ranch Style</option>
-                        <option value="Renaissance Style" title="Inspired by the artistic and intellectual movement of the Renaissance period, this style features opulent details, classical elements, and a sense of grandeur. It creates a lavish and elegant ambiance reminiscent of historical palaces and estates."> Renaissance Style</option>
-                        <option value="Retro Modern style" title="Retro Modern design combines the nostalgia of retro style with the clean lines and simplicity of modern design. It incorporates vintage furniture pieces, bold patterns, vibrant colors, and retro-inspired accessories for a playful and nostalgic aesthetic."> Retro Modern</option>
-                        <option value="Rococo Style" title="Originating from the 18th century, the Rococo style is characterized by elaborate ornamentation, soft colors, and asymmetrical designs. It creates a sense of whimsy, grace, and elegance with a focus on intricate details."> Rococo Style</option>
-                        <option value="Rustic style" title="Rustic design embraces natural elements and a sense of ruggedness. It features raw and unfinished materials, earthy colors, and a cozy and inviting ambiance. Rustic design often incorporates wood, stone, and organic textures."> Rustic</option>
-                        <option value="Scandinavian Style" title="Known for its simplicity, functionality, and beauty, this style features clean lines, muted tones, and an emphasis on natural materials. Light is important, with a focus on creating warm, cozy spaces. It's minimalism at its most warm and inviting."> Scandinavian Style</option>
-                        <option value="Shabby Chic style" title="Shabby Chic design blends vintage and feminine elements to create a soft and romantic ambiance. It features distressed furniture, floral patterns, pastel colors, and delicate decor, evoking a sense of nostalgia and charm."> Shabby Chic</option>
-                        <option value="Shaker Style" title="Rooted in the Shaker religious community, this style embraces simplicity, functionality, and craftsmanship. It features clean lines, muted colors, and minimal ornamentation. It creates a serene and timeless atmosphere with a focus on quality and utility."> Shaker Style</option>
-                        
-                        
-                        
-                        <option value="Southwestern Style" title="Inspired by the American Southwest, this style features warm desert colors, Native American patterns, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Western charm."> Southwestern Style</option>
-                        <option value="Spanish Mediterranean House" title="Influenced by the architectural traditions of Spain and Mediterranean regions, this style features stucco walls, clay tile roofs, wrought iron details, and colorful ceramic tiles. It exudes a timeless and elegant charm with a touch of Old World romance.">Spanish Mediterranean Style</option>
-
-                        <option value="Steampunk Style" title="A blend of Victorian elegance and industrial elements, the Steampunk style features vintage machinery, gears, and brass accents. It creates a sense of adventure, imagination, and an alternate history where steam-powered technology prevails."> Steampunk Style</option>
-                        <option value="Traditional style" title="Traditional design refers to classic and timeless styles that have stood the test of time. It often features ornate details, rich colors, and elegant furnishings, creating a formal and sophisticated atmosphere."> Traditional</option>
-                        <option value="Traditional Chinese Style" title="Rooted in Chinese culture and history, the Traditional Chinese style features ornate details, vibrant colors, and a harmonious balance of elements. It creates a rich and opulent ambiance with a deep appreciation for symbolism and tradition."> Traditional Chinese Style</option>
-                        <option value="Transitional style" title="Transitional design combines elements of both traditional and contemporary styles. It strikes a balance between classic and modern, incorporating clean lines, neutral colors, and a mix of traditional and contemporary furniture and decor."> Transitional</option>
-                        <option value="Tribal style" title="Tribal design draws inspiration from indigenous cultures around the world. It features bold patterns, tribal prints, earthy tones, natural materials like wood and rattan, and handcrafted elements to create a unique and culturally rich space."> Tribal</option>
-                        <option value="Tropical Style" title="Bringing the essence of the tropics indoors, this style features vibrant colors, botanical prints, and natural materials like bamboo and rattan. It creates a lively and exotic atmosphere that evokes a sense of paradise."> Tropical Style</option>
-                        <option value="Tuscan Style" title="Drawing inspiration from the Italian region of Tuscany, this style features warm earth tones, textured walls, and rustic elements. It creates a cozy and inviting atmosphere with a touch of Mediterranean charm."> Tuscan Style</option>
-                        <option value="Urban Style" title="Embracing the energy and vibrancy of city living, the Urban style features contemporary designs, industrial elements, and a mix of textures and materials. It creates a modern and edgy ambiance with a cosmopolitan flair."> Urban Style</option>
-                        <option value="Victorian Style" title="Victorian style is inspired by the design and architecture of the Victorian era. It features ornate details, rich colors, and a sense of opulence. Victorian design often incorporates antiques, luxurious fabrics, and intricate patterns."> Victorian Style</option>
-                        <option value="Vintage style" title="Vintage design incorporates elements from different eras and evokes a sense of nostalgia. It features antique or vintage-inspired furniture, retro patterns, and distressed finishes, creating a charming and lived-in atmosphere."> Vintage</option>
-                        <option value="Wabi Sabi Style" title="Derived from Japanese aesthetics, the Wabi-Sabi style embraces imperfection, simplicity, and the beauty of natural materials. It creates a rustic and unpretentious ambiance that appreciates the transient nature of things."> Wabi-Sabi Style</option>
-                        <option value="Zen Style" title="Zen style draws inspiration from Japanese design and focuses on creating a serene and minimalist space. It features clean lines, natural materials, a neutral color palette, and a sense of tranquility, promoting relaxation and mindfulness."> Zen Style</option>
-                    </select>-->
                     <select id="design_style">
-                        <option value="">Design style</option>
-                        <option value="African - African style draws inspiration from the rich and diverse cultures of the African continent.">African</option>
-                        <option value="Artisan - Celebrating handcrafted details and materials, the Artisan style showcases the beauty of craftsmanship.">Artisan</option>
-                        <option value="Artisanal - Celebrating traditional craftsmanship and handmade techniques, the Artisanal style features artisan-made products.">Artisanal</option>
-                        <option value="Artistic - An artistic style embraces creativity, self-expression, and a sense of experimentation.">Artistic</option>
-                        <option value="Artistic Industrial - Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches.">Artistic Industrial</option>
-                        <option value="Art Brut - Also known as Outsider Art, this style embraces unconventional and raw artistic expressions.">Art Brut</option>
-                        <option value="Art Deco - Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet.">Art Deco</option>
-                        <option value="Art Nouveau - Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms.">Art Nouveau</option>
-                        <option value="Asian Zen - Inspired by Eastern philosophies, this style promotes peace, harmony, and balance.">Asian Zen</option>
-                        <option value="Bohemian - Bohemian design is eclectic and free-spirited. It incorporates vibrant colors, patterns, and textures from around the world, with a mix of vintage and handcrafted items.">Bohemian</option>
-                        <option value="Boho Chic - Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance.">Boho Chic</option>
-                        <option value="Craftsman - Rooted in craftsmanship and natural materials, this style showcases the beauty of handcrafted woodwork, exposed beams, and detailed craftsmanship.">Craftsman</option>
-                        <option value="Cabin - Rooted in the rustic charm of cabins and lodges, this style features natural materials, cozy textiles, and a warm, earthy color palette.">Cabin</option>
-                        <option value="Chinese Modern - Blending traditional Chinese elements with modern designs, the Chinese Modern style combines classic aesthetics with contemporary sensibilities.">Chinese Modern</option>
-                        <option value="Chinoiserie - Influenced by East Asian art and design, the Chinoiserie style features decorative patterns, exotic motifs, and a sense of whimsy.">Chinoiserie</option>
-                        <option value="Colonial - Drawing inspiration from the colonial era, this style features symmetrical designs, classic proportions, and traditional details.">Colonial</option>
-                        <option value="Coastal - Coastal design brings the relaxed vibe of the beach into the home.">Coastal</option>
-                        <option value="Coastal Farmhouse - Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design.">Coastal Farmhouse</option>
-                        <option value="Contemporary - A blend of the latest trends, the Contemporary style is ever-evolving.">Contemporary</option>
-                        <option value="Cottage - Charming and cozy, the Cottage style evokes a sense of comfort and relaxation.">Cottage</option>
-                        <option value="Eclectic - Eclectic design is a mix of different styles, creating a unique and personalized space.">Eclectic</option>
-                        <option value="English Country - Inspired by the English countryside, this style features floral patterns, traditional furnishings, and a mix of rustic and refined elements.">English Country</option>
-                        <option value="Farmhouse - Farmhouse style brings the warmth and simplicity of rural farmhouses into the home.">Farmhouse</option>
-                        <option value="French Country - French Country style is inspired by the charm of rural France.">French Country</option>
-                        <option value="Futuristic - Looking ahead to the future, the Futuristic style embraces innovative designs, futuristic materials, and sleek, streamlined shapes.">Futuristic</option>
-                        <option value="Georgian - Originating from the 18th century, the Georgian style features symmetrical designs, elegant proportions, and refined details.">Georgian</option>
-                        <option value="Glam - Glamorous and luxurious, the Glam style embraces elegance, sparkle, and opulence.">Glam</option>
-                        <option value="Global Fusion - Global Fusion design draws inspiration from cultures around the world.">Global Fusion</option>
-                        <option value="Gothic - Dark and dramatic, the Gothic style draws inspiration from medieval architecture.">Gothic</option>
-                        <option value="Greek Revival - Inspired by ancient Greek architecture, this style features symmetrical designs, grand columns, and classical motifs.">Greek Revival</option>
-                        <option value="Hamptons - Elegant and sophisticated, the Hamptons style draws inspiration from the luxurious beachside homes of Long Island.">Hamptons</option>
-                        <option value="Hollywood Glam - Hollywood Glam design captures the elegance and opulence of old Hollywood.">Hollywood Glam</option>
-                        <option value="Hollywood Regency - Hollywood Regency style captures the glitz and glamour of the golden age of Hollywood.">Hollywood Regency</option>
-                        <option value="Hygge - Hygge style embraces the Danish concept of coziness and well-being.">Hygge</option>
-                        <option value="Industrial Chic - Industrial Chic design takes inspiration from old factories and industrial spaces.">Industrial Chic</option>
-                        <option value="Industrial - Industrial style draws inspiration from old factories and industrial spaces.">Industrial</option>
-                        <option value="Japanese - Japanese design is characterized by simplicity, minimalism, and harmony with nature.">Japanese</option>
-                        <option value="Mid Century Modern - Mid-Century Modern style emerged in the mid-20th century and is known for its clean lines, organic forms, and functionality.">Mid-Century Modern</option>
-                        <option value="Mediterranean - Mediterranean design takes inspiration from the coastal regions of Southern Europe.">Mediterranean</option>
-                        <option value="Mediterranean Revival - Mediterranean Revival design is influenced by the architecture and design of the Mediterranean region.">Mediterranean Revival</option>
-                        <option value="Minimalist - Defined by simplicity, the Minimalist style embraces functionality over decoration.">Minimalist</option>
-                        <option value="Modern - Embodying the spirit of the present and the future, Modern style features a clean and uncluttered design.">Modern</option>
-                        <option value="Modern Farmhouse - Modern Farmhouse design blends the comfort of traditional farmhouse elements with the clean lines of modern design.">Modern Farmhouse</option>
-                        <option value="Moroccan - Moroccan design is inspired by the rich cultural heritage of North Africa.">Moroccan</option>
-                        <option value="Nautical - Nautical design draws inspiration from the sea and coastal living.">Nautical</option>
-                        <option value="Neoclassical - Neoclassical style draws inspiration from classical Greek and Roman architecture.">Neoclassical</option>
-                        <option value="Organic - Organic design celebrates the beauty of natural materials and organic shapes.">Organic</option>
-                        <option value="Retro - Retro design takes inspiration from the past, particularly the mid-20th century.">Retro</option>
-                        <option value="Rustic - Rustic design is grounded in natural and rugged beauty.">Rustic</option>
-                        <option value="Scandinavian - Scandinavian design embraces simplicity, functionality, and minimalism.">Scandinavian</option>
-                        <option value="Shabby Chic - Shabby Chic design exudes a vintage and lived-in charm.">Shabby Chic</option>
-                        <option value="Southwestern - Southwestern design takes inspiration from the Native American and Spanish colonial heritage of the Southwest United States.">Southwestern</option>
-                        <option value="Spanish Colonial - Spanish Colonial design draws inspiration from the architectural traditions of Spain and Latin America.">Spanish Colonial</option>
-                        <option value="Spanish Mediterranean - Influenced by the architectural traditions of Spain and Mediterranean regions, this style features stucco walls, clay tile roofs, wrought iron details, and colorful ceramic tiles.">Spanish Mediterranean</option>
-                        <option value="Steampunk - Steampunk design combines Victorian-era aesthetics with industrial elements and a sense of fantasy and adventure.">Steampunk</option>
-                        <option value="Traditional - Traditional design is classic and timeless.">Traditional</option>
-                        <option value="Transitional - Transitional style blends the best of traditional and modern design.">Transitional</option>
-                        <option value="Tropical - Tropical design is inspired by the lush beauty of tropical regions.">Tropical</option>
-                        <option value="Urban Modern - Urban Modern design embraces the edgy and contemporary vibe of urban living.">Urban Modern</option>
-                        <option value="Victorian - Victorian design is characterized by ornate details, rich colors, and a sense of luxury and opulence.">Victorian</option>
-                        <option value="Vintage - Vintage design draws inspiration from past eras, such as the 1950s and 1960s.">Vintage</option>
-                        <option value="Zen - Zen design embraces the principles of Zen Buddhism, promoting simplicity, tranquility, and mindfulness.">Zen</option>
-                    </select>
-
+                            <option value="">Design style</option>
+                            <option value="African - African style draws inspiration from the rich and diverse cultures of the African continent.">African</option>
+                            <option value="Artisan - Celebrating handcrafted details and materials, the Artisan style showcases the beauty of craftsmanship.">Artisan</option>
+                            <option value="Artisanal - Celebrating traditional craftsmanship and handmade techniques, the Artisanal style features artisan-made products.">Artisanal</option>
+                            <option value="Artistic - An artistic style embraces creativity, self-expression, and a sense of experimentation.">Artistic</option>
+                            <option value="Artistic Industrial - Artistic Industrial design combines the raw and utilitarian elements of industrial design with artistic and creative touches.">Artistic Industrial</option>
+                            <option value="Art Brut - Also known as Outsider Art, this style embraces unconventional and raw artistic expressions.">Art Brut</option>
+                            <option value="Art Deco - Art Deco design originated in the 1920s and 1930s. It showcases geometric patterns, bold colors, and luxurious materials like marble and velvet.">Art Deco</option>
+                            <option value="Art Nouveau - Art Nouveau design emerged in the late 19th century and is known for its organic and curvilinear forms.">Art Nouveau</option>
+                            <option value="Asian Zen - Inspired by Eastern philosophies, this style promotes peace, harmony, and balance.">Asian Zen</option>
+                            <option value="Bohemian - Bohemian design is eclectic and free-spirited. It incorporates vibrant colors, patterns, and textures from around the world, with a mix of vintage and handcrafted items.">Bohemian</option>
+                            <option value="Boho Chic - Boho Chic design combines the free-spiritedness of bohemian style with a touch of elegance.">Boho Chic</option>
+                            <option value="Craftsman - Rooted in craftsmanship and natural materials, this style showcases the beauty of handcrafted woodwork, exposed beams, and detailed craftsmanship.">Craftsman</option>
+                            <option value="Cabin - Rooted in the rustic charm of cabins and lodges, this style features natural materials, cozy textiles, and a warm, earthy color palette.">Cabin</option>
+                            <option value="Chinese Modern - Blending traditional Chinese elements with modern designs, the Chinese Modern style combines classic aesthetics with contemporary sensibilities.">Chinese Modern</option>
+                            <option value="Chinoiserie - Influenced by East Asian art and design, the Chinoiserie style features decorative patterns, exotic motifs, and a sense of whimsy.">Chinoiserie</option>
+                            <option value="Colonial - Drawing inspiration from the colonial era, this style features symmetrical designs, classic proportions, and traditional details.">Colonial</option>
+                            <option value="Coastal - Coastal design brings the relaxed vibe of the beach into the home.">Coastal</option>
+                            <option value="Coastal Farmhouse - Coastal Farmhouse design merges the relaxed and breezy vibe of coastal style with the rustic charm of farmhouse design.">Coastal Farmhouse</option>
+                            <option value="Contemporary - A blend of the latest trends, the Contemporary style is ever-evolving.">Contemporary</option>
+                            <option value="Cottage - Charming and cozy, the Cottage style evokes a sense of comfort and relaxation.">Cottage</option>
+                            <option value="Eclectic - Eclectic design is a mix of different styles, creating a unique and personalized space.">Eclectic</option>
+                            <option value="English Country - Inspired by the English countryside, this style features floral patterns, traditional furnishings, and a mix of rustic and refined elements.">English Country</option>
+                            <option value="Farmhouse - Farmhouse style brings the warmth and simplicity of rural farmhouses into the home.">Farmhouse</option>
+                            <option value="French Country - French Country style is inspired by the charm of rural France.">French Country</option>
+                            <option value="Futuristic - Looking ahead to the future, the Futuristic style embraces innovative designs, futuristic materials, and sleek, streamlined shapes.">Futuristic</option>
+                            <option value="Georgian - Originating from the 18th century, the Georgian style features symmetrical designs, elegant proportions, and refined details.">Georgian</option>
+                            <option value="Glam - Glamorous and luxurious, the Glam style embraces elegance, sparkle, and opulence.">Glam</option>
+                            <option value="Global Fusion - Global Fusion design draws inspiration from cultures around the world.">Global Fusion</option>
+                            <option value="Gothic - Dark and dramatic, the Gothic style draws inspiration from medieval architecture.">Gothic</option>
+                            <option value="Greek Revival - Inspired by ancient Greek architecture, this style features symmetrical designs, grand columns, and classical motifs.">Greek Revival</option>
+                            <option value="Hamptons - Elegant and sophisticated, the Hamptons style draws inspiration from the luxurious beachside homes of Long Island.">Hamptons</option>
+                            <option value="Hollywood Glam - Hollywood Glam design captures the elegance and opulence of old Hollywood.">Hollywood Glam</option>
+                            <option value="Hollywood Regency - Hollywood Regency style captures the glitz and glamour of the golden age of Hollywood.">Hollywood Regency</option>
+                            <option value="Hygge - Hygge style embraces the Danish concept of coziness and well-being.">Hygge</option>
+                            <option value="Industrial Chic - Industrial Chic design takes inspiration from old factories and industrial spaces.">Industrial Chic</option>
+                            <option value="Industrial - Industrial style draws inspiration from old factories and industrial spaces.">Industrial</option>
+                            <option value="Japanese - Japanese design is characterized by simplicity, minimalism, and harmony with nature.">Japanese</option>
+                            <option value="Mid Century Modern - Mid-Century Modern style emerged in the mid-20th century and is known for its clean lines, organic forms, and functionality.">Mid-Century Modern</option>
+                            <option value="Mediterranean - Mediterranean design takes inspiration from the coastal regions of Southern Europe.">Mediterranean</option>
+                            <option value="Mediterranean Revival - Mediterranean Revival design is influenced by the architecture and design of the Mediterranean region.">Mediterranean Revival</option>
+                            <option value="Minimalist - Defined by simplicity, the Minimalist style embraces functionality over decoration.">Minimalist</option>
+                            <option value="Modern - Embodying the spirit of the present and the future, Modern style features a clean and uncluttered design.">Modern</option>
+                            <option value="Modern Farmhouse - Modern Farmhouse design blends the comfort of traditional farmhouse elements with the clean lines of modern design.">Modern Farmhouse</option>
+                            <option value="Moroccan - Moroccan design is inspired by the rich cultural heritage of North Africa.">Moroccan</option>
+                            <option value="Nautical - Nautical design draws inspiration from the sea and coastal living.">Nautical</option>
+                            <option value="Neoclassical - Neoclassical style draws inspiration from classical Greek and Roman architecture.">Neoclassical</option>
+                            <option value="Organic - Organic design celebrates the beauty of natural materials and organic shapes.">Organic</option>
+                            <option value="Retro - Retro design takes inspiration from the past, particularly the mid-20th century.">Retro</option>
+                            <option value="Rustic - Rustic design is grounded in natural and rugged beauty.">Rustic</option>
+                            <option value="Scandinavian - Scandinavian design embraces simplicity, functionality, and minimalism.">Scandinavian</option>
+                            <option value="Shabby Chic - Shabby Chic design exudes a vintage and lived-in charm.">Shabby Chic</option>
+                            <option value="Southwestern - Southwestern design takes inspiration from the Native American and Spanish colonial heritage of the Southwest United States.">Southwestern</option>
+                            <option value="Spanish Colonial - Spanish Colonial design draws inspiration from the architectural traditions of Spain and Latin America.">Spanish Colonial</option>
+                            <option value="Spanish Mediterranean - Influenced by the architectural traditions of Spain and Mediterranean regions, this style features stucco walls, clay tile roofs, wrought iron details, and colorful ceramic tiles.">Spanish Mediterranean</option>
+                            <option value="Steampunk - Steampunk design combines Victorian-era aesthetics with industrial elements and a sense of fantasy and adventure.">Steampunk</option>
+                            <option value="Traditional - Traditional design is classic and timeless.">Traditional</option>
+                            <option value="Transitional - Transitional style blends the best of traditional and modern design.">Transitional</option>
+                            <option value="Tropical - Tropical design is inspired by the lush beauty of tropical regions.">Tropical</option>
+                            <option value="Urban Modern - Urban Modern design embraces the edgy and contemporary vibe of urban living.">Urban Modern</option>
+                            <option value="Victorian - Victorian design is characterized by ornate details, rich colors, and a sense of luxury and opulence.">Victorian</option>
+                            <option value="Vintage - Vintage design draws inspiration from past eras, such as the 1950s and 1960s.">Vintage</option>
+                            <option value="Zen - Zen design embraces the principles of Zen Buddhism, promoting simplicity, tranquility, and mindfulness.">Zen</option>
+                        </select>
                     <span class="dot"></span>
                     
-                    
+
                     <!--
                     <div class="switchContainer">
-                    <label class="switchLabel"> Impossible Architecture <label class="switch">
-                    <input type="checkbox" name="switchLabel" id="impossible_architecture" value="impossible architecture">
-                    <span class="slider round"></span>
-                    </label>
-                    </label>
+                        <label class="switchLabel"> Impossible Architecture <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="impossible_architecture" value="impossible architecture">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
                     </div>-->
                     
                     
@@ -425,51 +326,47 @@
                     <!-- ID VENDORS -->
                     <select id="furniture_provided_by_this_vendor">
                         <option value="">Furniture vendor & decor vendor</option>
-                        <option value="AllModern - Modern and Chic" title="Modern furniture and home decor">AllModern - Modern and Chic</option>
-                        <option value="Article - Modern and Scandinavian-inspired" title="Modern and Scandinavian-inspired furniture">Article - Modern and Scandinavian-inspired</option>
-                        <option value="Ashley Furniture - Versatile and Stylish" title="Wide range of furniture styles for every room">Ashley Furniture - Versatile and Stylish</option>
-                        <option value="Bernhardt Furniture - High-quality and Sophisticated" title="High-quality furniture and home decor">Bernhardt Furniture - High-quality and Sophisticated</option>
-                        <option value="Bob's Discount Furniture - Affordable and Trendy" title="Affordable furniture and home decor">Bob's Discount Furniture - Affordable and Trendy</option>
-                        <option value="BoConcept - Contemporary and Danish-designed" title="Contemporary and Danish-designed furniture">BoConcept - Contemporary and Danish-designed</option>
-                        <option value="Broyhill Furniture - Quality and Classic" title="Quality furniture and home decor">Broyhill Furniture - Quality and Classic</option>
-                        <option value="CB2 - Modern and Space-saving" title="Modern furniture and home decor for apartments and small spaces">CB2 - Modern and Space-saving</option>
-                        <option value="Crate &amp; Barrel - Contemporary and Stylish" title="Contemporary furniture and home accessories">Crate &amp; Barrel - Contemporary and Stylish</option>
-                        <option value="Cymax - Affordable and Trendy" title="Affordable furniture and home decor">Cymax - Affordable and Trendy</option>
-                        <option value="Design Within Reach - Modern and Innovative" title="Modern furniture and lighting designs">Design Within Reach - Modern and Innovative</option>
-                        <option value="Ethan Allen - High-quality and Elegant" title="High-quality furniture and home accessories">Ethan Allen - High-quality and Elegant</option>
-                        <option value="Havertys - Quality and Refined" title="Quality furniture and home accessories">Havertys - Quality and Refined</option>
-                        <option value="HAY - Modern and Stylish" title="Modern furniture and accessories">HAY - Modern and Stylish</option>
-                        <option value="Herman Miller - High-end and Ergonomic" title="High-end ergonomic furniture and office solutions">Herman Miller - High-end and Ergonomic</option>
-                        <option value="HomeGoods - Trendy and Affordable" title="Home decor and furnishings at discounted prices">HomeGoods - Trendy and Affordable</option>
-                        <option value="IKEA - Affordable and Stylish" title="Affordable and stylish furniture for home and office">IKEA - Affordable and Stylish</option>
-                        <option value="JYSK - Scandinavian and Cozy" title="Scandinavian-inspired furniture and home decor">JYSK - Scandinavian and Cozy</option>
-                        <option value="Joybird - Customizable and Mid-century" title="Customizable and mid-century modern furniture">Joybird - Customizable and Mid-century</option>
-                        <option value="Knoll - Modern and Timeless" title="Modern furniture and design classics">Knoll - Modern and Timeless</option>
-                        <option value="La-Z-Boy - Comfortable and Stylish" title="Comfortable and stylish furniture">La-Z-Boy - Comfortable and Stylish</option>
-                        <option value="Lexington Home Brands - Upscale and Luxurious" title="Upscale furniture and home decor">Lexington Home Brands - Upscale and Luxurious</option>
-                        <option value="Ligne Roset - Contemporary French and Chic" title="Contemporary French furniture and accessories">Ligne Roset - Contemporary French and Chic</option>
-                        <option value="Modsy - Virtual and Curated" title="Virtual interior design services and curated furniture">Modsy - Virtual and Curated</option>
-                        <option value="Muuto - Scandinavian and Minimalist" title="Scandinavian furniture and lighting designs">Muuto - Scandinavian and Minimalist</option>
-                        <option value="Nebraska Furniture Mart - Diverse and Comprehensive" title="Wide selection of furniture, flooring, and appliances">Nebraska Furniture Mart - Diverse and Comprehensive</option>
-                        <option value="Pottery Barn - Classic and Timeless" title="Classic and timeless furniture and home decor">Pottery Barn - Classic and Timeless</option>
-                        <option value="Pier 1 Imports - Eclectic and Artistic" title="Eclectic furniture and home decor">Pier 1 Imports - Eclectic and Artistic</option>
-                        <option value="Raymour &amp; Flanigan - Diverse and Functional" title="Wide selection of furniture for every room">Raymour &amp; Flanigan - Diverse and Functional</option>
-                        <option value="Restoration Hardware - Luxury and Refined" title="Luxury home furnishings and decor">Restoration Hardware - Luxury and Refined</option>
-                        <option value="Roche Bobois - Luxury Contemporary and Unique" title="Luxury contemporary furniture and accessories">Roche Bobois - Luxury Contemporary and Unique</option>
-                        <option value="Room &amp; Board - Modern and Contemporary" title="Modern and contemporary furniture for home and office">Room &amp; Board - Modern and Contemporary</option>
-                        <option value="RH (formerly Restoration Hardware) - Luxury and Refined" title="Luxury home furnishings and decor">RH (formerly Restoration Hardware) - Luxury and Refined</option>
-                        <option value="Scandinavian Designs - Modern and Scandinavian-inspired" title="Modern and contemporary furniture inspired by Scandinavian design">Scandinavian Designs - Modern and Scandinavian-inspired</option>
-                        <option value="Structube - Affordable and Modern" title="Affordable and modern furniture">Structube - Affordable and Modern</option>
-                        <option value="West Elm - Modern and Trendy" title="Modern furniture and home decor">West Elm - Modern and Trendy</option>
-                        <option value="Wayfair - Furniture and Home Decor" title="Online furniture and home decor store">Wayfair - Furniture and Home Decor</option>
-                        
-                        <option value="Ledge Lounger - High-quality in-pool and outdoor furniturer" title="High-quality in-pool and outdoor furniture, including pool floats, chaise loungers, umbrellas, barstools, and other poolside accessories">Ledge Lounger - High-quality in-pool and outdoor furniture</option>
-
+                        <option value="AllModern" title="Modern furniture and home decor">AllModern</option>
+                        <option value="Article" title="Modern and Scandinavian-inspired furniture">Article</option>
+                        <option value="Ashley Furniture" title="Wide range of furniture styles for every room">Ashley Furniture</option>
+                        <option value="Bernhardt Furniture" title="High-quality furniture and home decor">Bernhardt Furniture</option>
+                        <option value="Bob's Discount Furniture" title="Affordable furniture and home decor">Bob's Discount Furniture</option>
+                        <option value="BoConcept" title="Contemporary and Danish-designed furniture">BoConcept</option>
+                        <option value="Broyhill Furniture" title="Quality furniture and home decor">Broyhill Furniture</option>
+                        <option value="CB2" title="Modern furniture and home decor for apartments and small spaces">CB2</option>
+                        <option value="Crate &amp; Barrel" title="Contemporary furniture and home accessories">Crate &amp; Barrel</option>
+                        <option value="Cymax" title="Affordable furniture and home decor">Cymax</option>
+                        <option value="Design Within Reach" title="Modern furniture and lighting designs">Design Within Reach</option>
+                        <option value="Ethan Allen" title="High-quality furniture and home accessories">Ethan Allen</option>
+                        <option value="Havertys" title="Quality furniture and home accessories">Havertys</option>
+                        <option value="HAY" title="Modern furniture and accessories">HAY</option>
+                        <option value="Herman Miller" title="High-end ergonomic furniture and office solutions">Herman Miller</option>
+                        <option value="HomeGoods" title="Home decor and furnishings at discounted prices">HomeGoods</option>
+                        <option value="IKEA" title="Affordable and stylish furniture for home and office">IKEA</option>
+                        <option value="JYSK" title="Scandinavian-inspired furniture and home decor">JYSK</option>
+                        <option value="Joybird" title="Customizable and mid-century modern furniture">Joybird</option>
+                        <option value="Knoll" title="Modern furniture and design classics">Knoll</option>
+                        <option value="La-Z-Boy" title="Comfortable and stylish furniture">La-Z-Boy</option>
+                        <option value="Lexington Home Brands" title="Upscale furniture and home decor">Lexington Home Brands</option>
+                        <option value="Ligne Roset" title="Contemporary French furniture and accessories">Ligne Roset</option>
+                        <option value="Modsy" title="Virtual interior design services and curated furniture">Modsy</option>
+                        <option value="Muuto" title="Scandinavian furniture and lighting designs">Muuto</option>
+                        <option value="Nebraska Furniture Mart" title="Wide selection of furniture, flooring, and appliances">Nebraska Furniture Mart</option>
+                        <option value="Pottery Barn" title="Classic and timeless furniture and home decor">Pottery Barn</option>
+                        <option value="Pier 1 Imports" title="Eclectic furniture and home decor">Pier 1 Imports</option>
+                        <option value="Raymour &amp; Flanigan" title="Wide selection of furniture for every room">Raymour &amp; Flanigan</option>
+                        <option value="Restoration Hardware" title="Luxury home furnishings and decor">Restoration Hardware</option>
+                        <option value="Roche Bobois" title="Luxury contemporary furniture and accessories">Roche Bobois</option>
+                        <option value="Room &amp; Board" title="Modern and contemporary furniture for home and office">Room &amp; Board</option>
+                        <option value="RH (formerly Restoration Hardware)" title="Luxury home furnishings and decor">RH (formerly Restoration Hardware)</option>
+                        <option value="Scandinavian Designs" title="Modern and contemporary furniture inspired by Scandinavian design">Scandinavian Designs</option>
+                        <option value="Structube" title="Affordable and modern furniture">Structube</option>
+                        <option value="West Elm" title="Modern furniture and home decor">West Elm</option>
+                        <option value="Wayfair" title="Online furniture and home decor store">Wayfair</option>
                     </select>
                     <span class="dot"></span>
                     
-                    <h5>Furniture color </h5>
-                   <select id="furniture_color">
+                    <select id="furniture_color">
                         <option value="">Furniture color</option>
                         <option value="White Furniture">White Furniture</option>
                         <option value="Black Furniture">Black Furniture</option>
@@ -513,133 +410,119 @@
                         <option value="Linen Furniture">Linen Furniture</option>
                     </select>
                     <span class="dot"></span>
-                    
+
                     <select id="designed_by_this_interior_designer">
                         <option value="">Interior designer</option>
-                        
-                        <!-- European Interior Designers -->
                         <optgroup label="European Interior Designers">
-                            <option value="Aldo Rossi - Postmodern and Stylish" title="Postmodern and Stylish">Aldo Rossi - Postmodern and Stylish</option>
-                            <option value="Giovanni 'Gio' Ponti - Industrial and Artistic" title="Industrial and Artistic">Giovanni "Gio" Ponti - Industrial and Artistic</option>
-                            <option value="Ilse Crawford - Scandinavian and Warm Modern" title="Scandinavian and Warm Modern">Ilse Crawford - Scandinavian and Warm Modern</option>
-                            <option value="India Mahdavi - Colorful and Artistic" title="Colorful and Artistic">India Mahdavi - Colorful and Artistic</option>
-                            <option value="Jaime Hayon - Whimsical and Surreal" title="Whimsical and Surreal">Jaime Hayon - Whimsical and Surreal</option>
-                            <option value="Kelly Hoppen - Luxurious and Minimalistic" title="Luxurious and Minimalistic">Kelly Hoppen - Luxurious and Minimalistic</option>
-                            <option value="Marcel Wanders - Avant-Garde and Playful" title="Avant-Garde and Playful">Marcel Wanders - Avant-Garde and Playful</option>
-                            <option value="Patricia Urquiola - Contemporary and Eclectic" title="Contemporary and Eclectic">Patricia Urquiola - Contemporary and Eclectic</option>
-                            <option value="Piet Boon - Minimalistic and Rustic" title="Minimalistic and Rustic">Piet Boon - Minimalistic and Rustic</option>
-                            <option value="Philippe Starck - Modern and Contemporary" title="Modern and Contemporary">Philippe Starck - Modern and Contemporary</option>
-                            <option value="Tom Dixon - Industrial and Futuristic" title="Industrial and Futuristic">Tom Dixon - Industrial and Futuristic</option>
-                            <option value="Verner Panton - Innovative and Futuristic" title="Innovative and Futuristic">Verner Panton - Innovative and Futuristic</option>
-                            <option value="Vincent Van Duysen - Timeless and Refined" title="Timeless and Refined">Vincent Van Duysen - Timeless and Refined</option>
+                            <option value="Giovanni 'Gio' Ponti" title="industrial designer, furniture designer, artist, teacher, writer and publisher">Giovanni "Gio" Ponti</option>
+                            <option value="Philippe Starck" title="Modern and Contemporary">Philippe Starck</option>
+                            <option value="Aldo Rossi" title="leading proponents of the postmodern movement and achieved international recognition in architectural and product design">Aldo Rossi </option>
+                            <option value="Kelly Hoppen" title="Luxurious and Minimalistic">Kelly Hoppen</option>
+                            <option value="Patricia Urquiola" title="Contemporary and Eclectic">Patricia Urquiola</option>
+                            <option value="Piet Boon" title="Minimalistic and Rustic">Piet Boon</option>
+                            <option value="Ilse Crawford" title="Scandinavian and Warm Modern">Ilse Crawford</option>
+                            <option value="Marcel Wanders" title="Avant-Garde and Playful">Marcel Wanders</option>
+                            <option value="India Mahdavi" title="Colorful and Artistic">India Mahdavi</option>
+                            <option value="Verner Panton" title="nnovative and futuristic designs in a variety of materials, especially plastics, and in vibrant and exotic colors">Verner Panton</option>
+                            <option value="Tom Dixon" title="Industrial and Futuristic">Tom Dixon</option>
+                            <option value="Jaime Hayon" title="Whimsical and Surreal">Jaime Hayon</option>
+                            <option value="Vincent Van Duysen" title="Timeless and Refined">Vincent Van Duysen</option>
                         </optgroup>
-                        
-                        <!-- Japanese Interior Designers -->
                         <optgroup label="Japanese Interior Designers">
-                            <option value="Fumihiko Maki - Contemporary and Elegant" title="Contemporary and Elegant">Fumihiko Maki - Contemporary and Elegant</option>
-                            <option value="Kenya Hara - Minimalistic and Zen" title="Minimalistic and Zen">Kenya Hara - Minimalistic and Zen</option>
-                            <option value="Masamichi Katayama - Contemporary and Urban" title="Contemporary and Urban">Masamichi Katayama - Contemporary and Urban</option>
-                            <option value="Nendo (Oki Sato) - Minimalistic and Conceptual" title="Minimalistic and Conceptual">Nendo (Oki Sato) - Minimalistic and Conceptual</option>
-                            <option value="Ryu Kosaka - Minimalistic and Serene" title="Minimalistic and Serene">Ryu Kosaka - Minimalistic and Serene</option>
-                            <option value="Shigeru Ban - Sustainable and Innovative" title="Sustainable and Innovative">Shigeru Ban - Sustainable and Innovative</option>
-                            <option value="Shinichiro Ogata - Traditional and Wabi-Sabi" title="Traditional and Wabi-Sabi">Shinichiro Ogata - Traditional and Wabi-Sabi</option>
-                            <option value="Sou Fujimoto - Organic and Ethereal" title="Organic and Ethereal">Sou Fujimoto - Organic and Ethereal</option>
-                            <option value="Tadao Ando - Modernist and Minimalistic" title="Modernist and Minimalistic">Tadao Ando - Modernist and Minimalistic</option>
-                            <option value="Yukio Hashimoto - Zen and Nature-inspired" title="Zen and Nature-inspired">Yukio Hashimoto - Zen and Nature-inspired</option>
+                            <option value="Masamichi Katayama" title="Contemporary and Urban">Masamichi Katayama</option>
+                            <option value="Kenya Hara" title="Minimalistic and Zen">Kenya Hara</option>
+                            <option value="Shinichiro Ogata" title="Traditional and Wabi-Sabi">Shinichiro Ogata</option>
+                            <option value="Nendo (Oki Sato)" title="Minimalistic and Conceptual">Nendo (Oki Sato)</option>
+                            <option value="Shigeru Ban" title="Sustainable and Innovative">Shigeru Ban</option>
+                            <option value="Sou Fujimoto" title="Organic and Ethereal">Sou Fujimoto</option>
+                            <option value="Tadao Ando" title="Modernist and Minimalistic">Tadao Ando</option>
+                            <option value="Yukio Hashimoto" title="Zen and Nature-inspired">Yukio Hashimoto</option>
+                            <option value="Fumihiko Maki" title="Contemporary and Elegant">Fumihiko Maki</option>
+                            <option value="Ryu Kosaka" title="Minimalistic and Serene">Ryu Kosaka</option>
                         </optgroup>
-                        
-                        <!-- American Interior Designers -->
                         <optgroup label="American Interior Designers">
-                            <option value="Bunny Williams - Classic and Traditional" title="Classic and Traditional">Bunny Williams - Classic and Traditional</option>
-                            <option value="Jonathan Adler - Colorful and Quirky" title="Colorful and Quirky">Jonathan Adler - Colorful and Quirky</option>
-                            <option value="Kelly Wearstler - Glamorous and Eclectic" title="Glamorous and Eclectic">Kelly Wearstler - Glamorous and Eclectic</option>
-                            <option value="Martyn Lawrence Bullard - Global and Exotic" title="Global and Exotic">Martyn Lawrence Bullard - Global and Exotic</option>
-                            <option value="Miles Redd - Bold and Glamorous" title="Bold and Glamorous">Miles Redd - Bold and Glamorous</option>
-                            <option value="Nate Berkus - Transitional and Timeless" title="Transitional and Timeless">Nate Berkus - Transitional and Timeless</option>
-                            <option value="Ryan Korban - Luxurious and Edgy" title="Luxurious and Edgy">Ryan Korban - Luxurious and Edgy</option>
-                            <option value="Thom Filicia - Casual and Comfortable" title="Casual and Comfortable">Thom Filicia - Casual and Comfortable</option>
-                            <option value="Victoria Hagan - Elegant and Sophisticated" title="Elegant and Sophisticated">Victoria Hagan - Elegant and Sophisticated</option>
-                            <option value="Windsor Smith - Timeless and Tailored" title="Timeless and Tailored">Windsor Smith - Timeless and Tailored</option>
+                            <option value="Kelly Wearstler" title="Glamorous and Eclectic">Kelly Wearstler</option>
+                            <option value="Jonathan Adler" title="Colorful and Quirky">Jonathan Adler</option>
+                            <option value="Nate Berkus" title="Transitional and Timeless">Nate Berkus</option>
+                            <option value="Bunny Williams" title="Classic and Traditional">Bunny Williams</option>
+                            <option value="Thom Filicia" title="Casual and Comfortable">Thom Filicia</option>
+                            <option value="Victoria Hagan" title="Elegant and Sophisticated">Victoria Hagan</option>
+                            <option value="Martyn Lawrence Bullard" title="Global and Exotic">Martyn Lawrence Bullard</option>
+                            <option value="Ryan Korban" title="Luxurious and Edgy">Ryan Korban</option>
+                            <option value="Windsor Smith" title="Timeless and Tailored">Windsor Smith</option>
+                            <option value="Miles Redd" title="Bold and Glamorous">Miles Redd</option>
                         </optgroup>
-                        
-                        <!-- Latin American Interior Designers -->
                         <optgroup label="Latin American Interior Designers">
-                            <option value="Adriana Hoyos - Modern and Organic" title="Modern and Organic">Adriana Hoyos - Modern and Organic</option>
-                            <option value="Diego Revollo - Contemporary and Chic" title="Contemporary and Chic">Diego Revollo - Contemporary and Chic</option>
-                            <option value="Fernando Diaz - Minimalistic and Sleek" title="Minimalistic and Sleek">Fernando Diaz - Minimalistic and Sleek</option>
-                            <option value="Giselle Macedo - Modern and Vibrant" title="Modern and Vibrant">Giselle Macedo - Modern and Vibrant</option>
-                            <option value="Guilherme Torres - Industrial and Contemporary" title="Industrial and Contemporary">Guilherme Torres - Industrial and Contemporary</option>
-                            <option value="Jorge Elias - Sophisticated and Elegant" title="Sophisticated and Elegant">Jorge Elias - Sophisticated and Elegant</option>
-                            <option value="Juan Montoya - Luxurious and Artistic" title="Luxurious and Artistic">Juan Montoya - Luxurious and Artistic</option>
-                            <option value="Mauricio Arruda - Sustainable and Urban" title="Sustainable and Urban">Mauricio Arruda - Sustainable and Urban</option>
-                            <option value="Patricia Bustos - Playful and Whimsical" title="Playful and Whimsical">Patricia Bustos - Playful and Whimsical</option>
-                            <option value="Sig Bergamin - Colorful and Eclectic" title="Colorful and Eclectic">Sig Bergamin - Colorful and Eclectic</option>
+                            <option value="Diego Revollo" title="Contemporary and Chic">Diego Revollo</option>
+                            <option value="Adriana Hoyos" title="Modern and Organic">Adriana Hoyos</option>
+                            <option value="Sig Bergamin" title="Colorful and Eclectic">Sig Bergamin</option>
+                            <option value="Fernando Diaz" title="Minimalistic and Sleek">Fernando Diaz</option>
+                            <option value="Juan Montoya" title="Luxurious and Artistic">Juan Montoya</option>
+                            <option value="Jorge Elias" title="Sophisticated and Elegant">Jorge Elias</option>
+                            <option value="Guilherme Torres" title="Industrial and Contemporary">Guilherme Torres</option>
+                            <option value="Giselle Macedo" title="Modern and Vibrant">Giselle Macedo</option>
+                            <option value="Patricia Bustos" title="Playful and Whimsical">Patricia Bustos</option>
+                            <option value="Mauricio Arruda" title="Sustainable and Urban">Mauricio Arruda</option>
                         </optgroup>
                     </select>
                     <span class="dot"></span>
                     <select id="designed_by_this_architect">
-                        <option value="">Architect</option>
-                        
-                        <!-- American Home Architects -->
-                        <optgroup label="American Home Architects">
-                            <option value="Charles Gwathmey - Contemporary and Geometric" title="Contemporary and Geometric">Charles Gwathmey - Contemporary and Geometric</option>
-                            <option value="Frank Lloyd Wright - Organic and Prairie Style" title="Organic and Prairie Style">Frank Lloyd Wright - Organic and Prairie Style</option>
-                            <option value="Glenn Murcutt - Contextual and Sustainable" title="Contextual and Sustainable">Glenn Murcutt - Contextual and Sustainable</option>
-                            <option value="Jeanne Gang - Sustainable and Community-Oriented" title="Sustainable and Community-Oriented">Jeanne Gang - Sustainable and Community-Oriented</option>
-                            <option value="Richard Meier - Minimalistic and Light-Filled" title="Minimalistic and Light-Filled">Richard Meier - Minimalistic and Light-Filled</option>
-                            <option value="Richard Neutra - Mid-Century Modern and Functional" title="Mid-Century Modern and Functional">Richard Neutra - Mid-Century Modern and Functional</option>
-                            <option value="Robert A.M. Stern - Classical and Traditional" title="Classical and Traditional">Robert A.M. Stern - Classical and Traditional</option>
-                            <option value="Steven Holl - Experimental and Poetic" title="Experimental and Poetic">Steven Holl - Experimental and Poetic</option>
-                            <option value="Zaha Hadid - Fluid and Dynamic" title="Fluid and Dynamic">Zaha Hadid - Fluid and Dynamic</option>
-                        </optgroup>
-                        
-                        <!-- European Home Architects -->
-                        <optgroup label="European Home Architects">
-                            <option value="Alessandro Mendini - Eclectic and Postmodern" title="Eclectic, postmodern style">Alessandro Mendini - Eclectic and Postmodern</option>
-                            <option value="Alvar Aalto - Organic and Human-Centered" title="Organic and Human-Centered">Alvar Aalto - Organic and Human-Centered</option>
-                            <option value="Arne Jacobsen - Modernism" title="Modernism">Arne Jacobsen - Modernism</option>
-                            <option value="Bjarke Ingels - Futuristic and Sustainable" title="Futuristic and Sustainable">Bjarke Ingels - Futuristic and Sustainable</option>
-                            <option value="David Adjaye - Contemporary and Eclectic" title="Contemporary and Eclectic">David Adjaye - Contemporary and Eclectic</option>
-                            <option value="David Chipperfield - Minimalistic and Timeless" title="Minimalistic and Timeless">David Chipperfield - Minimalistic and Timeless</option>
-                            <option value="Ettore Sottsass - Bold Colors and Glass" title="Bold Colors and Glass">Ettore Sottsass - Bold Colors and Glass</option>
-                            <option value="Frank Gehry - Deconstructivist and Avant-Garde" title="Deconstructivist and Avant-Garde">Frank Gehry - Deconstructivist and Avant-Garde</option>
-                            <option value="Jean Nouvel - Innovative and Contextual" title="Innovative and Contextual">Jean Nouvel - Innovative and Contextual</option>
-                            <option value="Jørn Utzon - Curving and Organic" title="Curving roof forms">Jørn Utzon - Curving and Organic</option>
-                            <option value="Massimiliano Fuksas - Experimental and Sculptural" title="Experimental and Sculptural">Massimiliano Fuksas - Experimental and Sculptural</option>
-                            <option value="Norman Foster - Contemporary and Technological" title="Contemporary and Technological">Norman Foster - Contemporary and Technological</option>
-                            <option value="Peter Zumthor - Elemental and Ethereal" title="Elemental and Ethereal">Peter Zumthor - Elemental and Ethereal</option>
-                            <option value="Peter Zumthor - Uncompromising and minimalist" title="Uncompromising and minimalist">Peter Zumthor - Uncompromising and minimalist</option>
-                            <option value="Rem Koolhaas - Bold and Conceptual" title="Bold and Conceptual">Rem Koolhaas - Bold and Conceptual</option>
-                            <option value="Ron Arad - Radical and Experimental" title="Radical and Experimental">Ron Arad - Radical and Experimental</option>
-                        </optgroup>
-                        
-                        <!-- Japanese Home Architects -->
-                        <optgroup label="Japanese Home Architects">
-                            <option value="Arata Isozaki - Sculptural and Dynamic" title="Sculptural and Dynamic">Arata Isozaki - Sculptural and Dynamic</option>
-                            <option value="Hiroshi Nakamura - Innovative and Spatial" title="Innovative and Spatial">Hiroshi Nakamura - Innovative and Spatial</option>
-                            <option value="Kazuyo Sejima - Minimalistic and Serene" title="Minimalistic and Serene">Kazuyo Sejima - Minimalistic and Serene</option>
-                            <option value="Kengo Kuma - Natural and Sustainable" title="Natural and Sustainable">Kengo Kuma - Natural and Sustainable</option>
-                            <option value="Kisho Kurokawa - Metabolist and Futuristic" title="Metabolist and Futuristic">Kisho Kurokawa - Metabolist and Futuristic</option>
-                            <option value="Ryue Nishizawa - Light and Ethereal" title="Light and Ethereal">Ryue Nishizawa - Light and Ethereal</option>
-                            <option value="Shigeru Ban - Humanitarian and Sustainable" title="Humanitarian and Sustainable">Shigeru Ban - Humanitarian and Sustainable</option>
-                            <option value="Sou Fujimoto - Organic and Transparent" title="Organic and Transparent">Sou Fujimoto - Organic and Transparent</option>
-                            <option value="Tadao Ando - Minimalistic and Zen" title="Minimalistic and Zen">Tadao Ando - Minimalistic and Zen</option>
-                            <option value="Toyo Ito - Fluid and Sensuous" title="Fluid and Sensuous">Toyo Ito - Fluid and Sensuous</option>
-                        </optgroup>
-                        
-                        <!-- Latin American Home Architects -->
-                        <optgroup label="Latin American Home Architects">
-                            <option value="Bernardes Arquitetura - Tropical and Beachfront" title="Tropical and Beachfront">Bernardes Arquitetura - Tropical and Beachfront</option>
-                            <option value="Ciro Najle - Eco-Conscious and Innovative" title="Eco-Conscious and Innovative">Ciro Najle - Eco-Conscious and Innovative</option>
-                            <option value="Diego Villaseñor - Sustainable and Contextual" title="Sustainable and Contextual">Diego Villaseñor - Sustainable and Contextual</option>
-                            <option value="Fernando Romero - Futuristic and Dynamic" title="Futuristic and Dynamic">Fernando Romero - Futuristic and Dynamic</option>
-                            <option value="Isay Weinfeld - Contemporary and Luxurious" title="Contemporary and Luxurious">Isay Weinfeld - Contemporary and Luxurious</option>
-                            <option value="José Cruz Ovalle - Adaptive and Resourceful" title="Adaptive and Resourceful">José Cruz Ovalle - Adaptive and Resourceful</option>
-                            <option value="Luis Barragán - Modernist and Colorful" title="Modernist and Colorful">Luis Barragán - Modernist and Colorful</option>
-                            <option value="Marcio Kogan - Minimalistic and Open" title="Minimalistic and Open">Marcio Kogan - Minimalistic and Open</option>
-                            <option value="Oscar Niemeyer - Organic and Curvaceous" title="Organic and Curvaceous">Oscar Niemeyer - Organic and Curvaceous</option>
-                            <option value="Rogelio Salmona - Brickwork and Landscapes" title="Brickwork and Landscapes">Rogelio Salmona - Brickwork and Landscapes</option>
-                        </optgroup>
+                        <option value="">Architect</label>
+                            <optgroup label="European Home Architects"> Ettore Sottsass <option value="Ettore Sottsass" title="Noted for designing furniture, jewelry, glass, lighting, home and office wares, as well as numerous buildings and interiors - often defined by bold colors">Ettore Sottsass</option>
+                                <option value="John Pawson" title="Known for his signature white, pared-back aesthetic that celebrates space over clutter">John Pawson</option>
+                                <option value="Alessandro Mendini" title="Eclectic, postmodern style">Alessandro Mendini</option>
+                                <option value="Arne Jacobsen" title="Modernism">Arne Jacobsen</option>
+                                <option value="Jørn Utzon" title="Curving roof forms">Jørn Utzon</option>
+                                <option value="Frank Gehry" title="Deconstructivist and Avant-Garde">Frank Gehry</option>
+                                <option value="Bjarke Ingels" title="Futuristic and Sustainable">Bjarke Ingels</option>
+                                <option value="David Adjaye" title="He is known for having designed many notable buildings around the world,">David Adjaye Ingels</option>
+                                <option value="Alvar Aalto" title="Organic and Human-Centered">Alvar Aalto</option>
+                                <option value="Norman Foster" title="Contemporary and Technological">Norman Foster</option>
+                                <option value="Jean Nouvel" title="Innovative and Contextual">Jean Nouvel</option>
+                                <option value="Massimiliano Fuksas" title="Experimental and Sculptural">Massimiliano Fuksas</option>
+                                <option value="David Chipperfield" title="Minimalistic and Timeless">David Chipperfield</option>
+                                <option value="Peter Zumthor" title="Elemental and Ethereal">Peter Zumthor</option>
+                                <option value="Rem Koolhaas" title="Bold and Conceptual">Rem Koolhaas</option>
+                                <option value="Ron Arad" title=" experimentation with the boundaries and possibilities of materials, from metals to composites, and his radical re-conception of the form and structure of objects and buildings">Ron Arad</option>
+                                <option value="Renzo Piano" title="Elegant and Sustainable">Renzo Piano</option>
+                                <option value="Peter Zumthor" title="Uncompromising and minimalist">Peter Zumthor</option>
+                            </optgroup>
+                            <optgroup label="Japanese Home Architects">
+                                <option value="Tadao Ando" title="Minimalistic and Zen">Tadao Ando</option>
+                                <option value="Kengo Kuma" title="Natural and Sustainable">Kengo Kuma</option>
+                                <option value="Sou Fujimoto" title="Organic and Transparent">Sou Fujimoto</option>
+                                <option value="Shigeru Ban" title="Humanitarian and Sustainable">Shigeru Ban</option>
+                                <option value="Hiroshi Nakamura" title="Innovative and Spatial">Hiroshi Nakamura</option>
+                                <option value="Toyo Ito" title="Fluid and Sensuous">Toyo Ito</option>
+                                <option value="Kazuyo Sejima" title="Minimalistic and Serene">Kazuyo Sejima</option>
+                                <option value="Ryue Nishizawa" title="Light and Ethereal">Ryue Nishizawa</option>
+                                <option value="Kisho Kurokawa" title="Metabolist and Futuristic">Kisho Kurokawa</option>
+                                <option value="Arata Isozaki" title="Sculptural and Dynamic">Arata Isozaki</option>
+                            </optgroup>
+                            <optgroup label="American Home Architects">
+                                <option value="Richard Meier" title="Minimalistic and Light-Filled">Richard Meier</option>
+                                <option value="Frank Lloyd Wright" title="Organic and Prairie Style">Frank Lloyd Wright</option>
+                                <option value="Robert A.M. Stern" title="Classical and Traditional">Robert A.M. Stern</option>
+                                <option value="Steven Holl" title="Experimental and Poetic">Steven Holl</option>
+                                <option value="Richard Neutra" title="Mid-Century Modern and Functional">Richard Neutra</option>
+                                <option value="Charles Gwathmey" title="Contemporary and Geometric">Charles Gwathmey</option>
+                                <option value="Zaha Hadid" title="Fluid and Dynamic">Zaha Hadid</option>
+                                <option value="Jeanne Gang" title="Sustainable and Community-Oriented">Jeanne Gang</option>
+                                <option value="Renzo Zecchetto" title="Industrial and Sustainable">Renzo Zecchetto</option>
+                                <option value="Glenn Murcutt" title="Contextual and Sustainable">Glenn Murcutt</option>
+                            </optgroup>
+                            <optgroup label="Latin American Home Architects">
+                                <option value="Luis Barragán" title="Modernist and Colorful">Luis Barragán</option>
+                                <option value="Oscar Niemeyer" title="Organic and Curvaceous">Oscar Niemeyer</option>
+                                <option value="Rogelio Salmona" title="Brickwork and Landscapes">Rogelio Salmona</option>
+                                <option value="Isay Weinfeld" title="Contemporary and Luxurious">Isay Weinfeld</option>
+                                <option value="Bernardes Arquitetura" title="Tropical and Beachfront">Bernardes Arquitetura</option>
+                                <option value="Fernando Romero" title="Futuristic and Dynamic">Fernando Romero</option>
+                                <option value="Diego Villaseñor" title="Sustainable and Contextual">Diego Villaseñor</option>
+                                <option value="Marcio Kogan" title="Minimalistic and Open">Marcio Kogan</option>
+                                <option value="Ciro Najle" title="Eco-Conscious and Innovative">Ciro Najle</option>
+                                <option value="José Cruz Ovalle" title="Adaptive and Resourceful">José Cruz Ovalle</option>
+                            </optgroup>
                     </select>
                     <span class="dot"></span>
                     <!-- ID COLOR PALETTES -->
@@ -659,57 +542,53 @@
                     <h4>General color schemes</h4>
                     <select id="color_scheme">
                         <option value="">Color scheme</option>
-                        <option value="Monochromatic" title="Monochromatic: Consists of varying shades and tones of a single color. Creates a harmonious and soothing effect.">Monochromatic</option>
                         <option value="Analogous" title="Analogous: Combines colors that are adjacent to each other on the color wheel. Creates a sense of harmony and is pleasing to the eye.">Analogous</option>
-                        <option value="Complementary" title="Complementary: Involves pairing colors that are opposite each other on the color wheel. Creates a high contrast and energetic look.">Complementary</option>
-                        <option value="Triadic" title="Triadic: Utilizes three colors that are evenly spaced on the color wheel. Creates a vibrant and balanced color scheme.">Triadic</option>
-                        <option value="Split-Complementary" title="Split-Complementary: Involves a base color paired with two colors adjacent to its complementary color. Offers a balanced yet dynamic color combination.">Split-Complementary</option>
-                        <option value="Tetradic" title="Tetradic: Combines four colors arranged in two complementary color pairs. Provides a diverse and visually striking color scheme.">Tetradic</option>
-                        <option value="Neutral" title="Neutral: Utilizes neutral colors such as whites, grays, and beiges. Creates a clean, timeless, and versatile look.">Neutral</option>
-                        <option value="Pastel" title="Pastel: Involves soft and light shades of colors. Creates a delicate and soothing ambiance.">Pastel</option>
-                        <option value="Bold and Vibrant" title="Bold and Vibrant: Uses bright and saturated colors to create a bold and energetic atmosphere. Adds a sense of excitement and drama.">Bold and Vibrant</option>
-                        <option value="Earthy and Natural" title="Earthy and Natural: Draws inspiration from nature, featuring warm earth tones such as browns, greens, and terracotta. Creates a grounded and calming environment.">Earthy and Natural</option>
-                        <option value="Black and White" title="Black and White: Focuses on the contrast between black and white, creating a sophisticated and timeless look.">Black and White</option>
-                        <option value="Metallic" title="Metallic: Incorporates metallic hues like gold, silver, and copper. Adds a touch of glamour and elegance to the space.">Metallic</option>
-                        <option value="High-Contrast" title="High-Contrast: Combines colors with a stark contrast, such as black and white or bold colors against a neutral backdrop. Creates a dramatic and visually impactful effect.">High-Contrast</option>
-                        <option value="Muted and Subtle" title="Muted and Subtle: Features soft and desaturated colors, offering a muted and understated color palette. Creates a calming and sophisticated atmosphere.">Muted and Subtle</option>
-                        <option value="Coastal" title="Coastal: Inspired by the seaside, it includes shades of blue, sandy beige, and white. Evokes a breezy and relaxed coastal vibe.">Coastal</option>
-                        <option value="Retro" title="Retro: Draws inspiration from past eras, utilizing vibrant and nostalgic colors such as mustard yellow, avocado green, and burnt orange. Creates a fun and nostalgic ambiance.">Retro</option>
-                        <option value="Industrial" title="Industrial: Incorporates shades of gray, black, and metallic tones. Reflects an urban and raw aesthetic inspired by industrial materials.">Industrial</option>
-                        <option value="Scandinavian" title="Scandinavian: Characterized by a minimalist and light color palette, featuring whites, pale grays, and natural wood tones. Creates a clean and airy Scandinavian-inspired look.">Scandinavian</option>
-                        <option value="Zen" title="Zen: Inspired by Eastern aesthetics, it features soft, muted tones like pale greens, blush pinks, and earthy neutrals. Creates a calm and balanced atmosphere.">Zen</option>
-                        <option value="Desert" title="Desert: Draws inspiration from arid landscapes, utilizing warm, sandy tones, terracotta, and burnt oranges. Evokes a sense of warmth and rugged beauty.">Desert</option>
-                        <option value="Tropical" title="Tropical: Reflects the vibrant colors found in tropical settings, including bright greens, yellows, blues, and pinks. Creates a lively and tropical ambiance.">Tropical</option>
-                        <option value="Moody" title="Moody: Features deep, rich hues like navy blues, emerald greens, and dark purples. Creates a mysterious and dramatic atmosphere.">Moody</option>
-                        <option value="French Country" title="French Country: Incorporates soft pastels, such as pale blues, lavender, and creamy yellows, combined with rustic elements. Evokes a charming and rustic French countryside feel.">French Country</option>
-                        <option value="Urban Jungle" title="Urban Jungle: Combines shades of green, ranging from deep emerald to bright lime, with natural wood tones. Creates a lush and vibrant indoor jungle vibe.">Urban Jungle</option>
+                        <option value="Art Deco" title="Art Deco: Features bold and luxurious colors like deep jewel tones, golds, and blacks. Creates a glamorous and opulent atmosphere.">Art Deco</option>
                         <option value="Beachy" title="Beachy: Reflects the colors of the beach, featuring shades of aqua, sandy beige, and soft blues. Creates a relaxed and coastal atmosphere.">Beachy</option>
-                        <option value="Scandinavian Minimalism" title="Scandinavian Minimalism: Focuses on a clean and minimal color palette, including whites, pale grays, and light woods. Creates a serene and clutter-free environment.">Scandinavian Minimalism</option>
+                        <option value="Black and White" title="Black and White: Focuses on the contrast between black and white, creating a sophisticated and timeless look.">Black and White</option>
+                        <option value="Bohemian" title="Bohemian: Incorporates a mix of vibrant and eclectic colors like oranges, purples, and greens, combined with rich textiles and patterns. Creates a free-spirited and artistic vibe.">Bohemian</option>
+                        <option value="Bold and Vibrant" title="Bold and Vibrant: Uses bright and saturated colors to create a bold and energetic atmosphere. Adds a sense of excitement and drama.">Bold and Vibrant</option>
+                        <option value="Cottagecore" title="Cottagecore: Incorporates soft, pastel colors like muted greens, pinks, and blues, combined with floral patterns and vintage elements. Creates a cozy and nostalgic cottage-inspired atmosphere.">Cottagecore</option>
+                        <option value="Cool" title="Cool: Blues, greens, and purples">Cool</option>
+                        <option value="Desert" title="Desert: Draws inspiration from arid landscapes, utilizing warm, sandy tones, terracotta, and burnt oranges. Evokes a sense of warmth and rugged beauty.">Desert</option>
+                        <option value="Duotone" title="Duotone colors">Duotone</option>
+                        <option value="Earthy and Natural" title="Earthy and Natural: Draws inspiration from nature, featuring warm earth tones such as browns, greens, and terracotta. Creates a grounded and calming environment.">Earthy and Natural</option>
+                        <option value="Electric" title="Electric colors">Electric</option>
+                        <option value="French Country" title="French Country: Incorporates soft pastels, such as pale blues, lavender, and creamy yellows, combined with rustic elements. Evokes a charming and rustic French countryside feel.">French Country</option>
+                        <option value="Gradient" title="Gradient colors">Gradient</option>
+                        <option value="High-Contrast" title="High-Contrast: Combines colors with a stark contrast, such as black and white or bold colors against a neutral backdrop. Creates a dramatic and visually impactful effect.">High-Contrast</option>
+                        <option value="Industrial" title="Industrial: Incorporates shades of gray, black, and metallic tones. Reflects an urban and raw aesthetic inspired by industrial materials.">Industrial</option>
+                        <option value="Industrial Chic" title="Industrial Chic: Combines cool, urban tones like grays, blacks, and metallics with accents of warm browns or exposed brick. Creates a modern and edgy industrial look.">Industrial Chic</option>
+                        <option value="Jewel" title="Jewel tones">Jewel</option>
+                        <option value="Mediterranean" title="Mediterranean: Features warm earth tones like terracotta, sandy beige, and deep blues, inspired by the colors of the Mediterranean region. Creates a relaxed and rustic feel.">Mediterranean</option>
+                        <option value="Metallic" title="Metallic: Incorporates metallic hues like gold, silver, and copper. Adds a touch of glamour and elegance to the space.">Metallic</option>
+                        <option value="Mid-Century Modern" title="Mid-Century Modern: Features colors like mustard yellows, olive greens, and teals, inspired by the retro aesthetics of the mid-20th century. Creates a sleek and vintage vibe.">Mid-Century Modern</option>
+                        <option value="Moody" title="Moody: Features deep, rich hues like navy blues, emerald greens, and dark purples. Creates a mysterious and dramatic atmosphere.">Moody</option>
+                        <option value="Muted" title="Muted colors">Muted</option>
+                        <option value="Muted and Subtle" title="Muted and Subtle: Features soft and desaturated colors, offering a muted and understated color palette. Creates a calming and sophisticated atmosphere.">Muted and Subtle</option>
+                        <option value="Nordic White" title="Nordic White: Focuses on a crisp and clean white color palette, enhanced with natural textures and materials. Creates a fresh and minimalist Scandinavian-inspired atmosphere.">Nordic White</option>
+                        <option value="Pastel" title="Pastel: Involves soft and light shades of colors. Creates a delicate and soothing ambiance.">Pastel</option>
+                        <option value="Pop Art" title="Pop Art: Utilizes bold primary colors like reds, yellows, and blues, often combined with black and white geometric patterns. Creates a vibrant and playful environment.">Pop Art</option>
+                        <option value="Primary" title="Primary colors">Primary</option>
+                        <option value="Retro" title="Retro: Draws inspiration from past eras, utilizing vibrant and nostalgic colors such as mustard yellow, avocado green, and burnt orange. Creates a fun and nostalgic ambiance.">Retro</option>
+                        <option value="Retro Pastels" title="Retro Pastels: Draws inspiration from the 1950s and 1960s, featuring soft pastel shades like mint greens, baby blues, and pale pinks. Creates a retro and nostalgic vibe.">Retro Pastels</option>
                         <option value="Romantic" title="Romantic: Utilizes soft, feminine colors like blush pinks, dusty roses, and muted purples. Creates a romantic and dreamy ambiance.">Romantic</option>
                         <option value="Rustic Farmhouse" title="Rustic Farmhouse: Incorporates warm, earthy tones like browns, creams, and deep reds. Creates a cozy and nostalgic farmhouse feel.">Rustic Farmhouse</option>
-                        <option value="Art Deco" title="Art Deco: Features bold and luxurious colors like deep jewel tones, golds, and blacks. Creates a glamorous and opulent atmosphere.">Art Deco</option>
-                        <option value="Scandinavian Pop" title="Scandinavian Pop: Combines the clean lines of Scandinavian design with pops of bold and vibrant colors like yellows, blues, and pinks. Creates a playful and modern look.">Scandinavian Pop</option>
-                        <option value="Bohemian" title="Bohemian: Incorporates a mix of vibrant and eclectic colors like oranges, purples, and greens, combined with rich textiles and patterns. Creates a free-spirited and artistic vibe.">Bohemian</option>
-                        <option value="Mid-Century Modern" title="Mid-Century Modern: Features colors like mustard yellows, olive greens, and teals, inspired by the retro aesthetics of the mid-20th century. Creates a sleek and vintage vibe.">Mid-Century Modern</option>
-                        <option value="Industrial Chic" title="Industrial Chic: Combines cool, urban tones like grays, blacks, and metallics with accents of warm browns or exposed brick. Creates a modern and edgy industrial look.">Industrial Chic</option>
-                        <option value="Nordic White" title="Nordic White: Focuses on a crisp and clean white color palette, enhanced with natural textures and materials. Creates a fresh and minimalist Scandinavian-inspired atmosphere.">Nordic White</option>
-                        <option value="Pop Art" title="Pop Art: Utilizes bold primary colors like reds, yellows, and blues, often combined with black and white geometric patterns. Creates a vibrant and playful environment.">Pop Art</option>
-                        <option value="Mediterranean" title="Mediterranean: Features warm earth tones like terracotta, sandy beige, and deep blues, inspired by the colors of the Mediterranean region. Creates a relaxed and rustic feel.">Mediterranean</option>
-                        <option value="Cottagecore" title="Cottagecore: Incorporates soft, pastel colors like muted greens, pinks, and blues, combined with floral patterns and vintage elements. Creates a cozy and nostalgic cottage-inspired atmosphere.">Cottagecore</option>
-                        <option value="Retro Pastels" title="Retro Pastels: Draws inspiration from the 1950s and 1960s, featuring soft pastel shades like mint greens, baby blues, and pale pinks. Creates a retro and nostalgic vibe.">Retro Pastels</option>
-                        <option value="Warm" title="Warm: Reds, oranges, and yellows">Warm</option>
-                        <option value="Cool" title="Cool: Blues, greens, and purples">Cool</option>
-                        <option value="Duotone" title="Duotone colors">Duotone</option>
-                        <option value="Electric" title="Electric colors">Electric</option>
-                        <option value="Gradient" title="Gradient colors">Gradient</option>
-                        <option value="Jewel" title="Jewel tones">Jewel</option>
                         <option value="Saturated" title="Saturated colors">Saturated</option>
+                        <option value="Scandinavian" title="Scandinavian: Characterized by a minimalist and light color palette, featuring whites, pale grays, and natural wood tones. Creates a clean and airy Scandinavian-inspired look.">Scandinavian</option>
+                        <option value="Scandinavian Minimalism" title="Scandinavian Minimalism: Focuses on a clean and minimal color palette, including whites, pale grays, and light woods. Creates a serene and clutter-free environment.">Scandinavian Minimalism</option>
+                        <option value="Scandinavian Pop" title="Scandinavian Pop: Combines the clean lines of Scandinavian design with pops of bold and vibrant colors like yellows, blues, and pinks. Creates a playful and modern look.">Scandinavian Pop</option>
+                      
+                        <option value="Split-Complementary" title="Split-Complementary: Involves a base color paired with two colors adjacent to its complementary color. Offers a balanced yet dynamic color combination.">Split-Complementary</option>
+                        <option value="Tetradic" title="Tetradic: Combines four colors arranged in two complementary color pairs. Provides a diverse and visually striking color scheme.">Tetradic</option>
+                        <option value="Triadic" title="Triadic: Utilizes three colors that are evenly spaced on the color wheel. Creates a vibrant and balanced color scheme.">Triadic</option>
+                        <option value="Tropical" title="Tropical: Reflects the vibrant colors found in tropical settings, including bright greens, yellows, blues, and pinks. Creates a lively and tropical ambiance.">Tropical</option>
+                        <option value="Urban Jungle" title="Urban Jungle: Combines shades of green, ranging from deep emerald to bright lime, with natural wood tones. Creates a lush and vibrant indoor jungle vibe.">Urban Jungle</option>
                         <option value="Vibrant" title="Vibrant colors">Vibrant</option>
-                        <option value="Primary" title="Primary colors">Primary</option>
-                        <option value="Muted" title="Muted colors">Muted</option>
+                        <option value="Warm" title="Warm: Reds, oranges, and yellows">Warm</option>
                     </select>
                     <span class="dot"></span>
-                    
+
                     
                     <h4>Interior / Outdoor design</h4>
                     <select id="space_to_be_designed">
@@ -722,19 +601,19 @@
                     <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
                     
                     <h4>Special organic style</h4>
-                    
+                
                     <div class="switchContainer">
                         <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
-                            <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
+                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
                                 <span class="slider round"></span>
-                        </label>
+                            </label>
                         </label>
                     </div>
                     <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
                     
                     
-                    
-                    
+                
+                  
                 </div>
                 <!-- AREA AND SPACE -->
                 <div class="group">
@@ -764,23 +643,23 @@
                         <option value="Conservatory" title="A room primarily made of glass, designed for the cultivation and display of plants.">Conservatory </option>
                         <option value="Mezzanine Level" title="An intermediate level between floors, often used to create additional functional space.">Mezzanine Level</option>
                         <!--<option value="Split-level Room" title="A room with multiple levels, typically connected by a short flight of stairs.">Split-level Room </option>
-                        <option value="Two storey apartment">Two storey apartment</option>-->
+                                <option value="Two storey apartment">Two storey apartment</option>-->
                     </select>
                     <span class="dot"></span>
                     <!--ID ROOM SIZE-->
                     <select id="room_size">
                         <option value="">Room size</option>
-                        <option value="miniature">Miniature</option>
+                        <option value="very small">Very Small</option>
                         <option value="small">Small</option>
-                        <option value="Regular">Regular</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
+                        <option value="modest">Modest</option>
+                        <option value="compact">Compact</option>
+                        <option value="cozy">Cozy</option>
                         <option value="medium">Medium</option>
+                        <option value="average">Average</option>
                         <option value="spacious">Spacious</option>
                         <option value="large">Large</option>
                         <option value="huge">Huge</option>
                         <option value="monumental">Monumental</option>
-                        
                     </select>
                     <span class="dot"></span>
                     <h4>Indoor spaces</h4>
@@ -850,18 +729,9 @@
                         <option value="Terrace">Terrace</option>
                         <option value="Balcony">Balcony</option>
                         <option value="Courtyard">Courtyard</option>
-                        <option value="Meeting Room">Meeting Room</option>
-                        <option value="Coffee Shop">Coffee Shop</option>
-                        <option value="Restaurant">Restaurant</option>
-                        <option value="Office">Office</option>
-                        <option value="Coworking Space">Coworking Space</option>
-                        <option value="Hotel Lobby">Hotel Lobby</option>
-                        <option value="Hotel Room">Hotel Room</option>
-                        <option value="Hotel Bathroom">Hotel Bathroom</option>
-                        <option value="Exhibition Space">Exhibition Space</option>
                     </select>
                     <span class="dot"></span>
-                    
+                   
                     <!--ID child room -->
                     <select id="child_room">
                         <option value="">Children room type</option>
@@ -888,47 +758,28 @@
                     </select>
                     <span class="dot"></span>
                     <h4>Outdoor spaces</h4>
-                    <select id="pool_style">
+                    <select id="pool">
                         <option value="">Pool style</option>
-                        <option value="contemporary pool - Emphasizes clean lines, sleek materials, and a minimalist aesthetic" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
-                        <option value="mediterranean pool - Incorporates colorful mosaic tiles, decorative water features, and lush landscaping" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
-                        <option value="naturalistic pool - Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
-                        <option value="tropical pool - Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
-                        <option value="modern pool - Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
-                        <option value="rustic pool - Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
-                        <option value="zen pool - Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
-                        <option value="resort pool - Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
-                        <option value="Infinity Pool - Infinity edge design with a vanishing edge, creating the illusion of the pool merging with the horizon" title="Infinity edge design with a vanishing edge, creating the illusion of the pool merging with the horizon">Infinity Pool</option>
-                        <option value="Lap Pool - Designed for swimming laps and exercise, featuring a long and narrow shape" title="Designed for swimming laps and exercise, featuring a long and narrow shape">Lap Pool</option>
-                        <option value="Freeform Pool - Irregular and organic shape, often with curves and flowing lines" title="Irregular and organic shape, often with curves and flowing lines">Freeform Pool</option>
-                        <option value="Plunge Pool - Small and deep pool designed for quick dips and cooling off" title="Small and deep pool designed for quick dips and cooling off">Plunge Pool</option>
-                        <option value="Hot Tub or Spa - Small heated pool with built-in jets for relaxation and hydrotherapy" title="Small heated pool with built-in jets for relaxation and hydrotherapy">Hot Tub or Spa</option>
-                        <option value="Waterfall Feature - Pool with a cascading waterfall or water feature" title="Pool with a cascading waterfall or water feature">Waterfall Feature</option>
-                        <option value="Koi Pond - Decorative pool with Koi fish and aquatic plants, often in a garden setting" title="Decorative pool with Koi fish and aquatic plants, often in a garden setting">Koi Pond</option>
-                        <option value="Reflecting Pool - Still and shallow pool that reflects its surroundings, often used in formal landscapes" title="Still and shallow pool that reflects its surroundings, often used in formal landscapes">Reflecting Pool</option>
-                        <option value="Fountain Feature - Pool with a central fountain or water spout" title="Pool with a central fountain or water spout">Fountain Feature</option>
-                        <option value="Wading Pool - Shallow pool designed for wading and playing in the water" title="Shallow pool designed for wading and playing in the water">Wading Pool</option>
-                        <option value="Rounded organic pool - Organic-shaped pool with rounded edges, blending harmoniously with the natural environment" title="Organic-shaped pool with rounded edges, blending harmoniously with the natural environment">Rounded organic pool</option>
-                        <option value="Mediterranean alberca - Above-ground traditional Reservoirs with a Mediterranean-inspired design" title="Above-ground small pool with a Mediterranean-inspired design">Mediterranean alberca</option>
+                        <option value="contemporary pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
+                        <option value="mediterranean pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
+                        <option value="naturalistic pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
+                        <option value="tropical pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
+                        <option value="modern pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
+                        <option value="rustic pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
+                        <option value="zen pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+                        <option value="resort pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
+                        <option value="Infinity Pool">Infinity Pool</option>
+                        <option value="Lap Pool">Lap Pool</option>
+                        <option value="Freeform Pool">Freeform Pool</option>
+                        <option value="Plunge Pool">Plunge Pool</option>
+                        <option value="Hot Tub or Spa">Hot Tub or Spa</option>
+                        <option value="Waterfall Feature">Waterfall Feature</option>
+                        <option value="Koi Pond">Koi Pond</option>
+                        <option value="Reflecting Pool">Reflecting Pool</option>
+                        <option value="Fountain Feature">Fountain Feature</option>
+                        <option value="Wading Pool">Wading Pool</option>
+                        <option value="Rounded organic pool">Rounded organic pool </option>
                     </select>
-
-                    <span class="dot"></span>
-                    
-                 
-                    
-                    <select id="pool_size">
-                        <option value="">Pool size</option>
-                        <option value="miniature">Miniature</option>
-                        <option value="small">Small</option>
-                        <option value="Regular">Regular</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Large">Large</option>
-                        <option value="medium">Medium</option>
-                        <option value="spacious">Spacious</option>
-                        <option value="large">Large</option>
-                        <option value="huge">Huge</option>
-                        <option value="monumental">Monumental</option>
-                        </select>
                     <span class="dot"></span>
                     <select id="landscaping_options" name="landscaping_options">
                         <option value="">Landscape options</option>
@@ -998,7 +849,7 @@
                     <h5>Windows</h5>
                     <select id="windows">
                         <option value="">Windows</option>
-                        
+
                         <option value="casement windows">Casement Windows</option>
                         <option value="double hung windows">Double Hung Windows</option>
                         <option value="bay windows">Bay Windows</option>
@@ -1012,40 +863,40 @@
                     </select>
                     <span class="dot"></span>
                     
-                    
+                
                     
                     <h5>Ceiling</h5>
-                    <select id="ceiling_design" name="ceiling_design">
-                        <option value="">Ceiling</option>
-                        
-                        <option value="Coffered Ceiling">Coffered Ceiling</option>
-                        <option value="Tray Ceiling">Tray Ceiling</option>
-                        <option value="Vaulted Ceiling">Vaulted Ceiling</option>
-                        <option value="Cathedral Ceiling">Cathedral Ceiling</option>
-                        <option value="Exposed Beam Ceiling">Exposed Beam Ceiling</option>
-                        <option value="Suspended Ceiling">Suspended Ceiling</option>
-                        <option value="Dome Ceiling">Dome Ceiling</option>
-                        <option value="Cove Ceiling">Cove Ceiling</option>
-                        <option value="Tented Ceiling">Tented Ceiling</option>
-                        <option value="Shed Ceiling">Shed Ceiling</option>
-                        <option value="catalan vault">Catalan Vault</option>
-                        <option value="gable Ceiling">Gable Roof</option>
-                        <option value="hip Ceiling">Hip Roof</option>
-                        <option value="mansard Ceiling">Mansard Roof</option>
-                        <option value="flat Ceiling">Flat Roof</option>
-                        <option value="shed Ceiling">Shed Roof</option>
-                        <option value="gambrel Ceiling">Gambrel Roof</option>
-                        <option value="butterfly Ceiling">Butterfly Roof</option>
-                        <option value="saltbox Ceiling">Saltbox Roof</option>
-                        <option value="dome Ceiling">Dome Roof</option>
-                        <option value="sawtooth Ceiling">Sawtooth Roof</option>
-                    </select>
-                    <span class="dot"></span>
+                        <select id="ceiling_design" name="ceiling_design">
+                            <option value="">Ceiling</option>
+
+                            <option value="Coffered Ceiling">Coffered Ceiling</option>
+                            <option value="Tray Ceiling">Tray Ceiling</option>
+                            <option value="Vaulted Ceiling">Vaulted Ceiling</option>
+                            <option value="Cathedral Ceiling">Cathedral Ceiling</option>
+                            <option value="Exposed Beam Ceiling">Exposed Beam Ceiling</option>
+                            <option value="Suspended Ceiling">Suspended Ceiling</option>
+                            <option value="Dome Ceiling">Dome Ceiling</option>
+                            <option value="Cove Ceiling">Cove Ceiling</option>
+                            <option value="Tented Ceiling">Tented Ceiling</option>
+                            <option value="Shed Ceiling">Shed Ceiling</option>
+                            <option value="catalan vault">Catalan Vault</option>
+                            <option value="gable Ceiling">Gable Roof</option>
+                            <option value="hip Ceiling">Hip Roof</option>
+                            <option value="mansard Ceiling">Mansard Roof</option>
+                            <option value="flat Ceiling">Flat Roof</option>
+                            <option value="shed Ceiling">Shed Roof</option>
+                            <option value="gambrel Ceiling">Gambrel Roof</option>
+                            <option value="butterfly Ceiling">Butterfly Roof</option>
+                            <option value="saltbox Ceiling">Saltbox Roof</option>
+                            <option value="dome Ceiling">Dome Roof</option>
+                            <option value="sawtooth Ceiling">Sawtooth Roof</option>
+                        </select>
+                        <span class="dot"></span>
                     
                     
                     <select id="roof_material" name="roof_material">
                         <option value="">Roof material</option>
-                        
+
                         <option value="asphalt shingles">Asphalt Shingles</option>
                         <option value="metal roofing">Metal Roofing</option>
                         <option value="concrete tiles">Concrete Tiles</option>
@@ -1061,7 +912,7 @@
                     
                     <select id="roof_height">
                         <option value="">Roof height</option>
-                        
+
                         <option value="low roof">Low Roof</option>
                         <option value="standard roof">Standard Roof</option>
                         <option value="high roof">High Roof</option>
@@ -1077,7 +928,7 @@
                     <h5>Walls</h5>
                     <select id="wall_type">
                         <option value="">Walls style</option>
-                        
+
                         <option value="brick wall">Brick wall</option>
                         <option value="stone wall">Stone wall</option>
                         <option value="concrete wall">Concrete wall</option>
@@ -1090,10 +941,10 @@
                         <option value="prefabricated wall">Prefabricated wall</option>
                     </select>
                     <span class="dot"></span>
-                    
+                   
                     <select id="wall_cladding" name="wall_cladding">
                         <option value="">Cladding</option>
-                        
+
                         <option value="wooden cladding">Wooden Cladding</option>
                         <option value="stone cladding">Stone Cladding</option>
                         <option value="brick cladding">Brick Cladding</option>
@@ -1108,7 +959,7 @@
                     <span class="dot"></span>
                     <select id="exterior_finish" name="exterior_finish">
                         <option value="">Exterior finish</option>
-                        
+
                         <option value="stucco finish">Stucco Finish</option>
                         <option value="brick finish">Brick Finish</option>
                         <option value="stone finish">Stone Finish</option>
@@ -1123,7 +974,7 @@
                     <span class="dot"></span>
                     <select id="exterior_trim_molding" name="exterior_trim_molding">
                         <option value="">Exterior trim</option>
-                        
+
                         <option value="crown molding">Crown Molding</option>
                         <option value="window trim">Window Trim</option>
                         <option value="door trim">Door Trim</option>
@@ -1136,30 +987,9 @@
                         <option value="column capitals">Column Capitals</option>
                     </select>
                     <span class="dot"></span>
-                    
-                    <h5>Interior walls color </h5>
-                    <select id="interior_paint_color" name="interior_paint_color">
-                            <option value="">Walls color</option>
-                            
-                            <option value="neutral tones">Neutral Tones</option>
-                            <option value="earthy tones">Earthy Tones</option>
-                            <option value="pastel colors">Pastel Colors</option>
-                            <option value="vibrant colors">Vibrant Colors</option>
-                            <option value="monochromatic colors">Monochromatic Colors</option>
-                            <option value="classic white">Classic White</option>
-                            <option value="cool gray tones">Cool Gray Tones</option>
-                            <option value="warm beige tones">Warm Beige Tones</option>
-                            <option value="bold accent colors">Bold Accent Colors</option>
-                            <option value="dark dramatic colors">Dark and Dramatic Colors</option>
-                        </select>
-                        <span class="dot"></span>
-                    
-                    <h5>Exterior walls color </h5>
-                  
-                    
-                <select id="exterior_paint_color" name="exterior_paint_color">
+                    <select id="exterior_paint_color" name="exterior_paint_color">
                         <option value="">Walls color</option>
-                        
+
                         <option value="neutral tones">Neutral Tones</option>
                         <option value="earthy tones">Earthy Tones</option>
                         <option value="pastel colors">Pastel Colors</option>
@@ -1174,7 +1004,7 @@
                     <span class="dot"></span>
                     <select id="facade_pattern" name="facade_pattern">
                         <option value="">Facade pattern</option>
-                        
+
                         <option value="Chevron Pattern">Chevron Pattern</option>
                         <option value="Herringbone Pattern">Herringbone Pattern</option>
                         <option value="Geometric Pattern">Geometric Pattern</option>
@@ -1192,7 +1022,7 @@
                     
                     <select id="floors" name="floors">
                         <option value="">Floor style</option>
-                        
+
                         <option value="Hardwood Flooring">Hardwood Flooring</option>
                         <option value="Laminate Flooring">Laminate Flooring</option>
                         <option value="Vinyl Flooring">Vinyl Flooring</option>
@@ -1213,249 +1043,249 @@
                         <option value="Onyx Flooring">Onyx Flooring</option>
                         <option value="Porcelain Flooring">Porcelain Flooring</option>
                         <option value="Ceramic Flooring">Ceramic Flooring</option>
-                        <option value="Decorative cement tile flooring">Decorative Cement Tile Flooring</option>
-                        <option value="Granada tile flooring">Granada Tile Flooring</option>
-                        <option value="Checkerboard Pattern Soft Black & Broken White Antique Italian Cement Tile flooring">Checkerboard Pattern Soft Black & Broken White Antique Italian Cement Tile Flooring</option>
-                        <option value="Encaustic Cement Tile Flooring">Encaustic Cement Tile Flooring</option>
-                        <option value="Victorian floor tile flooring">Victorian Floor Tile Flooring</option>
-                        
                     </select>
                     <span class="dot"></span>
-                    
-                </div>
-                
+                 
+                    </div>
+                    <!-- ID IMAGE
+                            <h4>Upload your sketch, picture, ...</h4>
+                            <input type="file" id="imageDisplayUrl" accept="image/*" />
+                            <br>
+                            <sub>JPG, PNG, GIF formats allowed.</sub><br>
+                            <sub>Upload and image is not mandatory</sub><br>
+                            <sub>File name must be simple and short</sub>-->
                 <!-- INTERIOR DESIGN TOKENS -->
                 <div class="group groupSpacer">
-                    
-                    <h5>Staircase</h5>
-                    <select id="staircase_design" name="staircase_design">
-                        <option value="">Staircase</option>
+                
+                   <h5>Staircase</h5>
+                        <select id="staircase_design" name="staircase_design">
+                            <option value="">Staircase</option>
+
+                            <option value="Straight Stairs">Straight Stairs</option>
+                            <option value="L-shaped Stairs">L-shaped Stairs</option>
+                            <option value="U-shaped Stairs">U-shaped Stairs</option>
+                            <option value="Spiral Stairs">Spiral Stairs</option>
+                            <option value="Curved Stairs">Curved Stairs</option>
+                            <option value="Floating Stairs">Floating Stairs</option>
+                            <option value="Cantilevered Stairs">Cantilevered Stairs</option>
+                            <option value="Glass Stairs">Glass Stairs</option>
+                            <option value="Open Riser Stairs">Open Riser Stairs</option>
+                            <option value="Geometric Stairs">Geometric Stairs</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Straight Stairs">Straight Stairs</option>
-                        <option value="L-shaped Stairs">L-shaped Stairs</option>
-                        <option value="U-shaped Stairs">U-shaped Stairs</option>
-                        <option value="Spiral Stairs">Spiral Stairs</option>
-                        <option value="Curved Stairs">Curved Stairs</option>
-                        <option value="Floating Stairs">Floating Stairs</option>
-                        <option value="Cantilevered Stairs">Cantilevered Stairs</option>
-                        <option value="Glass Stairs">Glass Stairs</option>
-                        <option value="Open Riser Stairs">Open Riser Stairs</option>
-                        <option value="Geometric Stairs">Geometric Stairs</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    
-                    <select id="railing_style" name="railing_style">
-                        <option value="">Railing</option>
                         
-                        <option value="Wood Railing">Wood Railing</option>
-                        <option value="Metal Railing">Metal Railing</option>
-                        <option value="Glass Railing">Glass Railing</option>
-                        <option value="Cable Railing">Cable Railing</option>
-                        <option value="Wrought Iron Railing">Wrought Iron Railing</option>
-                        <option value="Modern Railing">Modern Railing</option>
-                        <option value="Traditional Railing">Traditional Railing</option>
-                        <option value="Art Deco Railing">Art Deco Railing</option>
-                        <option value="Minimalist Railing">Minimalist Railing</option>
-                        <option value="Rustic Railing">Rustic Railing</option>
-                    </select>
-                    <span class="dot"></span>
+                        <select id="railing_style" name="railing_style">
+                            <option value="">Railing</option>
+
+                            <option value="Wood Railing">Wood Railing</option>
+                            <option value="Metal Railing">Metal Railing</option>
+                            <option value="Glass Railing">Glass Railing</option>
+                            <option value="Cable Railing">Cable Railing</option>
+                            <option value="Wrought Iron Railing">Wrought Iron Railing</option>
+                            <option value="Modern Railing">Modern Railing</option>
+                            <option value="Traditional Railing">Traditional Railing</option>
+                            <option value="Art Deco Railing">Art Deco Railing</option>
+                            <option value="Minimalist Railing">Minimalist Railing</option>
+                            <option value="Rustic Railing">Rustic Railing</option>
+                        </select>
+                        <span class="dot"></span>
                     
                     <h5>Kitchen</h5>
-                    <select id="kitchen_layout" name="kitchen_layout">
-                        <option value="">Kitchen layout</option>
+                        <select id="kitchen_layout" name="kitchen_layout">
+                            <option value="">Kitchen layout</option>
+
+                            <option value="L-shaped Kitchen">L-shaped Kitchen</option>
+                            <option value="U-shaped Kitchen">U-shaped Kitchen</option>
+                            <option value="Galley Kitchen">Galley Kitchen</option>
+                            <option value="Island Kitchen">Island Kitchen</option>
+                            <option value="Peninsula Kitchen">Peninsula Kitchen</option>
+                            <option value="Open Kitchen">Open Kitchen</option>
+                            <option value="Closed Kitchen">Closed Kitchen</option>
+                            <option value="One-Wall Kitchen">One-Wall Kitchen</option>
+                            <option value="Two-Wall Kitchen">Two-Wall Kitchen</option>
+                            <option value="G-shaped Kitchen">G-shaped Kitchen</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="L-shaped Kitchen">L-shaped Kitchen</option>
-                        <option value="U-shaped Kitchen">U-shaped Kitchen</option>
-                        <option value="Galley Kitchen">Galley Kitchen</option>
-                        <option value="Island Kitchen">Island Kitchen</option>
-                        <option value="Peninsula Kitchen">Peninsula Kitchen</option>
-                        <option value="Open Kitchen">Open Kitchen</option>
-                        <option value="Closed Kitchen">Closed Kitchen</option>
-                        <option value="One-Wall Kitchen">One-Wall Kitchen</option>
-                        <option value="Two-Wall Kitchen">Two-Wall Kitchen</option>
-                        <option value="G-shaped Kitchen">G-shaped Kitchen</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    <select id="countertop_material" name="countertop_material">
-                        <option value="">Countertop</option>
+                        <select id="countertop_material" name="countertop_material">
+                            <option value="">Countertop</option>
+
+                            <option value="Granite Countertop">Granite Countertop</option>
+                            <option value="Quartz Countertop">Quartz Countertop</option>
+                            <option value="Marble Countertop">Marble Countertop</option>
+                            <option value="Solid Surface Countertop">Solid Surface Countertop</option>
+                            <option value="Butcher Block Countertop">Butcher Block Countertop</option>
+                            <option value="Concrete Countertop">Concrete Countertop</option>
+                            <option value="Laminate Countertop">Laminate Countertop</option>
+                            <option value="Soapstone Countertop">Soapstone Countertop</option>
+                            <option value="Stainless Steel Countertop">Stainless Steel Countertop</option>
+                            <option value="Recycled Glass Countertop">Recycled Glass Countertop</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Granite Countertop">Granite Countertop</option>
-                        <option value="Quartz Countertop">Quartz Countertop</option>
-                        <option value="Marble Countertop">Marble Countertop</option>
-                        <option value="Solid Surface Countertop">Solid Surface Countertop</option>
-                        <option value="Butcher Block Countertop">Butcher Block Countertop</option>
-                        <option value="Concrete Countertop">Concrete Countertop</option>
-                        <option value="Laminate Countertop">Laminate Countertop</option>
-                        <option value="Soapstone Countertop">Soapstone Countertop</option>
-                        <option value="Stainless Steel Countertop">Stainless Steel Countertop</option>
-                        <option value="Recycled Glass Countertop">Recycled Glass Countertop</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    
-                    <select id="backsplash_design" name="backsplash_design">
-                        <option value="">Backsplash</option>
                         
-                        <option value="Subway Tile Backsplash">Subway Tile Backsplash</option>
-                        <option value="Mosaic Tile Backsplash">Mosaic Tile Backsplash</option>
-                        <option value="Herringbone Tile Backsplash">Herringbone Tile Backsplash</option>
-                        <option value="Arabesque Tile Backsplash">Arabesque Tile Backsplash</option>
-                        <option value="Penny Tile Backsplash">Penny Tile Backsplash</option>
-                        <option value="Hexagonal Tile Backsplash">Hexagonal Tile Backsplash</option>
-                        <option value="Brick Tile Backsplash">Brick Tile Backsplash</option>
-                        <option value="Stainless Steel Backsplash">Stainless Steel Backsplash</option>
-                        <option value="Glass Tile Backsplash">Glass Tile Backsplash</option>
-                        <option value="Marble Tile Backsplash">Marble Tile Backsplash</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    
-                    <select id="cabinet_storage_design" name="cabinet_storage_design">
-                        <option value="">Cabinet</option>
+                        <select id="backsplash_design" name="backsplash_design">
+                            <option value="">Backsplash</option>
+
+                            <option value="Subway Tile Backsplash">Subway Tile Backsplash</option>
+                            <option value="Mosaic Tile Backsplash">Mosaic Tile Backsplash</option>
+                            <option value="Herringbone Tile Backsplash">Herringbone Tile Backsplash</option>
+                            <option value="Arabesque Tile Backsplash">Arabesque Tile Backsplash</option>
+                            <option value="Penny Tile Backsplash">Penny Tile Backsplash</option>
+                            <option value="Hexagonal Tile Backsplash">Hexagonal Tile Backsplash</option>
+                            <option value="Brick Tile Backsplash">Brick Tile Backsplash</option>
+                            <option value="Stainless Steel Backsplash">Stainless Steel Backsplash</option>
+                            <option value="Glass Tile Backsplash">Glass Tile Backsplash</option>
+                            <option value="Marble Tile Backsplash">Marble Tile Backsplash</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Shaker Cabinets">Shaker Cabinets</option>
-                        <option value="Flat-Panel Cabinets">Flat-Panel Cabinets</option>
-                        <option value="Glass Front Cabinets">Glass Front Cabinets</option>
-                        <option value="Open Shelving">Open Shelving</option>
-                        <option value="Floating Shelves">Floating Shelves</option>
-                        <option value="Lazy Susan Cabinet">Lazy Susan Cabinet</option>
-                        <option value="Pantry Cabinet">Pantry Cabinet</option>
-                        <option value="Corner Cabinet">Corner Cabinet</option>
-                        <option value="Wine Rack Cabinet">Wine Rack Cabinet</option>
-                        <option value="Pull-Out Trash and Recycling Cabinet">Pull-Out Trash and Recycling Cabinet</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    
-                    <select id="appliance_style_finish" name="appliance_style_finish">
-                        <option value="">Appliance</option>
                         
-                        <option value="Stainless Steel Appliances">Stainless Steel Appliances</option>
-                        <option value="Black Stainless Steel Appliances">Black Stainless Steel Appliances</option>
-                        <option value="White Appliances">White Appliances</option>
-                        <option value="Black Appliances">Black Appliances</option>
-                        <option value="Custom Panel Appliances (to match cabinetry)">Custom Panel Appliances (to match cabinetry)</option>
-                        <option value="Matte Appliances">Matte Appliances</option>
-                        <option value="Colored Appliances (e.g., red, blue, etc.)">Colored Appliances (e.g., red, blue, etc.)</option>
-                        <option value="Retro-Style Appliances">Retro-Style Appliances</option>
-                        <option value="Smart Appliances">Smart Appliances</option>
-                        <option value="Built-In Appliances">Built-In Appliances</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    <h5>Bathroom</h5>
-                    <select id="bathroom_fixture_style" name="bathroom_fixture_style">
-                        <option value="">Fixture</option>
+                        <select id="cabinet_storage_design" name="cabinet_storage_design">
+                            <option value="">Cabinet</option>
+
+                            <option value="Shaker Cabinets">Shaker Cabinets</option>
+                            <option value="Flat-Panel Cabinets">Flat-Panel Cabinets</option>
+                            <option value="Glass Front Cabinets">Glass Front Cabinets</option>
+                            <option value="Open Shelving">Open Shelving</option>
+                            <option value="Floating Shelves">Floating Shelves</option>
+                            <option value="Lazy Susan Cabinet">Lazy Susan Cabinet</option>
+                            <option value="Pantry Cabinet">Pantry Cabinet</option>
+                            <option value="Corner Cabinet">Corner Cabinet</option>
+                            <option value="Wine Rack Cabinet">Wine Rack Cabinet</option>
+                            <option value="Pull-Out Trash and Recycling Cabinet">Pull-Out Trash and Recycling Cabinet</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Modern Fixtures">Modern Fixtures</option>
-                        <option value="Traditional Fixtures">Traditional Fixtures</option>
-                        <option value="Contemporary Fixtures">Contemporary Fixtures</option>
-                        <option value="Victorian Fixtures">Victorian Fixtures</option>
-                        <option value="Art Deco Fixtures">Art Deco Fixtures</option>
-                        <option value="Rustic Fixtures">Rustic Fixtures</option>
-                        <option value="Industrial Fixtures">Industrial Fixtures</option>
-                        <option value="Vintage Fixtures">Vintage Fixtures</option>
-                        <option value="Minimalist Fixtures">Minimalist Fixtures</option>
-                        <option value="Scandinavian Fixtures">Scandinavian Fixtures</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    <select id="bathroom_tile_design" name="bathroom_tile_design">
-                        <option value="">Tile design</option>
                         
-                        <option value="Subway Tiles">Subway Tiles</option>
-                        <option value="Mosaic Tiles">Mosaic Tiles</option>
-                        <option value="Penny Tiles">Penny Tiles</option>
-                        <option value="Hexagonal Tiles">Hexagonal Tiles</option>
-                        <option value="Moroccan Tiles">Moroccan Tiles</option>
-                        <option value="Fish Scale Tiles">Fish Scale Tiles</option>
-                        <option value="Marble Tiles">Marble Tiles</option>
-                        <option value="Ceramic Tiles">Ceramic Tiles</option>
-                        <option value="Glass Tiles">Glass Tiles</option>
-                        <option value="Porcelain Tiles">Porcelain Tiles</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    <select id="bathroom_vanity_style" name="bathroom_vanity_style">
-                        <option value="">Vanity</option>
+                        <select id="appliance_style_finish" name="appliance_style_finish">
+                            <option value="">Appliance</option>
+
+                            <option value="Stainless Steel Appliances">Stainless Steel Appliances</option>
+                            <option value="Black Stainless Steel Appliances">Black Stainless Steel Appliances</option>
+                            <option value="White Appliances">White Appliances</option>
+                            <option value="Black Appliances">Black Appliances</option>
+                            <option value="Custom Panel Appliances (to match cabinetry)">Custom Panel Appliances (to match cabinetry)</option>
+                            <option value="Matte Appliances">Matte Appliances</option>
+                            <option value="Colored Appliances (e.g., red, blue, etc.)">Colored Appliances (e.g., red, blue, etc.)</option>
+                            <option value="Retro-Style Appliances">Retro-Style Appliances</option>
+                            <option value="Smart Appliances">Smart Appliances</option>
+                            <option value="Built-In Appliances">Built-In Appliances</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Floating Vanity">Floating Vanity</option>
-                        <option value="Wall-Mounted Vanity">Wall-Mounted Vanity</option>
-                        <option value="Freestanding Vanity">Freestanding Vanity</option>
-                        <option value="Double Vanity">Double Vanity</option>
-                        <option value="Single Vanity">Single Vanity</option>
-                        <option value="Vessel Sink Vanity">Vessel Sink Vanity</option>
-                        <option value="Open Shelf Vanity">Open Shelf Vanity</option>
-                        <option value="Rustic Vanity">Rustic Vanity</option>
-                        <option value="Modern Vanity">Modern Vanity</option>
-                        <option value="Traditional Vanity">Traditional Vanity</option>
-                    </select>
-                    <span class="dot"></span>
-                    <select id="shower_bathtub_design" name="shower_bathtub_design">
-                        <option value="">Shower/bathtub</option>
+                        <h5>Bathroom</h5>
+                        <select id="bathroom_fixture_style" name="bathroom_fixture_style">
+                            <option value="">Fixture</option>
+
+                            <option value="Modern Fixtures">Modern Fixtures</option>
+                            <option value="Traditional Fixtures">Traditional Fixtures</option>
+                            <option value="Contemporary Fixtures">Contemporary Fixtures</option>
+                            <option value="Victorian Fixtures">Victorian Fixtures</option>
+                            <option value="Art Deco Fixtures">Art Deco Fixtures</option>
+                            <option value="Rustic Fixtures">Rustic Fixtures</option>
+                            <option value="Industrial Fixtures">Industrial Fixtures</option>
+                            <option value="Vintage Fixtures">Vintage Fixtures</option>
+                            <option value="Minimalist Fixtures">Minimalist Fixtures</option>
+                            <option value="Scandinavian Fixtures">Scandinavian Fixtures</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Walk-In Shower">Walk-In Shower</option>
-                        <option value="Corner Shower">Corner Shower</option>
-                        <option value="Alcove Shower">Alcove Shower</option>
-                        <option value="Shower-Tub Combo">Shower-Tub Combo</option>
-                        <option value="Freestanding Bathtub">Freestanding Bathtub</option>
-                        <option value="Drop-In Bathtub">Drop-In Bathtub</option>
-                        <option value="Clawfoot Bathtub">Clawfoot Bathtub</option>
-                        <option value="Soaking Bathtub">Soaking Bathtub</option>
-                        <option value="Jacuzzi Bathtub">Jacuzzi Bathtub</option>
-                        <option value="Whirlpool Bathtub">Whirlpool Bathtub</option>
-                    </select>
-                    <span class="dot"></span>
-                    <select id="bathroom_lighting_fixtures" name="bathroom_lighting_fixtures">
-                        <option value="">Bathroom lightning</option>
+                        <select id="bathroom_tile_design" name="bathroom_tile_design">
+                            <option value="">Tile design</option>
+
+                            <option value="Subway Tiles">Subway Tiles</option>
+                            <option value="Mosaic Tiles">Mosaic Tiles</option>
+                            <option value="Penny Tiles">Penny Tiles</option>
+                            <option value="Hexagonal Tiles">Hexagonal Tiles</option>
+                            <option value="Moroccan Tiles">Moroccan Tiles</option>
+                            <option value="Fish Scale Tiles">Fish Scale Tiles</option>
+                            <option value="Marble Tiles">Marble Tiles</option>
+                            <option value="Ceramic Tiles">Ceramic Tiles</option>
+                            <option value="Glass Tiles">Glass Tiles</option>
+                            <option value="Porcelain Tiles">Porcelain Tiles</option>
+                        </select>
+                        <span class="dot"></span>
                         
-                        <option value="Vanity Lights">Vanity Lights</option>
-                        <option value="Ceiling Lights">Ceiling Lights</option>
-                        <option value="Wall Sconces">Wall Sconces</option>
-                        <option value="Pendant Lights">Pendant Lights</option>
-                        <option value="Recessed Lights">Recessed Lights</option>
-                        <option value="Chandelier Lights">Chandelier Lights</option>
-                        <option value="Mirror Lights">Mirror Lights</option>
-                        <option value="LED Strip Lights">LED Strip Lights</option>
-                        <option value="Task Lighting">Task Lighting</option>
-                        <option value="Night Lights">Night Lights</option>
-                    </select>
-                    <span class="dot"></span>
-                    <h5>Special Features</h5>
-                    <select id="fireplace_design" name="fireplace_design">
-                        <option value="">Fireplace</option>
-                        
-                        <option value="Traditional Fireplace">Traditional Fireplace</option>
-                        <option value="Modern Fireplace">Modern Fireplace</option>
-                        <option value="Corner Fireplace">Corner Fireplace</option>
-                        <option value="Two-Sided Fireplace">Two-Sided Fireplace</option>
-                        <option value="Three-Sided Fireplace">Three-Sided Fireplace</option>
-                        <option value="See-Through Fireplace">See-Through Fireplace</option>
-                        <option value="Freestanding Fireplace">Freestanding Fireplace</option>
-                        <option value="Wall-Mounted Fireplace">Wall-Mounted Fireplace</option>
-                        <option value="Suspended Fireplace">Suspended Fireplace</option>
-                        <option value="Built-In Fireplace">Built-In Fireplace</option>
-                    </select>
-                    <span class="dot"></span>
-                    <select id="balcony_design" name="balcony_design">
-                        <option value="">Balcony</option>
-                        
-                        <option value="Juliet Balcony">Juliet Balcony</option>
-                        <option value="Cantilevered Balcony">Cantilevered Balcony</option>
-                        <option value="Wraparound Balcony">Wraparound Balcony</option>
-                        <option value="Suspended Balcony">Suspended Balcony</option>
-                        <option value="Railing-Integrated Planter Balcony">Railing-Integrated Planter Balcony</option>
-                        <option value="Multi-Level Balcony">Multi-Level Balcony</option>
-                        <option value="Glass Balustrade Balcony">Glass Balustrade Balcony</option>
-                        <option value="Open-Air Balcony">Open-Air Balcony</option>
-                        <option value="Terrace Balcony">Terrace Balcony</option>
-                        <option value="Rooftop Balcony">Rooftop Balcony</option>
-                    </select>
-                    <span class="dot"></span>
+                        <select id="bathroom_vanity_style" name="bathroom_vanity_style">
+                            <option value="">Vanity</option>
+
+                            <option value="Floating Vanity">Floating Vanity</option>
+                            <option value="Wall-Mounted Vanity">Wall-Mounted Vanity</option>
+                            <option value="Freestanding Vanity">Freestanding Vanity</option>
+                            <option value="Double Vanity">Double Vanity</option>
+                            <option value="Single Vanity">Single Vanity</option>
+                            <option value="Vessel Sink Vanity">Vessel Sink Vanity</option>
+                            <option value="Open Shelf Vanity">Open Shelf Vanity</option>
+                            <option value="Rustic Vanity">Rustic Vanity</option>
+                            <option value="Modern Vanity">Modern Vanity</option>
+                            <option value="Traditional Vanity">Traditional Vanity</option>
+                        </select>
+                        <span class="dot"></span>
+                        <select id="shower_bathtub_design" name="shower_bathtub_design">
+                            <option value="">Shower/bathtub</option>
+
+                            <option value="Walk-In Shower">Walk-In Shower</option>
+                            <option value="Corner Shower">Corner Shower</option>
+                            <option value="Alcove Shower">Alcove Shower</option>
+                            <option value="Shower-Tub Combo">Shower-Tub Combo</option>
+                            <option value="Freestanding Bathtub">Freestanding Bathtub</option>
+                            <option value="Drop-In Bathtub">Drop-In Bathtub</option>
+                            <option value="Clawfoot Bathtub">Clawfoot Bathtub</option>
+                            <option value="Soaking Bathtub">Soaking Bathtub</option>
+                            <option value="Jacuzzi Bathtub">Jacuzzi Bathtub</option>
+                            <option value="Whirlpool Bathtub">Whirlpool Bathtub</option>
+                        </select>
+                        <span class="dot"></span>
+                        <select id="bathroom_lighting_fixtures" name="bathroom_lighting_fixtures">
+                            <option value="">Bathroom lightning</option>
+
+                            <option value="Vanity Lights">Vanity Lights</option>
+                            <option value="Ceiling Lights">Ceiling Lights</option>
+                            <option value="Wall Sconces">Wall Sconces</option>
+                            <option value="Pendant Lights">Pendant Lights</option>
+                            <option value="Recessed Lights">Recessed Lights</option>
+                            <option value="Chandelier Lights">Chandelier Lights</option>
+                            <option value="Mirror Lights">Mirror Lights</option>
+                            <option value="LED Strip Lights">LED Strip Lights</option>
+                            <option value="Task Lighting">Task Lighting</option>
+                            <option value="Night Lights">Night Lights</option>
+                        </select>
+                        <span class="dot"></span>
+                        <h5>Special Features</h5>
+                        <select id="fireplace_design" name="fireplace_design">
+                            <option value="">Fireplace</option>
+
+                            <option value="Traditional Fireplace">Traditional Fireplace</option>
+                            <option value="Modern Fireplace">Modern Fireplace</option>
+                            <option value="Corner Fireplace">Corner Fireplace</option>
+                            <option value="Two-Sided Fireplace">Two-Sided Fireplace</option>
+                            <option value="Three-Sided Fireplace">Three-Sided Fireplace</option>
+                            <option value="See-Through Fireplace">See-Through Fireplace</option>
+                            <option value="Freestanding Fireplace">Freestanding Fireplace</option>
+                            <option value="Wall-Mounted Fireplace">Wall-Mounted Fireplace</option>
+                            <option value="Suspended Fireplace">Suspended Fireplace</option>
+                            <option value="Built-In Fireplace">Built-In Fireplace</option>
+                        </select>
+                        <span class="dot"></span>
+                        <select id="balcony_design" name="balcony_design">
+                            <option value="">Balcony</option>
+
+                            <option value="Juliet Balcony">Juliet Balcony</option>
+                            <option value="Cantilevered Balcony">Cantilevered Balcony</option>
+                            <option value="Wraparound Balcony">Wraparound Balcony</option>
+                            <option value="Suspended Balcony">Suspended Balcony</option>
+                            <option value="Railing-Integrated Planter Balcony">Railing-Integrated Planter Balcony</option>
+                            <option value="Multi-Level Balcony">Multi-Level Balcony</option>
+                            <option value="Glass Balustrade Balcony">Glass Balustrade Balcony</option>
+                            <option value="Open-Air Balcony">Open-Air Balcony</option>
+                            <option value="Terrace Balcony">Terrace Balcony</option>
+                            <option value="Rooftop Balcony">Rooftop Balcony</option>
+                        </select>
+                        <span class="dot"></span>
                 </div>
-                
+                 
                 <!-- ARCHITECTURAL TOKENS -->
                 <div class="group">
                     <h1><i class="fa-regular fa-eye"></i>&nbsp;</h1>
@@ -1568,8 +1398,16 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <!-- //end script - dont delete it -->
     <sub class="credits">Made with ♥️ by Gemma and Angel Sanchez </sub>
-    <!--  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"languages":["en","es"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"left","vertical_position":"bottom","select_language_label":"Language"}</script>
-    <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>-->
-    <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"languages":["en","es","it","fr","pt","de","no","sv","da","uk","ar","ja"],"wrapper_selector":".gtranslate_wrapper","horizontal_position":"right","vertical_position":"top","select_language_label":"Language"}</script>
+    <script>
+        window.gtranslateSettings = {
+            "default_language": "en",
+            "languages": ["en", "es"],
+            "wrapper_selector": ".gtranslate_wrapper",
+            "horizontal_position": "right",
+            "vertical_position": "bottom"
+        }
+    </script>
     <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
+</body>
+
 </html>

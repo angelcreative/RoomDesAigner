@@ -5851,6 +5851,10 @@ svg.active .gen-160 {
 
    }
 
+.errorButtons {
+    visibility: hidden;
+    height: 9px;
+}
 
 #cancelButton {
     border-radius: 0.5rem;
