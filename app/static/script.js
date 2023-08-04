@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", function() {
         width: width,
         height: height,
         samples: "4",
-        num_inference_steps: "20",
+        num_inference_steps: "40",
         seed: seedValue, // Set the seed value based on the switch state
         guidance_scale: 7.5,
         webhook: null,
