@@ -1,0 +1,46 @@
+{
+  "Nordic Nest": {
+    "description": "Offers a wide range of Scandinavian-inspired furniture and decor items.",
+    "link": "https://www.nordicnest.com/"
+  },
+  "IKEA": {
+    "description": "Features a variety of affordable Scandinavian-style furniture and home furnishings.",
+    "link": "https://www.ikea.com/"
+  },
+  "Muuto": {
+    "description": "Specializes in modern Scandinavian furniture and home accessories.",
+    "link": "https://www.muuto.com/"
+  },
+  "HAY": {
+    "description": "Offers a blend of contemporary and Scandinavian-style furniture and decor.",
+    "link": "https://hay.com/"
+  },
+  "Ferm Living": {
+    "description": "Provides a range of Scandinavian-inspired furniture, lighting, and decor.",
+    "link": "https://fermliving.com/"
+  },
+  "Skandium": {
+    "description": "Curates a selection of Scandinavian and modern design furniture and accessories.",
+    "link": "https://www.skandium.com/"
+  },
+  "Scandinavian Design Center": {
+    "description": "Features a curated collection of Scandinavian furniture and home decor.",
+    "link": "https://www.scandinaviandesigncenter.com/"
+  },
+  "House of Finn Juhl": {
+    "description": "Showcases furniture and decor designed by Finn Juhl in true Scandinavian style.",
+    "link": "https://houseoffinnjuhl.com/"
+  },
+  "Nordic Kind": {
+    "description": "Offers a variety of Scandinavian-inspired homeware and decor products.",
+    "link": "https://nordickind.com/"
+  },
+  "Design House Stockholm": {
+    "description": "Provides a range of modern Scandinavian furniture, lighting, and decor.",
+    "link": "https://www.designhousestockholm.com/"
+  },
+  "JYSK": {
+    "description": "Offers a variety of Scandinavian-style furniture and home decor.",
+    "link": "https://www.jysk.ca/"
+  }
+}

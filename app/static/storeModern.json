@@ -1,0 +1,50 @@
+{
+  "West Elm": {
+    "description": "Offers a variety of modern furniture and decor items.",
+    "link": "https://www.westelm.com/"
+  },
+  "CB2": {
+    "description": "Provides modern furniture, decor, and accessories.",
+    "link": "https://www.cb2.com/"
+  },
+  "AllModern": {
+    "description": "Offers a wide range of sleek and contemporary furniture and decor items.",
+    "link": "https://www.allmodern.com/"
+  },
+  "Room & Board": {
+    "description": "Specializes in modern furniture and home decor with a focus on quality.",
+    "link": "https://www.roomandboard.com/"
+  },
+  "Design Within Reach": {
+    "description": "Features authentic modern furniture and decor from renowned designers.",
+    "link": "https://www.dwr.com/"
+  },
+  "Houzz": {
+    "description": "A platform that offers a wide range of modern furniture and decor from various brands.",
+    "link": "https://www.houzz.com/"
+  },
+  "YLiving": {
+    "description": "Offers a curated selection of modern furniture, lighting, and decor.",
+    "link": "https://www.yliving.com/"
+  },
+  "Article": {
+    "description": "Provides modern furniture and decor with a focus on quality and affordability.",
+    "link": "https://www.article.com/"
+  },
+  "Joybird": {
+    "description": "Specializes in customizable modern furniture and home accessories.",
+    "link": "https://www.joybird.com/"
+  },
+  "LexMod": {
+    "description": "Offers a variety of modern and contemporary furniture and decor.",
+    "link": "https://www.lexmod.com/"
+  },
+  "Zinus": {
+    "description": "Provides modern and affordable furniture and mattresses.",
+    "link": "https://www.zinus.com/"
+  },
+  "BoConcept": {
+    "description": "Specializes in modern and contemporary furniture and accessories.",
+    "link": "https://www.boconcept.com/"
+  }
+}

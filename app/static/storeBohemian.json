@@ -1,0 +1,42 @@
+{
+  "Anthropologie": {
+    "description": "A lifestyle brand providing a curated mix of clothing, accessories, and home decor.",
+    "link": "https://www.anthropologie.com/"
+  },
+  "Urban Outfitters": {
+    "description": "A retail brand offering a variety of fashion, accessories, and home products.",
+    "link": "https://www.urbanoutfitters.com/"
+  },
+  "West Elm": {
+    "description": "A modern furniture and home decor brand with a focus on sustainable and stylish designs.",
+    "link": "https://www.westelm.com/"
+  },
+  "World Market": {
+    "description": "An eclectic retailer offering a wide range of unique home furniture, decor, and international goods.",
+    "link": "https://www.worldmarket.com/"
+  },
+  "Serena & Lily": {
+    "description": "A brand known for its sophisticated and casual collection of home decor, furniture, and bedding.",
+    "link": "https://www.serenaandlily.com/"
+  },
+  "Jungalow": {
+    "description": "A design and lifestyle brand that offers vibrant and bohemian-inspired home goods.",
+    "link": "https://www.jungalow.com/"
+  },
+  "Lulu and Georgia": {
+    "description": "An online shop offering a curated selection of stylish furniture, decor, and accessories.",
+    "link": "https://www.luluandgeorgia.com/"
+  },
+  "The Citizenry": {
+    "description": "A brand that collaborates with artisans globally to create well-crafted home decor and furniture.",
+    "link": "https://www.the-citizenry.com/"
+  },
+  "Target": {
+    "description": "A retail corporation providing a wide range of goods, including home essentials and decor.",
+    "link": "https://www.target.com/"
+  },
+  "Amara": {
+    "description": "A luxury home furnishings and accessories retailer with a focus on elegant and modern designs.",
+    "link": "https://www.amara.com/"
+  }
+}

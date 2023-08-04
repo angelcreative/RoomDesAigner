@@ -1,0 +1,46 @@
+{
+  "MUJI": {
+    "description": "Offers a wide range of minimalist and functional furniture and home products.",
+    "link": "https://www.muji.com/"
+  },
+  "CB2": {
+    "description": "Provides modern and minimalist furniture, decor, and accessories.",
+    "link": "https://www.cb2.com/"
+  },
+  "IKEA": {
+    "description": "Offers a variety of affordable minimalist furniture and home accessories.",
+    "link": "https://www.ikea.com/"
+  },
+  "West Elm": {
+    "description": "Provides modern and minimalist furniture, decor, and accessories.",
+    "link": "https://www.westelm.com/"
+  },
+  "AllModern": {
+    "description": "Offers a variety of sleek and simple furniture and decor items.",
+    "link": "https://www.allmodern.com/"
+  },
+  "Scandinavian Designs": {
+    "description": "Specializes in Scandinavian and minimalist-style furniture.",
+    "link": "https://www.scandinaviandesigns.com/"
+  },
+  "Minimalist Home": {
+    "description": "An online store that focuses exclusively on minimalist-style home products.",
+    "link": "https://www.minimalisthome.com/"
+  },
+  "Nordic Nest": {
+    "description": "Offers Scandinavian-inspired minimalist furniture and decor.",
+    "link": "https://www.nordicnest.com/"
+  },
+  "Crate & Barrel": {
+    "description": "Provides a mix of modern and minimalist furniture and decor.",
+    "link": "https://www.crateandbarrel.com/"
+  },
+  "YLiving": {
+    "description": "Offers a curated selection of modern and minimalist furniture and lighting.",
+    "link": "https://www.yliving.com/"
+  },
+  "Inmod": {
+    "description": "Specializes in mid-century modern and minimalist furniture.",
+    "link": "https://www.inmod.com/"
+  }
+}
