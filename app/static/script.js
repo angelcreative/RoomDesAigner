@@ -468,8 +468,6 @@ document.addEventListener("DOMContentLoaded", function() {
     function showOverlay() {
       const overlay = document.getElementById("overlay");
       overlay.style.display = "block";
-        
-    
     }
     
     
@@ -486,9 +484,6 @@ document.addEventListener("DOMContentLoaded", function() {
     rerollButton.addEventListener("click", rerollImages);
 
 
-
-    
-   
     
     
     
@@ -733,68 +728,6 @@ document.addEventListener("DOMContentLoaded", function() {
       window.open(imageUrl, "_blank");
     }
   }
-    
-    
-    
-//    cards+json
-    const designStyleSelect = document.getElementById("design_style");
-    const cardContainer = document.getElementById("cardContainer");
-
-    function createCard(storeName, description, link) {
-      const card = document.createElement("div");
-      card.classList.add("card");
-
-      const title = document.createElement("h2");
-      title.textContent = storeName;
-
-      const descriptionElement = document.createElement("p");
-      descriptionElement.textContent = description;
-
-      const linkElement = document.createElement("a");
-      linkElement.textContent = "Website";
-      linkElement.href = link;
-      linkElement.target = "_blank";
-
-      card.appendChild(title);
-      card.appendChild(descriptionElement);
-      card.appendChild(linkElement);
-
-      cardContainer.appendChild(card);
-    }
-
-    function loadAndGenerateCards(styleName) {
-      const jsonFilePath = `static/store${styleName.replace(/\s+/g, "")}.json`;
-      fetch(jsonFilePath)
-        .then((response) => response.json())
-        .then(async (data) => {
-          cardContainer.innerHTML = "";
-
-          for (const storeName in data) {
-            const storeData = data[storeName];
-            createCard(storeName, storeData.description, storeData.link);
-          }
-        })
-        .catch((error) => {
-          console.error("Error obteniendo datos JSON:", error);
-        });
-    }
-
-    designStyleSelect.addEventListener("change", function () {
-      const selectedOption = designStyleSelect.value;
-      if (selectedOption !== "") {
-        const styleName = selectedOption.split(" - ")[0].trim();
-        loadAndGenerateCards(styleName);
-      } else {
-        cardContainer.innerHTML = "";
-      }
-    });
-
-
-
-    
-    //    end cards+json
-    
-    
     // Green dot
     function toggleGreenDot(selectId) {
       var selectElement = document.getElementById(selectId);
@@ -927,4 +860,3 @@ window.addEventListener('load', function() {
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
-
