@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Update the promptInit variable based on the selected value from the "Render" select input
       const pictureSelect = document.getElementById("picture");
       const selectedPicture = pictureSelect.value;
-      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
+      const promptInit = ` ${selectedPicture} , interiordesign, homedecor, architecture, homedesign, UHD`;
 
       // Generate the plain text representation of the selected values
       let plainText = Object.entries(selectedValues)
