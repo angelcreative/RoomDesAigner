@@ -9,35 +9,6 @@ body {
   font-family: 'Varela Round', sans-serif;
 }
 
-/*  languages */
-
-.VIpgJd-ZVi9od-aZ2wEe-wOHMyf-ti6hGc {
-    visibility:hidden;
-}
-
-.gtranslate_wrapper {
-    position: relative;
-    width: 100%;
-}
-
-select.gt_selector.notranslate {
-  
-    width: auto;
-}
-.gt_selector, .gt_selector:hover {
-    background-image: url(./img/language.svg);
-    background-repeat: no-repeat;
-    background-position: 7px 6px;
-    padding-left: 34px;
-    background-size: 20px;
-}
-
-.gt_switcher_wrapper {
-    position: absolute !important ;
-    top: 0 !important;
-    right: 0 !important;
-    z-index: 1 !important ;
-}
 
 /*   MODAL P */
 
@@ -78,8 +49,6 @@ select.gt_selector.notranslate {
 .modalP h1  svg {
     max-width: 140px;
 }
-
-
 
 .left-section {
     flex: 1;
@@ -358,7 +327,7 @@ top:-50px;
 
 
 .modal-content p {
-    padding:10px 0 60px 0;
+    padding: 10px 30px;
     font-size: 13px;
     background: transparent;
     border-radius: 0.5rem;
@@ -446,12 +415,11 @@ h1 {
 
 .groupContainer h1 {
     color: #a9fff554;
-    font-size: 1rem;
+    font-size: 1.25rem;
     background-repeat: no-repeat;
     background-size: 24px;
     text-align: left;
     font-family: 'Lato', sans-serif;
-    text-transform:uppercase;
 }
 
 
@@ -634,8 +602,6 @@ select {
   -moz-appearance: none;
   text-indent: 1px;
   text-overflow: '';
-  text-transform: math-auto;
-  cursor:pointer;
 }
 
 select:hover {
@@ -651,19 +617,20 @@ select:hover {
     position: relative;
     top: -30px;
     left: -4px;
-    margin:0 0 -16px 0;
+    margin:0;
 }
 
 .groupContainer {
     display: flex;
-        flex-direction: row;
-        overflow: hidden;
-        border-radius: 1rem;
-        width: 100%;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        background: #171616;
-        column-gap: 1rem;
+    flex-direction: row;
+    overflow: hidden;
+    border-radius: 1rem;
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: #171616;
+    column-gap: 1rem;
+    padding: 0 1rem 2rem 1rem;
 }
 
 .buttonsCont {
@@ -1006,7 +973,7 @@ select#materials {
 }
 
 
-/*
+
 .progress-bar {
   width: 0%;
 height: 3px;
@@ -1014,7 +981,7 @@ height: 3px;
   border-radius: 10px;
   transition: width 0.3s ease-in-out;
 }
-*/
+
 .progress-label {
   text-align: center;
   margin-top: 0.5rem;
@@ -1022,159 +989,11 @@ height: 3px;
   color: #666;
 }
 
-.bar {
-  width: auto;
-  background: #efefef;
-  border-radius: 6px;
-  overflow: hidden;
-  .progress {
-    display: flex;
-    animation: progress-animate 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-    > * {
-      height: 12px;
-      background: #36d4c7 ;
-    }
-    .center {
-      width: 1px;
-      animation: center-animate 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-      transform-origin: left;
-    }
-    .left,
-    .right {
-      width: 6px;
-    }
-    .left {
-      border-radius: 6px 0 0 6px;
-    }
-    .right {
-      border-radius: 0 6px 6px 0;
-      animation: right-animate 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
-    }
-  }
-}
-
-@keyframes progress-animate {
-  0% {
-    transform: translateX(-6px);
-  }
-  65% {
-    transform: translateX(100px);
-  }
-  100% {
-    transform: translateX(400px);
-  }
-}
-
-@keyframes center-animate {
-  0% {
-    transform: scaleX(1);
-  }
-  65% {
-    transform: scaleX(301);
-  }
-  100% {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes right-animate {
-  0% {
-    transform: translateX(0);
-  }
-  65% {
-    transform: translateX(300px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-// Experimenting with a different approach below for reduced motion.
-
-@media (prefers-reduced-motion) {
-  .bar {
-    .progress {
-      animation: progress-animate-reduced 4s infinite;
-      .center {
-        animation: center-animate-reduced 4s infinite;
-      }
-      .right {
-        animation: right-animate-reduced 4s infinite;
-      }
-    }
-  }
-}
-@keyframes progress-animate-reduced {
-  0% {
-    transform: translateX(-6px);
-  }
-  40% {
-    transform: translateX(400px);
-  }
-  100% {
-    transform: translateX(400px);
-  }
-}
-
-@keyframes center-animate-reduced {
-  0% {
-    transform: scaleX(1);
-  }
-  20% {
-    transform: scaleX(301);
-  }
-  40% {
-    transform: scaleX(1);
-  }
-  100% {
-    transform: scaleX(1);
-  }
-}
-
-@keyframes right-animate-reduced {
-  0% {
-    transform: translateX(0);
-  }
-  40% {
-    transform: translateX(300px);
-  }
-  100% {
-    transform: translateX(300px);
-  }
-}
-
-
-
-
 .buddy {
     width:80px;
     height: auto;
     margin:0 auto;
     display:none;
-}
-
-/* Indeterminate animation */
-/* Indeterminate animation */
-@keyframes indeterminate {
-  0% {
-    width: 0%;
-  }
-  25% {
-    width: 100%;
-  }
-  50% {
-    width: 0%;
-  }
-  75% {
-    width: 100%;
-  }
-  100% {
-    width: 0%;
-  }
-}
-
-.indeterminate {
-  animation: indeterminate 2s infinite;
 }
 
 
@@ -5828,7 +5647,7 @@ svg.active .gen-160 {
      left: 50%;
      transform: translate(-50%, -50%);
      background-color: #fff;
-     width: 260px;
+     width: 400px;
      padding: 20px;
      text-align: center;
      border-radius: 10px;
@@ -5851,10 +5670,6 @@ svg.active .gen-160 {
 
    }
 
-.errorButtons {
-    visibility: hidden;
-    height: 9px;
-}
 
 #cancelButton {
     border-radius: 0.5rem;
@@ -5893,143 +5708,6 @@ span.closeGen {
      height: auto;
    }
 
-
-/* Agrega estilos para el cajón */
-.drawer {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 16px;
-  display: none;
-}
-
-.closeDrawer {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  cursor: pointer;
-}
-
-
-
-
-/*  card store */
-.card {
-    width: 200px;
-    height: auto;
-    display: block;
-    font-size: 20px;
-    text-align: left;
-    border: 1rem;
-    border-radius: .5rem;
-    box-shadow: 1px 1px 8px 1px rgba(0,0,0,.2);
-    padding: 1rem;
-    background: #1f1f1f;
-}
-
-
-/* Assign colors from the complementary color palette */
-/*.card:nth-child(1) {
-  background-color: #492879;
-  color: white;
-}
-
-.card:nth-child(2) {
-  background-color: #794949;
-  color: white;
-}*/
-
-/* Repeat the above for cards 3 to 10 with the corresponding colors */
-/*.card:nth-child(3) {
-  background-color: #497949;
-  color: white;
-}
-
-.card:nth-child(4) {
-  background-color: #494979;
-  color: white;
-}
-
-.card:nth-child(5) {
-  background-color: #794979;
-  color: white;
-}
-
-.card:nth-child(6) {
-  background-color: #794992;
-  color: white;
-}
-
-.card:nth-child(7) {
-  background-color: #497992;
-  color: white;
-}
-
-.card:nth-child(8) {
-  background-color: #497979;
-  color: white;
-}
-
-.card:nth-child(9) {
-  background-color: #927949;
-  color: white;
-}
-
-.card:nth-child(10) {
-  background-color: #799249;
-  color: white;
-}*/
-
-#cardContainer {
-    display: flex;
-        justify-content: flex-start;
-        justify-items: start;
-        align-items: flex-start;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-content: space-between;
-        column-gap: 1rem;
-        margin: 0 auto;
-        max-width: 980px;
-        row-gap: 1rem;
-}
-
-.card h2 {
-    font-size: 16px;
-    color:#fff
-}
-
-.card h2, .card p, .card a {
-    text-align: left;
-    font-size: 12px;
-    display: block;
-    padding: 0;
-    margin: 1rem 0;
-}
-
-.card a {
-    color: #a9fff5;
-}
-
-.card h2 {
-    font-size: 1rem;
-}
-
-div#resultContainer {
-
-}
-
-.card p {
-}
-
-
-.card img {
-    max-width: fit-content;
-    width: 100%;
-}
-
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
@@ -6062,8 +5740,6 @@ div#resultContainer {
       justify-content: flex-start;
       padding-top: 1rem;
       padding-bottom: 4rem;
-      
-      
   }
   
   .buddy {
@@ -6157,20 +5833,6 @@ div#resultContainer {
  
  select {
      width:220px;
- }
- 
- 
- #cardContainer {
-     display: flex;
-     justify-content: flex-start;
-     justify-items: start;
-     align-items: center;
-     flex-direction: column;
-     flex-wrap: nowrap;
-     column-gap: 1rem;
-     margin: 0 auto;
-     max-width: 980px;
-     row-gap: 1rem;
  }
 
 }

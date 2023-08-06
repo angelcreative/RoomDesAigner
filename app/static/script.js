@@ -8,7 +8,7 @@ function showWaitingOverlay() {
   var progressLabel = document.getElementById('progressLabel');
   var progress = 0;
   var intervalId = setInterval(function() {
-    progress += 0.3;
+    progress += 1;
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
     if (progress >= 100) {
@@ -16,7 +16,7 @@ function showWaitingOverlay() {
       hideWaitingOverlay();
       showOverlay();
     }
-  }, 5000);
+  }, 1000);
 }
 
 
@@ -137,7 +137,11 @@ document.addEventListener("DOMContentLoaded", function() {
 //    link.click();
 //  }
     function getSelectedValues(imageUrl = "") {
-        
+         /* const designStyleValue = document.getElementById("design_style").value;
+          const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
+
+          const wrappedDesignStyle = "(((" + designStyleValue + ")))";
+          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";*/
         
                 return {
                     
@@ -157,7 +161,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 space_to_be_designed: document.getElementById("space_to_be_designed").value,
                 child_room: document.getElementById("child_room").value,
                 pool: document.getElementById("pool").value,
-                pool_size: document.getElementById("pool_size").value,
                 garden: document.getElementById("garden").value,
                 room_shape: document.getElementById("room_shape").value,
                 //inspiration
@@ -211,7 +214,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     //render
                 picture: document.getElementById("picture").value,
                     design_style:   document.getElementById("design_style").value
-                   
+                    /*design style
+                    design_style: wrappedDesignStyle,
+                    impossible_architecture: wrappedImpossibleArchitecture*/
+                    
                 //image link
                 //imageUrl: document.getElementById("imageDisplayUrl").value
                 };
@@ -225,8 +231,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
  
     function generateImages(imageUrl, selectedValues) {
-        // const requestTimeout = 50000; Tiempo de espera en milisegundos (15 segundos)
-
       const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
 
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
@@ -258,6 +262,10 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         const optionalText = includeOptionalText ? generateOptionalText() : "";
         const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
 
+
+        
+      // Combine the promptInit with the plain text representation
+//   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
 
       showOverlay(); // Show the overlay and loading message
       showWaitingOverlay(); // Show the waiting overlay
@@ -323,46 +331,42 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 //      prompt.init_image = imageUrl;
 
       // Make an API request to Stable Diffusion API with the prompt
+        // Make an API request to Stable Diffusion API with the prompt
         fetch("/generate-images", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(prompt)
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to generate images. Status: " + response.status);
+            }
           })
-            .then(response => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                throw new Error("Failed to generate images. Status: " + response.status);
-              }
-            })
-            .then(data => {
-              if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                  url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                );
-
-                hideWaitingOverlay(); // Ocultar la superposición de espera
-               
-                  // Lógica para mostrar las imágenes generadas
-                        showModal(imageUrls, promptText); // Esta función debe mostrar las imágenes en la interfaz
-                   
-              } else if (data.status === "processing") {
-                // La generación de imágenes aún está en curso, puedes implementar lógica para mostrar un mensaje de carga o simplemente no hacer nada
-              } else {
-                console.error("Error generating images:", data);
-                displayErrorModal();
-                hideWaitingOverlay(); // Ocultar la superposición de espera
-                hideOverlay(); // Ocultar la superposición y el mensaje de carga
-              }
-            })
-            .catch(error => {
-              console.error("Error generating images:", error);
+          .then(data => {
+            // Handle the API response and display the generated images
+            if (data.status === "success" && data.output) {
+              const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+              );
+              hideWaitingOverlay(); // Hide the waiting overlay
+              showModal(imageUrls, promptText);
+            } else {
+              console.error("Error generating images:", data);
               displayErrorModal();
-              hideWaitingOverlay(); // Ocultar la superposición de espera
-              hideOverlay(); // Ocultar la superposición y el mensaje de carga
-            });
+              hideWaitingOverlay(); // Hide the waiting overlay
+              hideOverlay(); // Hide the overlay and loading message
+            }
+          })
+          .catch(error => {
+            console.error("Error generating images:", error);
+            displayErrorModal();
+            hideWaitingOverlay(); // Hide the waiting overlay
+            hideOverlay(); // Hide the overlay and loading message
+          });
 
         // Function to display the error modal window
         function displayErrorModal() {
