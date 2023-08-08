@@ -136,93 +136,153 @@ document.addEventListener("DOMContentLoaded", function() {
 //    link.download = filename;
 //    link.click();
 //  }
-    function getSelectedValues(imageUrl = "") {
-         /* const designStyleValue = document.getElementById("design_style").value;
-          const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
-
-          const wrappedDesignStyle = "(((" + designStyleValue + ")))";
-          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";*/
-        
-                return {
-                    
-                
-                //level shot
-                point_of_view: document.getElementById("point_of_view").value,
-                //colors
-                primary_color: document.getElementById("primary_color").value,
-                secondary_color: document.getElementById("secondary_color").value,
-                tertiary_color: document.getElementById("tertiary_color").value,
-                color_scheme: document.getElementById("color_scheme").value,
-               
-                //room size
-                room_size: document.getElementById("room_size").value,
-                //room design
-                home_room: document.getElementById("home_room").value,
-                space_to_be_designed: document.getElementById("space_to_be_designed").value,
-                child_room: document.getElementById("child_room").value,
-                pool: document.getElementById("pool").value,
-                garden: document.getElementById("garden").value,
-                room_shape: document.getElementById("room_shape").value,
-                //inspiration
-                inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
-                furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
-                    furniture_color: document.getElementById("furniture_color").value,
-                designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
-                designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
-                //film
-                film_used_to_take_the_shot: document.getElementById("film_used_to_take_the_shot").value,
-                illumination: document.getElementById("illumination").value,
-                //architecture
-                door: document.getElementById("door").value,
-                windows: document.getElementById("windows").value,
-                ceiling_design: document.getElementById("ceiling_design").value,
-                roof_material: document.getElementById("roof_material").value,
-                roof_height: document.getElementById("roof_height").value,
-                wall_type: document.getElementById("wall_type").value,
-                wall_cladding: document.getElementById("wall_cladding").value,
-                exterior_finish: document.getElementById("exterior_finish").value,
-                exterior_trim_molding: document.getElementById("exterior_trim_molding").value,
-                exterior_paint_color: document.getElementById("exterior_paint_color").value,
-                facade_pattern: document.getElementById("facade_pattern").value,
-                floors: document.getElementById("floors").value,
-
-                    
-                    //interior
-                staircase_design: document.getElementById("staircase_design").value,
-                railing_style: document.getElementById("railing_style").value,
-                kitchen_layout: document.getElementById("kitchen_layout").value,
-                countertop_material: document.getElementById("countertop_material").value,
-                backsplash_design: document.getElementById("backsplash_design").value,
-                cabinet_storage_design: document.getElementById("cabinet_storage_design").value,
-                appliance_style_finish: document.getElementById("appliance_style_finish").value,
-                bathroom_fixture_style: document.getElementById("bathroom_fixture_style").value,
-                bathroom_tile_design: document.getElementById("bathroom_tile_design").value,
-                bathroom_vanity_style: document.getElementById("bathroom_vanity_style").value,
-                shower_bathtub_design: document.getElementById("shower_bathtub_design").value,
-                bathroom_lighting_fixtures: document.getElementById("bathroom_lighting_fixtures").value,
-                fireplace_design: document.getElementById("fireplace_design").value,
-                balcony_design: document.getElementById("balcony_design").value,
-
-
-                    
-                material: document.getElementById("material").value,
-                ceramic_material: document.getElementById("ceramic_material").value,
-                fabric: document.getElementById("fabric").value,
-                stone_material: document.getElementById("stone_material").value,
-                marble_material: document.getElementById("marble_material").value,
-                wood_material: document.getElementById("wood_material").value,
-                    //render
-                picture: document.getElementById("picture").value,
-                    design_style:   document.getElementById("design_style").value
-                    /*design style
-                    design_style: wrappedDesignStyle,
-                    impossible_architecture: wrappedImpossibleArchitecture*/
-                    
-                //image link
-                //imageUrl: document.getElementById("imageDisplayUrl").value
-                };
-    }
+//    function getSelectedValues(imageUrl = "") {
+//         /* const designStyleValue = document.getElementById("design_style").value;
+//          const impossibleArchitectureValue = document.getElementById("impossible_architecture").value;
+//
+//          const wrappedDesignStyle = "(((" + designStyleValue + ")))";
+//          const wrappedImpossibleArchitecture = "(((" + impossibleArchitectureValue + ")))";*/
+//
+//                return {
+//
+//
+//                point_of_view: document.getElementById("point_of_view").value,
+//                primary_color: document.getElementById("primary_color").value,
+//                secondary_color: document.getElementById("secondary_color").value,
+//                tertiary_color: document.getElementById("tertiary_color").value,
+//                color_scheme: document.getElementById("color_scheme").value,
+//
+//                room_size: document.getElementById("room_size").value,
+//                home_room: document.getElementById("home_room").value,
+//                space_to_be_designed: document.getElementById("space_to_be_designed").value,
+//                children_room: document.getElementById("children_room").value,
+//                pool: document.getElementById("pool").value,
+//                garden: document.getElementById("garden").value,
+//                room_shape: document.getElementById("room_shape").value,
+//                inspired_by_this_interior_design_magazine: document.getElementById("inspired_by_this_interior_design_magazine").value,
+//                furniture_provided_by_this_vendor: document.getElementById("furniture_provided_by_this_vendor").value,
+//                    furniture_color: document.getElementById("furniture_color").value,
+//                designed_by_this_interior_designer: document.getElementById("designed_by_this_interior_designer").value,
+//                designed_by_this_architect: document.getElementById("designed_by_this_architect").value,
+//                film_used_to_take_the_shot: document.getElementById("film_used_to_take_the_shot").value,
+//                illumination: document.getElementById("illumination").value,
+//                door: document.getElementById("door").value,
+//                windows: document.getElementById("windows").value,
+//                ceiling_design: document.getElementById("ceiling_design").value,
+//                roof_material: document.getElementById("roof_material").value,
+//                roof_height: document.getElementById("roof_height").value,
+//                wall_type: document.getElementById("wall_type").value,
+//                wall_cladding: document.getElementById("wall_cladding").value,
+//                exterior_finish: document.getElementById("exterior_finish").value,
+//                exterior_trim_molding: document.getElementById("exterior_trim_molding").value,
+//                exterior_paint_color: document.getElementById("exterior_paint_color").value,
+//                facade_pattern: document.getElementById("facade_pattern").value,
+//                floors: document.getElementById("floors").value,
+//
+//                kitchen_layout: document.getElementById("kitchen_layout").value,
+//                countertop_material: document.getElementById("countertop_material").value,
+//                backsplash_design: document.getElementById("backsplash_design").value,
+//                cabinet_storage_design: document.getElementById("cabinet_storage_design").value,
+//                appliance_style_finish: document.getElementById("appliance_style_finish").value,
+//                bathroom_fixture_style: document.getElementById("bathroom_fixture_style").value,
+//                bathroom_tile_design: document.getElementById("bathroom_tile_design").value,
+//                bathroom_vanity_style: document.getElementById("bathroom_vanity_style").value,
+//                shower_bathtub_design: document.getElementById("shower_bathtub_design").value,
+//                bathroom_lighting_fixtures: document.getElementById("bathroom_lighting_fixtures").value,
+//                fireplace_design: document.getElementById("fireplace_design").value,
+//                balcony_design: document.getElementById("balcony_design").value,
+//
+//
+//
+//                material: document.getElementById("material").value,
+//                ceramic_material: document.getElementById("ceramic_material").value,
+//                fabric: document.getElementById("fabric").value,
+//                stone_material: document.getElementById("stone_material").value,
+//                marble_material: document.getElementById("marble_material").value,
+//                wood_material: document.getElementById("wood_material").value,
+//                picture: document.getElementById("picture").value,
+//                    design_style:   document.getElementById("design_style").value
+//                    /*design style
+//                    design_style: wrappedDesignStyle,
+//                    impossible_architecture: wrappedImpossibleArchitecture*/
+//
+//                //image link
+//                //imageUrl: document.getElementById("imageDisplayUrl").value
+//                };
+//    }
     
+    
+    function getSelectedValues() {
+        const elementIds = [
+            "point_of_view",
+            "primary_color",
+            "secondary_color",
+            "tertiary_color",
+            "color_scheme",
+            "room_size",
+            "home_room",
+            "space_to_be_designed",
+            "children_room",
+            "pool",
+            "garden",
+            "room_shape",
+            "inspired_by_this_interior_design_magazine",
+            "furniture_provided_by_this_vendor",
+            "furniture_color",
+            "designed_by_this_interior_designer",
+            "designed_by_this_architect",
+            "film_used_to_take_the_shot",
+            "illumination",
+            "door",
+            "windows",
+            "ceiling_design",
+            "roof_material",
+            "roof_height",
+            "wall_type",
+            "wall_cladding",
+            "exterior_finish",
+            "exterior_trim_molding",
+            "exterior_paint_color",
+            "facade_pattern",
+            "floors",
+            "kitchen_layout",
+            "countertop_material",
+            "backsplash_design",
+            "cabinet_storage_design",
+            "appliance_style_finish",
+            "bathroom_fixture_style",
+            "bathroom_tile_design",
+            "bathroom_vanity_style",
+            "shower_bathtub_design",
+            "bathroom_lighting_fixtures",
+            "fireplace_design",
+            "balcony_design",
+            "material",
+            "ceramic_material",
+            "fabric",
+            "stone_material",
+            "marble_material",
+            "wood_material",
+            "picture",
+            "design_style"
+        ];
+
+        const values = {};
+
+        elementIds.forEach(elementId => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                values[elementId] = element.value;
+            }
+        });
+
+        return values;
+    }
+
+  
+    const selectedValues = getSelectedValues();
+    console.log(selectedValues);
+
    
     // Function to generate the optional text
     function generateOptionalText() {
@@ -240,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // Update the promptInit variable based on the selected value from the "Render" select input
       const pictureSelect = document.getElementById("picture");
       const selectedPicture = pictureSelect.value;
-      const promptInit = ` ${selectedPicture} , interiordesign, homedecor, architecture, homedesign, UHD`;
+      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
 
       // Generate the plain text representation of the selected values
       let plainText = Object.entries(selectedValues)
@@ -290,30 +350,34 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         embeddings_model: null,
       };
 
-      const chipsSV = document.getElementById("chipsSV");
-      chipsSV.innerHTML = ""; // Clear the existing content
+        const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
 
-      for (const [key, value] of Object.entries(selectedValues)) {
-        if (value) {
-          const chip = document.createElement("span");
-          chip.classList.add("chipSV");
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
 
-          // Check if the value is a valid hex color
-          const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(value);
-          if (isHexColor) {
-            chip.classList.add("hexDot"); // Add the "hexDot" class
-            chip.style.backgroundColor = value;
-          } else {
-            chip.textContent = value;
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
           }
-
-          if (value.includes("_")) {
-            chip.style.visibility = "visible"; // Hide "_" character
-          }
-
-          chipsSV.appendChild(chip);
         }
-      }
+
 
       // Get the <span> element by its class name
       var spanElement = document.querySelector(".chipSV");
@@ -331,7 +395,6 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 //      prompt.init_image = imageUrl;
 
       // Make an API request to Stable Diffusion API with the prompt
-        // Make an API request to Stable Diffusion API with the prompt
         fetch("/generate-images", {
           method: "POST",
           headers: {
@@ -385,9 +448,23 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
           });
         }
 
+  
+
+        
 
         }
 
+    // Function to reroll the images
+    function rerollImages() {
+      const rerollButton = document.getElementById("rerollButton");
+      //rerollButton.disabled = true;
+      const selectedValues = getSelectedValues();
+      generateImages(null, selectedValues);
+    }
+
+    // Add event listener to the rerollButton
+    const rerollButton = document.getElementById("rerollButton");
+    rerollButton.addEventListener("click", rerollImages);
     
     function showWaitingOverlay() {
       const waiting = document.getElementById("waiting");
@@ -404,17 +481,7 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
     }
     
     
-    // Function to reroll the images
-    function rerollImages() {
-      const rerollButton = document.getElementById("rerollButton");
-      //rerollButton.disabled = true;
-      const selectedValues = getSelectedValues();
-      generateImages(null, selectedValues);
-    }
-
-    // Add event listener to the rerollButton
-    const rerollButton = document.getElementById("rerollButton");
-    rerollButton.addEventListener("click", rerollImages);
+   
 
 
     
