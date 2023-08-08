@@ -625,9 +625,9 @@ select:hover {
     flex-direction: row;
     overflow: hidden;
     border-radius: 1rem;
-    width: auto;
+    width: 90%;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     background: #171616;
     column-gap: 1rem;
     padding: 0 1rem 2rem 1rem;
@@ -953,7 +953,7 @@ select#materials {
 
 .containerUpscale {
     display:block;
-    width: 330px;
+    width: 260px;
 }
 
 #loadingMessage h1,
@@ -976,7 +976,7 @@ select#materials {
 
 .progress-bar {
   width: 0%;
-height: 3px;
+height: 10px;
   background: #a9fff5;
   border-radius: 10px;
   transition: width 0.3s ease-in-out;
@@ -984,9 +984,9 @@ height: 3px;
 
 .progress-label {
   text-align: center;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  color: #666;
+  margin-top: 0rem;
+  font-size: 0rem;
+  color: #fff;
 }
 
 .buddy {
@@ -5647,7 +5647,7 @@ svg.active .gen-160 {
      left: 50%;
      transform: translate(-50%, -50%);
      background-color: #fff;
-     width: 400px;
+     width: 260px;
      padding: 20px;
      text-align: center;
      border-radius: 10px;
@@ -5734,12 +5734,12 @@ span.closeGen {
       flex-direction: row;
       overflow: hidden;
       border-radius: 1rem;
+      width: auto;
       flex-wrap: wrap;
-      background: #171616;
-      column-gap: 5rem;
       justify-content: flex-start;
-      padding-top: 1rem;
-      padding-bottom: 4rem;
+      background: #171616;
+      column-gap: 1rem;
+      padding: 0 1rem 2rem 1rem;
   }
   
   .buddy {

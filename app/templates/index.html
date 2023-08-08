@@ -73,7 +73,7 @@
             <img src="{{ url_for('static', filename='img/error.png') }}">
             <h1>Something was wrong from our side, try it again</h1>
             <p>Sometimes technology doesn't work as intended.</p>
-            <div class="errorButtons">
+            <div class="errorButtons" style="height:1px; width:1px; position:fixed; top:0;left:0; overflow:hidden;">
                 <button id="errorButton" class="modalPbutton">Try again now</button>
             </div>
         </div>
@@ -84,7 +84,9 @@
             <img class="imgLoader" src="{{ url_for('static', filename='img/modal_img/designing.svg') }}">
             <h1>The magic is happening now!</h1>
             <p>Magical things takes a bit of time, relax, this will be done soon.</p>
-            <div>
+            <p id="processingMessageContainer"></p>
+            <div style="background: #e5e5e5;
+    border-radius: 100px;">
                 <div class="progress-bar" id="progressBar"></div>
                 <div class="progress-label" id="progressLabel"></div>
             </div>
@@ -342,6 +344,7 @@
                     
                     <!-- ID VENDORS -->
                     <select id="furniture_provided_by_this_vendor">
+                        <option value="">Furniture and decor vendor</option>
                         <option value="AllModern" title="Modern furniture and decor">AllModern - Modern furniture and decor</option>
                         <option value="Article" title="Modern Scandinavian-inspired furniture">Article - Modern Scandinavian-inspired furniture</option>
                         <option value="Ashley_Furniture" title="Wide range of furniture styles">Ashley Furniture - Wide range of furniture styles</option>
