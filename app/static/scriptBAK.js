@@ -1,5 +1,5 @@
 // Declare intervalId outside of the showWaitingOverlay() function
-var intervalId;
+var intervalId; 
 
 function showWaitingOverlay() {
   const waiting = document.getElementById("waiting");
@@ -24,7 +24,7 @@ function showWaitingOverlay() {
       hideWaitingOverlay();
       showOverlay();
     }
-  }, 3000);
+  }, 2000);
 
     // Add an event listener to track the visibility of the waiting overlay
       const observer = new IntersectionObserver(entries => {
@@ -327,108 +327,49 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 //      prompt.init_image = imageUrl;
 
       // Make an API request to Stable Diffusion API with the prompt
-        // Function to periodically check the status of generated images
-        function checkImageStatus(fetchResultUrl) {
-            fetch("/generate-images", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(prompt)
-            })
-                .then(response => response.json())
-                .then(statusData => {
-                    if (statusData.status === "success" && statusData.output) {
-                        const imageUrls = statusData.output.map(url =>
-                            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                        );
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        showModal(imageUrls, promptText);
-                    } else if (statusData.status === "processing") {
-                        // Continue checking
-                        setTimeout(() => {
-                            checkImageStatus(fetchResultUrl);
-                        }, 2000); // Check every 2 seconds (adjust as needed)
-                    } else {
-                        console.error("Error generating images:", statusData);
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        const processingMessage = document.createElement("p");
-                        processingMessage.textContent = "There was an error generating the images.";
-                        // Append the processingMessage to a specific element in your HTML
-                        const processingMessageContainer = document.getElementById("processingMessageContainer");
-                        processingMessageContainer.appendChild(processingMessage);
-                        hideOverlay(); // Hide the overlay and loading message
-                    }
-                })
-                .catch(error => {
-                    console.error("Error checking image generation status:", error);
-                });
-        }
-
-        // Function to display a loading message and progress bar
-        function showLoadingProgress() {
-            const loadingMessage = document.createElement("p");
-            loadingMessage.textContent = "Checking image generation progress...";
-            
-            const progressBar = document.createElement("div");
-            progressBar.className = "progress-bar"; // Add appropriate CSS class for styling
-            
-            const progressContainer = document.getElementById("progressContainer"); // Update with your HTML element
-            
-            progressContainer.appendChild(loadingMessage);
-            progressContainer.appendChild(progressBar);
-        }
-
-        // Your original code with the status checking integrated
         fetch("/generate-images", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(prompt)
         })
-        .then(response => {
+          .then(response => {
             if (response.ok) {
-                return response.json();
+              return response.json();
             } else {
-                throw new Error("Failed to generate images. Status: " + response.status);
+              throw new Error("Failed to generate images. Status: " + response.status);
             }
-        })
-        .then(data => {
+          })
+          .then(data => {
+            // Handle the API response and display the generated images
             if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                );
-                hideWaitingOverlay(); // Hide the waiting overlay
-                showModal(imageUrls, promptText);
-            } else if (data.status === "processing" && data.fetch_result) {
-                // Display a message to inform the user that images are being generated
-                showLoadingProgress();
-                
-                // Start checking the status of generated images
-                checkImageStatus(data.fetch_result);
+              const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+              );
+              hideWaitingOverlay(); // Hide the waiting overlay
+              showModal(imageUrls, promptText);
             } else {
                 console.error("Error generating images:", data);
                 hideWaitingOverlay(); // Hide the waiting overlay
                 const processingMessage = document.createElement("p");
-                processingMessage.textContent = "There was an error generating the images.";
+                processingMessage.textContent = "The images are taking a bit more time to be created. Please wait.";
                 // Append the processingMessage to a specific element in your HTML
                 const processingMessageContainer = document.getElementById("processingMessageContainer");
                 processingMessageContainer.appendChild(processingMessage);
                 hideOverlay(); // Hide the overlay and loading message
             }
-        })
-        .catch(error => {
-            console.error("Error generating images:", error);
-            hideWaitingOverlay(); // Hide the waiting overlay
-            const processingMessage = document.createElement("p");
-            processingMessage.textContent = "There was an error generating the images.";
-            // Append the processingMessage to a specific element in your HTML
-            const processingMessageContainer = document.getElementById("processingMessageContainer");
-            processingMessageContainer.appendChild(processingMessage);
-            hideOverlay(); // Hide the overlay and loading message
-        });
-
+          })
+          .catch(error => {
+              console.error("Error generating images:", error);
+                    hideWaitingOverlay(); // Hide the waiting overlay
+                    const processingMessage = document.createElement("p");
+                    processingMessage.textContent = "The images are taking a bit more time to be created. Please wait.";
+                    // Append the processingMessage to a specific element in your HTML
+                    const processingMessageContainer = document.getElementById("processingMessageContainer");
+                    processingMessageContainer.appendChild(processingMessage);
+                    hideOverlay(); // Hide the overlay and loading message
+          });
 
         // Function to display the error modal window
         function displayErrorModal() {

@@ -83,7 +83,8 @@
         <div id="loadingMessage">
             <img class="imgLoader" src="{{ url_for('static', filename='img/modal_img/designing.svg') }}">
             <h1>The magic is happening now!</h1>
-            <p>Magical things takes a bit of time, relax, this will be done soon.</p>
+            <p>Magical things take a bit of time, relax, this will be done soon.</p>
+            <div id="progressContainer"></div>
             <p id="processingMessageContainer"></p>
             <div style="background: #e5e5e5;
     border-radius: 100px;">
@@ -247,86 +248,85 @@
                     <span class="dot"></span>
                     <!-- ID STYLES-->
                     <select id="design_style">
-                        
-                        <option value="">Design style</option>
-                        <option value="African_Style" title="African-inspired design, rich colors, tribal patterns, natural materials, cultural motifs."> African Style</option>
-                        <option value="Andalusian_Style" title="Inspired by Andalusia, Spain, intricate tilework, vibrant colors, Moorish influences, courtyards."> Andalusian Style</option>
-                        <option value="Artisan_Style" title="Handcrafted details and materials, showcasing craftsmanship.">Artisan Style</option>
-                        <option value="Artisanal_Style" title="Traditional craftsmanship and handmade techniques.">Artisanal Style</option>
-                        <option value="Artistic_Style" title="Creativity, self-expression, and experimentation.">Artistic Style</option>
-                        <option value="Artistic_Industrial_Style" title="Combines industrial elements with artistic touches.">Artistic Industrial</option>
-                        <option value="Art_Brut_Style" title="Unconventional, raw artistic expressions.">Art Brut Style</option>
-                        <option value="Art_Deco_Style" title="1920s/30s style with geometric patterns and luxury materials.">Art Deco</option>
-                        <option value="Art_Nouveau_Style" title="Late 19th century, organic forms, inspired by nature.">Art Nouveau</option>
-                        <option value="Asian_Zen_Style" title="Peace, harmony, and balance with a minimalist approach.">Asian Zen Style</option>
-                        <option value="Bohemian_Style" title="Eclectic, vibrant colors, global influences.">Bohemian</option>
-                        <option value="Boho_Chic_Style" title="Free-spirited with a touch of elegance.">Boho Chic</option>
-                        <option value="Craftsman_Style" title="Handcrafted woodwork, functionality, and comfort.">Craftsman Style</option>
-                        <option value="Cabin_Style" title="Rustic charm with a connection to nature.">Cabin Style</option>
-                        <option value="Chinese_Modern_Style" title="Traditional Chinese elements blended with modern designs.">Chinese Modern Style</option>
-                        <option value="Chinoiserie_Style" title="East Asian art, decorative patterns, and whimsy.">Chinoiserie Style</option>
-                        <option value="Colonial_Style" title="Symmetrical, classic, reminiscent of early American architecture.">Colonial Style</option>
-                        <option value="Coastal_Style" title="Light colors, natural materials, nautical vibe.">Coastal</option>
-                        <option value="Coastal_Farmhouse" title="Beach vibe meets rustic farmhouse charm.">Coastal Farmhouse</option>
-                        <option value="Contemporary_Style" title="Latest trends, clean lines, balance, and harmony.">Contemporary Style</option>
-                        <option value="Cottage_Style" title="Cozy, soft colors, vintage furnishings.">Cottage Style</option>
-                        <option value="Eclectic_Style" title="Mix of styles for a unique, personalized space.">Eclectic</option>
-                        <option value="English_Country_Style" title="Floral patterns, traditional furnishings, countryside charm.">English Country Style</option>
-                        <option value="Farmhouse_Style" title="Warmth and simplicity of rural farmhouses.">Farmhouse Style</option>
-                        <option value="French_Country_Style" title="Elegance with rustic elements, inspired by rural France.">French Country Style</option>
-                        <option value="Futuristic_Style" title="Innovative designs, sleek shapes, forward-thinking.">Futuristic Style</option>
+                                            <option value="">Design style</option>
+                                            <option value="African_Style" title="African-inspired design, rich colors, tribal patterns, natural materials, cultural motifs."> African Style</option>
+                                            <option value="Andalusian_Style" title="Inspired by Andalusia, Spain, intricate tilework, vibrant colors, Moorish influences, courtyards."> Andalusian Style</option>
+                                            <option value="Artisan_Style" title="Handcrafted details and materials, showcasing craftsmanship.">Artisan Style</option>
+                                            <option value="Artisanal_Style" title="Traditional craftsmanship and handmade techniques.">Artisanal Style</option>
+                                            <option value="Artistic_Style" title="Creativity, self-expression, and experimentation.">Artistic Style</option>
+                                            <option value="Artistic_Industrial_Style" title="Combines industrial elements with artistic touches.">Artistic Industrial</option>
+                                            <option value="Art_Brut_Style" title="Unconventional, raw artistic expressions.">Art Brut Style</option>
+                                            <option value="Art_Deco_Style" title="1920s/30s style with geometric patterns and luxury materials.">Art Deco</option>
+                                            <option value="Art_Nouveau_Style" title="Late 19th century, organic forms, inspired by nature.">Art Nouveau</option>
+                                            <option value="Asian_Zen_Style" title="Peace, harmony, and balance with a minimalist approach.">Asian Zen Style</option>
+                                            <option value="Bohemian_Style" title="Eclectic, vibrant colors, global influences.">Bohemian</option>
+                                            <option value="Boho_Chic_Style" title="Free-spirited with a touch of elegance.">Boho Chic</option>
+                                            <option value="Craftsman_Style" title="Handcrafted woodwork, functionality, and comfort.">Craftsman Style</option>
+                                            <option value="Cabin_Style" title="Rustic charm with a connection to nature.">Cabin Style</option>
+                                            <option value="Chinese_Modern_Style" title="Traditional Chinese elements blended with modern designs.">Chinese Modern Style</option>
+                                            <option value="Chinoiserie_Style" title="East Asian art, decorative patterns, and whimsy.">Chinoiserie Style</option>
+                                            <option value="Colonial_Style" title="Symmetrical, classic, reminiscent of early American architecture.">Colonial Style</option>
+                                            <option value="Coastal_Style" title="Light colors, natural materials, nautical vibe.">Coastal</option>
+                                            <option value="Coastal_Farmhouse" title="Beach vibe meets rustic farmhouse charm.">Coastal Farmhouse</option>
+                                            <option value="Contemporary_Style" title="Latest trends, clean lines, balance, and harmony.">Contemporary Style</option>
+                                            <option value="Cottage_Style" title="Cozy, soft colors, vintage furnishings.">Cottage Style</option>
+                                            <option value="Eclectic_Style" title="Mix of styles for a unique, personalized space.">Eclectic</option>
+                                            <option value="English_Country_Style" title="Floral patterns, traditional furnishings, countryside charm.">English Country Style</option>
+                                            <option value="Farmhouse_Style" title="Warmth and simplicity of rural farmhouses.">Farmhouse Style</option>
+                                            <option value="French_Country_Style" title="Elegance with rustic elements, inspired by rural France.">French Country Style</option>
+                                            <option value="Futuristic_Style" title="Innovative designs, sleek shapes, forward-thinking.">Futuristic Style</option>
 
-                        <option value="Georgian_Style" title="Symmetrical designs, elegant proportions, and refined details from the 18th century."> Georgian Style</option>
-                        <option value="Glam_Style" title="Luxurious, sparkle, metallic accents, plush textures, opulence."> Glam Style</option>
-                        <option value="Global_Fusion_Style" title="Multicultural ambiance, blending elements, colors, patterns from around the world."> Global Fusion</option>
-                        <option value="Gothic_Style" title="Dark, dramatic, medieval architecture inspiration, pointed arches, mystery."> Gothic Style</option>
-                        <option value="Greek_Revival_Style" title="Inspired by ancient Greek architecture, symmetrical designs, grand columns."> Greek Revival Style</option>
-                        <option value="Hamptons_Style" title="Elegant, luxurious beachside inspiration, timeless palette, natural textures."> Hamptons Style</option>
-                        <option value="Hollywood_Glam_Style" title="Opulent, Hollywood elegance, velvet, gold accents, dramatic lighting."> Hollywood Glam</option>
-                        <option value="Hollywood_Regency_Style" title="Glamorous, bold colors, geometric patterns, golden age of Hollywood."> Hollywood Regency Style</option>
-                        <option value="Hygge_Style" title="Cozy, Danish concept, warmth, comfort, soft lighting, neutral palette."> Hygge Style</option>
-                        <option value="Industrial_Chic_Style" title="Stylish, edgy, raw materials, rustic and urban blend, salvaged wood."> Industrial Chic</option>
-                        <option value="Industrial_Style" title="Functional, raw and utilitarian, exposed brick, metal, concrete."> Industrial Style</option>
-                        <option value="Japanese_Style" title="Simplicity, minimalism, harmony with nature, clean lines, tranquility."> Japanese Style</option>
-                        <option value="Mid_Century_Modern_Style" title="Clean lines, organic forms, functionality, mix of natural and modern."> Mid-Century Modern Style</option>
-                        <option value="Mediterranean_Style" title="Warm colors, natural textures, rustic elements, relaxed ambiance."> Mediterranean Style</option>
-                        <option value="Mediterranean_Revival_Style" title="Vibrant, stucco walls, terracotta tiles, wrought iron, colorful tiles."> Mediterranean Revival</option>
-                        <option value="Minimalist_Style" title="Simplicity, functionality, clean lines, uncluttered spaces, serene."> Minimalist Style</option>
-                        <option value="Modern_Style" title="Simplicity, functionality, neutral colors, open spaces, modern elements."> Modern Style</option>
-                        <option value="Modernist_Organic_Architecture_Style" title="Flowing, curvilinear lines, nature-inspired forms."> Modernist Organic Architecture</option>
-                        <option value="Modern_Farmhouse_Style" title="Rustic charm, modern elements, neutral colors, natural textures."> Modern Farmhouse Style</option>
-                        <option value="Moroccan_Style" title="Vibrant, rich colors, intricate patterns, exotic atmosphere."> Moroccan Style</option>
-                        <option value="Muji_Style" title="Simplicity, natural materials, clean, organized, minimalist."> Muji Style</option>
-                        <option value="Nautical_Style" title="Blue and white, coastal inspiration, stripes, maritime ambiance."> Nautical Style</option>
-                        <option value="Neo_Classical_Style" title="Grandeur, symmetry, classical motifs, contemporary interpretation."> Neo-Classical Style</option>
+                                            <option value="Georgian_Style" title="Symmetrical designs, elegant proportions, and refined details from the 18th century."> Georgian Style</option>
+                                            <option value="Glam_Style" title="Luxurious, sparkle, metallic accents, plush textures, opulence."> Glam Style</option>
+                                            <option value="Global_Fusion_Style" title="Multicultural ambiance, blending elements, colors, patterns from around the world."> Global Fusion</option>
+                                            <option value="Gothic_Style" title="Dark, dramatic, medieval architecture inspiration, pointed arches, mystery."> Gothic Style</option>
+                                            <option value="Greek_Revival_Style" title="Inspired by ancient Greek architecture, symmetrical designs, grand columns."> Greek Revival Style</option>
+                                            <option value="Hamptons_Style" title="Elegant, luxurious beachside inspiration, timeless palette, natural textures."> Hamptons Style</option>
+                                            <option value="Hollywood_Glam_Style" title="Opulent, Hollywood elegance, velvet, gold accents, dramatic lighting."> Hollywood Glam</option>
+                                            <option value="Hollywood_Regency_Style" title="Glamorous, bold colors, geometric patterns, golden age of Hollywood."> Hollywood Regency Style</option>
+                                            <option value="Hygge_Style" title="Cozy, Danish concept, warmth, comfort, soft lighting, neutral palette."> Hygge Style</option>
+                                            <option value="Industrial_Chic_Style" title="Stylish, edgy, raw materials, rustic and urban blend, salvaged wood."> Industrial Chic</option>
+                                            <option value="Industrial_Style" title="Functional, raw and utilitarian, exposed brick, metal, concrete."> Industrial Style</option>
+                                            <option value="Japanese_Style" title="Simplicity, minimalism, harmony with nature, clean lines, tranquility."> Japanese Style</option>
+                                            <option value="Mid_Century_Modern_Style" title="Clean lines, organic forms, functionality, mix of natural and modern."> Mid-Century Modern Style</option>
+                                            <option value="Mediterranean_Style" title="Warm colors, natural textures, rustic elements, relaxed ambiance."> Mediterranean Style</option>
+                                            <option value="Mediterranean_Revival_Style" title="Vibrant, stucco walls, terracotta tiles, wrought iron, colorful tiles."> Mediterranean Revival</option>
+                                            <option value="Minimalist_Style" title="Simplicity, functionality, clean lines, uncluttered spaces, serene."> Minimalist Style</option>
+                                            <option value="Modern_Style" title="Simplicity, functionality, neutral colors, open spaces, modern elements."> Modern Style</option>
+                                            <option value="Modernist_Organic_Architecture_Style" title="Flowing, curvilinear lines, nature-inspired forms."> Modernist Organic Architecture</option>
+                                            <option value="Modern_Farmhouse_Style" title="Rustic charm, modern elements, neutral colors, natural textures."> Modern Farmhouse Style</option>
+                                            <option value="Moroccan_Style" title="Vibrant, rich colors, intricate patterns, exotic atmosphere."> Moroccan Style</option>
+                                            <option value="Muji_Style" title="Simplicity, natural materials, clean, organized, minimalist."> Muji Style</option>
+                                            <option value="Nautical_Style" title="Blue and white, coastal inspiration, stripes, maritime ambiance."> Nautical Style</option>
+                                            <option value="Neo_Classical_Style" title="Grandeur, symmetry, classical motifs, contemporary interpretation."> Neo-Classical Style</option>
 
-                        <option value="Organic_Architecture_Style" title="Integrates with nature, natural materials, harmonious, sustainable spaces."> Organic Style</option>
-                        <option value="Provence_Style" title="French countryside charm, soft colors, rustic elements, vintage pieces."> Provence Style</option>
-                        <option value="Ranch_Style" title="American West inspiration, single-story, open floor plan, connection to outdoors."> Ranch Style</option>
-                        <option value="Renaissance_Style" title="Opulent, grandeur, classical elements, inspired by the Renaissance period."> Renaissance Style</option>
-                        <option value="Retro_Modern_Style" title="Nostalgic retro style with modern lines, vintage furniture, bold patterns."> Retro Modern</option>
-                        <option value="Rococo_Style" title="18th-century origin, elaborate ornamentation, soft colors, whimsy."> Rococo Style</option>
-                        <option value="Rustic_Style" title="Embraces natural elements, ruggedness, raw materials, earthy colors."> Rustic Style</option>
-                        <option value="Scandinavian_Style" title="Simplicity, functionality, clean lines, muted tones, warm and inviting."> Scandinavian Style</option>
-                        <option value="Shabby_Chic_Style" title="Vintage and feminine blend, distressed furniture, pastel colors, romantic ambiance."> Shabby Chic</option>
-                        <option value="Shaker_Style" title="Simplicity, functionality, craftsmanship, clean lines, serene and timeless."> Shaker Style</option>
-                        <option value="Southwestern_Style" title="American Southwest inspiration, warm desert colors, rustic elements."> Southwestern Style</option>
-                        <option value="Spanish_Mediterranean_Style" title="Influenced by Spanish and Mediterranean regions, warm tones, arched doorways, tilework, wrought iron details."> Spanish Mediterranean Style</option>
+                                            <option value="Organic_Architecture_Style" title="Integrates with nature, natural materials, harmonious, sustainable spaces."> Organic Style</option>
+                                            <option value="Provence_Style" title="French countryside charm, soft colors, rustic elements, vintage pieces."> Provence Style</option>
+                                            <option value="Ranch_Style" title="American West inspiration, single-story, open floor plan, connection to outdoors."> Ranch Style</option>
+                                            <option value="Renaissance_Style" title="Opulent, grandeur, classical elements, inspired by the Renaissance period."> Renaissance Style</option>
+                                            <option value="Retro_Modern_Style" title="Nostalgic retro style with modern lines, vintage furniture, bold patterns."> Retro Modern</option>
+                                            <option value="Rococo_Style" title="18th-century origin, elaborate ornamentation, soft colors, whimsy."> Rococo Style</option>
+                                            <option value="Rustic_Style" title="Embraces natural elements, ruggedness, raw materials, earthy colors."> Rustic Style</option>
+                                            <option value="Scandinavian_Style" title="Simplicity, functionality, clean lines, muted tones, warm and inviting."> Scandinavian Style</option>
+                                            <option value="Shabby_Chic_Style" title="Vintage and feminine blend, distressed furniture, pastel colors, romantic ambiance."> Shabby Chic</option>
+                                            <option value="Shaker_Style" title="Simplicity, functionality, craftsmanship, clean lines, serene and timeless."> Shaker Style</option>
+                                            <option value="Southwestern_Style" title="American Southwest inspiration, warm desert colors, rustic elements."> Southwestern Style</option>
+                                            <option value="Spanish_Mediterranean_Style" title="Influenced by Spanish and Mediterranean regions, warm tones, arched doorways, tilework, wrought iron details."> Spanish Mediterranean Style</option>
 
-                        <option value="Steampunk_Style" title="Victorian elegance, industrial elements, vintage machinery, adventurous."> Steampunk Style</option>
-                        <option value="Traditional_Style" title="Classic, timeless, ornate details, rich colors, elegant furnishings."> Traditional Style</option>
-                        <option value="Traditional_Chinese_Style" title="Rooted in Chinese culture, ornate details, vibrant colors, harmonious balance."> Traditional Chinese Style</option>
-                        <option value="Transitional_Style" title="Combines traditional and contemporary, clean lines, neutral colors."> Transitional Style</option>
-                        <option value="Tribal_Style" title="Inspired by indigenous cultures, bold patterns, earthy tones, natural materials."> Tribal Style</option>
-                        <option value="Tropical_Style" title="Vibrant colors, botanical prints, natural materials, lively and exotic."> Tropical Style</option>
-                        <option value="Tuscan_Style" title="Italian Tuscany inspiration, warm earth tones, textured walls, rustic elements."> Tuscan Style</option>
-                        <option value="Urban_Style" title="City living energy, contemporary designs, industrial elements, modern and edgy."> Urban Style</option>
-                        <option value="Victorian_Style" title="Victorian era inspiration, ornate details, rich colors, opulent."> Victorian Style</option>
-                        <option value="Vintage_Style" title="Nostalgic design, antique or vintage-inspired elements, retro patterns."> Vintage Style</option>
-                        <option value="Wabi_Sabi_Style" title="Japanese aesthetics, imperfection, natural materials, rustic and unpretentious."> Wabi-Sabi Style</option>
-                        <option value="Zen_Style" title="Japanese-inspired serenity, minimalist, neutral colors, tranquility."> Zen Style</option>
+                                            <option value="Steampunk_Style" title="Victorian elegance, industrial elements, vintage machinery, adventurous."> Steampunk Style</option>
+                                            <option value="Traditional_Style" title="Classic, timeless, ornate details, rich colors, elegant furnishings."> Traditional Style</option>
+                                            <option value="Traditional_Chinese_Style" title="Rooted in Chinese culture, ornate details, vibrant colors, harmonious balance."> Traditional Chinese Style</option>
+                                            <option value="Transitional_Style" title="Combines traditional and contemporary, clean lines, neutral colors."> Transitional Style</option>
+                                            <option value="Tribal_Style" title="Inspired by indigenous cultures, bold patterns, earthy tones, natural materials."> Tribal Style</option>
+                                            <option value="Tropical_Style" title="Vibrant colors, botanical prints, natural materials, lively and exotic."> Tropical Style</option>
+                                            <option value="Tuscan_Style" title="Italian Tuscany inspiration, warm earth tones, textured walls, rustic elements."> Tuscan Style</option>
+                                            <option value="Urban_Style" title="City living energy, contemporary designs, industrial elements, modern and edgy."> Urban Style</option>
+                                            <option value="Victorian_Style" title="Victorian era inspiration, ornate details, rich colors, opulent."> Victorian Style</option>
+                                            <option value="Vintage_Style" title="Nostalgic design, antique or vintage-inspired elements, retro patterns."> Vintage Style</option>
+                                            <option value="Wabi_Sabi_Style" title="Japanese aesthetics, imperfection, natural materials, rustic and unpretentious."> Wabi-Sabi Style</option>
+                                            <option value="Zen_Style" title="Japanese-inspired serenity, minimalist, neutral colors, tranquility."> Zen Style</option>
 
-                    </select>
+                                        </select>
                     <span class="dot"></span>
                     
 
@@ -704,72 +704,72 @@
                     <!-- ID stanze -->
                     <h5>Home area to be designed</h5>
                     <select id="home_room">
-                        <option value="">Home area</option>
-                        <!-- Home Areas -->
-                        <option value="Balcony">Balcony</option>
-                        <option value="Bar_Area">Bar Area</option>
-                        <option value="Breakfast_Nook">Breakfast Nook</option>
-                        <option value="Courtyard">Courtyard</option>
-                        <option value="Deck">Deck</option>
-                        <option value="Dining_Room">Dining Room</option>
-                        <option value="Entryway">Entryway</option>
-                        <option value="Family_Room">Family Room</option>
-                        <option value="Foyer">Foyer</option>
-                        <option value="Game_Room">Game Room</option>
-                        <option value="Garage">Garage</option>
-                        <option value="Guest_Bathroom">Guest Bathroom</option>
-                        <option value="Guest_Bedroom">Guest Bedroom</option>
-                        <option value="Home_Gym">Home Gym</option>
-                        <option value="Home_Office">Home Office</option>
-                        <option value="Home_Theater">Home Theater</option>
-                        <option value="Indoor_Pool">Indoor Pool</option>
-                        <option value="Kitchen">Kitchen</option>
-                        <option value="Landing">Landing</option>
-                        <option value="Library">Library</option>
-                        <option value="Living_Room">Living Room</option>
-                        <option value="Living_Room_with_a_Fireplace">Living Room with a Fireplace</option>
-                        <option value="Laundry_Room">Laundry Room</option>
-                        <option value="Mudroom">Mudroom</option>
-                        <option value="Master_Bathroom">Master Bathroom</option>
-                        <option value="Master_Bedroom">Master Bedroom</option>
-                        <option value="Pantry">Pantry</option>
-                        <option value="Patio">Patio</option>
-                        <option value="Powder_Room">Powder Room/Half Bath</option>
-                        <option value="Porch">Porch</option>
-                        <option value="Sauna">Sauna</option>
-                        <option value="Spa_Relaxation_Room">Spa/Relaxation Room</option>
-                        <option value="Staircase">Staircase</option>
-                        <option value="Study">Study</option>
-                        <option value="Terrace">Terrace</option>
-                        <option value="Walk_in_Closet">Walk-in Closet</option>
-                        <option value="Wine_Cellar">Wine Cellar</option>
-                        <option value="Workshop">Workshop</option>
+                      <option value="">Home area</option>
+                      <!-- Home Areas -->
+                      <option value="Balcony_Relaxing_outdoor_space_attached_to_room">Balcony - A relaxing outdoor space attached to a room, often elevated for a view.</option>
+                      <option value="Bar_Area_Entertaining_and_serving_beverages">Bar Area - A designated space for entertaining and serving beverages.</option>
+                      <option value="Breakfast_Nook_Cozy_area_for_casual_meals">Breakfast Nook - A cozy area for casual meals, often near the kitchen.</option>
+                      <option value="Courtyard_Enclosed_outdoor_space_within_building">Courtyard - An enclosed outdoor space within the walls of a building.</option>
+                      <option value="Deck_Raised_platform_extending_from_house">Deck - A raised platform extending from the house, usually used for outdoor activities.</option>
+                      <option value="Dining_Room_Formal_space_for_enjoying_meals">Dining Room - A formal space for enjoying meals with family and guests.</option>
+                      <option value="Entryway_First_area_guests_see_when_entering">Entryway - The first area guests see when entering your home.</option>
+                      <option value="Family_Room_Casual_living_space_for_quality_time">Family Room - A casual living space for spending quality time with family.</option>
+                      <option value="Foyer_Entrance_hall_or_lobby_welcoming_guests">Foyer - An entrance hall or lobby that welcomes guests into your home.</option>
+                      <option value="Game_Room_Space_equipped_with_games_entertainment">Game Room - A space equipped with games and entertainment for leisure.</option>
+                      <option value="Garage_Storage_parking_area_for_vehicles">Garage - A storage and parking area for vehicles and belongings.</option>
+                      <option value="Guest_Bathroom_Restroom_for_visitors">Guest Bathroom - A restroom for visitors, often located near common areas.</option>
+                      <option value="Guest_Bedroom_Comfortable_space_for_hosting_visitors">Guest Bedroom - A comfortable space for hosting overnight visitors.</option>
+                      <option value="Home_Gym_Dedicated_area_for_exercising">Home Gym - A dedicated area for exercising and staying fit at home.</option>
+                      <option value="Home_Office_Workspace_for_remote_work">Home Office - A workspace designed for remote work and productivity.</option>
+                      <option value="Home_Theater_Room_equipped_for_cinematic_experiences">Home Theater - A room equipped with audio and visual technology for cinematic experiences.</option>
+                      <option value="Indoor_Pool_Swimming_pool_within_building">Indoor Pool - A swimming pool located within the confines of a building.</option>
+                      <option value="Kitchen_Heart_of_home_where_meals_are_prepared">Kitchen - The heart of the home, where meals are prepared and memories are made.</option>
+                      <option value="Landing_Small_platform_between_flights_of_stairs">Landing - A small platform or area between flights of stairs.</option>
+                      <option value="Library_Room_filled_with_books_quiet_space_for_reading">Library - A room filled with books and a quiet space for reading and reflection.</option>
+                      <option value="Living_Room_Gathering_space_for_relaxation_entertainment">Living Room - A gathering space for relaxation, entertainment, and socializing.</option>
+                      <option value="Living_Room_with_a_Fireplace_Cozy_living_area_with_fireplace">Living Room with a Fireplace - A cozy living area featuring a fireplace for warmth and ambiance.</option>
+                      <option value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room - A functional space dedicated to washing and drying clothes.</option>
+                      <option value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom - An entryway or transitional space for removing outdoor clothing and shoes.</option>
+                      <option value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom - The primary bathroom attached to the master bedroom.</option>
+                      <option value="Master_Bedroom_Main_bedroom_attached_bathroom_walk-in_closet">Master Bedroom - The main bedroom, often with an attached bathroom and walk-in closet.</option>
+                      <option value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry - A storage space for food and kitchen essentials.</option>
+                      <option value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio - An outdoor space adjacent to the house, used for relaxation and entertainment.</option>
+                      <option value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath - A small restroom for guests, usually with a sink and toilet.</option>
+                      <option value="Porch_Covered_area_at_entrance_for_sitting_enjoying_outdoors">Porch - A covered area at the entrance of a house, typically used for sitting and enjoying the outdoors.</option>
+                      <option value="Sauna_Room_with_high_temperatures_for_relaxation_health_benefits">Sauna - A room with high temperatures for relaxation and health benefits.</option>
+                      <option value="Spa_Relaxation_Room_Space_for_relaxation_self-care_activities">Spa/Relaxation Room - A space designed for relaxation and self-care activities.</option>
+                      <option value="Staircase_Structure_connecting_different_levels_of_home">Staircase - A structure that connects different levels of a home.</option>
+                      <option value="Study_Quiet_area_for_reading_working_focusing_on_intellectual_pursuits">Study - A quiet area for reading, working, and focusing on intellectual pursuits.</option>
+                      <option value="Terrace_Outdoor_platform_elevated_views_outdoor_seating">Terrace - An outdoor platform, often elevated, providing views and outdoor seating.</option>
+                      <option value="Walk_in_Closet_Spacious_closet_for_clothing_accessories">Walk-in Closet - A spacious closet with ample room for clothing and accessories.</option>
+                      <option value="Wine_Cellar_Controlled_environment_storing_aging_wine_collections">Wine Cellar - A controlled environment for storing and aging wine collections.</option>
+                      <option value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop - A workspace equipped for crafting, DIY projects, and hands-on activities.</option>
                     </select>
                     <span class="dot"></span>
                    
                     <!--ID child room -->
                     <select id="children_room">
-                        <option value="">Children room type</option>
-                        <option value="Nursery">Nursery</option>
-                        <option value="Babys_Room">Baby's Room</option>
-                        <option value="Toddlers_Room">Toddler's Room</option>
-                        <option value="Preschoolers_Room">Preschooler's Room</option>
-                        <option value="Elementary_Schoolers_Room">Elementary Schooler's Room</option>
-                        <option value="Preteens_Room">Preteen's Room</option>
-                        <option value="Teenagers_Room">Teenager's Room</option>
-                        <option value="Playroom">Playroom</option>
-                        <option value="Study_Room">Study Room</option>
-                        <option value="Homework_Room">Homework Room</option>
-                        <option value="Creative_Studio">Creative Studio</option>
-                        <option value="Game_Room">Game Room</option>
-                        <option value="Music_Room">Music Room</option>
-                        <option value="Sports_Room">Sports Room</option>
-                        <option value="Reading_Nook">Reading Nook</option>
-                        <option value="Craft_Room">Craft Room</option>
-                        <option value="Dressing_Room">Dressing Room</option>
-                        <option value="Sleepover_Room">Sleepover Room</option>
-                        <option value="Siblings_Room">Sibling's Room</option>
-                        <option value="Shared_Room">Shared Room</option>
+                      <option value="">Children room type</option>
+                      <option value="Nursery_Nurturing_space_for_infants">Nursery - A nurturing space designed for infants.</option>
+                      <option value="Babys_Room_Room_for_caring_for_babies">Baby's Room - A room designed for caring for babies and meeting their needs.</option>
+                      <option value="Toddlers_Room_Environment_for_toddlers_to_explore_play">Toddler's Room - An environment for toddlers to explore and engage in play activities.</option>
+                      <option value="Preschoolers_Room_Space_for_preschool-aged_children">Preschooler's Room - A space catered to the needs of preschool-aged children.</option>
+                      <option value="Elementary_Schoolers_Room_Room_for_elementary_school_children">Elementary Schooler's Room - A room tailored to the preferences of elementary school children.</option>
+                      <option value="Preteens_Room_Personal_space_for_preteens">Preteen's Room - A personal space designed for preteens as they transition to adolescence.</option>
+                      <option value="Teenagers_Room_Haven_for_teenagers_to_express_identity">Teenager's Room - A haven for teenagers to express their identity and preferences.</option>
+                      <option value="Playroom_Creative_space_for_play_imaginative_activities">Playroom - A creative space for play and engaging in imaginative activities.</option>
+                      <option value="Study_Room_Study_focused_area_for_learning">Study Room - A study-focused area intended for learning and educational pursuits.</option>
+                      <option value="Homework_Room_Dedicated_area_for_completing_homework">Homework Room - A dedicated area for completing homework assignments and studying.</option>
+                      <option value="Creative_Studio_Space_for_unleashing_creativity">Creative Studio - A space for unleashing creativity through various artistic endeavors.</option>
+                      <option value="Game_Room_Area_for_playing_board_video_games">Game Room - An area dedicated to playing board games, video games, and other entertainment.</option>
+                      <option value="Music_Room_Room_for_playing_musical_instruments">Music Room - A room equipped for playing musical instruments and enjoying music.</option>
+                      <option value="Sports_Room_Space_for_physical_activity_sports">Sports Room - A space for engaging in physical activity and sports-related pursuits.</option>
+                      <option value="Reading_Nook_Cozy_corner_for_reading_books">Reading Nook - A cozy corner designed for reading books and escaping into literature.</option>
+                      <option value="Craft_Room_Room_for_crafting_and_artistic_projects">Craft Room - A room equipped for crafting and engaging in artistic projects.</option>
+                      <option value="Dressing_Room_Area_for_getting_dressed_styling">Dressing Room - An area for getting dressed, styling outfits, and preparing for the day.</option>
+                      <option value="Sleepover_Room_Space_for_sleepovers_with_friends">Sleepover Room - A space designed for hosting sleepovers and spending time with friends.</option>
+                      <option value="Siblings_Room_Room_shared_by_siblings">Sibling's Room - A room shared by siblings, fostering bonding and companionship.</option>
+                      <option value="Shared_Room_Room_shared_by_multiple_children">Shared Room - A room shared by multiple children, encouraging cooperation and sharing.</option>
                     </select>
                     <span class="dot"></span>
                     <h4>Outdoor spaces</h4>

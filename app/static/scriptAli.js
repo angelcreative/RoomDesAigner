@@ -20,11 +20,11 @@ function showWaitingOverlay() {
     progressBar.style.width = progress + '%';
     progressLabel.textContent = 'Generating your images... ' + progress + '%';
     if (progress >= 100) {
-      clearInterval(intervalId);
+      clearInterval(intervalId); 
       hideWaitingOverlay();
       showOverlay();
     }
-  }, 3000);
+  }, 2000);
 
     // Add an event listener to track the visibility of the waiting overlay
       const observer = new IntersectionObserver(entries => {
@@ -327,108 +327,49 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 //      prompt.init_image = imageUrl;
 
       // Make an API request to Stable Diffusion API with the prompt
-        // Function to periodically check the status of generated images
-        function checkImageStatus(fetchResultUrl) {
-            fetch("/generate-images", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(prompt)
-            })
-                .then(response => response.json())
-                .then(statusData => {
-                    if (statusData.status === "success" && statusData.output) {
-                        const imageUrls = statusData.output.map(url =>
-                            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                        );
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        showModal(imageUrls, promptText);
-                    } else if (statusData.status === "processing") {
-                        // Continue checking
-                        setTimeout(() => {
-                            checkImageStatus(fetchResultUrl);
-                        }, 2000); // Check every 2 seconds (adjust as needed)
-                    } else {
-                        console.error("Error generating images:", statusData);
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        const processingMessage = document.createElement("p");
-                        processingMessage.textContent = "There was an error generating the images.";
-                        // Append the processingMessage to a specific element in your HTML
-                        const processingMessageContainer = document.getElementById("processingMessageContainer");
-                        processingMessageContainer.appendChild(processingMessage);
-                        hideOverlay(); // Hide the overlay and loading message
-                    }
-                })
-                .catch(error => {
-                    console.error("Error checking image generation status:", error);
-                });
-        }
-
-        // Function to display a loading message and progress bar
-        function showLoadingProgress() {
-            const loadingMessage = document.createElement("p");
-            loadingMessage.textContent = "Checking image generation progress...";
-            
-            const progressBar = document.createElement("div");
-            progressBar.className = "progress-bar"; // Add appropriate CSS class for styling
-            
-            const progressContainer = document.getElementById("progressContainer"); // Update with your HTML element
-            
-            progressContainer.appendChild(loadingMessage);
-            progressContainer.appendChild(progressBar);
-        }
-
-        // Your original code with the status checking integrated
         fetch("/generate-images", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(prompt)
         })
-        .then(response => {
+          .then(response => {
             if (response.ok) {
-                return response.json();
+              return response.json();
             } else {
-                throw new Error("Failed to generate images. Status: " + response.status);
+              throw new Error("Failed to generate images. Status: " + response.status);
             }
-        })
-        .then(data => {
+          })
+          .then(data => {
+            // Handle the API response and display the generated images
             if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                );
-                hideWaitingOverlay(); // Hide the waiting overlay
-                showModal(imageUrls, promptText);
-            } else if (data.status === "processing" && data.fetch_result) {
-                // Display a message to inform the user that images are being generated
-                showLoadingProgress();
-                
-                // Start checking the status of generated images
-                checkImageStatus(data.fetch_result);
+              const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+              );
+              hideWaitingOverlay(); // Hide the waiting overlay
+              showModal(imageUrls, promptText);
             } else {
                 console.error("Error generating images:", data);
                 hideWaitingOverlay(); // Hide the waiting overlay
                 const processingMessage = document.createElement("p");
-                processingMessage.textContent = "There was an error generating the images.";
+                processingMessage.textContent = "The images are taking a bit more time to be created. Please wait.";
                 // Append the processingMessage to a specific element in your HTML
                 const processingMessageContainer = document.getElementById("processingMessageContainer");
                 processingMessageContainer.appendChild(processingMessage);
                 hideOverlay(); // Hide the overlay and loading message
             }
-        })
-        .catch(error => {
-            console.error("Error generating images:", error);
-            hideWaitingOverlay(); // Hide the waiting overlay
-            const processingMessage = document.createElement("p");
-            processingMessage.textContent = "There was an error generating the images.";
-            // Append the processingMessage to a specific element in your HTML
-            const processingMessageContainer = document.getElementById("processingMessageContainer");
-            processingMessageContainer.appendChild(processingMessage);
-            hideOverlay(); // Hide the overlay and loading message
-        });
-
+          })
+          .catch(error => {
+              console.error("Error generating images:", error);
+                    hideWaitingOverlay(); // Hide the waiting overlay
+                    const processingMessage = document.createElement("p");
+                    processingMessage.textContent = "The images are taking a bit more time to be created. Please wait.";
+                    // Append the processingMessage to a specific element in your HTML
+                    const processingMessageContainer = document.getElementById("processingMessageContainer");
+                    processingMessageContainer.appendChild(processingMessage);
+                    hideOverlay(); // Hide the overlay and loading message
+          });
 
         // Function to display the error modal window
         function displayErrorModal() {
@@ -682,6 +623,14 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
           copyTextToClipboard(promptText);
         });
 
+          
+          // Create find similar products button
+              const findSimilarButton = document.createElement("button");
+              findSimilarButton.textContent = "Find Similar Products";
+              findSimilarButton.addEventListener("click", async () => {
+                await findAndDisplaySimilarProducts(imageUrl, imageContainer);
+              });
+          
         
           // Create upscale button
           const upscaleButton = document.createElement("button");
@@ -695,6 +644,7 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         // Append buttons to buttons container
         buttonsContainer.appendChild(copyButton);
         buttonsContainer.appendChild(copyPromptButton);
+        buttonsContainer.appendChild(findSimilarButton);
         buttonsContainer.appendChild(upscaleButton);
 
         // Append image and buttons container to image container
@@ -709,6 +659,71 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
       modal.style.display = "block";
       showOverlay(); // Show the overlay
     }
+    
+    
+//    alibaba
+    async function findAndDisplaySimilarProducts(imageUrl, container) {
+      const url = 'https://alibaba-image-search.p.rapidapi.com/search';
+      const data = new FormData();
+      data.append('image', imageUrl);
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d', // Replace with your actual RapidAPI key
+          'X-RapidAPI-Host': 'alibaba-image-search.p.rapidapi.com'
+        },
+        body: data
+      };
+
+      try {
+        const response = await fetch(url, options);
+        const result = await response.text();
+
+        // Handle the similar products search result
+        const resultDisplay = document.createElement("div");
+        resultDisplay.textContent = result;
+
+        // Clear container content and append search result
+        container.innerHTML = '';
+        container.appendChild(resultDisplay);
+
+      } catch (error) {
+        console.error(error);
+        // Display an error message if the search fails
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "An error occurred while searching for similar products.";
+        container.innerHTML = '';
+        container.appendChild(errorMessage);
+      }
+    }
+
+    const urlPrefix = 'https://cdn2.stablediffusionapi.com/generations/';
+    const urlSuffix = '.png';
+
+    const sampleUrls = [
+      'https://cdn2.stablediffusionapi.com/generations/6dc5bd19-7802-4a9c-b308-e6bcafa4892c-3.png',
+      'https://cdn2.stablediffusionapi.com/generations/1163bb3e-41da-4fc2-ba8c-b82440d91382-2.png',
+      'https://cdn2.stablediffusionapi.com/generations/bf5a9df8-7705-4ecf-ba12-7bae634851e0-4.png',
+      'https://cdn2.stablediffusionapi.com/generations/01fdf953-a340-4a57-9309-d60ffdc503e8-1.png'
+    ];
+
+    // Extract the dynamic parts using regex and generate image URLs
+    sampleUrls.forEach(url => {
+      const fileNameRegex = /generations\/([\w\-]+)\.png/;
+      const match = url.match(fileNameRegex);
+      
+      if (match && match[1]) {
+        const fileName = match[1];
+        const imageUrl = `${urlPrefix}${fileName}${urlSuffix}`;
+        // Call the function to find and display similar products for each URL
+        findAndDisplaySimilarProducts(imageUrl, document.body);
+      }
+    });
+
+    
+    
+    
   // Function to open the image in a new tab
   function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
