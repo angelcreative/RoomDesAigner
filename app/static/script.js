@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
             "wall_cladding",
             "exterior_finish",
             "exterior_trim_molding",
-            "exterior_paint_color",
+            "walls_paint_color",
             "facade_pattern",
             "floors",
             "kitchen_layout",
@@ -368,7 +368,7 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         // Function to display a loading message and progress bar
         function showLoadingProgress() {
             const loadingMessage = document.createElement("p");
-            loadingMessage.textContent = "Checking image generation progress...";
+            loadingMessage.textContent = "Please wait a bit more ...";
             
             const progressBar = document.createElement("div");
             progressBar.className = "progress-bar"; // Add appropriate CSS class for styling
