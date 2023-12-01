@@ -10,6 +10,57 @@ body {
 }
 
 
+.message {position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+    z-index: 9999;
+    border-radius: 1rem;
+    box-shadow: rgb(0 0 0 / 76%) 0px 24px 24px 8px;
+    min-width: 240px;}
+
+#generatingImagesDialog {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.close-dialog-button {
+    background: #181719;
+        border-radius: 900rem;
+        padding: 4px 10px 6px 10px;
+        position: absolute;
+        cursor: pointer;
+        color: #ffffff75;
+        top: 5px;
+        right: 32px;
+        font-size: 12px;
+        line-height: 1.3;
+        vertical-align: middle;
+}
+
+#generatingImagesDialog img {
+    width: 150px; /* Ajusta según sea necesario */
+    height: auto;
+}
+
+.preloader {
+    /* Estilos para tu preloader (puede ser un simple GIF o algo más complejo con CSS) */
+}
+.preloader img {
+    max-width: 50px; }
+
+
 /*   MODAL P */
 
 .modalP {
@@ -114,10 +165,21 @@ body {
 
 /* END */
 
+
+form h4, form h5 {
+    display:none;
+}
+
 h1, h2, h3, h4, h5 {
         color: #8c8c8c;
         margin-top: 2rem;
         font-weight: lighter;
+}
+.bigTitle {
+    color: #1f1f1f;
+    margin-top: 2rem;
+    font-size:24px;
+    font-weight: lighter;
 }
 
 h5 {
@@ -130,7 +192,7 @@ h4 {
 
 
 .groupSpacer {
-    margin-top: 6.7rem;
+    margin-top: 3.8rem;
 }
 
 
@@ -190,33 +252,34 @@ h4 {
 .colorPalette {
     display: flex;
     column-gap: 1rem;
+    margin-bottom:8px;
+    margin-top:20px;
 }
 
 
 .colorPicker {
-    height: 36px;
-    width: 36px;
+    height: 46px;
+    width: 46px;
     border-width: 0;
     overflow: hidden;
-    margin-top: 4px;
     border: none;
     padding: 0;
-    margin-right: 8px;
     background: none;
+    position: absolute;
+    top: -5px;
+    left: -5px;
 }
 
 .colorPicker:hover {
     cursor: pointer;
 }
 
-.colorPalette_60 {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    color: #808080;
-    font-size: 13px;
-    justify-content: flex-start;
-  
+.colorPaletteA {
+    border-radius: 900rem;
+    overflow: hidden;
+    width: 36px;
+    height: 36px;
+    position: relative;
 }
 
 #splash {
@@ -283,7 +346,7 @@ top:-50px;
 }
 
 .modal-content {
-    background: #1f1f1f;
+    background: #15202b;
         padding: 0;
         position: fixed;
         display: block;
@@ -447,14 +510,14 @@ h1 {
 
 
 .group {
-    background: #171616;
+    background: #1e2732;
     width: auto;
     padding: 1rem 0;
 }
 
 sub {
     font-size: 10px;
-    color: #424242;
+    color: #364552;
     display: block;
     width: 200px;
     margin: 4px 0 0 0;
@@ -488,13 +551,19 @@ sub {
 
 .aspectRatioShot,
 .switchContainer {
-    background: black;
+    background: #18222d;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     border-radius: 0.5rem;
     row-gap: 1rem;
     padding: 1rem;
+    margin-bottom:20px;
+}
+
+.switchContainer {
+    margin-top: 20px;
+    margin-bottom:8px;
 }
 
 .aspectRatio,
@@ -505,7 +574,7 @@ sub {
     flex-wrap: nowrap;
     align-items: center;
     width: 100%;
-    color: grey;
+    color: #6d7b87;
     font-size: 13px;
 }
 
@@ -573,7 +642,7 @@ sub {
 
 .slider.round {
     border-radius: 34px;
-    border: 1px solid #777777;
+    border:  1px solid #15202b;
 }
 
 .slider.round:before {
@@ -581,18 +650,17 @@ sub {
 }
 
 
-
 select, textarea {
     display: flex;
-    font-family:'Varela Round', sans-serif;
+    font-family: 'Varela Round', sans-serif;
     flex-direction: column;
     margin: 0.5rem 0;
-    border-radius: 0.5rem;
+    border-radius: 12px;
     padding: 0.5rem 0.5rem;
-    border: 1px solid #000000;
-    background: #0e0e0e;
-    box-shadow: inset 0px 4px 16px rgb(0 0 0);
-    color: #808080;
+    border: 1px solid #273440;
+    background: #273440;
+   
+    color: #6d7b87;
     width: 200px;
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
 }
@@ -605,7 +673,7 @@ select {
 }
 
 select:hover {
-    background: black;
+    background: #404f5d;
     color: #a5a5a5;
 }
 
@@ -628,7 +696,7 @@ select:hover {
     width: 90%;
     flex-wrap: wrap;
     justify-content: space-between;
-    background: #171616;
+    background: #1e2732;
     column-gap: 1rem;
     padding: 0 1rem 2rem 1rem;
 }
@@ -772,7 +840,7 @@ option[title]:hover:after {
 }
 
 .gradient-background {
-    background: #1f1f1f;
+    background: #15202b;
     /*
   background: linear-gradient(300deg, deepskyblue, darkviolet, blue);
   background-size: 180% 180%;
@@ -973,6 +1041,36 @@ select#materials {
 }
 
 
+/* indeterminated */
+.indeterminate-progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: #e0e0e0;
+  position: relative;
+  overflow: hidden;
+}
+
+.indeterminate-progress-bar::after {
+  content: '';
+  position: absolute;
+  background-color: #4caf50;
+  width: 50%;
+  height: 100%;
+  animation: indeterminate 2s linear infinite;
+}
+
+@keyframes indeterminate {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+
+/**/
+
 
 .progress-bar {
   width: 0%;
@@ -999,16 +1097,16 @@ height: 10px;
 
 #message {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #f0f0f0;
-    padding: 20px;
-    text-align: center;
-    z-index: 9999;
-    border-radius: 1rem;
-    box-shadow: rgb(0 0 0 / 76%) 0px 24px 24px 8px;
-    min-width:240px
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        text-align: center;
+        z-index: 9999;
+        border-radius: 1rem;
+        box-shadow: rgb(0 0 0 / 76%) 0px 24px 24px 8px;
+        width: 300px;
     
 }
 
@@ -5737,7 +5835,7 @@ span.closeGen {
       width: auto;
       flex-wrap: wrap;
       justify-content: flex-start;
-      background: #171616;
+      background: #1e2732;
       column-gap: 1rem;
       padding: 0 1rem 2rem 1rem;
   }

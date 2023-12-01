@@ -1,54 +1,9 @@
-// Declare intervalId outside of the showWaitingOverlay() function
-var intervalId;
 
-function showWaitingOverlay() {
-  const waiting = document.getElementById("waiting");
-  waiting.style.display = "block";
-
-  var loadingMessage = document.getElementById('loadingMessage');
-  loadingMessage.style.display = "block";
-  var progressBar = document.getElementById('progressBar');
-  var progressLabel = document.getElementById('progressLabel');
-
-  // Reset the progress bar to 0
-  progressBar.style.width = '0%';
-  progressLabel.textContent = 'Generating your images... 0%';
-
-  var progress = 0;
-  intervalId = setInterval(function() {
-    progress += 1;
-    progressBar.style.width = progress + '%';
-    progressLabel.textContent = 'Generating your images... ' + progress + '%';
-    if (progress >= 100) {
-      clearInterval(intervalId);
-      hideWaitingOverlay();
-      showOverlay();
-    }
-  }, 3000);
-
-    // Add an event listener to track the visibility of the waiting overlay
-      const observer = new IntersectionObserver(entries => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) {
-            // Reset the progress bar to 0 when the waiting overlay is not visible
-            progressBar.style.width = '0%';
-            progressLabel.textContent = 'Generating your images... 0%';
-          }
-        }
-      });
-
-  // Observe the waiting overlay element
-  observer.observe(waiting);
-}
 
 
 
 
 // Function to hide the waiting overlay and loading message
-function hideWaitingOverlay() {
-  const waiting = document.getElementById("waiting");
-  waiting.style.display = "none";
-}
 // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay");
@@ -61,26 +16,23 @@ function hideOverlay() {
 }
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton");
-magicButton.addEventListener("click", function() {
-  showWaitingOverlay();
-});
 
 // modal P
-document.getElementById('password-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    var passwordInput = document.getElementById('password');
-    var errorMessage = document.getElementById('error-message');
-    
-    if (passwordInput.value === '4yVd4nt3') {
-        // Password is correct, close the modal or perform desired actions
-        var modalP = document.querySelector('.modalP');
-        modalP.style.display = 'none';
-    } else {
-        // Password is incorrect, display error message
-        errorMessage.textContent = 'Invalid password. Schedule a call.';
-    }
-});
+//document.getElementById('password-form').addEventListener('submit', function(event) {
+//    event.preventDefault();
+//
+//    var passwordInput = document.getElementById('password');
+//    var errorMessage = document.getElementById('error-message');
+//
+//    if (passwordInput.value === '4yVd4nt3') {
+//        // Password is correct, close the modal or perform desired actions
+//        var modalP = document.querySelector('.modalP');
+//        modalP.style.display = 'none';
+//    } else {
+//        // Password is incorrect, display error message
+//        errorMessage.textContent = 'Invalid password. Schedule a call.';
+//    }
+//});
 
 //end modal P
 
@@ -221,8 +173,41 @@ document.addEventListener("DOMContentLoaded", function() {
       return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
     }
 
+    
+    function showGeneratingImagesDialog() {
+        document.getElementById('generatingImagesDialog').style.display = 'block';
+        document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
+  
+    }
+
+    function hideGeneratingImagesDialog() {
+        document.getElementById('generatingImagesDialog').style.display = 'none';
+    }
+
+    function showErrorInDialog() {
+        document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
+    }
+
+    function retryGeneration() {
+        hideGeneratingImagesDialog();
+        // Aquí debes llamar a la función que inicia la generación de imágenes
+         generateImages();
+    }
+    
+    document.getElementById('closeDialogButton').addEventListener('click', function() {
+        document.getElementById('generatingImagesDialog').style.display = 'none';
+    });
+    
+    function showErrorInDialog() {
+        document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
+//        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
+    }
+
+
  
     function generateImages(imageUrl, selectedValues) {
+        showGeneratingImagesDialog();
+
       const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
 
       const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
@@ -260,7 +245,6 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 //   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
 
       showOverlay(); // Show the overlay and loading message
-      showWaitingOverlay(); // Show the waiting overlay
       const prompt = {
         key: apiKey,
         prompt: JSON.stringify(promptText),
@@ -328,56 +312,60 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
 
       // Make an API request to Stable Diffusion API with the prompt
         // Function to periodically check the status of generated images
+
+//        function checkImageStatus(fetchResultUrl) {
+//            fetch(fetchResultUrl)
+//                .then(response => response.json())
+//                .then(data => {
+//                    if (data.status === 'processing') {
+//                        // Si las imágenes aún se están procesando, vuelve a llamar a esta función después de un retraso
+//                        setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Revisa nuevamente después de 2 segundos
+//                    } else if (data.status === 'success') {
+//                        // Si las imágenes se han generado con éxito
+//                        // Procesa las imágenes como sea necesario
+//                        hideGeneratingImagesDialog();
+//                    } else {
+//                        // Si hubo un error o un estado inesperado
+//                        showErrorInDialog();
+//                    }
+//                })
+//                .catch(error => {
+//                    console.error('Error al verificar el estado de la generación de imágenes:', error);
+//                    showErrorInDialog();
+//                });
+//        }
+
+        
         function checkImageStatus(fetchResultUrl) {
-            fetch("/generate-images", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(prompt)
+            // Suponiendo que no necesitas enviar datos adicionales en el cuerpo de la solicitud
+            fetch(fetchResultUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Añade aquí cualquier otro encabezado que sea necesario
+                }
+                // Si necesitas enviar un cuerpo de solicitud, inclúyelo aquí
             })
-                .then(response => response.json())
-                .then(statusData => {
-                    if (statusData.status === "success" && statusData.output) {
-                        const imageUrls = statusData.output.map(url =>
-                            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                        );
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        showModal(imageUrls, promptText);
-                    } else if (statusData.status === "processing") {
-                        // Continue checking
-                        setTimeout(() => {
-                            checkImageStatus(fetchResultUrl);
-                        }, 2000); // Check every 2 seconds (adjust as needed)
-                    } else {
-                        console.error("Error generating images:", statusData);
-                        hideWaitingOverlay(); // Hide the waiting overlay
-                        const processingMessage = document.createElement("p");
-                        processingMessage.textContent = "There was an error generating the images.";
-                        // Append the processingMessage to a specific element in your HTML
-                        const processingMessageContainer = document.getElementById("processingMessageContainer");
-                        processingMessageContainer.appendChild(processingMessage);
-                        hideOverlay(); // Hide the overlay and loading message
-                    }
-                })
-                .catch(error => {
-                    console.error("Error checking image generation status:", error);
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'processing') {
+                    // Si las imágenes aún se están procesando, vuelve a llamar a esta función después de un retraso
+                    setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Revisa nuevamente después de 2 segundos
+                } else if (data.status === 'success') {
+                    // Si las imágenes se han generado con éxito
+                    hideGeneratingImagesDialog();
+                    // Aquí puedes realizar acciones adicionales en función del éxito
+                } else {
+                    // Si hubo un error o un estado inesperado
+                    showErrorInDialog();
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el estado de la generación de imágenes:', error);
+                showErrorInDialog();
+            });
         }
 
-        // Function to display a loading message and progress bar
-        function showLoadingProgress() {
-            const loadingMessage = document.createElement("p");
-            loadingMessage.textContent = "Please wait a bit more ...";
-            
-            const progressBar = document.createElement("div");
-            progressBar.className = "progress-bar"; // Add appropriate CSS class for styling
-            
-            const progressContainer = document.getElementById("progressContainer"); // Update with your HTML element
-            
-            progressContainer.appendChild(loadingMessage);
-            progressContainer.appendChild(progressBar);
-        }
 
         // Your original code with the status checking integrated
         fetch("/generate-images", {
@@ -399,17 +387,15 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
                 const imageUrls = data.output.map(url =>
                     url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
                 );
-                hideWaitingOverlay(); // Hide the waiting overlay
                 showModal(imageUrls, promptText);
+                hideGeneratingImagesDialog();
             } else if (data.status === "processing" && data.fetch_result) {
                 // Display a message to inform the user that images are being generated
-                showLoadingProgress();
                 
                 // Start checking the status of generated images
                 checkImageStatus(data.fetch_result);
             } else {
                 console.error("Error generating images:", data);
-                hideWaitingOverlay(); // Hide the waiting overlay
                 const processingMessage = document.createElement("p");
                 processingMessage.textContent = "There was an error generating the images.";
                 // Append the processingMessage to a specific element in your HTML
@@ -420,7 +406,6 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
         })
         .catch(error => {
             console.error("Error generating images:", error);
-            hideWaitingOverlay(); // Hide the waiting overlay
             const processingMessage = document.createElement("p");
             processingMessage.textContent = "There was an error generating the images.";
             // Append the processingMessage to a specific element in your HTML
@@ -465,14 +450,7 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
     const rerollButton = document.getElementById("rerollButton");
     rerollButton.addEventListener("click", rerollImages);
     
-    function showWaitingOverlay() {
-      const waiting = document.getElementById("waiting");
-      waiting.style.display = "block";
-    }
-    function hideWaitingOverlay() {
-      const waiting = document.getElementById("waiting");
-      waiting.style.display = "none";
-    }
+
     // Function to show the overlay
     function showOverlay() {
       const overlay = document.getElementById("overlay");
@@ -646,8 +624,13 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
     }
     // Function to display the generated images in a modal
     function showModal(imageUrls, promptText) {
-      const modal = document.getElementById("modal");
-      const imageGrid = document.getElementById("imageGrid");
+        const modal = document.getElementById("modal");
+        const closeButton = modal.querySelector(".close");
+
+        // Asegurarse de que solo se añade un event listener
+        closeButton.removeEventListener("click", closeModalHandler);
+        closeButton.addEventListener("click", closeModalHandler);
+        
       // Clear previous images
       imageGrid.innerHTML = "";
       // Display the generated images
@@ -708,7 +691,12 @@ const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,  
       // Show the modal
       modal.style.display = "block";
       showOverlay(); // Show the overlay
+        
+        function closeModalHandler() {
+               modal.style.display = "none";
+           }
     }
+    
   // Function to open the image in a new tab
   function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");

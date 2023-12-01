@@ -32,8 +32,22 @@
 </head>
 
 <body class="gradient-background ">
+
+    <div id="generatingImagesDialog" style="display: none;" >
+        <div class="message-content message">
+        <img src="/static/img/modal_img/designing.svg" alt="Imagen de carga">
+        <h2 id="dialogTitle" class="bigTitle"></h2>
+        <div class="preloader"><img src="/static/img/gen.svg" alt="Imagen de loader"></div>
+        </div>
+        <button id="closeDialogButton" class="close-dialog-button close">X</button>
+        
+    </div>
+
+    <div id="processingMessageContainer"></div>
+
+    
     <!-- password -->
-    <div class="modalP">
+   <!-- <div class="modalP">
         <div class="modalP-content">
             <div class="left-section">
                 <h1>
@@ -51,12 +65,10 @@
                 </form>
             </div>
             <div class="right-section">
-                <!-- Add your content for the right section here
-                        <h2>Welcome to Room Designer!</h2>
-                        <p>Start designing your dream room now.</p>-->
+               
             </div>
         </div>
-    </div>
+    </div>-->
     <!-- end password -->
     <!-- Modal Window -->
     <div id="splash">
@@ -79,21 +91,7 @@
         </div>
         <span class="closeError">×</span>
     </div>
-    <div id="waiting">
-        <div id="loadingMessage">
-            <img class="imgLoader" src="{{ url_for('static', filename='img/modal_img/designing.svg') }}">
-            <h1>The magic is happening now!</h1>
-            <p>Magical things take a bit of time, relax, this will be done soon.</p>
-            <div id="progressContainer"></div>
-            <p id="processingMessageContainer"></p>
-            <div style="background: #e5e5e5;
-    border-radius: 100px;">
-                <div class="progress-bar" id="progressBar"></div>
-                <div class="progress-label" id="progressLabel"></div>
-            </div>
-        </div>
-        <span class="closeGen" onclick="hideWaitingOverlay()">x</span>
-    </div>
+
     <div id="overlay"></div>
     <div id="modal" class="modal" style="display: none;">
         <div class="modal-content">
@@ -543,13 +541,13 @@
                     <!-- ID COLOR PALETTES -->
                     <h4>Color palette</h4>
                     <div class="colorPalette">
-                        <div class="colorPalette 60">
+                        <div class="colorPaletteA">
                             <input type="color" id="primary_color" placeholder="#000000" class="colorPicker">
                         </div>
-                        <div class="colorPalette 60">
+                        <div class="colorPaletteA">
                             <input type="color" id="secondary_color" placeholder="#000000" class="colorPicker">
                         </div>
-                        <div class="colorPalette 60">
+                        <div class="colorPaletteA">
                             <input type="color" id="tertiary_color" placeholder="#000000" class="colorPicker">
                         </div>
                     </div>
@@ -1365,7 +1363,7 @@
                     <br>
                     <h1><img class="iconH1" src="/static/img/icon-prompt.svg" />Be a poet</h1>
                     <h4>Write with your own touch</h4>
-                    <textarea id="customText" rows="16" cols="50"></textarea>
+                    <textarea id="customText" rows="8s" cols="50"></textarea>
                     <span class="dot"></span>
                 </div>
             </div>
