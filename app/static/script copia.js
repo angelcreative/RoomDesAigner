@@ -39,60 +39,60 @@ const magicButton = document.getElementById("magicButton");
 document.addEventListener("DOMContentLoaded", function() {
     
  
-// Function to handle the form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = true;
-  showOverlay();
-
-  const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
-  const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
-
-  if (file) {
-    // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
-    const uploadUrl = "https://api.imgbb.com/1/upload";
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("image", file);
-
-    fetch(uploadUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        // Si la imagen se subió con éxito, obtén la URL y procede con img2img
-        const imageUrl = data.data.url;
-        generateImages(imageUrl, selectedValues, isImg2Img);
-      } else {
-        throw new Error("Image upload failed: " + data.error.message);
+    // Function to handle the form submission
+    function handleSubmit(event) {
+      event.preventDefault();
+      // Disable the "Make the Magic" button to prevent multiple clicks
+      const magicButton = document.getElementById("magicButton");
+      magicButton.disabled = true;
+      // Check if the form is being reset
+      if (event.submitter.id === "clearAllButton") {
+        clearAll();
+        return;
       }
-    })
-    .catch(error => {
-      // Manejo de errores en caso de falla en la subida de la imagen
-      handleError(error.message);
-    });
-  } else {
-    // Procesa txt2img si no se seleccionó ningún archivo
-    generateImages(null, selectedValues, isImg2Img);
-  }
-}
-
-function handleError(errorMessage) {
-  console.error(errorMessage);
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
-}
-
-// Asegúrate de que las funciones showOverlay, getSelectedValues y generateImages estén definidas correctamente.
-
+      showOverlay(); // Show the overlay and loading message
+    const fileInput = document.getElementById("imageDisplayUrl");
+      const file = fileInput.files[1];
+      if (file) {
+        // Image file is selected
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Replace with your actual API key
+        const uploadUrl = "https://api.imgbb.com/1/upload";
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+        fetch(uploadUrl, {
+          method: "POST",
+          body: formData
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Image uploaded successfully
+              const imageUrl = data.data && data.data.medium && data.data.medium.url;
+              const selectedValues = getSelectedValues(); // Get the selected form values
+              generateImages(imageUrl, selectedValues);
+            } else {
+              // Image upload failed
+              console.error("Image upload failed:", data.error.message);
+              // Enable the "Make the Magic" button to allow another attempt
+              magicButton.disabled = false;
+              hideOverlay(); // Hide the overlay and loading message
+            }
+          })
+          .catch(error => {
+            console.error("Error uploading image:", error);
+            // Enable the "Make the Magic" button to allow another attempt
+            magicButton.disabled = false;
+            hideOverlay(); // Hide the overlay and loading message
+          });
+      } else {
+        // Image file is not selected
+        const selectedValues = getSelectedValues(); // Get the selected form values
+        generateImages(null, selectedValues);
+        hideOverlay(); // Hide the overlay and loading message
+      }
+     
+    }
  
     
     
@@ -154,19 +154,15 @@ function handleError(errorMessage) {
         const values = {};
 
         elementIds.forEach(elementId => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      values[elementId] = element.value;
+            const element = document.getElementById(elementId);
+            if (element) {
+                values[elementId] = element.value;
+            }
+        });
+
+        return values;
     }
-  });
 
-  const imageDisplay = document.getElementById("imageDisplay");
-  if (imageDisplay && imageDisplay.src) {
-    values["imageUrl"] = imageDisplay.src; // Añade la URL de la imagen si está presente
-  }
-
-  return values;
-}
   
     const selectedValues = getSelectedValues();
     console.log(selectedValues);
@@ -209,73 +205,158 @@ function handleError(errorMessage) {
 
 
  
-function generateImages(imageUrl, selectedValues, isImg2Img) {
-  showGeneratingImagesDialog();
+    function generateImages(imageUrl, selectedValues) {
+        showGeneratingImagesDialog();
 
-  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-  const customText = document.getElementById("customText").value;
-  const pictureSelect = document.getElementById("picture");
-  const selectedPicture = pictureSelect.value;
-  const promptInit = `${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
+      const includeOptionalText = document.getElementById("optionalTextCheckbox").checked;
 
-  let plainText = Object.entries(selectedValues)
-    .filter(([key, value]) => value && key !== "imageUrl")
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(", ");
+      const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
 
-  const promptEndy = `interiordesign, homedecor, architecture, homedesign, UHD, ${selectedPicture}, `;
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const width = aspectRatio === "portrait" ? 512 : 1024;
-  const height = aspectRatio === "portrait" ? 1024 : 512;
+      // Retrieve the value of the custom text area
+      const customText = document.getElementById("customText").value;
+      // Update the promptInit variable based on the selected value from the "Render" select input
+      const pictureSelect = document.getElementById("picture");
+      const selectedPicture = pictureSelect.value;
+      const promptInit = ` ${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
 
-  const seedSwitch = document.getElementById("seedSwitch");
-  const seedEnabled = seedSwitch.checked;
-  const seedValue = seedEnabled ? null : "19071975";
+      // Generate the plain text representation of the selected values
+      let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
 
-  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
+const promptEndy = ` interiordesign, homedecor, architecture, homedesign, UHD,    ${selectedPicture}, `;
+      const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+      const width = aspectRatio === "portrait" ? 512 : 1024;
+      const height = aspectRatio === "portrait" ? 1024 : 512;
 
-  const prompt = {
-    key: apiKey,
-    prompt: JSON.stringify(promptText),
-    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
-    width: width,
-    height: height,
-    samples: "4",
-    num_inference_steps: "20",
-    seed: seedValue,
-    guidance_scale: 7.5,
-    webhook: null,
-    track_id: null,
-    safety_checker: null,
-    enhance_prompt: null,
-    multi_lingual: null,
-    panorama: null,
-    self_attention: null,
-    upscale: null,
-    embeddings_model: null,
-  };
+      const seedSwitch = document.getElementById("seedSwitch");
+      const seedEnabled = seedSwitch.checked;
+      const seedValue = seedEnabled ? null : "19071975";
+        // Replace "YOUR_SEED_VALUE" with the actual seed value you want to use
 
-  if (isImg2Img && imageUrl) {
-    prompt.init_image = imageUrl;
-    prompt.strength = 0.7; // Valor de intensidad para img2img
-  }
+       
+        const optionalText = includeOptionalText ? generateOptionalText() : "";
+        const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
 
-  fetch("/generate-images", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-     if (data.status === "success" && data.output) {
+
+        
+      // Combine the promptInit with the plain text representation
+//   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy}`;
+
+      showOverlay(); // Show the overlay and loading message
+      const prompt = {
+        key: apiKey,
+        prompt: JSON.stringify(promptText),
+        negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry,   bad proportions,  gross proportions,  username, watermark, signature, blurry, bad proportions, art, anime, tiling,out of frame, disfigured, deformed, watermark, ",
+        width: width,
+        height: height,
+        samples: "4",
+        num_inference_steps: "20",
+        seed: seedValue, // Set the seed value based on the switch state
+        guidance_scale: 7.5,
+        webhook: null,
+        track_id: null,
+        safety_checker: null,
+        enhance_prompt: null,
+        multi_lingual: null,
+        panorama: null,
+        self_attention: null,
+        upscale: null,
+        embeddings_model: null,
+      };
+
+        const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }
+
+
+      // Get the <span> element by its class name
+      var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+      var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+      var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+      spanElement.textContent = modifiedText;
+
+
+        
+        function checkImageStatus(fetchResultUrl) {
+            // Suponiendo que no necesitas enviar datos adicionales en el cuerpo de la solicitud
+            fetch(fetchResultUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // Añade aquí cualquier otro encabezado que sea necesario
+                }
+                // Si necesitas enviar un cuerpo de solicitud, inclúyelo aquí
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'processing') {
+                    // Si las imágenes aún se están procesando, vuelve a llamar a esta función después de un retraso
+                    setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Revisa nuevamente después de 2 segundos
+                } else if (data.status === 'success') {
+                    // Si las imágenes se han generado con éxito
+                    hideGeneratingImagesDialog();
+                    // Aquí puedes realizar acciones adicionales en función del éxito
+                } else {
+                    // Si hubo un error o un estado inesperado
+                    showErrorInDialog();
+                }
+            })
+            .catch(error => {
+                console.error('Error al verificar el estado de la generación de imágenes:', error);
+                showErrorInDialog();
+            });
+        }
+
+
+        // Your original code with the status checking integrated
+        fetch("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Failed to generate images. Status: " + response.status);
+            }
+        })
+        .then(data => {
+            if (data.status === "success" && data.output) {
                 const imageUrls = data.output.map(url =>
                     url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
                 );
@@ -295,18 +376,19 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
                 processingMessageContainer.appendChild(processingMessage);
                 hideOverlay(); // Hide the overlay and loading message
             }
-  })
-  .catch(error => {
-    console.error("Error generating images:", error);
-     const processingMessage = document.createElement("p");
+        })
+        .catch(error => {
+            console.error("Error generating images:", error);
+            const processingMessage = document.createElement("p");
             processingMessage.textContent = "There was an error generating the images.";
             // Append the processingMessage to a specific element in your HTML
             const processingMessageContainer = document.getElementById("processingMessageContainer");
             processingMessageContainer.appendChild(processingMessage);
             hideOverlay(); // Hide the overlay and loading message
-  });
-    
-    // Function to display the error modal window
+        });
+
+
+        // Function to display the error modal window
         function displayErrorModal() {
           const errorModal = document.getElementById("errorGenerating");
           errorModal.style.display = "block";
@@ -322,9 +404,12 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
             errorModal.style.display = "none";
           });
         }
-}
 
-// Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
+  
+
+        
+
+        }
 
     // Function to reroll the images
     function rerollImages() {
