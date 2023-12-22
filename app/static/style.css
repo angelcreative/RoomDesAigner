@@ -10,6 +10,18 @@ body {
 }
 
 
+ input[type="file"]{
+  visibility:hidden;
+}
+
+label.imageup {
+    cursor: pointer;
+    background: #18222d;
+    padding: 20px;
+    border-radius: 12px;
+    color: #677580;
+}
+
 .message {position: fixed;
     top: 50%;
     left: 50%;
