@@ -128,11 +128,16 @@
                 <!-- SHOT TOKENS -->
                 <div class="group">
                     
-                <label class="imageup" for="imageDisplayUrl">
- Upload your image here <span>↑</span>
-<small>Good quality, less than 400Kb, <br>(optional)</small>
-                    <input type="file" id="imageDisplayUrl" accept="image/*">
-                    </label>
+                <div id="myimage">
+  <label class="imageup" for="imageDisplayUrl">
+    Upload your image here <span>↑</span>
+    <small>Good quality, less than 400Kb, <br>(optional)</small>
+    <input type="file" id="imageDisplayUrl" accept="image/*">
+  </label>
+  <div class="thumbImg" style="display: none;">
+    <img id="thumbnail" src="" alt="Thumbnail">
+  </div>
+</div>
                     
                     <h1><img class="iconH1" src="/static/img/icon-shot.svg" />Shot tokens</h1>
                     <!-- ratio -->

@@ -688,6 +688,23 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 });
 
 
+document.addEventListener("DOMContentLoaded", function() {
+  const fileInput = document.getElementById("imageDisplayUrl");
+  const thumbnailContainer = document.querySelector(".thumbImg");
+  const thumbnailImage = document.getElementById("thumbnail");
+
+  fileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        thumbnailImage.src = e.target.result;
+        thumbnailContainer.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+});
 
 //disable MB
 

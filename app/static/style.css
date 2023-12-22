@@ -27,6 +27,11 @@ label.imageup {
     text-align: center;
 }
 
+.imageup:hover span {
+    background: #000000;
+    color: white;
+}
+
 .imageup span {
     color: #a9fff5;
     background: #46696d;
@@ -34,6 +39,19 @@ label.imageup {
     border-radius: 900px;
     display: block;
     margin: 9px auto;
+    transition: background ease-in 300ms, color ease-out 300ms;
+}
+img#thumbnail {
+    zoom: 1;
+    border-radius: 12px;
+    max-height: 170px;
+    max-width: 230px;
+}
+
+.thumbImg {
+    text-align: center;
+    border-radius: 12px;
+    margin-top: 12px;
 }
 .message {position: fixed;
     top: 50%;
