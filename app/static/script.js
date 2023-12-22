@@ -255,11 +255,57 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     upscale: null,
     embeddings_model: null,
   };
+    
+    
+    
+    
 
   if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
     prompt.strength = 0.7; // Valor de intensidad para img2img
   }
+    
+    
+      const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }
+
+
+      // Get the <span> element by its class name
+      var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+      var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+      var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+      spanElement.textContent = modifiedText;
 
   fetch("/generate-images", {
     method: "POST",
@@ -324,6 +370,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         }
 }
 
+    
+      
+
+    
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
     // Function to reroll the images
