@@ -1,6 +1,28 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const secretKey = '190719756'; // The secret key to check against
+  const accessButton = document.getElementById('accessButton'); // The button to trigger the validation
+  const secretKeyInput = document.getElementById('secretKeyInput'); // The input field for the secret key
+  const errorMessage = document.getElementById('errorMessage'); // The paragraph to display error messages
+  const signUpDiv = document.getElementById('signUp'); // The sign-up modal div
+  const mainUIDiv = document.getElementById('mainUI'); // The main UI div
 
+  // Event listener for the access button
+  accessButton.addEventListener('click', function() {
+    if (secretKeyInput.value === secretKey) {
+      // If the secret key is correct, hide sign-up and show main UI
+      signUpDiv.style.display = 'none';
+      mainUIDiv.style.display = 'block';
+    } else {
+      // If the secret key is incorrect, show an error message
+      errorMessage.style.display = 'block';
+    }
+  });
 
-
+  // Disable right-click on the signUp div
+  // signUpDiv.addEventListener('contextmenu', function(event) {
+  //   event.preventDefault();
+  // });
+});
 
 
 // Function to hide the waiting overlay and loading message

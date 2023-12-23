@@ -7,7 +7,82 @@ body {
   background-image: url('img/bg-body.png');
   background-size: cover;
   font-family: 'Varela Round', sans-serif;
+  height: 100vh;
+  margin: 0;
+
 }
+
+#customBtn {
+  display: inline-block;
+  background: white;
+  color: #444;
+  width: 190px;
+  border-radius: 5px;
+  border: thin solid #888;
+  box-shadow: 1px 1px 1px grey;
+  white-space: nowrap;
+}
+#customBtn:hover {
+  cursor: pointer;
+}
+input#secretKeyInput {
+    padding: 12px 8px;
+    background: #f7f7f7;
+    width: 200px;
+    border-radius: 12px;
+    border: 1px solid #cacaca;
+}
+
+#errorMessage a {
+    color: #00BCD4;
+}
+
+.SGmodal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+
+.SGmodal-content h1 {
+    color: #1f1f1f;
+}
+
+
+.SGmodal-content {
+background: url(https://notioly.com/wp-content/uploads/2022/01/79.Login_.png) #fff center top no-repeat;
+    margin: auto;
+    padding: 140px 20px 40px 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 340px;
+    background-size: 200px;
+    text-align: center;
+    border-radius: 36px;
+    color: #1f1f1f;
+}
+
+
+#processingMessageContainer {
+    background: #15202b;
+    color: #8b7e4f;
+    padding: 5px;
+    margin: 0;
+    text-align: center;
+    z-index: 9999;
+    position: relative;
+}
+
+/* Add more styles for your buttons and content as needed */
 
 
  input[type="file"]{
@@ -337,9 +412,13 @@ h4 {
     z-index: 9999;
     background: url(/static/img/bg-home.jpg);
     background-size: cover;
-    filter: drop-shadow(2px 4px 6px black);
+    
 }
 
+
+#splash svg {
+    margin: 100% auto;
+}
 
 
 #splash img {
