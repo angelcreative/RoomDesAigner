@@ -104,7 +104,6 @@ function handleSubmit(event) {
     generateImages(null, selectedValues, isImg2Img);
   }
 }
-
 function handleError(errorMessage) {
   console.error(errorMessage);
   const magicButton = document.getElementById("magicButton");
@@ -328,6 +327,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
       // Update the text content of the <span> element
       spanElement.textContent = modifiedText;
+// Fetch request to generate images
 
   fetch("/generate-images", {
     method: "POST",
@@ -335,61 +335,64 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
-  })
-  .then(response => {
+})
+ .then(response => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return response.json();
-  })
-  .then(data => {
-     if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
-                );
-                showModal(imageUrls, promptText);
-                hideGeneratingImagesDialog();
-            } else if (data.status === "processing" && data.fetch_result) {
-                // Display a message to inform the user that images are being generated
-                
-                // Start checking the status of generated images
-                checkImageStatus(data.fetch_result);
-            } else {
-                console.error("Error generating images:", data);
-                const processingMessage = document.createElement("p");
-                processingMessage.textContent = "There was an error generating the images.";
-                // Append the processingMessage to a specific element in your HTML
-                const processingMessageContainer = document.getElementById("processingMessageContainer");
-                processingMessageContainer.appendChild(processingMessage);
-                hideOverlay(); // Hide the overlay and loading message
-            }
-  })
+})
+ .then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+        );
+        showModal(imageUrls, promptText);
+        hideGeneratingImagesDialog();
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result);
+    } else {
+        showError(data);
+    }
+})
   .catch(error => {
-    console.error("Error generating images:", error);
-     const processingMessage = document.createElement("p");
-            processingMessage.textContent = "There was an error generating the images.";
-            // Append the processingMessage to a specific element in your HTML
-            const processingMessageContainer = document.getElementById("processingMessageContainer");
-            processingMessageContainer.appendChild(processingMessage);
-            hideOverlay(); // Hide the overlay and loading message
-  });
+    showError(error);
+});
     
+    // Function to show error message with dismiss button
+function showError(error) {
+    console.error("Error generating images:", error);
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><button id="dismissErrorButton" style="cursor:pointer;">X</button>';
+    processingMessageContainer.style.display = 'block';
+    hideOverlay(); // Hide the overlay and loading message
+
+    // Add event listener for the dismiss button
+    const dismissButton = document.getElementById("dismissErrorButton");
+    dismissButton.addEventListener('click', hideErrorMessage);
+}
+
+// Function to hide the error message
+function hideErrorMessage() {
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    processingMessageContainer.style.display = 'none';
+}
     // Function to display the error modal window
-        function displayErrorModal() {
-          const errorModal = document.getElementById("errorGenerating");
-          errorModal.style.display = "block";
+   function displayErrorModal() {
+    const errorModal = document.getElementById("errorGenerating");
+    errorModal.style.display = "block";
 
-          const tryAgainButton = document.getElementById("errorButton");
-          tryAgainButton.addEventListener("click", () => {
-            errorModal.style.display = "none";
-            generateImages(imageUrl, selectedValues); // Relaunch the query
-          });
+    const tryAgainButton = document.getElementById("errorButton");
+    tryAgainButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+        generateImages(imageUrl, selectedValues); // Relaunch the query
+    });
 
-          const closeButton = document.querySelector("#errorGenerating .closeError");
-          closeButton.addEventListener("click", () => {
-            errorModal.style.display = "none";
-          });
-        }
+    const closeButton = document.querySelector("#errorGenerating .closeError");
+    closeButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+    });
+}
 }
 
     
