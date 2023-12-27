@@ -188,7 +188,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You can now login.', 'success')
+            flash('Signup successful! You got 20 🟡 coins!.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
