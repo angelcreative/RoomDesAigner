@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Verification Result</title>
+    <!-- Add any additional CSS or JS here -->
+</head>
+<body>
+    <div class="container">
+        <h1>Email Verification Result</h1>
+        <p>{{ message }}</p>
+        {% if success %}
+            <a href="{{ url_for('login') }}">Go to Login</a>
+        {% else %}
+            <a href="{{ url_for('signup') }}">Try to Sign Up Again</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-#!/Users/angelsanchez/Desktop/AppInteriorDesign/venv/bin/python3
+#!/Users/angelsanchez/Desktop/AppInteriorDesign/app/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
