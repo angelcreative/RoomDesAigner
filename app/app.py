@@ -20,18 +20,48 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
-    data = request.get_json()
+    if 'username' not in session:
+        return jsonify({"error": "Not logged in"}), 401
 
-    # Determina si es una solicitud img2img o txt2img
-    if 'init_image' in data:
-        # img2img: Usa la URL de la imagen directamente
-        url = 'https://stablediffusionapi.com/api/v3/img2img'
+    username = session['username']
+    user_data = get_user_data(username)
+    if user_data and user_data.get('credits', 0) >= 2:
+        data = request.get_json()
+        url = 'https://stablediffusionapi.com/api/v3/img2img' if 'init_image' in data else 'https://stablediffusionapi.com/api/v3/text2img'
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            deduct_credits(username, 2)
+            return jsonify(response.json())
+        else:
+            return jsonify({"error": "Image generation failed"}), response.status_code
     else:
-        # txt2img: Sin imagen inicial
-        url = 'https://stablediffusionapi.com/api/v3/text2img'
+        return jsonify({"error": "Insufficient credits"}), 403
 
-    response = requests.post(url, json=data)
-    return jsonify(response.json())
+def get_user_data(username):
+    query_url = f'{mongo_data_api_url}/action/findOne'
+    query_body = {
+        'dataSource': 'Cluster0',
+        'database': 'yourDatabase',
+        'collection': 'users',
+        'filter': {'username': username}
+    }
+    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+    response = requests.post(query_url, headers=headers, data=json.dumps(query_body))
+    if response.status_code == 200:
+        return response.json().get('document')
+    return None
+
+def deduct_credits(username, amount):
+    update_url = f'{mongo_data_api_url}/action/updateOne'
+    update_body = {
+        'dataSource': 'Cluster0',
+        'database': 'yourDatabase',
+        'collection': 'users',
+        'filter': {'username': username},
+        'update': {'$inc': {'credits': -amount}}
+    }
+    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+    requests.post(update_url, headers=headers, data=json.dumps(update_body))
 
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
@@ -59,7 +89,7 @@ def home():
             user_data = response.json().get('document')
             if user_data:
                 # Pass the avatar URL and username to the template
-                return render_template('index.html', avatar_url=user_data.get('avatar', 'static/img/avatar/avatar_01.jpg'), username=session['username'])
+                            return render_template('index.html', avatar_url=user_data.get('avatar', 'default_avatar_url.jpg'), username=session['username'], credits=user_data.get('credits', 0))
             else:
                 flash('User data not found.', 'error')
         else:
@@ -145,7 +175,9 @@ def signup():
         user_data = {
             'username': request.form['username'],
             'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-            'avatar': selected_avatar
+            'avatar': selected_avatar,
+            'credits': 20 
+
         }
 
         # MongoDB Data API request
@@ -165,6 +197,17 @@ def signup():
     return render_template('signup.html')
 
 
+@app.route('/get-credits', methods=['GET'])
+def get_credits():
+    if 'username' not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    username = session['username']
+    user_data = get_user_data(username)
+    if user_data:
+        return jsonify({"credits": user_data.get('credits', 0)})
+    else:
+        return jsonify({"error": "User data not found"}), 404
 
 
 @app.route('/logout')

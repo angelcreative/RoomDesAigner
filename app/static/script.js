@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
 function handleSubmit(event) {
   event.preventDefault();
   const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = true;
+  magicButton.disabled = false;
   showOverlay();
 
   const fileInput = document.getElementById("imageDisplayUrl");
@@ -802,3 +802,22 @@ window.addEventListener('load', function() {
     }, 500); // Wait for the transition to complete (0.5 seconds)
   }, 4000); // 4 seconds (4000 milliseconds)
 });
+
+document.getElementById('clearImg').addEventListener('click', function() {
+    clearImage();
+
+    // Reset the file input
+    document.getElementById('imageDisplayUrl').value = '';
+});
+
+function clearImage() {
+    // Reset the src attribute of the thumbnail image
+    var thumbnail = document.getElementById('thumbnail');
+    thumbnail.src = '';
+
+    // Hide the thumbnail container
+    var thumbContainer = document.querySelector('.thumbImg');
+    thumbContainer.style.display = 'none';
+}
+
+

@@ -1,7 +1,10 @@
 html {
   height: 100%;
   width: 100%;
-background: #0d131a;
+}
+
+div#mainUI, html {
+    background: #15202b;
 }
 
 body {
@@ -101,7 +104,7 @@ h2.loginTitle {
 }
 
 .loginModal p {
-    color: #d36662;
+    color: #1f1f1f;
 }
 
 .loginBox p a {
@@ -238,9 +241,10 @@ img#thumbnail {
 }
 
 .thumbImg {
-    text-align: center;
+   text-align: center;
     border-radius: 12px;
     margin-top: 12px;
+    position: relative;
 }
 .message {position: fixed;
     top: 50%;
@@ -402,6 +406,19 @@ img#thumbnail {
 }
 
 
+span#clearImg {
+    color: #fff;
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    background: #0000007d;
+    padding: 4px 8px;
+    border-radius: 900rem;
+    font-size: 12px;
+    cursor: pointer;
+}
+
 .avatar {
     display: flex;
     flex-direction: row;
@@ -410,9 +427,16 @@ img#thumbnail {
     color: #fff;
 }
 
+
 span.username {
     font-size: 12px;
-    margin-left: 8px;
+}
+
+.usernameCredits {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 8px;
 }
 
 /*logput*/
@@ -1168,6 +1192,7 @@ option[title]:hover:after {
         border-radius: 1rem;
         overflow: hidden;
         align-items: center;
+    background: #15202b;
 }
 
 
