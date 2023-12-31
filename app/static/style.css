@@ -6207,6 +6207,12 @@ span.closeGen {
     margin: 30px auto;
 }
 
+    
+    .grid {
+     
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+   
+}
   
   .groupContainer {
       display: flex;
