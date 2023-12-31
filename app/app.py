@@ -200,6 +200,7 @@ def signup():
     'static/img/avatar/avatar_58.svg',
     'static/img/avatar/avatar_59.svg',
     'static/img/avatar/avatar_60.svg',
+    'static/img/avatar/default_avatar_url.svg',
     # Add more if needed
 ]
 
