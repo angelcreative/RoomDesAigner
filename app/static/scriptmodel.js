@@ -233,8 +233,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
 
-  const prompt = {
+ const prompt = {
     key: apiKey,
+    model_id: "sdxl",
     prompt: JSON.stringify(promptText),
     negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     width: width,
@@ -252,10 +253,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     self_attention: null,
     upscale: null,
     embeddings_model: null,
+    scheduler: "UniPCMultistepScheduler",
   };
-    
-    
-    
     
 
   if (isImg2Img && imageUrl) {
@@ -322,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
  .then(data => {
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
@@ -336,8 +335,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     showError(error);
 });
     
-    
-
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -366,8 +363,8 @@ function checkImageStatus(fetchResultUrl) {
         showError(error);
     });
 }
-    
 
+    
     // Function to show error message with dismiss button
 function showError(error) {
     console.error("Error generating images:", error);

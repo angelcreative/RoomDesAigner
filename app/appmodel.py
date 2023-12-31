@@ -27,7 +27,7 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        url = 'https://stablediffusionapi.com/api/v3/img2img' if 'init_image' in data else 'https://stablediffusionapi.com/api/v3/text2img'
+        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
             deduct_credits(username, 2)
@@ -89,7 +89,7 @@ def home():
             user_data = response.json().get('document')
             if user_data:
                 # Pass the avatar URL and username to the template
-                            return render_template('index.html', avatar_url=user_data.get('avatar', 'default_avatar_url.jpg'), username=session['username'], credits=user_data.get('credits', 0))
+                            return render_template('index.html', avatar_url=user_data.get('avatar', 'default_avatar_url.svg'), username=session['username'], credits=user_data.get('credits', 0))
             else:
                 flash('User data not found.', 'error')
         else:
@@ -200,6 +200,7 @@ def signup():
     'static/img/avatar/avatar_58.svg',
     'static/img/avatar/avatar_59.svg',
     'static/img/avatar/avatar_60.svg',
+
     # Add more if needed
 ]
 
@@ -211,7 +212,7 @@ def signup():
             'username': request.form['username'],
             'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
             'avatar': selected_avatar,
-            'credits': 40 
+            'credits': 20 
 
         }
 
