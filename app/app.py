@@ -89,7 +89,8 @@ def home():
             user_data = response.json().get('document')
             if user_data:
                 # Pass the avatar URL and username to the template
-                            return render_template('index.html', avatar_url=user_data.get('avatar', 'static/img/avatar/default_avatar_url.svg'), username=session['username'], credits=user_data.get('credits', 0))
+                            return render_template('index.html',                                        avatar_url=user_data.get('avatar', 'static/img/avatar/avatar_01.svg'),
+                                    username=session['username'], credits=user_data.get('credits', 0))
             else:
                 flash('User data not found.', 'error')
         else:
