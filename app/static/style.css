@@ -6189,6 +6189,11 @@ span.closeGen {
     margin: 0 auto;
   }
   
+.buttonExt {
+ 
+    width: 170px;
+}    
+    
   #loadingMessage {
       width:64%
   }
