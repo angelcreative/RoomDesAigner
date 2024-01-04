@@ -74,32 +74,16 @@ def proxy_image():
 @app.route('/', methods=['GET'])
 def home():
     if 'username' in session:
-        # Fetch the user's data from MongoDB
-        query_url = f'{mongo_data_api_url}/action/findOne'
-        query_body = {
-            'dataSource': 'Cluster0',
-            'database': 'yourDatabase',
-            'collection': 'users',
-            'filter': {'username': session['username']}
-        }
-        headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
-        response = requests.post(query_url, headers=headers, data=json.dumps(query_body))
+        # Use session data directly instead of fetching from the database
+        username = session['username']
+        avatar_url = session.get('avatar', 'static/img/avatar/avatar_01.svg')  # Default avatar if not set
+        credits = session.get('credits', 0)  # Default to 0 if credits not set
 
-        if response.status_code == 200:
-            user_data = response.json().get('document')
-            if user_data:
-                # Pass the avatar URL and username to the template
-                            return render_template('index.html',                                        avatar_url=user_data.get('avatar', 'static/img/avatar/avatar_01.svg'),
-                                    username=session['username'], credits=user_data.get('credits', 0))
-            else:
-                flash('User data not found.', 'error')
-        else:
-            flash('Error fetching user data.', 'error')
-
+        # Pass the avatar URL, username, and credits to the template
+        return render_template('index.html', username=username, avatar_url=avatar_url, credits=credits)
+    else:
+        # Redirect to login page if not logged in
         return redirect(url_for('login'))
-    
-    return redirect(url_for('login'))
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -119,15 +103,20 @@ def login():
         if response.status_code == 200:
             response_data = response.json()  # Get the response JSON
             user_data = response_data.get('document')  # Extract the user data from the 'document' key
+            
             if user_data and 'password' in user_data:
                 # Compare the hashed passwords
                 if bcrypt.checkpw(request.form['password'].encode('utf-8'), user_data['password'].encode('utf-8')):
+                    # Set user information in the session
                     session['username'] = user_data['username']
+                    session['avatar'] = user_data.get('avatar', 'static/img/avatar/avatar_01.svg')  # Use a default path if no avatar is set
+                    session['credits'] = user_data.get('credits', 0)  # Default to 0 if no credits are set
+
                     return redirect(url_for('home'))
                 else:
-                    flash('Invalid username/password combination.','error')
+                    flash('Invalid username/password combination.', 'error')
             else:
-                flash('User not found or password missing.','error')
+                flash('User not found or password missing.', 'error')
         else:
             flash('Login error with status code: {}'.format(response.status_code))
             # Optionally, log the response status code and text for debugging
@@ -136,9 +125,13 @@ def login():
     return render_template('login.html')
 
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
+        # Set the default avatar to 'avatar_01.svg' instead of randomly selecting one
+        default_avatar = 'static/img/avatar/avatar_01.svg'
+        
         # List of pre-made avatar images (local paths or URLs)
         avatar_images = [
     'static/img/avatar/avatar_01.svg',
@@ -212,8 +205,8 @@ def signup():
         user_data = {
             'username': request.form['username'],
             'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-            'avatar': selected_avatar,
-            'credits': 40 
+            'avatar': default_avatar,  # Use the default avatar instead of a random choice
+            'credits': 40
 
         }
 
@@ -225,7 +218,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You got 20 🟡 coins!.', 'success')
+            flash('Signup successful! You got 40 🟡 coins!.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
@@ -246,11 +239,40 @@ def get_credits():
     else:
         return jsonify({"error": "User data not found"}), 404
 
+@app.route('/change-avatar', methods=['POST'])
+def change_avatar():
+    if 'username' in session:
+        new_avatar = request.form['new_avatar']  # Retrieve the new avatar from the form data
+        username = session['username']
+
+        # Update the avatar in the database
+        query_url = f'{mongo_data_api_url}/action/updateOne'
+        update_body = {
+            'dataSource': 'Cluster0',
+            'database': 'yourDatabase',
+            'collection': 'users',
+            'filter': {'username': username},
+            'update': {'$set': {'avatar': new_avatar}}
+        }
+        headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+        response = requests.post(query_url, headers=headers, data=json.dumps(update_body))
+
+        if response.status_code == 200:
+            # Update the avatar in the session
+            session['avatar'] = new_avatar
+            return 'Avatar updated successfully', 200
+        else:
+            return 'Error updating avatar in database', 500
+    else:
+        return 'User not logged in', 401
+
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    # Clear all data stored in the session
+    session.clear()
     return redirect(url_for('login'))
+
 
 
 if __name__ == '__main__':

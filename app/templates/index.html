@@ -66,7 +66,10 @@
    <div class="official">
     <div class="avatar">
         <!-- Use the avatar_url variable for the src attribute -->
-        <img src="{{ avatar_url }}" id="avatar">
+        
+        <img id="avatar" src="static/img/avatar/avatar_01.svg" onclick="changeUserAvatar('static/img/avatar/avatar_01.svg')" alt="Avatar 1">
+
+       <!-- <img src="{{ avatar_url }}" id="avatar">-->
         
                 <!-- Lightbox Dialog -->
 <div id="avatarLightbox" class="lightbox">
@@ -1808,6 +1811,28 @@ window.usetifulTags = { role : "EXAMPLE_ROLE",
   })(window, document, "https://www.usetiful.com/dist/usetiful.js");</script>
 
 <!-- Usetiful script end -->
+    
+    <script>
+function changeUserAvatar(newAvatar) {
+    fetch('/change-avatar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'new_avatar=' + encodeURIComponent(newAvatar)
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Avatar updated successfully');
+            // Update avatar image on the page, if necessary
+        } else {
+            console.error('Error updating avatar');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+
 
 </body>
 
