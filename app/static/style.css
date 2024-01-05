@@ -556,8 +556,9 @@ h4 {
 
 
 .logoWeb {
-    margin: 0 auto;
-    display: block
+    margin: 20px auto;
+    display: block;
+    height: 60px;
 }
  
     .logoApp {
@@ -6219,6 +6220,13 @@ span.closeGen {
    
 }
   
+    .centerCoffee a img {
+      
+    margin: 0 auto;
+    display: block;
+
+        
+    }  
   .groupContainer {
       display: flex;
       flex-direction: row;
