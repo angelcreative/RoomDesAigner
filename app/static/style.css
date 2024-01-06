@@ -6222,17 +6222,18 @@ span.closeGen {
    
 }
     
-    .centerCoffee {
+.centerCoffee {
     text-align: center;
 }
   
-    .centerCoffee a img {
+ .centerCoffee a img {
       
     margin: 0 auto;
     display: block;
 
         
     }  
+    
   .groupContainer {
       display: flex;
       flex-direction: row;
