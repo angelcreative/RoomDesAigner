@@ -21,7 +21,7 @@
     <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
     <meta name="theme-color" content="#ffffff">
     <!-- //end icons for mobile -->
-    <title>Room DesAigner</title>
+    <title>App Room DesAigner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -352,7 +352,9 @@
 
 
 
-  <div id="processingMessageContainer" style="display:none;">
+  <div id="processingMessageContainer" style="display:none;"><img src="{{ url_for('static', filename='img/error.png') }}">
+            <h1>Something was wrong from our side, try it again</h1>
+            <p>Sometimes technology doesn't work as intended.</p>
    
 </div>
 
@@ -377,7 +379,9 @@
     <div id="overlay"></div>
     <div id="modal" class="modal" style="display: none;">
         <div class="modal-content">
-           <img src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+
+        <img class="logoApp" src="static/img/logoApp.svg">
             <h1>Your dream room is here</h1>
              <div class="centerCoffee"><a href="https://www.buymeacoffee.com/ajsc50q" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 110px !important;" ></a><p>Like the results? Buy me a coffee and earn coins!</p></div>
             <div id="chipsSV"></div>

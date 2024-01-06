@@ -669,7 +669,7 @@ h4 {
 
 
 #splash img {
-   /* Adjust the size of the logo */
+    width: calc(30% - 80px);
 }
 
 .buttonExt[disabled] {
@@ -6208,7 +6208,9 @@ span.closeGen {
     height: auto;
     }
     
-    
+#splash img {
+    width: calc(60% - 80px);
+}
 .group {
     margin: 30px auto;
 }
