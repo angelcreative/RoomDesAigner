@@ -260,7 +260,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
-    prompt.strength = 0.7; // Valor de intensidad para img2img
+    prompt.strength = 0.60; // Valor de intensidad para img2img
   }
     
     
