@@ -240,7 +240,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: width,
     height: height,
     samples: "4",
-    num_inference_steps: "20",
+    num_inference_steps: "40",
     seed: seedValue,
     guidance_scale: 7.25,
     webhook: null,
@@ -260,7 +260,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
-    prompt.strength = 0.60; // Valor de intensidad para img2img
+    prompt.strength = 0.65; // Valor de intensidad para img2img 1 destruye imagen original
   }
     
     
@@ -411,17 +411,23 @@ function hideErrorMessage() {
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
     // Function to reroll the images
-    function rerollImages() {
-      const rerollButton = document.getElementById("rerollButton");
-      //rerollButton.disabled = true;
-      const selectedValues = getSelectedValues();
-      generateImages(null, selectedValues);
+   function rerollImages() {
+    const selectedValues = getSelectedValues();
+    const thumbnailImage = document.getElementById('thumbnail');
+    
+    // Check if an image has been uploaded by examining the 'src' of the thumbnail
+    let imageUrl = null;
+    if (thumbnailImage && thumbnailImage.src && !thumbnailImage.src.includes('blob:')) {
+        imageUrl = thumbnailImage.src;
     }
 
-    // Add event listener to the rerollButton
-    const rerollButton = document.getElementById("rerollButton");
-    rerollButton.addEventListener("click", rerollImages);
-    
+    // Call generateImages with the imageUrl (null if no image uploaded)
+    generateImages(imageUrl, selectedValues);
+}
+
+// Modify the event listener for the reroll button
+const rerollButton = document.getElementById("rerollButton");
+rerollButton.addEventListener("click", rerollImages);
 
     // Function to show the overlay
     function showOverlay() {
@@ -535,48 +541,58 @@ function hideErrorMessage() {
     }
 
     const upscaleImage = async (imageUrl) => {
-      try {
-        showModalWithProgressBar();
+  try {
+    showModalWithProgressBar();
 
-        // Load the image
-        const image = new Image();
-        image.crossOrigin = "anonymous";
-        image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+    // Load the image
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
 
-        image.onload = async () => {
-          // Convert image to Base64
-          const base64Image = getBase64Image(image);
+    image.onload = async () => {
+      // Convert image to Base64
+      const base64Image = getBase64Image(image);
 
-          const url = 'https://super-image1.p.rapidapi.com/run';
-          const options = {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-              'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
-              'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
-            },
-            body: JSON.stringify({
-              upscale: 2,
-              image: base64Image
-            })
-          };
+      const url = 'https://super-image1.p.rapidapi.com/run';
+      const options = {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
+          'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
+        },
+        body: JSON.stringify({
+          upscale: 2,
+          image: base64Image
+        })
+      };
 
-          const response = await fetch(url, options);
-          const data = await response.json();
-          console.log(data);
+      const response = await fetch(url, options);
+      const data = await response.json();
+      console.log(data);
 
-          // Open the upscaled image in a new browser tab
-          const newTab = window.open(data.output_url, '_blank');
-          newTab.focus();
+      // Create a new HTML document with the image embedded
+      const newWindow = window.open('', '_blank');
+      newWindow.document.write(`
+        <html>
+          <head>
+            <title>Upscaled Image</title>
+          </head>
+          <body>
+            <img src="${data.output_url}" alt="Upscaled Image"/>
+          </body>
+        </html>
+      `);
+      newWindow.document.close();
 
-          hideModal();
-        };
-      } catch (error) {
-        console.error(error);
-        // Handle error here
-        hideModal();
-      }
+      hideModal();
     };
+  } catch (error) {
+    console.error(error);
+    hideModal();
+  }
+};
+
 
     
 
@@ -852,55 +868,8 @@ function clearImage() {
     thumbContainer.style.display = 'none';
 }
 
-// 1mb img and resize
 
-function handleImageUpload(event) {
-    const imageFile = event.target.files[0];
 
-    // Check file size
-    if (imageFile.size > 1048576) { // 1MB = 1048576 bytes
-        alert("File is larger than 1MB. Please upload a smaller file.");
-        event.target.value = ''; // Reset the file input
-        clearThumbnail(); // Clear the thumbnail if it's already displayed
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-            // Check image width and resize if necessary
-            if (this.width > 800) {
-                resizeAndDisplayImage(this, imageFile.name);
-            } else {
-                displayThumbnail(this.src); // Display the original image as thumbnail
-            }
-        };
-        img.src = e.target.result;
-    };
-    reader.readAsDataURL(imageFile);
-}
-
-function resizeAndDisplayImage(image, imageName) {
-    const canvas = document.createElement('canvas');
-    const scaleFactor = 800 / image.width;
-    canvas.width = 800;
-    canvas.height = image.height * scaleFactor;
-
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-    canvas.toBlob(function(blob) {
-        // Create a new file object from the resized blob
-        const newFile = new File([blob], imageName, {
-            type: 'image/jpeg',
-            lastModified: Date.now()
-        });
-
-        // Display the resized image as a thumbnail
-        displayThumbnail(URL.createObjectURL(newFile));
-    }, 'image/jpeg');
-}
 
 function displayThumbnail(imageSrc) {
     var thumbnail = document.getElementById('thumbnail');
@@ -916,7 +885,9 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+
+
 
 
 // Event listener for opening the lightbox when the avatar is clicked
