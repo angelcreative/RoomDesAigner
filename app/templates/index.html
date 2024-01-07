@@ -30,7 +30,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
     <script src="https://apis.google.com/js/api:client.js"></script>
-    <script async src="https://eu.umami.is/script.js" data-website-id="2258b451-16a1-411e-bc49-34ff34fbce22"></script>
+    
+    <!--tt-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='twentytwenty.css') }}">
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
+        <script src="{{ url_for('static', filename='jquery.twentytwenty.js') }}"></script>
+
+    
+
+ <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-62Z2N81J3F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-62Z2N81J3F');
+</script>
+    
     <!-- Hotjar Tracking Code for https://roomdesaigner.onrender.com -->
 <script>
     (function(h,o,t,j,a,r){
@@ -46,6 +65,7 @@
 </head>
 
 <body class="gradient-background ">
+  
     
   <!-- SPLASH -->
 
@@ -383,12 +403,13 @@
 
         <img class="logoApp" src="static/img/logoApp.svg">
             <h1>Your dream room is here</h1>
-             <div class="centerCoffee"><a href="https://www.buymeacoffee.com/ajsc50q" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 110px !important;" ></a><p>Like the results? Buy me a coffee and earn coins!</p></div>
+             
             <div id="chipsSV"></div>
             <br>
             <div class="imageGrid" id="imageGrid">
                 <button>Upscale</button>
             </div>
+            <div class="centerCoffee" style="margin-top:40px;"><p>Like the results? Buy me a coffee and earn coins!</p><br><a href="https://www.buymeacoffee.com/ajsc50q" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 110px !important;" ></a></div>
           <p style="visibility: hidden"> <button class="buttonExt" id="rerollButton">Reroll</button></p>
             <div id="resultContainer"></div>
             <span class="close">&times;</span>
@@ -414,7 +435,7 @@
     <img id="thumbnail" src="" alt="Thumbnail">
   </div>
 </div>
-                    
+                    <!-- home area -->
                     <div><h5>Home area to be designed</h5>
                     <select id="home_room">
                       <option value="">Home area</option>
@@ -460,6 +481,14 @@
                     </select>
                     <span class="dot"></span>
                    </div>
+                    
+                    
+                    <!-- add furniture -->
+                    
+    
+
+
+
                     
                     <h1><img class="iconH1" src="/static/img/icon-shot.svg" />Shot tokens</h1>
                     <!-- ratio -->
@@ -1198,6 +1227,8 @@
                         <option value="wall_lights">Wall Lights</option>
                     </select>
                     <span class="dot"></span>
+                    
+
 
                 </div>
                 <!-- BUILDING TOKENS -->

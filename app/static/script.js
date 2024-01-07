@@ -240,9 +240,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: width,
     height: height,
     samples: "4",
-    num_inference_steps: "40",
+    num_inference_steps: "25",
     seed: seedValue,
-    guidance_scale: 7.25,
+    guidance_scale: 10,
     webhook: null,
     track_id: null,
     safety_checker: null,
@@ -260,7 +260,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
-    prompt.strength = 0.65; // Valor de intensidad para img2img 1 destruye imagen original
+    prompt.strength = 0.69; // Valor de intensidad para img2img 1 destruye imagen original
   }
     
     

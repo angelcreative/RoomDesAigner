@@ -17,6 +17,14 @@ body {
 
 }
 
+#roomFurniture option {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    margin: 8px;
+}
+
 .lightbox {
     display: none; 
     position: fixed; 
@@ -1029,7 +1037,6 @@ select, textarea {
     padding: 0.5rem 0.5rem;
     border: 1px solid #273440;
     background: #273440;
-   
     color: #6d7b87;
     width: 200px;
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
@@ -1275,13 +1282,13 @@ option[title]:hover:after {
     column-gap: 16px;
     row-gap: 16px;
     flex-direction: row;
-    max-width: 70%;
+    max-width: 100%;
     justify-content: center;
     margin: 0 auto;
 }
 
 #imageGrid div {
-    width: 24%;
+    width: 23%;
 }
 
 .thumbnail {
@@ -3742,6 +3749,10 @@ svg .gen-160 {
 svg.active .gen-160 {
   stroke-dashoffset: 0;
 }
+
+
+
+
 
 
 
