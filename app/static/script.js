@@ -157,6 +157,14 @@ function handleError(errorMessage) {
       values[elementId] = element.value;
     }
   });
+        
+        // Slider event listener for displaying value
+  const slider = document.getElementById("strengthSlider");
+  const sliderValueDisplay = document.getElementById("sliderValue");
+
+  slider.addEventListener("input", function() {
+    sliderValueDisplay.textContent = this.value;
+  });
 
   const imageDisplay = document.getElementById("imageDisplay");
   if (imageDisplay && imageDisplay.src) {
@@ -212,7 +220,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
   const customText = document.getElementById("customText").value;
-  const pictureSelect = document.getElementById("picture");
+  const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
   const promptInit = `${selectedPicture}, interiordesign, homedecor, architecture, homedesign, UHD`;
 
@@ -257,12 +265,13 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     
     
     
-
-  if (isImg2Img && imageUrl) {
+if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
-    prompt.strength = 0.69; // Valor de intensidad para img2img 1 destruye imagen original
+
+    // Get the strength value from the slider
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
   }
-    
     
       const chipsSV = document.getElementById("chipsSV");
         chipsSV.innerHTML = ""; // Clear the existing content
