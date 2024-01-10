@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
+import hmac
+import hashlib
+import requests
 import bcrypt
 import os
 import uuid
@@ -101,28 +104,34 @@ def login():
         response = requests.post(query_url, headers=headers, data=json.dumps(query_body))
 
         if response.status_code == 200:
-            response_data = response.json()  # Get the response JSON
-            user_data = response_data.get('document')  # Extract the user data from the 'document' key
+            response_data = response.json()
+            user_data = response_data.get('document')
             
             if user_data and 'password' in user_data:
-                # Compare the hashed passwords
                 if bcrypt.checkpw(request.form['password'].encode('utf-8'), user_data['password'].encode('utf-8')):
-                    # Set user information in the session
                     session['username'] = user_data['username']
-                    session['avatar'] = user_data.get('avatar', 'static/img/avatar/avatar_01.svg')  # Use a default path if no avatar is set
-                    session['credits'] = user_data.get('credits', 0)  # Default to 0 if no credits are set
+                    session['avatar'] = user_data.get('avatar', 'static/img/avatar/avatar_01.svg')
+                    session['credits'] = user_data.get('credits', 0)
 
-                    return redirect(url_for('home'))
+                    # Redirect to upgrade page if credits are 0
+                    if session['credits'] <= 0:
+                        return redirect(url_for('upgrade'))
+                    else:
+                        return redirect(url_for('home'))
                 else:
                     flash('Invalid username/password combination.', 'error')
             else:
                 flash('User not found or password missing.', 'error')
         else:
             flash('Login error with status code: {}'.format(response.status_code))
-            # Optionally, log the response status code and text for debugging
-            # print(f'Error: Status Code {response.status_code}, {response.text}')
 
     return render_template('login.html')
+
+
+@app.route('/upgrade')
+def upgrade():
+    # Your logic to display the upgrade page
+    return render_template('upgrade.html')
 
 
 
@@ -200,13 +209,18 @@ def signup():
 
         # Randomly select an avatar image
         selected_avatar = random.choice(avatar_images)
+        
+         # Retrieve email from the form data
+        email = request.form['email']
+
 
         # Prepare user data with the randomly selected avatar
         user_data = {
-            'username': request.form['username'],
-            'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-            'avatar': default_avatar,  # Use the default avatar instead of a random choice
-            'credits': 40
+                'username': request.form['username'],
+                'email': email,  # Include email here
+                'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+                'avatar': default_avatar, 
+                'credits': 5
 
         }
 
@@ -218,7 +232,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You got 40 🟡 coins!.', 'success')
+            flash('Signup successful! You got 5 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
@@ -265,6 +279,74 @@ def change_avatar():
             return 'Error updating avatar in database', 500
     else:
         return 'User not logged in', 401
+
+
+@app.route('/lemonsqueezy_webhook', methods=['POST'])
+def lemonsqueezy_webhook():
+    # Verify the signature
+    if not is_valid_signature(request):
+        return "Invalid signature", 403
+
+    # Parse the webhook data
+    data = request.json
+
+    # Check the event type
+    if data.get('type') == 'order_created':
+        # Extract necessary information like user's email
+        user_email = extract_email(data)
+
+        # Update the user's coin balance in MongoDB
+        update_user_credits(user_email, additional_credits=100)
+
+    # Handle other event types as necessary
+
+    return '', 200
+
+def is_valid_signature(request):
+    signature = request.headers.get('X-Signature')
+    secret = '33luange1gean'
+    expected_signature = hmac.new(
+        key=secret.encode(),
+        msg=request.data,
+        digestmod=hashlib.sha256
+    ).hexdigest()
+    return hmac.compare_digest(signature, expected_signature)
+
+def extract_email(data):
+    # Extract and return the email from the webhook data
+    # Modify this based on the actual structure of Lemon Squeezy's webhook data
+    return data.get('customer', {}).get('email')
+
+
+def update_user_credits(email, additional_credits):
+    # MongoDB Data API URL and credentials
+    mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
+    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"  # Replace with your actual API key
+
+    # Prepare the request payload
+    payload = {
+        "dataSource": "Cluster0",
+        "database": "yourDatabase",
+        "collection": "yourCollection",
+        "filter": {"email": email},
+        "update": {"$inc": {"credits": additional_credits}}
+    }
+
+    # Headers
+    headers = {
+        "Content-Type": "application/json",
+        "api-key": mongo_data_api_key
+    }
+
+    # Update user's credits using MongoDB Data API
+    response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
+
+    if response.status_code == 200:
+        print("User credits updated successfully")
+    else:
+        print("Failed to update user credits")
+
+
 
 
 @app.route('/logout')

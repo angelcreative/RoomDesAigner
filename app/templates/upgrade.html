@@ -1,0 +1,236 @@
+<!-- templates/upgrade.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!-- icons for mobile -->
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png') }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='img/apple-icon-72x72.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='img/apple-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='img/apple-icon-144x144.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='img/favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
+    <meta name="theme-color" content="#ffffff">
+    <!-- //end icons for mobile -->
+    <title>Room DesAigner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+
+</head>
+<body>
+    <div class="loginBox">
+    <div class="loginLogo">                   <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+
+                        <img class="logoApp" src="static/img/logoApp.svg">
+
+        </div>
+
+            <h2 class="loginTitle">Upgrade your Room DesAigner account</h2>
+
+          <div class="loginModal">
+              
+              <div class="loginForm upgradeForm">
+            <img src="{{ url_for('static', filename='img/modal_img/more_coins.svg') }}">
+              
+                  <p>Your Image Coins are All Spent 🟡</p>
+
+                  <p>Get 100 coins for just €4.99
+<br><small>2 coins allow for the successful generation of 4 designs</small></p>
+
+<p>Click to Upgrade<br><small>You'll be redirected to our secure checkout page.</small></p>
+<button onclick="window.open('https://roomdesaigner.lemonsqueezy.com/', '_blank')">Buy coins now!</button>
+                  </div>
+          
+        </div>
+         </div>
+    
+    <!-- 
+#### EDIT
+I built this slider when I first started to learn JS, you can rebuild it with more readable, simple and less code, I'm too lazy to update it, sorry :) 
+-->
+
+<!-- 
+	use the left and right arrow keys on your keyboard or just swipe left and right on your smart phone to interact with the slider
+-->
+
+<section id="testim" class="testim">
+<!--         <div class="testim-cover"> -->
+            <div class="wrap">
+
+                <span id="right-arrow" class="arrow right fa fa-chevron-right"></span>
+                <span id="left-arrow" class="arrow left fa fa-chevron-left "></span>
+                <ul id="testim-dots" class="dots">
+                    <li class="dot active"></li><!--
+                    --><li class="dot"></li><!--
+                    --><li class="dot"></li><!--
+                    --><li class="dot"></li><!--
+                    --><li class="dot"></li>
+                </ul>
+                <div id="testim-content" class="cont">
+                    
+                    <div class="active">
+                        <div class="img"><img src="/static/img/avatar/test_03.png">
+                        <h2>herbierbie</h2>
+                        <p>"Using RoomDesAigner's AI-driven design tool has been a game-changer for my interior design projects. It not only saves me significant time but also allows me to experiment with different styles and concepts effortlessly. The results are exactly what I've been looking for!"
+
+</p>                    
+                    </div>
+                    </div>
+                    <div>
+                          <div class="img"><img src="/static/img/avatar/test_04.png">
+                        </div>
+                        <h2>giovanotti</h2>
+                        <p>"L'utilizzo di RoomDesAigner sul mio iPad e cellulare mentre sono in movimento ha rivoluzionato il modo in cui lavoro. È così comodo avere uno strumento potente a portata di mano che porta le mie idee di design alla vita ovunque io sia!"</p>                    
+                    </div>
+                    <div>
+                    <div class="img"><img src="/static/img/avatar/test_01.png">
+                        <h2>sofia_interior</h2>
+                        <p>"RoomDesAigner ha sido una ayuda increíble para mostrar home staging de manera rápida y efectiva. La inteligencia artificial entiende exactamente lo que necesito y transforma mis ideas en realidad en cuestión de minutos. ¡Es imprescindible para los profesionales!"</p>                    
+                    </div>
+</div>
+                    <div>
+                          <div class="img"><img src="/static/img/avatar/test_02.png">
+                        <h2>missEmma</h2>
+                        <p>"I was amazed by how intuitive RoomDesAigner is. The AI accurately captures my vision, providing stunning and realistic design visuals. It's like having a personal assistant that understands exactly what I need, making my design process much more efficient."</p>                    
+                    </div>
+                        </div>
+                    <div>
+                        <div class="img"><img src="/static/img/avatar/test_05.png">
+                        <h2>louclouc</h2>
+                        <p>"RoomDesAigner est une véritable révolution pour moi en tant que décorateur d'intérieur. L'intelligence artificielle comprend parfaitement mes besoins et me permet de visualiser mes idées de staging de maison rapidement. C'est un outil inestimable qui me fait gagner du temps et améliore la qualité de mes projets. Que je sois au bureau ou en déplacement, je peux l'utiliser sur mon iPad ou mon mobile sans problème. C'est incroyable de voir à quel point cela facilite mon travail quotidien !"</p>                    
+                    </div>
+
+                </div>
+
+            </div>
+    </div>
+<!--         </div> -->
+    </section>
+
+<script src="https://use.fontawesome.com/1744f3f671.js"></script>
+<script>// vars
+'use strict'
+var	testim = document.getElementById("testim"),
+		testimDots = Array.prototype.slice.call(document.getElementById("testim-dots").children),
+    testimContent = Array.prototype.slice.call(document.getElementById("testim-content").children),
+    testimLeftArrow = document.getElementById("left-arrow"),
+    testimRightArrow = document.getElementById("right-arrow"),
+    testimSpeed = 6500,
+    currentSlide = 0,
+    currentActive = 0,
+    testimTimer,
+		touchStartPos,
+		touchEndPos,
+		touchPosDiff,
+		ignoreTouch = 30;
+;
+
+window.onload = function() {
+
+    // Testim Script
+    function playSlide(slide) {
+        for (var k = 0; k < testimDots.length; k++) {
+            testimContent[k].classList.remove("active");
+            testimContent[k].classList.remove("inactive");
+            testimDots[k].classList.remove("active");
+        }
+
+        if (slide < 0) {
+            slide = currentSlide = testimContent.length-1;
+        }
+
+        if (slide > testimContent.length - 1) {
+            slide = currentSlide = 0;
+        }
+
+        if (currentActive != currentSlide) {
+            testimContent[currentActive].classList.add("inactive");            
+        }
+        testimContent[slide].classList.add("active");
+        testimDots[slide].classList.add("active");
+
+        currentActive = currentSlide;
+    
+        clearTimeout(testimTimer);
+        testimTimer = setTimeout(function() {
+            playSlide(currentSlide += 1);
+        }, testimSpeed)
+    }
+
+    testimLeftArrow.addEventListener("click", function() {
+        playSlide(currentSlide -= 1);
+    })
+
+    testimRightArrow.addEventListener("click", function() {
+        playSlide(currentSlide += 1);
+    })    
+
+    for (var l = 0; l < testimDots.length; l++) {
+        testimDots[l].addEventListener("click", function() {
+            playSlide(currentSlide = testimDots.indexOf(this));
+        })
+    }
+
+    playSlide(currentSlide);
+
+    // keyboard shortcuts
+    document.addEventListener("keyup", function(e) {
+        switch (e.keyCode) {
+            case 37:
+                testimLeftArrow.click();
+                break;
+                
+            case 39:
+                testimRightArrow.click();
+                break;
+
+            case 39:
+                testimRightArrow.click();
+                break;
+
+            default:
+                break;
+        }
+    })
+		
+		testim.addEventListener("touchstart", function(e) {
+				touchStartPos = e.changedTouches[0].clientX;
+		})
+	
+		testim.addEventListener("touchend", function(e) {
+				touchEndPos = e.changedTouches[0].clientX;
+			
+				touchPosDiff = touchStartPos - touchEndPos;
+			
+				console.log(touchPosDiff);
+				console.log(touchStartPos);	
+				console.log(touchEndPos);	
+
+			
+				if (touchPosDiff > 0 + ignoreTouch) {
+						testimLeftArrow.click();
+				} else if (touchPosDiff < 0 - ignoreTouch) {
+						testimRightArrow.click();
+				} else {
+					return;
+				}
+			
+		})
+}</script>
+</body>
+</html>
