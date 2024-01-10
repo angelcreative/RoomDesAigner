@@ -174,11 +174,20 @@ h2.loginTitle {
     font-weight: bold;
     width: 100%;
     margin: 0;
-    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(29,129,253,1) 50%, rgb(31 218 185) 100%);
+    background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
+ 
+    animation: animatedgradient 6s ease infinite alternate;
+    background-size: 300% 300%;
     font-size: 12px;
     box-shadow: 0px 4px 20px 7px #1d82fd47;
     margin-bottom: 16px;
 }
+
+
+
+   
+
+
 .loginBox {
     position: relative;
     display: flex;
@@ -845,7 +854,10 @@ form.loginForm input {
     font-weight: bold;
     width: 100%;
     margin: 20px auto;
-    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(29,129,253,1) 50%, rgb(31 218 185) 100%);
+background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
+ 
+    animation: animatedgradient 6s ease infinite alternate;
+    background-size: 300% 300%;
     font-size: 18px;
     box-shadow: 0px 4px 20px 7px #1d82fd47;
 }
@@ -1794,11 +1806,9 @@ border: 1px solid #ffffff42;
 
 .buttonExt,
 .accent{
-    background: #a9fff5;
+    /* background: #a9fff5; */
     border-radius: .5rem;
     color: #1f1f1f;
-    transition:animation ease-in-out 3ms
-    position:relative;
     z-index:2
 }
 
@@ -1812,8 +1822,9 @@ border: 1px solid #ffffff42;
     position: relative;
     right: 4px;
     font-size: 13px;
-    background: rgb(131,58,180);
-    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(29,129,253,1) 50%, rgb(31 218 185) 100%);
+    background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
+    animation: animatedgradient 100ms ease infinite alternate;
+    background-size: 300% 300%;
     font-size: 18px;
     box-shadow: 0px 4px 20px 7px #1d82fd2b;
     font-weight: bold;
@@ -1822,10 +1833,10 @@ border: 1px solid #ffffff42;
 
 .buttonExt:hover,
 .accent:hover {
-  background: linear-gradient(256deg,#a9fff5,#11e9d1,#00ffe3);
-  background-size: 180% 180%;
-  animation: gradient-animation 3s ease infinite;
-  background: linear-gradient(295deg, rgba(131,58,180,1) 0%, rgba(29,129,253,1) 50%, rgb(31 218 185) 100%);
+  background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
+ 
+    animation: animatedgradient 6s ease infinite alternate;
+    background-size: 300% 300%;
 }
 
 @keyframes gradient-animation {

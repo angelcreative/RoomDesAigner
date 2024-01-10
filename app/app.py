@@ -281,59 +281,55 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
-    
-    
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
     if not is_valid_signature(request):
+        print("Invalid signature")
         return "Invalid signature", 403
 
     data = request.json
+    print("Received data:", data)
+    
     event_name = data.get('meta', {}).get('event_name')
-
     if event_name == 'order_created':
         user_email = data.get('data', {}).get('attributes', {}).get('user_email')
+        print("User email from order:", user_email)
         if user_email:
-            update_user_credits(user_email, 100)
-
+            response = update_user_credits(user_email, 100)
+            print("Update response:", response.text)
+            return '', 200
+        else:
+            print("No user email found in data")
+            return "No user email", 400
     return '', 200
 
 def is_valid_signature(request):
-    # Replace 'your_signing_secret' with your actual Lemon Squeezy signing secret
-    secret = '33luange1gean'
+    secret = '33luange1gean'  # Replace with your actual Lemon Squeezy signing secret
     signature = request.headers.get('X-Signature')
     expected_signature = hmac.new(key=secret.encode(), msg=request.data, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(signature, expected_signature)
 
 def update_user_credits(email, additional_credits):
-    # MongoDB Data API URL and credentials
     mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
-    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4" 
+    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"
 
-    # Prepare the request payload
     payload = {
         "dataSource": "Cluster0",
-        "database": "yourDatabase",
-        "collection": "users",  # Ensure this is the correct collection name
+        "database": "yourDatabase",  # Replace with actual database name
+        "collection": "users",  # Replace with actual collection name
         "filter": {"email": email},
         "update": {"$inc": {"credits": additional_credits}}
     }
 
-    # Headers
     headers = {
         "Content-Type": "application/json",
         "api-key": mongo_data_api_key
     }
 
-    # Update user's credits using MongoDB Data API
     response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
+    return response    
+    
 
-    if response.status_code == 200:
-        print("User credits updated successfully")
-    else:
-        print(f"Failed to update user credits: {response.text}")
-
-# Remove the extract_email function as it's not being used in your webhook handling
 
     
 @app.route('/logout')
