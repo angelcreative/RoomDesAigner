@@ -8,7 +8,8 @@ import os
 import uuid
 import requests
 import random
-import json  # Import the json module
+import json
+# Import the json module
 
 app = Flask(__name__)
 CORS(app)
@@ -232,7 +233,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You got 5 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
+            flash('Signup successful! You got 10 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
@@ -283,34 +284,25 @@ def change_avatar():
 
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
-    # Verify the signature
     if not is_valid_signature(request):
         return "Invalid signature", 403
 
-    # Parse the webhook data
     data = request.json
+    event_name = data.get('meta', {}).get('event_name')
 
-    # Check the event type
-    if data.get('type') == 'order_created':
-        # Extract necessary information like user's email
-        user_email = extract_email(data)
-
-        # Update the user's coin balance in MongoDB
-        update_user_credits(user_email, additional_credits=100)
-
-    # Handle other event types as necessary
+    if event_name == 'order_created':
+        user_email = data.get('data', {}).get('attributes', {}).get('user_email')
+        if user_email:
+            update_user_credits(user_email, 100)
 
     return '', 200
 
 def is_valid_signature(request):
+    secret = os.getenv('33luange1gean')  # Replace '33luange1gean' with the environment variable
     signature = request.headers.get('X-Signature')
-    secret = '33luange1gean'
-    expected_signature = hmac.new(
-        key=secret.encode(),
-        msg=request.data,
-        digestmod=hashlib.sha256
-    ).hexdigest()
+    expected_signature = hmac.new(key=secret.encode(), msg=request.data, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(signature, expected_signature)
+
 
 def extract_email(data):
     # Extract and return the email from the webhook data

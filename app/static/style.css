@@ -162,6 +162,22 @@ h2.loginTitle {
 
 .rightOff {
     margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rightOff button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: bold;
+    width: 100%;
+    margin: 0;
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(29,129,253,1) 50%, rgb(31 218 185) 100%);
+    font-size: 12px;
+    box-shadow: 0px 4px 20px 7px #1d82fd47;
+    margin-bottom: 16px;
 }
 .loginBox {
     position: relative;
@@ -1118,9 +1134,11 @@ span.username {
     padding: 20px 0 0 0;
     color: #fff;
     font-size: 12px;
-   
     max-width: fit-content;
     border-radius: 12px;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: flex-end; */
 }
 
 .logout a {
