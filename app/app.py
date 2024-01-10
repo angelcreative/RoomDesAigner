@@ -281,7 +281,8 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
-
+    
+    
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
     if not is_valid_signature(request):
@@ -298,28 +299,22 @@ def lemonsqueezy_webhook():
     return '', 200
 
 def is_valid_signature(request):
-    secret = os.getenv('33luange1gean')  # Replace '33luange1gean' with the environment variable
+    # Replace 'your_signing_secret' with your actual Lemon Squeezy signing secret
+    secret = '33luange1gean'
     signature = request.headers.get('X-Signature')
     expected_signature = hmac.new(key=secret.encode(), msg=request.data, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(signature, expected_signature)
 
-
-def extract_email(data):
-    # Extract and return the email from the webhook data
-    # Modify this based on the actual structure of Lemon Squeezy's webhook data
-    return data.get('customer', {}).get('email')
-
-
 def update_user_credits(email, additional_credits):
     # MongoDB Data API URL and credentials
     mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
-    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"  # Replace with your actual API key
+    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4" 
 
     # Prepare the request payload
     payload = {
         "dataSource": "Cluster0",
         "database": "yourDatabase",
-        "collection": "yourCollection",
+        "collection": "users",  # Ensure this is the correct collection name
         "filter": {"email": email},
         "update": {"$inc": {"credits": additional_credits}}
     }
@@ -336,11 +331,11 @@ def update_user_credits(email, additional_credits):
     if response.status_code == 200:
         print("User credits updated successfully")
     else:
-        print("Failed to update user credits")
+        print(f"Failed to update user credits: {response.text}")
 
+# Remove the extract_email function as it's not being used in your webhook handling
 
-
-
+    
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
