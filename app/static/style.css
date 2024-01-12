@@ -174,15 +174,31 @@ h2.loginTitle {
     font-weight: bold;
     width: 100%;
     margin: 0;
-    background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
- 
-    animation: animatedgradient 6s ease infinite alternate;
+    /* background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82); */
+    /* animation: animatedgradient 6s ease infinite alternate; */
     background-size: 300% 300%;
     font-size: 12px;
     box-shadow: 0px 4px 20px 7px #1d82fd47;
     margin-bottom: 16px;
 }
 
+.gradient-animation {
+  background: linear-gradient(87deg,deepskyblue,darkviolet,#bd00ff,#ff5d00);
+  background-size: 240% 240%;
+  animation: gradient-animation 8s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 
    
@@ -854,9 +870,6 @@ form.loginForm input {
     font-weight: bold;
     width: 100%;
     margin: 20px auto;
-background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
- 
-    animation: animatedgradient 6s ease infinite alternate;
     background-size: 300% 300%;
     font-size: 18px;
     box-shadow: 0px 4px 20px 7px #1d82fd47;
@@ -1814,7 +1827,6 @@ border: 1px solid #ffffff42;
 
 
 .buttonExt {
-    background: #a9fff5;
     border-radius: 0.5rem;
     color: #ffffff;
     transition: background ease-in-out 300ms;
@@ -1822,9 +1834,6 @@ border: 1px solid #ffffff42;
     position: relative;
     right: 4px;
     font-size: 13px;
-    background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82);
-    animation: animatedgradient 100ms ease infinite alternate;
-    background-size: 300% 300%;
     font-size: 18px;
     box-shadow: 0px 4px 20px 7px #1d82fd2b;
     font-weight: bold;
