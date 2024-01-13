@@ -586,8 +586,41 @@ rerollButton.addEventListener("click", rerollImages);
         <html>
           <head>
             <title>Upscaled Image</title>
+<style>body {
+    text-align: center;
+    color: #a9fff5;
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    padding-top: 60px;
+    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+    background-size: 150px;
+    margin-top: 40px;
+}
+
+h1 {
+    margin: 20px 0
+}
+
+img-comparison-slider {
+    margin: 40px auto;
+    display: block;
+    overflow: hidden;
+    max-width: fit-content;
+    border-radius: 12px;
+}
+
+img {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+html {
+    background: #1f1f1f;
+}</style>
           </head>
           <body>
+  <h1>Upscaled Image</h1>
+<p>Use KreaAi or Magnific to enhance details</p>
             <img src="${data.output_url}" alt="Upscaled Image"/>
           </body>
         </html>
@@ -619,89 +652,162 @@ rerollButton.addEventListener("click", rerollImages);
       
       generateMessageDiv("Image URL copied to clipboard!");
     }
-    // Function to display the generated images in a modal
+   
+    
     function showModal(imageUrls, promptText) {
-        const modal = document.getElementById("modal");
-        const closeButton = modal.querySelector(".close");
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
 
-        // Asegurarse de que solo se añade un event listener
-        closeButton.removeEventListener("click", closeModalHandler);
-        closeButton.addEventListener("click", closeModalHandler);
-        
-      // Clear previous images
-      imageGrid.innerHTML = "";
-      // Display the generated images
-      imageUrls.forEach(imageUrl => {
+    // Ensure only one event listener is added
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+
+    // Get the thumbnail image source (user-uploaded image)
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = ""; // Clear previous images
+
+    imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
+
         // Create image element
         const image = document.createElement("img");
         image.src = imageUrl;
         image.alt = "Generated Image";
         image.classList.add("thumbnail");
 
-        // Attach click event listener to open image in new tab
-        image.addEventListener("click", () => {
-          openImageInNewTab(imageUrl);
-        });
-
         // Create buttons container
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        // Create copy URL button
-        const copyButton = document.createElement("button");
-        copyButton.textContent = "Copy URL";
-        copyButton.addEventListener("click", () => {
-          copyImageUrlToClipboard(imageUrl);
-        });
+        // Create and append buttons (Copy URL, Copy Prompt, Upscale)
+         // Create download button
+    const downloadButton = document.createElement("button");
+    downloadButton.textContent = "Download";
+    downloadButton.addEventListener("click", () => downloadImage(imageUrl));
 
-        // Create copy prompt button
-        const copyPromptButton = document.createElement("button");
-        copyPromptButton.textContent = "Copy Prompt";
-        copyPromptButton.addEventListener("click", () => {
-          copyTextToClipboard(promptText);
-        });
-
-        
-          // Create upscale button
-          const upscaleButton = document.createElement("button");
-          upscaleButton.textContent = "Upscale";
-          upscaleButton.addEventListener("click", () => {
-            upscaleImage(imageUrl);
-          });
-          
-          
-
-        // Append buttons to buttons container
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        buttonsContainer.appendChild(downloadButton);
         buttonsContainer.appendChild(copyButton);
         buttonsContainer.appendChild(copyPromptButton);
         buttonsContainer.appendChild(upscaleButton);
 
-        // Append image and buttons container to image container
+        // Create "Compare" button
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        buttonsContainer.appendChild(compareButton);
+
+        // Append image and buttons to image container
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
 
         // Append image container to image grid
         imageGrid.appendChild(imageContainer);
-      });
+    });
 
-      // Show the modal
-      modal.style.display = "block";
-      showOverlay(); // Show the overlay
-        
-        function closeModalHandler() {
-               modal.style.display = "none";
-           }
+    // Show the modal
+    modal.style.display = "block";
+    showOverlay();
+}
+// Function to handle image download
+function downloadImage(imageUrl) {
+    console.log("Attempting to download:", imageUrl); // Debugging log
+
+    const link = document.createElement("a");
+    link.href = imageUrl;
+
+    // Check if the browser supports the "download" attribute
+    if ("download" in link) {
+        link.download = "generated-image.jpg"; // Suggest a filename for download
+        document.body.appendChild(link); // Append to body
+        link.click(); // Programmatically click the link to trigger download
+        document.body.removeChild(link); // Remove the link from the body
+    } else {
+        // Fallback: Open the image in a new tab if download is not supported
+        console.log("Download attribute not supported, opening in new tab"); // Debugging log
+        window.open(imageUrl, "_blank");
     }
+}
+
+    
+    
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
+
+function openComparisonWindow(userImageBase64, generatedImageUrl) {
+    // Open a new window/tab with comparison view
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+       <html>
+            <head>
+                <title>Image Comparison</title>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css">
+                <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+<style>body {
+    text-align: center;
+    color: #a9fff5;
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    padding-top: 60px;
+    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+    background-size: 150px;
+    margin-top: 40px;
+}
+
+h1 {
+    margin: 20px 0
+}
+
+img-comparison-slider {
+    margin: 40px auto;
+    display: block;
+    overflow: hidden;
+    max-width: fit-content;
+    border-radius: 12px;
+}
+
+img {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+html {
+    background: #1f1f1f;
+}</style>
+            </head>
+            <body>
+                <h1>Image Comparison</h1>
+                <img-comparison-slider>
+                    <img slot="first" src="${userImageBase64}" alt="Original Image">
+                    <img slot="second" src="${generatedImageUrl}" alt="Generated Image">
+                </img-comparison-slider>
+            </body>
+        </html>
+    `);
+    newWindow.document.close();
+}
+
+function closeModalHandler() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
+    
     
   // Function to open the image in a new tab
   function openImageInNewTab(imageUrl) {
-    window.open(imageUrl, "_blank");
+    window.open(generatedImageUrl, "_blank");
   }
   // Function to download the image (or open in a new tab if not possible to download)
   function downloadImage(imageUrl) {
     const link = document.createElement("a");
-    link.href = imageUrl;
+    link.href = generatedImageUrl;
     link.target = "_blank";
     // Check if the browser supports the "download" attribute
     if ("download" in link) {
@@ -709,7 +815,7 @@ rerollButton.addEventListener("click", rerollImages);
       link.click();
     } else {
       // Fallback: Open the image in a new tab if download is not supported
-      window.open(imageUrl, "_blank");
+      window.open(generatedImageUrl, "_blank");
     }
   }
     // Green dot

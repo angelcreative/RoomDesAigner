@@ -944,6 +944,10 @@ img#thumbnail {
     max-width: 230px;
 }
 
+.image-buttons button:first-child {
+    display: none;
+}
+
 .thumbImg {
    text-align: center;
     border-radius: 12px;
@@ -963,17 +967,21 @@ img#thumbnail {
     min-width: 240px;}
 
 #generatingImagesDialog {
-    position: fixed;
+  position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+    z-index: 1000;
+    background: #1f1f1f75;
+    backdrop-filter: blur(8px);
 }
+
+
 
 .close-dialog-button {
     background: #181719;
@@ -1385,7 +1393,7 @@ top:-50px;
 }
 
 .modal-content {
-    background: #15202b;
+    background: #15202bba;
     padding: 0;
     position: fixed;
     display: block;
@@ -1397,6 +1405,7 @@ top:-50px;
     left: 0;
     overflow: scroll;
     text-align: center;
+    backdrop-filter: blur(8px);
 }
 
 
@@ -2037,7 +2046,7 @@ select#materials {
 }
 
 #modalUpscale {
-    z-index: 999;
+     z-index: 999; 
     width: 100%;
     height: 100%;
     background: #1f1f1f95;
