@@ -24,43 +24,42 @@
     <title>App Room DesAigner</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- ======= STYLES ========== -->
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
-    <script src="https://apis.google.com/js/api:client.js"></script>
     
-   
-
-    
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- ======= SCRIPTS ========== -->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
-        <script src="{{ url_for('static', filename='jquery.twentytwenty.js') }}"></script>
 
-    
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.1.0/chroma.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.5.1/dist/iro.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-62Z2N81J3F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
- <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-62Z2N81J3F"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-62Z2N81J3F');
-</script>
-    
+      gtag('config', 'G-62Z2N81J3F');
+    </script>
     <!-- Hotjar Tracking Code for https://roomdesaigner.onrender.com -->
-<script>
-    (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:3810393,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1; 
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-    })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-</script>
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:3810393,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1; 
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
 
 </head>
 
@@ -996,7 +995,7 @@
                     <!-- ID COLOR PALETTES -->
                     <h4>Color palette</h4>
                     <div class="colorPalette">
-                        <div class="colorPickers">
+                 <!--       <div class="colorPickers">
                         <div class="colorPaletteA">
                             <input type="color" id="primary_color" value="#ffffff" class="colorPicker">
                         </div>
@@ -1006,15 +1005,40 @@
                         <div class="colorPaletteA">
                             <input type="color" id="tertiary_color" value="#1f1f1f" class="colorPicker">
                         </div>
-                            </div>
+                            </div> -->
+                        <div class="coloresWheel">
+   <select id="harmonyType">
+                             <option value="">Color Harmony</option>
+
+        <option value="complementary">Complementary</option>
+        <option value="analogous">Analogous</option>
+        <option value="triadic">Triadic</option>
+        <option value="square">Square</option>
+    </select>
+                    <span class="dot"></span>
+                            
+<div id="colorWheelContainer"></div>
+<div class="selectColores">
+   
+    <div id="harmonyColors"></div>
+    
+    
+   <!-- <label class="custom-checkbox">
+  <input type="checkbox" id="myCheckbox">
+  <span class="checkmark"></span>
+  Use color selection
+</label>-->
+   
+</div>
+</div>
                          <small>Colors are for reference, RoomDesAigner will try to use them. </small>
                     </div>
                        
                  
                     
-                    <h4>General color schemes</h4>
+                    <h4>Or use pre-made color schemes</h4>
                     <select id="color_scheme">
-                        <option value="">Color scheme</option>
+                        <option value="">Color schemes</option>
                         <option value="Analogous" title="Harmony of adjacent colors">Analogous</option>
                         <option value="Art_Deco" title="Bold and luxurious tones">Art Deco</option>
                         <option value="Beachy" title="Beach-inspired shades">Beachy</option>
@@ -1067,28 +1091,7 @@
                     <span class="dot"></span>
                     
                     
-                    <h4>Interior / Outdoor design</h4>
-                    <select id="space_to_be_designed">
-                        <option value="">Space to design</option>
-                        <option value="interior design">Interior design</option>
-                        <option value="outdoor design">Outdoor design</option>
-                        <option value="front of the house">Facade design</option>
-                    </select>
-                    <span class="dot"></span>
-                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
-                    
-                    <h4>Special organic style</h4>
-                
-                    <div class="switchContainer">
-                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
-                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                    </div>
-                    <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
-                    
-                    
+                   
                 
                   
                 </div>
@@ -1249,7 +1252,28 @@
                     </select>
                     <span class="dot"></span>
                     
-
+ <h4>Interior / Outdoor design</h4>
+                    <select id="space_to_be_designed">
+                        <option value="">Space to design</option>
+                        <option value="interior design">Interior design</option>
+                        <option value="outdoor design">Outdoor design</option>
+                        <option value="front of the house">Facade design</option>
+                    </select>
+                    <span class="dot"></span>
+                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
+                    
+                    <h4>Special organic style</h4>
+                
+                    <div class="switchContainer">
+                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>
+                    <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
+                    
+                    
 
                 </div>
                 <!-- BUILDING TOKENS -->
@@ -1840,6 +1864,7 @@
     // Call it once on page load
     updateCredits();
 </script>
+
 <!-- User segmentation start -->
 <script>
 window.usetifulTags = { role : "EXAMPLE_ROLE",     

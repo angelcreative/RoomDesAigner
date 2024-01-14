@@ -1275,18 +1275,17 @@ h4 {
 }
 
 .colorPalette {
-  display: flex;
-  column-gap: 1rem;
-  margin-bottom: 8px;
-  margin-top: 20px;
-  padding: 22px 12px;
-  background: #18222d;
-  justify-content: space-around;
-  border-radius: 16px;
-  color:#6d7b87;
-  flex-direction: column;
-  width: 200px;
-  font-size: 14px;
+display: flex;
+    column-gap: 1rem;
+    margin-bottom: 8px;
+    padding: 16px;
+    background: #18222d;
+    justify-content: space-around;
+    border-radius: 16px;
+    color: #6d7b87;
+    flex-direction: column;
+    width: 200px;
+    font-size: 14px;
 }
 
 
@@ -1322,6 +1321,143 @@ h4 {
     height: 36px;
     position: relative;
     border: 1px solid #4c7275;
+}
+
+.myCustom {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    margin: 8px 0;
+    column-gap: 8px;
+}
+
+/* Hide the default checkbox */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 1;
+  cursor: pointer;
+  background: red;
+}
+
+/* Create a custom checkbox */
+
+label.custom-checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 2px 0 12px 0;
+    cursor: pointer;
+}
+.custom-checkbox .checkmark {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #000;
+  border-radius: 3px;
+  margin: 0 8px 0 0;
+}
+
+/* Style the checkmark/indicator */
+.custom-checkbox .checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.custom-checkbox .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #a9fff5;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+/* Change background color when checked */
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: #46696d;
+  display: block;
+}
+
+
+.colorIndicator {
+            position: absolute;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            /* visibility: hidden; */
+        }
+#colorWheelContainer {
+    position: relative;
+    width: 200px;
+    height: 240px;
+    margin-top: 0;
+}
+#harmonyColors {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 40px;
+}
+    #harmonyColors div {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin: 8px 8px;
+    border-radius: 6px;
+    rotate: 45deg;
+    border: 1px solid #00000000;
+    }
+
+select#harmonyType {
+    margin-bottom: 0;
+}
+
+.colorIndicator {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.selectColores {
+  display: flex;
+  row-gap: 10px;
+  flex-direction: column;
+  width: 200px
+}
+
+.coloresWheel {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    width: 200px;
+    flex-wrap: wrap;
+    align-content: center;
+    margin: 0 auto 16px;
+}
+
+.coloresWheel .dot {
+    margin-bottom: -24px;
+    top: -37px;
 }
 
 #splash {
@@ -1703,7 +1839,7 @@ select, textarea {
     display: flex;
     font-family: 'Varela Round', sans-serif;
     flex-direction: column;
-    margin: 0.5rem 0;
+    margin-bottom: 10px;
     border-radius: 12px;
     padding: 0.5rem 0.5rem;
     border: 1px solid #273440;
@@ -1731,9 +1867,10 @@ select:hover {
     width: 8px;
     border-radius: 900rem;
     position: relative;
-    top: -30px;
-    left: -4px;
-    margin:0;
+    top: -32px;
+    left: -3px;
+    margin: 0px 0px -8px 0;
+    display: none;
 }
 
 .groupContainer {
