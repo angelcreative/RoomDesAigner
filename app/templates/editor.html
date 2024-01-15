@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+   
+    <meta name="theme-color" content="#ffffff">
+    <!-- //end icons for mobile -->
+    <title>Room DesAigner Editor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://apis.google.com/js/api:client.js"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const imageUrl = decodeURIComponent(urlParams.get('image'));
+    if (imageUrl) {
+        openPhotopeaWithImage(imageUrl);
+    }
+});
+</script>
+</head>
+<body>
+    <h2> Editor </h2>
+    <!-- Your application's layout -->
+    <div class="editor">
+    <iframe id="photopeaIframe" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
+        </div>
+    <!-- Other content -->
+</body>
+</html>

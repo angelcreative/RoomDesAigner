@@ -720,6 +720,18 @@ html {
     }
    
     
+    // Function to open Photopea with the specified image
+function openPhotopeaWithImage(imageUrl) {
+    const photopeaUrl = `https://www.photopea.com#`;
+    const photopeaConfig = {
+        files: [imageUrl]
+    };
+    const encodedConfig = encodeURIComponent(JSON.stringify(photopeaConfig));
+    window.open(photopeaUrl + encodedConfig, '_blank');
+}
+
+    
+    
     function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -749,6 +761,12 @@ html {
         buttonsContainer.classList.add("image-buttons");
 
         // Create and append buttons (Copy URL, Copy Prompt, Upscale)
+        // Create "Edit in Photopea" button
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit in Photopea";
+        editButton.addEventListener("click", () => {
+            openPhotopeaWithImage(imageUrl);
+        });
          // Create download button
     const downloadButton = document.createElement("button");
     downloadButton.textContent = "Download";
@@ -759,6 +777,7 @@ html {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         buttonsContainer.appendChild(downloadButton);
         buttonsContainer.appendChild(copyButton);
+        buttonsContainer.appendChild(editButton);
         buttonsContainer.appendChild(copyPromptButton);
         buttonsContainer.appendChild(upscaleButton);
 
