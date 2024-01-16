@@ -64,7 +64,32 @@
 </head>
 
 <body class="gradient-background ">
-  
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDB_bkc_S-teVTwrzkv6_OcaT-b3EDA1Og",
+    authDomain: "room-desaigner.firebaseapp.com",
+    projectId: "room-desaigner",
+    storageBucket: "room-desaigner.appspot.com",
+    messagingSenderId: "729852650412",
+    appId: "1:729852650412:web:1cb45f732e024f5322d009",
+    measurementId: "G-8EY944RD0H"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>    
+    
+    
     
   <!-- SPLASH -->
 
