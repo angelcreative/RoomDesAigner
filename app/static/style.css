@@ -1428,6 +1428,32 @@ select#harmonyType {
     margin-bottom: 0;
 }
 
+.image-buttons button:nth-child(2) {
+    background: url('/static/img/ico_grid/ico_copy_url.svg') center center no-repeat;
+    background-size: 36px;
+}
+
+.image-buttons button:nth-child(3) {
+  background: url('/static/img/ico_grid/ico_edit_image.svg') center center no-repeat;
+    background-size: 36px
+}
+.image-buttons button:nth-child(4) {
+  background: url('/static/img/ico_grid/ico_copy_prompt.svg') center center no-repeat;
+    background-size: 36px
+}
+
+
+.image-buttons button:nth-child(5) {
+    background: url('/static/img/ico_grid/ico_upscale.svg') center center no-repeat;
+    background-size: 36px
+}
+
+.image-buttons button:nth-child(6) {
+   background: url('/static/img/ico_grid/ico_compare.svg') center center no-repeat;
+    background-size: 36px
+}
+
+
 .colorIndicator {
     position: absolute;
     width: 20px;
@@ -2120,27 +2146,38 @@ option[title]:hover:after {
 
 .image-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     width: 100% !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    background: #12121875;
+    border-radius: 0 0 16px 16px;
+    margin: -16px 0 0 0;
+    padding: 24px 0 12px 0;
 }
 
+
+
 .image-buttons button {
-    margin: 0 0.5rem 0 0;
-    border-radius: 0.5rem;
+    margin: 0 2px;
+    border-radius: 100%;
     border: none;
-    background: transparent;
-    color: #ffffff75;
+    color: #ffffff00;
     padding: 0.5rem;
     cursor: pointer;
     transition: background 300ms ease-in-out;
     font-size: 12px;
-    box-shadow: inset #ffffff75 0px 0px 0px 1px;
+    background-size: 16px !important;
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    opacity: 1;
 }
 
 
 .image-buttons button:hover {
     padding: 0.5rem;
-    box-shadow: inset #ffffff75 0px 0px 0px 2px;
+    background-color: #1a2038;
 }
 
 .spinner {
