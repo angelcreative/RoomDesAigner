@@ -281,6 +281,8 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
+
+    
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
     if not is_valid_signature(request):
@@ -292,7 +294,7 @@ def lemonsqueezy_webhook():
     
     event_name = data.get('meta', {}).get('event_name')
     if event_name == 'order_created':
-        user_email = data.get('data', {}).get('attributes', {}).get('user_email')
+        user_email = data.get('data', {}).get('attributes', {}).get('email')  # use 'email' instead of 'user_email'
         print("User email from order:", user_email)
         if user_email:
             response = update_user_credits(user_email, 100)
@@ -301,6 +303,7 @@ def lemonsqueezy_webhook():
         else:
             print("No user email found in data")
             return "No user email", 400
+
     return '', 200
 
 def is_valid_signature(request):
@@ -313,11 +316,13 @@ def update_user_credits(email, additional_credits):
     mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
     mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"
 
+  
+    
     payload = {
         "dataSource": "Cluster0",
-        "database": "yourDatabase",  # Replace with actual database name
-        "collection": "users",  # Replace with actual collection name
-        "filter": {"email": email},
+        "database": "yourDatabase",  # Replace with your actual database name
+        "collection": "users",  # Replace with your actual collection name
+        "filter": {"email": email},  # Ensure the key here is 'email'
         "update": {"$inc": {"credits": additional_credits}}
     }
 
