@@ -316,13 +316,11 @@ def update_user_credits(email, additional_credits):
     mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
     mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"
 
-  
-    
     payload = {
         "dataSource": "Cluster0",
-        "database": "yourDatabase",  # Replace with your actual database name
-        "collection": "users",  # Replace with your actual collection name
-        "filter": {"email": email},  # Ensure the key here is 'email'
+        "database": "yourDatabase",  # Replace with actual database name
+        "collection": "users",  # Replace with actual collection name
+        "filter": {"email": email},
         "update": {"$inc": {"credits": additional_credits}}
     }
 
@@ -331,8 +329,17 @@ def update_user_credits(email, additional_credits):
         "api-key": mongo_data_api_key
     }
 
-    response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
-    return response    
+    try:
+        response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
+        if response.status_code == 200:
+            print("Update successful:", response.json())
+        else:
+            print("Update failed:", response.status_code, response.text)
+        return response
+    except Exception as e:
+        print("Error making request to MongoDB Data API:", e)
+        return None
+  
     
 
 
