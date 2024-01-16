@@ -233,7 +233,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You got 10 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
+            flash('Signup successful! You got 5 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
@@ -283,62 +283,6 @@ def change_avatar():
 
 
     
-@app.route('/lemonsqueezy_webhook', methods=['POST'])
-def lemonsqueezy_webhook():
-    if not is_valid_signature(request):
-        print("Invalid signature")
-        return "Invalid signature", 403
-
-    data = request.json
-    print("Received data:", data)
-    
-    event_name = data.get('meta', {}).get('event_name')
-    if event_name == 'order_created':
-        user_email = data.get('data', {}).get('attributes', {}).get('email')  # use 'email' instead of 'user_email'
-        print("User email from order:", user_email)
-        if user_email:
-            response = update_user_credits(user_email, 100)
-            print("Update response:", response.text)
-            return '', 200
-        else:
-            print("No user email found in data")
-            return "No user email", 400
-
-    return '', 200
-
-def is_valid_signature(request):
-    secret = '33luange1gean'  # Replace with your actual Lemon Squeezy signing secret
-    signature = request.headers.get('X-Signature')
-    expected_signature = hmac.new(key=secret.encode(), msg=request.data, digestmod=hashlib.sha256).hexdigest()
-    return hmac.compare_digest(signature, expected_signature)
-
-def update_user_credits(email, additional_credits):
-    mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
-    mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"
-
-    payload = {
-        "dataSource": "Cluster0",
-        "database": "yourDatabase",  # Replace with actual database name
-        "collection": "users",  # Replace with actual collection name
-        "filter": {"email": email},
-        "update": {"$inc": {"credits": additional_credits}}
-    }
-
-    headers = {
-        "Content-Type": "application/json",
-        "api-key": mongo_data_api_key
-    }
-
-    try:
-        response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
-        if response.status_code == 200:
-            print("Update successful:", response.json())
-        else:
-            print("Update failed:", response.status_code, response.text)
-        return response
-    except Exception as e:
-        print("Error making request to MongoDB Data API:", e)
-        return None
   
     
 
