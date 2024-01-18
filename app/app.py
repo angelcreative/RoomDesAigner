@@ -8,11 +8,15 @@ import os
 import uuid
 import requests
 import random
+import logging
 import json
 # Import the json module
 
 app = Flask(__name__)
 CORS(app)
+
+logging.basicConfig(level=logging.INFO)
+
 app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
@@ -212,7 +216,8 @@ def signup():
         selected_avatar = random.choice(avatar_images)
         
          # Retrieve email from the form data
-        email = request.form['email']
+# In your signup route
+        email = request.form['email'].lower()  # Convert to lowercase before storing
 
 
         # Prepare user data with the randomly selected avatar
@@ -282,42 +287,47 @@ def change_avatar():
         return 'User not logged in', 401
       
     
+import logging
+
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
     if not is_valid_signature(request):
-        print("Invalid signature")
+        logging.error("Invalid signature")
         return "Invalid signature", 403
+
     data = request.json
-    print("Received data:", data)
+    logging.info(f"Received data: {data}")
     
     event_name = data.get('meta', {}).get('event_name')
     if event_name == 'order_created':
-        user_email = data.get('data', {}).get('attributes', {}).get('email')  # use 'email' instead of 'user_email'
-        print("User email from order:", user_email)
+        user_email = data.get('data', {}).get('attributes', {}).get('user_email')
         if user_email:
+            user_email = user_email.lower()  # Convert to lowercase for consistency
             response = update_user_credits(user_email, 100)
-            print("Update response:", response.text)
+            logging.info(f"Update response: {response.status_code} - {response.text}")
             return '', 200
         else:
-            print("No user email found in data")
+            logging.error("No user email found in data")
             return "No user email", 400
     return '', 200
+
+lemon_squeezy_secret = os.environ.get('33luange1gean', 'default_secret')
+
 def is_valid_signature(request):
-    secret = '33luange1gean'  # Replace with your actual Lemon Squeezy signing secret
+    secret = lemon_squeezy_secret.encode()
     signature = request.headers.get('X-Signature')
-    expected_signature = hmac.new(key=secret.encode(), msg=request.data, digestmod=hashlib.sha256).hexdigest()
+    expected_signature = hmac.new(key=secret, msg=request.data, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(signature, expected_signature)
+
 def update_user_credits(email, additional_credits):
     mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
     mongo_data_api_key = "vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4"
 
-  
-    
     payload = {
         "dataSource": "Cluster0",
-        "database": "yourDatabase",  # Replace with your actual database name
-        "collection": "users",  # Replace with your actual collection name
-        "filter": {"email": email},  # Ensure the key here is 'email'
+        "database": "yourDatabase",
+        "collection": "users",
+        "filter": {"email": email},  # Using 'email' field for consistency
         "update": {"$inc": {"credits": additional_credits}}
     }
 
@@ -327,7 +337,14 @@ def update_user_credits(email, additional_credits):
     }
 
     response = requests.patch(f"{mongo_data_api_url}/action/updateOne", headers=headers, data=json.dumps(payload))
-    return response  
+
+    if response.status_code == 200:
+        logging.info(f"Credits updated successfully for {email}")
+    else:
+        logging.error(f"Failed to update credits for {email}: {response.text}")
+
+    return response
+
 
     
 @app.route('/logout')

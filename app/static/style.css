@@ -13,8 +13,6 @@ body {
   font-family: 'Varela Round', sans-serif;
   height: 100vh;
   margin: 0;
-
-
 }
 
 
@@ -241,7 +239,7 @@ h2.loginTitle {
     display: flex;
     flex-direction: column;
     justify-content: center;
-       padding: 0 0 40px 0;
+    padding: 0 0 40px 0;
 }
 
 
@@ -1053,6 +1051,7 @@ img#thumbnail {
 
 .upgradeForm {
     padding: 0;
+    max-width: 960px;
 }
 
 
@@ -2540,8 +2539,9 @@ span.closeGen {
     column-gap: 32px;
     padding: 20px;
     max-width: 800px;
-    align-items: center;
+    align-items: stretch;
     color: #495a6c;
+    row-gap: 36px;
 }
 
 .boxExpert  img {
@@ -2577,8 +2577,7 @@ span.closeGen {
     padding: 0;
     border-radius: 8px;
     color: #1f1f1f;
-    width: 660px;
-    min-width: 360px;
+    width: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2586,6 +2585,7 @@ span.closeGen {
     border: 1px solid #e0e5eabf;
     text-align: left;
     padding-right: 24px;
+    justify-content: flex-start;
 }
 
 .priceBox li {
@@ -2676,6 +2676,13 @@ span.closeGen {
     margin: 0 auto;
   }
   
+    
+    
+.upgradeForm {
+    padding: 0;
+    max-width: 400px;
+}
+
 .buttonExt {
  
     width: 170px;
@@ -2821,7 +2828,19 @@ span.closeGen {
      width:220px;
  }
 
+    
+    .boxExpert {
+    display: flex;
+    flex-direction: column;
+    row-gap: 36px;
+    padding: 40px 0;
+    width: 90%;
+    margin: 0 auto;
+    align-items: center;
 }
+}
+
+
 
 
 
