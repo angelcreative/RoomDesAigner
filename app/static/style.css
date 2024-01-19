@@ -31,17 +31,17 @@ body {
     display: block;
 }
 .lightbox {
-    display: none; 
-    position: fixed; 
-    z-index: 4; 
-    padding-top: 100px; 
+    display: none;
+    position: fixed;
+    z-index: 4;
+    padding-top: 100px;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.9); 
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
 }
 
 .lightbox-content {
@@ -944,9 +944,76 @@ img#thumbnail {
     max-width: 230px;
 }
 
-.image-buttons button:first-child {
-    display: none;
+.image-buttons button:first-child,
+.image-buttons button:nth-child(2),
+.image-buttons button:nth-child(3),
+.image-buttons button:nth-child(4),
+.image-buttons button:nth-child(5),
+.image-buttons button:nth-child(6) {
+    position:relative;
+    font-size:1px;
+    
 }
+
+
+.image-buttons button:first-child:hover::after,
+.image-buttons button:nth-child(2):hover::after,
+.image-buttons button:nth-child(3):hover::after,
+.image-buttons button:nth-child(4):hover::after,
+.image-buttons button:nth-child(5):hover::after,
+.image-buttons button:nth-child(6):hover::after{
+    position:absolute;
+    content:" ";
+    height:auto;
+    width:max-content;
+    background:#1fdab9;
+    padding:4px 12px;
+    font-size:12px;
+    color:#1f1f1f;
+    top:40px;
+    left:-10px;
+    border-radius:90px;
+}
+
+.image-buttons button:first-child:hover::after {
+      content:"open in a new tab";
+}
+.image-buttons button:nth-child(2):hover::after {
+     content:"copy image url";
+}
+.image-buttons button:nth-child(3):hover::after {
+     content:"edit image on Photopea";
+}
+.image-buttons button:nth-child(4):hover::after {
+     content:"copy Ai prompt";
+}
+.image-buttons button:nth-child(5):hover::after {
+     content:"upscale image";
+}
+.image-buttons button:nth-child(6):hover::after{
+    content:"see before / after";
+}
+  
+.pricing-card {
+    padding: 40px;
+    text-align: left;
+}
+
+.pricing-card-content {
+    text-align: left;
+    color: #828282;
+}
+
+
+.priceBox strong {
+    color: #1f1f1f;
+}
+
+.priceBox p {
+    color: #898989;
+    font-size: 14px;
+}
+
 
 .thumbImg {
    text-align: center;
@@ -1051,7 +1118,6 @@ img#thumbnail {
 
 .upgradeForm {
     padding: 0;
-    max-width: 960px;
 }
 
 
@@ -1427,6 +1493,11 @@ label.custom-checkbox {
 
 select#harmonyType {
     margin-bottom: 0;
+}
+
+.image-buttons button:first-child {
+    background: url(/static/img/ico_grid/ico_open.svg) center center no-repeat;
+    background-size: 36px;
 }
 
 .image-buttons button:nth-child(2) {
@@ -1911,6 +1982,7 @@ select:hover {
     background: #1e2732;
     column-gap: 1rem;
     padding: 0 1rem 2rem 1rem;
+    position: relative;
 }
 
 .buttonsCont {
@@ -2539,9 +2611,10 @@ span.closeGen {
     column-gap: 32px;
     padding: 20px;
     max-width: 800px;
-    align-items: stretch;
+    align-items: flex-start;
     color: #495a6c;
     row-gap: 36px;
+    margin: 0 auto;
 }
 
 .boxExpert  img {
@@ -2553,7 +2626,11 @@ span.closeGen {
 .boxExpert h2 {
     color: #1f1f1f;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
+    font-weight: bold;
+    background: yellow;
+    max-width: fit-content;
+    margin: 0;
 }
 
 .boxExpert li {
@@ -2569,31 +2646,33 @@ span.closeGen {
 .priceBox h1 {
     font-size: 31px;
     color: #1f1f1f;
-    margin: 30px 0 0 0;
+    margin: 0;
+    text-align: left;
 }
 
 .priceBox {
-    background: #fff;
+    /* background: #fff; */
     padding: 0;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     color: #1f1f1f;
     width: 80%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0px 11px 17px 5px rgb(78 117 155 / 19%);
-    border: 1px solid #e0e5eabf;
+    /* box-shadow: 0px 11px 17px 5px rgb(78 117 155 / 19%); */
+    /* border: 1px solid #e0e5eabf; */
     text-align: left;
-    padding-right: 24px;
+    /* padding-right: 24px; */
     justify-content: flex-start;
 }
 
 .priceBox li {
     list-style-type: none;
     list-style-position: inside;
-    text-indent: -22px;
-    padding-left: 12px;
-    position: relative;
+    text-indent: -14px;
+    list-style-image: url(/static/img/check.svg);
+    /* padding-left: 12px; */
+    /* position: relative; */
 }
 
 .priceBox span {
@@ -2662,7 +2741,15 @@ span.closeGen {
     content: "Transparency at its best. Pay for your coins, and that's it. No extra charges or unexpected costs.";  
 }
 
-
+loginModal > p {
+    color: #116657;
+    line-height: 1.6;
+    padding: 20px;
+    background: #c9f6ee;
+    max-width: max-content;
+    width: 260px;
+    border-radius: 12px;
+}
 
 /*=========================   MEDIA QUERIES ===================*/
 

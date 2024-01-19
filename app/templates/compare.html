@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Image Comparison</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+    <style>
+                body {
+                text-align: center;
+                color: #a9fff5;
+                font-family: arial, sans-serif;
+                font-size: 12px;
+                padding-top: 60px;
+                background: url('/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+                background-size: 150px;
+                margin-top: 40px;
+            }
+
+            h1 {
+                margin: 20px 0
+            }
+
+
+
+            img {
+                border-radius: 12px;
+                overflow: hidden;
+            max-width:100%;
+            }
+
+            html {
+                background: #1f1f1f;
+        }
+                .share {margin: 60px auto; 
+        }
+            .st-cmp-settings {
+    display: none !important;
+}
+            </style>
+    <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=65aa9047f771bd00123745b1&product=inline-share-buttons&source=platform" async="async"></script>
+          </head>
+<body>
+    <h1>Image Comparison</h1>
+    <img-comparison-slider>
+        <img slot="first" src="{{ data['user_image_base64'] }}" alt="Original Image">
+        <img slot="second" src="{{ data['generated_image_url'] }}" alt="Generated Image">
+    </img-comparison-slider>
+    <div class="share"><h2>Share this design</h2><div class="sharethis-inline-share-buttons"></div></div>
+ </body>
+        </html>

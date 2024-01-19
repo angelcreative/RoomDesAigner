@@ -797,25 +797,7 @@ function openPhotopeaWithImage(imageUrl) {
     modal.style.display = "block";
     showOverlay();
 }
-// Function to handle image download
-function downloadImage(imageUrl) {
-    console.log("Attempting to download:", imageUrl); // Debugging log
 
-    const link = document.createElement("a");
-    link.href = imageUrl;
-
-    // Check if the browser supports the "download" attribute
-    if ("download" in link) {
-        link.download = "generated-image.jpg"; // Suggest a filename for download
-        document.body.appendChild(link); // Append to body
-        link.click(); // Programmatically click the link to trigger download
-        document.body.removeChild(link); // Remove the link from the body
-    } else {
-        // Fallback: Open the image in a new tab if download is not supported
-        console.log("Download attribute not supported, opening in new tab"); // Debugging log
-        window.open(imageUrl, "_blank");
-    }
-}
 
     
     
@@ -827,57 +809,30 @@ function createButton(text, onClickHandler) {
 }
 
 function openComparisonWindow(userImageBase64, generatedImageUrl) {
-    // Open a new window/tab with comparison view
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-       <html>
-            <head>
-                <title>Image Comparison</title>
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/styles.css">
-                <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
-<style>body {
-    text-align: center;
-    color: #a9fff5;
-    font-family: arial, sans-serif;
-    font-size: 12px;
-    padding-top: 60px;
-    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
-    background-size: 150px;
-    margin-top: 40px;
+    // Send the base64 image data to the server
+    fetch('/create-comparison-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userImageBase64: userImageBase64,
+            generatedImageUrl: generatedImageUrl
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.slug) {
+            // Open the new window with the unique URL
+            const url = `https://roomdesaigner.onrender.com/compare/${data.slug}`;
+            window.open(url, '_blank');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
-h1 {
-    margin: 20px 0
-}
-
-img-comparison-slider {
-    margin: 40px auto;
-    display: block;
-    overflow: hidden;
-    max-width: fit-content;
-    border-radius: 12px;
-}
-
-img {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-html {
-    background: #1f1f1f;
-}</style>
-            </head>
-            <body>
-                <h1>Image Comparison</h1>
-                <img-comparison-slider>
-                    <img slot="first" src="${userImageBase64}" alt="Original Image">
-                    <img slot="second" src="${generatedImageUrl}" alt="Generated Image">
-                </img-comparison-slider>
-            </body>
-        </html>
-    `);
-    newWindow.document.close();
-}
 
 function closeModalHandler() {
     const modal = document.getElementById("modal");
@@ -889,20 +844,7 @@ function closeModalHandler() {
   function openImageInNewTab(imageUrl) {
     window.open(generatedImageUrl, "_blank");
   }
-  // Function to download the image (or open in a new tab if not possible to download)
-  function downloadImage(imageUrl) {
-    const link = document.createElement("a");
-    link.href = generatedImageUrl;
-    link.target = "_blank";
-    // Check if the browser supports the "download" attribute
-    if ("download" in link) {
-      link.download = "generated_image.png";
-      link.click();
-    } else {
-      // Fallback: Open the image in a new tab if download is not supported
-      window.open(generatedImageUrl, "_blank");
-    }
-  }
+  
     // Green dot
     function toggleGreenDot(selectId) {
       var selectElement = document.getElementById(selectId);
@@ -940,6 +882,12 @@ function closeModalHandler() {
         select.addEventListener("change", handleSelectChange);
       });
     }
+
+function downloadImage(imageUrl) {
+    console.log("Opening image in new tab:", imageUrl); // Debugging log
+    window.open(imageUrl, "_blank");
+}
+
 
     
   // Function to close the modal

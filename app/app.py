@@ -345,6 +345,35 @@ def update_user_credits(email, additional_credits):
 
     return response
 
+# A dictionary to store the comparison data
+comparisons = {}
+
+@app.route('/create-comparison-session', methods=['POST'])
+def create_comparison_session():
+    data = request.json
+    user_image_base64 = data['userImageBase64']
+    generated_image_url = data['generatedImageUrl']
+
+    # Generate a unique slug
+    slug = str(uuid.uuid4())
+
+    # Store the comparison data
+    comparisons[slug] = {
+        'user_image_base64': user_image_base64,
+        'generated_image_url': generated_image_url
+    }
+
+    return jsonify({'slug': slug})
+
+@app.route('/compare/<slug>')
+def compare_images(slug):
+    if slug in comparisons:
+        data = comparisons[slug]
+        # Render a template that dynamically loads the comparison view
+        # Pass the base64 and URL data to the template
+        return render_template('compare.html', data=data)
+    else:
+        return "Comparison not found", 404
 
     
 @app.route('/logout')
