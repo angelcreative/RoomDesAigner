@@ -1021,7 +1021,8 @@ img#thumbnail {
     margin-top: 12px;
     position: relative;
 }
-.message {position: fixed;
+.message {
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -1029,9 +1030,10 @@ img#thumbnail {
     padding: 20px;
     text-align: center;
     z-index: 9999;
-    border-radius: 1rem;
+    border-radius: 100%;
     box-shadow: rgb(0 0 0 / 76%) 0px 24px 24px 8px;
-    min-width: 240px;}
+    min-width: 240px;
+    }
 
 #generatingImagesDialog {
   position: fixed;
@@ -1257,7 +1259,7 @@ form h4, form h5 {
 
 h1, h2, h3, h4, h5 {
         color: #8c8c8c;
-        margin-top: 2rem;
+        margin-top: 1rem;
         font-weight: lighter;
 }
 .bigTitle {
@@ -1273,6 +1275,8 @@ h5 {
 
 h4 {
     font-size: 1rem;
+    padding-left: 0.5rem;
+    display: none !important;
 }
 
 
@@ -1341,19 +1345,7 @@ h4 {
   display: block;
 }
 
-.colorPalette {
-display: flex;
-    column-gap: 1rem;
-    margin-bottom: 8px;
-    padding: 16px;
-    background: #18222d;
-    justify-content: space-around;
-    border-radius: 16px;
-    color: #6d7b87;
-    flex-direction: column;
-    width: 200px;
-    font-size: 14px;
-}
+.colorPalette {display: flex;column-gap: 1rem;margin-bottom: 8px;padding: 16px;background: #18222d;justify-content: space-around;border-radius: 16px;color: #6d7b87;flex-direction: column;font-size: 14px;}
 
 
 .colorPicker {
@@ -1547,7 +1539,6 @@ select#harmonyType {
     display: flex;
     flex-direction: column;
     row-gap: 16px;
-    width: 200px;
     flex-wrap: wrap;
     align-content: center;
     margin: 0 auto 16px;
@@ -1616,6 +1607,32 @@ top:-50px;
   display: none; /* Hide the content initially */
 }
 
+.mainContainer select {
+    margin-left:0px;
+}
+
+.mainContainer .dot {
+    left:-4px;
+}
+
+i {
+    color: #7cbbb7;
+    margin-right: 4px;
+}
+
+.secondaryContainer textarea {
+    width: 310px;
+}
+
+.closerI {
+    transform: rotate(0deg);
+    color: #4f5c67;
+    transition: transform 300ms ease-out;
+}
+
+.active  .closerI {
+    transform: rotate(45deg);
+}
 
 #modal {
     position: absolute;
@@ -1751,12 +1768,11 @@ img#replitBadge {
 
 
 h1 {
-   
-    font-size: 1.3rem;
-    background-repeat: no-repeat;
-    background-size: 24px;
-    text-align: center;
-    font-family: 'Lato', sans-serif;
+   font-size: 1rem;
+   background-repeat: no-repeat;
+   background-size: 25px;
+   text-align: left;
+   font-family: 'Lato', sans-serif;
 }
 
 .groupContainer h1 {
@@ -1788,6 +1804,7 @@ h1 {
     color: #a9fff5;
     margin: 2rem 0;
     font-weight: lighter;
+    text-align: center
 }
 
 
@@ -1802,8 +1819,7 @@ sub {
     font-size: 12px;
     color: #66737f;
     display: block;
-    width: 200px;
-    margin: 4px 0 0 0;
+    margin: 4px 0 0 20px;
 }
 
 
@@ -1943,8 +1959,9 @@ select, textarea {
     border: 1px solid #273440;
     background: #273440;
     color: #6d7b87;
-    width: 200px;
+    width: 100%;
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
+    margin-left: 10px;
 }
 
 select {
@@ -1966,7 +1983,7 @@ select:hover {
     border-radius: 900rem;
     position: relative;
     top: -32px;
-    left: -3px;
+    left: 8px;
     margin: 0px 0px -8px 0;
     display: none;
 }
@@ -2492,7 +2509,6 @@ border-radius: 40px;
 }
 
 .strenght {
-    width: 240px;
     color: #677580;
     font-size: 14px;
     display: flex;
@@ -2751,6 +2767,60 @@ loginModal > p {
     border-radius: 12px;
 }
 
+
+
+/*collapsible*/
+.collapsible {
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  width: auto;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  border-bottom: 1px solid #273440;
+  border-radius: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.active, .collapsible:hover {
+  background-color: #18222d;
+}
+
+.content {
+  padding: 16px 16px 16px 8px;
+  display: none;
+  overflow: hidden;
+  background-color: #273440;
+}
+
+/* new container*/
+
+.formContainer {
+    display: flex;
+    flex-direction: row;
+    background: #111b25;
+    border-radius: 2%;
+    padding: 2%;
+    width: 800px;
+    justify-content: space-between;
+}
+
+.secondaryContainer {
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+}
+
+.mainContainer {
+    width: 360px;
+}
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
@@ -2763,7 +2833,11 @@ loginModal > p {
     margin: 0 auto;
   }
   
-    
+
+    .formContainer {
+        display: flex;
+    flex-direction: column;
+    width: auto}
     
 .upgradeForm {
     padding: 0;

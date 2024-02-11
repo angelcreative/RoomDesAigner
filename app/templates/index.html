@@ -32,7 +32,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
-    
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
     <!-- ======= SCRIPTS ========== -->
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
@@ -71,7 +73,7 @@
     
   <!-- SPLASH -->
 
-<div id="splash">
+<div id="splash" style="visibility: hidden">
            <img src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
         
     </div>  
@@ -439,11 +441,14 @@
     <fieldset>
     
         <form id="imageGenerationForm">
-            
-            <div class="groupContainer">
+            <div class="formContainer">
+                <div class="mainContainer">
                 <!-- SHOT TOKENS -->
-                <div class="group">
-                       <h1><img class="iconH1" src="/static/img/icon-shot.svg" />Shot tokens</h1>
+                <div class="mainControls">
+                    <h1><i class="fa fa-camera" aria-hidden="true"></i>
+
+Image</h1>
+                    <!--upload image-->
                     <div id="myimage">
   <label class="imageup" for="imageDisplayUrl">
     Upload your image here <span>↑</span>
@@ -455,7 +460,7 @@
     <img id="thumbnail" src="" alt="Thumbnail">
   </div>
 </div>
-                      <!-- slider strenght -->
+                    <!-- slider strenght -->
                     <div class="strenght">
 <label for="strengthSlider">Original image strenght</label>
 <input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.69">
@@ -465,7 +470,6 @@
                         </small>
                     </div>
                     <!-- home area -->
-                    <div><h4>Home area to be designed</h4>
                     <select id="home_room">
                       <option value="">Home area</option>
                       <!-- Home Areas -->
@@ -509,136 +513,7 @@
                       <option value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop - A workspace equipped for crafting, DIY projects, and hands-on activities.</option>
                     </select>
                     <span class="dot"></span>
-                   </div>
-                    
-                  
-
-
-
-                    <!-- add furniture -->
-                    
-    
-
-
-
-                    
-                 
-                    <!-- ratio -->
-                    <h4>Apect ratio</h4>
-                    <div class="aspectRatioShot">
-                        <label class="aspectRatio"> Landscape <label class="switch">
-                                <input type="radio" name="aspectRatio" value="landscape" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                        <label class="aspectRatio"> Portrait <label class="switch">
-                                <input type="radio" name="aspectRatio" value="portrait">
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                    </div>
-                    <!-- seed -->
-                    <h4>Seed</h4>
-                    <div class="switchContainer">
-                        <label class="switchLabel"> Seed <label class="switch">
-                                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                    </div>
-                    <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
-                    <h4>Render</h4>
-                    <select id="picture">
-                        <option value="">Choose render</option>
-                        <option value="editorial_photography">Photography</option>
-                        <option value="Hand_Drawn_Interior_Design_Sketches">Hand-Draw Sketch</option>
-                        <option value="sketch_in_watercolor">Watercolor</option>
-                        <option value="line_drawing">Line Drawing</option>
-                    </select>
-                    <span class="dot"></span>
-                    <!-- ID LEVEL SHOT-->
-                    <h4>Point of view</h4>
-                    <select id="point_of_view">
-                        <option value="">Level shot</option>
-                        <option value="eye_level">Eye level shot</option>
-                        <option value="medium">Medium shot</option>
-                        <option value="close_up">Close-up shot</option>
-                        <option value="extreme_close_up">Extreme close-up shot</option>
-                        <option value="wide">Wide shot</option>
-                        <option value="extreme_wide">Extreme wide shot</option>
-                        <option value="low_angle">Low angle shot</option>
-                        <option value="high_angle">High angle shot</option>
-                        <option value="dutch_angle">Dutch angle shot</option>
-                        <option value="rule_of_hirds">Rule of Thirds shot</option>
-                        <option value="bird_eye_view">Bird's eye shot</option>
-                        <option value="drone_camera">Drone's camera shot</option>
-                        <option value="establishing">Establishing shot</option>
-                        <option value="point_of_view">Point of view shot</option>
-                    </select>
-                    <span class="dot"></span>
-                    <!-- ID CAMERAS-->
-                    <h4>Film stock</h4>
-                    <select id="film_used_to_take_the_shot">
-                        <option value="">Film for your shot</option>
-                        <option value="AgfaColor_Neu" title="Known for soft color rendering and fine grain">AgfaColor Neu</option>
-                        <option value="Anscochrome" title="Early color slide film known for saturated colors, but requiring complex processing">Anscochrome</option>
-                        <option value="Fujifilm_Velvia_100" title="Known for extremely saturated colors, especially in the green-blue part of the spectrum.">Fujifilm Velvia 100</option>
-                        <option value="Polaroid_Instant_Film" title="Known for its instant development and high contrast">Polaroid Instant Film</option>
-                        <option value="Agfa_APX" title="A classic black and white film, known for its high contrast and pronounced grain">Agfa APX</option>
-                        <option value="Agfa_CT_Precisa" title="A color slide film known for its sharpness and fine grain">Agfa CT Precisa</option>
-                        <option value="Fujifilm_Superia" title="A color film known for its fine grain and vivid color rendition">Fujifilm Superia</option>
-                        <option value="Kodak_Portra_400" title="A popular colour negative film stock. It’s excellent for daylight and indoor low light conditions">Kodak Portra 400</option>
-                        <option value="Fujifilm_Superia_X_Tra_400" title="A brilliant stock proven to be a popular choice for those looking for an everyday option">Fujifilm Superia X-Tra 400</option>
-                        <option value="Kodak_Tri_X_400" title="A film that’s ideal for indoor and outdoor shooting conditions and is incredibly flexible even in lower light">Kodak Tri-X 400</option>
-                        <option value="Ilford_HP5_Plus_400" title="A black and white film that delivers a medium level of contrast, nice tonal range with a gorgeous mid-level of grain">Ilford HP5 Plus 400</option>
-                        <option value="Kodak_Ektachromev100" title="Ideal for good lighting conditions, or the results will be muddy at best">Kodak Ektachrome 100</option>
-                        <option value="E_6_Colour_Reversal" title="It displays a positive image on the film rather than showing a negative">E-6 Colour Reversal</option>
-                        <option value="Fujifilm_FujiColour_200" title="Suit everyday happy snaps where people are not looking for superb image quality or colour reproduction">Fujifilm FujiColour 200 </option>
-                    </select>
-                    <span class="dot"></span>
-                    <sub>Use this to give a personal touch to the final render.</sub>
-                    <!-- <div class="menuButton">
-                            <label>Select the space to design</label>
-                            <ul id="space to be designed" class="menuDropdown">
-                            <li value=" " class="menuVoice">Select the space to design</li>
-                            <li value="interior design">Interior design</li>
-                            <li value="outdoor design">Outdoor design</li>
-                            <li value="facade design">Facade design</li>
-                            </ul>
-                            </div>
-                            -->
-                </div>
-                <!-- DESIGN TOKENS -->
-                <div class="group">
-                    <h1><img class="iconH1" src="/static/img/icon-design.svg" />Design tokens</h1>
-                    <h4>Design influence</h4>
-                    <select id="inspired_by_this_interior_design_magazine">
-                        <option value="">Interior design mag</option>
-                        <option value="AD_Espana" title="AD España is the Spanish edition of Architectural Digest. It features exceptional Spanish and international design projects, interviews with renowned designers, and trends in architecture and interior design.">AD España</option>
-                        <option value="Architectural_Digest" title="Architectural Digest is a prestigious international magazine that showcases luxurious homes, architectural marvels, and innovative interior design.">Architectural Digest</option>
-                        <option value="Beautiful_Kitchens_Baths" title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces.">Beautiful Kitchens & Baths</option>
-                        <option value="Belle" title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects.">Belle</option>
-                        <option value="Better_Homes_Gardens" title="Better Homes & Gardens is a popular magazine that offers practical advice, DIY projects, and affordable design solutions for creating beautiful and functional homes. It covers a wide range of topics, including home improvement, gardening, and entertaining.">Better Homes & Gardens</option>
-                        <option value="Dwell" title="Dwell is a magazine that celebrates modern architecture and design. It showcases innovative and sustainable homes, cutting-edge furniture, and contemporary interior design concepts.">Dwell</option>
-                        <option value="Elle_Decor" title="Elle Decor is a leading interior design magazine that offers inspiration and ideas for stylish living spaces. It covers a wide range of design styles, from modern to traditional, and provides tips on home decoration, furniture, color schemes, and more.">Elle Decor</option>
-                        <option value="Home_Design" title="Home & Design is a regional magazine that highlights exceptional homes and design projects in specific areas. It showcases local architecture, interior design, and landscape design, providing insights into regional design trends and talents.">Home & Design</option>
-                        <option value="House_Garden" title="House & Garden is a prestigious magazine that combines interior design, gardening, and lifestyle. It features elegant homes, beautiful gardens, and expert advice on interior decoration, landscaping, and entertaining.">House & Garden</option>
-                        <option value="House_Beautiful" title="House Beautiful is a classic interior design magazine that focuses on creating beautiful and functional living spaces. It features practical advice, design ideas, and expert tips on home decor, renovation, and DIY projects.">House Beautiful</option>
-                        <option value="Houzz" title="Houzz serves as a comprehensive online resource for home design and improvement, offering inspiration, information, and a platform for connecting with professionals and fellow enthusiasts.">Houzz</option>
-                        <option value="Interior_Design" title="Interior Design is a prominent industry magazine that showcases the latest trends, projects, and innovations in interior design. It features stunning visuals, profiles of renowned designers, and coverage of residential, commercial, and hospitality spaces.">Interior Design</option>
-                        <option value="Interior_Design_Today" title="Interior Design Today is a UK-based magazine that focuses on contemporary interior design trends, products, and projects. It provides industry insights, interviews with leading designers, and inspiration for modern living spaces.">Interior Design Today</option>
-                        <option value="Luxe_Interiors_Design" title="Luxe Interiors + Design is a high-end magazine that showcases luxurious interiors, high-quality craftsmanship, and sophisticated design. It covers residential and commercial projects, offering insights into the world of luxury design.">Luxe Interiors + Design</option>
-                        <option value="Period_Living" title="Period Living is a magazine dedicated to traditional homes and interiors. It features historic houses, restoration projects, and design ideas inspired by different architectural periods and styles.">Period Living</option>
-                        <option value="Real_Living" title="Real Living is an Australian magazine that focuses on contemporary and affordable interior design. It provides achievable design ideas, budget-friendly tips, and inspiring home tours for modern living.">Real Living</option>
-                        <option value="Traditional_Home" title="Traditional Home celebrates classic and timeless design. It showcases traditional and transitional interiors, highlighting refined furnishings, elegant architecture, and enduring design elements.">Traditional Home</option>
-                        <option value="Veranda" title="Veranda is a magazine that focuses on elegant and sophisticated interior design. It highlights luxurious homes, timeless aesthetics, and refined decorating ideas. Veranda also covers outdoor living spaces, travel, and entertaining.">Veranda</option>
-                        <option value="Veranda_Interiors" title="Veranda Interiors is a digital publication by Veranda magazine, dedicated to showcasing exceptional interior design projects. It offers exclusive access to designer portfolios, insider tips, and in-depth features on luxurious interiors.">Veranda Interiors</option>
-                        <option value="Wallpaper" title="Wallpaper* is a global design magazine that covers not only interior design but also architecture, fashion, art, and lifestyle. It showcases cutting-edge designs, exclusive interviews with designers, and unique perspectives on contemporary culture.">Wallpaper*</option>
-                        <option value="World_of_Interiors" title="World of Interiors is a prestigious British magazine that explores the world of interior design with an emphasis on creativity, craftsmanship, and unique design objects. It presents eclectic interiors, unusual homes, and rare decorative pieces.">World of Interiors</option>
-                    </select>
-
-                    <span class="dot"></span>
-                    <!-- ID STYLES-->
+                    <!-- design styles --> 
                     <select id="design_style">
                       <option value="">Design style</option>
                       <option value="African_Style_defined_by_rich_colors_tribal_patterns_natural_materials_cultural_motifs" title="African-inspired design, rich colors, tribal patterns, natural materials, cultural motifs.">African Style</option>
@@ -716,10 +591,8 @@
                       <option value="Zen_Style_defined_by_Japanese_inspired_serenity_minimalist_neutral_colors_tranquility" title="Japanese-inspired serenity, minimalist, neutral colors, tranquility.">Zen Style</option>
                     </select>
                     <span class="dot"></span>
-                    
-
-  <h4>Decorative Elements</h4>
-    <select id="decorative_elements">
+                     <!-- decoration -->                
+                    <select id="decorative_elements">
         <option value="">Choose decoration</option>
     
     <optgroup label="Contemporary Trends">
@@ -791,23 +664,238 @@
     
 
     </select>
+                    <span class="dot"></span>
+                    <!--color scheme-->
+                    <select id="color_scheme">
+                        <option value="">Color schemes</option>
+                        <option value="Analogous" title="Harmony of adjacent colors">Analogous</option>
+                        <option value="Art_Deco" title="Bold and luxurious tones">Art Deco</option>
+                        <option value="Beachy" title="Beach-inspired shades">Beachy</option>
+                        <option value="Black_and_White" title="Contrast of black and white">Black and White</option>
+                        <option value="Bohemian" title="Eclectic and vibrant">Bohemian</option>
+                        <option value="Bold_and_Vibrant" title="Bright and energetic">Bold and Vibrant</option>
+                        <option value="Cottagecore" title="Pastel colors with floral patterns">Cottagecore</option>
+                        <option value="Cool" title="Cool tones: blues, greens, purples">Cool</option>
+                        <option value="Coastal" title="Seaside-inspired colors">Coastal</option>
+                        <option value="Desert" title="Warm sandy tones, terracotta">Desert</option>
+                        <option value="Duotone" title="Duotone colors">Duotone</option>
+                        <option value="Earthy_and_Natural" title="Warm earth tones">Earthy and Natural</option>
+                        <option value="Electric" title="Electric colors">Electric</option>
+                        <option value="French_Country" title="Soft pastels with rustic elements">French Country</option>
+                        <option value="Gradient" title="Gradient colors">Gradient</option>
+                        <option value="High_Contrast" title="High contrast colors">High Contrast</option>
+                        <option value="Industrial" title="Urban and raw industrial tones">Industrial</option>
+                        <option value="Industrial_Chic" title="Urban and warm industrial tones">Industrial Chic</option>
+                        <option value="Jewel" title="Rich jewel tones">Jewel</option>
+                        <option value="Mediterranean" title="Warm earth tones inspired by the Mediterranean">Mediterranean</option>
+                        <option value="Metallic" title="Glamorous metallic hues">Metallic</option>
+                        <option value="Mid_Century_Modern" title="Colors inspired by retro aesthetics">Mid-Century Modern</option>
+                        <option value="Moody" title="Deep and rich hues">Moody</option>
+                        <option value="Muted" title="Soft and desaturated colors">Muted</option>
+                        <option value="Muted_and_Subtle" title="Soft and understated tones">Muted and Subtle</option>
+                        <option value="Nordic_White" title="Crisp and clean white palette">Nordic White</option>
+                        <option value="Pastel" title="Soft and light shades">Pastel</option>
+                        <option value="Pop_Art" title="Vibrant primary colors">Pop Art</option>
+                        <option value="Primary" title="Primary colors">Primary</option>
+                        <option value="Retro" title="Nostalgic retro colors">Retro</option>
+                        <option value="Retro_Pastels" title="Soft pastels from the 1950s and 1960s">Retro Pastels</option>
+                        <option value="Romantic" title="Soft and feminine tones">Romantic</option>
+                        <option value="Rustic_Farmhouse" title="Warm and earthy tones">Rustic Farmhouse</option>
+                        <option value="Saturated" title="Saturated colors">Saturated</option>
+                        <option value="Scandinavian" title="Minimalist and light palette">Scandinavian</option>
+                        <option value="Scandinavian_Minimalism" title="Clean and minimal color palette">Scandinavian Minimalism</option>
+                        <option value="Scandinavian_Pop" title="Bold and vibrant Scandinavian look">Scandinavian Pop</option>
+                        <option value="Tetradic" title="Four-color combination">Tetradic</option>
+                        <option value="Triadic" title="Three evenly spaced colors">Triadic</option>
+                        <option value="Tropical" title="Vibrant tropical colors">Tropical</option>
+                        <option value="Urban_Jungle" title="Green shades with natural wood tones">Urban Jungle</option>
+                        <option value="Vibrant" title="Vibrant colors">Vibrant</option>
+                        <option value="Warm" title="Warm tones: reds, oranges, yellows">Warm</option>
+                        <option value="off_white" title="With soft bone-white undertones">White: Off-White</option>
+                          <option value="silk_white" title="A white with subtle gray undertones">White: Silk-White</option>
+                          <option value="cream_white" title="Inspired by milk cream, with a hint of yellow">White: Cream-White </option>
+                          <option value="antique_white" title="It has a slight beige tone">White: Antique-White</option>
+                          <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
+                    </select>
+                    <span class="dot"></span>
+                    <!--indoor / outdoor -->
+                    <select id="space_to_be_designed">
+                        <option value="">Space to design</option>
+                        <option value="interior design">Interior design</option>
+                        <option value="outdoor design">Outdoor design</option>
+                        <option value="front of the house">Facade design</option>
+                    </select>
+                    <span class="dot"></span>
+                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
+                </div> 
                     
- 
-  <span class="dot"></span>
                     
-                    <!--
-                    <div class="switchContainer">
-                        <label class="switchLabel"> Impossible Architecture <label class="switch">
-                                <input type="checkbox" name="switchLabel" id="impossible_architecture" value="impossible architecture">
+                 <div class="buttonsCont">
+                <div class="buttonsL">
+                    <button id="clearAllButton">Clear All</button>
+                    <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
+                </div>
+                <div class="buttonsR">
+                    
+                    
+                    <button class="buttonExt gradient-animation" style="    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;justify-content: center;
+    width: 360px;" type="submit" id="magicButton"><script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
+
+    <dotlottie-player src="https://lottie.host/8aa5f792-60bc-4759-b4da-d4e739f53927/Sel78WMuhV.json" background="transparent" speed="1" style="display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 36px;
+    text-align: center;
+    justify-content: center;" loop autoplay></dotlottie-player>Make the magic!</button>
+                </div>
+            </div>
+            </div>
+            
+                <div class="secondaryContainer">
+<!-- COLLAPSE -->                    
+               
+
+            <!-- pro tokens -->
+            <section type="button" class="collapsible"><h1><i class="fa fa-cogs" aria-hidden="true"></i>
+Pro tokens</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
+
+</section>
+            <div class="content">     
+                    <!-- ratio -->
+                    <h4>Apect ratio</h4>
+                    <div class="aspectRatioShot">
+                        <label class="aspectRatio"> Landscape <label class="switch">
+                                <input type="radio" name="aspectRatio" value="landscape" checked>
                                 <span class="slider round"></span>
                             </label>
                         </label>
-                    </div>-->
+                        <label class="aspectRatio"> Portrait <label class="switch">
+                                <input type="radio" name="aspectRatio" value="portrait">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>
                     
+                    <!-- seed -->
+                    <h4>Seed</h4>
+                    <div class="switchContainer">
+                        <label class="switchLabel"> Seed <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>
+                    <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
                     
+                    <!-- render -->
+                    <h4>Render</h4>
+                    <select id="picture">
+                        <option value="">Choose render</option>
+                        <option value="editorial_photography">Photography</option>
+                        <option value="Hand_Drawn_Interior_Design_Sketches">Hand-Draw Sketch</option>
+                        <option value="sketch_in_watercolor">Watercolor</option>
+                        <option value="line_drawing">Line Drawing</option>
+                    </select>
+                    <span class="dot"></span>
                     
+                    <!-- level shot -->
+                    <h4>Point of view</h4>
+                    <select id="point_of_view">
+                        <option value="">Level shot</option>
+                        <option value="eye_level">Eye level shot</option>
+                        <option value="medium">Medium shot</option>
+                        <option value="close_up">Close-up shot</option>
+                        <option value="extreme_close_up">Extreme close-up shot</option>
+                        <option value="wide">Wide shot</option>
+                        <option value="extreme_wide">Extreme wide shot</option>
+                        <option value="low_angle">Low angle shot</option>
+                        <option value="high_angle">High angle shot</option>
+                        <option value="dutch_angle">Dutch angle shot</option>
+                        <option value="rule_of_hirds">Rule of Thirds shot</option>
+                        <option value="bird_eye_view">Bird's eye shot</option>
+                        <option value="drone_camera">Drone's camera shot</option>
+                        <option value="establishing">Establishing shot</option>
+                        <option value="point_of_view">Point of view shot</option>
+                    </select>
+                    <span class="dot"></span>
                     
-                    <!-- ID VENDORS -->
+                    <!-- film -->
+                    <h4>Film stock</h4>
+                    <select id="film_used_to_take_the_shot">
+                        <option value="">Film for your shot</option>
+                        <option value="AgfaColor_Neu" title="Known for soft color rendering and fine grain">AgfaColor Neu</option>
+                        <option value="Anscochrome" title="Early color slide film known for saturated colors, but requiring complex processing">Anscochrome</option>
+                        <option value="Fujifilm_Velvia_100" title="Known for extremely saturated colors, especially in the green-blue part of the spectrum.">Fujifilm Velvia 100</option>
+                        <option value="Polaroid_Instant_Film" title="Known for its instant development and high contrast">Polaroid Instant Film</option>
+                        <option value="Agfa_APX" title="A classic black and white film, known for its high contrast and pronounced grain">Agfa APX</option>
+                        <option value="Agfa_CT_Precisa" title="A color slide film known for its sharpness and fine grain">Agfa CT Precisa</option>
+                        <option value="Fujifilm_Superia" title="A color film known for its fine grain and vivid color rendition">Fujifilm Superia</option>
+                        <option value="Kodak_Portra_400" title="A popular colour negative film stock. It’s excellent for daylight and indoor low light conditions">Kodak Portra 400</option>
+                        <option value="Fujifilm_Superia_X_Tra_400" title="A brilliant stock proven to be a popular choice for those looking for an everyday option">Fujifilm Superia X-Tra 400</option>
+                        <option value="Kodak_Tri_X_400" title="A film that’s ideal for indoor and outdoor shooting conditions and is incredibly flexible even in lower light">Kodak Tri-X 400</option>
+                        <option value="Ilford_HP5_Plus_400" title="A black and white film that delivers a medium level of contrast, nice tonal range with a gorgeous mid-level of grain">Ilford HP5 Plus 400</option>
+                        <option value="Kodak_Ektachromev100" title="Ideal for good lighting conditions, or the results will be muddy at best">Kodak Ektachrome 100</option>
+                        <option value="E_6_Colour_Reversal" title="It displays a positive image on the film rather than showing a negative">E-6 Colour Reversal</option>
+                        <option value="Fujifilm_FujiColour_200" title="Suit everyday happy snaps where people are not looking for superb image quality or colour reproduction">Fujifilm FujiColour 200 </option>
+                    </select>
+                    <span class="dot"></span>
+                    <sub>Use this to give a personal touch to the final render.</sub>
+                 <!-- organic -->
+                <h4>Special organic style</h4>
+                
+                    <div class="switchContainer">
+                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>
+                    <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
+                
+                
+                </div>
+                <!-- end pro tokens -->
+<!-- //COLLAPSE --> 
+                    
+<!-- COLLAPSE -->                  
+              <section type="button" class="collapsible"><h1><i class="fa fa-paint-brush" aria-hidden="true"></i>
+Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>   
+                <!-- DESIGN TOKENS -->
+                 <div class="content">
+                
+                    <h4>Design magazine</h4>
+                     <!-- magazine -->
+                    <select id="inspired_by_this_interior_design_magazine">
+                        <option value="">Interior design mag</option>
+                        <option value="AD_Espana" title="AD España is the Spanish edition of Architectural Digest. It features exceptional Spanish and international design projects, interviews with renowned designers, and trends in architecture and interior design.">AD España</option>
+                        <option value="Architectural_Digest" title="Architectural Digest is a prestigious international magazine that showcases luxurious homes, architectural marvels, and innovative interior design.">Architectural Digest</option>
+                        <option value="Beautiful_Kitchens_Baths" title="Beautiful Kitchens & Baths is a magazine that specializes in kitchen and bathroom design. It features stunning kitchens, bathrooms, and remodeling projects, providing inspiration for creating functional and stylish spaces.">Beautiful Kitchens & Baths</option>
+                        <option value="Belle" title="Belle is an Australian design magazine that covers interior design, architecture, and luxury lifestyle. It showcases sophisticated homes, contemporary design trends, and profiles of renowned designers and architects.">Belle</option>
+                        <option value="Better_Homes_Gardens" title="Better Homes & Gardens is a popular magazine that offers practical advice, DIY projects, and affordable design solutions for creating beautiful and functional homes. It covers a wide range of topics, including home improvement, gardening, and entertaining.">Better Homes & Gardens</option>
+                        <option value="Dwell" title="Dwell is a magazine that celebrates modern architecture and design. It showcases innovative and sustainable homes, cutting-edge furniture, and contemporary interior design concepts.">Dwell</option>
+                        <option value="Elle_Decor" title="Elle Decor is a leading interior design magazine that offers inspiration and ideas for stylish living spaces. It covers a wide range of design styles, from modern to traditional, and provides tips on home decoration, furniture, color schemes, and more.">Elle Decor</option>
+                        <option value="Home_Design" title="Home & Design is a regional magazine that highlights exceptional homes and design projects in specific areas. It showcases local architecture, interior design, and landscape design, providing insights into regional design trends and talents.">Home & Design</option>
+                        <option value="House_Garden" title="House & Garden is a prestigious magazine that combines interior design, gardening, and lifestyle. It features elegant homes, beautiful gardens, and expert advice on interior decoration, landscaping, and entertaining.">House & Garden</option>
+                        <option value="House_Beautiful" title="House Beautiful is a classic interior design magazine that focuses on creating beautiful and functional living spaces. It features practical advice, design ideas, and expert tips on home decor, renovation, and DIY projects.">House Beautiful</option>
+                        <option value="Houzz" title="Houzz serves as a comprehensive online resource for home design and improvement, offering inspiration, information, and a platform for connecting with professionals and fellow enthusiasts.">Houzz</option>
+                        <option value="Interior_Design" title="Interior Design is a prominent industry magazine that showcases the latest trends, projects, and innovations in interior design. It features stunning visuals, profiles of renowned designers, and coverage of residential, commercial, and hospitality spaces.">Interior Design</option>
+                        <option value="Interior_Design_Today" title="Interior Design Today is a UK-based magazine that focuses on contemporary interior design trends, products, and projects. It provides industry insights, interviews with leading designers, and inspiration for modern living spaces.">Interior Design Today</option>
+                        <option value="Luxe_Interiors_Design" title="Luxe Interiors + Design is a high-end magazine that showcases luxurious interiors, high-quality craftsmanship, and sophisticated design. It covers residential and commercial projects, offering insights into the world of luxury design.">Luxe Interiors + Design</option>
+                        <option value="Period_Living" title="Period Living is a magazine dedicated to traditional homes and interiors. It features historic houses, restoration projects, and design ideas inspired by different architectural periods and styles.">Period Living</option>
+                        <option value="Real_Living" title="Real Living is an Australian magazine that focuses on contemporary and affordable interior design. It provides achievable design ideas, budget-friendly tips, and inspiring home tours for modern living.">Real Living</option>
+                        <option value="Traditional_Home" title="Traditional Home celebrates classic and timeless design. It showcases traditional and transitional interiors, highlighting refined furnishings, elegant architecture, and enduring design elements.">Traditional Home</option>
+                        <option value="Veranda" title="Veranda is a magazine that focuses on elegant and sophisticated interior design. It highlights luxurious homes, timeless aesthetics, and refined decorating ideas. Veranda also covers outdoor living spaces, travel, and entertaining.">Veranda</option>
+                        <option value="Veranda_Interiors" title="Veranda Interiors is a digital publication by Veranda magazine, dedicated to showcasing exceptional interior design projects. It offers exclusive access to designer portfolios, insider tips, and in-depth features on luxurious interiors.">Veranda Interiors</option>
+                        <option value="Wallpaper" title="Wallpaper* is a global design magazine that covers not only interior design but also architecture, fashion, art, and lifestyle. It showcases cutting-edge designs, exclusive interviews with designers, and unique perspectives on contemporary culture.">Wallpaper*</option>
+                        <option value="World_of_Interiors" title="World of Interiors is a prestigious British magazine that explores the world of interior design with an emphasis on creativity, craftsmanship, and unique design objects. It presents eclectic interiors, unusual homes, and rare decorative pieces.">World of Interiors</option>
+                    </select>
+                    <span class="dot"></span>
+                     <h4>Deco vendors</h4>
+                    <!-- vendors -->
                     <select id="furniture_provided_by_this_vendor">
                         <option value="">Furniture and decor vendor</option>
                         <option value="AllModern" title="Modern furniture and decor">AllModern - Modern furniture and decor</option>
@@ -849,7 +937,8 @@
 
                     </select>
                     <span class="dot"></span>
-                    
+                     <h4>Furniture color</h4>
+                    <!-- furniture color -->
                     <select id="furniture_color">
                         <option value="">Furniture color</option>
                         <option value="Antique_White_Furniture">Antique White Furniture</option>
@@ -892,9 +981,9 @@
                         <option value="Weathered_Wood_Furniture">Weathered Wood Furniture</option>
                         <option value="White_Furniture">White Furniture</option>
                     </select>
-
                     <span class="dot"></span>
-
+                     <h4>Interior esigners</h4>
+                    <!-- professionals -->
                     <select id="designed_by_this_interior_designer">
                         <option value="">Interior designer</option>
                         <optgroup label="European Interior Designers">
@@ -950,6 +1039,7 @@
                         </optgroup>
                     </select>
                     <span class="dot"></span>
+                     <h4>Architects</h4>
                     <select id="designed_by_this_architect">
                         <option value="">Architect</option>
                         <optgroup label="European Home Architects">
@@ -1009,10 +1099,25 @@
                         </optgroup>
                     </select>
                     <span class="dot"></span>
-                    <!-- ID COLOR PALETTES -->
-                    <h4>Color palette</h4>
-                    <div class="colorPalette">
-                 <!--       <div class="colorPickers">
+                </div>    
+  <!-- //COLLAPSE --> 
+                                      
+                    <!--
+                    <div class="switchContainer">
+                        <label class="switchLabel"> Impossible Architecture <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="impossible_architecture" value="impossible architecture">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                    </div>-->
+  <!-- COLLAPSE -->                    
+                 <section type="button" class="collapsible"><h1><i class="fa fa-tint" aria-hidden="true"></i>
+
+Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>     
+                   <div class="content">
+                       <h4>Color manual selector</h4>
+                        <div class="colorPalette">
+                         <!--<div class="colorPickers">
                         <div class="colorPaletteA">
                             <input type="color" id="primary_color" value="#ffffff" class="colorPicker">
                         </div>
@@ -1023,100 +1128,33 @@
                             <input type="color" id="tertiary_color" value="#1f1f1f" class="colorPicker">
                         </div>
                             </div> -->
-                        <div class="coloresWheel">
-   <select id="harmonyType">
-                             <option value="">Color Harmony</option>
-
-        <option value="complementary">Complementary</option>
-        <option value="analogous">Analogous</option>
-        <option value="triadic">Triadic</option>
-        <option value="square">Square</option>
-    </select>
-                    <span class="dot"></span>
                             
-<div id="colorWheelContainer"></div>
-<div class="selectColores">
-   
-    <div id="harmonyColors"></div>
-    
-    
-   <!-- <label class="custom-checkbox">
-  <input type="checkbox" id="myCheckbox">
-  <span class="checkmark"></span>
-  Use color selection
-</label>-->
-   
-</div>
-</div>
+                         <h4>Color harmony selector</h4>    
+                        <div class="coloresWheel">
+                            <select id="harmonyType">
+                                <option value="">Color Harmony</option>
+                                <option value="complementary">Complementary</option>
+                                <option value="analogous">Analogous</option>
+                                <option value="triadic">Triadic</option>
+                                <option value="square">Square</option>
+                            </select>
+                            <span class="dot"></span>
+                            <div id="colorWheelContainer"></div>
+                                <div class="selectColores">
+                                    <div id="harmonyColors"></div>
+                                </div>
+                        </div>
                          <small>Colors are for reference, RoomDesAigner will try to use them. </small>
                     </div>
                        
-                 
-                    
-                    <h4>Or use pre-made color schemes</h4>
-                    <select id="color_scheme">
-                        <option value="">Color schemes</option>
-                        <option value="Analogous" title="Harmony of adjacent colors">Analogous</option>
-                        <option value="Art_Deco" title="Bold and luxurious tones">Art Deco</option>
-                        <option value="Beachy" title="Beach-inspired shades">Beachy</option>
-                        <option value="Black_and_White" title="Contrast of black and white">Black and White</option>
-                        <option value="Bohemian" title="Eclectic and vibrant">Bohemian</option>
-                        <option value="Bold_and_Vibrant" title="Bright and energetic">Bold and Vibrant</option>
-                        <option value="Cottagecore" title="Pastel colors with floral patterns">Cottagecore</option>
-                        <option value="Cool" title="Cool tones: blues, greens, purples">Cool</option>
-                        <option value="Coastal" title="Seaside-inspired colors">Coastal</option>
-                        <option value="Desert" title="Warm sandy tones, terracotta">Desert</option>
-                        <option value="Duotone" title="Duotone colors">Duotone</option>
-                        <option value="Earthy_and_Natural" title="Warm earth tones">Earthy and Natural</option>
-                        <option value="Electric" title="Electric colors">Electric</option>
-                        <option value="French_Country" title="Soft pastels with rustic elements">French Country</option>
-                        <option value="Gradient" title="Gradient colors">Gradient</option>
-                        <option value="High_Contrast" title="High contrast colors">High Contrast</option>
-                        <option value="Industrial" title="Urban and raw industrial tones">Industrial</option>
-                        <option value="Industrial_Chic" title="Urban and warm industrial tones">Industrial Chic</option>
-                        <option value="Jewel" title="Rich jewel tones">Jewel</option>
-                        <option value="Mediterranean" title="Warm earth tones inspired by the Mediterranean">Mediterranean</option>
-                        <option value="Metallic" title="Glamorous metallic hues">Metallic</option>
-                        <option value="Mid_Century_Modern" title="Colors inspired by retro aesthetics">Mid-Century Modern</option>
-                        <option value="Moody" title="Deep and rich hues">Moody</option>
-                        <option value="Muted" title="Soft and desaturated colors">Muted</option>
-                        <option value="Muted_and_Subtle" title="Soft and understated tones">Muted and Subtle</option>
-                        <option value="Nordic_White" title="Crisp and clean white palette">Nordic White</option>
-                        <option value="Pastel" title="Soft and light shades">Pastel</option>
-                        <option value="Pop_Art" title="Vibrant primary colors">Pop Art</option>
-                        <option value="Primary" title="Primary colors">Primary</option>
-                        <option value="Retro" title="Nostalgic retro colors">Retro</option>
-                        <option value="Retro_Pastels" title="Soft pastels from the 1950s and 1960s">Retro Pastels</option>
-                        <option value="Romantic" title="Soft and feminine tones">Romantic</option>
-                        <option value="Rustic_Farmhouse" title="Warm and earthy tones">Rustic Farmhouse</option>
-                        <option value="Saturated" title="Saturated colors">Saturated</option>
-                        <option value="Scandinavian" title="Minimalist and light palette">Scandinavian</option>
-                        <option value="Scandinavian_Minimalism" title="Clean and minimal color palette">Scandinavian Minimalism</option>
-                        <option value="Scandinavian_Pop" title="Bold and vibrant Scandinavian look">Scandinavian Pop</option>
-                        <option value="Tetradic" title="Four-color combination">Tetradic</option>
-                        <option value="Triadic" title="Three evenly spaced colors">Triadic</option>
-                        <option value="Tropical" title="Vibrant tropical colors">Tropical</option>
-                        <option value="Urban_Jungle" title="Green shades with natural wood tones">Urban Jungle</option>
-                        <option value="Vibrant" title="Vibrant colors">Vibrant</option>
-                        <option value="Warm" title="Warm tones: reds, oranges, yellows">Warm</option>
-                        <option value="off_white" title="With soft bone-white undertones">White: Off-White</option>
-                          <option value="silk_white" title="A white with subtle gray undertones">White: Silk-White</option>
-                          <option value="cream_white" title="Inspired by milk cream, with a hint of yellow">White: Cream-White </option>
-                          <option value="antique_white" title="It has a slight beige tone">White: Antique-White</option>
-                          <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
-                    </select>
-                    <span class="dot"></span>
-                    
-                    
-                   
-                
-                  
-                </div>
-                <!-- AREA AND SPACE -->
-                <div class="group">
-                    <h1><img class="iconH1" src="/static/img/icon-area.svg" />Area & Space</h1>
-                    <h4>Room shape and size</h4>
-                    <!-- ID ROOM SHAPE -->
+                   </div>
+  <!-- //COLLAPSE -->                   
+<!-- COLLAPSE -->                    
+                 <section type="button" class="collapsible"> <h1><i class="fa fa-home" aria-hidden="true"></i>
+Indoor</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>                    
+                     <div class="content">
+                         <!-- shape -->
+                    <h4>Room shape</h4>
                     <select id="room_shape">
                         <option value="">Room shape</option>
                         <!-- Room Shapes -->
@@ -1143,9 +1181,9 @@
                         <option value="U_Shaped" title="U-shaped layout, ample space for functions or activities.">U-Shaped</option>
                                 
                     </select>
-
                     <span class="dot"></span>
-                    <!--ID ROOM SIZE-->
+                    <!--size-->
+                    <h4>Room size</h4>
                     <select id="room_size">
                         <option value="">Room size</option>
                         <option value="tiny">Tiny</option>
@@ -1153,10 +1191,9 @@
                         <option value="medium">Medium</option>
                         <option value="large">Large</option>
                     </select>
-
                     <span class="dot"></span>
-                    <h4>Indoor spaces</h4>
-                    <h5>Illumination</h5>
+                    <!--illumination-->
+                    <h4>Illumination</h4>
                     <select id="illumination">
                         <option value="">Illumination</option>
                         <option value="Accent_Illumination" title="Highlighting objects or features.">Accent Lighting</option>
@@ -1179,8 +1216,8 @@
 
                     </select>
                     <span class="dot"></span>
-                  
-                    <!--ID child room -->
+                  <h4>Children room</h4>
+                    <!-- child room -->
                     <select id="children_room">
                       <option value="">Children room type</option>
                       <option value="Nursery_Nurturing_space_for_infants">Nursery - A nurturing space designed for infants.</option>
@@ -1205,6 +1242,17 @@
                       <option value="Shared_Room_Room_shared_by_multiple_children">Shared Room - A room shared by multiple children, encouraging cooperation and sharing.</option>
                     </select>
                     <span class="dot"></span>
+                </div>
+                
+                
+ <!-- //COLLAPSE -->                       
+ <!-- COLLAPSE -->                 
+                    <section type="button" class="collapsible"> <h1><i class="fa fa-tree" aria-hidden="true"></i>
+Outdoor </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>             
+               
+                <div class="content">
+                   
+                <!-- outdoor room -->
                     <h4>Outdoor spaces</h4>
                     <select id="pool">
                         <option value="">Pool style</option>
@@ -1224,6 +1272,7 @@
                         <option value="zen_pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
                     </select>
                     <span class="dot"></span>
+                <!-- landscape -->
                     <select id="landscaping_options" name="landscaping_options">
                         <option value="">Landscape options</option>
                         <option value="fire_pit_design">Fire Pit Design</option>
@@ -1238,7 +1287,7 @@
                         <option value="water_feature_design">Water Feature Design</option>
                     </select>
                     <span class="dot"></span>
-
+                <!-- garden -->
                     <select id="garden">
                         <option value="">Garden style</option>
                         <option value="cottage_garden" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
@@ -1268,38 +1317,22 @@
                         <option value="wall_lights">Wall Lights</option>
                     </select>
                     <span class="dot"></span>
-                    
- <h4>Interior / Outdoor design</h4>
-                    <select id="space_to_be_designed">
-                        <option value="">Space to design</option>
-                        <option value="interior design">Interior design</option>
-                        <option value="outdoor design">Outdoor design</option>
-                        <option value="front of the house">Facade design</option>
-                    </select>
-                    <span class="dot"></span>
-                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
-                    
-                    <h4>Special organic style</h4>
-                
-                    <div class="switchContainer">
-                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
-                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                    </div>
-                    <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub>
+                  </div>  
+                   
                     
                     
+       
+ <!-- //COLLAPSE -->                    
+<!-- COLLAPSE -->                     
+                 <section type="button" class="collapsible">  <h1><i class="fa fa-wrench" aria-hidden="true"></i>
 
-                </div>
-                <!-- BUILDING TOKENS -->
-                <div class="group">
-                    <h1><img class="iconH1" src="/static/img/icon-architecture.svg" />Building tokens</h1>
-                    <h4>Architectural tokens</h4>
+Building </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>         <div class="content">    
+                <h1 >Interior</h1>
+                  
+                    <h4>Architectural </h4>
                     <!-- Building envelope -->
-                    <h5>Doors</h5>
                     
+                    <!-- door -->
                     <select id="door">
                         <option value="">Doors</option>
                         <option value="barn_door">Barn Doors</option>
@@ -1316,8 +1349,8 @@
                     </select>
                     <span class="dot"></span>
 
+                    <!-- windows -->
                     
-                    <h5>Windows</h5>
                     <select id="windows">
                         <option value="">Windows</option>
                             <option value="arched_windows">Arched Windows</option>
@@ -1340,9 +1373,9 @@
                     </select>
                     <span class="dot"></span>
 
-                
+                <!--ceiling-->
                     
-                    <h5>Ceiling</h5>
+                   
                     <select id="ceiling_design" name="ceiling_design">
                         <option value="">Ceiling</option>
                         <option value="Catalan_Vault">Catalan Vault</option>
@@ -1366,7 +1399,7 @@
                     </select>
                     <span class="dot"></span>
 
-                    
+                    <!-- roof material -->
                     <select id="roof_material" name="roof_material">
                         <option value="">Roof material</option>
                         <option value="asphalt_shingles">Asphalt Shingles</option>
@@ -1382,7 +1415,7 @@
                     </select>
                     <span class="dot"></span>
 
-                    
+                   <!-- roof height --> 
                     <select id="roof_height">
                         <option value="">Roof height</option>
                         <option value="atrium_roof">Atrium Roof</option>
@@ -1395,9 +1428,9 @@
                     </select>
                     <span class="dot"></span>
 
+                    <!-- walls -->
                     
-                    
-                    <h5>Walls</h5>
+                   
                     <select id="wall_type">
                         <option value="">Walls style</option>
                         <option value="adobe_wall">Adobe Wall</option>
@@ -1412,7 +1445,7 @@
                         <option value="timber_wall">Timber Wall</option>
                     </select>
                     <span class="dot"></span>
-                    
+                    <!-- walls color -->
                     <select id="walls_paint_color">
                         <option value="">Walls color</option>
                         <option value="bold_accent_colors">Bold Accent Colors</option>
@@ -1432,7 +1465,7 @@
                           <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
                     </select>
                     <span class="dot"></span>
-
+                    <!-- cladding-->
                     <select id="wall_cladding" >
                         <option value="">Cladding</option>
                         <option value="brick_cladding">Brick Cladding</option>
@@ -1447,56 +1480,10 @@
                         <option value="wooden_cladding">Wooden Cladding</option>
                     </select>
                     <span class="dot"></span>
-
-                    <select id="exterior_finish"  >
-                        <option value="">Exterior finish</option>
-                        <option value="brick_finish">Brick Finish</option>
-                        <option value="concrete_finish">Concrete Finish</option>
-                        <option value="fiber_cement_siding_finish">Fiber Cement Siding Finish</option>
-                        <option value="glass_finish">Glass Finish</option>
-                        <option value="metal_siding_finish">Metal Siding Finish</option>
-                        <option value="stucco_finish">Stucco Finish</option>
-                        <option value="stone_finish">Stone Finish</option>
-                        <option value="synthetic_finish">Synthetic Finish</option>
-                        <option value="vinyl_siding_finish">Vinyl Siding Finish</option>
-                        <option value="wood_siding_finish">Wood Siding Finish</option>
-                    </select>
-                    <span class="dot"></span>
-
-                    <select id="exterior_trim_molding" >
-                        <option value="">Exterior trim</option>
-                        <option value="crown_molding">Crown Molding</option>
-                        <option value="column_capitals">Column Capitals</option>
-                        <option value="corner_moldings">Corner Moldings</option>
-                        <option value="door_trim">Door Trim</option>
-                        <option value="eave_trim">Eave Trim</option>
-                        <option value="fascia_trim">Fascia Trim</option>
-                        <option value="gable_trim">Gable Trim</option>
-                        <option value="rake_trim">Rake Trim</option>
-                        <option value="soffit_trim">Soffit Trim</option>
-                        <option value="window_trim">Window Trim</option>
-                    </select>
-                    <span class="dot"></span>
-
                     
 
-                    <select id="facade_pattern" >
-                        <option value="">Facade pattern</option>
-                        <option value="basketweave_pattern">Basketweave Pattern</option>
-                        <option value="checkerboard_pattern">Checkerboard Pattern</option>
-                        <option value="chevron_pattern">Chevron Pattern</option>
-                        <option value="diamond_pattern">Diamond Pattern</option>
-                        <option value="geometric_pattern">Geometric Pattern</option>
-                        <option value="herringbone_pattern">Herringbone Pattern</option>
-                        <option value="interlocking_pattern">Interlocking Pattern</option>
-                        <option value="lattice_pattern">Lattice Pattern</option>
-                        <option value="parquet_pattern">Parquet Pattern</option>
-                        <option value="zigzag_pattern">Zigzag Pattern</option>
-                    </select>
-                    <span class="dot"></span>
-
-                    
-                    <h5>Floors</h5>
+                    <!--floors-->
+                  
                     <select id="floors">
                         <option value="">Floor style</option>
                         <option value="bamboo_flooring">Bamboo Flooring</option>
@@ -1523,21 +1510,66 @@
                         <option value="vinyl_flooring">Vinyl Flooring</option>
                     </select>
                     <span class="dot"></span>
+<h1>Exterior</h1>
+                <!-- exterior finish-->
+                    <select id="exterior_finish"  >
+                        <option value="">Exterior finish</option>
+                        <option value="brick_finish">Brick Finish</option>
+                        <option value="concrete_finish">Concrete Finish</option>
+                        <option value="fiber_cement_siding_finish">Fiber Cement Siding Finish</option>
+                        <option value="glass_finish">Glass Finish</option>
+                        <option value="metal_siding_finish">Metal Siding Finish</option>
+                        <option value="stucco_finish">Stucco Finish</option>
+                        <option value="stone_finish">Stone Finish</option>
+                        <option value="synthetic_finish">Synthetic Finish</option>
+                        <option value="vinyl_siding_finish">Vinyl Siding Finish</option>
+                        <option value="wood_siding_finish">Wood Siding Finish</option>
+                    </select>
+                    <span class="dot"></span>
+                    <!-- exterior trim molding-->
+                    <select id="exterior_trim_molding" >
+                        <option value="">Exterior trim</option>
+                        <option value="crown_molding">Crown Molding</option>
+                        <option value="column_capitals">Column Capitals</option>
+                        <option value="corner_moldings">Corner Moldings</option>
+                        <option value="door_trim">Door Trim</option>
+                        <option value="eave_trim">Eave Trim</option>
+                        <option value="fascia_trim">Fascia Trim</option>
+                        <option value="gable_trim">Gable Trim</option>
+                        <option value="rake_trim">Rake Trim</option>
+                        <option value="soffit_trim">Soffit Trim</option>
+                        <option value="window_trim">Window Trim</option>
+                    </select>
+                    <span class="dot"></span>
 
+                    <!-- facade pattern -->
+
+                    <select id="facade_pattern" >
+                        <option value="">Facade pattern</option>
+                        <option value="basketweave_pattern">Basketweave Pattern</option>
+                        <option value="checkerboard_pattern">Checkerboard Pattern</option>
+                        <option value="chevron_pattern">Chevron Pattern</option>
+                        <option value="diamond_pattern">Diamond Pattern</option>
+                        <option value="geometric_pattern">Geometric Pattern</option>
+                        <option value="herringbone_pattern">Herringbone Pattern</option>
+                        <option value="interlocking_pattern">Interlocking Pattern</option>
+                        <option value="lattice_pattern">Lattice Pattern</option>
+                        <option value="parquet_pattern">Parquet Pattern</option>
+                        <option value="zigzag_pattern">Zigzag Pattern</option>
+                    </select>
+                    <span class="dot"></span>
                  
-                    </div>
-                    <!-- ID IMAGE
-                            <h4>Upload your sketch, picture, ...</h4>
-                            <input type="file" id="imageDisplayUrl" accept="image/*" />
-                            <br>
-                            <sub>JPG, PNG, GIF formats allowed.</sub><br>
-                            <sub>Upload and image is not mandatory</sub><br>
-                            <sub>File name must be simple and short</sub>-->
-                <!-- INTERIOR DESIGN TOKENS -->
-                <div class="group groupSpacer">
+                </div>           
+<!-- //COLLAPSE -->                    
+<!-- COLLAPSE -->                     
+                 <section type="button" class="collapsible"><h1><i class="fa fa-bath" aria-hidden="true"></i>
+Kitchen &amp; Bathroom</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>         <div class="content">    
+                   
+        
+                
                 
                     
-                    <h5>Kitchen</h5>
+                    <h1>Kitchen</h1>
                         <select id="kitchen_layout" name="kitchen_layout">
                             <option value="">Kitchen layout</option>
 
@@ -1620,7 +1652,7 @@
                         </select>
                         <span class="dot"></span>
                         
-                        <h5>Bathroom</h5>
+                        <h1>Bathroom</h1>
                         <select id="bathroom_fixture_style" name="bathroom_fixture_style">
                             <option value="">Fixture</option>
 
@@ -1698,7 +1730,7 @@
                             <option value="Night">Night Lights</option>
                         </select>
                         <span class="dot"></span>
-                        <h5>Special Features</h5>
+                        <h1>Special Features</h1>
                         <select id="fireplace_design" name="fireplace_design">
                             <option value="">Fireplace</option>
 
@@ -1729,11 +1761,14 @@
                             <option value="Rooftop">Rooftop Balcony</option>
                         </select>
                         <span class="dot"></span>
-                </div>
-                 
-                <!-- ARCHITECTURAL TOKENS -->
-                <div class="group">
-                    <h1><i class="fa-regular fa-eye"></i>&nbsp;</h1>
+              
+                  </div>           
+<!-- //COLLAPSE -->                    
+<!-- COLLAPSE -->                     
+                 <section type="button" class="collapsible">  <h1><i class="fa fa-building-o" aria-hidden="true"></i>
+Building Materials</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>         <div class="content">                 
+              
+            
                     <h4>Architectural materials</h4>
                     <select id="wood_material">
                         <option value="">Wood</option>
@@ -1820,31 +1855,27 @@
                     </select>
                     <span class="dot"></span>
                     <sub>These values will have strong influence in the final render</sub>
-                    <br>
-                    <h1><img class="iconH1" src="/static/img/icon-prompt.svg" />Be a poet</h1>
+                   
+                  
+               
+            </div>
+<!-- COLLAPSE -->                     
+                 <section type="button" class="collapsible"> <h1><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+Manual prompting</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>         <div class="content">  
+                 
                     <h4>Write with your own touch</h4>
                     <textarea id="customText" rows="8s" cols="50"></textarea>
                     <span class="dot"></span>
                 </div>
-            </div>
-            <!-- end group container -->
-            <div class="buttonsCont">
-                <div class="buttonsL">
-                    <button id="clearAllButton">Clear All</button>
-                    <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
+                
+ <!-- //COLLAPSE -->
                 </div>
-                <div class="buttonsR">
-                    
-                    
-                    <button class="buttonExt gradient-animation" style="    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    width: max-content;" type="submit" id="magicButton"><script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script> 
-
-    <dotlottie-player src="https://lottie.host/8aa5f792-60bc-4759-b4da-d4e739f53927/Sel78WMuhV.json" background="transparent" speed="1" style="width: 40px; height: 40px;" loop autoplay></dotlottie-player>Make the magic!</button>
-                </div>
-            </div>
+                
+            
+        </div>
+        
+       
+        
         </form>
     </fieldset>
     
@@ -1929,6 +1960,24 @@ function changeUserAvatar(newAvatar) {
     .catch(error => console.error('Error:', error));
 }
 </script>
+    
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
 
 
 </body>
