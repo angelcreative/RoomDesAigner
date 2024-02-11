@@ -452,7 +452,7 @@ function checkImageStatus(fetchResultUrl) {
 function showError(error) {
     console.error("Error generating images:", error);
     const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><button id="dismissErrorButton" style="cursor:pointer;">X</button>';
+    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
     processingMessageContainer.style.display = 'block';
     hideOverlay(); // Hide the overlay and loading message
 
