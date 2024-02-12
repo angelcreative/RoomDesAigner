@@ -290,10 +290,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
 
   const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-    const customText = document.getElementById("customText").value;
+  const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-  const promptInit = `${selectedPicture},    It is crucial to strictly maintain the original perspective, vanishing points, and structural integrity of the  room photo in the transformation. Arrange the furniture and decor to complement the existing architecture and lighting of the room. `;
+    const promptInit = `${selectedPicture},    It is crucial to strictly maintain the original perspective, vanishing points, and structural integrity of the  room photo in the transformation. Arrange the furniture and decor to complement the existing architecture and lighting of the room. `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
