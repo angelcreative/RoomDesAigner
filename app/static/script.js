@@ -293,14 +293,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `${selectedPicture},  Transform the provided empty room image by adding furniture and decor, ensuring utmost adherence to the room's original perspective, structural integrity, and alignment with existing architectural features like windows, doors, and light sources. The goal is to create a harmonious and fully furnished living space that seamlessly blends new additions with the room's inherent structure. Each piece introduced must complement the architecture and natural lighting, filling the space without leaving empty areas, and maintaining a realistic appearance as if these elements were always part of the original setup. Achieve a cohesive design that respects the room's layout and angles, enhancing its functionality and aesthetic appeal, making the space inviting and visually compelling. `;
+    const promptInit = `${selectedPicture},  `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `.  ${selectedPicture}, `;
+  const promptEndy = `.  ${selectedPicture},  Transform the provided empty room image by adding furniture and decor, ensuring utmost adherence to the room's original perspective, structural integrity, and alignment with existing architectural features like windows, doors, and light sources. The goal is to create a harmonious and fully furnished living space that seamlessly blends new additions with the room's inherent structure. Each piece introduced must complement the architecture and natural lighting, filling the space without leaving empty areas, and maintaining a realistic appearance as if these elements were always part of the original setup. Achieve a cohesive design that respects the room's layout and angles, enhancing its functionality and aesthetic appeal, making the space inviting and visually compelling. `;
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
