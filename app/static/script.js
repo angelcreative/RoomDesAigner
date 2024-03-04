@@ -293,14 +293,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `${selectedPicture},    It is crucial to strictly maintain the original perspective, vanishing points, and structural integrity of the  room photo in the transformation. Arrange the furniture and decor to complement the existing architecture and lighting of the room. `;
+    const promptInit = `${selectedPicture},  Transform the provided empty room image by adding furniture and decor, ensuring utmost adherence to the room's original perspective, structural integrity, and alignment with existing architectural features like windows, doors, and light sources. The goal is to create a harmonious and fully furnished living space that seamlessly blends new additions with the room's inherent structure. Each piece introduced must complement the architecture and natural lighting, filling the space without leaving empty areas, and maintaining a realistic appearance as if these elements were always part of the original setup. Achieve a cohesive design that respects the room's layout and angles, enhancing its functionality and aesthetic appeal, making the space inviting and visually compelling. `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `. Please pay special attention to the room's existing vanishing points and structural lines when adding furniture and decor. Align all new elements with the room's perspective, ensuring that they follow the natural lines and angles of the space. This will help to create a realistic and cohesive design that feels like a natural part of the original photo. If the room is empty ADD FURNITURE. ${selectedPicture}, `;
+  const promptEndy = `.  ${selectedPicture}, `;
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
