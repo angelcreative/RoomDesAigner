@@ -319,7 +319,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: width,
     height: height,
     samples: "4",
-    num_inference_steps: "25",
+    num_inference_steps: "50",
     seed: seedValue,
     guidance_scale: 10,
     webhook: null,
