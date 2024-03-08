@@ -35,7 +35,7 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        url = 'https://stablediffusionapi.com/api/v5/pix2pix' if 'init_image' in data else 'https://stablediffusionapi.com/api/v3/text2img'
+        url = 'https://stablediffusionapi.com/api/v3/img2img' if 'init_image' in data else 'https://stablediffusionapi.com/api/v3/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
             deduct_credits(username, 2)
