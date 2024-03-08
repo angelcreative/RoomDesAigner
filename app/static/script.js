@@ -402,7 +402,7 @@ if (isImg2Img && imageUrl) {
  .then(data => {
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com/api/v5/interior")
         );
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
