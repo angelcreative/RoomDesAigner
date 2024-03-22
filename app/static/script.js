@@ -573,23 +573,29 @@ const upscaleImage = async (imageUrl) => {
         'X-RapidAPI-Host': 'ai-picture-upscaler.p.rapidapi.com'
       },
       body: new URLSearchParams({
-        image_url: imageUrl, // Pass the image URL directly
-        scale: '2' // Set the desired scale, adjust this value as needed
+        image_url: imageUrl, // Directly pass the image URL
+        scale: '2' // The desired scale
       })
     };
 
+    // Send the request to the upscaling API
     const response = await fetch(url, options);
-    const result = await response.text(); // Assuming the API response is text
-    const data = JSON.parse(result); // Parse the response if it's in JSON format
+    const result = await response.text(); // Assuming the response is text
+    const data = JSON.parse(result); // Parse the response to JSON
+
+    // Check the console to see the full API response
     console.log(data);
 
-    // Assuming `data.output_url` contains the URL to the upscaled image
+    // Use the correct property from the API response to get the upscaled image URL
+    const upscaledImageUrl = data.result_url;
+
+    // Open a new window or tab and display the upscaled image
     const newWindow = window.open('', '_blank');
     newWindow.document.write(`
       <html>
         <head>
           <title>Upscaled Image</title>
-          <style>body {
+           <style>body {
     text-align: center;
     color: #a9fff5;
     font-family: arial, sans-serif;
@@ -618,8 +624,8 @@ html {
         </head>
         <body>
           <h1>Upscaled Image</h1>
-          <p>Use KreaAi or Clarity to enhance details</p>
-          <img src="${data.output_url}" alt="Upscaled Image"/>
+          <p>Use KreaAi or Magnific to enhance details</p>
+          <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
         </body>
       </html>
     `);
