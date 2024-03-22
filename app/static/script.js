@@ -625,10 +625,10 @@ html {
     `);
     newWindow.document.close();
 
-    hideModal();
+   
   } catch (error) {
     console.error(error);
-    hideModal();
+   
   }
 };
 
