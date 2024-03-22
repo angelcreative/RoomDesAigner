@@ -16,7 +16,7 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton");
 
 // modal P
-//document.getElementById('password-form').addEventListener('submit', function(event) {
+//document.getElementById('password-form').addEventListener('submit', function(event)  {
 //    event.preventDefault();
 //
 //    var passwordInput = document.getElementById('password');
