@@ -557,107 +557,39 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
-//   upscale
-    
-    function getBase64Image(image) {
-      const canvas = document.createElement("canvas");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const context = canvas.getContext("2d");
-      context.drawImage(image, 0, 0);
-      const dataURL = canvas.toDataURL("image/jpeg");
-      return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-    }
-
- 
-
-    
-    function showModalWithProgressBar() {
-      // Create modal element
-      const modalUpscale = document.createElement("div");
-      modalUpscale.id = "modalUpscale";
-
-      // Create container element
-      const containerUpscale = document.createElement("div");
-      containerUpscale.classList.add("containerUpscale");
-
-      // Create <img> element
-      const imgElement = document.createElement("img");
-      imgElement.src = "static/img/modal_img/scaling.svg";
-      imgElement.setAttribute("alt", "Image");
-      imgElement.classList.add("imgLoader");
-
-      // Create message element
-      const message = document.createElement("h1");
-      message.textContent = "Upscaling your image, it could take a moment...";
-
-      // Create microcopy element
-      const microcopy = document.createElement("p");
-      microcopy.textContent = "The image will be automatically downloaded";
-
-      // Create progress bar element
-      const progressBar = document.createElement("div");
-      progressBar.classList.add("progress-bar");
-
-      // Append elements to container
-      containerUpscale.appendChild(imgElement);
-      containerUpscale.appendChild(message);
-      containerUpscale.appendChild(microcopy);
-
-      // Append container and progress bar to modal
-      modalUpscale.appendChild(containerUpscale);
-      modalUpscale.appendChild(progressBar);
-
-      // Append modal to the document body
-      document.body.appendChild(modalUpscale);
-    }
-
-    function hideModal() {
-      // Remove the modal from the document body
-      const modalUpscale = document.getElementById("modalUpscale");
-      if (modalUpscale) {
-        document.body.removeChild(modalUpscale);
-      }
-    }
-
-    const upscaleImage = async (imageUrl) => {
+const upscaleImage = async (imageUrl) => {
   try {
     showModalWithProgressBar();
 
-    // Load the image
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
+    // The new endpoint expects an image URL directly, so we skip the Base64 conversion
+    // and use the imageUrl as is.
 
-    image.onload = async () => {
-      // Convert image to Base64
-      const base64Image = getBase64Image(image);
+    const url = 'https://ai-picture-upscaler.p.rapidapi.com/upscaler/v2/';
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+        'X-RapidAPI-Host': 'ai-picture-upscaler.p.rapidapi.com'
+      },
+      body: new URLSearchParams({
+        image_url: imageUrl, // Pass the image URL directly
+        scale: '2' // Set the desired scale, adjust this value as needed
+      })
+    };
 
-      const url = 'https://super-image1.p.rapidapi.com/run';
-      const options = {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
-          'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
-        },
-        body: JSON.stringify({
-          upscale: 2,
-          image: base64Image
-        })
-      };
+    const response = await fetch(url, options);
+    const result = await response.text(); // Assuming the API response is text
+    const data = JSON.parse(result); // Parse the response if it's in JSON format
+    console.log(data);
 
-      const response = await fetch(url, options);
-      const data = await response.json();
-      console.log(data);
-
-      // Create a new HTML document with the image embedded
-      const newWindow = window.open('', '_blank');
-      newWindow.document.write(`
-        <html>
-          <head>
-            <title>Upscaled Image</title>
-<style>body {
+    // Assuming `data.output_url` contains the URL to the upscaled image
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Upscaled Image</title>
+          <style>body {
     text-align: center;
     color: #a9fff5;
     font-family: arial, sans-serif;
@@ -683,23 +615,23 @@ max-width:80%;
 html {
     background: #1f1f1f;
 }</style>
-          </head>
-          <body>
-  <h1>Upscaled Image</h1>
-<p>Use KreaAi or Magnific to enhance details</p>
-            <img src="${data.output_url}" alt="Upscaled Image"/>
-          </body>
-        </html>
-      `);
-      newWindow.document.close();
+        </head>
+        <body>
+          <h1>Upscaled Image</h1>
+          <p>Use KreaAi or Clarity to enhance details</p>
+          <img src="${data.output_url}" alt="Upscaled Image"/>
+        </body>
+      </html>
+    `);
+    newWindow.document.close();
 
-      hideModal();
-    };
+    hideModal();
   } catch (error) {
     console.error(error);
     hideModal();
   }
 };
+
 
 
     
