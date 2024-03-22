@@ -559,7 +559,7 @@ rerollButton.addEventListener("click", rerollImages);
     
 const upscaleImage = async (imageUrl) => {
   try {
-    showModalWithProgressBar();
+ 
 
     // The new endpoint expects an image URL directly, so we skip the Base64 conversion
     // and use the imageUrl as is.
