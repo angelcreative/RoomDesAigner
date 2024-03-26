@@ -1988,8 +1988,8 @@ select {
 }
 
 select:hover {
-    background: #404f5d;
-    color: #a5a5a5;
+    background: #eeeeee;
+    color: #6d7b87;
 }
 
 .dot {
