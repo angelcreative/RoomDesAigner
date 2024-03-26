@@ -15,7 +15,9 @@ body {
   margin: 0;
 }
 
-
+.logout img {
+    filter: contrast(0.5);
+}
 
 #roomFurniture option {
     display: flex;
