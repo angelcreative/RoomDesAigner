@@ -300,7 +300,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `.  ${selectedPicture},  Transform the provided empty room image by adding furniture and decor, ensuring utmost adherence to the room's original perspective, structural integrity, and alignment with existing architectural features like windows, doors, and light sources. The goal is to create a harmonious and fully furnished living space that seamlessly blends new additions with the room's inherent structure. Each piece introduced must complement the architecture and natural lighting, filling the space without leaving empty areas, and maintaining a realistic appearance as if these elements were always part of the original setup. Achieve a cohesive design that respects the room's layout and angles, enhancing its functionality and aesthetic appeal, making the space inviting and visually compelling. `;
+  const promptEndy = `.  ${selectedPicture},   `;
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -321,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1080",
     height: "1080",
     samples: "4",
-    num_inference_steps: "40",
+    num_inference_steps: "30",
     seed: seedValue,
     guidance_scale: 7,
     webhook: null,
@@ -434,7 +434,7 @@ function checkImageStatus(fetchResultUrl) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl), 8000); // Check again after 2 seconds
         } else if (data.status === 'success') {
             // Handle success
             // You might want to call a function to process and display the images
