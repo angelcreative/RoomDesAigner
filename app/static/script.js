@@ -321,18 +321,12 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1080",
     height: "1080",
     samples: "4",
-    num_inference_steps: "40",
+     
     seed: seedValue,
-    guidance_scale: 7,
-    webhook: null,
-    track_id: null,
+     
+    
     safety_checker: null,
-    enhance_prompt: null,
-    multi_lingual: null,
-    panorama: null,
-    self_attention: null,
-    upscale: null,
-    embeddings_model: null,
+   
   };
     
     
