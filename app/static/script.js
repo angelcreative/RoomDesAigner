@@ -300,7 +300,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `.  ${selectedPicture},   `;
+  const promptEndy = `  ${selectedPicture}   `;
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -321,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1080",
     height: "1080",
     samples: "4",
-    num_inference_steps: 40",
+    num_inference_steps: 40,
     seed: seedValue,
     guidance_scale: 7,
     webhook: null,
@@ -626,7 +626,7 @@ html {
         </head>
         <body>
           <h1>Upscaled Image</h1>
-          <p>Use KreaAi or Magnific to enhance details</p>
+          <p>Clarity or Krea to enhance details</p>
           <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
         </body>
       </html>
