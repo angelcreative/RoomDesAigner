@@ -434,7 +434,7 @@ function checkImageStatus(fetchResultUrl) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 240000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === 'success') {
             // Handle success
             // You might want to call a function to process and display the images
