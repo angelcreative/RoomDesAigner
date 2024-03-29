@@ -318,8 +318,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     //width: width,
     //height: height,
-    width: "1080",
-    height: "1080",
+    width: "1024",
+    height: "1024",
     samples: "4",
      
     seed: seedValue,
