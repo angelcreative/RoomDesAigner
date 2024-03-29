@@ -176,6 +176,7 @@ initializeColorWheel();
             "space_to_be_designed",
             "children_room",
             "pool",
+            "landscaping_options",
             "garden",
             "room_shape",
             "inspired_by_this_interior_design_magazine",
