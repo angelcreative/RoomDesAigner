@@ -123,7 +123,7 @@ function handleError(errorMessage) {
             const colorDiv = document.createElement('div');
             colorDiv.id = colorIds[index];
             colorDiv.style.backgroundColor = color;
-            harmonyColors.appendChild(colorDiv);
+            harmonyColors.appendChild(colorDiv); 
         });
     }
 
@@ -302,6 +302,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .join(", ");
 
   const promptEndy = `. ${selectedPicture},  `;
+  
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -322,7 +323,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1024",
     height: "1024",
     samples: "4",
-     
+    
+    num_inference_steps: "40",
+    scheduler: "PNDMScheduler",
+    self_attention: "yes",
     seed: seedValue,
      
     
