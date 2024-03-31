@@ -230,7 +230,10 @@ initializeColorWheel();
     const element = document.getElementById(elementId);
     if (element) {
       values[elementId] = element.value;
-    }
+    } else {
+            // Log a warning if an element with the specified ID wasn't found
+            console.warn(`Element with ID '${elementId}' not found.`);
+        }
   });
         
         // Slider event listener for displaying value
