@@ -295,6 +295,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
   const customText = document.getElementById("customText").value;
+  const furnishRoomToggle = document.getElementById('furnishRoomToggle').checked; // Check if the furnish room toggle is on
+  let additionalPrompt = furnishRoomToggle ? "transform the empty room into a beautifully furnished space, with furniture that perfectly fits the room's layout and style." : "";
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
     const promptInit = `${selectedPicture},  `;
@@ -315,7 +317,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const seedValue = seedEnabled ? null : "19071975";
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
+  const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${additionalPrompt} ${optionalText}`;
 
   const prompt = {
     key: apiKey,
