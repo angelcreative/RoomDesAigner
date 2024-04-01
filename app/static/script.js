@@ -16,7 +16,7 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton");
 
 // modal P
-//document.getElementById('password-form').addEventListener('submit', function(event) {
+//document.getElementById('password-form').addEventListener('submit', function(event)  {
 //    event.preventDefault();
 //
 //    var passwordInput = document.getElementById('password');
@@ -123,7 +123,7 @@ function handleError(errorMessage) {
             const colorDiv = document.createElement('div');
             colorDiv.id = colorIds[index];
             colorDiv.style.backgroundColor = color;
-            harmonyColors.appendChild(colorDiv);
+            harmonyColors.appendChild(colorDiv); 
         });
     }
 
@@ -176,11 +176,14 @@ initializeColorWheel();
             "space_to_be_designed",
             "children_room",
             "pool",
+            "landscaping_options",
             "garden",
             "room_shape",
             "inspired_by_this_interior_design_magazine",
             "furniture_provided_by_this_vendor",
             "furniture_color",
+          "furniture_pattern",
+          "upholstery_pattern",
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
             "film_used_to_take_the_shot",
@@ -192,6 +195,7 @@ initializeColorWheel();
             "roof_height",
             "wall_type",
             "wall_cladding",
+          "walls_pattern",
             "exterior_finish",
             "exterior_trim_molding",
             "walls_paint_color",
@@ -293,14 +297,15 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `${selectedPicture},    It is crucial to strictly maintain the original perspective, vanishing points, and structural integrity of the  room photo in the transformation. Arrange the furniture and decor to complement the existing architecture and lighting of the room. `;
+    const promptInit = `${selectedPicture},  `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `. Please pay special attention to the room's existing vanishing points and structural lines when adding furniture and decor. Align all new elements with the room's perspective, ensuring that they follow the natural lines and angles of the space. This will help to create a realistic and cohesive design that feels like a natural part of the original photo. If the room is empty ADD FURNITURE. ${selectedPicture}, `;
+  const promptEndy = `. ${selectedPicture},  `;
+  
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
@@ -316,21 +321,20 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     key: apiKey,
     prompt: JSON.stringify(promptText),
     negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
-    width: width,
-    height: height,
+    //width: width,
+    //height: height,
+    width: "1024",
+    height: "1024",
     samples: "4",
-    num_inference_steps: "25",
+    
+    num_inference_steps: "40",
+    scheduler: "PNDMScheduler",
+    self_attention: "yes",
     seed: seedValue,
-    guidance_scale: 10,
-    webhook: null,
-    track_id: null,
+     
+    
     safety_checker: null,
-    enhance_prompt: null,
-    multi_lingual: null,
-    panorama: null,
-    self_attention: null,
-    upscale: null,
-    embeddings_model: null,
+   
   };
     
     
@@ -402,7 +406,7 @@ if (isImg2Img && imageUrl) {
  .then(data => {
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://stablediffusionapi.com")
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
@@ -557,107 +561,45 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
-//   upscale
-    
-    function getBase64Image(image) {
-      const canvas = document.createElement("canvas");
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const context = canvas.getContext("2d");
-      context.drawImage(image, 0, 0);
-      const dataURL = canvas.toDataURL("image/jpeg");
-      return dataURL.replace(/^data:image\/(png|jpeg);base64,/, "");
-    }
-
+const upscaleImage = async (imageUrl) => {
+  try {
  
 
-    
-    function showModalWithProgressBar() {
-      // Create modal element
-      const modalUpscale = document.createElement("div");
-      modalUpscale.id = "modalUpscale";
+    // The new endpoint expects an image URL directly, so we skip the Base64 conversion
+    // and use the imageUrl as is.
 
-      // Create container element
-      const containerUpscale = document.createElement("div");
-      containerUpscale.classList.add("containerUpscale");
+    const url = 'https://ai-picture-upscaler.p.rapidapi.com/upscaler/v2/';
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+        'X-RapidAPI-Host': 'ai-picture-upscaler.p.rapidapi.com'
+      },
+      body: new URLSearchParams({
+        image_url: imageUrl, // Directly pass the image URL
+        scale: '2' // The desired scale
+      })
+    };
 
-      // Create <img> element
-      const imgElement = document.createElement("img");
-      imgElement.src = "static/img/modal_img/scaling.svg";
-      imgElement.setAttribute("alt", "Image");
-      imgElement.classList.add("imgLoader");
+    // Send the request to the upscaling API
+    const response = await fetch(url, options);
+    const result = await response.text(); // Assuming the response is text
+    const data = JSON.parse(result); // Parse the response to JSON
 
-      // Create message element
-      const message = document.createElement("h1");
-      message.textContent = "Upscaling your image, it could take a moment...";
+    // Check the console to see the full API response
+    console.log(data);
 
-      // Create microcopy element
-      const microcopy = document.createElement("p");
-      microcopy.textContent = "The image will be automatically downloaded";
+    // Use the correct property from the API response to get the upscaled image URL
+    const upscaledImageUrl = data.result_url;
 
-      // Create progress bar element
-      const progressBar = document.createElement("div");
-      progressBar.classList.add("progress-bar");
-
-      // Append elements to container
-      containerUpscale.appendChild(imgElement);
-      containerUpscale.appendChild(message);
-      containerUpscale.appendChild(microcopy);
-
-      // Append container and progress bar to modal
-      modalUpscale.appendChild(containerUpscale);
-      modalUpscale.appendChild(progressBar);
-
-      // Append modal to the document body
-      document.body.appendChild(modalUpscale);
-    }
-
-    function hideModal() {
-      // Remove the modal from the document body
-      const modalUpscale = document.getElementById("modalUpscale");
-      if (modalUpscale) {
-        document.body.removeChild(modalUpscale);
-      }
-    }
-
-    const upscaleImage = async (imageUrl) => {
-  try {
-    showModalWithProgressBar();
-
-    // Load the image
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.src = '/proxy-image?url=' + encodeURIComponent(imageUrl);
-
-    image.onload = async () => {
-      // Convert image to Base64
-      const base64Image = getBase64Image(image);
-
-      const url = 'https://super-image1.p.rapidapi.com/run';
-      const options = {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'X-RapidAPI-Key': '5288a49c47mshc0d528176d70522p1a13b5jsn7205ba3bf330',
-          'X-RapidAPI-Host': 'super-image1.p.rapidapi.com'
-        },
-        body: JSON.stringify({
-          upscale: 2,
-          image: base64Image
-        })
-      };
-
-      const response = await fetch(url, options);
-      const data = await response.json();
-      console.log(data);
-
-      // Create a new HTML document with the image embedded
-      const newWindow = window.open('', '_blank');
-      newWindow.document.write(`
-        <html>
-          <head>
-            <title>Upscaled Image</title>
-<style>body {
+    // Open a new window or tab and display the upscaled image
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+      <html>
+        <head>
+          <title>Upscaled Image</title>
+           <style>body {
     text-align: center;
     color: #a9fff5;
     font-family: arial, sans-serif;
@@ -683,23 +625,23 @@ max-width:80%;
 html {
     background: #1f1f1f;
 }</style>
-          </head>
-          <body>
-  <h1>Upscaled Image</h1>
-<p>Use KreaAi or Magnific to enhance details</p>
-            <img src="${data.output_url}" alt="Upscaled Image"/>
-          </body>
-        </html>
-      `);
-      newWindow.document.close();
+        </head>
+        <body>
+          <h1>Upscaled Image</h1>
+          <p>Use KreaAi or Magnific to enhance details</p>
+          <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+        </body>
+      </html>
+    `);
+    newWindow.document.close();
 
-      hideModal();
-    };
+   
   } catch (error) {
     console.error(error);
-    hideModal();
+   
   }
 };
+
 
 
     

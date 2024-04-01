@@ -352,7 +352,7 @@
         
         <div class="usernameCredits"><span class="username">{{ username }}</span><span class="creditsCoin" id="creditDisplay">{{ credits }}</span><small>🟡 coins</small></div>
     </div>
-                   <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+                   <img class="logoWeb" src="/static/img/logo_web_dark.svg" alt="logo Room DesAigner">
 
         <img class="logoApp" src="static/img/logoApp.svg">
     <div class="logout">
@@ -420,7 +420,7 @@
             <div class="imageGrid" id="imageGrid">
                 <button>Upscale</button>
             </div>
-            <div class="centerCoffee" style="margin-top:40px;"><p><a href="https://app.shapo.io/forms/1235b43bbe" style="
+           <!-- <div class="centerCoffee" style="margin-top:40px;"><p><a href="https://app.shapo.io/forms/1235b43bbe" style="
     color: #1fdab9;
     text-decoration: none;
     background: #1fdab9;
@@ -432,8 +432,8 @@
     border-radius: 8px;
     font-weight: 900;
 ">Like the results? Write a review and claim 1 case study!</a></p>
-</div>
-          <p style="visibility: hidden"> <button class="buttonExt" id="rerollButton">Reroll</button></p>
+</div>-->
+            <button class="buttonExt gradient-animation" id="rerollButton">Reroll</button>
             <div id="resultContainer"></div>
             <span class="close">&times;</span>
         </div>
@@ -465,8 +465,8 @@ Image</h1>
                     <!-- slider strenght -->
                     <div class="strenght">
 <label for="strengthSlider">Original image strenght</label>
-<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.69">
-<span id="sliderValue">0.69</span>
+<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.75">
+<span id="sliderValue">0.75</span>
                     <small>0 will produce an image nearly identical to the original.<br>
 1 will produce an image that greatly differs from the original.<br>
                         </small>
@@ -500,7 +500,7 @@ Image</h1>
                       <option value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room - A functional space dedicated to washing and drying clothes.</option>
                       <option value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom - An entryway or transitional space for removing outdoor clothing and shoes.</option>
                       <option value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom - The primary bathroom attached to the master bedroom.</option>
-                      <option value="Master_Bedroom_Main_bedroom_attached_walk-in_closet">Master Bedroom - The main bedroom, often with an attached walk-in closet.</option>
+                      <option value="Master_Bedroom_Main_bedroom">Master Bedroom - The main bedroom, often with an attached walk-in closet.</option>
                       <option value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry - A storage space for food and kitchen essentials.</option>
                       <option value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio - An outdoor space adjacent to the house, used for relaxation and entertainment.</option>
                       <option value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath - A small restroom for guests, usually with a sink and toilet.</option>
@@ -553,6 +553,7 @@ Image</h1>
                       <option value="Hollywood_Glam_Style_defined_by_opulent_Hollywood_elegance_velvet_gold_accents_dramatic_lighting" title="Opulent, Hollywood elegance, velvet, gold accents, dramatic lighting.">Hollywood Glam Style</option>
                       <option value="Hollywood_Regency_Style_defined_by_glamorous_bold_colors_geometric_patterns_golden_age_of_Hollywood" title="Glamorous, bold colors, geometric patterns, golden age of Hollywood.">Hollywood Regency Style</option>
                       <option value="Hygge_Style_defined_by_cozy_Danish_concept_warmth_comfort_soft_lighting_neutral_palette" title="Cozy, Danish concept, warmth, comfort, soft lighting, neutral palette.">Hygge Style</option>
+                      <option value="Ibicenco_Style_defined_by_white_washed_walls_natural_materials_rustic_elegance_indoor_outdoor_living" title="White-washed walls, natural materials, rustic elegance, indoor-outdoor living.">Ibicenco Style</option>
                       <option value="Industrial_Chic_Style_defined_by_stylish_edgy_raw_materials_rustic_and_urban_blend_salvaged_wood" title="Stylish, edgy, raw materials, rustic and urban blend, salvaged wood.">Industrial Chic Style</option>
                       <option value="Industrial_Style_defined_by_functional_raw_and_utilitarian_exposed_brick_metal_concrete" title="Functional, raw and utilitarian, exposed brick, metal, concrete.">Industrial Style</option>
                       <option value="Japanese_Style_defined_by_simplicity_minimalism_harmony_with_nature_clean_lines_tranquility" title="Simplicity, minimalism, harmony with nature, clean lines, tranquility.">Japanese Style</option>
@@ -633,8 +634,19 @@ Image</h1>
         <option value="Scandinavian_Hygge_decoration">Scandinavian Hygge - Cozy, comfortable, and content</option>
         <option value="Japanese_Wabi_Sabi_decoration">Japanese Wabi-Sabi - Finding beauty in imperfection</option>
         <option value="Mediterranean_Riviera_decoration">Mediterranean Riviera - Bright, airy, sea-inspired decor</option>
+            <option value="Moroccan_decoration">Moroccan - Vibrant colors, intricate tile work, lanterns, and plush fabrics</option>
+
         <option value="African_Tribal_decoration">African Tribal - Rich patterns and cultural motifs</option>
     </optgroup>
+
+    <optgroup label="Mediterranean Influences">
+    <option value="Ibicenco_decoration">Ibicenco - White-washed walls, natural materials, indoor-outdoor living, rustic yet elegant</option>
+    <option value="Tuscan_decoration">Tuscan - Warm earth tones, terracotta tiles, wood beams, and iron accents</option>
+    <option value="Greek_Island_decoration">Greek Island - Bright blues and whites, clean lines, natural light, and minimalist aesthetics</option>
+    <option value="Provencal_decoration">Provencal - French country style with floral patterns, soft pastels, and antique furniture</option>
+    <option value="Spanish_Revival_decoration">Spanish Revival - Rich colors, ornate details, terracotta roofs, and dark wood</option>
+</optgroup>
+
     
     <optgroup label="Vintage Revivals">
         <option value="Mid_Century_Modern_Retro_decoration">Mid-Century Modern Retro - 50s and 60s style revival</option>
@@ -686,6 +698,7 @@ Image</h1>
                         <option value="French_Country" title="Soft pastels with rustic elements">French Country</option>
                         <option value="Gradient" title="Gradient colors">Gradient</option>
                         <option value="High_Contrast" title="High contrast colors">High Contrast</option>
+                        <option value="Ibicenco" title="Serene and natural with a rustic elegance">Ibicenco</option>
                         <option value="Industrial" title="Urban and raw industrial tones">Industrial</option>
                         <option value="Industrial_Chic" title="Urban and warm industrial tones">Industrial Chic</option>
                         <option value="Jewel" title="Rich jewel tones">Jewel</option>
@@ -961,6 +974,8 @@ Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section
                         <option value="Honey_Furniture">Honey Furniture</option>
                         <option value="Ivory_Furniture">Ivory Furniture</option>
                         <option value="Linen_Furniture">Linen Furniture</option>
+                        
+                        <option value="Light_Blue_Furniture">Light Blue Furniture</option>
                         <option value="Light_Wood_Furniture">Light Wood Furniture</option>
                         <option value="Mahogany_Furniture">Mahogany Furniture</option>
                         <option value="Maple_Furniture">Maple Furniture</option>
@@ -980,7 +995,53 @@ Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section
                         <option value="White_Furniture">White Furniture</option>
                     </select>
                     <span class="dot"></span>
-                     <h4>Interior esigners</h4>
+
+  <h4>Furniture pattern</h4>
+                    <!-- style pattern -->
+<select id="furniture_pattern">
+                        <option value="">Furniture pattern</option>
+<option value="Furniture_with_Chevron_Zigzag_Stripes_Pattern">Chevron Zigzag Stripes Pattern Furniture</option>
+<option value="Furniture_with_Diamond_Harlequin_Pattern">Diamond Harlequin Pattern Furniture</option>
+<option value="Furniture_with_Classic_Houndstooth_Pattern">Classic Houndstooth Pattern Furniture</option>
+<option value="Furniture_with_Hexagon_Honeycomb_Mosaic_Pattern">Hexagon Honeycomb Mosaic Pattern Furniture</option>
+<option value="Furniture_with_Crosshatch_Sketching_Pattern">Crosshatch Sketching Pattern Furniture</option>
+<option value="Furniture_with_Argyle_Diamonds_and_Lozenge_Pattern">Argyle Diamonds and Lozenge Pattern Furniture</option>
+<option value="Furniture_with_Abstract_Geometric_Shapes_Pattern">Abstract Geometric Shapes Pattern Furniture</option>
+<option value="Furniture_with_Zigzag_Wave_Pattern">Zigzag Wave Pattern Furniture</option>
+<option value="Furniture_with_Triangular_Mosaic_Tessellation_Pattern">Triangular Mosaic Tessellation Pattern Furniture</option>
+<option value="Furniture_with_Multicolored_Geometric_Patchwork_Pattern">Multicolored Geometric Patchwork Pattern Furniture</option>
+<option value="Furniture_with_Moroccan_Tile_Inspired_Pattern">Moroccan Tile Inspired Pattern Furniture</option>
+    <option value="Furniture_with_Bohemian_Ethnic_Striped_Pattern">Bohemian Ethnic Striped Pattern Furniture</option>
+<option value="Furniture_with_Traditional_Peruvian_Striped_Pattern">Traditional Peruvian Striped Pattern Furniture</option>
+
+ </select>
+                    <span class="dot"></span>
+
+
+
+
+
+                     <h4>Upholstery Pattern</h4>
+<select id="upholstery_pattern">
+    <option value="">Select Upholstery Pattern</option>
+    <option value="Chevron_Zigzag_Stripes_Upholstery">Chevron Zigzag Stripes Upholstery</option>
+    <option value="Diamond_Harlequin_Upholstery">Diamond Harlequin Upholstery</option>
+    <option value="Classic_Houndstooth_Upholstery">Classic Houndstooth Upholstery</option>
+    <option value="Hexagon_Honeycomb_Mosaic_Upholstery">Hexagon Honeycomb Mosaic Upholstery</option>
+    <option value="Crosshatch_Sketching_Upholstery">Crosshatch Sketching Upholstery</option>
+    <option value="Argyle_Diamonds_Lozenge_Upholstery">Argyle Diamonds Lozenge Upholstery</option>
+    <option value="Abstract_Geometric_Shapes_Upholstery">Abstract Geometric Shapes Upholstery</option>
+    <option value="Zigzag_Wave_Upholstery">Zigzag Wave Upholstery</option>
+    <option value="Triangular_Mosaic_Tessellation_Upholstery">Triangular Mosaic Tessellation Upholstery</option>
+    <option value="Multicolored_Geometric_Patchwork_Upholstery">Multicolored Geometric Patchwork Upholstery</option>
+    <option value="Moroccan_Tile_Inspired_Upholstery">Moroccan Tile Inspired Upholstery</option>
+    <option value="Bohemian_Ethnic_Striped_Upholstery">Bohemian Ethnic Striped Upholstery</option>
+    <option value="Traditional_Peruvian_Striped_Upholstery">Traditional Peruvian Striped Upholstery</option>
+</select>
+<span class="dot"></span>
+
+                     
+                     <h4>Interior designers</h4>
                     <!-- professionals -->
                     <select id="designed_by_this_interior_designer">
                         <option value="">Interior designer</option>
@@ -1254,50 +1315,57 @@ Outdoor </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></secti
                     <h4>Outdoor spaces</h4>
                     <select id="pool">
                         <option value="">Pool style</option>
-                        <option value="contemporary_pool" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
-                        <option value="cottage_pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Cottage Pool</option>
-                        <option value="desert_pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Desert Pool</option>
-                        <option value="infinity_pool">Infinity Pool</option>
-                        <option value="lap_pool">Lap Pool</option>
-                        <option value="mediterranean_pool" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
-                        <option value="modern_pool" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
-                        <option value="naturalistic_pool" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
-                        <option value="plunge_pool">Plunge Pool</option>
-                        <option value="resort_pool" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
-                        <option value="rounded_organic_pool">Rounded Organic Pool</option>
-                        <option value="rustic_pool" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
-                        <option value="tropical_pool" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
-                        <option value="zen_pool" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+                      <option value="contemporary_pool_Emphasizes_clean_lines_sleek_materials_and_a_minimalist_aesthetic" title="Emphasizes clean lines, sleek materials, and a minimalist aesthetic">Contemporary Pool</option>
+<option value="cottage_pool_Inspired_by_natural_and_rural_settings_featuring_wooden_decks_stone_accents_and_a_cozy_ambiance" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Cottage Pool</option>
+<option value="desert_pool_Blends_seamlessly_with_natural_surroundings_featuring_irregular_shapes_rock_formations_and_waterfalls" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Desert Pool</option>
+<option value="infinity_pool" title="Features a vanishing edge, creating a visual effect of water extending to the horizon">Infinity Pool</option>
+<option value="ibicenco_pool_Reflects_the_serene_beauty_of_Ibiza_with_white_surrounds_natural_stone_and_water_that_merges_with_the_horizon" title="Reflects the serene beauty of Ibiza with white surrounds, natural stone, and water that merges with the horizon">Ibicenco Pool</option>
+<option value="lap_pool" title="Designed for fitness and health, facilitating long, straight swimming lanes">Lap Pool</option>
+<option value="mediterranean_pool_Incorporates_colorful_mosaic_tiles_decorative_water_features_and_lush_landscaping" title="Incorporates colorful mosaic tiles, decorative water features, and lush landscaping">Mediterranean Pool</option>
+<option value="modern_pool_Focuses_on_simplicity_minimalism_and_clean_design_with_sharp_lines_and_modern_materials" title="Focuses on simplicity, minimalism, and clean design with sharp lines and modern materials">Modern Pool</option>
+<option value="naturalistic_pool_Blends_seamlessly_with_natural_surroundings_featuring_irregular_shapes_rock_formations_and_waterfalls" title="Blends seamlessly with natural surroundings, featuring irregular shapes, rock formations, and waterfalls">Naturalistic Pool</option>
+<option value="plunge_pool" title="Small, deep pool for cooling off or leisure rather than swimming or exercise">Plunge Pool</option>
+<option value="resort_pool_Recreates_the_luxurious_ambiance_of_a_resort_with_multiple_levels_cabanas_and_elegant_water_features" title="Recreates the luxurious ambiance of a resort, with multiple levels, cabanas, and elegant water features">Resort-style Pool</option>
+<option value="rounded_organic_pool" title="Features soft, rounded edges and organic shapes, integrating naturally with the landscape">Rounded Organic Pool</option>
+<option value="rustic_pool_Inspired_by_natural_and_rural_settings_featuring_wooden_decks_stone_accents_and_a_cozy_ambiance" title="Inspired by natural and rural settings, featuring wooden decks, stone accents, and a cozy ambiance">Rustic Pool</option>
+<option value="tropical_pool_Creates_a_resort-like_atmosphere_with_lush_foliage_palm_trees_and_thatched-roof_structures" title="Creates a resort-like atmosphere with lush foliage, palm trees, and thatched-roof structures">Tropical Pool</option>
+<option value="zen_pool_Promotes_tranquility_and_harmony_with_smooth_stones_bamboo_and_a_minimalist_design" title="Promotes tranquility and harmony with smooth stones, bamboo, and a minimalist design">Zen Pool</option>
+
+
                     </select>
                     <span class="dot"></span>
                 <!-- landscape -->
                     <select id="landscaping_options" name="landscaping_options">
                         <option value="">Landscape options</option>
-                        <option value="fire_pit_design">Fire Pit Design</option>
-                        <option value="garden_design">Garden Design</option>
-                        <option value="lawn_design">Lawn Design</option>
-                        <option value="outdoor_kitchen_design">Outdoor Kitchen Design</option>
-                        <option value="outdoor_seating_design">Outdoor Seating Design</option>
-                        <option value="pathway_design">Pathway Design</option>
-                        <option value="patio_design">Patio Design</option>
-                        <option value="pergola_or_gazebo_design">Pergola or Gazebo Design</option>
-                        <option value="poolside_design">Poolside Design</option>
-                        <option value="water_feature_design">Water Feature Design</option>
+
+                    
+                    <option value="fire_pit_design_Features_a_dedicated_space_for_a_fire_pit_enhancing_ambiance_and_providing_warmth" title="Features a dedicated space for a fire pit, enhancing ambiance and providing warmth">Fire Pit Design</option>
+<option value="garden_design_Focuses_on_the_cultivation_and_arrangement_of_plants_flowers_and_shrubs_to_create_aesthetic_appeal" title="Focuses on the cultivation and arrangement of plants, flowers, and shrubs to create aesthetic appeal">Garden Design</option>
+<option value="lawn_design_Involves_the_planning_and_maintenance_of_a_grassy_area_emphasizing_health_greenness_and_uniformity" title="Involves the planning and maintenance of a grassy area, emphasizing health, greenness, and uniformity">Lawn Design</option>
+<option value="outdoor_kitchen_design_Includes_features_for_cooking_and_dining_outdoors_integrating_appliances_and_seating_areas" title="Includes features for cooking and dining outdoors, integrating appliances and seating areas">Outdoor Kitchen Design</option>
+<option value="outdoor_seating_design_Arranges_areas_for_sitting_relaxing_and_entertaining_in_the_outdoor_space" title="Arranges areas for sitting, relaxing, and entertaining in the outdoor space">Outdoor Seating Design</option>
+<option value="pathway_design_Involves_the_creation_of_walkways_or_paths_enhancing_navigation_and_aesthetic_appeal_of_the_outdoor_area" title="Involves the creation of walkways or paths, enhancing navigation and aesthetic appeal of the outdoor area">Pathway Design</option>
+<option value="patio_design_Focuses_on_the_design_of_outdoor_patios_incorporating_flooring_furnishings_and_decorative_elements" title="Focuses on the design of outdoor patios, incorporating flooring, furnishings, and decorative elements">Patio Design</option>
+<option value="pergola_or_gazebo_design_Involves_structures_such_as_pergolas_or_gazebos_to_add_shade_shelter_and_a_focal_point_to_the_garden" title="Involves structures such as pergolas or gazebos to add shade, shelter, and a focal point to the garden">Pergola or Gazebo Design</option>
+<option value="poolside_design_Concentrates_on_the_area_surrounding_the_pool_integrating_seating_landscaping_and_decorative_elements" title="Concentrates on the area surrounding the pool, integrating seating, landscaping, and decorative elements">Poolside Design</option>
+<option value="water_feature_design_Incorporates_elements_like_fountains_ponds_or_waterfalls_adding_visual_and_auditory_interest_to_the_landscape" title="Incorporates elements like fountains, ponds, or waterfalls, adding visual and auditory interest to the landscape">Water Feature Design</option>
+
                     </select>
                     <span class="dot"></span>
                 <!-- garden -->
                     <select id="garden">
                         <option value="">Garden style</option>
-                        <option value="cottage_garden" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
-                        <option value="contemporary_garden" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
-                        <option value="desert_garden" title="Drought-tolerant garden with succulents, cacti, rocks, and gravel for arid climates">Desert Garden</option>
-                        <option value="english_garden" title="Lush, romantic, and informal garden with abundant flowers and neatly trimmed hedges">English Garden</option>
-                        <option value="formal_garden" title="Symmetrical and structured garden with well-manicured hedges, topiaries, and geometric patterns">Formal Garden</option>
-                        <option value="japanese_garden" title="Serene and harmonious garden with Zen rock gardens, water features, and carefully pruned trees">Japanese Garden</option>
-                        <option value="mediterranean_garden" title="Inspired by Southern European coastal regions with vibrant colors, drought-tolerant plants, and terracotta pots">Mediterranean Garden</option>
-                        <option value="modern_garden" title="Minimalist garden design with clean lines, geometric shapes, and carefully selected plantings">Modern Garden</option>
-                        <option value="rooftop_garden" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
-                        <option value="tropical_garden" title="Exotic and lush garden with large-leaved plants, vibrant flowers, and water features">Tropical Garden</option>
+                      <option value="cottage_garden_Charming_and_rustic_garden_featuring_colorful_flowers_climbing_roses_and_informal_borders" title="Charming and rustic garden featuring colorful flowers, climbing roses, and informal borders">Cottage Garden</option>
+<option value="contemporary_garden_Blending_modern_elements_with_natural_features_featuring_minimalist_design_and_innovative_materials" title="Blending modern elements with natural features, featuring minimalist design and innovative materials">Contemporary Garden</option>
+<option value="desert_garden_Drought-tolerant_garden_with_succulents_cacti_rocks_and_gravel_for_arid_climates" title="Drought-tolerant garden with succulents, cacti, rocks, and gravel for arid climates">Desert Garden</option>
+<option value="english_garden_Lush_romantic_and_informal_garden_with_abundant_flowers_and_neatly_trimmed_hedges" title="Lush, romantic, and informal garden with abundant flowers and neatly trimmed hedges">English Garden</option>
+<option value="formal_garden_Symmetrical_and_structured_garden_with_well-manicured_hedges_topiaries_and_geometric_patterns" title="Symmetrical and structured garden with well-manicured hedges, topiaries, and geometric patterns">Formal Garden</option>
+<option value="japanese_garden_Serene_and_harmonious_garden_with_Zen_rock_gardens_water_features_and_carefully_pruned_trees" title="Serene and harmonious garden with Zen rock gardens, water features, and carefully pruned trees">Japanese Garden</option>
+<option value="mediterranean_garden_Inspired_by_Southern_European_coastal_regions_with_vibrant_colors_drought-tolerant_plants_and_terracotta_pots" title="Inspired by Southern European coastal regions with vibrant colors, drought-tolerant plants, and terracotta pots">Mediterranean Garden</option>
+<option value="modern_garden_Minimalist_garden_design_with_clean_lines_geometric_shapes_and_carefully_selected_plantings" title="Minimalist garden design with clean lines, geometric shapes, and carefully selected plantings">Modern Garden</option>
+<option value="rooftop_garden_Utilizes_rooftop_spaces_with_raised_planters_vertical_gardens_and_green_features_in_urban_environments" title="Utilizes rooftop spaces with raised planters, vertical gardens, and green features in urban environments">Rooftop Garden</option>
+<option value="tropical_garden_Exotic_and_lush_garden_with_large-leaved_plants_vibrant_flowers_and_water_features" title="Exotic and lush garden with large-leaved plants, vibrant flowers, and water features">Tropical Garden</option>
+
                     </select>
                     <span class="dot"></span>
 
@@ -1463,6 +1531,28 @@ Building </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></sect
                           <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
                     </select>
                     <span class="dot"></span>
+
+  <h4>Walls pattern</h4>
+                    <!-- style pattern -->
+<select id="walls_pattern">
+                        <option value="">Walls pattern</option>
+<option value="Walls_with_Chevron_Zigzag_Stripes_Pattern">Chevron Zigzag Stripes Pattern Furniture</option>
+<option value="Walls_with_Diamond_Harlequin_Pattern">Diamond Harlequin Pattern Furniture</option>
+<option value="Walls_with_Classic_Houndstooth_Pattern">Classic Houndstooth Pattern Furniture</option>
+<option value="Walls_with_Hexagon_Honeycomb_Mosaic_Pattern">Hexagon Honeycomb Mosaic Pattern Furniture</option>
+<option value="Walls_with_Crosshatch_Sketching_Pattern">Crosshatch Sketching Pattern Furniture</option>
+<option value="Walls_with_Argyle_Diamonds_and_Lozenge_Pattern">Argyle Diamonds and Lozenge Pattern Furniture</option>
+<option value="Walls_with_Abstract_Geometric_Shapes_Pattern">Abstract Geometric Shapes Pattern Furniture</option>
+<option value="Walls_with_Zigzag_Wave_Pattern">Zigzag Wave Pattern Furniture</option>
+<option value="Walls_with_Triangular_Mosaic_Tessellation_Pattern">Triangular Mosaic Tessellation Pattern Furniture</option>
+<option value="Walls_width_Multicolored_Geometric_Patchwork_Pattern">Multicolored Geometric Patchwork Pattern Furniture</option>
+<option value="Walls_with_Moroccan_Tile_Inspired_Pattern">Moroccan Tile Inspired Pattern Furniture</option>
+    <option value="Walls_with_Bohemian_Ethnic_Striped_Pattern">Bohemian Ethnic Striped Pattern Furniture</option>
+<option value="Walls_with_Traditional_Peruvian_Striped_Pattern">Traditional Peruvian Striped Pattern Furniture</option>
+
+ </select>
+                    <span class="dot"></span>
+    
                     <!-- cladding-->
                     <select id="wall_cladding" >
                         <option value="">Cladding</option>
