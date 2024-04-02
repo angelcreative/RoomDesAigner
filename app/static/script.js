@@ -327,7 +327,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     height: "1024",
     samples: "4",
     
-    num_inference_steps: "40",
+    num_inference_steps: "20",
     scheduler: "PNDMScheduler",
     self_attention: "yes",
     seed: seedValue,
