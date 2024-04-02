@@ -320,7 +320,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
+    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, diformed hands, username, watermark, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     //width: width,
     //height: height,
     width: "1024",
@@ -331,7 +331,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     scheduler: "PNDMScheduler",
     self_attention: "yes",
     seed: seedValue,
-     
+    instant_response: "true", 
     
     safety_checker: null,
    
