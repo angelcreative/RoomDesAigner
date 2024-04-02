@@ -183,7 +183,7 @@ initializeColorWheel();
             "furniture_provided_by_this_vendor",
             "furniture_color",
           "furniture_pattern",
-          "upholstery_pattern",
+          "seating_upholstery_pattern",
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
             "film_used_to_take_the_shot",
