@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-icon-114x114.png') }}">
     <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='img/apple-icon-120x120.png') }}">
     <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='img/apple-icon-144x144.png') }}">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}"> 
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-icon-180x180.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
@@ -423,7 +423,9 @@
     font-weight: 900;
 ">Like the results? Write a review and claim 1 case study!</a></p>
 </div>-->
-            <button class="buttonExt gradient-animation" id="rerollButton">Reroll</button>
+            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
+    width: 220px;
+    margin: 40px auto;">Reroll</button>
             <div id="resultContainer"></div>
             <span class="close">&times;</span>
         </div>
