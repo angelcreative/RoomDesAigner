@@ -325,11 +325,11 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     //height: height,
     width: "1024",
     height: "1024",
-    samples: "2",
+    samples: "4",
     
-    num_inference_steps: "40",
-    scheduler: "PNDMScheduler",
-    self_attention: "yes",
+    num_inference_steps: "50",
+    scheduler: "KarrasVeScheduler",
+    self_attention: "no",
     seed: seedValue,
      
     
