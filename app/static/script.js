@@ -4,7 +4,7 @@
 // Function to hide the waiting overlay and loading message
 // Function to show the overlay
 function showOverlay() {
-  const overlay = document.getElementById("overlay");
+  const overlay = document.getElementById("overlay"); 
   overlay.style.display = "block";
 }
 // Function to hide the overlay
@@ -330,7 +330,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     
     num_inference_steps: "50",
     scheduler: "KarrasVeScheduler",
-    self_attention: "no",
+    self_attention: "no", //testing no
 
    
     seed: seedValue,
