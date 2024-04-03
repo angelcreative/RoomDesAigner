@@ -324,14 +324,13 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     //width: width,
     //height: height,
     width: "1024",
-    height: "512",
+    height: "800",
     samples: "1",
     
     num_inference_steps: "50",
     scheduler: "PNDMScheduler",
     self_attention: "yes",
     seed: seedValue,
-    instant_response: "true", 
     
     safety_checker: null,
    
