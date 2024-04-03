@@ -320,9 +320,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, username, watermark, signature, blurry, bad proportions, art, anime, tiling, out of frame, disfigured, deformed, watermark",
+    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, blurry, bad proportions, gross proportions, diformed hands, username, watermark, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     //width: width,
     //height: height,
+
     width: "1024",
     height: "1024",
     samples: "4",
@@ -330,8 +331,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     num_inference_steps: "50",
     scheduler: "KarrasVeScheduler",
     self_attention: "no",
+
+   
     seed: seedValue,
-     
     
     safety_checker: null,
    
