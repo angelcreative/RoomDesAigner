@@ -324,10 +324,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     //width: width,
     //height: height,
     width: "1024",
-    height: "1024",
-    samples: "2",
+    height: "2048",
+    samples: "1",
     
-    num_inference_steps: "40",
+    num_inference_steps: "50",
     scheduler: "PNDMScheduler",
     self_attention: "yes",
     seed: seedValue,
