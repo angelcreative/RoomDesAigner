@@ -297,7 +297,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography for interior design; Resolution: Ultra HD 8K for impeccable detail; Rendering Technique: Octane Render for photorealistic textures and lighting; Lighting Setup: Soft, diffused light complemented by strategic studio lighting to highlight textures and spaces; Aesthetic: Refined elegance with a focus on spatial harmony; Special Requirements: Emphasis on dynamic composition and the interplay of light and shadow to elevate the architectural features.`;
+    const promptInit = `High-end editorial photography, Resolution: Ultra HD 8K for impeccable detail,  Rendering Technique: Octane Render for photorealistic textures and lighting, Volumetric lightning `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
