@@ -446,7 +446,7 @@ Image</h1>
                     <div id="myimage">
   <label class="imageup" for="imageDisplayUrl">
     Upload your image here <span>↑</span>
-    <small>Use a good resolution image<br>less than 1MB and max 800px width</small>
+    <small>Use a good resolution image<br>less than 500Kb and 1024x1204 size</small>
     <input type="file" id="imageDisplayUrl" accept="image/*">
   </label>
   <div class="thumbImg" style="display: none;">
@@ -743,12 +743,34 @@ Image</h1>
                     <!--indoor / outdoor -->
                     <select id="space_to_be_designed">
                         <option value="">Space to design</option>
-                        <option value="interior design">Interior design</option>
-                        <option value="outdoor design">Outdoor design</option>
-                        <option value="front of the house">Facade design</option>
+                        <option value="interior_design">Interior design</option>
+                        <option value="outdoor_design">Outdoor design</option>
+                        <option value="front_of_the_house_facade">Facade design</option>
                     </select>
                     <span class="dot"></span>
                     <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub>
+
+ <!--person -->
+                    <select id="person">
+                        <option value="">Chooose a character</option>
+                        <option value="Girl_teen_girl_18_years_old_very_big_boobs_blonde_slim-fit_revealing_dress_she_smiles_headshot_picture_young_girl">Blonde Girl</option>
+                        <option value="Girl_teen_girl_18_years_old_very_big_boobs_brunette_slim-fit_revealing_dress_she_smiles_headshot_picture_young_girl">Brunette Girl</option>
+                        <option value="Girl_teen_girl_18_years_old_very_big_boobs_red_hair_slim-fit_revealing_dress_she_smiles_headshot_picture_young_girl">Red Hair Girl</option>
+                        <option value="Girl_teen_girl_18_years_old_very_big_boobs_mulatto_slim-fit_revealing_dress_she_smiles_headshot_picture_young_girl">Black Girl</option>
+                        <option value="Woman_mature_woman_30_years_old_very_big_boobs_blonde_slim-fit_revealing_dress_she_smiles_headshot_picture_mature_woman">Blonde Woman</option>
+                                                <option value="Woman_mature_woman_30_years_old_very_big_boobs_brunette_slim-fit_revealing_dress_she_smiles_headshot_picture_mature_woman">Brunette Woman</option>
+                                                <option value="Woman_mature_woman_30_years_old_very_big_boobs_red_hair_slim-fit_revealing_dress_she_smiles_headshot_picture_mature_woman">Red Hair Woman</option>
+                                                <option value="Woman_mature_woman_30_years_old_very_big_boobs_mulatto_slim-fit_revealing_dress_she_smiles_headshot_picture_mature_woman">Black Woman</option>
+
+
+
+
+                       
+                    </select>
+                    <span class="dot"></span>
+                    <sub>Select a character, for best results use "close-up" or "extremely close-up" parameters</sub>
+
+                    
                 </div> 
                     
                     
@@ -756,6 +778,9 @@ Image</h1>
                 <div class="buttonsL">
                     <button id="clearAllButton">Clear All</button>
                     <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
+                   
+                
+                
                 </div>
                 <div class="buttonsR">
                     
