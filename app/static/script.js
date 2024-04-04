@@ -327,7 +327,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1024",
     height: "1024",
     samples: "4",
-    
+    guidance_scale: "10",
     num_inference_steps: "50",
     scheduler: "KarrasVeScheduler",
     self_attention: "no", //testing no
