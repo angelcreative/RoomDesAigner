@@ -672,58 +672,68 @@ Image</h1>
     </select>
                     <span class="dot"></span>
                     <!--color scheme-->
-                    <select id="color_scheme">
-                        <option value="">Color schemes</option>
-                        <option value="Analogous" title="Harmony of adjacent colors">Analogous</option>
-                        <option value="Art_Deco" title="Bold and luxurious tones">Art Deco</option>
-                        <option value="Beachy" title="Beach-inspired shades">Beachy</option>
-                        <option value="Black_and_White" title="Contrast of black and white">Black and White</option>
-                        <option value="Bohemian" title="Eclectic and vibrant">Bohemian</option>
-                        <option value="Bold_and_Vibrant" title="Bright and energetic">Bold and Vibrant</option>
-                        <option value="Cottagecore" title="Pastel colors with floral patterns">Cottagecore</option>
-                        <option value="Cool" title="Cool tones: blues, greens, purples">Cool</option>
-                        <option value="Coastal" title="Seaside-inspired colors">Coastal</option>
-                        <option value="Desert" title="Warm sandy tones, terracotta">Desert</option>
-                        <option value="Duotone" title="Duotone colors">Duotone</option>
-                        <option value="Earthy_and_Natural" title="Warm earth tones">Earthy and Natural</option>
-                        <option value="Electric" title="Electric colors">Electric</option>
-                        <option value="French_Country" title="Soft pastels with rustic elements">French Country</option>
-                        <option value="Gradient" title="Gradient colors">Gradient</option>
-                        <option value="High_Contrast" title="High contrast colors">High Contrast</option>
-                        <option value="Ibicenco" title="Serene and natural with a rustic elegance">Ibicenco</option>
-                        <option value="Industrial" title="Urban and raw industrial tones">Industrial</option>
-                        <option value="Industrial_Chic" title="Urban and warm industrial tones">Industrial Chic</option>
-                        <option value="Jewel" title="Rich jewel tones">Jewel</option>
-                        <option value="Mediterranean" title="Warm earth tones inspired by the Mediterranean">Mediterranean</option>
-                        <option value="Metallic" title="Glamorous metallic hues">Metallic</option>
-                        <option value="Mid_Century_Modern" title="Colors inspired by retro aesthetics">Mid-Century Modern</option>
-                        <option value="Moody" title="Deep and rich hues">Moody</option>
-                        <option value="Muted" title="Soft and desaturated colors">Muted</option>
-                        <option value="Muted_and_Subtle" title="Soft and understated tones">Muted and Subtle</option>
-                        <option value="Nordic_White" title="Crisp and clean white palette">Nordic White</option>
-                        <option value="Pastel" title="Soft and light shades">Pastel</option>
-                        <option value="Pop_Art" title="Vibrant primary colors">Pop Art</option>
-                        <option value="Primary" title="Primary colors">Primary</option>
-                        <option value="Retro" title="Nostalgic retro colors">Retro</option>
-                        <option value="Retro_Pastels" title="Soft pastels from the 1950s and 1960s">Retro Pastels</option>
-                        <option value="Romantic" title="Soft and feminine tones">Romantic</option>
-                        <option value="Rustic_Farmhouse" title="Warm and earthy tones">Rustic Farmhouse</option>
-                        <option value="Saturated" title="Saturated colors">Saturated</option>
-                        <option value="Scandinavian" title="Minimalist and light palette">Scandinavian</option>
-                        <option value="Scandinavian_Minimalism" title="Clean and minimal color palette">Scandinavian Minimalism</option>
-                        <option value="Scandinavian_Pop" title="Bold and vibrant Scandinavian look">Scandinavian Pop</option>
-                        <option value="Tetradic" title="Four-color combination">Tetradic</option>
-                        <option value="Triadic" title="Three evenly spaced colors">Triadic</option>
-                        <option value="Tropical" title="Vibrant tropical colors">Tropical</option>
-                        <option value="Urban_Jungle" title="Green shades with natural wood tones">Urban Jungle</option>
-                        <option value="Vibrant" title="Vibrant colors">Vibrant</option>
-                        <option value="Warm" title="Warm tones: reds, oranges, yellows">Warm</option>
-                        <option value="off_white" title="With soft bone-white undertones">White: Off-White</option>
-                          <option value="silk_white" title="A white with subtle gray undertones">White: Silk-White</option>
-                          <option value="cream_white" title="Inspired by milk cream, with a hint of yellow">White: Cream-White </option>
-                          <option value="antique_white" title="It has a slight beige tone">White: Antique-White</option>
-                          <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
-                    </select>
+                   <select id="color_scheme">
+    <option value="">Select Color Scheme</option>
+
+    <optgroup label="Basic and Monochromatic">
+        <option value="Black_and_White_Timeless_contrast_of_black_and_white_for_a_striking_look">Black and White</option>
+        <option value="White_Variations_Variations_of_white_including_Off-White_Silk-White_Cream-White_Antique-White_Chalk-White">White Variations</option>
+        <option value="Duotone_Two-tone_color_schemes_for_a_minimalist_yet_bold_statement">Duotone</option>
+    </optgroup>
+
+    <optgroup label="Warm Tones">
+        <option value="Warm_Inviting_tones_of_reds_oranges_yellows">Warm</option>
+        <option value="Desert_Warm_sandy_and_terracotta_tones_reminiscent_of_the_desert_landscape">Desert</option>
+        <option value="Rustic_Farmhouse_Warm_earthy_tones_for_a_cozy_rustic_look">Rustic Farmhouse</option>
+        <option value="Mediterranean_Sun-kissed_earth_tones_inspired_by_Mediterranean_landscapes">Mediterranean</option>
+    </optgroup>
+
+    <optgroup label="Cool Tones">
+        <option value="Cool_Refreshing_blues_greens_purples_for_a_serene_ambiance">Cool</option>
+        <option value="Nordic_White_Crisp_clean_white_palette_inspired_by_Scandinavian_simplicity">Nordic White</option>
+        <option value="Scandinavian_Minimalist_palette_with_light_airy_tones_for_a_modern_look">Scandinavian</option>
+    </optgroup>
+
+    <optgroup label="Natural and Earthy">
+        <option value="Earthy_and_Natural_Grounded_in_nature_with_warm_earth_tones_and_textures">Earthy and Natural</option>
+        <option value="Bohemian_Eclectic_vibrant_mix_of_global_influences_and_textures">Bohemian</option>
+        <option value="Urban_Jungle_Lush_greens_and_natural_wood_tones_for_an_indoor_oasis">Urban Jungle</option>
+    </optgroup>
+
+    <optgroup label="Vibrant and Energetic">
+        <option value="Bold_and_Vibrant_Dynamic_bright_and_energetic_colors_for_lively_spaces">Bold and Vibrant</option>
+        <option value="Electric_High-voltage_electric_hues_for_strikingly_modern_interiors">Electric</option>
+        <option value="Tropical_Bright_vibrant_tropical_colors_for_a_lively_exotic_touch">Tropical</option>
+        <option value="Pop_Art_Pop_Art-inspired_vibrant_primary_colors_for_a_fun_retro_vibe">Pop Art</option>
+    </optgroup>
+
+    <optgroup label="Patterns and Themes">
+        <option value="Art_Deco_Luxurious_tones_with_geometric_patterns_for_a_glamorous_look">Art Deco</option>
+        <option value="Beachy_Relaxed_beach-inspired_shades_for_a_casual_airy_feel">Beachy</option>
+        <option value="Cottagecore_Pastel_colors_with_floral_patterns_for_a_quaint_charming_vibe">Cottagecore</option>
+        <option value="French_Country_Soft_pastels_mixed_with_rustic_elements_for_a_chic_countryside_feel">French Country</option>
+    </optgroup>
+    
+    <optgroup label="Luxurious and Glamorous">
+        <option value="Jewel_Rich_saturated_jewel_tones_for_opulent_luxurious_interiors">Jewel</option>
+        <option value="Metallic_Shimmering_metallic_hues_for_a_touch_of_glamour">Metallic</option>
+    </optgroup>
+    
+    <optgroup label="Specialty Color Schemes">
+        <option value="Gradient_Smooth_transitions_between_colors_for_a_modern_dynamic_look">Gradient</option>
+        <option value="High_Contrast_Dramatic_high_contrast_colors_for_bold_impactful_designs">High Contrast</option>
+        <option value="Muted_Soft_desaturated_colors_for_a_subtle_sophisticated_ambiance">Muted</option>
+        <option value="Saturated_Deep_intense_colors_for_a_rich_visual_experience">Saturated</option>
+        <option value="Moody_Deep_rich_hues_for_an_intimate_atmospheric_setting">Moody</option>
+    </optgroup>
+    
+    <optgroup label="Color Harmony">
+        <option value="Analogous_Harmonious_adjacent_colors_for_a_cohesive_balanced_look">Analogous</option>
+        <option value="Triadic_Three_evenly_spaced_colors_on_the_color_wheel_for_vibrant_harmony">Triadic</option>
+        <option value="Tetradic_Four-color_schemes_for_complex_rich_palettes">Tetradic</option>
+    </optgroup>
+</select>
+
                     <span class="dot"></span>
                     <!--indoor / outdoor -->
                     <select id="space_to_be_designed">
