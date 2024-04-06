@@ -187,6 +187,7 @@ initializeColorWheel();
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
             "film_used_to_take_the_shot",
+            "photo_lighting_type",
             "illumination",
             "door",
             "windows",
