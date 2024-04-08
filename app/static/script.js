@@ -186,7 +186,8 @@ initializeColorWheel();
           "seating_upholstery_pattern",
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
-            "film_used_to_take_the_shot",
+          "lens_used",
+            "filmgrain_used_to_take_the_shot",
             "photo_lighting_type",
             "illumination",
             "door",
@@ -299,14 +300,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,  `;
+  const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (((lot of furniture, several decoration, many deco, filled up of furniture, amueblado, lleno de muebles)))`;
+  const promptEndy = ` `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
@@ -322,7 +323,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate,  bad proportions,  bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers, diformed hands, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
+    negative_prompt: "small boobs, ugly woman face, tiny boobs, split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate,  bad proportions,  bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers, diformed hands, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     //width: width, 
     //height: height,
 
