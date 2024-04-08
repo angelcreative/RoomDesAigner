@@ -183,7 +183,8 @@ initializeColorWheel();
           "seating_upholstery_pattern",
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
-            "film_used_to_take_the_shot",
+          "lens_used",
+            "filmgrain_used_to_take_the_shot",
             "photo_lighting_type",
             "illumination",
             "door",
@@ -303,7 +304,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (((lot of furniture, several decoration, many deco, filled up of furniture, amueblado, lleno de muebles)))`;
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed)`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 512 : 1024;
