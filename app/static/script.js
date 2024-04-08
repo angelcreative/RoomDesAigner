@@ -318,7 +318,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
 
   const prompt = {
-    key: apiKey,
+    key: "apiKey",
     prompt: JSON.stringify(promptText),
     negative_prompt: "ugly face, split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate,  bad proportions,  bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers, diformed hands, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
     //width: width, 
@@ -327,18 +327,20 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     width: "1024",
     height: "1024",
     samples: "4",
-    guidance_scale: "10",
-    num_inference_steps: "50",
-    scheduler: "KarrasVeScheduler",
-    self_attention: "no", //testing no
-
-   
+    guidance_scale: "5",
+    //num_inference_steps: "50",
+    //scheduler: "KarrasVeScheduler",
+    //self_attention: "no", //testing no
     seed: seedValue,
-    
-    safety_checker: null,
-   
+    webhook: "null",
+    safety_checker: "false",
+    track_id: null,
   };
-    
+
+
+
+
+
     
     
     
