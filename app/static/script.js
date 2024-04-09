@@ -161,6 +161,7 @@ initializeColorWheel();
     
     function getSelectedValues() {
         const elementIds = [
+           "person",
             "point_of_view",
             "harmonyType",
             "primary_color",
@@ -220,8 +221,8 @@ initializeColorWheel();
             "wood_material",
             "picture",
             "design_style",
-            "decorative_elements",
-           "person"
+            "decorative_elements"
+          
         ];
 
         const values = {};
