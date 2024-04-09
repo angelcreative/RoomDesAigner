@@ -307,7 +307,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed)`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const width = aspectRatio === "portrait" ? 512 : 1024;
+  const width = aspectRatio === "portrait" ? 1024 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 512;
 
   const seedSwitch = document.getElementById("seedSwitch");
@@ -321,11 +321,11 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     key: apiKey,
     prompt: JSON.stringify(promptText),
     negative_prompt: "ugly face, split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate,  bad proportions,  bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers, diformed hands, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
-    //width: width, 
-    //height: height,
+    width: width, 
+    height: height,
 
-    width: "1024",
-    height: "1024",
+    //width: "1024",
+    //height: "1024",
     samples: "4",
     guidance_scale: "5",
     //num_inference_steps: "50",
