@@ -308,7 +308,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
-  const height = aspectRatio === "portrait" ? 1024 : 512;
+  const height = aspectRatio === "portrait" ? 1024 : 768;
 
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
