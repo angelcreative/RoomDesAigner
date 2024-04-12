@@ -980,7 +980,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
