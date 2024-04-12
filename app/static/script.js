@@ -580,63 +580,63 @@ const upscaleImage = async (imageUrl) => {
             },
             body: JSON.stringify({
                 input: {
-                    input_image_url: imageUrl // Pass the image URL dynamically
+                    input_image_url: imageUrl  // Ensure you pass the correct URL here
                 }
             })
         };
 
         // Send the request to the upscaling API
         const response = await fetch(url, options);
-        const data = await response.json(); // Assuming the response is JSON formatted
-
-        // Check the console to see the full API response
-        console.log(data);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json(); // Parse the response to JSON
 
         // Use the correct property from the API response to get the upscaled image URL
-        const upscaledImageUrl = data.result_url; // Adjust according to the actual response property for the upscaled image URL
+        const upscaledImageUrl = data.output.body.output_image_url;
 
         // Open a new window or tab and display the upscaled image
         const newWindow = window.open('', '_blank');
         newWindow.document.write(`
             <html>
-            <head>
-                <title>Upscaled Image</title>
-                <style>
-                    body {
-                        text-align: center;
-                        color: #a9fff5;
-                        font-family: arial, sans-serif;
-                        font-size: 12px;
-                        padding-top: 60px;
-                        background: url('/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
-                        background-size: 150px;
-                        margin-top: 40px;
-                    }
-                    h1 {
-                        margin: 20px 0;
-                    }
-                    img {
-                        border-radius: 12px;
-                        overflow: hidden;
-                        max-width: 80%;
-                    }
-                    html {
-                        background: #1f1f1f;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Upscaled Image</h1>
-                <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-            </body>
+                <head>
+                    <title>Upscaled Image</title>
+                    <style>
+                        body {
+                            text-align: center;
+                            color: #a9fff5;
+                            font-family: arial, sans-serif;
+                            font-size: 12px;
+                            padding-top: 60px;
+                            background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+                            background-size: 150px;
+                            margin-top: 40px;
+                        }
+                        h1 {
+                            margin: 20px 0;
+                        }
+                        img {
+                            border-radius: 12px;
+                            overflow: hidden;
+                            max-width: 80%;
+                        }
+                        html {
+                            background: #1f1f1f;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>Upscaled Image</h1>
+                    <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+                </body>
             </html>
         `);
         newWindow.document.close();
     } catch (error) {
         console.error('Error upscaling image:', error);
+        alert(`Failed to upscale image: ${error.message}`);
     }
 };
-
 
     
 // END ENHANCE
