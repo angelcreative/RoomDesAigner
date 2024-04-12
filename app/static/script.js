@@ -585,17 +585,21 @@ const upscaleImage = async (imageUrl) => {
             })
         };
 
-        // Send the request to the upscaling API
         const response = await fetch(url, options);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log("Full API response:", data);
+        console.log("Full API response:", JSON.stringify(data, null, 2));
 
-        const upscaledImageUrl = data && data.output && data.output.body && data.output.body.output_image_url ? data.output.body.output_image_url : "path/to/fallback/image.jpg";
+        const upscaledImageUrl = data.output && data.output.body && data.output.body.output_image_url ? data.output.body.output_image_url : "path/to/fallback/image.jpg";
 
-        // Open a new window or tab and display the upscaled image
+        if (!upscaledImageUrl || upscaledImageUrl === "path/to/fallback/image.jpg") {
+            console.error('Failed to upscale image:', data);
+            alert('Failed to upscale image. Please check the console for more details.');
+            return;
+        }
+
         const newWindow = window.open('', '_blank');
         newWindow.document.write(`
             <html>
@@ -615,6 +619,7 @@ const upscaleImage = async (imageUrl) => {
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
+
 
     
 // END ENHANCE
