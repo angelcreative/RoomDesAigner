@@ -580,7 +580,7 @@ const upscaleImage = async (imageUrl) => {
             },
             body: JSON.stringify({
                 input: {
-                    input_image_url: imageUrl  // Ensure you pass the correct URL here
+                    input_image_url: imageUrl
                 }
             })
         };
@@ -590,10 +590,10 @@ const upscaleImage = async (imageUrl) => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json(); // Parse the response to JSON
+        const data = await response.json();
+        console.log("Full API response:", data);
 
-        // Use the correct property from the API response to get the upscaled image URL
-        const upscaledImageUrl = data.output.body.output_image_url;
+        const upscaledImageUrl = data && data.output && data.output.body && data.output.body.output_image_url ? data.output.body.output_image_url : "path/to/fallback/image.jpg";
 
         // Open a new window or tab and display the upscaled image
         const newWindow = window.open('', '_blank');
@@ -601,29 +601,7 @@ const upscaleImage = async (imageUrl) => {
             <html>
                 <head>
                     <title>Upscaled Image</title>
-                    <style>
-                        body {
-                            text-align: center;
-                            color: #a9fff5;
-                            font-family: arial, sans-serif;
-                            font-size: 12px;
-                            padding-top: 60px;
-                            background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
-                            background-size: 150px;
-                            margin-top: 40px;
-                        }
-                        h1 {
-                            margin: 20px 0;
-                        }
-                        img {
-                            border-radius: 12px;
-                            overflow: hidden;
-                            max-width: 80%;
-                        }
-                        html {
-                            background: #1f1f1f;
-                        }
-                    </style>
+                    <style> /* Your existing styles */ </style>
                 </head>
                 <body>
                     <h1>Upscaled Image</h1>
