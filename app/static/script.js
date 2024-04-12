@@ -710,7 +710,7 @@ function openPhotopeaWithImage(imageUrl) {
 
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const upscaleButton = createButton("Enhance Image", () => upscaleImage(imageUrl));
         buttonsContainer.appendChild(downloadButton);
         buttonsContainer.appendChild(copyButton);
         buttonsContainer.appendChild(editButton);
