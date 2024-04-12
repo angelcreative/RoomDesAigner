@@ -586,34 +586,62 @@ const upscaleImage = async (imageUrl) => {
         };
 
         const response = await fetch(url, options);
+        const data = await response.json();  // Parse the response to JSON
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
-        console.log("Full API response:", JSON.stringify(data, null, 2));
 
-        const upscaledImageUrl = data.output && data.output.body && data.output.body.output_image_url ? data.output.body.output_image_url : "path/to/fallback/image.jpg";
+        // Parsing the nested JSON string inside the 'body' property
+        if (data.output && data.output.body) {
+            const body = JSON.parse(data.output.body);
+            const upscaledImageUrl = body.output_image_url;
 
-        if (!upscaledImageUrl || upscaledImageUrl === "path/to/fallback/image.jpg") {
-            console.error('Failed to upscale image:', data);
-            alert('Failed to upscale image. Please check the console for more details.');
-            return;
+            if (upscaledImageUrl) {
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Upscaled Image</title>
+                            <style>
+                                body {
+                                    text-align: center;
+                                    color: #a9fff5;
+                                    font-family: arial, sans-serif;
+                                    font-size: 12px;
+                                    padding-top: 60px;
+                                    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+                                    background-size: 150px;
+                                    margin-top: 40px;
+                                }
+                                h1 {
+                                    margin: 20px 0;
+                                }
+                                img {
+                                    border-radius: 12px;
+                                    overflow: hidden;
+                                    max-width: 80%;
+                                }
+                                html {
+                                    background: #1f1f1f;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <h1>Upscaled Image</h1>
+                            <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+                        </body>
+                    </html>
+                `);
+                newWindow.document.close();
+            } else {
+                console.error('No upscaled image URL found:', body);
+                alert('Failed to retrieve the upscaled image. Please check the console for more details.');
+            }
+        } else {
+            console.error('Invalid API response structure:', data);
+            alert('Failed to process the API response. Please check the console for more details.');
         }
-
-        const newWindow = window.open('', '_blank');
-        newWindow.document.write(`
-            <html>
-                <head>
-                    <title>Upscaled Image</title>
-                    <style> /* Your existing styles */ </style>
-                </head>
-                <body>
-                    <h1>Upscaled Image</h1>
-                    <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-                </body>
-            </html>
-        `);
-        newWindow.document.close();
     } catch (error) {
         console.error('Error upscaling image:', error);
         alert(`Failed to upscale image: ${error.message}`);
