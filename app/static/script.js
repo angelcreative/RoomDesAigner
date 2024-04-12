@@ -566,91 +566,80 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
+//ENHANCE IMAGE
+
 const upscaleImage = async (imageUrl) => {
-  try {
- 
+    try {
+        const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+                'X-RapidAPI-Host': 'image-upscale-ai-resolution-x4.p.rapidapi.com'
+            },
+            body: JSON.stringify({
+                input: {
+                    input_image_url: imageUrl // Pass the image URL dynamically
+                }
+            })
+        };
 
-    // The new endpoint expects an image URL directly, so we skip the Base64 conversion
-    // and use the imageUrl as is.
+        // Send the request to the upscaling API
+        const response = await fetch(url, options);
+        const data = await response.json(); // Assuming the response is JSON formatted
 
-    const url = 'https://ai-picture-upscaler.p.rapidapi.com/upscaler/v2/';
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded',
-        'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-        'X-RapidAPI-Host': 'ai-picture-upscaler.p.rapidapi.com'
-      },
-      body: new URLSearchParams({
-        image_url: imageUrl, // Directly pass the image URL
-        scale: '2' // The desired scale
-      })
-    };
+        // Check the console to see the full API response
+        console.log(data);
 
-    // Send the request to the upscaling API
-    const response = await fetch(url, options);
-    const result = await response.text(); // Assuming the response is text
-    const data = JSON.parse(result); // Parse the response to JSON
+        // Use the correct property from the API response to get the upscaled image URL
+        const upscaledImageUrl = data.result_url; // Adjust according to the actual response property for the upscaled image URL
 
-    // Check the console to see the full API response
-    console.log(data);
-
-    // Use the correct property from the API response to get the upscaled image URL
-    const upscaledImageUrl = data.result_url;
-
-    // Open a new window or tab and display the upscaled image
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-      <html>
-        <head>
-          <title>Upscaled Image</title>
-           <style>body {
-    text-align: center;
-    color: #a9fff5;
-    font-family: arial, sans-serif;
-    font-size: 12px;
-    padding-top: 60px;
-    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
-    background-size: 150px;
-    margin-top: 40px;
-}
-
-h1 {
-    margin: 20px 0
-}
-
-
-
-img {
-    border-radius: 12px;
-    overflow: hidden;
-max-width:80%;
-}
-
-html {
-    background: #1f1f1f;
-}</style>
-        </head>
-        <body>
-          <h1>Upscaled Image</h1>
-          <p>Use KreaAi or Magnific to enhance details</p>
-          <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-        </body>
-      </html>
-    `);
-    newWindow.document.close();
-
-   
-  } catch (error) {
-    console.error(error);
-   
-  }
+        // Open a new window or tab and display the upscaled image
+        const newWindow = window.open('', '_blank');
+        newWindow.document.write(`
+            <html>
+            <head>
+                <title>Upscaled Image</title>
+                <style>
+                    body {
+                        text-align: center;
+                        color: #a9fff5;
+                        font-family: arial, sans-serif;
+                        font-size: 12px;
+                        padding-top: 60px;
+                        background: url('/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+                        background-size: 150px;
+                        margin-top: 40px;
+                    }
+                    h1 {
+                        margin: 20px 0;
+                    }
+                    img {
+                        border-radius: 12px;
+                        overflow: hidden;
+                        max-width: 80%;
+                    }
+                    html {
+                        background: #1f1f1f;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Upscaled Image</h1>
+                <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+            </body>
+            </html>
+        `);
+        newWindow.document.close();
+    } catch (error) {
+        console.error('Error upscaling image:', error);
+    }
 };
 
 
-
     
-
+// END ENHANCE
 
 
     
