@@ -305,7 +305,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `(abundant-furniture:1,multiple-decoration:1,numerous-decor-items:1,densely-furnished:1,fully-equipped:1,richly-appointed:1,empty-room:-2,void-room:-2)`;
+  const promptEndy = `(abundant-furniture:1,multiple-decoration:1,numerous-decor-items:1,densely-furnished:1,fully-equipped:1,richly-appointed:1,empty-room:-2,void-room:-2),(beautiful-face:2,perfect-hands:2,big-boobs:2,perfect-morphology:2),`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -321,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "(everything-fucked-up:2),(something-fucked-up:2),(anything-fucked-up:2),(fucked-up-body-and-hand-morphology:2,empty-room:2)",
+    negative_prompt: "(ugly-face:2,weird-hands:2,extra-limbs:-2,wrong-generated-body-and-hand-morphology:2,empty-room:2)",
     width: width, 
     height: height,
 
