@@ -680,27 +680,68 @@ function searchImageOnRapidAPI(imageUrl) {
 }
 
 // Function to display search results in a new tab
-function displayResultsInNewTab(data) {
-    if (data && data.data && Array.isArray(data.data.visual_matches)) {
-        const newWindow = window.open('', '_blank');
-        const htmlContent = `
-            <html>
-            <head><title>Search Results</title></head>
-            <body>
-                <h1>Image Search Results</h1>
-                <ul>
-                    ${data.data.visual_matches.map(match => `<li><a href="${match.link}" target="_blank">${match.title}</a></li>`).join('')}
-                </ul>
-            </body>
-            </html>
-        `;
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-    } else {
-        console.error('Expected data not found in response:', data);
-        alert('No search results found or the response format is incorrect. Check the console for more details.');
-    }
+
+
+  function displayResultsInNewTab(data) {
+    const newWindow = window.open('', '_blank');
+    const htmlContent = `
+        <html>
+        <head>
+            <title>Search Results</title>
+            <style>
+                .card-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    justify-content: space-around;
+                }
+                .card {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    width: 200px;
+                    padding: 10px;
+                    text-align: center;
+                }
+                .card img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                }
+                .source-icon {
+                    width: 20px;
+                    height: 20px;
+                }
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
+                a:hover {
+                    color: blue;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Image Search Results</h1>
+            <div class="card-container">
+                ${data.data.visual_matches.map(match => `
+                    <div class="card">
+                        <img src="${match.thumbnail}" alt="Thumbnail">
+                        <h3>${match.title}</h3>
+                        <img class="source-icon" src="${match.source_icon}" alt="Source Icon">
+                        <p>${match.source}</p>
+                        <a href="${match.link}" target="_blank">Visit</a>
+                    </div>
+                `).join('')}
+            </div>
+        </body>
+        </html>
+    `;
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
 }
+
 
 
 
