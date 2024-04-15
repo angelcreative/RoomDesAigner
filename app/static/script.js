@@ -741,9 +741,15 @@ function showOverlay() {
     overlay.style.display = "block";
 }
 
+
+//start reverse
+  
 // Async function to search an image via reverse image search API and open results in new tab
 async function searchImage(imageUrl) {
-    const encodedUrl = encodeURIComponent(imageUrl);  
+    console.log("Original Image URL: ", imageUrl); // Debugging log to display the original URL
+    const encodedUrl = encodeURIComponent(imageUrl);
+    console.log("Encoded Image URL: ", encodedUrl); // Debugging log to display the encoded URL
+
     const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
     const options = {
         method: 'GET',
@@ -755,12 +761,15 @@ async function searchImage(imageUrl) {
 
     try {
         const response = await fetch(url, options);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        if (data && data.visual_matches) {
+        if (data && data.visual_matches && data.visual_matches.length > 0) {
             openResultsInNewTab(data.visual_matches);
         } else {
-            throw new Error("No visual matches found.");
+            console.log("No visual matches found or API returned an empty data set.");
+            alert("No visual matches found or API returned an empty data set.");
         }
     } catch (error) {
         console.error('Search Image API error:', error);
@@ -779,6 +788,8 @@ function openResultsInNewTab(matches) {
     newWindow.document.close();
 }
 
+
+//end reverse
 
     
     
