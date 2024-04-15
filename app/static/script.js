@@ -744,18 +744,21 @@ function showOverlay() {
 
 //start reverse
   
-// Async function to search an image via reverse image search API and open results in new tab
 async function searchImage(imageUrl) {
-    console.log("Original Image URL: ", imageUrl); // Debugging log to display the original URL
-    const encodedUrl = encodeURIComponent(imageUrl);
-    console.log("Encoded Image URL: ", encodedUrl); // Debugging log to display the encoded URL
+    console.log("Trying to search image with URL: ", imageUrl);  // Log the URL being used for debugging
 
+    const encodedUrl = encodeURIComponent(imageUrl);  // Properly encode the URL to ensure it's correctly parsed by the API
+    console.log("Encoded URL for API: ", encodedUrl);  // Debug log to check the encoded URL
+
+    const apiHost = 'real-time-lens-data.p.rapidapi.com';
+    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Use your actual API key
     const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
+
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': apiHost
         }
     };
 
@@ -764,12 +767,12 @@ async function searchImage(imageUrl) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();
+        const data = await response.json();  // Assuming the response is JSON
+        console.log('API Response:', data);  // Log the data to debug it
         if (data && data.visual_matches && data.visual_matches.length > 0) {
-            openResultsInNewTab(data.visual_matches);
+            openResultsInNewTab(data.visual_matches);  // Function to open results in a new tab
         } else {
-            console.log("No visual matches found or API returned an empty data set.");
-            alert("No visual matches found or API returned an empty data set.");
+            throw new Error("No visual matches found or API returned an empty data set.");
         }
     } catch (error) {
         console.error('Search Image API error:', error);
