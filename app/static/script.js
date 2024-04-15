@@ -718,7 +718,7 @@ function showModal(imageUrls, promptText) {
         buttonsContainer.appendChild(createButton("Copy Prompt", () => copyTextToClipboard(promptText)));
         buttonsContainer.appendChild(createButton("Enhance Image", () => upscaleImage(imageUrl)));
         buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(imageUrl, promptText)));
-        buttonsContainer.appendChild(createButton("Search Image", () => searchImage(imageUrl)));
+        buttonsContainer.appendChild(createButton("Search Image", () => searchImageWithAPI(imageUrl)));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
