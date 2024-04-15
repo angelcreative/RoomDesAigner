@@ -652,6 +652,8 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
+//reverse
+
 //REVERSE SEARCH
 
 async function searchImage(imageUrl) {
@@ -670,6 +672,9 @@ async function searchImage(imageUrl) {
 
     try {
         const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();  // Assuming the response is JSON
         openResultsInNewTab(data);  // Function to open results in a new tab
     } catch (error) {
@@ -678,22 +683,28 @@ async function searchImage(imageUrl) {
     }
 }
 
-
-
 function openResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
-    newWindow.document.write(`<html><head><title>Image Search Results</title><style>
-        .card { display: flex; flex-direction: column; align-items: center; margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9; }
-        .card img { width: 100%; max-width: 200px; border-radius: 5px; }
-        .card a { color: #007bff; text-decoration: none; }
-        .card a:hover { text-decoration: underline; }
-        .flex-container { display: flex; flex-wrap: wrap; justify-content: center; }
-        .source-icon { height: 16px; width: 16px; vertical-align: middle; margin-right: 5px; }
-        .info { margin: 5px 0; }
-        .price { color: green; font-weight: bold; }
-    </style></head><body><div class="flex-container">`);
+    newWindow.document.write(`
+        <html>
+        <head>
+            <title>Image Search Results</title>
+            <style>
+                .card { display: flex; flex-direction: column; align-items: center; margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9; }
+                .card img { width: 100%; max-width: 200px; border-radius: 5px; }
+                .card a { color: #007bff; text-decoration: none; }
+                .card a:hover { text-decoration: underline; }
+                .flex-container { display: flex; flex-wrap: wrap; justify-content: center; }
+                .source-icon { height: 16px; width: 16px; vertical-align: middle; margin-right: 5px; }
+                .info { margin: 5px 0; }
+                .price { color: green; font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <div class="flex-container">
+    `);
 
-    if (data && data.visual_matches) {
+    if (data && data.visual_matches && data.visual_matches.length > 0) {
         data.visual_matches.forEach(match => {
             const htmlContent = `
                 <div class="card">
@@ -713,9 +724,11 @@ function openResultsInNewTab(data) {
     newWindow.document.write('</div></body></html>');
     newWindow.document.close();
 }
-  
-  
+
 // END REVERSE
+
+
+//end reverse
     
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
