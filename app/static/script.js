@@ -652,81 +652,6 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
-// REVERSE SEARCH FUNCTION
-
-async function searchImage(imageUrl) {
-    const encodedUrl = encodeURIComponent(imageUrl);  // Properly encode the URL to ensure it's correctly parsed by the API
-    const apiHost = 'real-time-lens-data.p.rapidapi.com';
-    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Use your actual API key
-    const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
-
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': apiKey,
-            'X-RapidAPI-Host': apiHost
-        }
-    };
-
-    try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();  // Assuming the response is JSON
-        console.log('API Response:', data);  // Log the data to debug it
-        openResultsInNewTab(data);  // Function to open results in a new tab
-    } catch (error) {
-        console.error('Search Image API error:', error);
-        alert('Failed to perform image search.');
-    }
-}
-
-// FUNCTION TO DISPLAY RESULTS IN A NEW TAB
-function openResultsInNewTab(data) {
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-        <html>
-        <head>
-            <title>Image Search Results</title>
-            <style>
-                .card { display: flex; flex-direction: column; align-items: center; margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9; }
-                .card img { width: 100%; max-width: 200px; border-radius: 5px; }
-                .card a { color: #007bff; text-decoration: none; }
-                .card a:hover { text-decoration: underline; }
-                .flex-container { display: flex; flex-wrap: wrap; justify-content: center; }
-                .source-icon { height: 16px; width: 16px; vertical-align: middle; margin-right: 5px; }
-                .info { margin: 5px 0; }
-                .price { color: green; font-weight: bold; }
-            </style>
-        </head>
-        <body>
-            <div class="flex-container">
-    `);
-
-    if (data && data.visual_matches && data.visual_matches.length > 0) {
-        data.visual_matches.forEach(match => {
-            const htmlContent = `
-                <div class="card">
-                    <img src="${match.thumbnail}" alt="Thumbnail">
-                    <div class="info"><a href="${match.link}" target="_blank">${match.title}</a></div>
-                    <div class="info"><img src="${match.source_icon}" class="source-icon"><a href="https://${match.source}" target="_blank">${match.source.replace('www.', '')}</a></div>
-                    ${match.price ? `<div class="info price">Price: ${match.price}</div>` : ''}
-                    ${match.availability ? `<div class="info">Availability: ${match.availability}</div>` : ''}
-                </div>
-            `;
-            newWindow.document.write(htmlContent);
-        });
-    } else {
-        newWindow.document.write('<div>No visual matches found or error in response.</div>');
-    }
-
-    newWindow.document.write('</div></body></html>');
-    newWindow.document.close();
-}
-
-
-// END REVERSE SEARCH
 
 
     
@@ -747,7 +672,7 @@ function openResultsInNewTab(data) {
 function openPhotopeaWithImage(imageUrl) {
     const photopeaUrl = `https://www.photopea.com#`;
     const photopeaConfig = {
-        files: [imageUrl]
+        files: [imageUrl] 
     };
     const encodedConfig = encodeURIComponent(JSON.stringify(photopeaConfig));
     window.open(photopeaUrl + encodedConfig, '_blank');
@@ -755,79 +680,103 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-    function showModal(imageUrls, promptText) {
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
+
+// Displays modal with generated images and associated action buttons
+function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
-    // Ensure only one event listener is added
+    // Remove existing event listener to avoid duplication
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
 
-    // Get the thumbnail image source (user-uploaded image)
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
-
     const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = ""; // Clear previous images
+    imageGrid.innerHTML = "";  // Clear existing images
 
+    // Create and append image elements and buttons
     imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
-
-        // Create image element
         const image = document.createElement("img");
         image.src = imageUrl;
         image.alt = "Generated Image";
         image.classList.add("thumbnail");
 
-        // Create buttons container
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        // Create and append buttons (Copy URL, Copy Prompt, Upscale)
-        // Create "Edit in Photopea" button
-        const editButton = document.createElement("button");
-        editButton.textContent = "Edit in Photopea";
-        editButton.addEventListener("click", () => {
-            openPhotopeaWithImage(imageUrl);
-        });
-         // Create download button
-        const downloadButton = document.createElement("button");
-        downloadButton.textContent = "Download";
-        downloadButton.addEventListener("click", () => downloadImage(imageUrl));
+        // Create and append each button
+        buttonsContainer.appendChild(createButton("Download", () => downloadImage(imageUrl)));
+        buttonsContainer.appendChild(createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl)));
+        buttonsContainer.appendChild(createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl)));
+        buttonsContainer.appendChild(createButton("Copy Prompt", () => copyTextToClipboard(promptText)));
+        buttonsContainer.appendChild(createButton("Enhance Image", () => upscaleImage(imageUrl)));
+        buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(imageUrl, promptText)));
+        buttonsContainer.appendChild(createButton("Search Image", () => searchImage(imageUrl)));
 
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Enhance Image", () => upscaleImage(imageUrl));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const searchImageButton = createButton("Search Image", () => searchImage(imageUrl));
-//download button
-        buttonsContainer.appendChild(downloadButton);
- //copy button       
-        buttonsContainer.appendChild(copyButton);
-
-//edit photopea button
-        buttonsContainer.appendChild(editButton);
-//copy prompt button
-        buttonsContainer.appendChild(copyPromptButton);
-//upscale buttobn
-        buttonsContainer.appendChild(upscaleButton);
-
-//compare button
-        buttonsContainer.appendChild(compareButton);
-      //search reverse button
-        buttonsContainer.appendChild(searchImageButton);
-
-        // Append image and buttons to image container
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
-
-        // Append image container to image grid
         imageGrid.appendChild(imageContainer);
     });
 
-    // Show the modal
-    modal.style.display = "block";
+    modal.style.display = "block";  // Show the modal
     showOverlay();
+}
+
+// Function to handle the "Close" action of modal
+function closeModalHandler() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
+
+// Function to show overlay during modal display
+function showOverlay() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
+}
+
+// Async function to search an image via reverse image search API and open results in new tab
+async function searchImage(imageUrl) {
+    const encodedUrl = encodeURIComponent(imageUrl);  
+    const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+        const data = await response.json();
+        if (data && data.visual_matches) {
+            openResultsInNewTab(data.visual_matches);
+        } else {
+            throw new Error("No visual matches found.");
+        }
+    } catch (error) {
+        console.error('Search Image API error:', error);
+        alert('Failed to perform image search: ' + error.message);
+    }
+}
+
+// Display search results in a new window/tab using data from API
+function openResultsInNewTab(matches) {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write('<html><head><title>Image Search Results</title><link rel="stylesheet" type="text/css" href="styles.css"></head><body><div class="flex-container">');
+    matches.forEach(match => {
+        newWindow.document.write(`<div class="card"><img src="${match.thumbnail}" alt="Thumbnail"><div><a href="${match.link}" target="_blank">${match.title}</a></div><div>${match.price ? `Price: ${match.price}` : 'Price unavailable'}</div></div>`);
+    });
+    newWindow.document.write('</div></body></html>');
+    newWindow.document.close();
 }
 
 
