@@ -681,21 +681,27 @@ function searchImageOnRapidAPI(imageUrl) {
 
 // Function to display search results in a new tab
 function displayResultsInNewTab(data) {
-    const newWindow = window.open('', '_blank');
-    const htmlContent = `
-        <html>
-        <head><title>Search Results</title></head>
-        <body>
-            <h1>Image Search Results</h1>
-            <ul>
-                ${data.data.visual_matches.map(match => `<li><a href="${match.link}" target="_blank">${match.title}</a></li>`).join('')}
-            </ul>
-        </body>
-        </html>
-    `;
-    newWindow.document.write(htmlContent);
-    newWindow.document.close();
+    if (data && data.data && Array.isArray(data.data.visual_matches)) {
+        const newWindow = window.open('', '_blank');
+        const htmlContent = `
+            <html>
+            <head><title>Search Results</title></head>
+            <body>
+                <h1>Image Search Results</h1>
+                <ul>
+                    ${data.data.visual_matches.map(match => `<li><a href="${match.link}" target="_blank">${match.title}</a></li>`).join('')}
+                </ul>
+            </body>
+            </html>
+        `;
+        newWindow.document.write(htmlContent);
+        newWindow.document.close();
+    } else {
+        console.error('Expected data not found in response:', data);
+        alert('No search results found or the response format is incorrect. Check the console for more details.');
+    }
 }
+
 
 
 //END REVERSE
