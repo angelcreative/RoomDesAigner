@@ -298,14 +298,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,  `;
+    const promptInit = `High-end-interior-design-editorial-photography,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),(((she has massive enormous gigantic superb big boobs)))`;
+  const promptEndy = `(abundant-furniture:1,multiple-decoration:1,numerous-decor-items:1,densely-furnished:1,fully-equipped:1,richly-appointed:1,empty-room:-2,void-room:-2)`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -321,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "ugly face, split image, out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate,  bad proportions,  bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers, diformed hands, signature, blurry, art, anime, tiling, out of frame, disfigured, deformed, watermark",
+    negative_prompt: "(everything-fucked-up:2),(something-fucked-up:2),(anything-fucked-up:2),(fucked-up-body-and-hand-morphology:2,empty-room:2)",
     width: width, 
     height: height,
 
