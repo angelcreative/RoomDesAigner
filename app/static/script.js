@@ -668,7 +668,7 @@ function searchImageOnRapidAPI(imageUrl) {
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
+            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
             'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
         }
     };
