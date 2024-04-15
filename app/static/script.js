@@ -689,6 +689,31 @@ function searchImageOnRapidAPI(imageUrl) {
         <head>
             <title>Search Results</title>
             <style>
+
+            html {
+    background: #15202b;
+}
+
+h3 {
+    padding: 10px;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 160px;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+h1 {
+    color: #a9fff5;
+    margin: 2rem 0;
+    font-weight: lighter;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+
                 .card-container {
                     display: flex;
                     flex-wrap: wrap;
@@ -723,15 +748,18 @@ function searchImageOnRapidAPI(imageUrl) {
             </style>
         </head>
         <body>
-            <h1>Image Search Results</h1>
+           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
+            <h1 class="headerStore">Image Search Results</h1>
             <div class="card-container">
                 ${data.data.visual_matches.map(match => `
                     <div class="card">
+                        <div class="maskImage">
                         <img src="${match.thumbnail}" alt="Thumbnail">
-                        <h3>${match.title}</h3>
-                        <img class="source-icon" src="${match.source_icon}" alt="Source Icon">
-                        <p>${match.source}</p>
-                        <a href="${match.link}" target="_blank">Visit</a>
+                        </div>
+                        <h3 class="cardTitle">${match.title}</h3>
+                        <div class="provider"><img class="source-icon" src="${match.source_icon}" alt="Source Icon">  <p>${match.source}</p></div>
+                       
+                        <a href="${match.link}" target="_blank">Visit product</a>
                     </div>
                 `).join('')}
             </div>
