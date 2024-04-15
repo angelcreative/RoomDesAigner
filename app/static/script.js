@@ -652,50 +652,53 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
-//start reverse
-  
-async function searchImageWithAPI(imageUrl) {
-    const encodedImageUrl = encodeURIComponent(imageUrl); // Ensure the URL is properly encoded
-    const apiURL = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedImageUrl}&language=en&country=us`;
+//REVERSE
+
+
+
+// Function to search an image on RapidAPI and display results in a new tab
+function searchImageOnRapidAPI(imageUrl) {
+    const url = 'https://real-time-lens-data.p.rapidapi.com/search';
+    const params = new URLSearchParams({
+        url: imageUrl,
+        language: 'en',
+        country: 'us'
+    });
 
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d', // Replace 'YOUR_API_KEY' with your actual RapidAPI key
+            'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY',
             'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
         }
     };
 
-    try {
-        const response = await fetch(apiURL, options);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json(); // Assuming the API returns JSON data
-        console.log(data); // Process your data here
-    } catch (error) {
-        console.error('Error fetching data: ', error);
-    }
+    fetch(`${url}?${params.toString()}`, options)
+        .then(response => response.json())
+        .then(data => displayResultsInNewTab(data))
+        .catch(err => console.error('Error:', err));
 }
 
-// Example Usage
-const imageUrl = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/f8267fb5-2852-4f2e-9704-05840ba3d657-1.png"; // Replace with your image URL
-searchImageWithAPI(imageUrl);
-
-
-// Display search results in a new window/tab using data from API
-function openResultsInNewTab(matches) {
+// Function to display search results in a new tab
+function displayResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
-    newWindow.document.write('<html><head><title>Image Search Results</title><link rel="stylesheet" type="text/css" href="styles.css"></head><body><div class="flex-container">');
-    matches.forEach(match => {
-        newWindow.document.write(`<div class="card"><img src="${match.thumbnail}" alt="Thumbnail"><div><a href="${match.link}" target="_blank">${match.title}</a></div><div>${match.price ? `Price: ${match.price}` : 'Price unavailable'}</div></div>`);
-    });
-    newWindow.document.write('</div></body></html>');
+    const htmlContent = `
+        <html>
+        <head><title>Search Results</title></head>
+        <body>
+            <h1>Image Search Results</h1>
+            <ul>
+                ${data.data.visual_matches.map(match => `<li><a href="${match.link}" target="_blank">${match.title}</a></li>`).join('')}
+            </ul>
+        </body>
+        </html>
+    `;
+    newWindow.document.write(htmlContent);
     newWindow.document.close();
 }
 
 
-//end reverse
+//END REVERSE
 
     
     // Function to copy image URL to clipboard
@@ -761,7 +764,7 @@ function showModal(imageUrls, promptText) {
         buttonsContainer.appendChild(createButton("Copy Prompt", () => copyTextToClipboard(promptText)));
         buttonsContainer.appendChild(createButton("Enhance Image", () => upscaleImage(imageUrl)));
         buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(imageUrl, promptText)));
-        buttonsContainer.appendChild(createButton("Search Image", () => searchImageWithAPI(imageUrl)));
+        buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -783,9 +786,6 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
-
-
-
 
     
     
