@@ -787,20 +787,22 @@ function openPhotopeaWithImage(imageUrl) {
         const upscaleButton = createButton("Enhance Image", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchImageButton = createButton("Search Image", () => searchImage(imageUrl));
-//copy button       
-        buttonsContainer.appendChild(copyButton);
 //download button
         buttonsContainer.appendChild(downloadButton);
+ //copy button       
+        buttonsContainer.appendChild(copyButton);
+
 //edit photopea button
         buttonsContainer.appendChild(editButton);
 //copy prompt button
         buttonsContainer.appendChild(copyPromptButton);
 //upscale buttobn
         buttonsContainer.appendChild(upscaleButton);
-//search reverse button
-        buttonsContainer.appendChild(searchImageButton);
+
 //compare button
         buttonsContainer.appendChild(compareButton);
+      //search reverse button
+        buttonsContainer.appendChild(searchImageButton);
 
         // Append image and buttons to image container
         imageContainer.appendChild(image);
