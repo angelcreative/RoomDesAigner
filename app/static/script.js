@@ -652,14 +652,12 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
-//reverse
-
-//REVERSE SEARCH
+// REVERSE SEARCH FUNCTION
 
 async function searchImage(imageUrl) {
-    const encodedUrl = encodeURIComponent(imageUrl);
+    const encodedUrl = encodeURIComponent(imageUrl);  // Ensure the URL is properly encoded
     const apiHost = 'real-time-lens-data.p.rapidapi.com';
-    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Replace with your actual API key
+    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Use your actual API key
     const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
 
     const options = {
@@ -682,6 +680,8 @@ async function searchImage(imageUrl) {
         alert('Failed to perform image search.');
     }
 }
+
+// FUNCTION TO DISPLAY RESULTS IN A NEW TAB
 
 function openResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
@@ -727,8 +727,6 @@ function openResultsInNewTab(data) {
 
 // END REVERSE
 
-
-//end reverse
     
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
