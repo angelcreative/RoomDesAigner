@@ -683,8 +683,7 @@ async function searchImage(imageUrl) {
 }
 
 // FUNCTION TO DISPLAY RESULTS IN A NEW TAB
-
-function openResultsInNew Tab(data) {
+function openResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
     newWindow.document.write(`
         <html>
@@ -725,6 +724,7 @@ function openResultsInNew Tab(data) {
     newWindow.document.write('</div></body></html>');
     newWindow.document.close();
 }
+
 
 // END REVERSE SEARCH
 
