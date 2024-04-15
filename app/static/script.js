@@ -298,14 +298,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = "High-end-interior-design-editorial-photography,Midjourney-render-generated-image,";
+    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,  `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ",abundant-furniture,multiple-decoration,numerous-decor-items,densely-furnished,fully-equipped,richly-appointed,beautiful-face,perfect-hands,perfect-morphology";
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),(((she has massive enormous gigantic superb big boobs))), she has white beautiful teeth`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -316,12 +316,12 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const seedValue = seedEnabled ? null : "19071975";
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const promptText = `(${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText})`;
+  const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
 
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "ugly-face,weird-hands:2,extra-limbs,wrong-generated-body-and-hand-morphology,empty-room:,void-room",
+    negative_prompt: "The artwork avoids the pitfalls of bad art, such as ugly and deformed eyes and faces, poorly drawn, blurry, and disfigured bodies with extra limbs and close-ups that look weird. It also avoids other common issues such as watermarking, text errors, missing fingers or digits, cropping, poor quality, and JPEG artifacts. The artwork is free of signature or watermark and avoids framing issues. The hands are not deformed, the eyes are not disfigured, and there are no extra bodies or limbs. The artwork is not blurry, out of focus, or poorly drawn, and the proportions are not bad or deformed. There are no mutations, missing  limbs, or floating or disconnected limbs. The hands and neck are not malformed, and there are no extra heads or out-of-frame elements. The artwork is not low-res or disgusting and is a well-drawn, highly detailed, and beautiful rendering.",
     width: width, 
     height: height,
 
@@ -652,7 +652,70 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
+//REVERSE SEARCH
 
+async function searchImage(imageUrl) {
+    const encodedUrl = encodeURIComponent(imageUrl);
+    const apiHost = 'real-time-lens-data.p.rapidapi.com';
+    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Replace with your actual API key
+    const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': apiHost
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();  // Assuming the response is JSON
+        openResultsInNewTab(data);  // Function to open results in a new tab
+    } catch (error) {
+        console.error('Search Image API error:', error);
+        alert('Failed to perform image search.');
+    }
+}
+
+
+
+function openResultsInNewTab(data) {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`<html><head><title>Image Search Results</title><style>
+        .card { display: flex; flex-direction: column; align-items: center; margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9; }
+        .card img { width: 100%; max-width: 200px; border-radius: 5px; }
+        .card a { color: #007bff; text-decoration: none; }
+        .card a:hover { text-decoration: underline; }
+        .flex-container { display: flex; flex-wrap: wrap; justify-content: center; }
+        .source-icon { height: 16px; width: 16px; vertical-align: middle; margin-right: 5px; }
+        .info { margin: 5px 0; }
+        .price { color: green; font-weight: bold; }
+    </style></head><body><div class="flex-container">`);
+
+    if (data && data.visual_matches) {
+        data.visual_matches.forEach(match => {
+            const htmlContent = `
+                <div class="card">
+                    <img src="${match.thumbnail}" alt="Thumbnail">
+                    <div class="info"><a href="${match.link}" target="_blank">${match.title}</a></div>
+                    <div class="info"><img src="${match.source_icon}" class="source-icon"><a href="https://${match.source}" target="_blank">${match.source.replace('www.', '')}</a></div>
+                    ${match.price ? `<div class="info price">Price: ${match.price}</div>` : ''}
+                    ${match.availability ? `<div class="info">Availability: ${match.availability}</div>` : ''}
+                </div>
+            `;
+            newWindow.document.write(htmlContent);
+        });
+    } else {
+        newWindow.document.write('<div>No visual matches found or error in response.</div>');
+    }
+
+    newWindow.document.write('</div></body></html>');
+    newWindow.document.close();
+}
+  
+  
+// END REVERSE
     
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
@@ -715,21 +778,28 @@ function openPhotopeaWithImage(imageUrl) {
             openPhotopeaWithImage(imageUrl);
         });
          // Create download button
-    const downloadButton = document.createElement("button");
-    downloadButton.textContent = "Download";
-    downloadButton.addEventListener("click", () => downloadImage(imageUrl));
+        const downloadButton = document.createElement("button");
+        downloadButton.textContent = "Download";
+        downloadButton.addEventListener("click", () => downloadImage(imageUrl));
 
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
         const upscaleButton = createButton("Enhance Image", () => upscaleImage(imageUrl));
-        buttonsContainer.appendChild(downloadButton);
-        buttonsContainer.appendChild(copyButton);
-        buttonsContainer.appendChild(editButton);
-        buttonsContainer.appendChild(copyPromptButton);
-        buttonsContainer.appendChild(upscaleButton);
-
-        // Create "Compare" button
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchImageButton = createButton("Search Image", () => searchImage(imageUrl));
+//copy button       
+        buttonsContainer.appendChild(copyButton);
+//download button
+        buttonsContainer.appendChild(downloadButton);
+//edit photopea button
+        buttonsContainer.appendChild(editButton);
+//copy prompt button
+        buttonsContainer.appendChild(copyPromptButton);
+//upscale buttobn
+        buttonsContainer.appendChild(upscaleButton);
+//search reverse button
+        buttonsContainer.appendChild(searchImageButton);
+//compare button
         buttonsContainer.appendChild(compareButton);
 
         // Append image and buttons to image container
