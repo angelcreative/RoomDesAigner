@@ -298,14 +298,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end-interior-design-editorial-photography,`;
+    const promptInit = `High-end-interior-design-editorial-photography,(((Midjourney-style-generated-image)))`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `(abundant-furniture:1,multiple-decoration:1,numerous-decor-items:1,densely-furnished:1,fully-equipped:1,richly-appointed:1,empty-room:-2,void-room:-2),(beautiful-face:2,perfect-hands:2,big-boobs:2,perfect-morphology:2),`;
+  const promptEndy = `((abundant-furniture,multiple-decoration,numerous-decor-items,densely-furnished,fully-equipped,richly-appointed),(((beautiful-face,perfect-hands,perfect-morphology)))`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -321,7 +321,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: JSON.stringify(promptText),
-    negative_prompt: "(ugly-face:2,weird-hands:2,extra-limbs:-2,wrong-generated-body-and-hand-morphology:2,empty-room:2)",
+    negative_prompt: "(((ugly-face,weird-hands:2,extra-limbs,wrong-generated-body-and-hand-morphology))),((empty-room:,void-room))",
     width: width, 
     height: height,
 
