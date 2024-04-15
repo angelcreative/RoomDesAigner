@@ -655,7 +655,7 @@ const upscaleImage = async (imageUrl) => {
 // REVERSE SEARCH FUNCTION
 
 async function searchImage(imageUrl) {
-    const encodedUrl = encodeURIComponent(imageUrl);  // Ensure the URL is properly encoded
+    const encodedUrl = encodeURIComponent(imageUrl);  // Properly encode the URL to ensure it's correctly parsed by the API
     const apiHost = 'real-time-lens-data.p.rapidapi.com';
     const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Use your actual API key
     const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
@@ -674,6 +674,7 @@ async function searchImage(imageUrl) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();  // Assuming the response is JSON
+        console.log('API Response:', data);  // Log the data to debug it
         openResultsInNewTab(data);  // Function to open results in a new tab
     } catch (error) {
         console.error('Search Image API error:', error);
@@ -683,7 +684,7 @@ async function searchImage(imageUrl) {
 
 // FUNCTION TO DISPLAY RESULTS IN A NEW TAB
 
-function openResultsInNewTab(data) {
+function openResultsInNew Tab(data) {
     const newWindow = window.open('', '_blank');
     newWindow.document.write(`
         <html>
@@ -725,7 +726,8 @@ function openResultsInNewTab(data) {
     newWindow.document.close();
 }
 
-// END REVERSE
+// END REVERSE SEARCH
+
 
     
     // Function to copy image URL to clipboard
