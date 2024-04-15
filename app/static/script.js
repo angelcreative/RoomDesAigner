@@ -744,41 +744,34 @@ function showOverlay() {
 
 //start reverse
   
-async function searchImage(imageUrl) {
-    console.log("Trying to search image with URL: ", imageUrl);  // Log the URL being used for debugging
-
-    const encodedUrl = encodeURIComponent(imageUrl);  // Properly encode the URL to ensure it's correctly parsed by the API
-    console.log("Encoded URL for API: ", encodedUrl);  // Debug log to check the encoded URL
-
-    const apiHost = 'real-time-lens-data.p.rapidapi.com';
-    const apiKey = '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d';  // Use your actual API key
-    const url = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedUrl}&language=en&country=us`;
+async function searchImageWithAPI(imageUrl) {
+    const encodedImageUrl = encodeURIComponent(imageUrl); // Ensure the URL is properly encoded
+    const apiURL = `https://real-time-lens-data.p.rapidapi.com/search?url=${encodedImageUrl}&language=en&country=us`;
 
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': apiKey,
-            'X-RapidAPI-Host': apiHost
+            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d', // Replace 'YOUR_API_KEY' with your actual RapidAPI key
+            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
         }
     };
 
     try {
-        const response = await fetch(url, options);
+        const response = await fetch(apiURL, options);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const data = await response.json();  // Assuming the response is JSON
-        console.log('API Response:', data);  // Log the data to debug it
-        if (data && data.visual_matches && data.visual_matches.length > 0) {
-            openResultsInNewTab(data.visual_matches);  // Function to open results in a new tab
-        } else {
-            throw new Error("No visual matches found or API returned an empty data set.");
-        }
+        const data = await response.json(); // Assuming the API returns JSON data
+        console.log(data); // Process your data here
     } catch (error) {
-        console.error('Search Image API error:', error);
-        alert('Failed to perform image search: ' + error.message);
+        console.error('Error fetching data: ', error);
     }
 }
+
+// Example Usage
+const imageUrl = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/f8267fb5-2852-4f2e-9704-05840ba3d657-1.png"; // Replace with your image URL
+searchImageWithAPI(imageUrl);
+
 
 // Display search results in a new window/tab using data from API
 function openResultsInNewTab(matches) {
