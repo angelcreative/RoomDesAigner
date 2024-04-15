@@ -298,14 +298,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end-interior-design-editorial-photography,Midjourney-render-generated-image,`;
+    const promptInit = "High-end-interior-design-editorial-photography,Midjourney-render-generated-image,";
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `,abundant-furniture,multiple-decoration,numerous-decor-items,densely-furnished,fully-equipped,richly-appointed,beautiful-face,perfect-hands,perfect-morphology`;
+  const promptEndy = ",abundant-furniture,multiple-decoration,numerous-decor-items,densely-furnished,fully-equipped,richly-appointed,beautiful-face,perfect-hands,perfect-morphology";
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -316,7 +316,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const seedValue = seedEnabled ? null : "19071975";
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const promptText = "${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}";
+  const promptText = `(${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText})`;
 
   const prompt = {
     key: apiKey,
