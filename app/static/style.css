@@ -996,6 +996,9 @@ img#thumbnail {
 .image-buttons button:nth-child(6):hover::after{
     content:"see before / after";
 }
+.image-buttons button:nth-child(6):hover::after{
+    content:"search products";
+}
   
 .pricing-card {
     padding: 40px;
@@ -1517,6 +1520,13 @@ select#harmonyType {
 
 .image-buttons button:nth-child(6) {
    background: url('/static/img/ico_grid/ico_compare.svg') center center no-repeat;
+    background-size: 36px
+}
+
+
+
+.image-buttons button:nth-child(7) {
+   background: url('/static/img/ico_grid/ico_reverse_search.svg') center center no-repeat;
     background-size: 36px
 }
 
