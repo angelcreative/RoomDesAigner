@@ -721,15 +721,6 @@ img.logoRD {
 
 
 
-h1 {
-    color: #a9fff5;
-    margin: 2rem 0;
-    font-weight: lighter;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 20px;
-}
-
 h3 {
     padding: 10px;
     white-space: pre-wrap;
@@ -738,6 +729,15 @@ h3 {
     width: 160px;
     font-weight: 300;
     font-size: 12px;
+}
+
+h1 {
+    color: #a9fff5;
+    margin: 2rem 0;
+    font-weight: lighter;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 20px;
 }
 
 
