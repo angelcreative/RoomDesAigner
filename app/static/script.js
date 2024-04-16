@@ -298,14 +298,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,  `;
+    const promptInit = `Create an ultra-high-definition 8K editorial image of a sophisticated interior design using Octane Render for its photorealistic textures and lighting. The image should showcase a variety of textures and materials. The composition should be have an impressive depth of field that draws the eye through the room. The overall atmosphere should convey cleanliness, with a sharp focus on the quality and finish of the interior elements `;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),(((she has massive enormous gigantic superb big boobs))), she has white beautiful teeth`;
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),`;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
@@ -884,7 +884,7 @@ function showModal(imageUrls, promptText) {
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";  // Clear existing images
 
-    // Create and append image elements and buttons
+    //Create and append image elements and buttons
     imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
         const image = document.createElement("img");
@@ -895,13 +895,12 @@ function showModal(imageUrls, promptText) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        // Create and append each button
         buttonsContainer.appendChild(createButton("Download", () => downloadImage(imageUrl)));
         buttonsContainer.appendChild(createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl)));
         buttonsContainer.appendChild(createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl)));
         buttonsContainer.appendChild(createButton("Copy Prompt", () => copyTextToClipboard(promptText)));
         buttonsContainer.appendChild(createButton("Enhance Image", () => upscaleImage(imageUrl)));
-        buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(imageUrl, promptText)));
+        buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl)));
         buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
 
         imageContainer.appendChild(image);
@@ -909,10 +908,15 @@ function showModal(imageUrls, promptText) {
         imageGrid.appendChild(imageContainer);
     });
 
+
+  
     modal.style.display = "block";  // Show the modal
     showOverlay();
 }
 
+      //  buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
+
+  
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
