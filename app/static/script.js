@@ -610,7 +610,7 @@ const upscaleImage = async (imageUrl) => {
                                     font-family: arial, sans-serif;
                                     font-size: 12px;
                                     padding-top: 60px;
-                                    background: url('http://127.0.0.1:5000/static/img/logo_web_light.svg') no-repeat center top #1f1f1f;
+                                    background: url('http://127.0.0.1:5000/static/img/logo_web_dark.svg') no-repeat center top #1f1f1f;
                                     background-size: 150px;
                                     margin-top: 40px;
                                 }
