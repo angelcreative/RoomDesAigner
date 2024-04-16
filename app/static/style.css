@@ -952,7 +952,8 @@ img#thumbnail {
 .image-buttons button:nth-child(3),
 .image-buttons button:nth-child(4),
 .image-buttons button:nth-child(5),
-.image-buttons button:nth-child(6) {
+.image-buttons button:nth-child(6),
+.image-buttons button:nth-child(7){
     position:relative;
     font-size:1px;
     
@@ -964,7 +965,9 @@ img#thumbnail {
 .image-buttons button:nth-child(3):hover::after,
 .image-buttons button:nth-child(4):hover::after,
 .image-buttons button:nth-child(5):hover::after,
-.image-buttons button:nth-child(6):hover::after{
+.image-buttons button:nth-child(6):hover::after,
+.image-buttons button:nth-child(7):hover::after,
+{
     position:absolute;
     content:" ";
     height:auto;
@@ -996,7 +999,7 @@ img#thumbnail {
 .image-buttons button:nth-child(6):hover::after{
     content:"see before / after";
 }
-.image-buttons button:nth-child(6):hover::after{
+.image-buttons button:nth-child(7):hover::after{
     content:"search products";
 }
   
