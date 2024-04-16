@@ -1,4 +1,4 @@
-// Function to hide the waiting overlay and loading message
+// Function to hide the waiting overlay and loading message 
 // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
@@ -603,31 +603,45 @@ const upscaleImage = async (imageUrl) => {
                     <html>
                         <head>
                             <title>Upscaled Image</title>
+                             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
                             <style>
+
+                                html {
+                                    background: #15202b;
+                                    }
+                                    
                                 body {
                                     text-align: center;
                                     color: #a9fff5;
                                     font-family: arial, sans-serif;
                                     font-size: 12px;
                                     padding-top: 60px;
-                                    background: url('http://127.0.0.1:5000/static/img/logo_web_dark.svg') no-repeat center top #1f1f1f;
-                                    background-size: 150px;
                                     margin-top: 40px;
-                                }
+                                    }
+                                 
                                 h1 {
                                     margin: 20px 0;
-                                }
+                                    }
+                                    
                                 img {
                                     border-radius: 12px;
                                     overflow: hidden;
-                                    max-width: 80%;
-                                }
-                                html {
-                                    background: #1f1f1f;
-                                }
+                                    max-width: 100%;
+                                    }
+                                
+                                img.logoRD {
+                                    margin: 20px auto 0 auto;
+                                    display: block;
+                                    height: 50px;
+                                    }
+                                    
                             </style>
                         </head>
                         <body>
+                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
                             <h1>Upscaled Image</h1>
                             <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
                         </body>
@@ -688,6 +702,10 @@ function searchImageOnRapidAPI(imageUrl) {
         <html>
         <head>
             <title>Search Results</title>
+             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
             <style>
 
             html {
