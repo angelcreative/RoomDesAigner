@@ -748,30 +748,43 @@ h1 {
                     justify-content: space-around;
                 }
                 .card {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                    width: 200px;
-                    padding: 10px;
-                    text-align: center;
-                }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 200px;
+    padding: 10px;
+    text-align: center;
+    background: #111921;
+    color: #9aabba;
+    font-family: courier;
+}
+
+
+p {
+    text-align: center;
+    color: #9aabba;
+    font-family: courier;
+}
+
+p a {
+font-size:16px;
+}
                 .card img {
                     width: 100%;
                     height: auto;
                     border-radius: 4px;
                 }
-                .source-icon {
-                    width: 20px;
-                    height: 20px;
-                }
+               .source-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 4px;
+}
                 a {
-                    text-decoration: none;
-                    color: black;
-                }
-                a:hover {
-                    color: blue;
-                }
+    color: #9aabba;
+    font-size: 12px;
+    text-decoration: underline;
+}
             </style>
         </head>
         <body>
