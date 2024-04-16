@@ -747,23 +747,26 @@ h1 {
                     gap: 20px;
                     justify-content: space-around;
                 }
-                .card {
+  .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 200px;
-    padding: 10px;
+    padding: 0 0 20px 0;
     text-align: center;
-    background: #111921;
-    color: #9aabba;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #6d7b87;
     font-family: courier;
+    font-size: 14px;
 }
 
 
 p {
     text-align: center;
-    color: #9aabba;
+    color: #6d7b87;
     font-family: courier;
 }
 
@@ -788,7 +791,7 @@ font-size:16px;
             </style>
         </head>
         <body>
-           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
+           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
             <h1 class="headerStore">Image Search Results</h1>
             <p>For refined product search, download the desired image,<a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
 
