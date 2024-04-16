@@ -904,14 +904,21 @@ function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
-    // Remove existing event listener to avoid duplication
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
 
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";  // Clear existing images
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
 
-    //Create and append image elements and buttons
+    // Check if userImageBase64 is valid
+    if (!userImageBase64.startsWith('data:image')) {
+        alert("Please upload a valid image before comparing.");
+        return; // Exit if no valid image is uploaded
+    }
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
     imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
         const image = document.createElement("img");
@@ -922,24 +929,27 @@ function showModal(imageUrls, promptText) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        buttonsContainer.appendChild(createButton("Download", () => downloadImage(imageUrl)));
-        buttonsContainer.appendChild(createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl)));
-        buttonsContainer.appendChild(createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl)));
-        buttonsContainer.appendChild(createButton("Copy Prompt", () => copyTextToClipboard(promptText)));
-        buttonsContainer.appendChild(createButton("Enhance Image", () => upscaleImage(imageUrl)));
-        buttonsContainer.appendChild(createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl)));
-        buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
+        // Create buttons
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+
+        // Append buttons to container
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
         imageGrid.appendChild(imageContainer);
     });
 
-
-  
-    modal.style.display = "block";  // Show the modal
+    modal.style.display = "block";
     showOverlay();
 }
+
 
       //  buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
 
