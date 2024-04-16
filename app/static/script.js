@@ -838,6 +838,33 @@ font-size:16px;
 
 //END REVERSE
 
+
+  //compare
+function openComparisonWindow(userImageBase64, generatedImageUrl) {
+    // Send the base64 image data to the server
+    fetch('/create-comparison-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userImageBase64: userImageBase64,
+            generatedImageUrl: generatedImageUrl
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.slug) {
+            // Open the new window with the unique URL
+            const url = `https://roomdesaigner.onrender.com/compare/${data.slug}`;
+            window.open(url, '_blank');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+//end compare
     
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
@@ -938,30 +965,7 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
-function openComparisonWindow(userImageBase64, generatedImageUrl) {
-    // Send the base64 image data to the server
-    fetch('/create-comparison-session', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userImageBase64: userImageBase64,
-            generatedImageUrl: generatedImageUrl
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.slug) {
-            // Open the new window with the unique URL
-            const url = `https://roomdesaigner.onrender.com/compare/${data.slug}`;
-            window.open(url, '_blank');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
+
 
 
 function closeModalHandler() {
@@ -982,7 +986,7 @@ function closeModalHandler() {
       if (selectElement.value === '') {
         dotElement.style.display = 'none';
       } else {
-        dotElement.style.display = 'block';
+        dotElement.style.display = 'block'; 
       }
     }
     // Attach event listeners to all select elements
