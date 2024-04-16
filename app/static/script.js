@@ -904,17 +904,14 @@ function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
+        // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
-
+    
+// Get the thumbnail image source (user-uploaded image)
     const thumbnailImage = document.getElementById("thumbnail");
     const userImageBase64 = thumbnailImage.src;
 
-    // Check if userImageBase64 is valid
-    if (!userImageBase64.startsWith('data:image')) {
-        alert("Please upload a valid image before comparing.");
-        return; // Exit if no valid image is uploaded
-    }
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -950,8 +947,6 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-
-      //  buttonsContainer.appendChild(createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl)));
 
   
 // Function to handle the "Close" action of modal
