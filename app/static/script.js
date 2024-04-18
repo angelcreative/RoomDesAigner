@@ -87,11 +87,13 @@ function handleSubmit(event) {
 }
 
 //HARMONY
-document.addEventListener("DOMContentLoaded", function() {
-    function getHarmonyColors(color, type) {
+
+    
+       function getHarmonyColors(color, type) {
         const baseColor = chroma(color);
         const baseHue = baseColor.get('hsl.h');
         let colors;
+
         switch (type) {
             case 'complementary':
                 colors = [baseColor.hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24", "#131b24"];
@@ -108,17 +110,20 @@ document.addEventListener("DOMContentLoaded", function() {
             default:
                 colors = [baseColor.hex(), "#131b24", "#131b24", "#131b24"];
         }
+
         return colors;
     }
 
     function displayColors(colors) {
         const harmonyColors = document.getElementById('harmonyColors');
         harmonyColors.innerHTML = '';
+
         const colorIds = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
         colors.forEach((color, index) => {
             const colorDiv = document.createElement('div');
+            colorDiv.id = colorIds[index];
             colorDiv.style.backgroundColor = color;
-            harmonyColors.appendChild(colorDiv);
+            harmonyColors.appendChild(colorDiv); 
         });
     }
 
@@ -135,18 +140,21 @@ document.addEventListener("DOMContentLoaded", function() {
             color: "#46696d"
         });
 
-        colorWheel.on(['color:change'], function(color) {
-            updateHarmonyColors(color.hexString);
-        });
-
-        document.getElementById('harmonyType').addEventListener('change', function() {
-            updateHarmonyColors(colorWheel.color.hexString);
-        });
-    }
-
-    initializeColorWheel();
+        colorWheel.on(['color:init', 'color:change'], function(color) {
+            updateHarmonyColors(color.hexString
+);
 });
+        
+            document.getElementById('harmonyType').addEventListener('change', function() {
+        updateHarmonyColors(colorWheel.color.hexString);
+    });
 
+    // Initial call to set the harmony colors based on the default color of the color wheel
+    updateHarmonyColors(colorWheel.color.hexString);
+}
+
+// Call the function to initialize the color wheel
+initializeColorWheel();
 
 
   //END HARMONY
@@ -296,14 +304,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = ` (((she has massive enormous gigantic superb big boobs))), she has white beautiful teeth,(((he is handsome))) (slender fingers, proportional hands, realistic perspectives),`;
+    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),`;
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed),(((she has massive enormous gigantic superb big boobs))), she has white beautiful teeth, (slender fingers, proportional hands, realistic perspectives) `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 1024;
