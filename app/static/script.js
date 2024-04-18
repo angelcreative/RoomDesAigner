@@ -298,7 +298,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Create an ultra-high-definition 8K editorial image of a sophisticated interior design using Octane Render for its photorealistic textures and lighting. The image should showcase a variety of textures and materials. The composition should be have an impressive depth of field that draws the eye through the room. The overall atmosphere should convey cleanliness, with a sharp focus on the quality and finish of the interior elements, (((the person has a beautiful face))), (slender fingers, proportional hands, realistic perspectives) ,(-bad hands -unnatural hands -disfigured hands -bad anatomy -bent fingers -disfigured palms -extra joints -asymmetrical hands),`;
+    const promptInit = `Create an ultra-high-definition 8K editorial image of a sophisticated interior design using Octane Render for its photorealistic textures and lighting. The image should showcase a variety of textures and materials. The composition should be have an impressive depth of field that draws the eye through the room. The overall atmosphere should convey cleanliness, with a sharp focus on the quality and finish of the interior elements, (the person has a CONTEMPORANEOUS face), (slender fingers, proportional hands, realistic perspectives),`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
