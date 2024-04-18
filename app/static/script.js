@@ -77,81 +77,65 @@ function handleSubmit(event) {
     generateImages(null, selectedValues, isImg2Img);
   }
 }
-function handleError(errorMessage) {
-  console.error(errorMessage);
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
-}
 
-    
-       function getHarmonyColors(color, type) {
-        const baseColor = chroma(color);
+
+//HARMONY
+document.addEventListener("DOMContentLoaded", function() {
+    // Initialize color picker and update harmony colors
+    const colorWheelContainer = document.getElementById('colorWheelContainer');
+    const colorWheel = new iro.ColorPicker(colorWheelContainer, {
+        width: 320,
+        color: "#46696d" // Default color
+    });
+
+    colorWheel.on(['color:change'], function(color) {
+        updateHarmonyColors(color.hexString);
+    });
+
+    document.getElementById('harmonyType').addEventListener('change', function() {
+        updateHarmonyColors(colorWheel.color.hexString);
+    });
+
+    function updateHarmonyColors(baseColor) {
+        const harmonyType = document.getElementById('harmonyType').value;
+        const colors = getHarmonyColors(baseColor, harmonyType);
+        displayColors(colors);
+    }
+
+    function getHarmonyColors(color, type) {
+        const baseColor = chroma(color); // Using chroma.js to handle color transformations
         const baseHue = baseColor.get('hsl.h');
         let colors;
-
         switch (type) {
             case 'complementary':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24", "#131b24"];
+                colors = [baseColor.hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()];
                 break;
             case 'analogous':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24"];
+                colors = [baseColor.hex(), chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue - 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()];
                 break;
-            case 'triadic':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 120) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24"];
-                break;
-            case 'square':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 90) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 270) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()];
-                break;
+            // Add more cases as necessary
             default:
-                colors = [baseColor.hex(), "#131b24", "#131b24", "#131b24"];
+                colors = [baseColor.hex()];
         }
-
         return colors;
     }
 
     function displayColors(colors) {
-        const harmonyColors = document.getElementById('harmonyColors');
-        harmonyColors.innerHTML = '';
-
-        const colorIds = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
-        colors.forEach((color, index) => {
-            const colorDiv = document.createElement('div');
-            colorDiv.id = colorIds[index];
-            colorDiv.style.backgroundColor = color;
-            harmonyColors.appendChild(colorDiv); 
+        const colorElements = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
+        colorElements.forEach((id, index) => {
+            const colorElement = document.getElementById(id);
+            if (colorElement) {
+                colorElement.value = colors[index];
+            }
         });
     }
 
-    function updateHarmonyColors(color) {
-        const harmonyType = document.getElementById('harmonyType').value;
-        const colors = getHarmonyColors(color, harmonyType);
-        displayColors(colors);
-    }
-
-    function initializeColorWheel() {
-        var colorWheelContainer = document.getElementById('colorWheelContainer');
-        var colorWheel = new iro.ColorPicker(colorWheelContainer, {
-            width: 200,
-            color: "#46696d"
-        });
-
-        colorWheel.on(['color:init', 'color:change'], function(color) {
-            updateHarmonyColors(color.hexString
-);
+    // Initialize the colors once to set default values
+    updateHarmonyColors("#46696d");
 });
-        
-            document.getElementById('harmonyType').addEventListener('change', function() {
-        updateHarmonyColors(colorWheel.color.hexString);
-    });
 
-    // Initial call to set the harmony colors based on the default color of the color wheel
-    updateHarmonyColors(colorWheel.color.hexString);
-}
 
-// Call the function to initialize the color wheel
-initializeColorWheel();
+  //END HARMONY
     
     
 // Asegúrate de que las funciones showOverlay, getSelectedValues y generateImages estén definidas correctamente.
