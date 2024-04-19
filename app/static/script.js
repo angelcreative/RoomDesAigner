@@ -907,61 +907,57 @@ function createButton(text, onClickHandler) {
 
 
 //AUTO DESIGN
-document.getElementById('aiDesignButton').addEventListener('click', function() {
-    const roomType = document.getElementById('roomType').value;
-    generateRandomRoomDesign(roomType);
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const roomType = document.getElementById('roomType').value;
+        generateRandomRoomDesign(roomType);
+    });
+
+    function generateRandomRoomDesign(roomType) {
+        const selectedValues = generateRandomValuesForRoom(roomType);
+        const imageUrl = null; // Assuming no initial image URL since this is a design generation
+        const isImg2Img = false; // Indicates no modification to an existing image
+        // Simulate API call
+        simulateImageGeneration(selectedValues);
+    }
+
+    function simulateImageGeneration(selectedValues) {
+        console.log("Generating images for:", selectedValues);
+        // Simulated API call delay
+        setTimeout(() => {
+            const imageUrls = [
+                "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/3561afc4-15fc-4209-a2e2-1179e7f7c066-2.png",
+                "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/c1bde7a8-7991-4b16-a62b-b6e2ffb7ec2b-2.png"
+            ]; // Replace these URLs with those from your actual API
+            showModal(imageUrls, "Generated images based on your room selection");
+        }, 1000);
+    }
+
+    function generateRandomValuesForRoom(roomType) {
+        // Mock function to generate data based on room type
+        return {
+            roomType: roomType,
+            otherParam: "value" // Include other parameters as needed
+        };
+    }
+
+    function showModal(imageUrls, promptText) {
+        const modal = document.getElementById("modal");
+        const imageGrid = document.getElementById('imageGrid');
+        imageGrid.innerHTML = ''; // Clear previous images
+
+        imageUrls.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = "Generated Image";
+            imageGrid.appendChild(img);
+        });
+
+        modal.style.display = 'block'; // Show the modal
+        // Assuming you have a function to display overlay if you use one
+        console.log(promptText); // Log or display prompt text
+    }
 });
-
-function generateRandomRoomDesign(roomType) {
-    const selectedValues = generateRandomValuesForRoom(roomType);
-    const imageUrl = null; // No initial image URL as this is a new design
-    const isImg2Img = false; // This indicates that we are not modifying an existing image
-
-    // This will simulate image generation and eventually show the modal
-    generateImages(imageUrl, selectedValues, isImg2Img);
-}
-
-function generateRandomValuesForRoom(roomType) {
-    return {
-        "room_size": getRandomRoomSize(),
-        "home_room": roomType,
-        "color_scheme": getRandomColorScheme(),
-        "furniture_color": getRandomFurnitureColor(),
-        "wall_type": getRandomWallType(),
-        // You can add more parameters here as necessary
-    };
-}
-
-// Helper functions to generate random attributes
-function getRandomRoomSize() {
-    const sizes = ['small', 'medium', 'large'];
-    return sizes[Math.floor(Math.random() * sizes.length)];
-}
-
-function getRandomColorScheme() {
-    const schemes = ['#FFFFFF', '#F0F0F0', '#E0E0E0']; // Replace with actual color schemes
-    return schemes[Math.floor(Math.random() * schemes.length)];
-}
-
-function getRandomFurnitureColor() {
-    const colors = ['red', 'green', 'blue'];
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-
-function getRandomWallType() {
-    const types = ['painted', 'wallpaper', 'tiled'];
-    return types[Math.floor(Math.random() * types.length)];
-}
-
-// Simulated function to generate images based on selected values and show the modal
-function generateImages(imageUrl, selectedValues, isImg2Img) {
-    console.log("Generating images for:", selectedValues);
-    // Simulate a process that would normally involve an API call
-    setTimeout(() => {
-        const imageUrls = ["https://example.com/image1.png", "https://example.com/image2.png"];
-        showModal(imageUrls); // Display images in a modal
-    }, 1000);
-}
 
 // END AUTO DESIGN
   
