@@ -10,7 +10,7 @@ function hideOverlay() {
   overlay.style.display = "none";
 }
 // Example usage when "Make the Magic" button is clicked
-const magicButton = document.getElementById("magicButton");
+const magicButton = document.getElementById("magicButton"); 
 
 // modal P
 //document.getElementById('password-form').addEventListener('submit', function(event)  {
@@ -499,6 +499,45 @@ function hideErrorMessage() {
 }
 }
 
+
+  //auto design
+// This function will merge attributes from the form with random attributes for diversity
+function mixAttributes(baseAttributes) {
+    const mixedAttributes = {...baseAttributes};
+    const keys = Object.keys(baseAttributes);
+    keys.forEach(key => {
+        // Randomly decide whether to use the form value or pick a random one from the predefined list
+        if (Math.random() > 0.5) { // 50% chance to swap the attribute with a random one
+            mixedAttributes[key] = getRandomValue(attributes[key] || [baseAttributes[key]]);
+        }
+    });
+    return mixedAttributes;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const baseValues = getSelectedValues(); // Get values from the form
+        const imageSets = [];
+        
+        for (let i = 0; i < 4; i++) { // Generate four mixed sets of values
+            const mixedValues = mixAttributes(baseValues);
+            console.log("Generating images with mixed values:", mixedValues);
+            // Simulate API call to generate images based on these mixed values
+            simulateImageGeneration(mixedValues);
+        }
+    });
+
+    function simulateImageGeneration(selectedValues) {
+        console.log("Simulated generation with values:", selectedValues);
+        // Assume this function would interact with an API to generate images
+        setTimeout(() => {
+            const imageUrls = ["https://example.com/image1.png", "https://example.com/image2.png"]; // Simulated image URLs
+            showModal(imageUrls, "Generated images for your design selection");
+        }, 1000);
+    }
+});
+
+// end auto design
     
       
 
@@ -1129,45 +1168,7 @@ for (const select of selectElements) {
 }
 
 
-//AUTO DESIGN
- document.addEventListener("DOMContentLoaded", function() {
-    const attributes = {
-        room_size: ['small', 'medium', 'large'],
-        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
-        furniture_color: ['red', 'green', 'blue'],
-        wall_type: ['painted', 'wallpaper', 'tiled']
-    };
 
-    function getRandomValue(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
-
-    function generateRandomValuesForRoom() {
-        return {
-            room_size: getRandomValue(attributes.room_size),
-            color_scheme: getRandomValue(attributes.color_scheme),
-            furniture_color: getRandomValue(attributes.furniture_color),
-            wall_type: getRandomValue(attributes.wall_type)
-        };
-    }
-
-    function simulateImageGeneration(selectedValues) {
-        console.log("Generating images with these values:", selectedValues);
-        // Simulate a call to an API or a process that generates images based on these values
-        setTimeout(() => {
-            console.log("Images generated!");
-            // For demonstration, just log out a success message
-        }, 1000);
-    }
-
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        const randomValues = generateRandomValuesForRoom();
-        simulateImageGeneration(randomValues);
-    });
-});
-
-
-// END AUTO DESIGN
 
 
 
