@@ -905,6 +905,67 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
+
+//AUTO DESIGN
+document.getElementById('aiDesignButton').addEventListener('click', function() {
+    const roomType = document.getElementById('roomType').value;
+    generateRandomRoomDesign(roomType);
+});
+
+function generateRandomRoomDesign(roomType) {
+    const selectedValues = generateRandomValuesForRoom(roomType);
+    const imageUrl = null; // No initial image URL as this is a new design
+    const isImg2Img = false; // This indicates that we are not modifying an existing image
+
+    // This will simulate image generation and eventually show the modal
+    generateImages(imageUrl, selectedValues, isImg2Img);
+}
+
+function generateRandomValuesForRoom(roomType) {
+    return {
+        "room_size": getRandomRoomSize(),
+        "home_room": roomType,
+        "color_scheme": getRandomColorScheme(),
+        "furniture_color": getRandomFurnitureColor(),
+        "wall_type": getRandomWallType(),
+        // You can add more parameters here as necessary
+    };
+}
+
+// Helper functions to generate random attributes
+function getRandomRoomSize() {
+    const sizes = ['small', 'medium', 'large'];
+    return sizes[Math.floor(Math.random() * sizes.length)];
+}
+
+function getRandomColorScheme() {
+    const schemes = ['#FFFFFF', '#F0F0F0', '#E0E0E0']; // Replace with actual color schemes
+    return schemes[Math.floor(Math.random() * schemes.length)];
+}
+
+function getRandomFurnitureColor() {
+    const colors = ['red', 'green', 'blue'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function getRandomWallType() {
+    const types = ['painted', 'wallpaper', 'tiled'];
+    return types[Math.floor(Math.random() * types.length)];
+}
+
+// Simulated function to generate images based on selected values and show the modal
+function generateImages(imageUrl, selectedValues, isImg2Img) {
+    console.log("Generating images for:", selectedValues);
+    // Simulate a process that would normally involve an API call
+    setTimeout(() => {
+        const imageUrls = ["https://example.com/image1.png", "https://example.com/image2.png"];
+        showModal(imageUrls); // Display images in a modal
+    }, 1000);
+}
+
+// END AUTO DESIGN
+  
+
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
