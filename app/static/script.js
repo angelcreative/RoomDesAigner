@@ -32,53 +32,39 @@ const magicButton = document.getElementById("magicButton");
 //end modal P
 
 document.addEventListener("DOMContentLoaded", function() {
-    //autodesign
- // Predefined attributes for randomness
-    const attributes = {
-        room_size: ['small', 'medium', 'large'],
-        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
-        furniture_color: ['red', 'green', 'blue'],
-        wall_type: ['painted', 'wallpaper', 'tiled']
-    };
 
-    // Function to get a random value from an array
-    function getRandomValue(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
 
-    // This function will merge attributes from the form with random attributes for diversity
-    function mixAttributes(baseAttributes) {
-        const mixedAttributes = {...baseAttributes};
-        const keys = Object.keys(attributes); // Only mix keys that are in the predefined list
-        keys.forEach(key => {
-            // Randomly decide whether to use the form value or pick a random one
-            if (Math.random() > 0.5) { // 50% chance to swap the attribute with a random one
-                mixedAttributes[key] = getRandomValue(attributes[key]);
-            }
-        });
-        return mixedAttributes;
-    }
+//AIDESIGN
+// Predefined attributes for randomness (place this within your existing script)
+const attributes = {
+    room_size: ['small', 'medium', 'large'],
+    color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
+    furniture_color: ['red', 'green', 'blue'],
+    wall_type: ['painted', 'wallpaper', 'tiled']
+};
 
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        const baseValues = getSelectedValues(); // Get values from the form
-        const imageSets = [];
-
-        for (let i = 0; i < 4; i++) { // Generate four mixed sets of values
-            const mixedValues = mixAttributes(baseValues);
-            console.log("Generating images with mixed values:", mixedValues);
-            simulateImageGeneration(mixedValues);
+// Mixing attributes function
+function mixAttributes(baseAttributes) {
+    const mixedAttributes = {...baseAttributes};
+    Object.keys(attributes).forEach(key => {
+        if (Math.random() > 0.5) { // 50% chance to swap
+            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
         }
     });
+    return mixedAttributes;
+}
 
-    // Simulate an image generation process
-    function simulateImageGeneration(selectedValues) {
-        console.log("Simulated generation with values:", selectedValues);
-        // Simulate an API call delay
-        setTimeout(() => {
-            const imageUrls = ["https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/57d34fda-206c-4533-ae25-1bddf0faf214-2.png", "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/d15b5790-ede9-4294-b343-d92abb87b9ba-0.png"]; // Replace with actual image URLs from an API
-            showModal(imageUrls, "Generated images based on your design selection");
-        }, 1000);
+// Modify existing event listener for "AI Design" button
+document.getElementById('aiDesignButton').addEventListener('click', function() {
+    const baseValues = getSelectedValues(); // Get current form values
+    for (let i = 0; i < 4; i++) { // Generate four sets of mixed values
+        const mixedValues = mixAttributes(baseValues);
+        console.log("Mixed Values for Generation:", mixedValues);
+        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
     }
+});
+//AIDESIGN
+  
  
 // Function to handle the form submission
 function handleSubmit(event) {
