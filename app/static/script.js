@@ -906,45 +906,7 @@ function createButton(text, onClickHandler) {
 }
 
 
-//AUTO DESIGN
- document.addEventListener("DOMContentLoaded", function() {
-    const attributes = {
-        room_size: ['small', 'medium', 'large'],
-        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
-        furniture_color: ['red', 'green', 'blue'],
-        wall_type: ['painted', 'wallpaper', 'tiled']
-    };
 
-    function getRandomValue(array) {
-        return array[Math.floor(Math.random() * array.length)];
-    }
-
-    function generateRandomValuesForRoom() {
-        return {
-            room_size: getRandomValue(attributes.room_size),
-            color_scheme: getRandomValue(attributes.color_scheme),
-            furniture_color: getRandomValue(attributes.furniture_color),
-            wall_type: getRandomValue(attributes.wall_type)
-        };
-    }
-
-    function simulateImageGeneration(selectedValues) {
-        console.log("Generating images with these values:", selectedValues);
-        // Simulate a call to an API or a process that generates images based on these values
-        setTimeout(() => {
-            console.log("Images generated!");
-            // For demonstration, just log out a success message
-        }, 1000);
-    }
-
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        const randomValues = generateRandomValuesForRoom();
-        simulateImageGeneration(randomValues);
-    });
-});
-
-
-// END AUTO DESIGN
   
 
 // Displays modal with generated images and associated action buttons
@@ -1165,6 +1127,49 @@ function handleSelectChange() {
 for (const select of selectElements) {
   select.addEventListener("change", handleSelectChange);
 }
+
+
+//AUTO DESIGN
+ document.addEventListener("DOMContentLoaded", function() {
+    const attributes = {
+        room_size: ['small', 'medium', 'large'],
+        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
+        furniture_color: ['red', 'green', 'blue'],
+        wall_type: ['painted', 'wallpaper', 'tiled']
+    };
+
+    function getRandomValue(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function generateRandomValuesForRoom() {
+        return {
+            room_size: getRandomValue(attributes.room_size),
+            color_scheme: getRandomValue(attributes.color_scheme),
+            furniture_color: getRandomValue(attributes.furniture_color),
+            wall_type: getRandomValue(attributes.wall_type)
+        };
+    }
+
+    function simulateImageGeneration(selectedValues) {
+        console.log("Generating images with these values:", selectedValues);
+        // Simulate a call to an API or a process that generates images based on these values
+        setTimeout(() => {
+            console.log("Images generated!");
+            // For demonstration, just log out a success message
+        }, 1000);
+    }
+
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const randomValues = generateRandomValuesForRoom();
+        simulateImageGeneration(randomValues);
+    });
+});
+
+
+// END AUTO DESIGN
+
+
 
 // Initial check on page load
 handleSelectChange();
