@@ -907,57 +907,42 @@ function createButton(text, onClickHandler) {
 
 
 //AUTO DESIGN
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        const roomType = document.getElementById('roomType').value;
-        generateRandomRoomDesign(roomType);
-    });
+ document.addEventListener("DOMContentLoaded", function() {
+    const attributes = {
+        room_size: ['small', 'medium', 'large'],
+        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
+        furniture_color: ['red', 'green', 'blue'],
+        wall_type: ['painted', 'wallpaper', 'tiled']
+    };
 
-    function generateRandomRoomDesign(roomType) {
-        const selectedValues = generateRandomValuesForRoom(roomType);
-        const imageUrl = null; // Assuming no initial image URL since this is a design generation
-        const isImg2Img = false; // Indicates no modification to an existing image
-        // Simulate API call
-        simulateImageGeneration(selectedValues);
+    function getRandomValue(array) {
+        return array[Math.floor(Math.random() * array.length)];
     }
 
-    function simulateImageGeneration(selectedValues) {
-        console.log("Generating images for:", selectedValues);
-        // Simulated API call delay
-        setTimeout(() => {
-            const imageUrls = [
-                "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/3561afc4-15fc-4209-a2e2-1179e7f7c066-2.png",
-                "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/c1bde7a8-7991-4b16-a62b-b6e2ffb7ec2b-2.png"
-            ]; // Replace these URLs with those from your actual API
-            showModal(imageUrls, "Generated images based on your room selection");
-        }, 1000);
-    }
-
-    function generateRandomValuesForRoom(roomType) {
-        // Mock function to generate data based on room type
+    function generateRandomValuesForRoom() {
         return {
-            roomType: roomType,
-            otherParam: "value" // Include other parameters as needed
+            room_size: getRandomValue(attributes.room_size),
+            color_scheme: getRandomValue(attributes.color_scheme),
+            furniture_color: getRandomValue(attributes.furniture_color),
+            wall_type: getRandomValue(attributes.wall_type)
         };
     }
 
-    function showModal(imageUrls, promptText) {
-        const modal = document.getElementById("modal");
-        const imageGrid = document.getElementById('imageGrid');
-        imageGrid.innerHTML = ''; // Clear previous images
-
-        imageUrls.forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = "Generated Image";
-            imageGrid.appendChild(img);
-        });
-
-        modal.style.display = 'block'; // Show the modal
-        // Assuming you have a function to display overlay if you use one
-        console.log(promptText); // Log or display prompt text
+    function simulateImageGeneration(selectedValues) {
+        console.log("Generating images with these values:", selectedValues);
+        // Simulate a call to an API or a process that generates images based on these values
+        setTimeout(() => {
+            console.log("Images generated!");
+            // For demonstration, just log out a success message
+        }, 1000);
     }
+
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const randomValues = generateRandomValuesForRoom();
+        simulateImageGeneration(randomValues);
+    });
 });
+
 
 // END AUTO DESIGN
   
