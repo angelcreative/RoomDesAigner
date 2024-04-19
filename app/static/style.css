@@ -2045,12 +2045,13 @@ select:hover {
 }
 
 .buttonsR {
-    display: flex;
-    flex-direction: row;
-    position:relative;
+   display: flex;
+    flex-direction: column;
+    position: relative;
     width: 100%;
     margin-top: 20px;
     font-family: courier;
+    align-items: center;
 }
 
 .buttonsL {
@@ -2060,13 +2061,13 @@ select:hover {
 }
 
 button {
-  margin: 1rem 0.5rem;
-  border-radius: 900rem;
-  border: none;
-  background: #1f1f1f;
-  color: #fff;
-  padding: 0.8rem 1.2rem;
-  cursor: pointer;
+    margin: 1rem 0.5rem;
+    border-radius: 8px;
+    border: none;
+    background: #eeeeee;
+    color: #4f5c66;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
 }
 
 #clearAllButton, #downloadJsonButton {
@@ -3011,11 +3012,13 @@ loginModal > p {
       flex-direction: row;
   }
   
-  .buttonsR {
-      display: flex;
-      flex-direction: column;
-      width:90%;
-  }
+         .buttonsR {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin: 0;
+        justify-content: space-evenly;
+    }
  
  
  select {
