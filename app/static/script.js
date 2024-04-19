@@ -32,7 +32,53 @@ const magicButton = document.getElementById("magicButton");
 //end modal P
 
 document.addEventListener("DOMContentLoaded", function() {
-    
+    //autodesign
+ // Predefined attributes for randomness
+    const attributes = {
+        room_size: ['small', 'medium', 'large'],
+        color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
+        furniture_color: ['red', 'green', 'blue'],
+        wall_type: ['painted', 'wallpaper', 'tiled']
+    };
+
+    // Function to get a random value from an array
+    function getRandomValue(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
+    // This function will merge attributes from the form with random attributes for diversity
+    function mixAttributes(baseAttributes) {
+        const mixedAttributes = {...baseAttributes};
+        const keys = Object.keys(attributes); // Only mix keys that are in the predefined list
+        keys.forEach(key => {
+            // Randomly decide whether to use the form value or pick a random one
+            if (Math.random() > 0.5) { // 50% chance to swap the attribute with a random one
+                mixedAttributes[key] = getRandomValue(attributes[key]);
+            }
+        });
+        return mixedAttributes;
+    }
+
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const baseValues = getSelectedValues(); // Get values from the form
+        const imageSets = [];
+
+        for (let i = 0; i < 4; i++) { // Generate four mixed sets of values
+            const mixedValues = mixAttributes(baseValues);
+            console.log("Generating images with mixed values:", mixedValues);
+            simulateImageGeneration(mixedValues);
+        }
+    });
+
+    // Simulate an image generation process
+    function simulateImageGeneration(selectedValues) {
+        console.log("Simulated generation with values:", selectedValues);
+        // Simulate an API call delay
+        setTimeout(() => {
+            const imageUrls = ["https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/57d34fda-206c-4533-ae25-1bddf0faf214-2.png", "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/d15b5790-ede9-4294-b343-d92abb87b9ba-0.png"]; // Replace with actual image URLs from an API
+            showModal(imageUrls, "Generated images based on your design selection");
+        }, 1000);
+    }
  
 // Function to handle the form submission
 function handleSubmit(event) {
@@ -500,45 +546,7 @@ function hideErrorMessage() {
 }
 
 
-  //auto design
-// This function will merge attributes from the form with random attributes for diversity
-function mixAttributes(baseAttributes) {
-    const mixedAttributes = {...baseAttributes};
-    const keys = Object.keys(baseAttributes);
-    keys.forEach(key => {
-        // Randomly decide whether to use the form value or pick a random one from the predefined list
-        if (Math.random() > 0.5) { // 50% chance to swap the attribute with a random one
-            mixedAttributes[key] = getRandomValue(attributes[key] || [baseAttributes[key]]);
-        }
-    });
-    return mixedAttributes;
-}
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        const baseValues = getSelectedValues(); // Get values from the form
-        const imageSets = [];
-        
-        for (let i = 0; i < 4; i++) { // Generate four mixed sets of values
-            const mixedValues = mixAttributes(baseValues);
-            console.log("Generating images with mixed values:", mixedValues);
-            // Simulate API call to generate images based on these mixed values
-            simulateImageGeneration(mixedValues);
-        }
-    });
-
-    function simulateImageGeneration(selectedValues) {
-        console.log("Simulated generation with values:", selectedValues);
-        // Assume this function would interact with an API to generate images
-        setTimeout(() => {
-            const imageUrls = ["https://example.com/image1.png", "https://example.com/image2.png"]; // Simulated image URLs
-            showModal(imageUrls, "Generated images for your design selection");
-        }, 1000);
-    }
-});
-
-// end auto design
-    
       
 
     
