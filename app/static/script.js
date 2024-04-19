@@ -35,11 +35,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 //AIDESIGN
-// Predefined attributes for randomness (place this within your existing script)
+// Predefined attributes for randomness
 const attributes = {
     room_size: ['small', 'medium', 'large'],
-    color_scheme: ['#FFFFFF', '#F0F0F0', '#E0E0E0'],
-    furniture_color: ['red', 'green', 'blue'],
+    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
+    furniture_color: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'],
     wall_type: ['painted', 'wallpaper', 'tiled']
 };
 
@@ -47,23 +47,23 @@ const attributes = {
 function mixAttributes(baseAttributes) {
     const mixedAttributes = {...baseAttributes};
     Object.keys(attributes).forEach(key => {
-        if (Math.random() > 0.5) { // 50% chance to swap
+        // 50% chance to swap
+        if (Math.random() > 0.5) {
             mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
         }
     });
     return mixedAttributes;
 }
 
-// Modify existing event listener for "AI Design" button
+// Event listener for the "AI Design" button
 document.getElementById('aiDesignButton').addEventListener('click', function() {
     const baseValues = getSelectedValues(); // Get current form values
-    for (let i = 0; i < 4; i++) { // Generate four sets of mixed values
-        const mixedValues = mixAttributes(baseValues);
-        console.log("Mixed Values for Generation:", mixedValues);
-        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-    }
+    const mixedValues = mixAttributes(baseValues);
+    console.log("Mixed Values for Generation:", mixedValues);
+    generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
 });
 //AIDESIGN
+
   
  
 // Function to handle the form submission
@@ -346,8 +346,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed), `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const width = aspectRatio === "portrait" ? 1024 : 1024;
-  const height = aspectRatio === "portrait" ? 1024 : 768;
+  const width = aspectRatio === "portrait" ? 1024 : 768;
+  const height = aspectRatio === "portrait" ? 1024 : 1024;
 
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
