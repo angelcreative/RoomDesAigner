@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 const attributes = {
     room_size: ['small', 'medium', 'large'],
     color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-    furniture_color: ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'],
+    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
     wall_type: ['painted', 'wallpaper', 'tiled']
 };
 
@@ -343,7 +343,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, richly appointed), `;
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined), `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 768;
