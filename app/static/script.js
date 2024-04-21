@@ -40,6 +40,7 @@ const attributes = {
     room_size: ['small', 'medium', 'large'],
     color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
     furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
+    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
     wall_type: ['painted', 'wallpaper', 'tiled']
 };
 
