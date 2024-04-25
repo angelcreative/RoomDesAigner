@@ -375,40 +375,6 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    # Parse the incoming data
-    data = request.json
-    print("Received data from webhook:", data)
-    # Process and possibly store this data, or notify users
-    return jsonify({'status': 'success'}), 200
-
-@app.route('/reimagine-image', methods=['POST'])
-def reimagine_image():
-    try:
-        image_url = request.json.get('image_url')
-        webhook_url = 'https://roomdesaigner.onrender.com/webhook'  # Your Flask app's webhook URL
-
-        headers = {
-            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
-            'Content-Type': 'application/json'
-        }
-        data = {
-            'image': image_url,
-            'webhook': webhook_url
-        }
-
-        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
-        if response.status_code == 200:
-            try:
-                json_data = response.json()
-                return jsonify(json_data), 200
-            except ValueError:  # includes simplejson.decoder.JSONDecodeError
-                return jsonify({'error': 'Failed to decode JSON', 'details': response.text}), 500
-        else:
-            return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
-    except Exception as e:
-        return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 
 
