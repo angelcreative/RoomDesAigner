@@ -912,7 +912,8 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
 
   // reimagine
 
-// Function to call the reimagine API endpoint
+
+  // Function to call the reimagine API endpoint
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -921,7 +922,12 @@ function reimagineImage(imageUrl) {
         },
         body: JSON.stringify({image_url: imageUrl})
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === 'success') {
             console.log('Reimagine process started:', data);
@@ -937,6 +943,8 @@ function reimagineImage(imageUrl) {
     });
 }
 
+
+  
 //end reimagine
     
     // Function to copy image URL to clipboard
