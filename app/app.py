@@ -375,6 +375,25 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    # Get the data sent to the webhook
+    data = request.json
+    print("Webhook received:", data)
+
+    # Process the webhook data here
+    # For example, you might update a database, send an email, etc.
+    process_webhook_data(data)
+
+    # Return a response to indicate that the webhook was handled successfully
+    return jsonify({'status': 'success'}), 200
+
+def process_webhook_data(data):
+    # Implement your logic here
+    # This could involve saving data to a database,
+    # triggering other processes, or sending notifications.
+    pass
+
     
 @app.route('/logout')
 def logout():
