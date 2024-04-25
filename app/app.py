@@ -375,24 +375,26 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    # Get the data sent to the webhook
-    data = request.json
-    print("Webhook received:", data)
+@app.route('/reimagine-image', methods=['POST'])
+def reimagine_image():
+    image_url = request.json.get('image_url')
+    webhook_url = 'https://roomdesaigner.onrender.com/webhook'  # Your Flask app's webhook URL
 
-    # Process the webhook data here
-    # For example, you might update a database, send an email, etc.
-    process_webhook_data(data)
+    headers = {
+        'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        'image': image_url,
+        'webhook': webhook_url  # Your webhook to receive the reimagine results
+    }
 
-    # Return a response to indicate that the webhook was handled successfully
-    return jsonify({'status': 'success'}), 200
+    response = requests.post('https://api.clarityai.cc/v1/reimagine', headers=headers, json=data)
+    if response.status_code == 200:
+        return jsonify(response.json()), 200
+    else:
+        return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
 
-def process_webhook_data(data):
-    # Implement your logic here
-    # This could involve saving data to a database,
-    # triggering other processes, or sending notifications.
-    pass
 
     
 @app.route('/logout')
