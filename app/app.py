@@ -389,7 +389,7 @@ def reimagine_image():
         'webhook': webhook_url  # Your webhook to receive the reimagine results
     }
 
-    response = requests.post('https://api.clarityai.cc/v1/reimagine', headers=headers, json=data)
+    response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
     if response.status_code == 200:
         return jsonify(response.json()), 200
     else:
