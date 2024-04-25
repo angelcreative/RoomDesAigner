@@ -984,10 +984,9 @@ function showModal(imageUrls, promptText) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));
 
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, reimagineButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
