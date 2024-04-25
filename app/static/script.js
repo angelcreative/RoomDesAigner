@@ -359,7 +359,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   const prompt = {
     key: apiKey,
-    prompt: JSON.stringify(promptText),
+    prompt: promptText,
     negative_prompt: " The artwork avoids the pitfalls of bad art, such as ugly and deformed eyes and faces, poorly drawn, blurry, and disfigured bodies with extra limbs and close-ups that look weird. It also avoids other common issues such as watermarking, text errors, missing fingers or digits, cropping, poor quality, and JPEG artifacts. The artwork is free of signature or watermark and avoids framing issues. The hands are not deformed, the eyes are not disfigured, and there are no extra bodies or limbs. The artwork is not blurry, out of focus, or poorly drawn, and the proportions are not bad or deformed. There are no mutations, missing  limbs, or floating or disconnected limbs. The hands and neck are not malformed, and there are no extra heads or out-of-frame elements. The artwork is not low-res or disgusting and is a well-drawn, highly detailed, and beautiful rendering.",
     width: width, 
     height: height,
@@ -437,32 +437,35 @@ if (isImg2Img && imageUrl) {
   fetch("/generate-images", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+        "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
 })
- .then(response => {
+.then(response => {
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        // Directly throw an error with the status to handle it in the catch block
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return response.json();
+    return response.json();  // Parse JSON only if the response was OK
 })
- .then(data => {
+.then(data => {
+    // Handle the API response based on its status
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, promptText);
-        hideGeneratingImagesDialog();
+        showModal(imageUrls, promptText);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);
+        checkImageStatus(data.fetch_result);  // Continue checking status if processing
     } else {
-        showError(data);
+        showError(data);  // Show error if other statuses are encountered
     }
 })
-  .catch(error => {
-    showError(error);
+.catch(error => {
+    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
+
     
     
 
