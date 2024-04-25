@@ -395,6 +395,13 @@ def reimagine_image():
     else:
         return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    # Parse the incoming data
+    data = request.json
+    print("Received data from webhook:", data)
+    # Process and possibly store this data, or notify users
+    return jsonify({'status': 'success'}), 200
 
     
 @app.route('/logout')
