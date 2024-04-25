@@ -395,16 +395,21 @@ def reimagine_image():
         }
         data = {
             'image': image_url,
-            'webhook': webhook_url  # Your webhook to receive the reimagine results
+            'webhook': webhook_url
         }
 
         response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
         if response.status_code == 200:
-            return jsonify(response.json()), 200
+            try:
+                json_data = response.json()
+                return jsonify(json_data), 200
+            except ValueError:  # includes simplejson.decoder.JSONDecodeError
+                return jsonify({'error': 'Failed to decode JSON', 'details': response.text}), 500
         else:
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
 
 
 
