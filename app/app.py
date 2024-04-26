@@ -426,9 +426,6 @@ def reimagine_image():
         app.logger.error("Error processing the reimagine-image request", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 
     
 @app.route('/logout')
