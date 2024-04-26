@@ -470,7 +470,7 @@ if (isImg2Img && imageUrl) {
  
 function checkImageStatus(fetchResultUrl, retryCount = 0) {
     fetch(fetchResultUrl, {
-        method: 'GET',  // Changed to 'GET' if appropriate for your API
+        method: 'POST', 
         headers: {
             'Content-Type': 'application/json'
             // Include any necessary authorization headers if needed
