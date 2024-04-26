@@ -949,32 +949,41 @@ function createButton(text, onClickHandler) {
 // IMAGINE
 
  function reimagineImage(imageUrl) {
-        fetch('/reimagine-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image_url: imageUrl })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Reimagine process started:', data);
-                alert('Reimagine process has been initiated. Check webhook for updates.');
-            } else {
-                console.error('Failed to initiate reimagine:', data);
-                alert('Failed to reimagine image. See console for details.');
-            }
-        })
-        .catch(error => {
-            console.error('Error calling reimagine API:', error);
-            alert('Error initiating reimagine process. See console for details.');
-        });
+    if (!imageUrl) {
+        console.error("No image URL provided.");
+        alert("Please provide a valid image URL.");
+        return;
+    }
+
+    console.log("Initiating reimagine process for URL:", imageUrl);
+    fetch('/reimagine-image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image_url: imageUrl })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => throw Error(`HTTP ${response.status}: ${err.message}`));
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Reimagine process started:', data);
+            alert('Reimagine process has been initiated. Check webhook for updates.');
+        } else {
+            console.error('Failed to initiate reimagine:', data);
+            alert('Failed to reimagine image. See console for details.');
+        }
+    })
+    .catch(error => {
+        console.error('Error calling reimagine API:', error);
+        alert('Error initiating reimagine process. See console for details.');
+    });
+}
+
   
 //END IMAGINE
   
