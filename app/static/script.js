@@ -337,7 +337,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting, masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>`;
+    const promptInit = `interior design photography, 8k, high resolution, model lora:SDXLrender_v2.0:1`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -360,7 +360,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: promptText,
-    negative_prompt: " The artwork avoids the pitfalls of bad art, such as ugly and deformed eyes and faces, poorly drawn, blurry, and disfigured bodies with extra limbs and close-ups that look weird. It also avoids other common issues such as watermarking, text errors, missing fingers or digits, cropping, poor quality, and JPEG artifacts. The artwork is free of signature or watermark and avoids framing issues. The hands are not deformed, the eyes are not disfigured, and there are no extra bodies or limbs. The artwork is not blurry, out of focus, or poorly drawn, and the proportions are not bad or deformed. There are no mutations, missing  limbs, or floating or disconnected limbs. The hands and neck are not malformed, and there are no extra heads or out-of-frame elements. The artwork is not low-res or disgusting and is a well-drawn, highly detailed, and beautiful rendering.",
+    negative_prompt: " The image generated avoids the pitfalls of bad genrative image, such as ugly and deformed eyes and faces, poorly drawn, blurry, and disfigured bodies with extra limbs and close-ups that look weird. It also avoids other common issues such as watermarking, text errors, missing fingers or digits, cropping, poor quality, and JPEG artifacts. The generated image is free of signature or watermark and avoids framing issues. The hands are not deformed, the eyes are not disfigured, and there are no extra bodies or limbs. The generated image is not blurry, out of focus, or poorly drawn, and the proportions are not bad or deformed. There are no mutations, missing  limbs, or floating or disconnected limbs. The hands and neck are not malformed, and there are no extra heads or out-of-frame elements. The generated image is not low-res or disgusting and is a well-drawn, highly detailed, and beautiful rendering.",
     width: width, 
     height: height,
 
