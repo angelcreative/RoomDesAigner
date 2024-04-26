@@ -375,8 +375,59 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    try:
+        # Assuming the data sent by the API is JSON
+        data = request.json
+        print("Received data from webhook:", data)
+        # Here you could process the data or update your application state
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        print("Error processing webhook data:", str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
 
 
+@app.route('/reimagine-image', methods=['POST'])
+def reimagine_image():
+    try:
+        # Extracting image_url from the incoming JSON request
+        image_url = request.json.get('image_url')
+        if not image_url:
+            return jsonify({'error': 'Missing image URL'}), 400
+
+        webhook_url = 'https://roomdesaigner.onrender.com/webhook'
+
+        # Preparing headers and data payload for the API request
+        headers = {
+            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            'image': image_url,
+            'webhook': webhook_url
+        }
+
+        # Log the data being sent
+        app.logger.debug(f"Sending data to Clarity AI API: {data}")
+
+        # Sending the request to the Clarity AI API
+        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
+        
+        # Log the response
+        app.logger.debug(f"Received response: {response.status_code} - {response.text}")
+
+        # Check response status and return accordingly
+        if response.status_code == 200:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
+    except Exception as e:
+        app.logger.error("Error processing the reimagine-image request", exc_info=True)
+        return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
     
