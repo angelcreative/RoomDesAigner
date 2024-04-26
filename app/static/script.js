@@ -337,7 +337,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting, masterpiece, best quality, highres, lora:SDXLrender_v2.0:1`;
+    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting, masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -467,37 +467,52 @@ if (isImg2Img && imageUrl) {
 });
 
     
-    
-
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+ 
+function checkImageStatus(fetchResultUrl, retryCount = 0) {
     fetch(fetchResultUrl, {
-        method: 'POST',
+        method: 'GET',  // Changed to 'GET' if appropriate for your API
         headers: {
-            'Content-Type': 'application/json',
-            // Include any other necessary headers, such as authorization headers if needed
+            'Content-Type': 'application/json'
+            // Include any necessary authorization headers if needed
         }
-        // If additional data needs to be sent in the request body, include it here
-        // body: JSON.stringify({ /* Your data here */ })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error, status = ${response.status}`);
+        return response.json();
+    })
     .then(data => {
-        if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === 'success') {
-            // Handle success
-            // You might want to call a function to process and display the images
-        } else {
-            // Handle any other statuses or errors
-            showError(data);
+        switch(data.status) {
+            case 'processing':
+                if (retryCount < 10) {  // Sets a maximum number of retries to 10
+                    setTimeout(() => checkImageStatus(fetchResultUrl, retryCount + 1), 2000);
+                } else {
+                    throw new Error("Max retries reached, please try again later.");
+                }
+                break;
+            case 'success':
+                displayImages(data.images);  // Assume this function processes and displays the images
+                break;
+            default:
+                throw new Error(`Unhandled status: ${data.status}`);
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
-        showError(error);
+        showError(error);  // Display or log the error appropriately
     });
 }
-    
+
+function showError(error) {
+    // Update the user interface to show the error
+    console.error(error);
+    alert("Error: " + error.message);
+}
+
+function displayImages(images) {
+    // Function to display images or handle the successful completion of the task
+    console.log('Displaying images:', images);
+}
+
 
     // Function to show error message with dismiss button
 function showError(error) {
@@ -946,46 +961,7 @@ function createButton(text, onClickHandler) {
 }
 
 
-// IMAGINE
 
- function reimagineImage(imageUrl) {
-    if (!imageUrl) {
-        console.error("No image URL provided.");
-        alert("Please provide a valid image URL.");
-        return;
-    }
-
-    console.log("Initiating reimagine process for URL:", imageUrl);
-    fetch('/reimagine-image', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ image_url: imageUrl })
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(err => throw Error(`HTTP ${response.status}: ${err.message}`));
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            console.log('Reimagine process started:', data);
-            alert('Reimagine process has been initiated. Check webhook for updates.');
-        } else {
-            console.error('Failed to initiate reimagine:', data);
-            alert('Failed to reimagine image. See console for details.');
-        }
-    })
-    .catch(error => {
-        console.error('Error calling reimagine API:', error);
-        alert('Error initiating reimagine process. See console for details.');
-    });
-}
-
-  
-//END IMAGINE
   
 
 // Displays modal with generated images and associated action buttons
@@ -1023,11 +999,9 @@ function showModal(imageUrls, promptText) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));
-
 
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, reimagineButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
