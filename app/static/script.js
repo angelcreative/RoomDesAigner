@@ -368,8 +368,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     //height: "1024",
     samples: "4",
     guidance_scale: "5",
-    //num_inference_steps: "50",
-    //scheduler: "KarrasVeScheduler",
+    num_inference_steps: "40",
+    scheduler: "DPM++ 3M SDE Karras",
     //self_attention: "no", //testing no
     seed: seedValue,
     webhook: null,
