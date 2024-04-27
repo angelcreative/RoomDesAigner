@@ -337,7 +337,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `interior design photography, 8k, high resolution, model lora:SDXLrender_v2.0:1, hyperrealistic rendering,`;
+    const promptInit = `interior design, 8k, high resolution, model lora:SDXLrender_v2.0:1,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -467,40 +467,35 @@ if (isImg2Img && imageUrl) {
 });
 
     
- 
-function checkImageStatus(fetchResultUrl, retryCount = 0) {
+
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
-        method: 'POST', 
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
-            // Include any necessary authorization headers if needed
-        }
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
     })
-    .then(response => {
-        if (!response.ok) throw new Error(`HTTP error, status = ${response.status}`);
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        switch(data.status) {
-            case 'processing':
-                if (retryCount < 10) {  // Sets a maximum number of retries to 10
-                    setTimeout(() => checkImageStatus(fetchResultUrl, retryCount + 1), 2000);
-                } else {
-                    throw new Error("Max retries reached, please try again later.");
-                }
-                break;
-            case 'success':
-                displayImages(data.images);  // Assume this function processes and displays the images
-                break;
-            default:
-                throw new Error(`Unhandled status: ${data.status}`);
+        if (data.status === 'processing') {
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+        } else if (data.status === 'success') {
+            // Handle success
+            // You might want to call a function to process and display the images
+        } else {
+            // Handle any other statuses or errors
+            showError(data);
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
-        showError(error);  // Display or log the error appropriately
+        showError(error);
     });
 }
+    
+
 
 function showError(error) {
     // Update the user interface to show the error
