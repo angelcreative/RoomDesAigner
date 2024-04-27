@@ -481,9 +481,13 @@ function checkImageStatus(fetchResultUrl) {
     .then(data => {
         if (data.status === 'processing') {
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === 'success') {
-            // Handle success
-            // You might want to call a function to process and display the images
+        } else if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, promptText);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    
         } else {
             // Handle any other statuses or errors
             showError(data);
