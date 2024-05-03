@@ -337,14 +337,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `interior design, 8k, high resolution, (((enhance,cinematic-diva,3-D-model, higher-fractality, hyper-realistic, perfect-morphology))), model lora:SDXLrender_v2.0:1,`;
+    const promptInit = `interior design, 8k, high resolution, (((enhance,cinematic-diva,3-D-model, hyper-realistic, perfect-morphology))), model lora:SDXLrender_v2.0:1,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined), ((fractal,fractality pattern details)), `;
+  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined), pattern details, `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 768;
