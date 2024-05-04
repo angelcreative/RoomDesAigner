@@ -364,7 +364,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: promptText,
-    negative_prompt: " The image generated avoids the pitfalls of bad genrative image, such as ugly and deformed eyes and faces, poorly drawn, blurry, and disfigured bodies with extra limbs and close-ups that look weird. It also avoids other common issues such as watermarking, text errors, missing fingers or digits, cropping, poor quality, and JPEG artifacts. The generated image is free of signature or watermark and avoids framing issues. The hands are not deformed, the eyes are not disfigured, and there are no extra bodies or limbs. The generated image is not blurry, out of focus, or poorly drawn, and the proportions are not bad or deformed. There are no mutations, missing  limbs, or floating or disconnected limbs. The hands and neck are not malformed, and there are no extra heads or out-of-frame elements. The generated image is not low-res or disgusting and is a well-drawn, highly detailed, and beautiful rendering.",
+    negative_prompt: " (deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck ",
     width: width, 
     height: height,
 
