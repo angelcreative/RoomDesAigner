@@ -297,7 +297,10 @@ initializeColorWheel();
     function generateOptionalText() {
       return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
     }
-
+ //Function to generate fractal
+function generateFractalText() {
+  return "(((fractal,fractality pattern details)))";
+    }
     
     function showGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'block';
@@ -355,7 +358,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const seedValue = seedEnabled ? null : "19071975";
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${promptEndy} ${optionalText}`;
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
   const prompt = {
     key: apiKey,
