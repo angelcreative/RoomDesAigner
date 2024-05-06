@@ -224,7 +224,7 @@ initializeColorWheel();
             "designed_by_this_interior_designer",
             "designed_by_this_architect",
           "lens_used",
-            "filmgrain_used_to_take_the_shot",
+            "image _color",
             "photo_lighting_type",
             "illumination",
             "door",
