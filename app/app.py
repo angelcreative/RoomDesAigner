@@ -26,7 +26,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 
 
 
-@app.route('/generate-images', methods=['POST'])
+@app.route('/generate-images', methods=['POST']) 
 def generate_images():
     if 'username' not in session:
         return jsonify({"error": "Not logged in"}), 401
@@ -375,57 +375,51 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     try:
-        # Assuming the data sent by the API is JSON
-        data = request.json
+        # Robust error handling for JSON parsing
+        data = request.get_json(force=True)  # `force=True` ignores Content-Type header
         print("Received data from webhook:", data)
-        # Here you could process the data or update your application state
         return jsonify({'status': 'success'}), 200
     except Exception as e:
         print("Error processing webhook data:", str(e))
-        return jsonify({'error': 'Internal Server Error'}), 500
-
+        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
 
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
-        # Extracting image_url from the incoming JSON request
-        image_url = request.json.get('image_url')
-        if not image_url:
-            return jsonify({'error': 'Missing image URL'}), 400
+        request_data = request.get_json()
+        if not request_data or 'image_url' not in request_data:
+            return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
 
+        image_url = request_data['image_url']
         webhook_url = 'https://roomdesaigner.onrender.com/webhook'
 
-        # Preparing headers and data payload for the API request
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
-        data = {
+        payload = {
             'image': image_url,
             'webhook': webhook_url
         }
 
-        # Log the data being sent
-        app.logger.debug(f"Sending data to Clarity AI API: {data}")
-
-        # Sending the request to the Clarity AI API
-        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
-        
-        # Log the response
-        app.logger.debug(f"Received response: {response.status_code} - {response.text}")
-
-        # Check response status and return accordingly
+        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=payload)
         if response.status_code == 200:
             return jsonify(response.json()), 200
         else:
-            return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
+            return jsonify({
+                'error': 'API request failed',
+                'details': response.text,
+                'status_code': response.status_code,
+                'api_url': 'https://api.clarityai.cc/v1/upscale'
+            }), response.status_code
+    except requests.exceptions.RequestException as e:
+        return jsonify({'error': 'Networking error', 'message': str(e)}), 502
     except Exception as e:
-        app.logger.error("Error processing the reimagine-image request", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
-
 
     
 @app.route('/logout')
