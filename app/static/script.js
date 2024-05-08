@@ -340,14 +340,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `interior design, 8k, high resolution, (((enhance,cinematic-diva,3-D-model, hyper-realistic, perfect-morphology))), model lora:SDXLrender_v2.0:1,`;
+    const promptInit = `(interior design:1), [3-D-model: hyper-realistic:1], (8k high resolution:1), (enhance:1), [cinematic-diva: perfect-morphology:1], model lora:SDXLrender_v2.0:1,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined), pattern details, `;
+  const promptEndy = ` (abundant furniture:1), [multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1] (stylishly streamlined:0.5), pattern details, `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 768;
@@ -364,7 +364,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const prompt = {
     key: apiKey,
     prompt: promptText,
-    negative_prompt: " (deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck ",
+    negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
     width: width, 
     height: height,
 
