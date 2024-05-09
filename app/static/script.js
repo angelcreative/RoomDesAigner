@@ -340,7 +340,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `(interior design:1), [3-D-model: hyper-realistic:1], (8k high resolution:1), (enhance:1), [cinematic-diva: perfect-morphology:1], model lora:SDXLrender_v2.0:1,`;
+    const promptInit = `(interior design:1), [3-D-model: hyper-realistic:1], (8k high resolution:1), (enhance:1), [cinematic-diva: perfect-morphology:1], [hyper-detailed-face: perfect-face:1], (((symmetric face))),  model lora:SDXLrender_v2.0:1,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
