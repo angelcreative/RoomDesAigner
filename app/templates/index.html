@@ -35,7 +35,33 @@
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        .toggle-content {
+            display: none;
+        }
+        .chipSV {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        @media (min-width: 600px) {
+            .chipSV {
+                display: inline-block;
+                margin: 5px;
+                font-size: 16px;
+            }
+        }
+    </style>
+   
+    
+    
     <!-- ======= SCRIPTS ========== -->
+     <script>
+        function toggleContent() {
+            const content = document.getElementById("chipsSV");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+    </script>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
 
@@ -405,8 +431,8 @@
 
         <img class="logoApp" src="static/img/logoApp.svg">
             <h1>Your dream room is here</h1>
-             
-            <div id="chipsSV"></div>
+             <button onclick="toggleContent()">See prompt details</button>
+            <div id="chipsSV" class="toggle-content"></div>
             <br>
             <div class="imageGrid" id="imageGrid">
                 <button>Upscale</button>
