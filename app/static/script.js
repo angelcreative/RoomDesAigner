@@ -709,7 +709,7 @@ const upscaleImage = async (imageUrl) => {
                             </style>
                         </head>
                         <body>
-                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
+                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
                             <h1>Upscaled Image</h1>
                             <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
                         </body>
