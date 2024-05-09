@@ -347,7 +347,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` (abundant furniture:1), [multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1] (stylishly streamlined:0.5), pattern details, [female: big breasts:1] `;
+  const promptEndy = ` (abundant furniture:1), [multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1] (stylishly streamlined:0.5), pattern details, [she has: big breasts:1], (perfect definition of a face on distan shots:1) `;
   
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 768;
