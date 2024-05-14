@@ -355,21 +355,24 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const width = aspectRatio === "portrait" ? 768 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 1024;
 
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;*/
+  */
+
+const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
 let width, height;
 
 if (aspectRatio === "landscape") {
-  width = 1080;
+  width = 1024;
   height = 768;
 } else if (aspectRatio === "portrait") {
   width = 768;
-  height = 1080;
+  height = 1024;
 } else if (aspectRatio === "square") {
-  width = 1080;
-  height = 1080;
+  width = 1024;
+  height = 1024;
 }
 
+  
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
