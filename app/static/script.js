@@ -350,9 +350,56 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
   
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+/*  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   const width = aspectRatio === "portrait" ? 1024 : 768;
+  const width = aspectRatio === "portrait" ? 768 : 1024;
   const height = aspectRatio === "portrait" ? 1024 : 1024;
+
+  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;*/
+
+let width, height;
+
+if (aspectRatio === "landscape") {
+  width = 1080;
+  height = 768;
+} else if (aspectRatio === "portrait") {
+  width = 768;
+  height = 1080;
+} else if (aspectRatio === "square") {
+  width = 1080;
+  height = 1080;
+}
+
+  const seedSwitch = document.getElementById("seedSwitch");
+  const seedEnabled = seedSwitch.checked;
+  const seedValue = seedEnabled ? null : "19071975";
+
+  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+  const prompt = {
+    key: apiKey,
+    prompt: promptText,
+    negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
+    width: width, 
+    height: height,
+
+    //width: "1024",
+    //height: "1024",
+    samples: "4",
+    guidance_scale: "10",
+    //num_inference_steps: "40",
+    //scheduler: "DPM++ 3M SDE Karras",
+    //self_attention: "no", //testing no
+    seed: seedValue,
+    webhook: null,
+    safety_checker: false,
+    track_id: null,
+  };
+
+
+
 
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
