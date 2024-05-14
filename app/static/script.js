@@ -258,7 +258,7 @@ initializeColorWheel();
             "stone_material",
             "marble_material",
             "wood_material",
-            "picture",
+            "generated_artwork",
             "design_style",
             "decorative_elements"
           
