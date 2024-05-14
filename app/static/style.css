@@ -19,6 +19,15 @@ body {
     filter: contrast(0.5);
 }
 
+.ar {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    column-gap: 8px;
+    font-size: 14px;
+    color: #677580;
+}
+
 #roomFurniture option {
     display: flex;
     flex-direction: column;
