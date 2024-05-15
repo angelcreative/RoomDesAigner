@@ -970,6 +970,39 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
+  //reimagine
+// Function to call the reimagine API endpoint
+function reimagineImage(imageUrl) {
+    fetch('/reimagine-image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({image_url: imageUrl})
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error('Failed to initiate reimagine:', data);
+            alert('Failed to reimagine image. See console for details.');
+        } else {
+            console.log('Reimagine process started:', data);
+            alert('Reimagine process has been initiated. Check webhook for updates.');
+        }
+    })
+    .catch(error => {
+        console.error('Error calling reimagine API:', error);
+        alert('Error initiating reimagine process. See console for details.');
+    });
+}
+
+
+
 
 
   
@@ -1009,9 +1042,10 @@ function showModal(imageUrls, promptText) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));
 
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, reimagineButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
