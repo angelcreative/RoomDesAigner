@@ -378,48 +378,41 @@ def compare_images(slug):
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    try:
-        # Robust error handling for JSON parsing
-        data = request.get_json(force=True)  # `force=True` ignores Content-Type header
-        print("Received data from webhook:", data)
-        return jsonify({'status': 'success'}), 200
-    except Exception as e:
-        print("Error processing webhook data:", str(e))
-        return jsonify({'error': 'Internal Server Error', 'details': str(e)}), 500
+    data = request.json
+    print("Received data from webhook:", data)
+    # Process and possibly store this data, or notify users
+    return jsonify({'status': 'success'}), 200
 
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
-        request_data = request.get_json()
-        if not request_data or 'image_url' not in request_data:
-            return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
-
-        image_url = request_data['image_url']
-        webhook_url = 'https://roomdesaigner.onrender.com/webhook'
+        image_url = request.json.get('image_url')
+        webhook_url = 'https://roomdesaigner.onrender.com/webhook'  # Your Flask app's webhook URL
 
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
-        payload = {
+        data = {
             'image': image_url,
             'webhook': webhook_url
         }
 
-        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=payload)
+        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
         if response.status_code == 200:
-            return jsonify(response.json()), 200
+            try:
+                json_data = response.json()
+                return jsonify(json_data), 200
+            except ValueError:
+                app.logger.error("Failed to decode JSON", exc_info=True)
+                return jsonify({'error': 'Failed to decode JSON', 'details': response.text}), 500
         else:
-            return jsonify({
-                'error': 'API request failed',
-                'details': response.text,
-                'status_code': response.status_code,
-                'api_url': 'https://api.clarityai.cc/v1/upscale'
-            }), response.status_code
-    except requests.exceptions.RequestException as e:
-        return jsonify({'error': 'Networking error', 'message': str(e)}), 502
+            app.logger.error(f"Failed to reimagine image: {response.text}")
+            return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
+        app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
 
     
 @app.route('/logout')
