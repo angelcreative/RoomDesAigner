@@ -496,7 +496,6 @@ if (isImg2Img && imageUrl) {
     
 
 // Define the checkImageStatus function
-// Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
         method: 'POST',
@@ -1105,6 +1104,7 @@ function closeModalHandler() {
 }
 
 
+
 //end reimagine
   
 
@@ -1182,10 +1182,6 @@ function createButton(text, onClickHandler) {
 
 
 
-function closeModalHandler() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
-}
     
     
   // Function to open the image in a new tab
