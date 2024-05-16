@@ -375,6 +375,7 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
@@ -397,7 +398,7 @@ def reimagine_image():
             "fractality": 0,
             "scale_factor": 2,
             "style": "default",
-            "prompt": "",
+            "prompt": ""
         }
 
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
@@ -410,7 +411,7 @@ def reimagine_image():
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
-    
+
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
