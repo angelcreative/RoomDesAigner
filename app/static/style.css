@@ -1546,6 +1546,12 @@ select#harmonyType {
     background-size: 36px
 }
 
+.image-buttons button:nth-child(8) {
+   background: url('/static/img/ico_grid/ico_enhance.svg') center center no-repeat;
+    background-size: 36px
+}
+
+
 
 .colorIndicator {
     position: absolute;
