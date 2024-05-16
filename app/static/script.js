@@ -1011,23 +1011,46 @@ function reimagineImage(imageUrl) {
         return response.json();
     })
     .then(data => {
-        if (data.error) {
+        if (data.status === 'processing') {
+            console.log('Reimagine process started, waiting for webhook...');
+            alert('Reimagine process has been initiated. You will be notified when the image is ready.');
+            checkUpscaledImageStatus();  // Start polling
+        } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
-        } else {
-            console.log('Reimagine process completed:', data);
-            const upscaledImageUrl = data.upscaled_image_url;
-            if (upscaledImageUrl) {
-                window.open(upscaledImageUrl, '_blank');  // Open the upscaled image in a new tab
-            } else {
-                console.error('No upscaled image URL returned:', data);
-                alert('Failed to retrieve the upscaled image. See console for details.');
-            }
         }
     })
     .catch(error => {
         console.error('Error calling reimagine API:', error);
         alert('Error initiating reimagine process. See console for details.');
+    });
+}
+
+// Function to check the status of the upscaled image
+function checkUpscaledImageStatus() {
+    fetch('/get-upscaled-image', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'processing') {
+            console.log('Upscaled image is still processing, retrying...');
+            setTimeout(checkUpscaledImageStatus, 5000);  // Retry after 5 seconds
+        } else if (data.upscaled_image_url) {
+            console.log('Upscaled image is ready:', data.upscaled_image_url);
+            openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
+        }
+    })
+    .catch(error => {
+        console.error('Error checking upscaled image status:', error);
     });
 }
 
@@ -1087,16 +1110,27 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-
-// Function to close modal
+// Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
 }
- 
+
+// Function to show overlay during modal display
+function showOverlay() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
+}
+
+// Function to open the image in a new tab
+function openImageInNewTab(imageUrl) {
+    window.open(imageUrl, "_blank");
+}
 
 
 //end reimagine
+
+
   
 
 /*Displays modal with generated images and associated action buttons
