@@ -412,6 +412,7 @@ def reimagine_image():
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
+
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
