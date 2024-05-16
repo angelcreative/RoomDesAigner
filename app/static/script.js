@@ -1087,6 +1087,7 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
+
 // Function to close modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
