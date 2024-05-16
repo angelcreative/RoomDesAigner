@@ -375,55 +375,49 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    try:
-        # Assuming the data sent by the API is JSON
-        data = request.json
-        print("Received data from webhook:", data)
-        # Here you could process the data or update your application state
-        return jsonify({'status': 'success'}), 200
-    except Exception as e:
-        print("Error processing webhook data:", str(e))
-        return jsonify({'error': 'Internal Server Error'}), 500
-
-
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
-        # Extracting image_url from the incoming JSON request
-        image_url = request.json.get('image_url')
-        if not image_url:
-            return jsonify({'error': 'Missing image URL'}), 400
+        request_data = request.get_json()
+        app.logger.debug(f"Received request data: {request_data}")
 
-        webhook_url = 'https://roomdesaigner.onrender.com/webhook'
+        if not request_data or 'image_url' not in request_data:
+            app.logger.error("Bad Request: No image URL provided")
+            return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
 
-        # Preparing headers and data payload for the API request
+        image_url = request_data['image_url']
+        app.logger.debug(f"Image URL: {image_url}")
+
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
+
         data = {
-            'image': image_url,
-            'webhook': webhook_url
+            "image": image_url,
+            "creativity": 0,
+            "resemblance": 0,
+            "dynamic": 0,
+            "fractality": 0,
+            "scale_factor": 2,
+            "style": "default",
+            "prompt": ""
         }
 
-        # Log the data being sent
-        app.logger.debug(f"Sending data to Clarity AI API: {data}")
+        app.logger.debug(f"Sending data to external API: {data}")
 
-        # Sending the request to the Clarity AI API
         response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
-        
-        # Log the response
-        app.logger.debug(f"Received response: {response.status_code} - {response.text}")
+        app.logger.debug(f"Received response from external API: {response.status_code} - {response.text}")
 
-        # Check response status and return accordingly
         if response.status_code == 200:
-            return jsonify(response.json()), 200
+            json_data = response.json()
+            app.logger.debug(f"JSON response data: {json_data}")
+            return jsonify(json_data), 200
         else:
+            app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
-        app.logger.error("Error processing the reimagine-image request", exc_info=True)
+        app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 
