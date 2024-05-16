@@ -1054,6 +1054,11 @@ function checkUpscaledImageStatus() {
     });
 }
 
+// Function to open the image in a new tab
+function openImageInNewTab(imageUrl) {
+    window.open(imageUrl, "_blank");
+}
+
 // Function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
     const button = document.createElement("button");
@@ -1122,10 +1127,6 @@ function showOverlay() {
     overlay.style.display = "block";
 }
 
-// Function to open the image in a new tab
-function openImageInNewTab(imageUrl) {
-    window.open(imageUrl, "_blank");
-}
 
 
 //end reimagine
