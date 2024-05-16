@@ -994,10 +994,150 @@ function createButton(text, onClickHandler) {
 }
 
 
+//reimagine
 
-  
+function reimagineImage(imageUrl) {
+    fetch('/reimagine-image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image_url: imageUrl })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            console.error('Failed to initiate reimagine:', data);
+            alert('Failed to reimagine image. See console for details.');
+        } else {
+            console.log('Reimagine process started:', data);
+            if (data.image_url) {
+                console.log('Image URL:', data.image_url);
+                openImageInNewTab(data.image_url);
+                alert('Image has been reimagined successfully.');
+            } else {
+                alert('Reimagine process has been initiated. Check the console for the response.');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error calling reimagine API:', error);
+        alert('Error initiating reimagine process. See console for details.');
+    });
+}
+
+function openImageInNewTab(imageUrl) {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+        <html>
+            <head>
+                <title>Reimagined Image</title>
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        background-color: #f0f0f0;
+                    }
+                    img {
+                        max-width: 90%;
+                        max-height: 90%;
+                        border: 2px solid #ccc;
+                        border-radius: 8px;
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${imageUrl}" alt="Reimagined Image">
+            </body>
+        </html>
+    `);
+    newWindow.document.close();
+}
+
+function createButton(text, onClickHandler, className = '') {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.className = className; // Allows setting custom classes
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
 
 // Displays modal with generated images and associated action buttons
+function showModal(imageUrls, promptText) {
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
+
+    // Ensure only one event listener is added
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+    
+    // Get the thumbnail image source (user-uploaded image)
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    imageUrls.forEach(imageUrl => {
+        const imageContainer = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
+
+        // Create buttons
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));
+
+        // Append buttons to container
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, reimagineButton].forEach(button => buttonsContainer.appendChild(button));
+
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+        imageGrid.appendChild(imageContainer);
+    });
+
+    modal.style.display = "block";
+    showOverlay();
+}
+
+// Function to show overlay during modal display
+function showOverlay() {
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
+}
+
+// Function to handle the "Close" action of modal
+function closeModalHandler() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
+
+// Example usage
+const testImageUrl = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/69f13d9c-e49b-421c-8e8a-7b92d074bebe-3.png";
+reimagineImage(testImageUrl);
+
+//end reimagine
+  
+
+/*Displays modal with generated images and associated action buttons
 function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -1045,7 +1185,7 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-
+*/
   
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
