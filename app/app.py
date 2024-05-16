@@ -396,29 +396,48 @@ def reimagine_image():
             "fractality": 0,
             "scale_factor": 2,
             "style": "default",
-            "prompt": ""
+            "prompt": "",
+            "webhook": "https://roomdesaigner.onrender.com/webhook"  # Your webhook URL
         }
 
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
-        
-        # Log the response status and content for debugging
+
         app.logger.debug(f"Clarity API response status: {response.status_code}")
         app.logger.debug(f"Clarity API response content: {response.text}")
 
         if response.status_code == 200:
-            json_data = response.json()
-            upscaled_image_url = json_data.get('output_image_url')
-            if upscaled_image_url:
-                return jsonify({'status': 'success', 'upscaled_image_url': upscaled_image_url}), 200
-            else:
-                app.logger.error("Upscaled image URL not found in Clarity API response.")
-                return jsonify({'error': 'Upscaled image URL not found'}), 500
+            return jsonify({'status': 'processing'}), 200
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    try:
+        data = request.json
+        app.logger.debug(f"Received data from webhook: {data}")
+        
+        # Process the webhook data here
+        upscaled_image_url = data.get('output_image_url')
+        if upscaled_image_url:
+            # Handle the upscaled image URL (e.g., store it in a database, notify the user, etc.)
+            # For simplicity, we'll just log it here
+            app.logger.info(f"Upscaled image URL: {upscaled_image_url}")
+            
+            # Send a response back to the client if necessary
+            return jsonify({'status': 'success', 'upscaled_image_url': upscaled_image_url}), 200
+        else:
+            return jsonify({'error': 'Upscaled image URL not found in webhook data'}), 400
+    except Exception as e:
+        app.logger.error("Error processing webhook", exc_info=True)
+        return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
