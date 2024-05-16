@@ -379,11 +379,9 @@ def compare_images(slug):
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
-        request_data = request.get_json()
-        if not request_data or 'image_url' not in request_data:
-            return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
-
-        image_url = request_data['image_url']
+        image_url = request.json.get('image_url')
+        if not image_url:
+            return jsonify({'error': 'image_url is required'}), 400
 
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
@@ -404,13 +402,15 @@ def reimagine_image():
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
         if response.status_code == 200:
             json_data = response.json()
-            return jsonify(json_data), 200
+            upscaled_image_url = json_data.get('output_image_url')  # Make sure this key matches the actual response key
+            return jsonify({'status': 'success', 'upscaled_image_url': upscaled_image_url}), 200
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
 
 
 
