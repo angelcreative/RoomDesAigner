@@ -995,6 +995,7 @@ function createButton(text, onClickHandler) {
 
 //reimagine
 
+// Function to reimagine the image
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1011,19 +1012,16 @@ function reimagineImage(imageUrl) {
     })
     .then(data => {
         if (data.error) {
-            console.error('Failed to initiate reimagine:', data);
+            console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
         } else {
-            console.log('Reimagine process started:', data);
-            if (data.image) {
-                const newWindow = window.open(data.image, '_blank');
-                if (newWindow) {
-                    newWindow.focus();
-                } else {
-                    alert('Please allow popups for this website.');
-                }
+            console.log('Reimagine process completed:', data);
+            const upscaledImageUrl = data.upscaled_image_url;
+            if (upscaledImageUrl) {
+                window.open(upscaledImageUrl, '_blank');  // Open the upscaled image in a new tab
             } else {
-                alert('Reimagine process has been initiated. Check the console for the response.');
+                console.error('No upscaled image URL returned:', data);
+                alert('Failed to retrieve the upscaled image. See console for details.');
             }
         }
     })
@@ -1033,7 +1031,7 @@ function reimagineImage(imageUrl) {
     });
 }
 
-// Helper function to create a button and attach an event listener
+// Function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
     const button = document.createElement("button");
     button.textContent = text;
@@ -1049,7 +1047,7 @@ function showModal(imageUrls, promptText) {
     // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
-    
+
     // Get the thumbnail image source (user-uploaded image)
     const thumbnailImage = document.getElementById("thumbnail");
     const userImageBase64 = thumbnailImage.src;
@@ -1075,7 +1073,7 @@ function showModal(imageUrls, promptText) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));
+        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));  // Reimagine button
 
         // Append buttons to container
         [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, reimagineButton].forEach(button => buttonsContainer.appendChild(button));
@@ -1088,6 +1086,7 @@ function showModal(imageUrls, promptText) {
     modal.style.display = "block";
     showOverlay();
 }
+
 
 // Function to show overlay
 function showOverlay() {
