@@ -1104,6 +1104,7 @@ function closeModalHandler() {
     modal.style.display = "none";
 }
 
+
 //end reimagine
   
 
