@@ -384,7 +384,7 @@ def reimagine_image():
             return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
 
         image_url = request_data['image_url']
-        
+
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
@@ -411,6 +411,7 @@ def reimagine_image():
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
 
 
 @app.route('/logout')
