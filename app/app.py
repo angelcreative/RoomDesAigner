@@ -414,6 +414,7 @@ def reimagine_image():
 
 
 
+
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
