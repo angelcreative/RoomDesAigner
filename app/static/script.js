@@ -995,7 +995,6 @@ function createButton(text, onClickHandler) {
 
 //reimagine
 
-// Function to call reimagine API and open the enhanced image in a new tab
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1016,9 +1015,8 @@ function reimagineImage(imageUrl) {
             alert('Failed to reimagine image. See console for details.');
         } else {
             console.log('Reimagine process started:', data);
-            if (data.image_url) {
-                console.log('Image URL:', data.image_url);
-                const newWindow = window.open(data.image_url, '_blank');
+            if (data.image) {
+                const newWindow = window.open(data.image, '_blank');
                 if (newWindow) {
                     newWindow.focus();
                 } else {
