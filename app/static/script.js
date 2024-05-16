@@ -1087,19 +1087,12 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-
-// Function to show overlay
-function showOverlay() {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
-}
-
 // Function to close modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
 }
-
+ 
 
 
 //end reimagine
