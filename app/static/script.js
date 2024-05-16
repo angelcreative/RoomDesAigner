@@ -996,6 +996,7 @@ function createButton(text, onClickHandler) {
 
 //reimagine
 
+// Function to call reimagine API and open the enhanced image in a new tab
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1018,8 +1019,12 @@ function reimagineImage(imageUrl) {
             console.log('Reimagine process started:', data);
             if (data.image_url) {
                 console.log('Image URL:', data.image_url);
-                openImageInNewTab(data.image_url);
-                alert('Image has been reimagined successfully.');
+                const newWindow = window.open(data.image_url, '_blank');
+                if (newWindow) {
+                    newWindow.focus();
+                } else {
+                    alert('Please allow popups for this website.');
+                }
             } else {
                 alert('Reimagine process has been initiated. Check the console for the response.');
             }
@@ -1031,41 +1036,10 @@ function reimagineImage(imageUrl) {
     });
 }
 
-function openImageInNewTab(imageUrl) {
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-        <html>
-            <head>
-                <title>Reimagined Image</title>
-                <style>
-                    body {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 100vh;
-                        margin: 0;
-                        background-color: #f0f0f0;
-                    }
-                    img {
-                        max-width: 90%;
-                        max-height: 90%;
-                        border: 2px solid #ccc;
-                        border-radius: 8px;
-                    }
-                </style>
-            </head>
-            <body>
-                <img src="${imageUrl}" alt="Reimagined Image">
-            </body>
-        </html>
-    `);
-    newWindow.document.close();
-}
-
-function createButton(text, onClickHandler, className = '') {
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
     const button = document.createElement("button");
     button.textContent = text;
-    button.className = className; // Allows setting custom classes
     button.addEventListener("click", onClickHandler);
     return button;
 }
@@ -1118,21 +1092,17 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-// Function to show overlay during modal display
+// Function to show overlay
 function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
 
-// Function to handle the "Close" action of modal
+// Function to close modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
 }
-
-// Example usage
-const testImageUrl = "https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/69f13d9c-e49b-421c-8e8a-7b92d074bebe-3.png";
-reimagineImage(testImageUrl);
 
 //end reimagine
   
@@ -1187,7 +1157,7 @@ function showModal(imageUrls, promptText) {
 
 */
   
-// Function to handle the "Close" action of modal
+/*Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
@@ -1197,7 +1167,7 @@ function closeModalHandler() {
 function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
-}
+}*/
 
     
     
