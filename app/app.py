@@ -379,15 +379,11 @@ def compare_images(slug):
 def reimagine_image():
     try:
         request_data = request.get_json()
-        app.logger.debug(f"Received request data: {request_data}")
-
         if not request_data or 'image_url' not in request_data:
-            app.logger.error("Bad Request: No image URL provided")
             return jsonify({'error': 'Bad Request', 'message': 'No image URL provided'}), 400
 
         image_url = request_data['image_url']
-        app.logger.debug(f"Image URL: {image_url}")
-
+        
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
@@ -401,17 +397,12 @@ def reimagine_image():
             "fractality": 0,
             "scale_factor": 2,
             "style": "default",
-            "prompt": ""
+            "prompt": "",
         }
 
-        app.logger.debug(f"Sending data to external API: {data}")
-
-        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
-        app.logger.debug(f"Received response from external API: {response.status_code} - {response.text}")
-
+        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
         if response.status_code == 200:
             json_data = response.json()
-            app.logger.debug(f"JSON response data: {json_data}")
             return jsonify(json_data), 200
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
@@ -419,8 +410,6 @@ def reimagine_image():
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
-
-
     
 @app.route('/logout')
 def logout():
