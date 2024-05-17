@@ -1047,6 +1047,8 @@ function checkUpscaledImageStatus(uniqueKey) {
         } else if (data.upscaled_image_url) {
             console.log('Upscaled image is ready:', data.upscaled_image_url);
             openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
+        } else {
+            console.error('Unexpected response:', data);
         }
     })
     .catch(error => {
