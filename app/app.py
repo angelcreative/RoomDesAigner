@@ -376,6 +376,7 @@ def compare_images(slug):
         return "Comparison not found", 404
 
 
+
 # Dictionary to store upscaled image URLs
 upscaled_image_urls = {}
 
@@ -448,8 +449,6 @@ def get_upscaled_image():
     else:
         app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
-
-
 
 @app.route('/logout')
 def logout():
