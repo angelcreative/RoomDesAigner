@@ -377,6 +377,7 @@ def compare_images(slug):
 
 
 # Dictionary to store upscaled image URLs
+# Dictionary to store upscaled image URLs
 upscaled_image_urls = {}
 
 @app.route('/reimagine-image', methods=['POST'])
@@ -403,7 +404,7 @@ def reimagine_image():
             "scale_factor": 2,
             "style": "default",
             "prompt": "",
-            "webhook": f"https://roomdesaigner.onrender.com/webhook?key={unique_key}"
+            "webhook": f"https://roomdesaigner.onrender.com//webhook?key={unique_key}"
         }
 
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
@@ -438,6 +439,7 @@ def get_upscaled_image():
         return jsonify({'upscaled_image_url': upscaled_image_url}), 200
     else:
         return jsonify({'status': 'processing'}), 200
+
 
 
 @app.route('/logout')
