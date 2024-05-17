@@ -994,6 +994,7 @@ function createButton(text, onClickHandler) {
 
 
 //reimagine
+// Function to reimagine the image
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1012,7 +1013,7 @@ function reimagineImage(imageUrl) {
         if (data.status === 'processing') {
             console.log('Reimagine process started, waiting for webhook...');
             alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            checkUpscaledImageStatus(data.key);  // Start polling
+            checkUpscaledImageStatus(data.key);  // Start polling with the unique key
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1024,6 +1025,7 @@ function reimagineImage(imageUrl) {
     });
 }
 
+// Function to check the status of the upscaled image
 function checkUpscaledImageStatus(uniqueKey) {
     fetch(`/get-upscaled-image?key=${uniqueKey}`, {
         method: 'GET',
@@ -1051,6 +1053,7 @@ function checkUpscaledImageStatus(uniqueKey) {
     });
 }
 
+// Function to open the image in a new tab
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
