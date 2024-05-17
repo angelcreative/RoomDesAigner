@@ -1014,7 +1014,7 @@ function reimagineImage(imageUrl) {
         if (data.status === 'processing') {
             console.log('Reimagine process started, waiting for webhook...');
             alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            checkUpscaledImageStatus();  // Start polling
+            checkUpscaledImageStatus(data.key);  // Pass the unique key to the polling function
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1027,8 +1027,8 @@ function reimagineImage(imageUrl) {
 }
 
 // Function to check the status of the upscaled image
-function checkUpscaledImageStatus() {
-    fetch('/get-upscaled-image', {
+function checkUpscaledImageStatus(uniqueKey) {
+    fetch(`/get-upscaled-image?key=${uniqueKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -1043,7 +1043,7 @@ function checkUpscaledImageStatus() {
     .then(data => {
         if (data.status === 'processing') {
             console.log('Upscaled image is still processing, retrying...');
-            setTimeout(checkUpscaledImageStatus, 5000);  // Retry after 5 seconds
+            setTimeout(() => checkUpscaledImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
         } else if (data.upscaled_image_url) {
             console.log('Upscaled image is ready:', data.upscaled_image_url);
             openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
