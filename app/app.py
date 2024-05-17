@@ -411,8 +411,10 @@ def reimagine_image():
         if response.status_code == 200:
             return jsonify({'status': 'processing', 'key': unique_key}), 200
         else:
+            app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
+        app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 @app.route('/webhook', methods=['POST'])
@@ -420,14 +422,18 @@ def webhook():
     try:
         unique_key = request.args.get('key')
         data = request.json
+        app.logger.debug(f"Webhook received data: {data}")
         upscaled_image_url = data.get('output_image_url')
         if unique_key and upscaled_image_url:
             # Store the upscaled image URL in the global dictionary
             upscaled_image_urls[unique_key] = upscaled_image_url
+            app.logger.info(f"Image processed successfully: {upscaled_image_url}")
             return jsonify({'status': 'success'}), 200
         else:
+            app.logger.error("Upscaled image URL or unique key not found in webhook data")
             return jsonify({'error': 'Upscaled image URL or unique key not found in webhook data'}), 400
     except Exception as e:
+        app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 @app.route('/get-upscaled-image', methods=['GET'])
@@ -437,7 +443,9 @@ def get_upscaled_image():
     if upscaled_image_url:
         return jsonify({'upscaled_image_url': upscaled_image_url}), 200
     else:
+        app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
+
 
 
 
