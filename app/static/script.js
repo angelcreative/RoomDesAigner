@@ -994,8 +994,6 @@ function createButton(text, onClickHandler) {
 
 
 //reimagine
-
-// Function to reimagine the image
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1014,7 +1012,7 @@ function reimagineImage(imageUrl) {
         if (data.status === 'processing') {
             console.log('Reimagine process started, waiting for webhook...');
             alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            checkUpscaledImageStatus(data.key);  // Pass the unique key to the polling function
+            checkUpscaledImageStatus(data.key);  // Start polling
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1026,7 +1024,6 @@ function reimagineImage(imageUrl) {
     });
 }
 
-// Function to check the status of the upscaled image
 function checkUpscaledImageStatus(uniqueKey) {
     fetch(`/get-upscaled-image?key=${uniqueKey}`, {
         method: 'GET',
@@ -1047,8 +1044,6 @@ function checkUpscaledImageStatus(uniqueKey) {
         } else if (data.upscaled_image_url) {
             console.log('Upscaled image is ready:', data.upscaled_image_url);
             openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
-        } else {
-            console.error('Unexpected response:', data);
         }
     })
     .catch(error => {
@@ -1056,7 +1051,6 @@ function checkUpscaledImageStatus(uniqueKey) {
     });
 }
 
-// Function to open the image in a new tab
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
@@ -1128,6 +1122,7 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+
 
 
 //end reimagine
