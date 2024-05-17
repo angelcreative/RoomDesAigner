@@ -419,6 +419,9 @@ def reimagine_image():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    if request.method != 'POST':
+        return jsonify({'error': 'Method Not Allowed'}), 405
+
     try:
         unique_key = request.args.get('key')
         data = request.json
@@ -445,7 +448,6 @@ def get_upscaled_image():
     else:
         app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
-
 
 
 
