@@ -1026,7 +1026,7 @@ function reimagineImage(imageUrl) {
 }
 
 // Function to check the status of the upscaled image
-function checkUpscaledImageStatus(uniqueKey) {
+function checkUpscaledImageStatus(uniqueKey, retryCount = 0, maxRetries = 60) {  // Allow up to 60 retries (5 minutes)
     fetch(`/get-upscaled-image?key=${uniqueKey}`, {
         method: 'GET',
         headers: {
@@ -1041,8 +1041,13 @@ function checkUpscaledImageStatus(uniqueKey) {
     })
     .then(data => {
         if (data.status === 'processing') {
-            console.log('Upscaled image is still processing, retrying...');
-            setTimeout(() => checkUpscaledImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
+            if (retryCount < maxRetries) {
+                console.log(`Upscaled image is still processing, retrying... (${retryCount + 1}/${maxRetries})`);
+                setTimeout(() => checkUpscaledImageStatus(uniqueKey, retryCount + 1, maxRetries), 5000);  // Retry after 5 seconds
+            } else {
+                console.error('Max retries reached. Image processing took too long.');
+                alert('Failed to retrieve the upscaled image within the expected time. Please try again later.');
+            }
         } else if (data.upscaled_image_url) {
             console.log('Upscaled image is ready:', data.upscaled_image_url);
             openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
@@ -1057,6 +1062,7 @@ function checkUpscaledImageStatus(uniqueKey) {
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
+
 
 // Function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
