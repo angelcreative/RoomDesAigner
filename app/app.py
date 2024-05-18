@@ -378,6 +378,7 @@ def compare_images(slug):
 
 
 # Dictionary to store upscaled image URLs
+# Dictionary to store upscaled image URLs
 upscaled_image_urls = {}
 
 @app.route('/reimagine-image', methods=['POST'])
@@ -450,8 +451,6 @@ def get_upscaled_image():
     else:
         app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
-
-
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
