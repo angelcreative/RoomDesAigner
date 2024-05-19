@@ -999,10 +999,9 @@ function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Accept': 'application/json'
-        
         },
         body: JSON.stringify({ image_url: imageUrl })
     })
