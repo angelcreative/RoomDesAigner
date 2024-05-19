@@ -994,7 +994,7 @@ function createButton(text, onClickHandler) {
 
 
 //reimagine
-// Function to reimagine the image
+// Función para reenviar la imagen
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1012,10 +1012,9 @@ function reimagineImage(imageUrl) {
         return response.json();
     })
     .then(data => {
-        if (data.status === 'processing') {
-            console.log('Reimagine process started, waiting for webhook...');
-            alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            waitForWebhook(data.key);  // Wait for webhook notification
+        if (data.status === 'success') {
+            console.log('Reimagine process completed:', data.upscaled_image_url);
+            openImageInNewTab(data.upscaled_image_url);  // Abrir la imagen en una nueva pestaña
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1027,43 +1026,7 @@ function reimagineImage(imageUrl) {
     });
 }
 
-// Function to wait for webhook notification
-function waitForWebhook(uniqueKey) {
-    console.log(`Waiting for webhook notification for key: ${uniqueKey}`);
-    // Implement the logic to notify the user when the webhook updates the status.
-    // This could be a UI update, a message display, or an actual webhook listener.
-    alert(`Waiting for the image processing to complete. Please check back later or wait for notification.`);
-}
-
-// Function to check the status of the upscaled image
-function checkUpscaledImageStatus(uniqueKey) {
-    fetch(`/get-upscaled-image?key=${uniqueKey}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.upscaled_image_url) {
-            console.log('Upscaled image is ready:', data.upscaled_image_url);
-            openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
-        } else {
-            console.log('Upscaled image is still processing. Please wait for notification.');
-            alert('Upscaled image is still processing. Please wait for notification.');
-        }
-    })
-    .catch(error => {
-        console.error('Error checking upscaled image status:', error);
-    });
-}
-
-// Function to open the image in a new tab
+// Función para abrir la imagen en una nueva pestaña
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
