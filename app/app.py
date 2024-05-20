@@ -10,6 +10,9 @@ import requests
 import random
 import logging
 import json
+import time
+
+
 # Import the json module
 
 app = Flask(__name__)
@@ -376,6 +379,9 @@ def compare_images(slug):
         return "Comparison not found", 404
 
 
+# Dictionary to store upscaled image URLs
+upscaled_image_urls = {}
+
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
@@ -384,9 +390,12 @@ def reimagine_image():
             return jsonify({'error': 'image_url is required'}), 400
 
         headers = {
-            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
+            'Authorization': 'Bearer YOUR_CLARITY_API_KEY',
             'Content-Type': 'application/json'
         }
+
+        # Generate a unique key for this image processing session
+        unique_key = str(uuid.uuid4())
 
         data = {
             "image": image_url,
@@ -396,29 +405,52 @@ def reimagine_image():
             "fractality": 0,
             "scale_factor": 2,
             "style": "default",
-            "prompt": ""
+            "prompt": "",
+            "webhook": f"https://roomdesaigner.onrender.com/webhook?key={unique_key}"
         }
 
-        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data, timeout=60)
+        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
 
         if response.status_code == 200:
-            json_data = response.json()
-            enhanced_image_url = json_data.get('output_image_url')
-            if enhanced_image_url:
-                return jsonify({'status': 'success', 'enhanced_image_url': enhanced_image_url}), 200
-            else:
-                app.logger.error("Failed to retrieve enhanced image URL from response")
-                return jsonify({'error': 'Failed to retrieve enhanced image URL'}), 500
+            return jsonify({'status': 'processing', 'key': unique_key}), 200
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
-    except requests.exceptions.RequestException as e:
-        app.logger.error("RequestException error", exc_info=True)
-        return jsonify({'error': 'RequestException error', 'message': str(e)}), 500
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    if request.method != 'POST':
+        return jsonify({'error': 'Method Not Allowed'}), 405
+
+    try:
+        unique_key = request.args.get('key')
+        data = request.json
+        app.logger.debug(f"Webhook received data: {data}")
+        upscaled_image_url = data.get('output_image_url')
+        if unique_key and upscaled_image_url:
+            # Store the upscaled image URL in the global dictionary
+            upscaled_image_urls[unique_key] = upscaled_image_url
+            app.logger.info(f"Image processed successfully: {upscaled_image_url}")
+            return jsonify({'status': 'success'}), 200
+        else:
+            app.logger.error("Upscaled image URL or unique key not found in webhook data")
+            return jsonify({'error': 'Upscaled image URL or unique key not found in webhook data'}), 400
+    except Exception as e:
+        app.logger.error("Server error", exc_info=True)
+        return jsonify({'error': 'Server error', 'message': str(e)}), 500
+
+@app.route('/get-upscaled-image', methods=['GET'])
+def get_upscaled_image():
+    unique_key = request.args.get('key')
+    upscaled_image_url = upscaled_image_urls.get(unique_key)
+    if upscaled_image_url:
+        return jsonify({'upscaled_image_url': upscaled_image_url}), 200
+    else:
+        app.logger.info(f"Image with key {unique_key} still processing.")
+        return jsonify({'status': 'processing'}), 200
 
 @app.route('/logout')
 def logout():
