@@ -388,40 +388,38 @@ def reimagine_image():
     try:
         image_url = request.json.get('image_url')
         if not image_url:
+            app.logger.error('No image_url provided in request.')
             return jsonify({'error': 'image_url is required'}), 400
+
+        headers = {
+            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
+            'Content-Type': 'application/json'
+        }
 
         # Generate a unique key for this image processing session
         unique_key = str(uuid.uuid4())
-        webhook_url = f"https://roomdesaigner.onrender.com/webhook?key={unique_key}"
 
-        # Construct the curl command
-        curl_command = [
-            'curl', '-s', '-X', 'POST',
-            'https://api.clarityai.co/v1/upscale',
-            '-H', 'Content-Type: application/json',
-            '-H', 'Authorization: Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
-            '-d', json.dumps({
-                "image": image_url,
-                "creativity": 0,
-                "resemblance": 0,
-                "dynamic": 0,
-                "fractality": 0,
-                "scale_factor": 2,
-                "style": "default",
-                "prompt": "",
-                "webhook": webhook_url
-            })
-        ]
+        data = {
+            "image": image_url,
+            "creativity": 0,
+            "resemblance": 0,
+            "dynamic": 0,
+            "fractality": 0,
+            "scale_factor": 2,
+            "style": "default",
+            "prompt": "",
+            "webhook": f"https://roomdesaigner.onrender.com/webhook?key={unique_key}"
+        }
 
-        # Execute the curl command
-        result = subprocess.run(curl_command, capture_output=True, text=True)
-        response_data = json.loads(result.stdout)
+        app.logger.debug(f'Sending request to Clarity AI with data: {data}')
+        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
 
-        if result.returncode == 0 and 'output_image_url' in response_data:
+        if response.status_code == 200:
+            app.logger.info('Successfully initiated reimagine process.')
             return jsonify({'status': 'processing', 'key': unique_key}), 200
         else:
-            app.logger.error(f"Failed to reimagine image: {result.stderr}")
-            return jsonify({'error': 'Failed to reimagine image', 'details': result.stderr}), 500
+            app.logger.error(f"Failed to reimagine image: {response.text}")
+            return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
@@ -453,12 +451,10 @@ def get_upscaled_image():
     unique_key = request.args.get('key')
     upscaled_image_url = upscaled_image_urls.get(unique_key)
     if upscaled_image_url:
-        app.logger.info(f"Retrieved upscaled image URL for key {unique_key}")
         return jsonify({'upscaled_image_url': upscaled_image_url}), 200
     else:
         app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
-
 
 @app.route('/logout')
 def logout():
