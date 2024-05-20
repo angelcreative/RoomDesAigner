@@ -37,19 +37,21 @@ openai.api_key = openai_api_key
 
 
 def transform_prompt(prompt_text):
-    prompt = f"Transform the following list of values into a natural language prompt:\n\n{prompt_text}"
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant that transforms lists of values into natural language prompts."},
+        {"role": "user", "content": f"Transform the following list of values into a natural language prompt:\n\n{prompt_text}"}
+    ]
 
-    response = openai.Completion.create(
-        engine="davinci",  # You can use other engines like "gpt-3.5-turbo" if available
-        prompt=prompt,
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
         max_tokens=150,  # Adjust the token count as needed
-        n=1,
-        stop=None,
         temperature=0.7,
     )
 
-    transformed_prompt = response.choices[0].text.strip()
+    transformed_prompt = response.choices[0].message['content'].strip()
     return transformed_prompt
+
 
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
