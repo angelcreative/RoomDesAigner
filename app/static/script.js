@@ -656,6 +656,7 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
+
 // Function to upscale the image using RapidAPI
 const upscaleImage = async (imageUrl) => {
     try {
@@ -681,7 +682,6 @@ const upscaleImage = async (imageUrl) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // Parsing the nested JSON string inside the 'body' property
         if (data.output && data.output.body) {
             const body = JSON.parse(data.output.body);
             const upscaledImageUrl = body.output_image_url;
@@ -708,7 +708,7 @@ function openImageInNewTab(imageUrl) {
     newWindow.document.write(`
         <html>
             <head>
-                <title>Upscaled Image</title>
+                <title>Image</title>
                 <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
                 <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
                 <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
@@ -742,16 +742,16 @@ function openImageInNewTab(imageUrl) {
             </head>
             <body>
                 <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
-                <h1>Upscaled Image</h1>
-                <img src="${imageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+                <h1>Image</h1>
+                <img src="${imageUrl}" alt="Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
             </body>
         </html>
     `);
     newWindow.document.close();
 }
-    
-// END upscale
 
+
+  
 //REVERSE
 
 
