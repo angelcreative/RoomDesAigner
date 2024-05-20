@@ -166,7 +166,7 @@ function handleSubmit(event) {
         displayColors(colors);
     }
 
-    function initializeColorWheel() {
+   function initializeColorWheel() {
         var colorWheelContainer = document.getElementById('colorWheelContainer');
         var colorWheel = new iro.ColorPicker(colorWheelContainer, {
             width: 200,
@@ -174,21 +174,19 @@ function handleSubmit(event) {
         });
 
         colorWheel.on(['color:init', 'color:change'], function(color) {
-            updateHarmonyColors(color.hexString
-);
-});
-        
-            document.getElementById('harmonyType').addEventListener('change', function() {
+            updateHarmonyColors(color.hexString);
+        });
+
+        document.getElementById('harmonyType').addEventListener('change', function() {
+            updateHarmonyColors(colorWheel.color.hexString);
+        });
+
+        // Initial call to set the harmony colors based on the default color of the color wheel
         updateHarmonyColors(colorWheel.color.hexString);
-    });
+    }
 
-    // Initial call to set the harmony colors based on the default color of the color wheel
-    updateHarmonyColors(colorWheel.color.hexString);
-}
-
-// Call the function to initialize the color wheel
-initializeColorWheel();
-
+    // Call the function to initialize the color wheel
+    initializeColorWheel();
 
   //END HARMONY
     
