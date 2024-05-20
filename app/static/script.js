@@ -656,8 +656,7 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
-//ENHANCE IMAGE
-
+// Function to upscale the image using RapidAPI
 const upscaleImage = async (imageUrl) => {
     try {
         const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
@@ -688,56 +687,7 @@ const upscaleImage = async (imageUrl) => {
             const upscaledImageUrl = body.output_image_url;
 
             if (upscaledImageUrl) {
-                const newWindow = window.open('', '_blank');
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Upscaled Image</title>
-                             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
-                            <style>
-
-                                html {
-                                    background: #15202b;
-                                    }
-                                    
-                                body {
-                                    text-align: center;
-                                    color: #a9fff5;
-                                    font-family: arial, sans-serif;
-                                    font-size: 12px;
-                                    padding-top: 60px;
-                                    margin-top: 40px;
-                                    }
-                                 
-                                h1 {
-                                    margin: 20px 0;
-                                    }
-                                    
-                                img {
-                                    border-radius: 12px;
-                                    overflow: hidden;
-                                    max-width: 100%;
-                                    }
-                                
-                                img.logoRD {
-                                    margin: 20px auto 0 auto;
-                                    display: block;
-                                    height: 50px;
-                                    }
-                                    
-                            </style>
-                        </head>
-                        <body>
-                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
-                            <h1>Upscaled Image</h1>
-                            <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-                        </body>
-                    </html>
-                `);
-                newWindow.document.close();
+                openImageInNewTab(upscaledImageUrl);
             } else {
                 console.error('No upscaled image URL found:', body);
                 alert('Failed to retrieve the upscaled image. Please check the console for more details.');
@@ -752,9 +702,55 @@ const upscaleImage = async (imageUrl) => {
     }
 };
 
-
+// Function to open the image in a new tab
+function openImageInNewTab(imageUrl) {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+        <html>
+            <head>
+                <title>Upscaled Image</title>
+                <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+                <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+                <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+                <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+                <style>
+                    html {
+                        background: #15202b;
+                    }
+                    body {
+                        text-align: center;
+                        color: #a9fff5;
+                        font-family: arial, sans-serif;
+                        font-size: 12px;
+                        padding-top: 60px;
+                        margin-top: 40px;
+                    }
+                    h1 {
+                        margin: 20px 0;
+                    }
+                    img {
+                        border-radius: 12px;
+                        overflow: hidden;
+                        max-width: 100%;
+                    }
+                    img.logoRD {
+                        margin: 20px auto 0 auto;
+                        display: block;
+                        height: 50px;
+                    }
+                </style>
+            </head>
+            <body>
+                <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
+                <h1>Upscaled Image</h1>
+                <img src="${imageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+            </body>
+        </html>
+    `);
+    newWindow.document.close();
+}
     
-// END ENHANCE
+// END upscale
 
 //REVERSE
 
@@ -994,7 +990,7 @@ function createButton(text, onClickHandler) {
 
 
 //reimagine
-// Function to reimagine the image
+// Function to reimagine the image using Clarity API
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
@@ -1013,7 +1009,7 @@ function reimagineImage(imageUrl) {
         if (data.status === 'processing') {
             console.log('Reimagine process started, waiting for webhook...');
             alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            checkUpscaledImageStatus(data.key);  // Start polling with the unique key
+            checkReimaginedImageStatus(data.key);  // Start polling with the unique key
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1025,9 +1021,9 @@ function reimagineImage(imageUrl) {
     });
 }
 
-// Function to check the status of the upscaled image
-function checkUpscaledImageStatus(uniqueKey) {
-    fetch(`/get-upscaled-image?key=${uniqueKey}`, {
+// Function to check the status of the reimagined image from Clarity API
+function checkReimaginedImageStatus(uniqueKey) {
+    fetch(`/get-reimagined-image?key=${uniqueKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -1041,21 +1037,19 @@ function checkUpscaledImageStatus(uniqueKey) {
     })
     .then(data => {
         if (data.status === 'processing') {
-            console.log('Upscaled image is still processing, retrying...');
-            setTimeout(() => checkUpscaledImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
-        } else if (data.upscaled_image_url) {
-            console.log('Upscaled image is ready:', data.upscaled_image_url);
-            openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
+            console.log('Reimagined image is still processing, retrying...');
+            setTimeout(() => checkReimaginedImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
+        } else if (data.reimagined_image_url) {
+            console.log('Reimagined image is ready:', data.reimagined_image_url);
+            openImageInNewTab(data.reimagined_image_url);  // Open the image in a new tab
+        } else {
+            console.error('Unexpected response:', data);
+            alert('Failed to retrieve the reimagined image. Please try again.');
         }
     })
     .catch(error => {
-        console.error('Error checking upscaled image status:', error);
+        console.error('Error checking reimagined image status:', error);
     });
-}
-
-// Function to open the image in a new tab
-function openImageInNewTab(imageUrl) {
-    window.open(imageUrl, "_blank");
 }
 
 
@@ -1101,7 +1095,7 @@ function showModal(imageUrls, promptText) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Upscale", () => reimagineImage(imageUrl));  // Update to reimagineImage function
+        const upscaleButton = createButton("Upscale", () => upscale(imageUrl));  // 
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
         const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));  // Reimagine button
