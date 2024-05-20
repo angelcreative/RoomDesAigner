@@ -341,7 +341,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `sharp focus,` ;
+    const promptInit = `highly detailed,  photoshoot,  professional photo highly defined, soft shadows, best quality, masterpiece, realistic, photo-realistic, UHD, 8k, F2.8, RAW Photo, ultra detailed, sharp focus,` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -379,37 +379,43 @@ if (aspectRatio === "landscape") {
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
   const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+  const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
-  const prompt = {
-    key: apiKey,
-    prompt: promptText,
-    negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-    width: width, 
-    height: height,
+   // Function to call the backend API to transform the prompt
+    async function getTransformedPrompt(promptText) {
+        const response = await fetch("/transform-prompt", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ promptText })
+        });
 
-    //width: "1024",
-    //height: "1024",
-    samples: "4",
-    guidance_scale: "10",
-    //num_inference_steps: "40",
-    //scheduler: "DPM++ 3M SDE Karras",
-    //self_attention: "no", //testing no
-    seed: seedValue,
-    webhook: null,
-    safety_checker: false,
-    track_id: null,
-  };
+        const data = await response.json();
+        if (response.ok) {
+            return data.transformedPrompt;
+        } else {
+            throw new Error(data.error || "Failed to transform prompt");
+        }
+    }
 
+    try {
+        const transformedPromptText = await getTransformedPrompt(initialPromptText);
 
+        const prompt = {
+            key: apiKey,
+            prompt: transformedPromptText,
+            negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
+            width: width,
+            height: height,
+            samples: "4",
+            guidance_scale: "10",
+            seed: seedValue,
+            webhook: null,
+            safety_checker: false,
+            track_id: null,
+        };
 
-
-
-
-
-
-    
-    
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
@@ -495,6 +501,7 @@ if (isImg2Img && imageUrl) {
 
     
 
+// Define the checkImageStatus function
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -656,8 +663,8 @@ rerollButton.addEventListener("click", rerollImages);
       generateMessageDiv("Prompt copied to clipboard!");
     }
     
+//ENHANCE IMAGE
 
-// Function to upscale the image using RapidAPI
 const upscaleImage = async (imageUrl) => {
     try {
         const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
@@ -682,12 +689,62 @@ const upscaleImage = async (imageUrl) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
+        // Parsing the nested JSON string inside the 'body' property
         if (data.output && data.output.body) {
             const body = JSON.parse(data.output.body);
             const upscaledImageUrl = body.output_image_url;
 
             if (upscaledImageUrl) {
-                openImageInNewTab(upscaledImageUrl);
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>Upscaled Image</title>
+                             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+                            <style>
+
+                                html {
+                                    background: #15202b;
+                                    }
+                                    
+                                body {
+                                    text-align: center;
+                                    color: #a9fff5;
+                                    font-family: arial, sans-serif;
+                                    font-size: 12px;
+                                    padding-top: 60px;
+                                    margin-top: 40px;
+                                    }
+                                 
+                                h1 {
+                                    margin: 20px 0;
+                                    }
+                                    
+                                img {
+                                    border-radius: 12px;
+                                    overflow: hidden;
+                                    max-width: 100%;
+                                    }
+                                
+                                img.logoRD {
+                                    margin: 20px auto 0 auto;
+                                    display: block;
+                                    height: 50px;
+                                    }
+                                    
+                            </style>
+                        </head>
+                        <body>
+                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
+                            <h1>Upscaled Image</h1>
+                            <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
+                        </body>
+                    </html>
+                `);
+                newWindow.document.close();
             } else {
                 console.error('No upscaled image URL found:', body);
                 alert('Failed to retrieve the upscaled image. Please check the console for more details.');
@@ -702,56 +759,10 @@ const upscaleImage = async (imageUrl) => {
     }
 };
 
-// Function to open the image in a new tab
-function openImageInNewTab(imageUrl) {
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-        <html>
-            <head>
-                <title>Image</title>
-                <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-                <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-                <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-                <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
-                <style>
-                    html {
-                        background: #15202b;
-                    }
-                    body {
-                        text-align: center;
-                        color: #a9fff5;
-                        font-family: arial, sans-serif;
-                        font-size: 12px;
-                        padding-top: 60px;
-                        margin-top: 40px;
-                    }
-                    h1 {
-                        margin: 20px 0;
-                    }
-                    img {
-                        border-radius: 12px;
-                        overflow: hidden;
-                        max-width: 100%;
-                    }
-                    img.logoRD {
-                        margin: 20px auto 0 auto;
-                        display: block;
-                        height: 50px;
-                    }
-                </style>
-            </head>
-            <body>
-                <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
-                <h1>Image</h1>
-                <img src="${imageUrl}" alt="Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-            </body>
-        </html>
-    `);
-    newWindow.document.close();
-}
 
+    
+// END ENHANCE
 
-  
 //REVERSE
 
 
@@ -989,149 +1000,10 @@ function createButton(text, onClickHandler) {
 }
 
 
-//reimagine
-// Function to reimagine the image using Clarity API
-function reimagineImage(imageUrl) {
-    fetch('/reimagine-image', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ image_url: imageUrl })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'processing') {
-            console.log('Reimagine process started, waiting for webhook...');
-            alert('Reimagine process has been initiated. You will be notified when the image is ready.');
-            checkReimaginedImageStatus(data.key);  // Start polling with the unique key
-        } else {
-            console.error('Failed to reimagine:', data);
-            alert('Failed to reimagine image. See console for details.');
-        }
-    })
-    .catch(error => {
-        console.error('Error calling reimagine API:', error);
-        alert('Error initiating reimagine process. See console for details.');
-    });
-}
-
-// Function to check the status of the reimagined image from Clarity API
-function checkReimaginedImageStatus(uniqueKey) {
-    fetch(`/get-reimagined-image?key=${uniqueKey}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'processing') {
-            console.log('Reimagined image is still processing, retrying...');
-            setTimeout(() => checkReimaginedImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
-        } else if (data.reimagined_image_url) {
-            console.log('Reimagined image is ready:', data.reimagined_image_url);
-            openImageInNewTab(data.reimagined_image_url);  // Open the image in a new tab
-        } else {
-            console.error('Unexpected response:', data);
-            alert('Failed to retrieve the reimagined image. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error checking reimagined image status:', error);
-    });
-}
-
-
-
-  //end reimagine
-
-// Function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
-
-// Displays modal with generated images and associated action buttons
-function showModal(imageUrls, promptText) {
-    const modal = document.getElementById("modal");
-    const closeButton = modal.querySelector(".close");
-
-    // Ensure only one event listener is added
-    closeButton.removeEventListener("click", closeModalHandler);
-    closeButton.addEventListener("click", closeModalHandler);
-
-    // Get the thumbnail image source (user-uploaded image)
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
-
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";
-
-    imageUrls.forEach(imageUrl => {
-        const imageContainer = document.createElement("div");
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
-
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
-
-        // Create buttons
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));  // 
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-        const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));  // Reimagine button
-
-        // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, reimagineButton].forEach(button => buttonsContainer.appendChild(button));
-
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        imageGrid.appendChild(imageContainer);
-    });
-
-    modal.style.display = "block";
-    showOverlay();
-}
-
-// Function to handle the "Close" action of modal
-function closeModalHandler() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
-}
-
-// Function to show overlay during modal display
-function showOverlay() {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
-}
-
-
-
-//end reimagine
-
 
   
 
-/*Displays modal with generated images and associated action buttons
+// Displays modal with generated images and associated action buttons
 function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -1179,9 +1051,9 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
-*/
+
   
-/*Function to handle the "Close" action of modal
+// Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
     modal.style.display = "none";
@@ -1191,7 +1063,7 @@ function closeModalHandler() {
 function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
-}*/
+}
 
     
     
@@ -1205,6 +1077,10 @@ function createButton(text, onClickHandler) {
 
 
 
+function closeModalHandler() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
     
     
   // Function to open the image in a new tab
