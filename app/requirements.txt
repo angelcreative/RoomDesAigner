@@ -25,7 +25,7 @@ dash-table==5.0.0
 debugpy==1.6.7
 decorator==5.1.1
 diffusers==0.17.1
-dnspython==2.4.2
+dnspython==2.3.0
 executing==1.2.0
 filelock==3.12.2
 Flask==2.2.5
