@@ -350,12 +350,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
   
-/*  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const width = aspectRatio === "portrait" ? 1024 : 768;
-  const width = aspectRatio === "portrait" ? 768 : 1024;
-  const height = aspectRatio === "portrait" ? 1024 : 1024;
-
-  */
+ 
 
 const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
@@ -401,15 +396,7 @@ if (aspectRatio === "landscape") {
     track_id: null,
   };
 
-
-
-
-
-
-
-
-    
-    
+ 
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
@@ -419,7 +406,7 @@ if (isImg2Img && imageUrl) {
     prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
   }
     
-      const chipsSV = document.getElementById("chipsSV");
+   /*   const chipsSV = document.getElementById("chipsSV");
         chipsSV.innerHTML = ""; // Clear the existing content
 
         for (const [key, value] of Object.entries(selectedValues)) {
@@ -445,20 +432,20 @@ if (isImg2Img && imageUrl) {
 
             chipsSV.appendChild(chip);
           }
-        }
+        }*/
 
 
       // Get the <span> element by its class name
-      var spanElement = document.querySelector(".chipSV");
+     // var spanElement = document.querySelector(".chipSV");
 
       // Get the text content of the <span> element
-      var text = spanElement.textContent;
+    //  var text = spanElement.textContent;
 
       // Replace all underscore characters with non-breaking spaces
-      var modifiedText = text.replace(/_/g, "&nbsp;");
+     // var modifiedText = text.replace(/_/g, "&nbsp;");
 
       // Update the text content of the <span> element
-      spanElement.textContent = modifiedText;
+   //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
   fetch("/generate-images", {
@@ -481,7 +468,7 @@ if (isImg2Img && imageUrl) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, promptText);  // Display images
+        showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
         checkImageStatus(data.fetch_result);  // Continue checking status if processing
@@ -998,7 +985,7 @@ function createButton(text, onClickHandler) {
   
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, promptText) {
+function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
