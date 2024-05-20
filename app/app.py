@@ -412,6 +412,7 @@ def reimagine_image():
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
 
         if response.status_code == 200:
+            app.logger.info(f"Reimagine process started with key: {unique_key}")
             return jsonify({'status': 'processing', 'key': unique_key}), 200
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
@@ -447,10 +448,12 @@ def get_upscaled_image():
     unique_key = request.args.get('key')
     upscaled_image_url = upscaled_image_urls.get(unique_key)
     if upscaled_image_url:
+        app.logger.info(f"Retrieved upscaled image URL for key {unique_key}")
         return jsonify({'upscaled_image_url': upscaled_image_url}), 200
     else:
         app.logger.info(f"Image with key {unique_key} still processing.")
         return jsonify({'status': 'processing'}), 200
+
 
 @app.route('/logout')
 def logout():
