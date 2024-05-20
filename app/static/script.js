@@ -468,7 +468,7 @@ if (isImg2Img && imageUrl) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
+        showModal(imageUrls, data.promptText);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
         checkImageStatus(data.fetch_result);  // Continue checking status if processing
@@ -985,7 +985,7 @@ function createButton(text, onClickHandler) {
   
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, transformedPrompt) {
+function showModal(imageUrls, promptText) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
@@ -1015,7 +1015,7 @@ function showModal(imageUrls, transformedPrompt) {
         const downloadButton = createButton("Download", () => downloadImage(imageUrl));
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
