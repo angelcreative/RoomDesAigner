@@ -36,6 +36,21 @@ else:
 openai.api_key = openai_api_key
 
 
+def transform_prompt(prompt_text):
+    prompt = f"Transform the following list of values into a natural language prompt:\n\n{prompt_text}"
+
+    response = openai.Completion.create(
+        engine="davinci",  # You can use other engines like "gpt-3.5-turbo" if available
+        prompt=prompt,
+        max_tokens=150,  # Adjust the token count as needed
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+
+    transformed_prompt = response.choices[0].text.strip()
+    return transformed_prompt
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -45,6 +60,19 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
+        
+        # Extract the promptText from the incoming data
+        prompt_text = data.get('prompt')
+        
+        if not prompt_text:
+            return jsonify({"error": "Missing prompt text"}), 400
+        
+        # Transform the prompt using OpenAI API
+        transformed_prompt = transform_prompt(prompt_text)
+        
+        # Update the prompt in the data with the transformed prompt
+        data['prompt'] = transformed_prompt
+        
         url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
