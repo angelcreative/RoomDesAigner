@@ -5,15 +5,12 @@ import hashlib
 import requests
 import bcrypt
 import os
+import uuid
 import requests
 import random
 import logging
-import subprocess
 import json
-import uuid
-import time 
-
-
+import openai
 # Import the json module
 
 app = Flask(__name__)
@@ -27,8 +24,30 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
+# OpenAI API Key
+openai.api_key = os.environ.get('sk-proj-v8OkXBtsyhEhqE4yAaTWT3BlbkFJzYYMfoKaI7ffRbBcHtG8')
 
+@app.route('/transform-prompt', methods=['POST'])
+def transform_prompt():
+    data = request.json
+    prompt_text = data.get('promptText')
 
+    if not prompt_text:
+        return jsonify({"error": "No prompt text provided"}), 400
+
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=f"Transform the following values into a detailed, coherent, and descriptive prompt for indoor or outdoor  design: {prompt_text}",
+            max_tokens=150,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
+        transformed_prompt = response.choices[0].text.strip()
+        return jsonify({"transformedPrompt": transformed_prompt})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
@@ -379,77 +398,59 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    try:
+        # Assuming the data sent by the API is JSON
+        data = request.json
+        print("Received data from webhook:", data)
+        # Here you could process the data or update your application state
+        return jsonify({'status': 'success'}), 200
+    except Exception as e:
+        print("Error processing webhook data:", str(e))
+        return jsonify({'error': 'Internal Server Error'}), 500
 
-# Dictionary to store reimagined image URLs
-reimagined_image_urls = {}
 
 @app.route('/reimagine-image', methods=['POST'])
 def reimagine_image():
     try:
+        # Extracting image_url from the incoming JSON request
         image_url = request.json.get('image_url')
         if not image_url:
-            return jsonify({'error': 'image_url is required'}), 400
+            return jsonify({'error': 'Missing image URL'}), 400
 
+        webhook_url = 'https://roomdesaigner.onrender.com/webhook'
+
+        # Preparing headers and data payload for the API request
         headers = {
             'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
-
-        # Generate a unique key for this image processing session
-        unique_key = str(uuid.uuid4())
-
         data = {
-            "image": image_url,
-            "creativity": 0,
-            "resemblance": 0,
-            "dynamic": 0,
-            "fractality": 0,
-            "scale_factor": 2,
-            "style": "default",
-            "prompt": "",
-            "webhook": f"https://roomdesaigner.onrender.com/webhook?key={unique_key}"
+            'image': image_url,
+            'webhook': webhook_url
         }
 
-        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
+        # Log the data being sent
+        app.logger.debug(f"Sending data to Clarity AI API: {data}")
 
+        # Sending the request to the Clarity AI API
+        response = requests.post('https://api.clarityai.cc/v1/upscale', headers=headers, json=data)
+        
+        # Log the response
+        app.logger.debug(f"Received response: {response.status_code} - {response.text}")
+
+        # Check response status and return accordingly
         if response.status_code == 200:
-            return jsonify({'status': 'processing', 'key': unique_key}), 200
+            return jsonify(response.json()), 200
         else:
-            app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
     except Exception as e:
-        app.logger.error("Server error", exc_info=True)
+        app.logger.error("Error processing the reimagine-image request", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    try:
-        unique_key = request.args.get('key')
-        data = request.json
-        app.logger.debug(f"Webhook received data: {data}")
-        upscaled_image_url = data.get('output_image_url')
-        if unique_key and upscaled_image_url:
-            reimagined_image_urls[unique_key] = upscaled_image_url
-            app.logger.info(f"Image processed successfully: {upscaled_image_url}")
-            return jsonify({'status': 'success'}), 200
-        else:
-            app.logger.error("Upscaled image URL or unique key not found in webhook data")
-            return jsonify({'error': 'Upscaled image URL or unique key not found in webhook data'}), 400
-    except Exception as e:
-        app.logger.error("Server error", exc_info=True)
-        return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
-@app.route('/get-reimagined-image', methods=['GET'])
-def get_reimagined_image():
-    unique_key = request.args.get('key')
-    upscaled_image_url = reimagined_image_urls.get(unique_key)
-    if upscaled_image_url:
-        return jsonify({'reimagined_image_url': upscaled_image_url}), 200
-    else:
-        app.logger.info(f"Image with key {unique_key} still processing.")
-        return jsonify({'status': 'processing'}), 200
-
-
+    
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
