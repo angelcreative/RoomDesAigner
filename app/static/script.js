@@ -1005,7 +1005,9 @@ function reimagineImage(imageUrl) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
+            return response.text().then(text => {
+                throw new Error('Network response was not ok: ' + response.statusText + ' - ' + text);
+            });
         }
         return response.json();
     })
@@ -1096,6 +1098,7 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+
 
 
 //end reimagine
