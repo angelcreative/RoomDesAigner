@@ -79,7 +79,9 @@ def generate_images():
         response = requests.post(url, json=data)
         if response.status_code == 200:
             deduct_credits(username, 2)
-            return jsonify(response.json())
+            result = response.json()
+            result['transformed_prompt'] = transformed_prompt  # Add the transformed prompt to the response
+            return jsonify(result)
         else:
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
