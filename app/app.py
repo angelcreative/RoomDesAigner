@@ -29,20 +29,17 @@ openai.api_key = os.environ.get('sk-proj-v8OkXBtsyhEhqE4yAaTWT3BlbkFJzYYMfoKaI7f
 
 @app.route('/transform-prompt', methods=['POST'])
 def transform_prompt():
-    data = request.json
+    data = request.get_json()
     prompt_text = data.get('promptText')
-
+    
     if not prompt_text:
         return jsonify({"error": "No prompt text provided"}), 400
-
+    
     try:
         response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Transform the following values into a detailed, coherent, and descriptive prompt for interior design: {prompt_text}",
-            max_tokens=150,
-            n=1,
-            stop=None,
-            temperature=0.7,
+            model="text-davinci-003",
+            prompt=prompt_text,
+            max_tokens=150  # Adjust as needed
         )
         transformed_prompt = response.choices[0].text.strip()
         return jsonify({"transformedPrompt": transformed_prompt})
