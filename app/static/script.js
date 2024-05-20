@@ -166,7 +166,7 @@ function handleSubmit(event) {
         displayColors(colors);
     }
 
-   function initializeColorWheel() {
+    function initializeColorWheel() {
         var colorWheelContainer = document.getElementById('colorWheelContainer');
         var colorWheel = new iro.ColorPicker(colorWheelContainer, {
             width: 200,
@@ -174,19 +174,21 @@ function handleSubmit(event) {
         });
 
         colorWheel.on(['color:init', 'color:change'], function(color) {
-            updateHarmonyColors(color.hexString);
-        });
-
-        document.getElementById('harmonyType').addEventListener('change', function() {
-            updateHarmonyColors(colorWheel.color.hexString);
-        });
-
-        // Initial call to set the harmony colors based on the default color of the color wheel
+            updateHarmonyColors(color.hexString
+);
+});
+        
+            document.getElementById('harmonyType').addEventListener('change', function() {
         updateHarmonyColors(colorWheel.color.hexString);
-    }
+    });
 
-    // Call the function to initialize the color wheel
-    initializeColorWheel();
+    // Initial call to set the harmony colors based on the default color of the color wheel
+    updateHarmonyColors(colorWheel.color.hexString);
+}
+
+// Call the function to initialize the color wheel
+initializeColorWheel();
+
 
   //END HARMONY
     
@@ -334,7 +336,6 @@ function generateFractalText() {
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
-    const apiKey = "YOUR_API_KEY";  // Replace with your actual API key
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
     const selectedPicture = pictureSelect.value;
@@ -368,7 +369,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
-    // Call the backend API to transform the prompt
     try {
         const response = await fetch("/transform-prompt", {
             method: "POST",
@@ -382,50 +382,27 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         if (response.ok) {
             const transformedPromptText = data.transformedPrompt;
 
-            const prompt = {
-                key: apiKey,
-                prompt: transformedPromptText,
-                negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-                width: width,
-                height: height,
-                samples: "4",
-                guidance_scale: "10",
-                seed: seedValue,
-                webhook: null,
-                safety_checker: false,
-                track_id: null,
-            };
-
-            if (isImg2Img && imageUrl) {
-                prompt.init_image = imageUrl;
-                const strengthSlider = document.getElementById("strengthSlider");
-                prompt.strength = parseFloat(strengthSlider.value);
-            }
-
-            fetch("/generate-images", {
+            const backendResponse = await fetch("/generate-images", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(prompt)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success" && data.output) {
-                    const imageUrls = data.output.map(url =>
-                        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-                    );
+                body: JSON.stringify({ prompt: transformedPromptText })
+            });
+
+            const backendData = await backendResponse.json();
+
+            if (backendResponse.ok) {
+                if (backendData.status === "success" && backendData.output) {
+                    const imageUrls = backendData.output;
                     showModal(imageUrls, transformedPromptText);
                     hideGeneratingImagesDialog();
-                } else if (data.status === "processing" && data.fetch_result) {
-                    checkImageStatus(data.fetch_result);
-                } else {
-                    showError(data);
+                } else if (backendData.status === "error") {
+                    showError(backendData);
                 }
-            })
-            .catch(error => {
-                showError(error);
-            });
+            } else {
+                showError(backendData);
+            }
         } else {
             throw new Error(data.error || "Failed to transform prompt");
         }
@@ -434,7 +411,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 }
 
-    
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
@@ -521,7 +497,7 @@ function hideErrorMessage() {
         errorModal.style.display = "none";
     });
 }
-
+}
 
 
 

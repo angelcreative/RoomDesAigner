@@ -29,22 +29,21 @@ openai.api_key = os.environ.get('sk-proj-v8OkXBtsyhEhqE4yAaTWT3BlbkFJzYYMfoKaI7f
 
 @app.route('/transform-prompt', methods=['POST'])
 def transform_prompt():
-    data = request.get_json()
+    data = request.json
     prompt_text = data.get('promptText')
-    
-    if not prompt_text:
-        return jsonify({"error": "No prompt text provided"}), 400
-    
-    try:
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=prompt_text,
-            max_tokens=150  # Adjust as needed
-        )
-        transformed_prompt = response.choices[0].text.strip()
-        return jsonify({"transformedPrompt": transformed_prompt})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
+    # Transform the prompt as needed
+    transformed_prompt = transform_prompt_function(prompt_text)  # Define your transformation logic
+    return jsonify({'transformedPrompt': transformed_prompt})
+
+@app.route('/transform-prompt', methods=['POST'])
+def transform_prompt():
+    data = request.json
+    prompt_text = data.get('promptText')
+
+    # Example transformation function
+    transformed_prompt = f"{prompt_text} with additional details"
+    return jsonify({'transformedPrompt': transformed_prompt})
 
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
@@ -55,13 +54,19 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Generate an image based on the following description."},
+                    {"role": "user", "content": data['prompt']}
+                ]
+            )
+            image_urls = [choice['message']['content'] for choice in response.choices]
             deduct_credits(username, 2)
-            return jsonify(response.json())
-        else:
-            return jsonify({"error": "Image generation failed"}), response.status_code
+            return jsonify({'status': 'success', 'output': image_urls})
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 500
     else:
         return jsonify({"error": "Insufficient credits"}), 403
 
