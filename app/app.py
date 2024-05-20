@@ -38,7 +38,7 @@ def transform_prompt():
     try:
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Transform the following values into a detailed, coherent, and descriptive prompt for indoor or outdoor  design: {prompt_text}",
+            prompt=f"Transform the following values into a detailed, coherent, and descriptive prompt for interior design: {prompt_text}",
             max_tokens=150,
             n=1,
             stop=None,
