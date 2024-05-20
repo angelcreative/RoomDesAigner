@@ -1095,7 +1095,7 @@ function showModal(imageUrls, promptText) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Upscale", () => upscale(imageUrl));  // 
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));  // 
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
         const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));  // Reimagine button
