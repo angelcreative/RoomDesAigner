@@ -994,14 +994,12 @@ function createButton(text, onClickHandler) {
 
 
 //reimagine
-// Función para reenviar la imagen
+// Function to reimagine the image
 function reimagineImage(imageUrl) {
     fetch('/reimagine-image', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ image_url: imageUrl })
     })
@@ -1012,9 +1010,9 @@ function reimagineImage(imageUrl) {
         return response.json();
     })
     .then(data => {
-        if (data.status === 'success') {
-            console.log('Reimagine process completed:', data.upscaled_image_url);
-            openImageInNewTab(data.upscaled_image_url);  // Abrir la imagen en una nueva pestaña
+        if (data.status === 'success' && data.enhanced_image_url) {
+            console.log('Enhanced image URL:', data.enhanced_image_url);
+            openImageInNewTab(data.enhanced_image_url);  // Open the image in a new tab
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1026,11 +1024,10 @@ function reimagineImage(imageUrl) {
     });
 }
 
-// Función para abrir la imagen en una nueva pestaña
+// Function to open the image in a new tab
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
-
 
 // Function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
@@ -1071,7 +1068,7 @@ function showModal(imageUrls, promptText) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const upscaleButton = createButton("Upscale", () => reimagineImage(imageUrl));  // Update to reimagineImage function
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
         const reimagineButton = createButton("Reimagine", () => reimagineImage(imageUrl));  // Reimagine button
@@ -1099,7 +1096,6 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
-
 
 
 //end reimagine
