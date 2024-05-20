@@ -27,14 +27,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 # OpenAI API Key
 openai.api_key = os.environ.get('sk-proj-v8OkXBtsyhEhqE4yAaTWT3BlbkFJzYYMfoKaI7ffRbBcHtG8')
 
-@app.route('/transform-prompt', methods=['POST'])
-def transform_prompt():
-    data = request.json
-    prompt_text = data.get('promptText')
 
-    # Transform the prompt as needed
-    transformed_prompt = transform_prompt_function(prompt_text)  # Define your transformation logic
-    return jsonify({'transformedPrompt': transformed_prompt})
 
 @app.route('/transform-prompt', methods=['POST'])
 def transform_prompt():
