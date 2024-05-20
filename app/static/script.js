@@ -333,55 +333,46 @@ function generateFractalText() {
     }
 
 
- 
-function generateImages(imageUrl, selectedValues, isImg2Img) {
-  showGeneratingImagesDialog();
+async function generateImages(imageUrl, selectedValues, isImg2Img) {
+    showGeneratingImagesDialog();
 
-  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-  const customText = document.getElementById("customText").value;
-  const pictureSelect = document.getElementById("imageDisplayUrl");
-  const selectedPicture = pictureSelect.value;
-    const promptInit = `highly detailed,  photoshoot,  professional photo highly defined, soft shadows, best quality, masterpiece, realistic, photo-realistic, UHD, 8k, F2.8, RAW Photo, ultra detailed, sharp focus,` ;
+    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your real API key
+    const customText = document.getElementById("customText").value;
+    const pictureSelect = document.getElementById("imageDisplayUrl");
+    const selectedPicture = pictureSelect.value;
+    const promptInit = `highly detailed, photoshoot, professional photo highly defined, soft shadows, best quality, masterpiece, realistic, photo-realistic, UHD, 8k, F2.8, RAW Photo, ultra detailed, sharp focus,`;
 
-  let plainText = Object.entries(selectedValues)
-    .filter(([key, value]) => value && key !== "imageUrl")
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(", ");
+    let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
 
-  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
-  
-/*  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const width = aspectRatio === "portrait" ? 1024 : 768;
-  const width = aspectRatio === "portrait" ? 768 : 1024;
-  const height = aspectRatio === "portrait" ? 1024 : 1024;
+    const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1],`;
 
-  */
+    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
-const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+    let width, height;
 
-let width, height;
+    if (aspectRatio === "landscape") {
+        width = 1080;
+        height = 768;
+    } else if (aspectRatio === "portrait") {
+        width = 768;
+        height = 1080;
+    } else if (aspectRatio === "square") {
+        width = 1080;
+        height = 1080;
+    }
 
-if (aspectRatio === "landscape") {
-  width = 1080;
-  height = 768;
-} else if (aspectRatio === "portrait") {
-  width = 768;
-  height = 1080;
-} else if (aspectRatio === "square") {
-  width = 1080;
-  height = 1080;
-}
+    const seedSwitch = document.getElementById("seedSwitch");
+    const seedEnabled = seedSwitch.checked;
+    const seedValue = seedEnabled ? null : "19071975";
 
-  
-  const seedSwitch = document.getElementById("seedSwitch");
-  const seedEnabled = seedSwitch.checked;
-  const seedValue = seedEnabled ? null : "19071975";
+    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+    const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
-  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-  const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
-
-   // Function to call the backend API to transform the prompt
+    // Function to call the backend API to transform the prompt
     async function getTransformedPrompt(promptText) {
         const response = await fetch("/transform-prompt", {
             method: "POST",
@@ -416,88 +407,75 @@ if (aspectRatio === "landscape") {
             track_id: null,
         };
 
-    
-if (isImg2Img && imageUrl) {
-    prompt.init_image = imageUrl;
+        if (isImg2Img && imageUrl) {
+            prompt.init_image = imageUrl;
+            const strengthSlider = document.getElementById("strengthSlider");
+            prompt.strength = parseFloat(strengthSlider.value);
+        }
 
-    // Get the strength value from the slider
-    const strengthSlider = document.getElementById("strengthSlider");
-    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
-  }
-    
-      const chipsSV = document.getElementById("chipsSV");
+        const chipsSV = document.getElementById("chipsSV");
         chipsSV.innerHTML = ""; // Clear the existing content
 
         for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            // Replace "_" with " " in the value
-            const formattedValue = value.replace(/_/g, " ");
-            
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
+            if (value) {
+                const formattedValue = value.replace(/_/g, " ");
+                const chip = document.createElement("span");
+                chip.classList.add("chipSV");
 
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = formattedValue;
-            } else {
-              chip.textContent = formattedValue;
+                const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+                if (isHexColor) {
+                    chip.classList.add("hexDot");
+                    chip.style.backgroundColor = formattedValue;
+                } else {
+                    chip.textContent = formattedValue;
+                }
+
+                if (formattedValue.includes("_")) {
+                    chip.style.visibility = "visible"; // Hide "_" character
+                }
+
+                chipsSV.appendChild(chip);
             }
-
-            if (formattedValue.includes("_")) {
-              chip.style.visibility = "visible"; // Hide "_" character
-            }
-
-            chipsSV.appendChild(chip);
-          }
         }
 
+        var spanElement = document.querySelector(".chipSV");
+        var text = spanElement.textContent;
+        var modifiedText = text.replace(/_/g, " ");
+        spanElement.textContent = modifiedText;
 
-      // Get the <span> element by its class name
-      var spanElement = document.querySelector(".chipSV");
-
-      // Get the text content of the <span> element
-      var text = spanElement.textContent;
-
-      // Replace all underscore characters with non-breaking spaces
-      var modifiedText = text.replace(/_/g, "&nbsp;");
-
-      // Update the text content of the <span> element
-      spanElement.textContent = modifiedText;
-// Fetch request to generate images
-
-  fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => {
-    if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        fetch("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "success" && data.output) {
+                const imageUrls = data.output.map(url =>
+                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+                );
+                showModal(imageUrls, transformedPromptText);
+                hideGeneratingImagesDialog();
+            } else if (data.status === "processing" && data.fetch_result) {
+                checkImageStatus(data.fetch_result);
+            } else {
+                showError(data);
+            }
+        })
+        .catch(error => {
+            showError(error);
+        });
+    } catch (error) {
+        showError(error);
     }
-    return response.json();  // Parse JSON only if the response was OK
-})
-.then(data => {
-    // Handle the API response based on its status
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, promptText);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
-    } else {
-        showError(data);  // Show error if other statuses are encountered
-    }
-})
-.catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-});
+}
 
     
 
