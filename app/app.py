@@ -384,7 +384,7 @@ def reimagine_image():
             return jsonify({'error': 'image_url is required'}), 400
 
         headers = {
-            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',  # Asegúrate de que tu API key sea correcta
+            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
 
@@ -396,15 +396,18 @@ def reimagine_image():
             "fractality": 0,
             "scale_factor": 2,
             "style": "default",
-            "prompt": "",
-            "webhook": ""  # Dejar vacío ya que no usaremos webhook
+            "prompt": ""
         }
 
         response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
 
         if response.status_code == 200:
             json_data = response.json()
-            return jsonify({'status': 'success', 'upscaled_image_url': json_data.get('output_image_url')}), 200
+            enhanced_image_url = json_data.get('output_image_url')
+            if enhanced_image_url:
+                return jsonify({'status': 'success', 'enhanced_image_url': enhanced_image_url}), 200
+            else:
+                return jsonify({'error': 'Failed to retrieve enhanced image URL'}), 500
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
