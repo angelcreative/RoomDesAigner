@@ -399,7 +399,7 @@ def reimagine_image():
             "prompt": ""
         }
 
-        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data)
+        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=data, timeout=60)
 
         if response.status_code == 200:
             json_data = response.json()
@@ -407,10 +407,14 @@ def reimagine_image():
             if enhanced_image_url:
                 return jsonify({'status': 'success', 'enhanced_image_url': enhanced_image_url}), 200
             else:
+                app.logger.error("Failed to retrieve enhanced image URL from response")
                 return jsonify({'error': 'Failed to retrieve enhanced image URL'}), 500
         else:
             app.logger.error(f"Failed to reimagine image: {response.text}")
             return jsonify({'error': 'Failed to reimagine image', 'details': response.text}), response.status_code
+    except requests.exceptions.RequestException as e:
+        app.logger.error("RequestException error", exc_info=True)
+        return jsonify({'error': 'RequestException error', 'message': str(e)}), 500
     except Exception as e:
         app.logger.error("Server error", exc_info=True)
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
