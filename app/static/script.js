@@ -336,7 +336,7 @@ function generateFractalText() {
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your real API key
+    const apiKey = "YOUR_API_KEY";  // Replace with your actual API key
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
     const selectedPicture = pictureSelect.value;
@@ -347,12 +347,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1],`;
-
+    const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
     let width, height;
-
     if (aspectRatio === "landscape") {
         width = 1080;
         height = 768;
@@ -372,106 +370,67 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
-    // Function to call the backend API to transform the prompt
-    async function getTransformedPrompt(promptText) {
+    // Call the backend API to transform the prompt
+    try {
         const response = await fetch("/transform-prompt", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ promptText })
+            body: JSON.stringify({ promptText: initialPromptText })
         });
 
         const data = await response.json();
         if (response.ok) {
-            return data.transformedPrompt;
+            const transformedPromptText = data.transformedPrompt;
+
+            const prompt = {
+                key: apiKey,
+                prompt: transformedPromptText,
+                negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
+                width: width,
+                height: height,
+                samples: "4",
+                guidance_scale: "10",
+                seed: seedValue,
+                webhook: null,
+                safety_checker: false,
+                track_id: null,
+            };
+
+            if (isImg2Img && imageUrl) {
+                prompt.init_image = imageUrl;
+                const strengthSlider = document.getElementById("strengthSlider");
+                prompt.strength = parseFloat(strengthSlider.value);
+            }
+
+            fetch("/generate-images", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(prompt)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success" && data.output) {
+                    const imageUrls = data.output.map(url =>
+                        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+                    );
+                    showModal(imageUrls, transformedPromptText);
+                    hideGeneratingImagesDialog();
+                } else if (data.status === "processing" && data.fetch_result) {
+                    checkImageStatus(data.fetch_result);
+                } else {
+                    showError(data);
+                }
+            })
+            .catch(error => {
+                showError(error);
+            });
         } else {
             throw new Error(data.error || "Failed to transform prompt");
         }
-    }
-
-    try {
-        const transformedPromptText = await getTransformedPrompt(initialPromptText);
-
-        const prompt = {
-            key: apiKey,
-            prompt: transformedPromptText,
-            negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-            width: width,
-            height: height,
-            samples: "4",
-            guidance_scale: "10",
-            seed: seedValue,
-            webhook: null,
-            safety_checker: false,
-            track_id: null,
-        };
-
-        if (isImg2Img && imageUrl) {
-            prompt.init_image = imageUrl;
-            const strengthSlider = document.getElementById("strengthSlider");
-            prompt.strength = parseFloat(strengthSlider.value);
-        }
-
-        const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
-
-        for (const [key, value] of Object.entries(selectedValues)) {
-            if (value) {
-                const formattedValue = value.replace(/_/g, " ");
-                const chip = document.createElement("span");
-                chip.classList.add("chipSV");
-
-                const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
-                if (isHexColor) {
-                    chip.classList.add("hexDot");
-                    chip.style.backgroundColor = formattedValue;
-                } else {
-                    chip.textContent = formattedValue;
-                }
-
-                if (formattedValue.includes("_")) {
-                    chip.style.visibility = "visible"; // Hide "_" character
-                }
-
-                chipsSV.appendChild(chip);
-            }
-        }
-
-        var spanElement = document.querySelector(".chipSV");
-        var text = spanElement.textContent;
-        var modifiedText = text.replace(/_/g, " ");
-        spanElement.textContent = modifiedText;
-
-        fetch("/generate-images", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-                );
-                showModal(imageUrls, transformedPromptText);
-                hideGeneratingImagesDialog();
-            } else if (data.status === "processing" && data.fetch_result) {
-                checkImageStatus(data.fetch_result);
-            } else {
-                showError(data);
-            }
-        })
-        .catch(error => {
-            showError(error);
-        });
     } catch (error) {
         showError(error);
     }
@@ -479,7 +438,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     
 
-// Define the checkImageStatus function
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
