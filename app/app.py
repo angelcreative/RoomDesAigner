@@ -390,7 +390,7 @@ def reimagine_image():
             return jsonify({'error': 'image_url is required'}), 400
 
         headers = {
-            'Authorization': 'Bearer YOUR_CLARITY_API_KEY',
+            'Authorization': 'Bearer THISISAWORKINGTESTKEYFORTHEFIRSTAPIUSER1337a',
             'Content-Type': 'application/json'
         }
 
