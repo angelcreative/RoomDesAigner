@@ -79,11 +79,14 @@ def generate_images():
         response = requests.post(url, json=data)
         if response.status_code == 200:
             deduct_credits(username, 2)
-            return jsonify(response.json())
+            result = response.json()
+            result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+            return jsonify(result)
         else:
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
+
 
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
