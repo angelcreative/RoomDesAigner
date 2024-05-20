@@ -6,10 +6,12 @@ import requests
 import bcrypt
 import os
 import uuid
+import requests
 import random
 import logging
 import json
 import openai
+# Import the json module
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +24,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
+
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
@@ -33,15 +36,6 @@ else:
 openai.api_key = openai_api_key
 
 
-@app.route('/transform-prompt', methods=['POST'])
-def transform_prompt():
-    data = request.json
-    prompt_text = data.get('promptText')
-
-    # Example transformation function
-    transformed_prompt = f"{prompt_text} with additional details"
-    return jsonify({'transformedPrompt': transformed_prompt})
-
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -51,19 +45,13 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": "Generate an image based on the following description."},
-                    {"role": "user", "content": data['prompt']}
-                ]
-            )
-            image_urls = [choice['message']['content'] for choice in response.choices]
+        url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
             deduct_credits(username, 2)
-            return jsonify({'status': 'success', 'output': image_urls})
-        except Exception as e:
-            return jsonify({'status': 'error', 'message': str(e)}), 500
+            return jsonify(response.json())
+        else:
+            return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
 
@@ -170,83 +158,86 @@ def signup():
         
         # List of pre-made avatar images (local paths or URLs)
         avatar_images = [
-            'static/img/avatar/avatar_01.svg',
-            'static/img/avatar/avatar_02.svg',
-            'static/img/avatar/avatar_03.svg',
-            'static/img/avatar/avatar_04.svg',
-            'static/img/avatar/avatar_05.svg',
-            'static/img/avatar/avatar_06.svg',
-            'static/img/avatar/avatar_07.svg',
-            'static/img/avatar/avatar_08.svg',
-            'static/img/avatar/avatar_09.svg',
-            'static/img/avatar/avatar_10.svg',
-            'static/img/avatar/avatar_11.svg',
-            'static/img/avatar/avatar_12.svg',
-            'static/img/avatar/avatar_13.svg',
-            'static/img/avatar/avatar_14.svg',
-            'static/img/avatar/avatar_15.svg',
-            'static/img/avatar/avatar_16.svg',
-            'static/img/avatar/avatar_17.svg',
-            'static/img/avatar/avatar_18.svg',
-            'static/img/avatar/avatar_19.svg',
-            'static/img/avatar/avatar_20.svg',
-            'static/img/avatar/avatar_21.svg',
-            'static/img/avatar/avatar_22.svg',
-            'static/img/avatar/avatar_23.svg',
-            'static/img/avatar/avatar_24.svg',
-            'static/img/avatar/avatar_25.svg',
-            'static/img/avatar/avatar_26.svg',
-            'static/img/avatar/avatar_27.svg',
-            'static/img/avatar/avatar_28.svg',
-            'static/img/avatar/avatar_29.svg',
-            'static/img/avatar/avatar_30.svg',
-            'static/img/avatar/avatar_31.svg',
-            'static/img/avatar/avatar_32.svg',
-            'static/img/avatar/avatar_33.svg',
-            'static/img/avatar/avatar_34.svg',
-            'static/img/avatar/avatar_35.svg',
-            'static/img/avatar/avatar_36.svg',
-            'static/img/avatar/avatar_37.svg',
-            'static/img/avatar/avatar_38.svg',
-            'static/img/avatar/avatar_39.svg',
-            'static/img/avatar/avatar_40.svg',
-            'static/img/avatar/avatar_41.svg',
-            'static/img/avatar/avatar_42.svg',
-            'static/img/avatar/avatar_43.svg',
-            'static/img/avatar/avatar_44.svg',
-            'static/img/avatar/avatar_45.svg',
-            'static/img/avatar/avatar_46.svg',
-            'static/img/avatar/avatar_47.svg',
-            'static/img/avatar/avatar_48.svg',
-            'static/img/avatar/avatar_49.svg',
-            'static/img/avatar/avatar_50.svg',
-            'static/img/avatar/avatar_51.svg',
-            'static/img/avatar/avatar_52.svg',
-            'static/img/avatar/avatar_53.svg',
-            'static/img/avatar/avatar_54.svg',
-            'static/img/avatar/avatar_55.svg',
-            'static/img/avatar/avatar_56.svg',
-            'static/img/avatar/avatar_57.svg',
-            'static/img/avatar/avatar_58.svg',
-            'static/img/avatar/avatar_59.svg',
-            'static/img/avatar/avatar_60.svg',
-            'static/img/avatar/default_avatar_url.svg',
-            # Add more if needed
-        ]
+    'static/img/avatar/avatar_01.svg',
+    'static/img/avatar/avatar_02.svg',
+    'static/img/avatar/avatar_03.svg',
+    'static/img/avatar/avatar_04.svg',
+    'static/img/avatar/avatar_05.svg',
+    'static/img/avatar/avatar_06.svg',
+    'static/img/avatar/avatar_07.svg',
+    'static/img/avatar/avatar_08.svg',
+    'static/img/avatar/avatar_09.svg',
+    'static/img/avatar/avatar_10.svg',
+    'static/img/avatar/avatar_11.svg',
+    'static/img/avatar/avatar_12.svg',
+    'static/img/avatar/avatar_13.svg',
+    'static/img/avatar/avatar_14.svg',
+    'static/img/avatar/avatar_15.svg',
+    'static/img/avatar/avatar_16.svg',
+    'static/img/avatar/avatar_17.svg',
+    'static/img/avatar/avatar_18.svg',
+    'static/img/avatar/avatar_19.svg',
+    'static/img/avatar/avatar_20.svg',
+    'static/img/avatar/avatar_21.svg',
+    'static/img/avatar/avatar_22.svg',
+    'static/img/avatar/avatar_23.svg',
+    'static/img/avatar/avatar_24.svg',
+    'static/img/avatar/avatar_25.svg',
+    'static/img/avatar/avatar_26.svg',
+    'static/img/avatar/avatar_27.svg',
+    'static/img/avatar/avatar_28.svg',
+    'static/img/avatar/avatar_29.svg',
+    'static/img/avatar/avatar_30.svg',
+    'static/img/avatar/avatar_31.svg',
+    'static/img/avatar/avatar_32.svg',
+    'static/img/avatar/avatar_33.svg',
+    'static/img/avatar/avatar_34.svg',
+    'static/img/avatar/avatar_35.svg',
+    'static/img/avatar/avatar_36.svg',
+    'static/img/avatar/avatar_37.svg',
+    'static/img/avatar/avatar_38.svg',
+    'static/img/avatar/avatar_39.svg',
+    'static/img/avatar/avatar_40.svg',
+    'static/img/avatar/avatar_41.svg',
+    'static/img/avatar/avatar_42.svg',
+    'static/img/avatar/avatar_43.svg',
+    'static/img/avatar/avatar_44.svg',
+    'static/img/avatar/avatar_45.svg',
+    'static/img/avatar/avatar_46.svg',
+    'static/img/avatar/avatar_47.svg',
+    'static/img/avatar/avatar_48.svg',
+    'static/img/avatar/avatar_49.svg',
+    'static/img/avatar/avatar_50.svg',
+    'static/img/avatar/avatar_51.svg',
+    'static/img/avatar/avatar_52.svg',
+    'static/img/avatar/avatar_53.svg',
+    'static/img/avatar/avatar_54.svg',
+    'static/img/avatar/avatar_55.svg',
+    'static/img/avatar/avatar_56.svg',
+    'static/img/avatar/avatar_57.svg',
+    'static/img/avatar/avatar_58.svg',
+    'static/img/avatar/avatar_59.svg',
+    'static/img/avatar/avatar_60.svg',
+    'static/img/avatar/default_avatar_url.svg',
+    # Add more if needed
+]
 
         # Randomly select an avatar image
         selected_avatar = random.choice(avatar_images)
         
-        # Retrieve email from the form data
+         # Retrieve email from the form data
+# In your signup route
         email = request.form['email'].lower()  # Convert to lowercase before storing
+
 
         # Prepare user data with the randomly selected avatar
         user_data = {
-            'username': request.form['username'],
-            'email': email,  # Include email here
-            'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
-            'avatar': default_avatar, 
-            'credits': 5
+                'username': request.form['username'],
+                'email': email,  # Include email here
+                'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
+                'avatar': default_avatar, 
+                'credits': 5
+
         }
 
         # MongoDB Data API request
@@ -304,7 +295,9 @@ def change_avatar():
             return 'Error updating avatar in database', 500
     else:
         return 'User not logged in', 401
-
+      
+    
+import logging
 
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
@@ -444,11 +437,13 @@ def reimagine_image():
         return jsonify({'error': 'Server error', 'message': str(e)}), 500
 
 
+    
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
     session.clear()
     return redirect(url_for('login'))
+
 
 
 if __name__ == '__main__':

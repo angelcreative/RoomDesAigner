@@ -333,85 +333,169 @@ function generateFractalText() {
     }
 
 
-async function generateImages(imageUrl, selectedValues, isImg2Img) {
-    showGeneratingImagesDialog();
+ 
+function generateImages(imageUrl, selectedValues, isImg2Img) {
+  showGeneratingImagesDialog();
 
-    const customText = document.getElementById("customText").value;
-    const pictureSelect = document.getElementById("imageDisplayUrl");
-    const selectedPicture = pictureSelect.value;
-    const promptInit = `highly detailed, photoshoot, professional photo highly defined, soft shadows, best quality, masterpiece, realistic, photo-realistic, UHD, 8k, F2.8, RAW Photo, ultra detailed, sharp focus,`;
+  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+  const customText = document.getElementById("customText").value;
+  const pictureSelect = document.getElementById("imageDisplayUrl");
+  const selectedPicture = pictureSelect.value;
+    const promptInit = `highly detailed, photoshoot, professional photo highly defined, soft shadows, best quality, masterpiece, realistic, photo-realistic, UHD, 8k, F2.8, RAW Photo, ultra detailed, sharp focus,` ;
 
-    let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
+  let plainText = Object.entries(selectedValues)
+    .filter(([key, value]) => value && key !== "imageUrl")
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ");
 
-    const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
-    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
+  
+/*  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+  const width = aspectRatio === "portrait" ? 1024 : 768;
+  const width = aspectRatio === "portrait" ? 768 : 1024;
+  const height = aspectRatio === "portrait" ? 1024 : 1024;
 
-    let width, height;
-    if (aspectRatio === "landscape") {
-        width = 1080;
-        height = 768;
-    } else if (aspectRatio === "portrait") {
-        width = 768;
-        height = 1080;
-    } else if (aspectRatio === "square") {
-        width = 1080;
-        height = 1080;
-    }
+  */
 
-    const seedSwitch = document.getElementById("seedSwitch");
-    const seedEnabled = seedSwitch.checked;
-    const seedValue = seedEnabled ? null : "19071975";
+const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
-    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-    const initialPromptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+let width, height;
 
-    try {
-        const response = await fetch("/transform-prompt", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ promptText: initialPromptText })
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            const transformedPromptText = data.transformedPrompt;
-
-            const backendResponse = await fetch("/generate-images", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ prompt: transformedPromptText })
-            });
-
-            const backendData = await backendResponse.json();
-
-            if (backendResponse.ok) {
-                if (backendData.status === "success" && backendData.output) {
-                    const imageUrls = backendData.output;
-                    showModal(imageUrls, transformedPromptText);
-                    hideGeneratingImagesDialog();
-                } else if (backendData.status === "error") {
-                    showError(backendData);
-                }
-            } else {
-                showError(backendData);
-            }
-        } else {
-            throw new Error(data.error || "Failed to transform prompt");
-        }
-    } catch (error) {
-        showError(error);
-    }
+if (aspectRatio === "landscape") {
+  width = 1080;
+  height = 768;
+} else if (aspectRatio === "portrait") {
+  width = 768;
+  height = 1080;
+} else if (aspectRatio === "square") {
+  width = 1080;
+  height = 1080;
 }
 
+  
+  const seedSwitch = document.getElementById("seedSwitch");
+  const seedEnabled = seedSwitch.checked;
+  const seedValue = seedEnabled ? null : "19071975";
 
+  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+  const prompt = {
+    key: apiKey,
+    prompt: promptText,
+    negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
+    width: width, 
+    height: height,
+
+    //width: "1024",
+    //height: "1024",
+    samples: "4",
+    guidance_scale: "10",
+    //num_inference_steps: "40",
+    //scheduler: "DPM++ 3M SDE Karras",
+    //self_attention: "no", //testing no
+    seed: seedValue,
+    webhook: null,
+    safety_checker: false,
+    track_id: null,
+  };
+
+
+
+
+
+
+
+
+    
+    
+    
+if (isImg2Img && imageUrl) {
+    prompt.init_image = imageUrl;
+
+    // Get the strength value from the slider
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+  }
+    
+      const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }
+
+
+      // Get the <span> element by its class name
+      var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+      var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+      var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+      spanElement.textContent = modifiedText;
+// Fetch request to generate images
+
+  fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        // Directly throw an error with the status to handle it in the catch block
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();  // Parse JSON only if the response was OK
+})
+.then(data => {
+    // Handle the API response based on its status
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, promptText);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+    } else {
+        showError(data);  // Show error if other statuses are encountered
+    }
+})
+.catch(error => {
+    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+});
+
+    
+
+// Define the checkImageStatus function
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -497,7 +581,7 @@ function hideErrorMessage() {
         errorModal.style.display = "none";
     });
 }
-
+}
 
 
 
@@ -1133,8 +1217,8 @@ for (const select of selectElements) {
 }
 
 
-//test
- /*hola*/
+
+
 
 
 // Initial check on page load
@@ -1159,6 +1243,7 @@ window.addEventListener('load', function() {
 
 document.getElementById('clearImg').addEventListener('click', function() {
     clearImage();
+
     // Reset the file input
     document.getElementById('imageDisplayUrl').value = '';
 });
