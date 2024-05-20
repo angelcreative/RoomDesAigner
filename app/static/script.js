@@ -1005,16 +1005,15 @@ function reimagineImage(imageUrl) {
     })
     .then(response => {
         if (!response.ok) {
-            return response.text().then(text => {
-                throw new Error('Network response was not ok: ' + response.statusText + ' - ' + text);
-            });
+            throw new Error('Network response was not ok: ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
-        if (data.status === 'success' && data.enhanced_image_url) {
-            console.log('Enhanced image URL:', data.enhanced_image_url);
-            openImageInNewTab(data.enhanced_image_url);  // Open the image in a new tab
+        if (data.status === 'processing') {
+            console.log('Reimagine process started, waiting for webhook...');
+            alert('Reimagine process has been initiated. You will be notified when the image is ready.');
+            checkUpscaledImageStatus(data.key);  // Start polling with the unique key
         } else {
             console.error('Failed to reimagine:', data);
             alert('Failed to reimagine image. See console for details.');
@@ -1026,10 +1025,41 @@ function reimagineImage(imageUrl) {
     });
 }
 
+// Function to check the status of the upscaled image
+function checkUpscaledImageStatus(uniqueKey) {
+    fetch(`/get-upscaled-image?key=${uniqueKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'processing') {
+            console.log('Upscaled image is still processing, retrying...');
+            setTimeout(() => checkUpscaledImageStatus(uniqueKey), 5000);  // Retry after 5 seconds
+        } else if (data.upscaled_image_url) {
+            console.log('Upscaled image is ready:', data.upscaled_image_url);
+            openImageInNewTab(data.upscaled_image_url);  // Open the image in a new tab
+        }
+    })
+    .catch(error => {
+        console.error('Error checking upscaled image status:', error);
+    });
+}
+
 // Function to open the image in a new tab
 function openImageInNewTab(imageUrl) {
     window.open(imageUrl, "_blank");
 }
+
+
+  //end reimagine
 
 // Function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
