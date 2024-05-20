@@ -1133,8 +1133,8 @@ for (const select of selectElements) {
 }
 
 
-
-
+//test
+ /*hola*/
 
 
 // Initial check on page load
@@ -1159,7 +1159,6 @@ window.addEventListener('load', function() {
 
 document.getElementById('clearImg').addEventListener('click', function() {
     clearImage();
-
     // Reset the file input
     document.getElementById('imageDisplayUrl').value = '';
 });
