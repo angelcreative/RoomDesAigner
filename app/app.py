@@ -38,14 +38,20 @@ openai.api_key = openai_api_key
 
 def transform_prompt(prompt_text):
     messages = [
-        {"role": "system", "content": "You are a helpful assistant that transforms lists of values into natural language prompts."},
-        {"role": "user", "content": f"Transform the following list of values into a natural language prompt:\n\n{prompt_text}"}
+       {
+            "role": "system",
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions."
+        },
+        {
+            "role": "user",
+            "content": f"Transform the following list of interior design values into a detailed and professional natural language prompt suitable for a high-quality interior design description:\n\n{prompt_text}"
+        }
     ]
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
-        max_tokens=150,  # Adjust the token count as needed
+        max_tokens=300,  # Adjust the token count as needed
         temperature=0.7,
     )
 

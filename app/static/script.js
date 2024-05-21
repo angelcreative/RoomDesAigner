@@ -341,7 +341,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 8k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,` ;
+    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -632,7 +632,7 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
 
-    // Function to copy text to clipboard
+    /*Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
       tempInput.value = text;
@@ -643,6 +643,20 @@ rerollButton.addEventListener("click", rerollImages);
       
       generateMessageDiv("Prompt copied to clipboard!");
     }
+    */
+    
+    // Function to copy text to clipboard
+async function copyTextToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    generateMessageDiv("Prompt copied to clipboard!");
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+    generateMessageDiv("Failed to copy prompt to clipboard.");
+  }
+}
+
+    
     
 //ENHANCE IMAGE
 
