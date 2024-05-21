@@ -44,7 +44,7 @@ def transform_prompt(prompt_text):
         },
         {
             "role": "user",
-            "content": f"Transform the following list of interior design values into a detailed and professional natural language prompt suitable for a high-quality interior design description in less than 180 words:\n\n{prompt_text}"
+            "content": f"Transform the following list of architectural design values into a detailed and professional natural language prompt suitable for a high-quality architectural design description in less than 180 words:\n\n{prompt_text}"
         }
     ]
 
