@@ -118,177 +118,214 @@ function handleSubmit(event) {
   hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
-
 //HARMONY
 
+function getHarmonyColors(color, type) {
+    const baseColor = chroma(color);
+    const baseHue = baseColor.get('hsl.h');
+    let colors;
+
+    switch (type) {
+        case 'complementary':
+            colors = [
+                baseColor.hex(), 
+                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                "#131b24", 
+                "#131b24"
+            ];
+            break;
+        case 'analogous':
+            colors = [
+                baseColor.hex(), 
+                chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                "#131b24"
+            ];
+            break;
+        case 'triadic':
+            colors = [
+                baseColor.hex(), 
+                chroma.hsl((baseHue + 120) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                "#131b24"
+            ];
+            break;
+        case 'square':
+            colors = [
+                baseColor.hex(), 
+                chroma.hsl((baseHue + 90) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
+                chroma.hsl((baseHue + 270) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
+            ];
+            break;
+        default:
+            colors = [
+                baseColor.hex(), 
+                "#131b24", 
+                "#131b24", 
+                "#131b24"
+            ];
+    }
+
+    return colors;
+}
+
+function displayColors(colors, type) {
+    const harmonyColors = document.getElementById('harmonyColors');
+    harmonyColors.innerHTML = '';
+
+    const colorIds = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
+    colors.forEach((color, index) => {
+        const colorDiv = document.createElement('div');
+        colorDiv.id = colorIds[index];
+        colorDiv.style.backgroundColor = color;
+        colorDiv.innerText = `${type} ${color}`; // Display harmony type and color hex
+        harmonyColors.appendChild(colorDiv); 
+    });
+}
+
+function updateHarmonyFromSelectedValues() {
+    const values = getSelectedValues();
     
-       function getHarmonyColors(color, type) {
-        const baseColor = chroma(color);
-        const baseHue = baseColor.get('hsl.h');
-        let colors;
-
-        switch (type) {
-            case 'complementary':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24", "#131b24"];
-                break;
-            case 'analogous':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24"];
-                break;
-            case 'triadic':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 120) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), "#131b24"];
-                break;
-            case 'square':
-                colors = [baseColor.hex(), chroma.hsl((baseHue + 90) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(), chroma.hsl((baseHue + 270) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()];
-                break;
-            default:
-                colors = [baseColor.hex(), "#131b24", "#131b24", "#131b24"];
-        }
-
-        return colors;
+    // Ensure primary color and harmony type are selected
+    if (values.primary_color && values.harmonyType) {
+        const colors = {
+            primary: values.primary_color,
+            secondary: values.secondary_color || "#131b24",
+            tertiary: values.tertiary_color || "#131b24",
+            quaternary: values.quaternary_color || "#131b24"
+        };
+        updateHarmonyColors(colors, values.harmonyType);
     }
+}
 
-    function displayColors(colors) {
-        const harmonyColors = document.getElementById('harmonyColors');
-        harmonyColors.innerHTML = '';
+// Modify updateHarmonyColors to handle multiple colors
+function updateHarmonyColors(colors, harmonyType) {
+    const harmonyColors = getHarmonyColors(colors.primary, harmonyType);
+    harmonyColors[1] = colors.secondary !== "#131b24" ? colors.secondary : harmonyColors[1];
+    harmonyColors[2] = colors.tertiary !== "#131b24" ? colors.tertiary : harmonyColors[2];
+    harmonyColors[3] = colors.quaternary !== "#131b24" ? colors.quaternary : harmonyColors[3];
+    displayColors(harmonyColors, harmonyType);
+}
 
-        const colorIds = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
-        colors.forEach((color, index) => {
-            const colorDiv = document.createElement('div');
-            colorDiv.id = colorIds[index];
-            colorDiv.style.backgroundColor = color;
-            harmonyColors.appendChild(colorDiv); 
-        });
-    }
-
-    function updateHarmonyColors(color) {
-        const harmonyType = document.getElementById('harmonyType').value;
-        const colors = getHarmonyColors(color, harmonyType);
-        displayColors(colors);
-    }
-
-    function initializeColorWheel() {
-        var colorWheelContainer = document.getElementById('colorWheelContainer');
-        var colorWheel = new iro.ColorPicker(colorWheelContainer, {
-            width: 200,
-            color: "#46696d"
-        });
-
-        colorWheel.on(['color:init', 'color:change'], function(color) {
-            updateHarmonyColors(color.hexString
-);
+// Initial setup when the page loads
+document.addEventListener('DOMContentLoaded', (event) => {
+    initializeColorWheel();
+    
+    // Add event listener to capture updates based on user interactions
+    document.getElementById('harmonyType').addEventListener('change', updateHarmonyFromSelectedValues);
+    document.getElementById('primary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('secondary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('tertiary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('quaternary_color').addEventListener('input', updateHarmonyFromSelectedValues);
 });
-        
-            document.getElementById('harmonyType').addEventListener('change', function() {
-        updateHarmonyColors(colorWheel.color.hexString);
+
+// Assuming initializeColorWheel function remains the same as provided earlier
+function initializeColorWheel() {
+    var colorWheelContainer = document.getElementById('colorWheelContainer');
+    var colorWheel = new iro.ColorPicker(colorWheelContainer, {
+        width: 200,
+        color: "#46696d"
+    });
+
+    colorWheel.on(['color:init', 'color:change'], function(color) {
+        updateHarmonyColors({ primary: color.hexString }, document.getElementById('harmonyType').value);
+    });
+    
+    document.getElementById('harmonyType').addEventListener('change', function() {
+        updateHarmonyColors({ primary: colorWheel.color.hexString }, document.getElementById('harmonyType').value);
     });
 
     // Initial call to set the harmony colors based on the default color of the color wheel
-    updateHarmonyColors(colorWheel.color.hexString);
+    updateHarmonyColors({ primary: colorWheel.color.hexString }, document.getElementById('harmonyType').value);
 }
 
 // Call the function to initialize the color wheel
 initializeColorWheel();
 
+//END HARMONY
 
-  //END HARMONY
-    
-    
-// Asegúrate de que las funciones showOverlay, getSelectedValues y generateImages estén definidas correctamente.
 
  
     
-    
-    function getSelectedValues() {
-        const elementIds = [
-           "person",
-          "generated_artwork",
-            "point_of_view",
-            "harmonyType",
-            "primary_color",
-            "secondary_color",
-            "tertiary_color",
-            "quaternary_color",
-            "color_scheme",
-            "room_size",
-            "home_room",
-            "space_to_be_designed",
-            "children_room",
-            "pool",
-            "landscaping_options",
-            "garden",
-            "room_shape",
-            "inspired_by_this_interior_design_magazine",
-            "furniture_provided_by_this_vendor",
-            "furniture_color",
-          "furniture_pattern",
-          "seating_upholstery_pattern",
-            "designed_by_this_interior_designer",
-            "designed_by_this_architect",
-          "lens_used",
-            "image_color",
-            "photo_lighting_type",
-            "illumination",
-            "door",
-            "windows",
-            "ceiling_design",
-            "roof_material",
-            "roof_height",
-            "wall_type",
-            "wall_cladding",
-          "walls_pattern",
-            "exterior_finish",
-            "exterior_trim_molding",
-            "walls_paint_color",
-            "facade_pattern",
-            "floors",
-            "kitchen_layout",
-            "countertop_material",
-            "backsplash_design",
-            "cabinet_storage_design",
-            "appliance_style_finish",
-            "bathroom_fixture_style",
-            "bathroom_tile_design",
-            "bathroom_vanity_style",
-            "shower_bathtub_design",
-            "bathroom_lighting_fixtures",
-            "fireplace_design",
-            "balcony_design",
-            "material",
-            "ceramic_material",
-            "fabric",
-            "stone_material",
-            "marble_material",
-            "wood_material",
-            
-            "design_style",
-            "decorative_elements"
-          
-        ];
+function getSelectedValues() {
+    const elementIds = [
+        "person",
+        "generated_artwork",
+        "point_of_view",
+        "harmonyType",
+        "primary_color",
+        "secondary_color",
+        "tertiary_color",
+        "quaternary_color",
+        "color_scheme",
+        "room_size",
+        "home_room",
+        "space_to_be_designed",
+        "children_room",
+        "pool",
+        "landscaping_options",
+        "garden",
+        "room_shape",
+        "inspired_by_this_interior_design_magazine",
+        "furniture_provided_by_this_vendor",
+        "furniture_color",
+        "furniture_pattern",
+        "seating_upholstery_pattern",
+        "designed_by_this_interior_designer",
+        "designed_by_this_architect",
+        "lens_used",
+        "image_color",
+        "photo_lighting_type",
+        "illumination",
+        "door",
+        "windows",
+        "ceiling_design",
+        "roof_material",
+        "roof_height",
+        "wall_type",
+        "wall_cladding",
+        "walls_pattern",
+        "exterior_finish",
+        "exterior_trim_molding",
+        "walls_paint_color",
+        "facade_pattern",
+        "floors",
+        "kitchen_layout",
+        "countertop_material",
+        "backsplash_design",
+        "cabinet_storage_design",
+        "appliance_style_finish",
+        "bathroom_fixture_style",
+        "bathroom_tile_design",
+        "bathroom_vanity_style",
+        "shower_bathtub_design",
+        "bathroom_lighting_fixtures",
+        "fireplace_design",
+        "balcony_design",
+        "material",
+        "ceramic_material",
+        "fabric",
+        "stone_material",
+        "marble_material",
+        "wood_material",
+        "design_style",
+        "decorative_elements"
+    ];
 
-        const values = {};
+    const values = {};
 
-        elementIds.forEach(elementId => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      values[elementId] = element.value;
-    }
-  });
-        
-        // Slider event listener for displaying value
-  const slider = document.getElementById("strengthSlider");
-  const sliderValueDisplay = document.getElementById("sliderValue");
+    elementIds.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            values[elementId] = element.value;
+        }
+    });
 
-  slider.addEventListener("input", function() {
-    sliderValueDisplay.textContent = this.value;
-  });
-
-  const imageDisplay = document.getElementById("imageDisplay");
-  if (imageDisplay && imageDisplay.src) {
-    values["imageUrl"] = imageDisplay.src; // Añade la URL de la imagen si está presente
-  }
-
-  return values;
+    return values;
 }
+
+
   
     const selectedValues = getSelectedValues();
     console.log(selectedValues);
@@ -1036,7 +1073,7 @@ function showModal(imageUrls, transformedPrompt) {
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
  
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -1047,14 +1084,7 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
-// Initialize event listeners
-document.addEventListener("DOMContentLoaded", function() {
-    const enhanceButton = document.getElementById("enhanceButton");
-    enhanceButton.addEventListener("click", function() {
-        const imageUrl = document.getElementById("thumbnail").src;
-        enhanceImage(imageUrl);
-    });
-});
+ 
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
@@ -1068,34 +1098,7 @@ function showOverlay() {
     overlay.style.display = "block";
 }
     
-// Function to show the dialog with the enhanced image URL
-function showDialog(enhancedImageUrl) {
-    const modal = document.getElementById("modal");
-    const modalContent = document.getElementById("modalContent");
-
-    modalContent.innerHTML = `
-        <p>Hey, your enhanced image is ready!</p>
-        <img src="${enhancedImageUrl}" alt="Enhanced Image">
-        <a href="${enhancedImageUrl}" download>Download image</a>`;
-
-    modal.style.display = "block";
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-}
-    
-    
-document.addEventListener("DOMContentLoaded", function() {
-    const enhanceButton = document.getElementById("enhanceButton");
-    enhanceButton.addEventListener("click", function() {
-        const imageUrl = document.getElementById("thumbnail").src;
-        enhanceImage(imageUrl);
-    });
-});
-
+ 
 
     
     
