@@ -120,121 +120,7 @@ function handleSubmit(event) {
 }
 
     
-    // HARMONY
 
-// HARMONY
-
-function getHarmonyColors(color, type) {
-    const baseColor = chroma(color);
-    const baseHue = baseColor.get('hsl.h');
-    let colors;
-
-    switch (type) {
-        case 'complementary':
-            colors = [
-                baseColor.hex(), 
-                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
-            ];
-            break;
-        case 'analogous':
-            colors = [
-                baseColor.hex(), 
-                chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
-            ];
-            break;
-        case 'triadic':
-            colors = [
-                baseColor.hex(), 
-                chroma.hsl((baseHue + 120) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
-            ];
-            break;
-        case 'square':
-            colors = [
-                baseColor.hex(), 
-                chroma.hsl((baseHue + 90) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue + 270) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
-            ];
-            break;
-        default:
-            colors = [baseColor.hex()];
-    }
-
-    while (colors.length < 4) {
-        colors.push("#131b24");
-    }
-
-    return colors;
-}
-
-function displayColors(colors, type) {
-    const harmonyColors = document.getElementById('harmonyColors');
-    harmonyColors.innerHTML = '';
-
-    const colorIds = ['primary_color', 'secondary_color', 'tertiary_color', 'quaternary_color'];
-    colors.forEach((color, index) => {
-        const colorDiv = document.createElement('div');
-        colorDiv.id = colorIds[index];
-        colorDiv.style.backgroundColor = color;
-        colorDiv.innerText = `${type} ${color}`; // Display harmony type and color hex
-        harmonyColors.appendChild(colorDiv); 
-    });
-}
-
-function updateHarmonyFromSelectedValues() {
-    const values = getSelectedValues();
-
-    // Ensure primary color and harmony type are selected
-    if (values.primary_color && values.harmonyType) {
-        const colors = {
-            primary: values.primary_color,
-            secondary: values.secondary_color || "#131b24",
-            tertiary: values.tertiary_color || "#131b24",
-            quaternary: values.quaternary_color || "#131b24"
-        };
-        updateHarmonyColors(colors, values.harmonyType);
-    }
-}
-
-function updateHarmonyColors(colors, harmonyType) {
-    const harmonyColors = getHarmonyColors(colors.primary, harmonyType);
-    harmonyColors[1] = colors.secondary !== "#131b24" ? colors.secondary : harmonyColors[1];
-    harmonyColors[2] = colors.tertiary !== "#131b24" ? colors.tertiary : harmonyColors[2];
-    harmonyColors[3] = colors.quaternary !== "#131b24" ? colors.quaternary : harmonyColors[3];
-    displayColors(harmonyColors, harmonyType);
-}
-
-function initializeColorWheel() {
-    const colorWheelContainer = document.getElementById('colorWheelContainer');
-    const colorWheel = new iro.ColorPicker(colorWheelContainer, {
-        width: 200,
-        color: "#46696d"
-    });
-
-    colorWheel.on(['color:init', 'color:change'], function(color) {
-        updateHarmonyColors({ primary: color.hexString }, document.getElementById('harmonyType').value);
-    });
-
-    document.getElementById('harmonyType').addEventListener('change', function() {
-        updateHarmonyColors({ primary: colorWheel.color.hexString }, document.getElementById('harmonyType').value);
-    });
-
-    // Initial call to set the harmony colors based on the default color of the color wheel
-    updateHarmonyColors({ primary: colorWheel.color.hexString }, document.getElementById('harmonyType').value);
-}
-
-// Call the function to initialize the color wheel
-document.addEventListener('DOMContentLoaded', (event) => {
-    initializeColorWheel();
-    
-    document.getElementById('primary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('secondary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('tertiary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('quaternary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-});
-// END HARMONY
 
 // Function to get selected values
 function getSelectedValues() {
@@ -242,11 +128,9 @@ function getSelectedValues() {
         "person",
         "generated_artwork",
         "point_of_view",
-        "harmonyType",
-        "primary_color",
+        "dominant_color",
         "secondary_color",
-        "tertiary_color",
-        "quaternary_color",
+        "accent_color",
         "color_scheme",
         "room_size",
         "home_room",
