@@ -80,7 +80,7 @@ def enhance_image():
     }
 
     headers = {
-        'Authorization': f'Bearer {os.environ.get("ap_egmqsrn88493d0d1ykgvc8smm8s9w9d8y8sl4cht")}',
+        'Authorization': f'Bearer {os.environ.get("CLARITYAI_API_KEY")}',
         'Content-Type': 'application/json'
     }
 
