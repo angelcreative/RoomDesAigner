@@ -994,66 +994,7 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
-// Function to enhance the image
-const enhanceImage = async (imageUrl) => {
-    try {
-        const response = await fetch('/enhance-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image_url: imageUrl })
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Image enhancement in progress');
-            pollWebhookForEnhancedImage(data.id);
-        } else {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            throw new Error('Image enhancement failed');
-        }
-    } catch (error) {
-        console.error('Error enhancing image:', error);
-        alert(`Failed to enhance image: ${error.message}`);
-    }
-};
-
-const pollWebhookForEnhancedImage = (id) => {
-    const interval = 5000;
-
-    const poll = setInterval(async () => {
-        try {
-            const response = await fetch(`/clarity-webhook?id=${id}`, {
-                method: 'GET'
-            });
-            if (response.ok) {
-                const data = await response.json();
-                if (data.status === 'completed') {
-                    clearInterval(poll);
-                    console.log('Enhanced image URL:', data.enhanced_image_url);
-                    showDialog(data.enhanced_image_url);
-                } else if (data.status === 'processing') {
-                    console.log('Enhancement still in progress...');
-                }
-            } else {
-                const errorText = await response.text();
-                console.error('Error response:', errorText);
-            }
-        } catch (error) {
-            console.error('Error polling webhook:', error);
-        }
-    }, interval);
-};
-
-
-// Function to display the enhanced image URL
-const displayEnhancedImage = (enhancedImageUrl) => {
-    console.log('Enhanced Image URL:', enhancedImageUrl);
-    // Handle the URL as needed
-    // Example: display the URL in the console or update the UI with the URL
-};
+ 
 
 // Helper function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
@@ -1093,8 +1034,7 @@ function showModal(imageUrls, transformedPrompt) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-        const enhanceButton = createButton("Enhance", () => enhanceImage(imageUrl)); // Enhance button
-
+ 
         // Append buttons to container
         [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
 

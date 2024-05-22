@@ -10,7 +10,6 @@ import requests
 import random
 import logging
 import json
-import replicate
 import openai
 # Import the json module
 
@@ -25,13 +24,7 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
-
-# Ensure you have the correct API key set in your environment variables
-CLARITYAI_API_KEY = os.environ.get('CLARITYAI_API_KEY')
-REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
-
-#test
-replicate.Client(api_token=REPLICATE_API_TOKEN)
+ 
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -66,47 +59,7 @@ def transform_prompt(prompt_text):
     transformed_prompt = response.choices[0].message['content'].strip()
     return transformed_prompt
 
-
-
-
-@app.route('/enhance-image', methods=['POST'])
-def enhance_image():
-    data = request.get_json()
-    image_url = data.get('image_url')
-
-    if not image_url:
-        return jsonify({"error": "Missing image URL"}), 400
-
-    model_version = "e09e5c9a537d00be5f3c4ef431edee2d06a34f4b748a608c3f4ca4f2ce0e933e"
-    webhook_url = url_for('clarity_webhook', _external=True)
-    
-    response = replicate.predictions.create(
-        version=model_version,
-        input={"image": image_url},
-        webhook=webhook_url,
-        webhook_events_filter=["completed"]
-    )
-
-    if response:
-        return jsonify({"message": "Image enhancement in progress", "id": response.id}), 201
-    else:
-        return jsonify({"error": "Image enhancement failed"}), 500
-
-
-
-@app.route('/clarity-webhook', methods=['GET'])
-def clarity_webhook():
-    prediction_id = request.args.get('id')
-    prediction = replicate.predictions.get(prediction_id)
-
-    if prediction.status == "succeeded":
-        enhanced_image_url = prediction.output['image']
-        return jsonify({"status": "completed", "enhanced_image_url": enhanced_image_url})
-    elif prediction.status == "processing":
-        return jsonify({"status": "processing"})
-    else:
-        return jsonify({"error": "Failed to get enhancement status"}), 500
-
+ 
 
 
 
