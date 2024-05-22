@@ -122,6 +122,8 @@ function handleSubmit(event) {
     
     // HARMONY
 
+// HARMONY
+
 function getHarmonyColors(color, type) {
     const baseColor = chroma(color);
     const baseHue = baseColor.get('hsl.h');
@@ -131,25 +133,21 @@ function getHarmonyColors(color, type) {
         case 'complementary':
             colors = [
                 baseColor.hex(), 
-                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                "#131b24", 
-                "#131b24"
+                chroma.hsl((baseHue + 180) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
             ];
             break;
         case 'analogous':
             colors = [
                 baseColor.hex(), 
                 chroma.hsl((baseHue + 30) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                "#131b24"
+                chroma.hsl((baseHue - 30 + 360) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
             ];
             break;
         case 'triadic':
             colors = [
                 baseColor.hex(), 
                 chroma.hsl((baseHue + 120) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex(),
-                "#131b24"
+                chroma.hsl((baseHue + 240) % 360, baseColor.get('hsl.s'), baseColor.get('hsl.l')).hex()
             ];
             break;
         case 'square':
@@ -161,12 +159,11 @@ function getHarmonyColors(color, type) {
             ];
             break;
         default:
-            colors = [
-                baseColor.hex(), 
-                "#131b24", 
-                "#131b24", 
-                "#131b24"
-            ];
+            colors = [baseColor.hex()];
+    }
+
+    while (colors.length < 4) {
+        colors.push("#131b24");
     }
 
     return colors;
@@ -188,7 +185,7 @@ function displayColors(colors, type) {
 
 function updateHarmonyFromSelectedValues() {
     const values = getSelectedValues();
-    
+
     // Ensure primary color and harmony type are selected
     if (values.primary_color && values.harmonyType) {
         const colors = {
@@ -201,7 +198,6 @@ function updateHarmonyFromSelectedValues() {
     }
 }
 
-// Modify updateHarmonyColors to handle multiple colors
 function updateHarmonyColors(colors, harmonyType) {
     const harmonyColors = getHarmonyColors(colors.primary, harmonyType);
     harmonyColors[1] = colors.secondary !== "#131b24" ? colors.secondary : harmonyColors[1];
@@ -210,21 +206,9 @@ function updateHarmonyColors(colors, harmonyType) {
     displayColors(harmonyColors, harmonyType);
 }
 
-// Initial setup when the page loads
-document.addEventListener('DOMContentLoaded', (event) => {
-    initializeColorWheel();
-    
-    // Add event listener to capture updates based on user interactions
-    document.getElementById('harmonyType').addEventListener('change', updateHarmonyFromSelectedValues);
-    document.getElementById('primary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('secondary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('tertiary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-    document.getElementById('quaternary_color').addEventListener('input', updateHarmonyFromSelectedValues);
-});
-
 function initializeColorWheel() {
-    var colorWheelContainer = document.getElementById('colorWheelContainer');
-    var colorWheel = new iro.ColorPicker(colorWheelContainer, {
+    const colorWheelContainer = document.getElementById('colorWheelContainer');
+    const colorWheel = new iro.ColorPicker(colorWheelContainer, {
         width: 200,
         color: "#46696d"
     });
@@ -232,7 +216,7 @@ function initializeColorWheel() {
     colorWheel.on(['color:init', 'color:change'], function(color) {
         updateHarmonyColors({ primary: color.hexString }, document.getElementById('harmonyType').value);
     });
-    
+
     document.getElementById('harmonyType').addEventListener('change', function() {
         updateHarmonyColors({ primary: colorWheel.color.hexString }, document.getElementById('harmonyType').value);
     });
@@ -242,8 +226,14 @@ function initializeColorWheel() {
 }
 
 // Call the function to initialize the color wheel
-initializeColorWheel();
-
+document.addEventListener('DOMContentLoaded', (event) => {
+    initializeColorWheel();
+    
+    document.getElementById('primary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('secondary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('tertiary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+    document.getElementById('quaternary_color').addEventListener('input', updateHarmonyFromSelectedValues);
+});
 // END HARMONY
 
 // Function to get selected values
