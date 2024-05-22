@@ -30,6 +30,9 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 CLARITYAI_API_KEY = os.environ.get('CLARITYAI_API_KEY')
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
+
+replicate.Client(api_token=REPLICATE_API_TOKEN)
+
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
@@ -64,6 +67,8 @@ def transform_prompt(prompt_text):
     return transformed_prompt
 
 
+
+
 @app.route('/enhance-image', methods=['POST'])
 def enhance_image():
     data = request.get_json()
@@ -72,44 +77,36 @@ def enhance_image():
     if not image_url:
         return jsonify({"error": "Missing image URL"}), 400
 
-    payload = {
-        "version": "e09e5c9a537d00be5f3c4ef431edee2d06a34f4b748a608c3f4ca4f2ce0e933e",
-        "input": {"image": image_url},
-        "webhook": url_for('clarity_webhook', _external=True)
-    }
+    model_version = "e09e5c9a537d00be5f3c4ef431edee2d06a34f4b748a608c3f4ca4f2ce0e933e"
+    webhook_url = url_for('clarity_webhook', _external=True)
+    
+    response = replicate.predictions.create(
+        version=model_version,
+        input={"image": image_url},
+        webhook=webhook_url,
+        webhook_events_filter=["completed"]
+    )
 
-    headers = {
-        'Authorization': f'Token {REPLICATE_API_TOKEN}',
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.post('https://api.replicate.com/v1/predictions', headers=headers, json=payload)
-
-    if response.status_code == 201:
-        return jsonify({"message": "Image enhancement in progress", "id": response.json().get("id")}), 201
+    if response:
+        return jsonify({"message": "Image enhancement in progress", "id": response.id}), 201
     else:
-        return jsonify({"error": "Image enhancement failed"}), response.status_code
+        return jsonify({"error": "Image enhancement failed"}), 500
 
 
 
 @app.route('/clarity-webhook', methods=['GET'])
 def clarity_webhook():
     prediction_id = request.args.get('id')
-    headers = {
-        'Authorization': f'Token {REPLICATE_API_TOKEN}',
-        'Content-Type': 'application/json'
-    }
-    response = requests.get(f"https://api.replicate.com/v1/predictions/{prediction_id}", headers=headers)
+    prediction = replicate.predictions.get(prediction_id)
 
-    if response.status_code == 200:
-        data = response.json()
-        if data['status'] == 'succeeded':
-            enhanced_image_url = data['output'][0]
-            return jsonify({"status": "completed", "enhanced_image_url": enhanced_image_url})
-        else:
-            return jsonify({"status": data['status']})
+    if prediction.status == "succeeded":
+        enhanced_image_url = prediction.output['image']
+        return jsonify({"status": "completed", "enhanced_image_url": enhanced_image_url})
+    elif prediction.status == "processing":
+        return jsonify({"status": "processing"})
     else:
-        return jsonify({"error": "Failed to get enhancement status"}), response.status_code
+        return jsonify({"error": "Failed to get enhancement status"}), 500
+
 
 
 

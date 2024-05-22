@@ -1020,7 +1020,6 @@ const enhanceImage = async (imageUrl) => {
     }
 };
 
-
 const pollWebhookForEnhancedImage = (id) => {
     const interval = 5000;
 
@@ -1047,8 +1046,6 @@ const pollWebhookForEnhancedImage = (id) => {
         }
     }, interval);
 };
-
-
 
 
 // Function to display the enhanced image URL
@@ -1149,7 +1146,8 @@ function showDialog(enhancedImageUrl) {
         }
     };
 }
-
+    
+    
 document.addEventListener("DOMContentLoaded", function() {
     const enhanceButton = document.getElementById("enhanceButton");
     enhanceButton.addEventListener("click", function() {
