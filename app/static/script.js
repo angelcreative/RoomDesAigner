@@ -1006,8 +1006,9 @@ const enhanceImage = async (imageUrl) => {
         });
 
         if (response.ok) {
+            const data = await response.json();
             console.log('Image enhancement in progress');
-            pollWebhookForEnhancedImage();
+            pollWebhookForEnhancedImage(data.id);
         } else {
             const errorText = await response.text();
             console.error('Error response:', errorText);
@@ -1019,41 +1020,30 @@ const enhanceImage = async (imageUrl) => {
     }
 };
 
-const pollWebhookForEnhancedImage = () => {
-    const webhookUrl = '/clarity-webhook';
-    const interval = 5000; // Poll every 5 seconds
+
+const pollWebhookForEnhancedImage = (id) => {
+    const interval = 5000;
 
     const poll = setInterval(async () => {
         try {
-            const response = await fetch(webhookUrl, {
+            const response = await fetch(`/clarity-webhook?id=${id}`, {
                 method: 'GET'
             });
-
             if (response.ok) {
                 const data = await response.json();
-                console.log('Webhook response:', data);
-
-                if (data.enhanced_image_url) {
+                if (data.status === 'completed') {
                     clearInterval(poll);
                     console.log('Enhanced image URL:', data.enhanced_image_url);
                     showDialog(data.enhanced_image_url);
-                } else if (data.status === 'IN_PROGRESS' || data.status === 'processing') {
+                } else if (data.status === 'processing') {
                     console.log('Enhancement still in progress...');
-                } else {
-                    clearInterval(poll);
-                    console.error('Unexpected status:', data.status);
-                    alert('Failed to enhance image. Please try again later.');
                 }
             } else {
                 const errorText = await response.text();
                 console.error('Error response:', errorText);
-                clearInterval(poll);
-                alert('Failed to poll the webhook. Please try again later.');
             }
         } catch (error) {
             console.error('Error polling webhook:', error);
-            clearInterval(poll);
-            alert('An error occurred while polling the webhook. Please try again later.');
         }
     }, interval);
 };
@@ -1149,16 +1139,13 @@ function showDialog(enhancedImageUrl) {
     modalContent.innerHTML = `
         <p>Hey, your enhanced image is ready!</p>
         <img src="${enhancedImageUrl}" alt="Enhanced Image">
-        <a href="${enhancedImageUrl}" download>Download image</a>
-    `;
+        <a href="${enhancedImageUrl}" download>Download image</a>`;
 
     modal.style.display = "block";
-    showOverlay();
 
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            hideOverlay();
         }
     };
 }
