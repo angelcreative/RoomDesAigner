@@ -1006,7 +1006,6 @@ const enhanceImage = async (imageUrl) => {
         });
 
         if (response.ok) {
-            const data = await response.json();
             console.log('Image enhancement in progress');
             pollWebhookForEnhancedImage();
         } else {
@@ -1020,20 +1019,24 @@ const enhanceImage = async (imageUrl) => {
     }
 };
 
-// Function to poll the webhook endpoint to get the enhanced image URL
+
 const pollWebhookForEnhancedImage = () => {
-    const webhookUrl = '/clarity-webhook'; // Your webhook endpoint
-    const interval = 5000; // Poll every 5 seconds
+    const webhookUrl = '/clarity-webhook';
+    const interval = 5000;
 
     const poll = setInterval(async () => {
         try {
-            const response = await fetch(webhookUrl);
+            const response = await fetch(webhookUrl, {
+                method: 'GET'
+            });
             if (response.ok) {
                 const data = await response.json();
                 if (data.enhanced_image_url) {
                     clearInterval(poll);
                     console.log('Enhanced image URL:', data.enhanced_image_url);
-                    displayEnhancedImage(data.enhanced_image_url);
+                    showModal(data.enhanced_image_url);
+                } else if (data.status === 'processing') {
+                    console.log('Enhancement still in progress...');
                 }
             } else {
                 const errorText = await response.text();
@@ -1044,6 +1047,7 @@ const pollWebhookForEnhancedImage = () => {
         }
     }, interval);
 };
+
 
 // Function to display the enhanced image URL
 const displayEnhancedImage = (enhancedImageUrl) => {
@@ -1124,7 +1128,28 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+    
+// Function to show the dialog with the enhanced image URL
+function showDialog(enhancedImageUrl) {
+    const modal = document.getElementById("modal");
+    const modalContent = document.getElementById("modalContent");
 
+    modalContent.innerHTML = `
+        <p>Hey, your enhanced image is ready!</p>
+        <img src="${enhancedImageUrl}" alt="Enhanced Image">
+        <a href="${enhancedImageUrl}" download>Download image</a>
+    `;
+
+    modal.style.display = "block";
+    showOverlay();
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            hideOverlay();
+        }
+    };
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     const enhanceButton = document.getElementById("enhanceButton");
