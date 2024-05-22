@@ -702,7 +702,7 @@ Image</h1>
                    <select id="color_scheme">
     <option value="">Select Color Scheme</option>
 
-    <optgroup label="Basic and Monochromatic">
+    <optgroup label="Basic">
         <option value="Black_and_White_Timeless_contrast_of_black_and_white_for_a_striking_look">Black and White</option>
         <option value="White_Variations_Variations_of_white_including_Off-White_Silk-White_Cream-White_Antique-White_Chalk-White">White Variations</option>
         <option value="Duotone_Two-tone_color_schemes_for_a_minimalist_yet_bold_statement">Duotone</option>
@@ -754,10 +754,14 @@ Image</h1>
         <option value="Moody_Deep_rich_hues_for_an_intimate_atmospheric_setting">Moody</option>
     </optgroup>
     
-    <optgroup label="Color Harmony">
+   <optgroup label="Color Harmony">
+        <option value="Monochromatic_Different_shades_and_tints_of_a_single_color">Monochromatic</option>
         <option value="Analogous_Harmonious_adjacent_colors_for_a_cohesive_balanced_look">Analogous</option>
+        <option value="Complementary_Colors_opposite_each_other_on_the_color_wheel">Complementary</option>
+        <option value="Split-Complementary_A_base_color_and_two_adjacent_tertiary_colors">Split-Complementary</option>
         <option value="Triadic_Three_evenly_spaced_colors_on_the_color_wheel_for_vibrant_harmony">Triadic</option>
         <option value="Tetradic_Four-color_schemes_for_complex_rich_palettes">Tetradic</option>
+        <option value="Square_Four_colors_spaced_evenly_around_the_color_wheel">Square</option>
     </optgroup>
 </select>
 
@@ -1144,9 +1148,27 @@ Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section
 
                     </select>
                     <span class="dot"></span>
-                     <h4>Furniture color</h4>
+                    
+                     
+                     <div class="coloresWheel colorPalette">
+                          <h4>Furniture color</h4>
+                             <!-- ID COLOR PALETTES -->
+     <div class="colorPickers">
+                        <div class="colorPaletteA">
+                            <input type="color" id="furniture_color" value="#ffffff" class="colorPicker">
+                        </div>
+                       
+                        
+                            </div>
+                            
+                            <small>This will guide for an specific furniture  color</small>
+                            
+                    </div>
+                     
+                     
+                     
                     <!-- furniture color -->
-                   <select id="furniture_color">
+                  <!-- <select id="furniture_color">
     <option value="">Select Furniture Color</option>
     
     <optgroup label="Neutral Colors">
@@ -1204,7 +1226,7 @@ Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section
     </optgroup>
 </select>
 
-                    <span class="dot"></span>
+                    <span class="dot"></span>-->
 
   <h4>Furniture pattern</h4>
                     <!-- style pattern -->
@@ -1417,7 +1439,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
                     </div>
                        
                        <select id="image_color">
-    <option value="">Select a dominant color for the room</option>
+    <option value="">Or select a dominant color for the room</option>
     <option value="Converts_image_to_black_and_white_eliminating_color" title="Black and White Colors">Black and White Colors</option>
     <option value="Boosts_color_saturation_to_make_colors_more_vivid" title="Hyper Saturated Colors">Hyper Saturated Colors</option>
     <option value="Reduces_color_saturation_for_a_more_subdued_look" title="Low Saturated Colors">Low Saturated Colors</option>
@@ -1740,7 +1762,24 @@ Building </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></sect
                     </select>
                     <span class="dot"></span>
                     <!-- walls color -->
-                    <select id="walls_paint_color">
+                    
+                    <div class="coloresWheel colorPalette">
+                         <h4>Walls color</h4>
+                             <!-- ID COLOR PALETTES -->
+     <div class="colorPickers">
+                        <div class="colorPaletteA">
+                            <input type="color" id="walls_paint_color" value="#ffffff" class="colorPicker">
+                        </div>
+                       
+                        
+                            </div>
+                            
+                            <small>This will guide for an specific walls  color</small>
+                            
+                    </div>
+                    
+                    
+                 <!--   <select id="walls_paint_color">
                         <option value="">Walls color</option>
                         <option value="bold_accent_colors">Bold Accent Colors</option>
                         <option value="classic_white">Classic White</option>
@@ -1758,7 +1797,7 @@ Building </h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></sect
                           <option value="antique_white" title="It has a slight beige tone">White: Antique-White</option>
                           <option value="chalk_white" title="Contains very light gray pigments">White: Chalk-White</option>
                     </select>
-                    <span class="dot"></span>
+                    <span class="dot"></span>-->
 
   <h4>Walls pattern</h4>
                     <!-- style pattern -->
