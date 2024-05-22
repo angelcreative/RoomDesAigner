@@ -1013,13 +1013,14 @@ const enhanceImage = async (imageUrl) => {
         if (response.ok) {
             console.log('Image enhancement in progress');
         } else {
-            throw new Error(data.error || 'Image enhancement failed');
+            throw new Error(data.error || 'Image enhancement failed: ' + (data.details || 'Unknown error'));
         }
     } catch (error) {
         console.error('Error enhancing image:', error);
         alert(`Failed to enhance image: ${error.message}`);
     }
 };
+
 
 // Function to handle the webhook response
 window.addEventListener('message', function(event) {

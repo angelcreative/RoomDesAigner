@@ -89,7 +89,10 @@ def enhance_image():
     if response.status_code == 200:
         return jsonify({"message": "Image enhancement in progress"}), 200
     else:
-        return jsonify({"error": "Image enhancement failed"}), response.status_code
+        # Print response content for debugging
+        print(f"Error enhancing image: {response.content.decode()}")
+        return jsonify({"error": "Image enhancement failed", "details": response.content.decode()}), response.status_code
+
 
 @app.route('/clarity-webhook', methods=['POST'])
 def clarity_webhook():
