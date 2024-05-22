@@ -10,6 +10,7 @@ import requests
 import random
 import logging
 import json
+import replicate
 import openai
 # Import the json module
 
