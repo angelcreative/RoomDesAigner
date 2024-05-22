@@ -1012,8 +1012,10 @@ const enhanceImage = async (imageUrl) => {
 
         if (response.ok) {
             console.log('Image enhancement in progress');
+            // Poll the webhook endpoint to get the enhanced image URL
+            pollWebhookForEnhancedImage();
         } else {
-            throw new Error(data.error || 'Image enhancement failed: ' + (data.details || 'Unknown error'));
+            throw new Error(data.error || 'Image enhancement failed');
         }
     } catch (error) {
         console.error('Error enhancing image:', error);
@@ -1021,44 +1023,59 @@ const enhanceImage = async (imageUrl) => {
     }
 };
 
+// Function to poll the webhook endpoint to get the enhanced image URL
+const pollWebhookForEnhancedImage = () => {
+    const webhookUrl = '/clarity-webhook'; // Your webhook endpoint
+    const interval = 5000; // Poll every 5 seconds
 
-// Function to handle the webhook response
-window.addEventListener('message', function(event) {
-    if (event.origin === window.location.origin) {
-        const enhancedImageUrl = event.data.enhanced_image_url;
+    const poll = setInterval(async () => {
+        try {
+            const response = await fetch(webhookUrl);
+            const data = await response.json();
 
-        if (enhancedImageUrl) {
-            const newWindow = window.open('', '_blank');
-            newWindow.document.write(`
-                <html>
-                    <head>
-                        <title>Enhanced Image</title>
-                        <style>
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                margin: 0;
-                                background-color: #15202b;
-                            }
-                            img {
-                                max-width: 90%;
-                                max-height: 90%;
-                                border-radius: 12px;
-                                overflow: hidden;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <img src="${enhancedImageUrl}" alt="Enhanced Image">
-                    </body>
-                </html>
-            `);
-            newWindow.document.close();
+            if (data.enhanced_image_url) {
+                clearInterval(poll);
+                displayEnhancedImage(data.enhanced_image_url);
+            }
+        } catch (error) {
+            console.error('Error polling webhook:', error);
         }
-    }
-}, false);
+    }, interval);
+};
+    
+// Function to display the enhanced image
+const displayEnhancedImage = (enhancedImageUrl) => {
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(`
+        <html>
+            <head>
+                <title>Enhanced Image</title>
+                <style>
+                    body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        background-color: #15202b;
+                    }
+                    img {
+                        max-width: 90%;
+                        max-height: 90%;
+                        border-radius: 12px;
+                        overflow: hidden;
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${enhancedImageUrl}" alt="Enhanced Image">
+            </body>
+        </html>
+    `);
+    newWindow.document.close();
+};
+    
+    
 
 // Helper function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
@@ -1067,6 +1084,15 @@ function createButton(text, onClickHandler) {
     button.addEventListener("click", onClickHandler);
     return button;
 }
+    
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const enhanceButton = document.getElementById("enhanceButton");
+    enhanceButton.addEventListener("click", function() {
+        const imageUrl = document.getElementById("thumbnail").src;
+        enhanceImage(imageUrl);
+    });
+});
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {

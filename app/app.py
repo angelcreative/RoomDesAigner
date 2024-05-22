@@ -84,26 +84,32 @@ def enhance_image():
         'Content-Type': 'application/json'
     }
 
-    response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=payload)
+    try:
+        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=payload)
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as http_err:
+        print(f"HTTP error occurred: {http_err}")  # Python 3.6
+        return jsonify({"error": "Image enhancement failed", "details": str(http_err)}), response.status_code
+    except Exception as err:
+        print(f"Other error occurred: {err}")  # Python 3.6
+        return jsonify({"error": "Image enhancement failed", "details": str(err)}), 500
 
-    if response.status_code == 200:
-        return jsonify({"message": "Image enhancement in progress"}), 200
-    else:
-        # Print response content for debugging
-        print(f"Error enhancing image: {response.content.decode()}")
-        return jsonify({"error": "Image enhancement failed", "details": response.content.decode()}), response.status_code
+    return jsonify({"message": "Image enhancement in progress"}), 200
+
 
 
 @app.route('/clarity-webhook', methods=['POST'])
 def clarity_webhook():
     data = request.get_json()
-    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on Clarity API's response structure
+    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on ClarityAI's response structure
 
     if enhanced_image_url:
-        # Open a new tab with the enhanced image
+        # Send the enhanced image URL back to the client
+        # You can also save it to a database or perform other actions as needed
         return jsonify({"enhanced_image_url": enhanced_image_url}), 200
     else:
         return jsonify({"error": "Enhancement failed"}), 400
+
 
 
 
