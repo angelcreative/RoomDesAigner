@@ -1022,31 +1022,43 @@ const enhanceImage = async (imageUrl) => {
 
 const pollWebhookForEnhancedImage = () => {
     const webhookUrl = '/clarity-webhook';
-    const interval = 5000;
+    const interval = 5000; // Poll every 5 seconds
 
     const poll = setInterval(async () => {
         try {
             const response = await fetch(webhookUrl, {
                 method: 'GET'
             });
+
             if (response.ok) {
                 const data = await response.json();
+                console.log('Webhook response:', data);
+
                 if (data.enhanced_image_url) {
                     clearInterval(poll);
                     console.log('Enhanced image URL:', data.enhanced_image_url);
-                    showModal(data.enhanced_image_url);
-                } else if (data.status === 'processing') {
+                    showDialog(data.enhanced_image_url);
+                } else if (data.status === 'IN_PROGRESS') {
                     console.log('Enhancement still in progress...');
+                } else {
+                    clearInterval(poll);
+                    console.error('Unexpected status:', data.status);
+                    alert('Failed to enhance image. Please try again later.');
                 }
             } else {
                 const errorText = await response.text();
                 console.error('Error response:', errorText);
+                clearInterval(poll);
+                alert('Failed to poll the webhook. Please try again later.');
             }
         } catch (error) {
             console.error('Error polling webhook:', error);
+            clearInterval(poll);
+            alert('An error occurred while polling the webhook. Please try again later.');
         }
     }, interval);
 };
+
 
 
 // Function to display the enhanced image URL
