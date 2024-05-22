@@ -30,7 +30,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 CLARITYAI_API_KEY = os.environ.get('CLARITYAI_API_KEY')
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
-
+#test
 replicate.Client(api_token=REPLICATE_API_TOKEN)
 
 # Fetch the API key from the environment

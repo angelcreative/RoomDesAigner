@@ -1302,7 +1302,7 @@ function areAllOptionsEmpty() {
   }
   return true; // All options have empty values
 }
-
+//test
 // Function to handle changes in select elements
 function handleSelectChange() {
   const allOptionsEmpty = areAllOptionsEmpty();
