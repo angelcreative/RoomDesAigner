@@ -996,7 +996,6 @@ function createButton(text, onClickHandler) {
 
 
 
-  
 // Function to enhance the image
 const enhanceImage = async (imageUrl) => {
     try {
@@ -1022,7 +1021,8 @@ const enhanceImage = async (imageUrl) => {
         alert(`Failed to enhance image: ${error.message}`);
     }
 };
-
+    
+    
 // Function to poll the webhook endpoint to get the enhanced image URL
 const pollWebhookForEnhancedImage = () => {
     const webhookUrl = '/clarity-webhook'; // Your webhook endpoint
@@ -1035,6 +1035,7 @@ const pollWebhookForEnhancedImage = () => {
 
             if (data.enhanced_image_url) {
                 clearInterval(poll);
+                console.log('Enhanced image URL:', data.enhanced_image_url);
                 displayEnhancedImage(data.enhanced_image_url);
             }
         } catch (error) {
@@ -1042,39 +1043,16 @@ const pollWebhookForEnhancedImage = () => {
         }
     }, interval);
 };
+
+    
     
 // Function to display the enhanced image
 const displayEnhancedImage = (enhancedImageUrl) => {
-    const newWindow = window.open('', '_blank');
-    newWindow.document.write(`
-        <html>
-            <head>
-                <title>Enhanced Image</title>
-                <style>
-                    body {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 100vh;
-                        margin: 0;
-                        background-color: #15202b;
-                    }
-                    img {
-                        max-width: 90%;
-                        max-height: 90%;
-                        border-radius: 12px;
-                        overflow: hidden;
-                    }
-                </style>
-            </head>
-            <body>
-                <img src="${enhancedImageUrl}" alt="Enhanced Image">
-            </body>
-        </html>
-    `);
-    newWindow.document.close();
+    const enhancedImageContainer = document.getElementById('enhancedImageContainer');
+    enhancedImageContainer.innerHTML = `<img src="${enhancedImageUrl}" alt="Enhanced Image" class="enhanced-image">`;
 };
-    
+
+
     
 
 // Helper function to create a button and attach an event listener
@@ -1084,7 +1062,7 @@ function createButton(text, onClickHandler) {
     button.addEventListener("click", onClickHandler);
     return button;
 }
-    
+ 
 
     document.addEventListener("DOMContentLoaded", function() {
     const enhanceButton = document.getElementById("enhanceButton");
@@ -1093,6 +1071,7 @@ function createButton(text, onClickHandler) {
         enhanceImage(imageUrl);
     });
 });
+
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1137,6 +1116,7 @@ function showModal(imageUrls, transformedPrompt) {
     modal.style.display = "block";
     showOverlay();
 }
+
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {

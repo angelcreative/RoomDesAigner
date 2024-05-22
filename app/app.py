@@ -101,14 +101,13 @@ def enhance_image():
 @app.route('/clarity-webhook', methods=['POST'])
 def clarity_webhook():
     data = request.get_json()
-    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on ClarityAI's response structure
+    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on Clarity API's response structure
 
     if enhanced_image_url:
-        # Send the enhanced image URL back to the client
-        # You can also save it to a database or perform other actions as needed
         return jsonify({"enhanced_image_url": enhanced_image_url}), 200
     else:
         return jsonify({"error": "Enhancement failed"}), 400
+
 
 
 
