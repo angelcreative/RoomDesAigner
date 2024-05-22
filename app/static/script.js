@@ -1019,7 +1019,6 @@ const enhanceImage = async (imageUrl) => {
     }
 };
 
-
 const pollWebhookForEnhancedImage = () => {
     const webhookUrl = '/clarity-webhook';
     const interval = 5000; // Poll every 5 seconds
@@ -1038,7 +1037,7 @@ const pollWebhookForEnhancedImage = () => {
                     clearInterval(poll);
                     console.log('Enhanced image URL:', data.enhanced_image_url);
                     showDialog(data.enhanced_image_url);
-                } else if (data.status === 'IN_PROGRESS') {
+                } else if (data.status === 'IN_PROGRESS' || data.status === 'processing') {
                     console.log('Enhancement still in progress...');
                 } else {
                     clearInterval(poll);
@@ -1058,6 +1057,7 @@ const pollWebhookForEnhancedImage = () => {
         }
     }, interval);
 };
+
 
 
 
