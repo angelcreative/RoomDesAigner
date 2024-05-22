@@ -997,20 +997,84 @@ function createButton(text, onClickHandler) {
 
 
   
+// Function to enhance the image
+const enhanceImage = async (imageUrl) => {
+    try {
+        const response = await fetch('/enhance-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image_url: imageUrl })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log('Image enhancement in progress');
+        } else {
+            throw new Error(data.error || 'Image enhancement failed');
+        }
+    } catch (error) {
+        console.error('Error enhancing image:', error);
+        alert(`Failed to enhance image: ${error.message}`);
+    }
+};
+
+// Function to handle the webhook response
+window.addEventListener('message', function(event) {
+    if (event.origin === window.location.origin) {
+        const enhancedImageUrl = event.data.enhanced_image_url;
+
+        if (enhancedImageUrl) {
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Enhanced Image</title>
+                        <style>
+                            body {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                margin: 0;
+                                background-color: #15202b;
+                            }
+                            img {
+                                max-width: 90%;
+                                max-height: 90%;
+                                border-radius: 12px;
+                                overflow: hidden;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <img src="${enhancedImageUrl}" alt="Enhanced Image">
+                    </body>
+                </html>
+            `);
+            newWindow.document.close();
+        }
+    }
+}, false);
+
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
-        // Ensure only one event listener is added
+    // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
-    
-// Get the thumbnail image source (user-uploaded image)
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
-
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -1033,9 +1097,10 @@ function showModal(imageUrls, transformedPrompt) {
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+        const enhanceButton = createButton("Enhance", () => enhanceImage(imageUrl)); // Enhance button
 
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -1046,8 +1111,6 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
-
-  
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
@@ -1059,6 +1122,15 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const enhanceButton = document.getElementById("enhanceButton");
+    enhanceButton.addEventListener("click", function() {
+        const imageUrl = document.getElementById("thumbnail").src;
+        enhanceImage(imageUrl);
+    });
+});
+
 
     
     

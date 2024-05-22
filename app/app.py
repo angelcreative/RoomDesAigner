@@ -59,6 +59,51 @@ def transform_prompt(prompt_text):
     return transformed_prompt
 
 
+@app.route('/enhance-image', methods=['POST'])
+def enhance_image():
+    data = request.get_json()
+    image_url = data.get('image_url')
+    
+    if not image_url:
+        return jsonify({"error": "Missing image URL"}), 400
+
+    payload = {
+        "image": image_url,
+        "creativity": 0,
+        "resemblance": 0,
+        "dynamic": 0,
+        "fractality": 0,
+        "scale_factor": 2,
+        "style": "default",
+        "prompt": "",
+        "webhook": url_for('clarity_webhook', _external=True)  # URL for the webhook endpoint
+    }
+
+    headers = {
+        'Authorization': f'Bearer {os.environ.get("ap_egmqsrn88493d0d1ykgvc8smm8s9w9d8y8sl4cht")}',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=payload)
+
+    if response.status_code == 200:
+        return jsonify({"message": "Image enhancement in progress"}), 200
+    else:
+        return jsonify({"error": "Image enhancement failed"}), response.status_code
+
+@app.route('/clarity-webhook', methods=['POST'])
+def clarity_webhook():
+    data = request.get_json()
+    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on Clarity API's response structure
+
+    if enhanced_image_url:
+        # Open a new tab with the enhanced image
+        return jsonify({"enhanced_image_url": enhanced_image_url}), 200
+    else:
+        return jsonify({"error": "Enhancement failed"}), 400
+
+
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
