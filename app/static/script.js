@@ -994,8 +994,6 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
-
-
 // Function to enhance the image
 const enhanceImage = async (imageUrl) => {
     try {
@@ -1007,22 +1005,21 @@ const enhanceImage = async (imageUrl) => {
             body: JSON.stringify({ image_url: imageUrl })
         });
 
-        const data = await response.json();
-
         if (response.ok) {
+            const data = await response.json();
             console.log('Image enhancement in progress');
-            // Poll the webhook endpoint to get the enhanced image URL
             pollWebhookForEnhancedImage();
         } else {
-            throw new Error(data.error || 'Image enhancement failed');
+            const errorText = await response.text();
+            console.error('Error response:', errorText);
+            throw new Error('Image enhancement failed');
         }
     } catch (error) {
         console.error('Error enhancing image:', error);
         alert(`Failed to enhance image: ${error.message}`);
     }
 };
-    
-    
+
 // Function to poll the webhook endpoint to get the enhanced image URL
 const pollWebhookForEnhancedImage = () => {
     const webhookUrl = '/clarity-webhook'; // Your webhook endpoint
@@ -1031,12 +1028,16 @@ const pollWebhookForEnhancedImage = () => {
     const poll = setInterval(async () => {
         try {
             const response = await fetch(webhookUrl);
-            const data = await response.json();
-
-            if (data.enhanced_image_url) {
-                clearInterval(poll);
-                console.log('Enhanced image URL:', data.enhanced_image_url);
-                displayEnhancedImage(data.enhanced_image_url);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.enhanced_image_url) {
+                    clearInterval(poll);
+                    console.log('Enhanced image URL:', data.enhanced_image_url);
+                    displayEnhancedImage(data.enhanced_image_url);
+                }
+            } else {
+                const errorText = await response.text();
+                console.error('Error response:', errorText);
             }
         } catch (error) {
             console.error('Error polling webhook:', error);
@@ -1044,16 +1045,11 @@ const pollWebhookForEnhancedImage = () => {
     }, interval);
 };
 
-    
-    
 // Function to display the enhanced image
 const displayEnhancedImage = (enhancedImageUrl) => {
     const enhancedImageContainer = document.getElementById('enhancedImageContainer');
     enhancedImageContainer.innerHTML = `<img src="${enhancedImageUrl}" alt="Enhanced Image" class="enhanced-image">`;
 };
-
-
-    
 
 // Helper function to create a button and attach an event listener
 function createButton(text, onClickHandler) {
@@ -1062,16 +1058,6 @@ function createButton(text, onClickHandler) {
     button.addEventListener("click", onClickHandler);
     return button;
 }
- 
-
-    document.addEventListener("DOMContentLoaded", function() {
-    const enhanceButton = document.getElementById("enhanceButton");
-    enhanceButton.addEventListener("click", function() {
-        const imageUrl = document.getElementById("thumbnail").src;
-        enhanceImage(imageUrl);
-    });
-});
-
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1116,6 +1102,15 @@ function showModal(imageUrls, transformedPrompt) {
     modal.style.display = "block";
     showOverlay();
 }
+
+// Initialize event listeners
+document.addEventListener("DOMContentLoaded", function() {
+    const enhanceButton = document.getElementById("enhanceButton");
+    enhanceButton.addEventListener("click", function() {
+        const imageUrl = document.getElementById("thumbnail").src;
+        enhanceImage(imageUrl);
+    });
+});
 
 
 // Function to handle the "Close" action of modal

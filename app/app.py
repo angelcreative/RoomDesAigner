@@ -25,6 +25,9 @@ mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
 
+# Ensure you have the correct API key set in your environment variables
+CLARITYAI_API_KEY = os.environ.get('CLARITYAI_API_KEY')
+
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
@@ -80,30 +83,24 @@ def enhance_image():
     }
 
     headers = {
-        'Authorization': f'Bearer {os.environ.get("CLARITYAI_API_KEY")}',
+        'Authorization': f'Bearer {CLARITYAI_API_KEY}',
         'Content-Type': 'application/json'
     }
 
-    try:
-        response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=payload)
-        response.raise_for_status()
-    except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")  # Python 3.6
-        return jsonify({"error": "Image enhancement failed", "details": str(http_err)}), response.status_code
-    except Exception as err:
-        print(f"Other error occurred: {err}")  # Python 3.6
-        return jsonify({"error": "Image enhancement failed", "details": str(err)}), 500
+    response = requests.post('https://api.clarityai.co/v1/upscale', headers=headers, json=payload)
 
-    return jsonify({"message": "Image enhancement in progress"}), 200
-
-
+    if response.status_code == 200:
+        return jsonify({"message": "Image enhancement in progress"}), 200
+    else:
+        return jsonify({"error": "Image enhancement failed"}), response.status_code
 
 @app.route('/clarity-webhook', methods=['POST'])
 def clarity_webhook():
     data = request.get_json()
-    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on Clarity API's response structure
+    enhanced_image_url = data.get('enhanced_image_url')  # This will depend on Clarity AI's response structure
 
     if enhanced_image_url:
+        # Here you can add logic to store the URL or update a database, etc.
         return jsonify({"enhanced_image_url": enhanced_image_url}), 200
     else:
         return jsonify({"error": "Enhancement failed"}), 400
