@@ -220,7 +220,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('quaternary_color').addEventListener('input', updateHarmonyFromSelectedValues);
 });
 
-// Assuming initializeColorWheel function remains the same as provided earlier
 function initializeColorWheel() {
     var colorWheelContainer = document.getElementById('colorWheelContainer');
     var colorWheel = new iro.ColorPicker(colorWheelContainer, {
@@ -244,6 +243,7 @@ function initializeColorWheel() {
 initializeColorWheel();
 
 //END HARMONY
+
 
 
  
