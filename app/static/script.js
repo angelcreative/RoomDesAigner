@@ -1045,10 +1045,11 @@ const pollWebhookForEnhancedImage = () => {
     }, interval);
 };
 
-// Function to display the enhanced image
+// Function to display the enhanced image URL
 const displayEnhancedImage = (enhancedImageUrl) => {
-    const enhancedImageContainer = document.getElementById('enhancedImageContainer');
-    enhancedImageContainer.innerHTML = `<img src="${enhancedImageUrl}" alt="Enhanced Image" class="enhanced-image">`;
+    console.log('Enhanced Image URL:', enhancedImageUrl);
+    // Handle the URL as needed
+    // Example: display the URL in the console or update the UI with the URL
 };
 
 // Helper function to create a button and attach an event listener
@@ -1112,7 +1113,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
@@ -1124,6 +1124,7 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const enhanceButton = document.getElementById("enhanceButton");
