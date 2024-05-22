@@ -118,7 +118,9 @@ function handleSubmit(event) {
   hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
-//HARMONY
+
+    
+    // HARMONY
 
 function getHarmonyColors(color, type) {
     const baseColor = chroma(color);
@@ -242,12 +244,9 @@ function initializeColorWheel() {
 // Call the function to initialize the color wheel
 initializeColorWheel();
 
-//END HARMONY
+// END HARMONY
 
-
-
- 
-    
+// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
