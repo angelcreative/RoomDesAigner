@@ -267,14 +267,14 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") {
-  width = 1080;
-  height = 768;
+  width = 1536;
+  height = 1024;
 } else if (aspectRatio === "portrait") {
   width = 1024;
   height = 1536;
 } else if (aspectRatio === "square") {
-  width = 1080;
-  height = 1080;
+  width = 1536;
+  height = 1536;
 }
 
   
