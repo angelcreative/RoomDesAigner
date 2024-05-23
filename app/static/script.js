@@ -267,14 +267,14 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") {
-  width = 1536;
-  height = 1024;
+  width = 1200;
+  height = 800;
 } else if (aspectRatio === "portrait") {
-  width = 1024;
-  height = 1536;
+  width = 800;
+  height = 1200;
 } else if (aspectRatio === "square") {
-  width = 1536;
-  height = 1536;
+  width = 1200;
+  height = 1200;
 }
 
   
@@ -291,22 +291,18 @@ if (aspectRatio === "landscape") {
     prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
     width: width, 
-    height: height,
-
-    //width: "1024",
-    //height: "1024",
+    height: height, 
     samples: "4",
     guidance_scale: "10",
-    num_inference_steps: "40",
-    //scheduler: "DPM++ 3M SDE Karras",
-    //self_attention: "no", //testing no
+    num_inference_steps: "40", 
     seed: seedValue,
     webhook: null,
-    safety_checker: false,
-    sampling_method: "ddim",
+    safety_checker: false, 
     track_id: null,
   };
 
+    
+    
  
     
 if (isImg2Img && imageUrl) {
