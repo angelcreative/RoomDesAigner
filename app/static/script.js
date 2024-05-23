@@ -270,8 +270,8 @@ if (aspectRatio === "landscape") {
   width = 1080;
   height = 768;
 } else if (aspectRatio === "portrait") {
-  width = 768;
-  height = 1080;
+  width = 1024;
+  height = 1536;
 } else if (aspectRatio === "square") {
   width = 1080;
   height = 1080;
@@ -297,12 +297,13 @@ if (aspectRatio === "landscape") {
     //height: "1024",
     samples: "4",
     guidance_scale: "10",
-    //num_inference_steps: "40",
+    num_inference_steps: "40",
     //scheduler: "DPM++ 3M SDE Karras",
     //self_attention: "no", //testing no
     seed: seedValue,
     webhook: null,
     safety_checker: false,
+    sampling_method: "ddim",
     track_id: null,
   };
 
