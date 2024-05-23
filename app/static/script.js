@@ -264,43 +264,21 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
-// Function to get dimensions based on aspect ratio and base size
-function getDimensions(aspectRatio, base) {
-  let width, height;
+let width, height;
 
-  if (aspectRatio === "landscape") { // 3:2 aspect ratio
-    width = base;
-    height = Math.round((2 / 3) * base);
-  } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-    width = Math.round((2 / 3) * base);
-    height = base;
-  } else if (aspectRatio === "square") { // 1:1 aspect ratio
-    width = base;
-    height = base;
-  }
-
-  return { width, height };
+if (aspectRatio === "landscape") { // 3:2 aspect ratio
+  width = 1400;
+  height = Math.round((2 / 3) * 1400); // 933
+} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+  width = Math.round((2 / 3) * 1400); // 933
+  height = 1400;
+} else if (aspectRatio === "square") { // 1:1 aspect ratio
+  width = 1400;
+  height = 1400;
 }
 
-// Event listener for when the aspect ratio is selected
-document.querySelector('input[name="aspectRatio"]').addEventListener('change', function() {
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  const baseSize = 1400; // Replace this with your desired base size
+console.log(`Width: ${width}, Height: ${height}`);
 
-  let dimensions = getDimensions(aspectRatio, baseSize);
-  let width = dimensions.width;
-  let height = dimensions.height;
-
-  console.log(`Width: ${width}, Height: ${height}`);
-
-  // Use width and height in your application logic as needed
-});
-
-// Example: Triggering the change event to set initial values
-document.querySelector('input[name="aspectRatio"]:checked').dispatchEvent(new Event('change'));
-
-
-  
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
