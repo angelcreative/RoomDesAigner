@@ -123,14 +123,12 @@ function handleSubmit(event) {
 
 
 // Function to get selected values
+// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
         "generated_artwork",
         "point_of_view",
-        "dominant_color",
-        "secondary_color",
-        "accent_color",
         "color_scheme",
         "room_size",
         "home_room",
@@ -142,7 +140,6 @@ function getSelectedValues() {
         "room_shape",
         "inspired_by_this_interior_design_magazine",
         "furniture_provided_by_this_vendor",
-        "furniture_color",
         "furniture_pattern",
         "seating_upholstery_pattern",
         "designed_by_this_interior_designer",
@@ -161,7 +158,6 @@ function getSelectedValues() {
         "walls_pattern",
         "exterior_finish",
         "exterior_trim_molding",
-        "walls_paint_color",
         "facade_pattern",
         "floors",
         "kitchen_layout",
@@ -186,6 +182,14 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
+    const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
+
     const values = {};
 
     elementIds.forEach(elementId => {
@@ -195,8 +199,38 @@ function getSelectedValues() {
         }
     });
 
+    colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        if (colorInput && colorSwitch && colorSwitch.checked) {
+            values[colorElement.id] = colorInput.value;
+        } else {
+            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+        }
+    });
+
     return values;
 }
+
+// Event listener for the color switches
+document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+    switchElement.addEventListener('change', function() {
+        const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !this.checked;
+        });
+    });
+});
+
+// Ensure color pickers are enabled/disabled on page load based on switch state
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !switchElement.checked;
+        });
+    });
+});
 
 
   
