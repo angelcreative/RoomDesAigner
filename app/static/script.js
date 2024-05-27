@@ -873,6 +873,7 @@ font-size:16px;
 //END REVERSE
 
 
+
   //compare
 function openComparisonWindow(userImageBase64, generatedImageUrl) {
     // Send the base64 image data to the server
@@ -950,10 +951,15 @@ function createButton(text, onClickHandler) {
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
+    
 
     // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
+    
+     // Get the thumbnail image source (user-uploaded image)
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -975,10 +981,10 @@ function showModal(imageUrls, transformedPrompt) {
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
  
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -989,6 +995,7 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
+    
  
 
 // Function to handle the "Close" action of modal
