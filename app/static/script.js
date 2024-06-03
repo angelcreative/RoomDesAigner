@@ -479,15 +479,6 @@ function checkImageStatus(fetchResultUrl) {
     });
 }
 
-// Example call
-const fetchResultUrl = "https://yourapiendpoint.com/check_status";
-const prompt = {
-    prompt: "Your prompt text here",
-    // Add other parameters required by your API
-};
-const promptText = "Your prompt text to display in the modal";
-
-checkImageStatus(fetchResultUrl);
 
 
 
