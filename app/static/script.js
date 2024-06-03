@@ -431,7 +431,8 @@ if (isImg2Img && imageUrl) {
 
     
 
-// Define the checkImageStatus function
+ 
+    
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -443,14 +444,16 @@ function checkImageStatus(fetchResultUrl) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log('Response data:', data); // Debugging line to log the response data
         if (data.status === 'processing') {
             // Update the ETA display
             if (data.eta) {
+                console.log('ETA:', data.eta); // Debugging line to log the ETA value
                 document.getElementById('etaValue').textContent = data.eta;
             }
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
+        } else if (data.status === "success" && data.links) {
+            const imageUrls = data.links.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, promptText);  // Display images
@@ -468,7 +471,7 @@ function checkImageStatus(fetchResultUrl) {
         document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
-    
+
 
 
 function showError(error) {
