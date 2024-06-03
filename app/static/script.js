@@ -254,7 +254,11 @@ function generateFractalText() {
   return "(((fractal,fractality pattern details)))";
     }
     
-   
+    
+    function showGeneratingImagesDialog() {
+    document.getElementById('generatingImagesDialog').style.display = 'block';
+    document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
+    document.getElementById('etaValue').textContent = '0'; // Reset progress to 0%
 }
 
 
@@ -474,12 +478,6 @@ function checkImageStatus(fetchResultUrl) {
         showError(error);
         document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
-}
-
-function showGeneratingImagesDialog() {
-    document.getElementById('generatingImagesDialog').style.display = 'block';
-    document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
-    document.getElementById('etaValue').textContent = '0'; // Reset progress to 0%
 }
 
 
