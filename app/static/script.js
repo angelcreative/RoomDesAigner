@@ -458,6 +458,8 @@ function checkImageStatus(fetchResultUrl) {
                 document.getElementById('etaValue').textContent = data.progress;
             } else {
                 console.log('Progress not found in response'); // Debugging line to log if progress is not found
+                // Simulate progress if not provided
+                simulateProgress();
             }
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.links) {
@@ -480,6 +482,20 @@ function checkImageStatus(fetchResultUrl) {
     });
 }
 
+// Simulate Progress Function
+function simulateProgress() {
+    let progress = 0;
+    const interval = setInterval(() => {
+        if (progress >= 100) {
+            clearInterval(interval);
+            hideGeneratingImagesDialog();
+            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+        } else {
+            progress += 1;
+            document.getElementById('etaValue').textContent = progress;
+        }
+    }, 2000); // Update every 2 seconds
+}
 
 
 
