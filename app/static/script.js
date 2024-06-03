@@ -435,6 +435,7 @@ if (isImg2Img && imageUrl) {
     
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
+    console.log('Fetching status from:', fetchResultUrl); // Debugging line to log the fetch URL
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -442,14 +443,20 @@ function checkImageStatus(fetchResultUrl) {
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response received:', response); // Debugging line to log the raw response
+        return response.json();
+    })
     .then(data => {
         console.log('Response data:', data); // Debugging line to log the response data
         if (data.status === 'processing') {
+            console.log('Status is processing'); // Debugging line to log the processing status
             // Update the ETA display
             if (data.eta) {
                 console.log('ETA:', data.eta); // Debugging line to log the ETA value
                 document.getElementById('etaValue').textContent = data.eta;
+            } else {
+                console.log('ETA not found in response'); // Debugging line to log if ETA is not found
             }
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.links) {
@@ -471,6 +478,16 @@ function checkImageStatus(fetchResultUrl) {
         document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
+
+// Example call
+const fetchResultUrl = "https://yourapiendpoint.com/check_status";
+const prompt = {
+    prompt: "Your prompt text here",
+    // Add other parameters required by your API
+};
+const promptText = "Your prompt text to display in the modal";
+
+checkImageStatus(fetchResultUrl);
 
 
 
