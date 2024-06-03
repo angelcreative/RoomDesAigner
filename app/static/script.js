@@ -254,11 +254,13 @@ function generateFractalText() {
   return "(((fractal,fractality pattern details)))";
     }
     
+    
     function showGeneratingImagesDialog() {
-        document.getElementById('generatingImagesDialog').style.display = 'block';
-        document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
-  
-    }
+    document.getElementById('generatingImagesDialog').style.display = 'block';
+    document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
+    document.getElementById('etaValue').textContent = '0'; // Reset progress to 0%
+}
+
 
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
@@ -432,7 +434,6 @@ if (isImg2Img && imageUrl) {
     
 
  
-    
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     console.log('Fetching status from:', fetchResultUrl); // Debugging line to log the fetch URL
@@ -451,12 +452,12 @@ function checkImageStatus(fetchResultUrl) {
         console.log('Response data:', data); // Debugging line to log the response data
         if (data.status === 'processing') {
             console.log('Status is processing'); // Debugging line to log the processing status
-            // Update the ETA display
-            if (data.eta) {
-                console.log('ETA:', data.eta); // Debugging line to log the ETA value
-                document.getElementById('etaValue').textContent = data.eta;
+            // Update the progress display
+            if (data.progress !== undefined) {
+                console.log('Progress:', data.progress); // Debugging line to log the progress value
+                document.getElementById('etaValue').textContent = data.progress;
             } else {
-                console.log('ETA not found in response'); // Debugging line to log if ETA is not found
+                console.log('Progress not found in response'); // Debugging line to log if progress is not found
             }
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.links) {
