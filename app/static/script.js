@@ -35,7 +35,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // AIDESIGN
-// Predefined attributes for randomness
+
+    
+    // Predefined attributes for randomness
 const attributes = {
   room_size: ['small', 'medium', 'large'],
   color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
@@ -62,23 +64,30 @@ let isGenerating = false;
 // Event listener for the "AI Design" button
 document.addEventListener('DOMContentLoaded', () => {
   const aiDesignButton = document.getElementById('aiDesignButton');
-  aiDesignButton.addEventListener('click', () => {
-    if (isGenerating) return; // Prevents multiple calls
+  if (aiDesignButton) {
+    aiDesignButton.addEventListener('click', () => {
+      if (isGenerating) return; // Prevents multiple calls
 
-    isGenerating = true; // Set flag to true to prevent further calls
-    const baseValues = getSelectedValues(); // Get current form values
-    const mixedValues = mixAttributes(baseValues);
-    console.log("Mixed Values for Generation:", mixedValues);
-    generateImages(null, mixedValues, false) // Assuming generateImages handles the image generation logic
-      .then(() => {
-        isGenerating = false; // Reset flag after generation
-      })
-      .catch((error) => {
-        console.error("Error generating images:", error);
-        isGenerating = false; // Reset flag even if there's an error
-      });
-  });
+      isGenerating = true; // Set flag to true to prevent further calls
+      const baseValues = getSelectedValues(); // Get current form values
+      const mixedValues = mixAttributes(baseValues);
+      console.log("Mixed Values for Generation:", mixedValues);
+      generateImages(null, mixedValues, false) // Assuming generateImages handles the image generation logic
+        .then(() => {
+          isGenerating = false; // Reset flag after generation
+        })
+        .catch((error) => {
+          console.error("Error generating images:", error);
+          isGenerating = false; // Reset flag even if there's an error
+        });
+    });
+  } else {
+    console.error('Element with ID "aiDesignButton" not found.');
+  }
 });
+
+// Ensure these functions are defined elsewhere in your codebase
+function getSelectedValues
 
 
 
