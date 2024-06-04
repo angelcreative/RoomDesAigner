@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // AIDESIGN
-
 // Predefined attributes for randomness
 const attributes = {
   room_size: ['small', 'medium', 'large'],
@@ -61,16 +60,24 @@ function mixAttributes(baseAttributes) {
 let isGenerating = false;
 
 // Event listener for the "AI Design" button
-const aiDesignButton = document.getElementById('aiDesignButton');
-aiDesignButton.addEventListener('click', () => {
-  if (isGenerating) return; // Prevents multiple calls
+document.addEventListener('DOMContentLoaded', () => {
+  const aiDesignButton = document.getElementById('aiDesignButton');
+  aiDesignButton.addEventListener('click', () => {
+    if (isGenerating) return; // Prevents multiple calls
 
-  isGenerating = true; // Set flag to true to prevent further calls
-  const baseValues = getSelectedValues(); // Get current form values
-  const mixedValues = mixAttributes(baseValues);
-  console.log("Mixed Values for Generation:", mixedValues);
-  generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-  isGenerating = false; // Reset flag after generation
+    isGenerating = true; // Set flag to true to prevent further calls
+    const baseValues = getSelectedValues(); // Get current form values
+    const mixedValues = mixAttributes(baseValues);
+    console.log("Mixed Values for Generation:", mixedValues);
+    generateImages(null, mixedValues, false) // Assuming generateImages handles the image generation logic
+      .then(() => {
+        isGenerating = false; // Reset flag after generation
+      })
+      .catch((error) => {
+        console.error("Error generating images:", error);
+        isGenerating = false; // Reset flag even if there's an error
+      });
+  });
 });
 
 
