@@ -36,33 +36,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //AIDESIGN
 // Predefined attributes for randomness
-const attributes = {
-    room_size: ['small', 'medium', 'large'],
-    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
-    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-    wall_type: ['painted', 'wallpaper', 'tiled']
-};
+    const attributes = {
+        room_size: ['small', 'medium', 'large'],
+        color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
+        furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
+        room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
+        wall_type: ['painted', 'wallpaper', 'tiled'],
+    };
 
-// Mixing attributes function
-function mixAttributes(baseAttributes) {
-    const mixedAttributes = {...baseAttributes};
-    Object.keys(attributes).forEach(key => {
-        // 50% chance to swap
-        if (Math.random() > 0.5) {
-            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
-        }
+    // Mixing attributes function
+    function mixAttributes(baseAttributes) {
+        const mixedAttributes = {...baseAttributes};
+        Object.keys(attributes).forEach(key => {
+            // 50% chance to swap
+            if (Math.random() > 0.5) {
+                mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
+            }
+        });
+        return mixedAttributes;
+    }
+
+    // Control flag to prevent multiple generations
+    let isGenerating = false;
+
+    // Event listener for the "AI Design" button
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        if (isGenerating) return; // Prevents multiple calls
+
+        isGenerating = true; // Set flag to true to prevent further calls
+        const baseValues = getSelectedValues(); // Get current form values
+        const mixedValues = mixAttributes(baseValues);
+        console.log("Mixed Values for Generation:", mixedValues);
+        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
     });
-    return mixedAttributes;
-}
 
-// Event listener for the "AI Design" button
-document.getElementById('aiDesignButton').addEventListener('click', function() {
-    const baseValues = getSelectedValues(); // Get current form values
-    const mixedValues = mixAttributes(baseValues);
-    console.log("Mixed Values for Generation:", mixedValues);
-    generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-});
 //AIDESIGN
 
   
@@ -238,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   slider.addEventListener("input", function() {
     sliderValueDisplay.textContent = this.value;
-  });
+  });generate
 
   
     const selectedValues = getSelectedValues();
@@ -429,7 +436,11 @@ if (isImg2Img && imageUrl) {
 })
 .catch(error => {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-});
+})
+
+ .finally(() => {
+            isGenerating = false; // Reset flag after completion
+        });
 
     
 
@@ -1264,7 +1275,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
