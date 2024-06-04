@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   slider.addEventListener("input", function() {
     sliderValueDisplay.textContent = this.value;
-  });generate
+  });
 
   
     const selectedValues = getSelectedValues();
