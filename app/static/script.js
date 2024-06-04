@@ -34,41 +34,45 @@ const magicButton = document.getElementById("magicButton");
 document.addEventListener("DOMContentLoaded", function() {
 
 
-//AIDESIGN
+// AIDESIGN
 // Predefined attributes for randomness
-    const attributes = {
-        room_size: ['small', 'medium', 'large'],
-        color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-        furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
-        room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-        wall_type: ['painted', 'wallpaper', 'tiled'],
-    };
+const attributes = {
+  room_size: ['small', 'medium', 'large'],
+  color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
+  furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
+  room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
+  wall_type: ['painted', 'wallpaper', 'tiled'],
+};
 
-    // Mixing attributes function
-    function mixAttributes(baseAttributes) {
-        const mixedAttributes = {...baseAttributes};
-        Object.keys(attributes).forEach(key => {
-            // 50% chance to swap
-            if (Math.random() > 0.5) {
-                mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
-            }
-        });
-        return mixedAttributes;
+// Mixing attributes function
+function mixAttributes(baseAttributes) {
+  const mixedAttributes = { ...baseAttributes };
+  Object.keys(attributes).forEach((key) => {
+    // 50% chance to swap
+    if (Math.random() > 0.5) {
+      mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
     }
+  });
+  return mixedAttributes;
+}
 
-    // Control flag to prevent multiple generations
-    let isGenerating = false;
+// Control flag to prevent multiple generations
+let isGenerating = false;
 
-    // Event listener for the "AI Design" button
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
-        if (isGenerating) return; // Prevents multiple calls
+// Event listener for the "AI Design" button
+const aiDesignButton = document.getElementById('aiDesignButton');
+aiDesignButton.addEventListener('click', (function() {
+  if (isGenerating) return; // Prevents multiple calls
 
-        isGenerating = true; // Set flag to true to prevent further calls
-        const baseValues = getSelectedValues(); // Get current form values
-        const mixedValues = mixAttributes(baseValues);
-        console.log("Mixed Values for Generation:", mixedValues);
-        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-    });
+  (function() {
+    isGenerating = true; // Set flag to true to prevent further calls
+    const baseValues = getSelectedValues(); // Get current form values
+    const mixedValues = mixAttributes(baseValues);
+    console.log("Mixed Values for Generation:", mixedValues);
+    generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
+  })(); // Call the callback function
+})());
+
 
 //AIDESIGN
 
