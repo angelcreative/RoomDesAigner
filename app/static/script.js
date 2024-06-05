@@ -1235,7 +1235,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
