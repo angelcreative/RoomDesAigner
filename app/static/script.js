@@ -276,7 +276,15 @@ function generateFractalText() {
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
 
+  // Slider event listener for displaying value
+  const slider = document.getElementById("strengthSlider");
+  const sliderValueDisplay = document.getElementById("sliderValue");
 
+  slider.addEventListener("input", function() {
+    sliderValueDisplay.textContent = this.value;
+  });
+     
+    
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -347,6 +355,8 @@ if (isImg2Img && imageUrl) {
     const strengthSlider = document.getElementById("strengthSlider");
     prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
   }
+    
+  
     
    /*   const chipsSV = document.getElementById("chipsSV");
         chipsSV.innerHTML = ""; // Clear the existing content
@@ -425,40 +435,37 @@ if (isImg2Img && imageUrl) {
     
 
 // Define the checkImageStatus function
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
-    fetch(fetchResultUrl, {
+function checkImageStatus(fetchResultUrl, retryCount = 0) {
+     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) throw new Error(`HTTP error, status = ${response.status}`);
+        return response.json();
+    })
     .then(data => {
-        if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, promptText);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
-        } else {
-            // Handle any other statuses or errors
-            showError(data);
-            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+        switch(data.status) {
+            case 'processing':
+                if (retryCount < 10) {  // Sets a maximum number of retries to 10
+                    setTimeout(() => checkImageStatus(fetchResultUrl, retryCount + 1), 2000);
+                } else {
+                    throw new Error("Max retries reached, please try again later.");
+                }
+                break;
+            case 'success':
+                displayImages(data.images);  // Assume this function processes and displays the images
+                break;
+            default:
+                throw new Error(`Unhandled status: ${data.status}`);
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
-        showError(error);
-        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+        showError(error);  // Display or log the error appropriately
     });
 }
     
