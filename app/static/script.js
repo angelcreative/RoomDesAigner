@@ -376,7 +376,7 @@ fetch("/generate-images", {
     headers: {
         "Content-Type": "application/json"
     },
-    body: JSON.stringify({ prompt: prompt })  // Ensure prompt is wrapped in an object
+    body: JSON.stringify(prompt)  // Ensure prompt is wrapped in an object
 })
 .then(response => {
     if (!response.ok) {
@@ -414,7 +414,7 @@ function checkImageStatus(fetchResultUrl, payload) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)  // Ensure payload is an object with proper structure
+        body: JSON.stringify(prompt)  // Ensure payload is an object with proper structure
     })
     .then(response => response.json())
     .then(data => {
