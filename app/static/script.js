@@ -450,7 +450,7 @@ function checkImageStatus(fetchResultUrl, retryCount = 0) {
     .then(data => {
         switch(data.status) {
             case 'processing':
-                if (retryCount < 10) {  // Sets a maximum number of retries to 10
+                if (retryCount < 50) {  // Sets a maximum number of retries to 10
                     setTimeout(() => checkImageStatus(fetchResultUrl, retryCount + 1), 2000);
                 } else {
                     throw new Error("Max retries reached, please try again later.");
