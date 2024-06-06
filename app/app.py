@@ -36,10 +36,9 @@ else:
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
 
-
 def transform_prompt(prompt_text):
-   messages = [
-       {
+    messages = [
+        {
             "role": "system",
             "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. When encountering hex color values, convert them into their corresponding name and Pantone."
         },
@@ -57,10 +56,6 @@ def transform_prompt(prompt_text):
 
     transformed_prompt = response.choices[0].message['content'].strip()
     return transformed_prompt
-
- 
-
-
 
 
 
