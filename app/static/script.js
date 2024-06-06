@@ -406,12 +406,12 @@ if (isImg2Img && imageUrl) {
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, prompt) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            body: JSON.stringify({ prompt: prompt })},
-      
+     fetch(fetchResultUrl, {
+        method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
     })
     .then(response => response.json())
     .then(data => {
