@@ -123,14 +123,12 @@ function handleSubmit(event) {
 
 
 // Function to get selected values
+// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
         "generated_artwork",
         "point_of_view",
-        "dominant_color",
-        "secondary_color",
-        "accent_color",
         "color_scheme",
         "room_size",
         "home_room",
@@ -142,7 +140,6 @@ function getSelectedValues() {
         "room_shape",
         "inspired_by_this_interior_design_magazine",
         "furniture_provided_by_this_vendor",
-        "furniture_color",
         "furniture_pattern",
         "seating_upholstery_pattern",
         "designed_by_this_interior_designer",
@@ -161,7 +158,6 @@ function getSelectedValues() {
         "walls_pattern",
         "exterior_finish",
         "exterior_trim_molding",
-        "walls_paint_color",
         "facade_pattern",
         "floors",
         "kitchen_layout",
@@ -186,6 +182,14 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
+    const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
+
     const values = {};
 
     elementIds.forEach(elementId => {
@@ -195,8 +199,38 @@ function getSelectedValues() {
         }
     });
 
+    colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        if (colorInput && colorSwitch && colorSwitch.checked) {
+            values[colorElement.id] = colorInput.value;
+        } else {
+            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+        }
+    });
+
     return values;
 }
+
+// Event listener for the color switches
+document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+    switchElement.addEventListener('change', function() {
+        const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !this.checked;
+        });
+    });
+});
+
+// Ensure color pickers are enabled/disabled on page load based on switch state
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !switchElement.checked;
+        });
+    });
+});
 
 
   
@@ -204,26 +238,25 @@ function getSelectedValues() {
     console.log(selectedValues);
 
    
-    
-    
     // Function to generate the optional text
     function generateOptionalText() {
       return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
     }
- //Function to generate fractal
-function generateFractalText() {
-  return "(((fractal,fractality pattern details)))";
-    }
     
     
-       // Slider event listener for displaying value
+     // Slider event listener for displaying value
   const slider = document.getElementById("strengthSlider");
   const sliderValueDisplay = document.getElementById("sliderValue");
 
   slider.addEventListener("input", function() {
     sliderValueDisplay.textContent = this.value;
   });
-
+    
+    
+ //Function to generate fractal
+function generateFractalText() {
+  return "(((fractal,fractality pattern details)))";
+    }
     
     function showGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'block';
@@ -278,18 +311,19 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 
 let width, height;
 
-if (aspectRatio === "landscape") {
+if (aspectRatio === "landscape") { // 3:2 aspect ratio
   width = 1080;
-  height = 768;
-} else if (aspectRatio === "portrait") {
-  width = 768;
+  height = Math.round((2 / 3) * 1080);  
+} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+  width = Math.round((2 / 3) * 1080);  
   height = 1080;
-} else if (aspectRatio === "square") {
+} else if (aspectRatio === "square") { // 1:1 aspect ratio
   width = 1080;
   height = 1080;
 }
 
-  
+console.log(`Width: ${width}, Height: ${height}`);
+
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
@@ -303,21 +337,18 @@ if (aspectRatio === "landscape") {
     prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
     width: width, 
-    height: height,
-
-    //width: "1024",
-    //height: "1024",
+    height: height, 
     samples: "4",
     guidance_scale: "10",
-    //num_inference_steps: "40",
-    //scheduler: "DPM++ 3M SDE Karras",
-    //self_attention: "no", //testing no
+    num_inference_steps: "40", 
     seed: seedValue,
     webhook: null,
-    safety_checker: false,
+    safety_checker: false, 
     track_id: null,
   };
 
+    
+    
  
     
 if (isImg2Img && imageUrl) {
@@ -370,13 +401,12 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-// Fetch request to generate images
-fetch("/generate-images", {
+  fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
-    body: JSON.stringify(prompt)  // Ensure prompt is wrapped in an object
+    body: JSON.stringify(prompt)
 })
 .then(response => {
     if (!response.ok) {
@@ -394,7 +424,7 @@ fetch("/generate-images", {
         showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, { prompt: prompt });  // Continue checking status if processing
+        checkImageStatus(data.fetch_result);  // Continue checking status if processing
     } else {
         showError(data);  // Show error if other statuses are encountered
     }
@@ -403,10 +433,9 @@ fetch("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
-
     
 
-
+// Define the checkImageStatus function
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -855,6 +884,7 @@ font-size:16px;
 //END REVERSE
 
 
+
   //compare
 function openComparisonWindow(userImageBase64, generatedImageUrl) {
     // Send the base64 image data to the server
@@ -932,10 +962,15 @@ function createButton(text, onClickHandler) {
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
+    
 
     // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
+    
+     // Get the thumbnail image source (user-uploaded image)
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -957,10 +992,10 @@ function showModal(imageUrls, transformedPrompt) {
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
  
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -971,6 +1006,7 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
+    
  
 
 // Function to handle the "Close" action of modal
@@ -1203,7 +1239,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
