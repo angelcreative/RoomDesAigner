@@ -123,12 +123,14 @@ function handleSubmit(event) {
 
 
 // Function to get selected values
-// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
         "generated_artwork",
         "point_of_view",
+        "dominant_color",
+        "secondary_color",
+        "accent_color",
         "color_scheme",
         "room_size",
         "home_room",
@@ -140,6 +142,7 @@ function getSelectedValues() {
         "room_shape",
         "inspired_by_this_interior_design_magazine",
         "furniture_provided_by_this_vendor",
+        "furniture_color",
         "furniture_pattern",
         "seating_upholstery_pattern",
         "designed_by_this_interior_designer",
@@ -158,6 +161,7 @@ function getSelectedValues() {
         "walls_pattern",
         "exterior_finish",
         "exterior_trim_molding",
+        "walls_paint_color",
         "facade_pattern",
         "floors",
         "kitchen_layout",
@@ -182,14 +186,6 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
-    const colorElements = [
-        { id: "dominant_color", switchId: "use_colors" },
-        { id: "secondary_color", switchId: "use_colors" },
-        { id: "accent_color", switchId: "use_colors" },
-        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-        { id: "furniture_color", switchId: "use_furniture_color" }
-    ];
-
     const values = {};
 
     elementIds.forEach(elementId => {
@@ -199,38 +195,8 @@ function getSelectedValues() {
         }
     });
 
-    colorElements.forEach(colorElement => {
-        const colorInput = document.getElementById(colorElement.id);
-        const colorSwitch = document.getElementById(colorElement.switchId);
-        if (colorInput && colorSwitch && colorSwitch.checked) {
-            values[colorElement.id] = colorInput.value;
-        } else {
-            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-        }
-    });
-
     return values;
 }
-
-// Event listener for the color switches
-document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-    switchElement.addEventListener('change', function() {
-        const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-        colorPickers.forEach(picker => {
-            picker.disabled = !this.checked;
-        });
-    });
-});
-
-// Ensure color pickers are enabled/disabled on page load based on switch state
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-        colorPickers.forEach(picker => {
-            picker.disabled = !switchElement.checked;
-        });
-    });
-});
 
 
   
@@ -276,15 +242,7 @@ function generateFractalText() {
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
 
-  // Slider event listener for displaying value
-  const slider = document.getElementById("strengthSlider");
-  const sliderValueDisplay = document.getElementById("sliderValue");
 
-  slider.addEventListener("input", function() {
-    sliderValueDisplay.textContent = this.value;
-  });
-     
-    
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -308,19 +266,18 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 
 let width, height;
 
-if (aspectRatio === "landscape") { // 3:2 aspect ratio
+if (aspectRatio === "landscape") {
   width = 1080;
-  height = Math.round((2 / 3) * 1080);  
-} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
+  height = 768;
+} else if (aspectRatio === "portrait") {
+  width = 768;
   height = 1080;
-} else if (aspectRatio === "square") { // 1:1 aspect ratio
+} else if (aspectRatio === "square") {
   width = 1080;
   height = 1080;
 }
 
-console.log(`Width: ${width}, Height: ${height}`);
-
+  
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
@@ -334,18 +291,21 @@ console.log(`Width: ${width}, Height: ${height}`);
     prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
     width: width, 
-    height: height, 
+    height: height,
+
+    //width: "1024",
+    //height: "1024",
     samples: "4",
     guidance_scale: "10",
-    num_inference_steps: "40", 
+    //num_inference_steps: "40",
+    //scheduler: "DPM++ 3M SDE Karras",
+    //self_attention: "no", //testing no
     seed: seedValue,
     webhook: null,
-    safety_checker: false, 
+    safety_checker: false,
     track_id: null,
   };
 
-    
-    
  
     
 if (isImg2Img && imageUrl) {
@@ -355,8 +315,6 @@ if (isImg2Img && imageUrl) {
     const strengthSlider = document.getElementById("strengthSlider");
     prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
   }
-    
-  
     
    /*   const chipsSV = document.getElementById("chipsSV");
         chipsSV.innerHTML = ""; // Clear the existing content
@@ -435,37 +393,40 @@ if (isImg2Img && imageUrl) {
     
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, retryCount = 0) {
-     fetch(fetchResultUrl, {
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl) {
+    fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => {
-        if (!response.ok) throw new Error(`HTTP error, status = ${response.status}`);
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        switch(data.status) {
-            case 'processing':
-                if (retryCount < 50) {  // Sets a maximum number of retries to 10
-                    setTimeout(() => checkImageStatus(fetchResultUrl, retryCount + 1), 2000);
-                } else {
-                    throw new Error("Max retries reached, please try again later.");
-                }
-                break;
-            case 'success':
-                displayImages(data.images);  // Assume this function processes and displays the images
-                break;
-            default:
-                throw new Error(`Unhandled status: ${data.status}`);
+        if (data.status === 'processing') {
+            // Update the ETA display
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, promptText);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+        } else {
+            // Handle any other statuses or errors
+            showError(data);
+            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
-        showError(error);  // Display or log the error appropriately
+        showError(error);
+        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
     
@@ -880,7 +841,6 @@ font-size:16px;
 //END REVERSE
 
 
-
   //compare
 function openComparisonWindow(userImageBase64, generatedImageUrl) {
     // Send the base64 image data to the server
@@ -958,15 +918,10 @@ function createButton(text, onClickHandler) {
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
-    
 
     // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
-    
-     // Get the thumbnail image source (user-uploaded image)
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -988,10 +943,10 @@ function showModal(imageUrls, transformedPrompt) {
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
+        const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
  
         // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -1002,7 +957,6 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
-    
  
 
 // Function to handle the "Close" action of modal
@@ -1235,7 +1189,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
