@@ -393,42 +393,33 @@ if (isImg2Img && imageUrl) {
     
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+function checkImageStatus(fetchResultUrl, prompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json',
+            // Include any other necessary headers, such as authorization headers if needed
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ prompt: prompt })
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, promptText);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+            setTimeout(() => checkImageStatus(fetchResultUrl, prompt), 2000); // Check again after 2 seconds
+        } else if (data.status === 'success') {
+            // Handle success
+            // You might want to call a function to process and display the images
+            displayImages(data.images); // Assuming `data.images` contains the images
         } else {
             // Handle any other statuses or errors
             showError(data);
-            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
-}
-    
+}   
 
 
 function showError(error) {
@@ -1188,7 +1179,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 

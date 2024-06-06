@@ -40,7 +40,7 @@ def transform_prompt(prompt_text):
     messages = [
         {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. When encountering hex color values, convert them into their corresponding name and Pantone."
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. When encountering hex color values, convert them into their corresponding Pantone."
         },
         {
             "role": "user",
