@@ -370,12 +370,13 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-  fetch("/generate-images", {
+// Fetch request to generate images
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
-    body: JSON.stringify(prompt)
+    body: JSON.stringify({ prompt: prompt })  // Ensure prompt is wrapped in an object
 })
 .then(response => {
     if (!response.ok) {
@@ -393,7 +394,7 @@ if (isImg2Img && imageUrl) {
         showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+        checkImageStatus(data.fetch_result, { prompt: prompt });  // Continue checking status if processing
     } else {
         showError(data);  // Show error if other statuses are encountered
     }
@@ -402,24 +403,25 @@ if (isImg2Img && imageUrl) {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
+
     
 
+
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, prompt) {
-     fetch(fetchResultUrl, {
+function checkImageStatus(fetchResultUrl, payload) {
+    fetch(fetchResultUrl, {
         method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)  // Ensure payload is an object with proper structure
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl, prompt), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, payload), 2000); // Check again after 2 seconds
         } else if (data.status === 'success') {
             // Handle success
-            // You might want to call a function to process and display the images
             displayImages(data.images); // Assuming `data.images` contains the images
         } else {
             // Handle any other statuses or errors
@@ -430,7 +432,7 @@ function checkImageStatus(fetchResultUrl, prompt) {
         console.error('Error checking image status:', error);
         showError(error);
     });
-}   
+}
 
 
 function showError(error) {
