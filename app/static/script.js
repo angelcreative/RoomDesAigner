@@ -398,9 +398,8 @@ function checkImageStatus(fetchResultUrl, prompt) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            // Include any other necessary headers, such as authorization headers if needed
-        },
-        body: JSON.stringify({ prompt: prompt })
+            body: JSON.stringify({ prompt: prompt })},
+      
     })
     .then(response => response.json())
     .then(data => {
