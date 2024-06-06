@@ -204,6 +204,8 @@ function getSelectedValues() {
     console.log(selectedValues);
 
    
+    
+    
     // Function to generate the optional text
     function generateOptionalText() {
       return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
@@ -212,6 +214,16 @@ function getSelectedValues() {
 function generateFractalText() {
   return "(((fractal,fractality pattern details)))";
     }
+    
+    
+       // Slider event listener for displaying value
+  const slider = document.getElementById("strengthSlider");
+  const sliderValueDisplay = document.getElementById("sliderValue");
+
+  slider.addEventListener("input", function() {
+    sliderValueDisplay.textContent = this.value;
+  });
+
     
     function showGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'block';
