@@ -338,13 +338,11 @@ if (isImg2Img && imageUrl) {
   }
     
      
-// Fetch request to generate images
-
- // Function to generate images
+// Function to generate images
 function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
     const customText = document.getElementById("customText").value;
     const promptInit = `Create an exceptionally detailed and professional photoshoot masterpiece. The photograph must be ultra-high-definition (UHD) and captured in 16k resolution, using RAW format to ensure the highest quality. Emphasize ultra-realism with lifelike, photo-realistic details, soft shadows, and impeccable sharpness. Prioritize ultra-detail, precision, and clarity to achieve a visually stunning, highly appealing result. Focus on achieving the best quality, with every element meticulously rendered for an extraordinary, realistic appearance.`;
 
@@ -421,7 +419,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
             showModal(imageUrls, promptText);
             hideGeneratingImagesDialog();
         } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result);
+            checkImageStatus(data.fetch_result, prompt);
         } else {
             showError(data);
         }
@@ -432,18 +430,18 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 }
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+function checkImageStatus(fetchResultUrl, prompt) {
     fetch(fetchResultUrl, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ key: apiKey }) // Adjust this as needed
+        body: JSON.stringify(prompt)
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, prompt), 5000); // Check again after 5 seconds
         } else if (data.status === 'success') {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
