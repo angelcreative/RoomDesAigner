@@ -361,7 +361,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     num_inference_steps: "40",
     seed: seedValue,
     webhook: null,
-    safety_checker: false,
     base64: false,
     track_id: null,
   };
