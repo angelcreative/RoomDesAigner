@@ -344,7 +344,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     seed: seedValue,
     webhook: null,
     safety_checker: false, 
-    base64: true,
+    base64: false,
     track_id: null,
   };
 
