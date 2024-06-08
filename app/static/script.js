@@ -249,16 +249,23 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  async function waitForImages(urls, maxRetries = 100, delay = 2000) {
-    for (let i = 0; i < maxRetries; i++) {
+ async function waitForImages(urls, maxRetries = 120, delay = 5000) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
       const results = await Promise.all(urls.map(checkImageAvailability));
       if (results.every(available => available)) {
         return true;
       }
-      await new Promise(resolve => setTimeout(resolve, delay));
+    } catch (error) {
+      console.error(`Error checking image availability: ${error.message}`);
     }
-    return false;
+    if (i % 10 === 0) {
+      console.log(`Retry ${i + 1}/${maxRetries}: Waiting for images to become available...`);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
   }
+  throw new Error("Images are not available after maximum retries");
+}
 
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
