@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function() {
       document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
           const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
           colorPickers.forEach(picker => {
-              picker.disabled = !switchElement.checked);
+              picker.disabled = !switchElement.checked;
           });
       });
   });
