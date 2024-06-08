@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  async function waitForImages(urls, maxRetries = 10, delay = 2000) {
+  async function waitForImages(urls, maxRetries = 100, delay = 2000) {
     for (let i = 0; i < maxRetries; i++) {
       const results = await Promise.all(urls.map(checkImageAvailability));
       if (results.every(available => available)) {
