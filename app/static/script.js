@@ -288,7 +288,27 @@ function generateFractalText() {
     }
 
 
- 
+ async function checkImageAvailability(url) {
+  try {
+    const response = await fetch(url, { method: 'HEAD' });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function waitForImages(urls, maxRetries = 10, delay = 2000) {
+  for (let i = 0; i < maxRetries; i++) {
+    const results = await Promise.all(urls.map(checkImageAvailability));
+    if (results.every(available => available)) {
+      return true;
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  return false;
+}
+
+  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
 
@@ -296,33 +316,31 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,` ;
+  const promptInit = `Create an exceptionally detailed and professional photoshoot masterpiece. The photograph must be ultra-high-definition (UHD) and captured in 16k resolution, using RAW format to ensure the highest quality. Emphasize ultra-realism with lifelike, photo-realistic details, soft shadows, and impeccable sharpness. Prioritize ultra-detail, precision, and clarity to achieve a visually stunning, highly appealing result. Focus on achieving the best quality, with every element meticulously rendered for an extraordinary, realistic appearance.`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
-  
- 
+  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1],`;
 
-const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
-let width, height;
+  let width, height;
 
-if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1080;
-  height = Math.round((2 / 3) * 1080);  
-} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
-  height = 1080;
-} else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1080;
-  height = 1080;
-}
+  if (aspectRatio === "landscape") { // 3:2 aspect ratio
+    width = 1080;
+    height = Math.round((2 / 3) * 1080);  
+  } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+    width = Math.round((2 / 3) * 1080);  
+    height = 1080;
+  } else if (aspectRatio === "square") { // 1:1 aspect ratio
+    width = 1080;
+    height = 1080;
+  }
 
-console.log(`Width: ${width}, Height: ${height}`);
+  console.log(`Width: ${width}, Height: ${height}`);
 
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
@@ -336,196 +354,62 @@ console.log(`Width: ${width}, Height: ${height}`);
     key: apiKey,
     prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-    width: width, 
-    height: height, 
+    width: width,
+    height: height,
     samples: "4",
     guidance_scale: "10",
-    num_inference_steps: "40", 
+    num_inference_steps: "40",
     seed: seedValue,
     webhook: null,
-    safety_checker: false, 
+    safety_checker: false,
+    base64: false,
     track_id: null,
   };
 
-    
-    
- 
-    
-if (isImg2Img && imageUrl) {
+  if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
 
-    // Get the strength value from the slider
     const strengthSlider = document.getElementById("strengthSlider");
-    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+    prompt.strength = parseFloat(strengthSlider.value);
   }
-    
-   /*   const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
-
-        for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            // Replace "_" with " " in the value
-            const formattedValue = value.replace(/_/g, " ");
-            
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
-
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = formattedValue;
-            } else {
-              chip.textContent = formattedValue;
-            }
-
-            if (formattedValue.includes("_")) {
-              chip.style.visibility = "visible"; // Hide "_" character
-            }
-
-            chipsSV.appendChild(chip);
-          }
-        }*/
-
-
-      // Get the <span> element by its class name
-     // var spanElement = document.querySelector(".chipSV");
-
-      // Get the text content of the <span> element
-    //  var text = spanElement.textContent;
-
-      // Replace all underscore characters with non-breaking spaces
-     // var modifiedText = text.replace(/_/g, "&nbsp;");
-
-      // Update the text content of the <span> element
-   //   spanElement.textContent = modifiedText;
-// Fetch request to generate images
 
   fetch("/generate-images", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
-})
-.then(response => {
+  })
+  .then(response => {
     if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return response.json();  // Parse JSON only if the response was OK
-})
-.then(data => {
-    // Handle the API response based on its status
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    return response.json();
+  })
+  .then(async data => {
+    if (data.status === "success" && data.links) {
+      const imageUrls = data.links.map(url =>
+        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+      );
+
+      const imagesReady = await waitForImages(imageUrls);
+      if (imagesReady) {
+        showModal(imageUrls, data.transformed_prompt);
+      } else {
+        showError({ message: "Images are not ready yet. Please try again later." });
+      }
+
+      hideGeneratingImagesDialog();
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+      showError({ message: "Image processing is still ongoing. Please try again later." });
     } else {
-        showError(data);  // Show error if other statuses are encountered
+      showError(data);
     }
-})
-.catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-});
-
-    
-
-// Define the checkImageStatus function
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, promptText);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
-        } else {
-            // Handle any other statuses or errors
-            showError(data);
-            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
-        }
-    })
-    .catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
-    });
+  })
+  .catch(error => {
+    showError(error);
+  });
 }
-    
-
-
-function showError(error) {
-    // Update the user interface to show the error
-    console.error(error);
-    alert("Error: " + error.message);
-}
-
-function displayImages(images) {
-    // Function to display images or handle the successful completion of the task
-    console.log('Displaying images:', images);
-}
-
-
-    // Function to show error message with dismiss button
-function showError(error) {
-    console.error("Error generating images:", error);
-    const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
-    processingMessageContainer.style.display = 'block';
-    hideOverlay(); // Hide the overlay and loading message
-
-    // Add event listener for the dismiss button
-    const dismissButton = document.getElementById("dismissErrorButton");
-    dismissButton.addEventListener('click', hideErrorMessage);
-}
-
-// Function to hide the error message
-function hideErrorMessage() {
-    const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.style.display = 'none';
-}
-    // Function to display the error modal window
-   function displayErrorModal() {
-    const errorModal = document.getElementById("errorGenerating");
-    errorModal.style.display = "block";
-
-    const tryAgainButton = document.getElementById("errorButton");
-    tryAgainButton.addEventListener("click", () => {
-        errorModal.style.display = "none";
-        generateImages(imageUrl, selectedValues); // Relaunch the query
-    });
-
-    const closeButton = document.querySelector("#errorGenerating .closeError");
-    closeButton.addEventListener("click", () => {
-        errorModal.style.display = "none";
-    });
-}
-}
-
-
-
-      
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
