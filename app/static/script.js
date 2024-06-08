@@ -340,37 +340,96 @@ if (isImg2Img && imageUrl) {
      
 // Fetch request to generate images
 
-  fetch("/generate-images", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
- .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+ // Function to generate images
+function generateImages(imageUrl, selectedValues, isImg2Img) {
+    showGeneratingImagesDialog();
+
+    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+    const customText = document.getElementById("customText").value;
+    const promptInit = `Create an exceptionally detailed and professional photoshoot masterpiece. The photograph must be ultra-high-definition (UHD) and captured in 16k resolution, using RAW format to ensure the highest quality. Emphasize ultra-realism with lifelike, photo-realistic details, soft shadows, and impeccable sharpness. Prioritize ultra-detail, precision, and clarity to achieve a visually stunning, highly appealing result. Focus on achieving the best quality, with every element meticulously rendered for an extraordinary, realistic appearance.`;
+
+    let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+
+    const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1],`;
+
+    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+
+    let width, height;
+
+    if (aspectRatio === "landscape") { // 3:2 aspect ratio
+        width = 1080;
+        height = Math.round((2 / 3) * 1080);  
+    } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+        width = Math.round((2 / 3) * 1080);  
+        height = 1080;
+    } else if (aspectRatio === "square") { // 1:1 aspect ratio
+        width = 1080;
+        height = 1080;
     }
-    return response.json();
-})
- .then(data => {
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, promptText);
-        hideGeneratingImagesDialog();
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);
-    } else {
-        showError(data);
+
+    const seedSwitch = document.getElementById("seedSwitch");
+    const seedEnabled = seedSwitch.checked;
+    const seedValue = seedEnabled ? null : "19071975";
+
+    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+    const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+    const prompt = {
+        key: apiKey,
+        prompt: promptText,
+        negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
+        width: width,
+        height: height,
+        samples: "4",
+        guidance_scale: "10",
+        num_inference_steps: "40",
+        seed: seedValue,
+        webhook: null,
+        safety_checker: false,
+        base64: false,
+        track_id: null,
+    };
+
+    if (isImg2Img && imageUrl) {
+        prompt.init_image = imageUrl;
+        const strengthSlider = document.getElementById("strengthSlider");
+        prompt.strength = parseFloat(strengthSlider.value);
     }
-})
-  .catch(error => {
-    showError(error);
-});
-    
-    
+
+    fetch("/generate-images", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, promptText);
+            hideGeneratingImagesDialog();
+        } else if (data.status === "processing" && data.fetch_result) {
+            checkImageStatus(data.fetch_result);
+        } else {
+            showError(data);
+        }
+    })
+    .catch(error => {
+        showError(error);
+    });
+}
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
@@ -379,7 +438,7 @@ function checkImageStatus(fetchResultUrl) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ key: apiKey }) // Adjust this as needed
     })
     .then(response => response.json())
     .then(data => {
@@ -401,6 +460,7 @@ function checkImageStatus(fetchResultUrl) {
         showError(error);
     });
 }
+
 
     
 
