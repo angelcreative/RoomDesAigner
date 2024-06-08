@@ -387,7 +387,7 @@ function checkImageStatus(fetchResultUrl) {
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === 'success') {
             // Handle success
-            // You might want to call a function to process and display the images
+            showModal(imageUrls, data.transformed_prompt);
         } else {
             // Handle any other statuses or errors
             showError(data);
@@ -955,7 +955,9 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+
+
+//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
