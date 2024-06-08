@@ -242,8 +242,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
  
- 
-function generateImages(imageUrl, selectedValues, isImg2Img) {
+ function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
@@ -326,7 +325,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
 
-            const imagesReady = await waitForImages(imageUrls);
+            const eta = data.eta || 0; // Get ETA from response
+            const imagesReady = await waitForImages(imageUrls, 120, 5000, eta);
             if (imagesReady) {
                 showModal(imageUrls, data.transformed_prompt);
             } else {
@@ -342,6 +342,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);
     });
 }
+
     
     
  async function checkImageAvailability(url) {
@@ -353,7 +354,13 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
   }
 
- async function waitForImages(urls, maxRetries = 120, delay = 5000) {
+async function waitForImages(urls, maxRetries = 120, delay = 5000, eta = 0) {
+  // Wait for the ETA duration before starting the retry process
+  if (eta > 0) {
+    console.log(`Waiting for ETA: ${eta} seconds`);
+    await new Promise(resolve => setTimeout(resolve, eta * 1000));
+  }
+
   for (let i = 0; i < maxRetries; i++) {
     try {
       const results = await Promise.all(urls.map(checkImageAvailability));
@@ -362,9 +369,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
       }
     } catch (error) {
       console.error(`Error checking image availability: ${error.message}`);
-    }
-    if (i % 10 === 0) {
-      console.log(`Retry ${i + 1}/${maxRetries}: Waiting for images to become available...`);
     }
     await new Promise(resolve => setTimeout(resolve, delay));
   }
