@@ -308,6 +308,31 @@ async function waitForImages(urls, maxRetries = 10, delay = 2000) {
   return false;
 }
 
+function showError(error) {
+    console.error("Error:", error.message || error);
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    if (processingMessageContainer) {
+        processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
+        processingMessageContainer.style.display = 'block';
+    }
+    hideOverlay(); // Asegúrate de que esta función existe y oculta la interfaz de carga
+
+    // Add event listener for the dismiss button
+    const dismissButton = document.getElementById("dismissErrorButton");
+    if (dismissButton) {
+        dismissButton.addEventListener('click', hideErrorMessage);
+    }
+}
+
+// Function to hide the error message
+function hideErrorMessage() {
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    if (processingMessageContainer) {
+        processingMessageContainer.style.display = 'none';
+    }
+}
+
+
 function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
@@ -409,6 +434,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);
     });
 }
+
 
 
     
