@@ -753,6 +753,15 @@ async function waitForImages(urls, maxRetries = 10, delay = 2000) {
       window.open(photopeaUrl + encodedConfig, '_blank');
   }
 
+
+    // Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
+    
   // Displays modal with generated images and associated action buttons
   function showModal(imageUrls, transformedPrompt) {
       const modal = document.getElementById("modal");
