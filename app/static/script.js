@@ -376,10 +376,10 @@ if (isImg2Img && imageUrl) {
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
         method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
     })
     .then(response => response.json())
     .then(data => {
@@ -387,6 +387,9 @@ function checkImageStatus(fetchResultUrl) {
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === 'success') {
             // Handle success
+            const imageUrls = data.proxy_links.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
             showModal(imageUrls, data.transformed_prompt);
         } else {
             // Handle any other statuses or errors
@@ -398,6 +401,7 @@ function checkImageStatus(fetchResultUrl) {
         showError(error);
     });
 }
+
     
 
     // Function to show error message with dismiss button
