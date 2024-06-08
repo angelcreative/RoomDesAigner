@@ -14,7 +14,8 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton"); 
 
 document.addEventListener("DOMContentLoaded", function() {
-  // AIDESIGN
+  
+    // AIDESIGN
   // Predefined attributes for randomness
   const attributes = {
       room_size: ['small', 'medium', 'large'],
@@ -240,33 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById('generatingImagesDialog').style.display = 'none';
   });
 
-  async function checkImageAvailability(url) {
-    try {
-      const response = await fetch(url, { method: 'HEAD' });
-      return response.ok;
-    } catch (error) {
-      return false;
-    }
-  }
-
- async function waitForImages(urls, maxRetries = 120, delay = 5000) {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const results = await Promise.all(urls.map(checkImageAvailability));
-      if (results.every(available => available)) {
-        return true;
-      }
-    } catch (error) {
-      console.error(`Error checking image availability: ${error.message}`);
-    }
-    if (i % 10 === 0) {
-      console.log(`Retry ${i + 1}/${maxRetries}: Waiting for images to become available...`);
-    }
-    await new Promise(resolve => setTimeout(resolve, delay));
-  }
-  throw new Error("Images are not available after maximum retries");
-}
-
+ 
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
@@ -367,6 +342,35 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);
     });
 }
+    
+    
+ async function checkImageAvailability(url) {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+ async function waitForImages(urls, maxRetries = 120, delay = 5000) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const results = await Promise.all(urls.map(checkImageAvailability));
+      if (results.every(available => available)) {
+        return true;
+      }
+    } catch (error) {
+      console.error(`Error checking image availability: ${error.message}`);
+    }
+    if (i % 10 === 0) {
+      console.log(`Retry ${i + 1}/${maxRetries}: Waiting for images to become available...`);
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  throw new Error("Images are not available after maximum retries");
+}
+
 
 function showError(error) {
     console.error("Error:", error.message || error);
