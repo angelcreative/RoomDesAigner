@@ -383,7 +383,7 @@ function checkImageStatus(fetchResultUrl) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 5000); // Check again after 5 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl), 1000); // Check again after 1 seconds
         } else if (data.status === 'success') {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
