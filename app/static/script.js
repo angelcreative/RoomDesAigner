@@ -338,7 +338,6 @@ if (isImg2Img && imageUrl) {
   }
     
      
-// Fetch request to generate images
 fetch("/generate-images", {
     method: "POST",
     headers: {
@@ -360,7 +359,7 @@ fetch("/generate-images", {
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
     } else if (data.status === "queued" && data.taskId) {
-        setTimeout(() => checkImageStatus(data.taskId), data.eta * 1000); // Wait eta seconds before checking status
+        setTimeout(() => checkImageStatus(data.fetch_result), data.eta * 1000); // Wait eta seconds before checking status
     } else {
         showError(data);
     }
@@ -370,18 +369,24 @@ fetch("/generate-images", {
 });
 
 
+
 // Define the checkImageStatus function
-function checkImageStatus(taskId) {
-    fetch(`/check-status?taskId=${taskId}`, {
+function checkImageStatus(fetchResultUrl) {
+    fetch(fetchResultUrl, {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === 'processing' || data.status === 'queued') {
-            setTimeout(() => checkImageStatus(taskId), data.eta * 1000); // Wait eta seconds before checking status again
+            setTimeout(() => checkImageStatus(fetchResultUrl), data.eta * 1000); // Wait eta seconds before checking status again
         } else if (data.status === 'success' && data.proxy_links) {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
