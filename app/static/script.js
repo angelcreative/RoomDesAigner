@@ -358,8 +358,8 @@ fetch("/generate-images", {
         );
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
-    } else if (data.status === "queued" && data.taskId) {
-        setTimeout(() => checkImageStatus(data.fetch_result), data.eta * 1000); // Wait eta seconds before checking status
+    } else if (data.status === "queued" && data.fetch_result) {
+        setTimeout(() => checkImageStatus(data.fetch_result, data.eta), data.eta * 1000); // Wait eta seconds before checking status
     } else {
         showError(data);
     }
@@ -371,7 +371,7 @@ fetch("/generate-images", {
 
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+function checkImageStatus(fetchResultUrl, eta) {
     fetch(fetchResultUrl, {
         method: "GET",
         headers: {
@@ -386,7 +386,7 @@ function checkImageStatus(fetchResultUrl) {
     })
     .then(data => {
         if (data.status === 'processing' || data.status === 'queued') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), data.eta * 1000); // Wait eta seconds before checking status again
+            setTimeout(() => checkImageStatus(fetchResultUrl, eta), eta * 1000); // Wait eta seconds before checking status again
         } else if (data.status === 'success' && data.proxy_links) {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
@@ -404,6 +404,7 @@ function checkImageStatus(fetchResultUrl) {
         showError(error);
     });
 }
+
 
 
     // Function to show error message with dismiss button
