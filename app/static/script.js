@@ -275,7 +275,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `High-end editorial photography, Resolution Ultra HD 8K for impeccable detail,  Rendering Technique Octane Render for photorealistic textures and lighting,`;
+    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,`;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -360,7 +360,7 @@ fetch("/generate-images", {
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
     } else if (data.status === "queued" && data.taskId) {
-        checkImageStatus(data.taskId);
+        setTimeout(() => checkImageStatus(data.taskId), data.eta * 1000); // Wait eta seconds before checking status
     } else {
         showError(data);
     }
@@ -368,6 +368,7 @@ fetch("/generate-images", {
 .catch(error => {
     showError(error);
 });
+
 
 // Define the checkImageStatus function
 function checkImageStatus(taskId) {
@@ -380,7 +381,7 @@ function checkImageStatus(taskId) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing' || data.status === 'queued') {
-            setTimeout(() => checkImageStatus(taskId), 5000); // Check again after 5 seconds
+            setTimeout(() => checkImageStatus(taskId), data.eta * 1000); // Wait eta seconds before checking status again
         } else if (data.status === 'success' && data.proxy_links) {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
@@ -398,6 +399,7 @@ function checkImageStatus(taskId) {
         showError(error);
     });
 }
+
 
     // Function to show error message with dismiss button
 function showError(error) {

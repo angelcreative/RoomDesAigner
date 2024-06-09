@@ -44,7 +44,7 @@ def transform_prompt(prompt_text):
         },
         {
             "role": "user",
-            "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 100 words:\n\n{prompt_text}"
+            "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 180 words:\n\n{prompt_text}"
         }
     ]
     response = openai.ChatCompletion.create(
