@@ -378,7 +378,8 @@ function checkImageStatus(fetchResultUrl) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ key: prompt.key })
+        //body: JSON.stringify({ key: prompt.key })
+body: JSON.stringify(prompt)
     })
     .then(response => response.json())
     .then(data => {
