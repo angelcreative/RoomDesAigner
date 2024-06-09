@@ -339,53 +339,49 @@ if (isImg2Img && imageUrl) {
     
      
 // Fetch request to generate images
-
-  fetch("/generate-images", {
+fetch("/generate-images", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+        "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
 })
- .then(response => {
+.then(response => {
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return response.json();
 })
- .then(data => {
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
+.then(data => {
+    if (data.status === "success" && data.proxy_links) {
+        const imageUrls = data.proxy_links.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
         showModal(imageUrls, promptText);
         hideGeneratingImagesDialog();
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);
+    } else if (data.status === "queued" && data.taskId) {
+        checkImageStatus(data.taskId);
     } else {
         showError(data);
     }
 })
-  .catch(error => {
+.catch(error => {
     showError(error);
 });
-    
-    
+
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
-    fetch(fetchResultUrl, {
-        method: "POST",
+function checkImageStatus(taskId) {
+    fetch(`/check-status?taskId=${taskId}`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json"
-        },
-        //body: JSON.stringify({ key: prompt.key })
-body: JSON.stringify(prompt)
+        }
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status === 'processing') {
-            setTimeout(() => checkImageStatus(fetchResultUrl), 1000); // Check again after 1 seconds
-        } else if (data.status === 'success') {
+        if (data.status === 'processing' || data.status === 'queued') {
+            setTimeout(() => checkImageStatus(taskId), 5000); // Check again after 5 seconds
+        } else if (data.status === 'success' && data.proxy_links) {
             // Handle success
             const imageUrls = data.proxy_links.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -402,7 +398,6 @@ body: JSON.stringify(prompt)
         showError(error);
     });
 }
-    
 
     // Function to show error message with dismiss button
 function showError(error) {
