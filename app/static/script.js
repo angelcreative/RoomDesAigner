@@ -269,9 +269,6 @@ function handleSubmit(event) {
  
 
     
-     
-//new request
-
 // Define the generateImages function
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -402,13 +399,7 @@ function checkImageStatus(fetchResultUrl, apiKey) {
   });
 }
 
-
-
-//end new request
-
-    
-    
-    // Function to show error message with dismiss button
+// Function to show error message with dismiss button
 function showError(error) {
     console.error("Error generating images:", error);
     const processingMessageContainer = document.getElementById("processingMessageContainer");
@@ -426,8 +417,9 @@ function hideErrorMessage() {
     const processingMessageContainer = document.getElementById("processingMessageContainer");
     processingMessageContainer.style.display = 'none';
 }
-    // Function to display the error modal window
-   function displayErrorModal() {
+
+// Function to display the error modal window
+function displayErrorModal() {
     const errorModal = document.getElementById("errorGenerating");
     errorModal.style.display = "block";
 
@@ -442,9 +434,6 @@ function hideErrorMessage() {
         errorModal.style.display = "none";
     });
 }
-}
-
-
 
       
 
