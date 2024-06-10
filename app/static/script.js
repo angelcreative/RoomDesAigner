@@ -288,7 +288,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .join(", ");
 
   const promptEndy = ` abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined, `;
-  
+
   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
   let width, height;
 
@@ -367,13 +367,21 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, apiKey) {
-  fetch(fetchResultUrl, {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var raw = JSON.stringify({
+    "key": apiKey
+  });
+
+  var requestOptions = {
     method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ key: apiKey })
-  })
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(fetchResultUrl, requestOptions)
   .then(response => response.json())
   .then(data => {
     if (data.status === 'processing') {
