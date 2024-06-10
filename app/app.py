@@ -36,17 +36,19 @@ else:
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
 
+
 def transform_prompt(prompt_text):
     messages = [
-        {
+       {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. When encountering hex color values, convert them into their corresponding Pantone."
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. When encountering hex color values, convert them into their corresponding color Pantone."
         },
         {
             "role": "user",
             "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 180 words:\n\n{prompt_text}"
         }
     ]
+
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
@@ -56,6 +58,10 @@ def transform_prompt(prompt_text):
 
     transformed_prompt = response.choices[0].message['content'].strip()
     return transformed_prompt
+
+ 
+
+
 
 
 

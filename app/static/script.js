@@ -1,3 +1,4 @@
+// Function to hide the waiting overlay and loading message 
 // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
@@ -11,7 +12,24 @@ function hideOverlay() {
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton"); 
 
+// modal P
+//document.getElementById('password-form').addEventListener('submit', function(event)  {
+//    event.preventDefault();
+//
+//    var passwordInput = document.getElementById('password');
+//    var errorMessage = document.getElementById('error-message');
+//
+//    if (passwordInput.value === '4yVd4nt3') {
+//        // Password is correct, close the modal or perform desired actions
+//        var modalP = document.querySelector('.modalP');
+//        modalP.style.display = 'none';
+//    } else {
+//        // Password is incorrect, display error message
+//        errorMessage.textContent = 'Invalid password. Schedule a call.';
+//    }
+//});
 
+//end modal P
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -46,6 +64,7 @@ document.getElementById('aiDesignButton').addEventListener('click', function() {
     generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
 });
 //AIDESIGN
+
   
  
 // Function to handle the form submission
@@ -101,95 +120,119 @@ function handleSubmit(event) {
 }
 
     
-    
-    function getSelectedValues() {
-        const elementIds = [
-           "person",
-          "generated_artwork",
-          "point_of_view",
-          "color_scheme",
-          "room_size",
-          "home_room",
-          "space_to_be_designed",
-          "children_room",
-          "pool",
-          "landscaping_options",
-          "garden",
-          "room_shape",
-          "inspired_by_this_interior_design_magazine",
-          "furniture_provided_by_this_vendor",
-          "furniture_pattern",
-          "seating_upholstery_pattern",
-          "designed_by_this_interior_designer",
-          "designed_by_this_architect",
-          "lens_used",
-          "image_color",
-          "photo_lighting_type",
-          "illumination",
-          "door",
-          "windows",
-          "ceiling_design",
-          "roof_material",
-          "roof_height",
-          "wall_type",
-          "wall_cladding",
-          "walls_pattern",
-          "exterior_finish",
-          "exterior_trim_molding",
-          "facade_pattern",
-          "floors",
-          "kitchen_layout",
-          "countertop_material",
-          "backsplash_design",
-          "cabinet_storage_design",
-          "appliance_style_finish",
-          "bathroom_fixture_style",
-          "bathroom_tile_design",
-          "bathroom_vanity_style",
-          "shower_bathtub_design",
-          "bathroom_lighting_fixtures",
-          "fireplace_design",
-          "balcony_design",
-          "material",
-          "ceramic_material",
-          "fabric",
-          "stone_material",
-          "marble_material",
-          "wood_material",
-          "design_style",
-          "decorative_elements"
-      ];
 
-        
-        const colorElements = [
-          { id: "dominant_color", switchId: "use_colors" },
-          { id: "secondary_color", switchId: "use_colors" },
-          { id: "accent_color", switchId: "use_colors" },
-          { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-          { id: "furniture_color", switchId: "use_furniture_color" }
-      ];
 
-        
-        const values = {};
+// Function to get selected values
+// Function to get selected values
+function getSelectedValues() {
+    const elementIds = [
+        "person",
+        "generated_artwork",
+        "point_of_view",
+        "color_scheme",
+        "room_size",
+        "home_room",
+        "space_to_be_designed",
+        "children_room",
+        "pool",
+        "landscaping_options",
+        "garden",
+        "room_shape",
+        "inspired_by_this_interior_design_magazine",
+        "furniture_provided_by_this_vendor",
+        "furniture_pattern",
+        "seating_upholstery_pattern",
+        "designed_by_this_interior_designer",
+        "designed_by_this_architect",
+        "lens_used",
+        "image_color",
+        "photo_lighting_type",
+        "illumination",
+        "door",
+        "windows",
+        "ceiling_design",
+        "roof_material",
+        "roof_height",
+        "wall_type",
+        "wall_cladding",
+        "walls_pattern",
+        "exterior_finish",
+        "exterior_trim_molding",
+        "facade_pattern",
+        "floors",
+        "kitchen_layout",
+        "countertop_material",
+        "backsplash_design",
+        "cabinet_storage_design",
+        "appliance_style_finish",
+        "bathroom_fixture_style",
+        "bathroom_tile_design",
+        "bathroom_vanity_style",
+        "shower_bathtub_design",
+        "bathroom_lighting_fixtures",
+        "fireplace_design",
+        "balcony_design",
+        "material",
+        "ceramic_material",
+        "fabric",
+        "stone_material",
+        "marble_material",
+        "wood_material",
+        "design_style",
+        "decorative_elements"
+    ];
 
-        elementIds.forEach(elementId => {
-    const element = document.getElementById(elementId);
-    if (element) {
-      values[elementId] = element.value;
-    }
-  });
-        
-        colorElements.forEach(colorElement => {
-          const colorInput = document.getElementById(colorElement.id);
-          const colorSwitch = document.getElementById(colorElement.switchId);
-          if (colorInput && colorSwitch && colorSwitch.checked) {
-              values[colorElement.id] = colorInput.value;
-          } else {
-              values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-          }
-      });
-        
-        // Slider event listener for displaying value
+    const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
+
+    const values = {};
+
+    elementIds.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            values[elementId] = element.value;
+        }
+    });
+
+    colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        if (colorInput && colorSwitch && colorSwitch.checked) {
+            values[colorElement.id] = colorInput.value;
+        } else {
+            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+        }
+    });
+
+    return values;
+}
+
+// Event listener for the color switches
+document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+    switchElement.addEventListener('change', function() {
+        const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !this.checked;
+        });
+    });
+});
+
+// Ensure color pickers are enabled/disabled on page load based on switch state
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
+        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+        colorPickers.forEach(picker => {
+            picker.disabled = !switchElement.checked;
+        });
+    });
+});
+
+// Slider event listener for displaying value
   const slider = document.getElementById("strengthSlider");
   const sliderValueDisplay = document.getElementById("sliderValue");
 
@@ -197,35 +240,7 @@ function handleSubmit(event) {
     sliderValueDisplay.textContent = this.value;
   });
 
-  const imageDisplay = document.getElementById("imageDisplay");
-  if (imageDisplay && imageDisplay.src) {
-    values["imageUrl"] = imageDisplay.src; // Añade la URL de la imagen si está presente
-  }
-
-  return values;
-}
   
-    // Event listener for the color switches
-  document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-      switchElement.addEventListener('change', function() {
-          const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-          colorPickers.forEach(picker => {
-              picker.disabled = !this.checked;
-          });
-      });
-  });
-
-    
-     // Ensure color pickers are enabled/disabled on page load based on switch state
-  document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-          const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-          colorPickers.forEach(picker => {
-              picker.disabled = !switchElement.checked;
-          });
-      });
-  });
-    
     const selectedValues = getSelectedValues();
     console.log(selectedValues);
 
@@ -234,7 +249,10 @@ function handleSubmit(event) {
     function generateOptionalText() {
       return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
     }
-
+ //Function to generate fractal
+function generateFractalText() {
+  return "(((fractal,fractality pattern details)))";
+    }
     
     function showGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'block';
@@ -266,38 +284,41 @@ function handleSubmit(event) {
     }
 
 
- //NEW
-    
-    // Define the generateImages function
+ 
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
 
-  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your real API key
+  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-  const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,`;
+    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined, `;
+  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
+  
+ 
 
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  let width, height;
+const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
-  if (aspectRatio === "landscape") {
-    width = 1080;
-    height = Math.round((2 / 3) * 1080);  
-  } else if (aspectRatio === "portrait") {
-    width = Math.round((2 / 3) * 1080);  
-    height = 1080;
-  } else if (aspectRatio === "square") {
-    width = 1080;
-    height = 1080;
-  }
+let width, height;
+
+if (aspectRatio === "landscape") { // 3:2 aspect ratio
+  width = 1080;
+  height = Math.round((2 / 3) * 1080);  
+} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+  width = Math.round((2 / 3) * 1080);  
+  height = 1080;
+} else if (aspectRatio === "square") { // 1:1 aspect ratio
+  width = 1080;
+  height = 1080;
+}
+
+console.log(`Width: ${width}, Height: ${height}`);
 
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
@@ -311,94 +332,158 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     key: apiKey,
     prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-    width: width,
-    height: height,
+    width: width, 
+    height: height, 
     samples: "4",
     guidance_scale: "10",
-    num_inference_steps: "40",
+    num_inference_steps: "40", 
     seed: seedValue,
     webhook: null,
-    safety_checker: false,
-    base64: false,
+    safety_checker: false, 
     track_id: null,
   };
 
-  if (isImg2Img && imageUrl) {
+    
+    
+ 
+    
+if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
-    const strengthSlider = document.getElementById("strengthSlider");
-    prompt.strength = parseFloat(strengthSlider.value);
-  }
 
-  // Fetch request to generate images
+    // Get the strength value from the slider
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+  }
+    
+   /*   const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }*/
+
+
+      // Get the <span> element by its class name
+     // var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+    //  var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+     // var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+   //   spanElement.textContent = modifiedText;
+// Fetch request to generate images
+
   fetch("/generate-images", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+        "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
-  })
-  .then(response => {
+})
+.then(response => {
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        // Directly throw an error with the status to handle it in the catch block
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return response.json();
-  })
-  .then(data => {
+    return response.json();  // Parse JSON only if the response was OK
+})
+.then(data => {
+    // Handle the API response based on its status
     if (data.status === "success" && data.output) {
-      const imageUrls = data.output.map(url =>
-        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-      );
-      showModal(imageUrls, promptText);
-      hideGeneratingImagesDialog();
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-      checkImageStatus(data.fetch_result, apiKey);
+        checkImageStatus(data.fetch_result);  // Continue checking status if processing
     } else {
-      showError(data);
+        showError(data);  // Show error if other statuses are encountered
     }
-  })
-  .catch(error => {
-    showError(error);
-  });
-}
+})
+.catch(error => {
+    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+});
+
+    
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, apiKey) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'processing') {
+            // Update the ETA display
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, promptText);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+           // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+        } else {
+            // Handle any other statuses or errors
+            showError(data);
+            //document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+        }
+    })
+    .catch(error => {
+        console.error('Error checking image status:', error);
+        showError(error);
+        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+    });
+}
+    
 
-  var raw = JSON.stringify({
-    "key": apiKey
-  });
 
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  fetch(fetchResultUrl, requestOptions)
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'processing') {
-      setTimeout(() => checkImageStatus(fetchResultUrl, apiKey), 5000); // Check again after 5 seconds
-    } else if (data.status === "success" && data.output) {
-      const imageUrls = data.output.map(url =>
-        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-      );
-      showModal(imageUrls, data.transformed_prompt);
-      hideGeneratingImagesDialog();
-    } else {
-      showError(data);
-    }
-  })
-  .catch(error => {
-    console.error('Error checking image status:', error);
-    showError(error);
-  });
+function showError(error) {
+    // Update the user interface to show the error
+    console.error(error);
+    alert("Error: " + error.message);
 }
 
-// Function to show error message with dismiss button
+function displayImages(images) {
+    // Function to display images or handle the successful completion of the task
+    console.log('Displaying images:', images);
+}
+
+
+    // Function to show error message with dismiss button
 function showError(error) {
     console.error("Error generating images:", error);
     const processingMessageContainer = document.getElementById("processingMessageContainer");
@@ -416,9 +501,8 @@ function hideErrorMessage() {
     const processingMessageContainer = document.getElementById("processingMessageContainer");
     processingMessageContainer.style.display = 'none';
 }
-
-// Function to display the error modal window
-function displayErrorModal() {
+    // Function to display the error modal window
+   function displayErrorModal() {
     const errorModal = document.getElementById("errorGenerating");
     errorModal.style.display = "block";
 
@@ -433,13 +517,11 @@ function displayErrorModal() {
         errorModal.style.display = "none";
     });
 }
+}
 
-    
-    
-//END NEW    
-    
 
-     
+
+      
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
@@ -499,7 +581,7 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
 
-    // Function to copy text to clipboard
+    /*Function to copy text to clipboard
     function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
       tempInput.value = text;
@@ -510,6 +592,20 @@ rerollButton.addEventListener("click", rerollImages);
       
       generateMessageDiv("Prompt copied to clipboard!");
     }
+    */
+    
+    // Function to copy text to clipboard
+async function copyTextToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    generateMessageDiv("Prompt copied to clipboard!");
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+    generateMessageDiv("Failed to copy prompt to clipboard.");
+  }
+}
+
+    
     
 //ENHANCE IMAGE
 
@@ -586,7 +682,7 @@ const upscaleImage = async (imageUrl) => {
                             </style>
                         </head>
                         <body>
-                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
+                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
                             <h1>Upscaled Image</h1>
                             <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
                         </body>
@@ -611,6 +707,177 @@ const upscaleImage = async (imageUrl) => {
     
 // END ENHANCE
 
+//REVERSE
+
+
+
+// Function to search an image on RapidAPI and display results in a new tab
+function searchImageOnRapidAPI(imageUrl) {
+    const url = 'https://real-time-lens-data.p.rapidapi.com/search';
+    const params = new URLSearchParams({
+        url: imageUrl,
+        language: 'en',
+        country: 'us'
+    });
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
+        }
+    };
+
+    fetch(`${url}?${params.toString()}`, options)
+        .then(response => response.json())
+        .then(data => displayResultsInNewTab(data))
+        .catch(err => console.error('Error:', err));
+}
+
+// Function to display search results in a new tab
+
+
+  function displayResultsInNewTab(data) {
+    const newWindow = window.open('', '_blank');
+    const htmlContent = `
+        <html>
+        <head>
+            <title>Search Results</title>
+             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+            <style>
+
+            html {
+    background: #15202b;
+}
+
+img.logoRD {
+    margin: 20px auto 0 auto;
+    display: block;
+    height: 50px;
+}
+
+.maskImage {
+    height: 160px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    width: 200px;
+}
+
+.provider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+
+
+
+h3 {
+    padding: 10px;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 160px;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+h1 {
+    color: #a9fff5;
+    margin: 2rem 0;
+    font-weight: lighter;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+
+                .card-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    justify-content: space-around;
+                }
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 200px;
+    padding: 0 0 20px 0;
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #6d7b87;
+    font-family: courier;
+    font-size: 14px;
+}
+
+
+p {
+    text-align: center;
+    color: #6d7b87;
+    font-family: courier;
+}
+
+p a {
+font-size:16px;
+}
+                .card img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                }
+               .source-icon {
+    width: 20px !important;
+    height: 20px !important;
+    margin-right: 4px;
+}
+                a {
+    color: #9aabba;
+    font-size: 12px;
+    text-decoration: underline;
+}
+            </style>
+        </head>
+        <body>
+           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
+            <h1 class="headerStore">Image Search Results</h1>
+            <p>For refined product search, download the desired image,<a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
+
+            <div class="card-container">
+                ${data.data.visual_matches.map(match => `
+                    <div class="card">
+                        <div class="maskImage">
+                        <img src="${match.thumbnail}" alt="Thumbnail">
+                        </div>
+                        <h3 class="cardTitle">${match.title}</h3>
+                        <div class="provider"><img class="source-icon" src="${match.source_icon}" alt="Source Icon">  <p>${match.source}</p></div>
+                       
+                        <a href="${match.link}" target="_blank">Visit product</a>
+                    </div>
+                `).join('')}
+            </div>
+        </body>
+        </html>
+    `;
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
+}
+
+
+
+
+//END REVERSE
 
 
 
@@ -640,6 +907,9 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
     });
 }
 //end compare
+
+
+ 
     
     // Function to copy image URL to clipboard
     function copyImageUrlToClipboard(imageUrl) {
@@ -674,23 +944,29 @@ function createButton(text, onClickHandler) {
     return button;
 }
 
+ 
 
-
-  
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, promptText) {
+function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
+    
 
-        // Ensure only one event listener is added
+    // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
     
-// Get the thumbnail image source (user-uploaded image)
+     // Get the thumbnail image source (user-uploaded image)
     const thumbnailImage = document.getElementById("thumbnail");
     const userImageBase64 = thumbnailImage.src;
-
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
@@ -709,11 +985,11 @@ function showModal(imageUrls, promptText) {
         const downloadButton = createButton("Download", () => downloadImage(imageUrl));
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(promptText));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-       
-
+       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
+ 
         // Append buttons to container
         [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
@@ -726,8 +1002,9 @@ function showModal(imageUrls, promptText) {
     showOverlay();
 }
 
+    
+ 
 
-  
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
@@ -739,6 +1016,8 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+    
+ 
 
     
     
@@ -885,7 +1164,7 @@ function areAllOptionsEmpty() {
   }
   return true; // All options have empty values
 }
-
+//test
 // Function to handle changes in select elements
 function handleSelectChange() {
   const allOptionsEmpty = areAllOptionsEmpty();
