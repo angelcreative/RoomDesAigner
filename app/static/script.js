@@ -266,10 +266,9 @@ function handleSubmit(event) {
     }
 
 
- 
-
+ //NEW
     
-// Define the generateImages function
+    // Define the generateImages function
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
 
@@ -435,7 +434,12 @@ function displayErrorModal() {
     });
 }
 
-      
+    
+    
+//END NEW    
+    
+
+     
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
