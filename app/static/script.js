@@ -1301,4 +1301,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
-});
+}
