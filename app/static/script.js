@@ -1170,7 +1170,7 @@ function downloadImage(imageUrl) {
   // Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
-});
+}
 
 
 document.addEventListener("DOMContentLoaded", function() {
