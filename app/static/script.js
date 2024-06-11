@@ -412,10 +412,12 @@ fetch("/generate-images", {
   return response.json(); // Parse JSON only if the response was OK
 })
 .then(data => {
-  if (data.status === "success" && data.output) {
-    const imageUrls = data.output.map(url =>
-      url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-    );
+  if (data.status === "success" && data.proxy_links) { // Use proxy_links directly
+    const imageUrls = data.proxy_links; // No need to transform URLs
+
+    // Log the image URLs to ensure they are correct
+    console.log("Image URLs:", imageUrls);
+
     showModal(imageUrls, data.transformed_prompt); // Pass the transformed prompt here
     hideGeneratingImagesDialog(); // Hide any loading dialogs
   } else if (data.status === "processing" && data.fetch_result) {
@@ -994,8 +996,6 @@ function showModal(imageUrls, transformedPrompt) {
   showOverlay();
 }
 
-    
- 
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
