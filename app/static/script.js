@@ -397,38 +397,36 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-  fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
+// Fetch request to generate images
+fetch("/generate-images", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(prompt)
 })
 .then(response => {
-    if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();  // Parse JSON only if the response was OK
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+  return response.json(); // Parse JSON only if the response was OK
 })
 .then(data => {
-    // Handle the API response based on its status
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
-    } else {
-        showError(data);  // Show error if other statuses are encountered
-    }
+  if (data.status === "success" && data.output) {
+    const imageUrls = data.output.map(url =>
+      url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+    );
+    showModal(imageUrls, data.transformed_prompt); // Pass the transformed prompt here
+    hideGeneratingImagesDialog(); // Hide any loading dialogs
+  } else if (data.status === "processing" && data.fetch_result) {
+    checkImageStatus(data.fetch_result); // Continue checking status if processing
+  } else {
+    showError(data); // Show error if other statuses are encountered
+  }
 })
 .catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+  showError(error); // Catch and display errors from the fetch operation or JSON parsing
 });
-
     
 
 // Define the checkImageStatus function
@@ -956,50 +954,44 @@ function createButton(text, onClickHandler) {
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
-    const modal = document.getElementById("modal");
-    const closeButton = modal.querySelector(".close");
-    
+  const modal = document.getElementById("modal");
+  const closeButton = modal.querySelector(".close");
 
-    // Ensure only one event listener is added
-    closeButton.removeEventListener("click", closeModalHandler);
-    closeButton.addEventListener("click", closeModalHandler);
-    
-     // Get the thumbnail image source (user-uploaded image)
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
+  closeButton.removeEventListener("click", closeModalHandler);
+  closeButton.addEventListener("click", closeModalHandler);
 
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";
+  const thumbnailImage = document.getElementById("thumbnail");
+  const userImageBase64 = thumbnailImage.src;
 
-    imageUrls.forEach(imageUrl => {
-        const imageContainer = document.createElement("div");
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
+  const imageGrid = document.getElementById("imageGrid");
+  imageGrid.innerHTML = "";
 
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
+  imageUrls.forEach(imageUrl => {
+    const imageContainer = document.createElement("div");
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.classList.add("thumbnail");
 
-        // Create buttons
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
- 
-        // Append buttons to container
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
 
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        imageGrid.appendChild(imageContainer);
-    });
+    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
+    const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
 
-    modal.style.display = "block";
-    showOverlay();
+    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(buttonsContainer);
+    imageGrid.appendChild(imageContainer);
+  });
+
+  modal.style.display = "block";
+  showOverlay();
 }
 
     
