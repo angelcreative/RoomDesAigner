@@ -41,14 +41,16 @@ replicate_model_version = "0c237d34697731df3f3899fed7d162b93b9a2578bb167940218e7
 
 def generate_image_replicate(image_url):
     client = replicate.Client(api_token=replicate_api_token)
-    model = client.models.get("philz1337x/clarity-upscaler")
-    version = model.versions.get(replicate_model_version)
-
     inputs = {
-        'image': image_url
+        "image": image_url
     }
 
-    output = version.predict(**inputs)
+    prediction = client.predictions.create(
+        version=replicate_model_version,
+        input=inputs
+    )
+    
+    output = prediction.output
     return output[0]  # Assuming the API returns a list of URLs
 
 # Fetch the API key from the environment
@@ -86,17 +88,6 @@ def transform_prompt(prompt_text):
 
  
 
-def generate_image_replicate(image_url):
-    client = replicate.Client(api_token=replicate_api_token)
-    model = client.models.get("philz1337x/clarity-upscaler")
-    version = model.versions.get(replicate_model_version)
-
-    inputs = {
-        'image': image_url
-    }
-
-    output = version.predict(**inputs)
-    return output[0]  # Assuming the API returns a list of URLs
 
 
 
@@ -153,7 +144,7 @@ def clarity_image():
     if upscaled_image_url:
         return jsonify({'upscaled_image_url': upscaled_image_url})
     else:
-        return jsonify({"error": "Image generation failed"}), 500    
+        return jsonify({"error": "Image generation failed"}), 500 
     
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
