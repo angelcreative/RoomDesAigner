@@ -397,6 +397,7 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 
     
+
 // Define the generateImages function
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -418,14 +419,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   let width, height;
 
   if (aspectRatio === "landscape") {
-    width = 1024;
-    height = Math.round((2 / 3) * 1024);  
+    width = 1080;
+    height = Math.round((2 / 3) * 1080);  
   } else if (aspectRatio === "portrait") {
-    width = Math.round((2 / 3) * 1024);  
-    height = 1024;
+    width = Math.round((2 / 3) * 1080);  
+    height = 1080;
   } else if (aspectRatio === "square") {
-    width = 1024;
-    height = 1024;
+    width = 1080;
+    height = 1080;
   }
 
   const seedSwitch = document.getElementById("seedSwitch");
@@ -563,8 +564,6 @@ function displayErrorModal() {
     });
 }
 
-
-      
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
