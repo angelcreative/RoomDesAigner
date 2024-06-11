@@ -318,6 +318,10 @@ if (aspectRatio === "landscape") { // 3:2 aspect ratio
   height = 1024;
 }
 
+// Ensure dimensions are divisible by 8
+width = Math.floor(width / 8) * 8;
+height = Math.floor(height / 8) * 8;
+
 console.log(`Width: ${width}, Height: ${height}`);
 
   const seedSwitch = document.getElementById("seedSwitch");
