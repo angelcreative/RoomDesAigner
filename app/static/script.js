@@ -308,14 +308,14 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1080;
-  height = Math.round((2 / 3) * 1080);  
+  width = 1024;
+  height = Math.round((2 / 3) * 1024);  
 } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
-  height = 1080;
+  width = Math.round((2 / 3) * 1024);  
+  height = 1024;
 } else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1080;
-  height = 1080;
+  width = 1024;
+  height = 1024;
 }
 
 console.log(`Width: ${width}, Height: ${height}`);
@@ -395,144 +395,95 @@ if (isImg2Img && imageUrl) {
 
       // Update the text content of the <span> element
    //   spanElement.textContent = modifiedText;
+// Fetch request to generate images
 
-    
-
-
-
-// START GENERATE
-    
-    // Define the generateImages function
-function generateImages(imageUrl, selectedValues, isImg2Img) {
-  showGeneratingImagesDialog();
-
-  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your real API key
-  const customText = document.getElementById("customText").value;
-  const pictureSelect = document.getElementById("imageDisplayUrl");
-  const selectedPicture = pictureSelect.value;
-  const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,`;
-
-  let plainText = Object.entries(selectedValues)
-    .filter(([key, value]) => value && key !== "imageUrl")
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(", ");
-
-  const promptEndy = ` abundant furniture, multiple decorations, numerous decor items, densely furnished, fully equipped, stylishly streamlined, `;
-
-  const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-  let width, height;
-
-  if (aspectRatio === "landscape") {
-    width = 1024;
-    height = Math.round((2 / 3) * 1024);  
-  } else if (aspectRatio === "portrait") {
-    width = Math.round((2 / 3) * 1024);  
-    height = 1024;
-  } else if (aspectRatio === "square") {
-    width = 1024;
-    height = 1024;
+// Fetch request to generate images
+fetch("/generate-images", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(prompt)
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
   }
+  return response.json(); // Parse JSON only if the response was OK
+})
+.then(data => {
+  if (data.status === "success" && data.proxy_links) { // Use proxy_links directly
+    const imageUrls = data.proxy_links; // No need to transform URLs
 
-  const seedSwitch = document.getElementById("seedSwitch");
-  const seedEnabled = seedSwitch.checked;
-  const seedValue = seedEnabled ? null : "19071975";
+    // Log the image URLs to ensure they are correct
+    console.log("Image URLs:", imageUrls);
 
-  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
-
-  const prompt = {
-    key: apiKey,
-    prompt: promptText,
-    negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
-    width: width,
-    height: height,
-    samples: "4",
-    guidance_scale: "10",
-    num_inference_steps: "40",
-    seed: seedValue,
-    webhook: null,
-    safety_checker: false,
-    base64: false,
-    track_id: null,
-  };
-
-  if (isImg2Img && imageUrl) {
-    prompt.init_image = imageUrl;
-    const strengthSlider = document.getElementById("strengthSlider");
-    prompt.strength = parseFloat(strengthSlider.value);
+    showModal(imageUrls, data.transformed_prompt); // Pass the transformed prompt here
+    hideGeneratingImagesDialog(); // Hide any loading dialogs
+  } else if (data.status === "processing" && data.fetch_result) {
+    checkImageStatus(data.fetch_result); // Continue checking status if processing
+  } else {
+    showError(data); // Show error if other statuses are encountered
   }
-
-  // Fetch request to generate images
-  fetch("/generate-images", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.status === "success" && data.output) {
-      const imageUrls = data.output.map(url =>
-        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-      );
-      showModal(imageUrls, promptText);
-      hideGeneratingImagesDialog();
-    } else if (data.status === "processing" && data.fetch_result) {
-      checkImageStatus(data.fetch_result, apiKey);
-    } else {
-      showError(data);
-    }
-  })
-  .catch(error => {
-    showError(error);
-  });
-}
+})
+.catch(error => {
+  showError(error); // Catch and display errors from the fetch operation or JSON parsing
+});
+    
 
 // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, apiKey) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'processing') {
+            // Update the ETA display
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, promptText);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+           // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+        } else {
+            // Handle any other statuses or errors
+            showError(data);
+            //document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+        }
+    })
+    .catch(error => {
+        console.error('Error checking image status:', error);
+        showError(error);
+        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+    });
+}
+    
 
-  var raw = JSON.stringify({
-    "key": apiKey
-  });
 
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  fetch(fetchResultUrl, requestOptions)
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === 'processing') {
-      setTimeout(() => checkImageStatus(fetchResultUrl, apiKey), 5000); // Check again after 5 seconds
-    } else if (data.status === "success" && data.output) {
-      const imageUrls = data.output.map(url =>
-        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-      );
-      showModal(imageUrls, data.transformed_prompt);
-      hideGeneratingImagesDialog();
-    } else {
-      showError(data);
-    }
-  })
-  .catch(error => {
-    console.error('Error checking image status:', error);
-    showError(error);
-  });
+function showError(error) {
+    // Update the user interface to show the error
+    console.error(error);
+    alert("Error: " + error.message);
 }
 
-// Function to show error message with dismiss button
+function displayImages(images) {
+    // Function to display images or handle the successful completion of the task
+    console.log('Displaying images:', images);
+}
+
+
+    // Function to show error message with dismiss button
 function showError(error) {
     console.error("Error generating images:", error);
     const processingMessageContainer = document.getElementById("processingMessageContainer");
@@ -550,9 +501,8 @@ function hideErrorMessage() {
     const processingMessageContainer = document.getElementById("processingMessageContainer");
     processingMessageContainer.style.display = 'none';
 }
-
-// Function to display the error modal window
-function displayErrorModal() {
+    // Function to display the error modal window
+   function displayErrorModal() {
     const errorModal = document.getElementById("errorGenerating");
     errorModal.style.display = "block";
 
@@ -567,10 +517,12 @@ function displayErrorModal() {
         errorModal.style.display = "none";
     });
 }
+}
 
 
-    
-///// END GENERATE    
+
+      
+
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
@@ -1170,7 +1122,7 @@ function downloadImage(imageUrl) {
   // Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
-}
+});
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -1301,4 +1253,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
-}
+});
