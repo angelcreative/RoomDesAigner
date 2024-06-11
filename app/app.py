@@ -1,38 +1,58 @@
+import os
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
 import hmac
 import hashlib
 import requests
 import bcrypt
-import os
 import uuid
-import requests
 import random
 import logging
 import json
 import openai
 import replicate
+from dotenv import load_dotenv
 
-# Import the json module
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 
-app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
+app.secret_key = os.getenv('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
-mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
+mongo_data_api_key = os.getenv('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
- 
+# Fetch the API key from the environment
+openai_api_key = os.getenv('OPENAI_API_KEY')
+if openai_api_key:
+    logging.debug("OpenAI API Key is set.")
+else:
+    logging.debug("OpenAI API Key is NOT set.")
+
+# Set the API key for OpenAI
+openai.api_key = openai_api_key
+
 # Replicate API token
-replicate_api_token = environ.get('REPLICATE_API_TOKEN', 'e34de83ffceb02ab41dfa5de4c9ed6229bedd7e1')
+replicate_api_token = os.getenv('REPLICATE_API_TOKEN', 'e34de83ffceb02ab41dfa5de4c9ed6229bedd7e1')
 replicate_model_version = "0c237d34697731df3f3899fed7d162b93b9a2578bb167940218e771e7b3f4a48"
 
-    
-    
+def generate_image_replicate(image_url):
+    client = replicate.Client(api_token=replicate_api_token)
+    model = client.models.get("philz1337x/clarity-upscaler")
+    version = model.versions.get(replicate_model_version)
+
+    inputs = {
+        'image': image_url
+    }
+
+    output = version.predict(**inputs)
+    return output[0]  # Assuming the API returns a list of URLs
+
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
