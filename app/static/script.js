@@ -938,6 +938,34 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
+    // Function to handle the "Clarity" button click
+async function clarityImage(imageUrl) {
+  try {
+    const response = await fetch('/clarity-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ image_url: imageUrl }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const upscaledImageUrl = data.upscaled_image_url;
+      alert("Image has been upscaled successfully!");
+
+      // Open the upscaled image in a new tab
+      window.open(upscaledImageUrl, '_blank');
+    } else {
+      alert("Failed to upscale image.");
+      console.error('Error:', response.statusText);
+    }
+  } catch (error) {
+    alert("Error upscaling image.");
+    console.error('Error:', error);
+  }
+}
+
     
     
 // Helper function to create a button and attach an event listener
@@ -988,8 +1016,9 @@ function showModal(imageUrls, transformedPrompt) {
     const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
     const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+    const clarityButton = createButton("Clarity", () => clarityImage(imageUrl)); // Add the Clarity button
 
-    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
 
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
@@ -999,6 +1028,7 @@ function showModal(imageUrls, transformedPrompt) {
   modal.style.display = "block";
   showOverlay();
 }
+
 
 
 // Function to handle the "Close" action of modal
