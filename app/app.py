@@ -35,23 +35,40 @@ else:
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
 
-# Replicate API token
-replicate_api_token = os.getenv('REPLICATE_API_TOKEN', 'e34de83ffceb02ab41dfa5de4c9ed6229bedd7e1')
-replicate_model_version = "0c237d34697731df3f3899fed7d162b93b9a2578bb167940218e771e7b3f4a48"
 
 def generate_image_replicate(image_url):
-    client = replicate.Client(api_token=replicate_api_token)
-    inputs = {
-        "image": image_url
-    }
+    try:
+        client = replicate.Client(api_token=replicate_api_token)
+        inputs = {
+            "image": image_url
+        }
 
-    prediction = client.predictions.create(
-        version=replicate_model_version,
-        input=inputs
-    )
+        prediction = client.predictions.create(
+            version=replicate_model_version,
+            input=inputs
+        )
+        
+        output = prediction.output
+        return output[0]  # Assuming the API returns a list of URLs
+    except Exception as e:
+        print(f"Error generating image: {e}")
+        return None
+
+@app.route('/clarity-image', methods=['POST'])
+def clarity_image():
+    data = request.get_json()
+    image_url = data.get('image_url')
     
-    output = prediction.output
-    return output[0]  # Assuming the API returns a list of URLs
+    if not image_url:
+        return jsonify({"error": "Missing image URL"}), 400
+    
+    # Generate the image using Replicate API
+    upscaled_image_url = generate_image_replicate(image_url)
+    
+    if upscaled_image_url:
+        return jsonify({'upscaled_image_url': upscaled_image_url})
+    else:
+        return jsonify({"error": "Image generation failed"}), 500
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -127,24 +144,7 @@ def generate_images():
         return jsonify({"error": "Insufficient credits"}), 403
 
 
-@app.route('/clarity-image', methods=['POST'])
-def clarity_image():
-    if 'username' not in session:
-        return jsonify({"error": "Not logged in"}), 401
 
-    data = request.get_json()
-    image_url = data.get('image_url')
-    
-    if not image_url:
-        return jsonify({"error": "Missing image URL"}), 400
-    
-    # Generate the image using Replicate API
-    upscaled_image_url = generate_image_replicate(image_url)
-    
-    if upscaled_image_url:
-        return jsonify({'upscaled_image_url': upscaled_image_url})
-    else:
-        return jsonify({"error": "Image generation failed"}), 500 
     
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'

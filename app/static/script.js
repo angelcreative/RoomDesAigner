@@ -938,7 +938,7 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-    // Function to handle the "Clarity" button click
+// Function to handle the "Clarity" button click
 async function clarityImage(imageUrl) {
   try {
     const response = await fetch('/clarity-image', {
@@ -957,8 +957,9 @@ async function clarityImage(imageUrl) {
       // Open the upscaled image in a new tab
       window.open(upscaledImageUrl, '_blank');
     } else {
-      alert("Failed to upscale image.");
-      console.error('Error:', response.statusText);
+      const errorData = await response.json();
+      alert(`Failed to upscale image: ${errorData.error}`);
+      console.error('Error:', errorData);
     }
   } catch (error) {
     alert("Error upscaling image.");
