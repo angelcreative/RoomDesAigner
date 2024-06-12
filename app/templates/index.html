@@ -55,7 +55,16 @@
    
     
     
-  
+    <!-- ======= SCRIPTS ========== -->
+     <script>
+        function toggleContent() {
+            const content = document.getElementById("chipsSV");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("chipsSV").style.display = "none";
+        });
+    </script>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
 
@@ -426,10 +435,12 @@
 
         <img class="logoApp" src="static/img/logoApp.svg">
             <h1>Your dream room is here</h1>
-            <div> <button onclick="toggleContent()">See prompt details</button>
-            <div class="toggle-content"></div></div>
+            <div style="visibility: hidden; display: block;height: 1px; width: 1px; opacity: 0"> <button onclick="toggleContent()">See prompt details</button>
+            <div id="chipsSV" class="toggle-content"></div></div>
             <br>
-           
+            <div class="imageGrid" id="imageGrid">
+                <button>Upscale</button>
+            </div>
          
             <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
     width: 220px;
