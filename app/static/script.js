@@ -1021,10 +1021,10 @@ function showModal(imageUrls, transformedPrompt) {
     imageGrid.appendChild(imageContainer);
   });
     
-     // Update the toggle-content div with the transformed prompt
+      // Update the toggle-content div with the transformed prompt
   const toggleContentDiv = document.querySelector(".toggle-content");
   if (toggleContentDiv) {
-    toggleContentDiv.innerHTML = prompt;
+    toggleContentDiv.innerHTML = transformedPrompt;
   } else {
     console.error("Toggle content div not found.");
   }
