@@ -585,18 +585,24 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
 
-    /*Function to copy text to clipboard
-    function copyTextToClipboard(text) {
+
+    // Function to copy text to clipboard
+    function copyTextToClipboardClip(text) {
       const tempInput = document.createElement("textarea");
       tempInput.value = text;
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-      
-      generateMessageDiv("Prompt copied to clipboard!");
+
+      alert("Text copied to clipboard!"); // Optional: Alert to show copy success
     }
-    */
+
+    // Event listener for the copy button
+    document.getElementById("toclip").addEventListener("click", function() {
+      const textToCopy = document.getElementById("chipsSV").textContent;
+      copyTextToClipboardClip(textToCopy);
+    });
     
     // Function to copy text to clipboard
 async function copyTextToClipboard(text) {

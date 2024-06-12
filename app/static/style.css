@@ -2237,14 +2237,9 @@ option[title]:hover:after {
 
 #chipsSV {
     margin: 10px auto;
-    text-align: center;
+    text-align: left;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
     max-width:1000px;
-        color:#fff
 }
 
 .chipSV {
@@ -2257,6 +2252,16 @@ option[title]:hover:after {
     /* border: 1px solid #ffffff29; */
     margin: 3px;
 }
+
+/*.toggle-content {
+    display: none;
+    background: hsl(210 34% 5% / 1);
+    padding: 24px;
+    border-radius: 16px;
+    color: hsl(210 34% 83% / 1);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;*/
 
 .hexDot {
     width: 5px;
