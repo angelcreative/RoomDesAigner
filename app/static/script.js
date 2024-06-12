@@ -598,11 +598,7 @@ rerollButton.addEventListener("click", rerollImages);
       alert("Text copied to clipboard!"); // Optional: Alert to show copy success
     }
 
-    // Event listener for the copy button
-    document.getElementById("toclip").addEventListener("click", function() {
-      const textToCopy = document.getElementById("chipsSV").textContent;
-      copyTextToClipboardClip(textToCopy);
-    });
+    
     
     // Function to copy text to clipboard
 async function copyTextToClipboard(text) {
