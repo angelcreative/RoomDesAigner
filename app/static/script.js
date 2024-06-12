@@ -583,9 +583,7 @@ rerollButton.addEventListener("click", rerollImages);
         messageDiv.remove();
       }
     }
-    
 
- 
     
     
 //ENHANCE IMAGE
@@ -917,15 +915,16 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-// Function to create a button element with the provided label and click handler
-function createButton(label, clickHandler) {
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
     const button = document.createElement("button");
-    button.textContent = label;
-    button.addEventListener("click", clickHandler);
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
     return button;
 }
-
-// Function to copy text to clipboard
+    
+    
+    / Function to copy text to clipboard
 async function copyTextToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -936,7 +935,7 @@ async function copyTextToClipboard(text) {
   }
 }
 
-// Function to toggle the visibility of the prompt details
+    // Function to toggle the visibility of the prompt details
 function toggleContent() {
   const contentDiv = document.querySelector(".toggle-content");
   if (contentDiv) {
@@ -949,32 +948,21 @@ function toggleContent() {
     console.error("Toggle content div not found.");
   }
 }
+ 
+ 
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
   const modal = document.getElementById("modal");
-  if (!modal) {
-    console.error("Modal element not found.");
-    return;
-  }
-
   const closeButton = modal.querySelector(".close");
-  if (closeButton) {
-    closeButton.removeEventListener("click", closeModalHandler);
-    closeButton.addEventListener("click", closeModalHandler);
-  } else {
-    console.error("Close button not found.");
-  }
+
+  closeButton.removeEventListener("click", closeModalHandler);
+  closeButton.addEventListener("click", closeModalHandler);
 
   const thumbnailImage = document.getElementById("thumbnail");
-  const userImageBase64 = thumbnailImage ? thumbnailImage.src : "";
+  const userImageBase64 = thumbnailImage.src;
 
   const imageGrid = document.getElementById("imageGrid");
-  if (!imageGrid) {
-    console.error("Image grid element not found.");
-    return;
-  }
-
   imageGrid.innerHTML = "";
 
   imageUrls.forEach(imageUrl => {
@@ -990,7 +978,7 @@ function showModal(imageUrls, transformedPrompt) {
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
     const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
     const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
 
@@ -1001,7 +989,7 @@ function showModal(imageUrls, transformedPrompt) {
     imageGrid.appendChild(imageContainer);
   });
 
-  // Update the toggle-content div with the transformed prompt
+    // Update the toggle-content div with the transformed prompt
   const toggleContentDiv = document.querySelector(".toggle-content");
   if (toggleContentDiv) {
     toggleContentDiv.innerHTML = transformedPrompt;
@@ -1013,26 +1001,19 @@ function showModal(imageUrls, transformedPrompt) {
   showOverlay();
 }
 
+
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
-    if (modal) {
-        modal.style.display = "none";
-    } else {
-        console.error("Modal element not found.");
-    }
+    modal.style.display = "none";
 }
 
 // Function to show overlay during modal display
 function showOverlay() {
     const overlay = document.getElementById("overlay");
-    if (overlay) {
-        overlay.style.display = "block";
-    } else {
-        console.error("Overlay element not found.");
-    }
+    overlay.style.display = "block";
 }
-
+    
  
 
     
