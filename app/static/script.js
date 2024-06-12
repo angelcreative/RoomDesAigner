@@ -457,7 +457,7 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, transformed_prompt);  // Display images
+            showModal(imageUrls, data.transformed_prompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
            // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
