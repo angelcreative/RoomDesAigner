@@ -917,29 +917,15 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
+// Function to create a button element with the provided label and click handler
+function createButton(label, clickHandler) {
     const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
+    button.textContent = label;
+    button.addEventListener("click", clickHandler);
     return button;
 }
 
-
-   /*Function to copy text to clipboard
-    function copyTextToClipboard(text) {
-      const tempInput = document.createElement("textarea");
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      
-      generateMessageDiv("Prompt copied to clipboard!");
-    }
-    */
-    
-    // Function to copy text to clipboard
+// Function to copy text to clipboard
 async function copyTextToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -950,29 +936,45 @@ async function copyTextToClipboard(text) {
   }
 }
 
-    // Function to toggle the visibility of the prompt details
+// Function to toggle the visibility of the prompt details
 function toggleContent() {
   const contentDiv = document.querySelector(".toggle-content");
-  if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
-    contentDiv.style.display = "block";
+  if (contentDiv) {
+    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+      contentDiv.style.display = "block";
+    } else {
+      contentDiv.style.display = "none";
+    }
   } else {
-    contentDiv.style.display = "none";
+    console.error("Toggle content div not found.");
   }
 }
-    
-    
-    // Displays modal with generated images and associated action buttons
+
+// Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
   const modal = document.getElementById("modal");
-  const closeButton = modal.querySelector(".close");
+  if (!modal) {
+    console.error("Modal element not found.");
+    return;
+  }
 
-  closeButton.removeEventListener("click", closeModalHandler);
-  closeButton.addEventListener("click", closeModalHandler);
+  const closeButton = modal.querySelector(".close");
+  if (closeButton) {
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+  } else {
+    console.error("Close button not found.");
+  }
 
   const thumbnailImage = document.getElementById("thumbnail");
-  const userImageBase64 = thumbnailImage.src;
+  const userImageBase64 = thumbnailImage ? thumbnailImage.src : "";
 
   const imageGrid = document.getElementById("imageGrid");
+  if (!imageGrid) {
+    console.error("Image grid element not found.");
+    return;
+  }
+
   imageGrid.innerHTML = "";
 
   imageUrls.forEach(imageUrl => {
@@ -988,7 +990,7 @@ function showModal(imageUrls, transformedPrompt) {
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
     const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
     const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
 
@@ -998,29 +1000,39 @@ function showModal(imageUrls, transformedPrompt) {
     imageContainer.appendChild(buttonsContainer);
     imageGrid.appendChild(imageContainer);
   });
-    
-    
-// Update the toggle-content div with the transformed prompt
+
+  // Update the toggle-content div with the transformed prompt
   const toggleContentDiv = document.querySelector(".toggle-content");
-  toggleContentDiv.innerHTML = transformedPrompt;    
-    
+  if (toggleContentDiv) {
+    toggleContentDiv.innerHTML = transformedPrompt;
+  } else {
+    console.error("Toggle content div not found.");
+  }
+
   modal.style.display = "block";
   showOverlay();
 }
 
-
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
-    modal.style.display = "none";
+    if (modal) {
+        modal.style.display = "none";
+    } else {
+        console.error("Modal element not found.");
+    }
 }
 
 // Function to show overlay during modal display
 function showOverlay() {
     const overlay = document.getElementById("overlay");
-    overlay.style.display = "block";
+    if (overlay) {
+        overlay.style.display = "block";
+    } else {
+        console.error("Overlay element not found.");
+    }
 }
-    
+
  
 
     
