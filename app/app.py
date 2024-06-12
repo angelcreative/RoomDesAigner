@@ -1,74 +1,30 @@
-import os
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
 import hmac
 import hashlib
 import requests
 import bcrypt
+import os
 import uuid
+import requests
 import random
 import logging
 import json
 import openai
-import replicate
-
- 
+# Import the json module
 
 app = Flask(__name__)
 CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 
-app.secret_key = os.getenv('SECRET_KEY', 'S3cR#tK3y_2023$!')
+app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
-mongo_data_api_key = os.getenv('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
+mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
-# Fetch the API key from the environment
-openai_api_key = os.getenv('OPENAI_API_KEY')
-if openai_api_key:
-    logging.debug("OpenAI API Key is set.")
-else:
-    logging.debug("OpenAI API Key is NOT set.")
-
-# Set the API key for OpenAI
-openai.api_key = openai_api_key
-
-
-def generate_image_replicate(image_url):
-    try:
-        client = replicate.Client(api_token=replicate_api_token)
-        inputs = {
-            "image": image_url
-        }
-
-        prediction = client.predictions.create(
-            version=replicate_model_version,
-            input=inputs
-        )
-        
-        output = prediction.output
-        return output[0]  # Assuming the API returns a list of URLs
-    except Exception as e:
-        print(f"Error generating image: {e}")
-        return None
-
-@app.route('/clarity-image', methods=['POST'])
-def clarity_image():
-    data = request.get_json()
-    image_url = data.get('image_url')
-    
-    if not image_url:
-        return jsonify({"error": "Missing image URL"}), 400
-    
-    # Generate the image using Replicate API
-    upscaled_image_url = generate_image_replicate(image_url)
-    
-    if upscaled_image_url:
-        return jsonify({'upscaled_image_url': upscaled_image_url})
-    else:
-        return jsonify({"error": "Image generation failed"}), 500
+ 
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -109,6 +65,7 @@ def transform_prompt(prompt_text):
 
 
 
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -144,8 +101,6 @@ def generate_images():
         return jsonify({"error": "Insufficient credits"}), 403
 
 
-
-    
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
     query_body = {

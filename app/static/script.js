@@ -585,30 +585,7 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
 
-    /*Function to copy text to clipboard
-    function copyTextToClipboard(text) {
-      const tempInput = document.createElement("textarea");
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      
-      generateMessageDiv("Prompt copied to clipboard!");
-    }
-    */
-    
-    // Function to copy text to clipboard
-async function copyTextToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    generateMessageDiv("Prompt copied to clipboard!");
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    generateMessageDiv("Failed to copy prompt to clipboard.");
-  }
-}
-
+ 
     
     
 //ENHANCE IMAGE
@@ -938,56 +915,53 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-// Function to handle the "Clarity" button click
-async function clarityImage(imageUrl) {
-  try {
-    const response = await fetch('/clarity-image', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ image_url: imageUrl }),
-    });
+    
+    
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
 
-    if (response.ok) {
-      const data = await response.json();
-      const upscaledImageUrl = data.upscaled_image_url;
-      alert("Image has been upscaled successfully!");
 
-      // Open the upscaled image in a new tab
-      window.open(upscaledImageUrl, '_blank');
-    } else {
-      const errorData = await response.json();
-      alert(`Failed to upscale image: ${errorData.error}`);
-      console.error('Error:', errorData);
+   /*Function to copy text to clipboard
+    function copyTextToClipboard(text) {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      
+      generateMessageDiv("Prompt copied to clipboard!");
     }
-  } catch (error) {
-    alert("Error upscaling image.");
-    console.error('Error:', error);
+    */
+    
+    // Function to copy text to clipboard
+async function copyTextToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    generateMessageDiv("Prompt copied to clipboard!");
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+    generateMessageDiv("Failed to copy prompt to clipboard.");
   }
 }
 
+    // Function to toggle the visibility of the prompt details
+function toggleContent() {
+  const contentDiv = document.querySelector(".toggle-content");
+  if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+    contentDiv.style.display = "block";
+  } else {
+    contentDiv.style.display = "none";
+  }
+}
     
     
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
-
- 
-
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
-
-// Displays modal with generated images and associated action buttons
+    // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
   const modal = document.getElementById("modal");
   const closeButton = modal.querySelector(".close");
@@ -1017,19 +991,22 @@ function showModal(imageUrls, transformedPrompt) {
     const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
     const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-    const clarityButton = createButton("Clarity", () => clarityImage(imageUrl)); // Add the Clarity button
 
-    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
     imageGrid.appendChild(imageContainer);
   });
-
+    
+    
+// Update the toggle-content div with the transformed prompt
+  const toggleContentDiv = document.querySelector(".toggle-content");
+  toggleContentDiv.innerHTML = transformedPrompt;    
+    
   modal.style.display = "block";
   showOverlay();
 }
-
 
 
 // Function to handle the "Close" action of modal
