@@ -1024,7 +1024,7 @@ function showModal(imageUrls, transformedPrompt) {
      // Update the toggle-content div with the transformed prompt
   const toggleContentDiv = document.querySelector(".toggle-content");
   if (toggleContentDiv) {
-    toggleContentDiv.innerHTML = p;
+    toggleContentDiv.innerHTML = "";
   } else {
     console.error("Toggle content div not found.");
   }
