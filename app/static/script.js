@@ -924,7 +924,7 @@ function createButton(text, onClickHandler) {
 }
     
     
-    / Function to copy text to clipboard
+    // Function to copy text to clipboard
 async function copyTextToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
