@@ -457,7 +457,7 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, promptText);  // Display images
+            showModal(imageUrls, transformed_prompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
            // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
@@ -1010,7 +1010,7 @@ function showModal(imageUrls, transformedPrompt) {
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
     const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(prompt)); // Use transformedPrompt here
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
     const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
 
@@ -1024,7 +1024,7 @@ function showModal(imageUrls, transformedPrompt) {
      // Update the toggle-content div with the transformed prompt
   const toggleContentDiv = document.querySelector(".toggle-content");
   if (toggleContentDiv) {
-    toggleContentDiv.innerHTML = prompt;
+    toggleContentDiv.innerHTML = p;
   } else {
     console.error("Toggle content div not found.");
   }
