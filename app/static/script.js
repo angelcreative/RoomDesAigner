@@ -949,14 +949,33 @@ function createButton(text, onClickHandler) {
 }
 
  
-
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
+// Function to copy text to clipboard
+async function copyTextToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    generateMessageDiv("Prompt copied to clipboard!");
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+    generateMessageDiv("Failed to copy prompt to clipboard.");
+  }
 }
+
+// Function to toggle the visibility of the prompt details
+function toggleContent() {
+  const contentDiv = document.querySelector(".toggle-content");
+  if (contentDiv) {
+    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+      contentDiv.style.display = "block";
+    } else {
+      contentDiv.style.display = "none";
+    }
+  } else {
+    console.error("Toggle content div not found.");
+  }
+}
+
+    
+    
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -995,6 +1014,14 @@ function showModal(imageUrls, transformedPrompt) {
     imageContainer.appendChild(buttonsContainer);
     imageGrid.appendChild(imageContainer);
   });
+    
+     // Update the toggle-content div with the transformed prompt
+  const toggleContentDiv = document.querySelector(".toggle-content");
+  if (toggleContentDiv) {
+    toggleContentDiv.innerHTML = transformedPrompt;
+  } else {
+    console.error("Toggle content div not found.");
+  }
 
   modal.style.display = "block";
   showOverlay();
