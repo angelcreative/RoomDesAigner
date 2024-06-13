@@ -344,7 +344,7 @@ const prompt = {
     webhook: null,
     safety_checker: false, 
     track_id: null,
-    enhance_style: ["masterpiece", "photograph", "analog-film", "cinematic"] // Ensure correct styles as an array
+    enhance_style: cinematic // Ensure correct styles as an array
 };
 
     
