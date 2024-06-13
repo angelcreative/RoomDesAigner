@@ -327,8 +327,6 @@ console.log(`Width: ${width}, Height: ${height}`);
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
-const enhanceStyle = "masterpiece, photograph, analog-film, cinematic"; // Best styles for photographic quality
-
  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
 const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
 const promptText = `${promptInit} ${plainText} ${fractalText} ${promptEndy} ${optionalText} ${customText}`;
@@ -346,7 +344,7 @@ const prompt = {
     webhook: null,
     safety_checker: false, 
     track_id: null,
-    enhance_style: enhanceStyle // Include your chosen style
+    enhance_style: "masterpiece, photograph, analog-film, cinematic" // Include your chosen style
 };
 
     
