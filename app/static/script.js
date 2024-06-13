@@ -1134,7 +1134,6 @@ function downloadImage(imageUrl) {
 document.addEventListener("DOMContentLoaded", function() {
   const form = document.getElementById("imageGenerationForm");
   const clearAllButton = document.getElementById("clearAllButton");
-  const selectElements = document.querySelectorAll("select");
 
   // Function to hide green dots
   function hideGreenDots() {
@@ -1190,7 +1189,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //disable MB
 
-const selectElements = document.querySelectorAll("select");
 
 // Function to check if all select options have empty values
 function areAllOptionsEmpty() {
