@@ -1127,33 +1127,45 @@ function downloadImage(imageUrl) {
     // Reset the form and event listeners
 //    resetFormAndEventListeners();
   }
+    
+    
     // Function to clear all form values and reset the image display
-    function clearAll(event) {
-      /*event.preventDefault(); // Prevent form submission
-      const fileInput = document.getElementById("imageDisplayUrl");
-      fileInput.value = ""; // Clear the file input*/
-      const form = document.getElementById("imageGenerationForm");
-      form.reset(); // Reset the form
-      // Hide all green dots
-      const selectElements = document.querySelectorAll('select');
-      selectElements.forEach(function(selectElement) {
-        const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
-        dotElement.style.display = 'none';
-      });
-      // Enable the "Make the Magic" button
-      const magicButton = document.getElementById("magicButton");
-      magicButton.disabled = false;
-      // Reset the form and event listeners
-      resetFormAndEventListeners();
-    }
-  // Add event listener to the form submission
+
+document.addEventListener("DOMContentLoaded", function() {
   const form = document.getElementById("imageGenerationForm");
-  form.addEventListener("submit", handleSubmit);
-  // Add event listener to the close button of the modal
-  const closeButton = document.getElementsByClassName("close")[0];
-  closeButton.addEventListener("click", closeModal);
-  // Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
+  const selectElements = document.querySelectorAll("select");
+
+  // Function to hide green dots
+  function hideGreenDots() {
+    selectElements.forEach(function(selectElement) {
+      const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
+      if (dotElement) {
+        dotElement.style.display = 'none';
+      }
+    });
+  }
+
+  // Function to clear all form values and reset the image display
+  function clearAll(event) {
+    event.preventDefault(); // Prevent form submission
+    form.reset(); // Reset the form
+
+    // Hide all green dots
+    hideGreenDots();
+
+    // Disable the "Make the Magic" button
+    const magicButton = document.getElementById("magicButton");
+    magicButton.disabled = true;
+
+    // Clear the thumbnail image and hide the container
+    const thumbnail = document.getElementById("thumbnail");
+    thumbnail.src = '';
+    const thumbContainer = document.querySelector('.thumbImg');
+    thumbContainer.style.display = 'none';
+  }
+
+  // Add event listener to the "Clear All" button
   clearAllButton.addEventListener("click", clearAll);
 });
 
