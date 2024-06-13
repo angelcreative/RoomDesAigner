@@ -1127,44 +1127,33 @@ function downloadImage(imageUrl) {
     // Reset the form and event listeners
 //    resetFormAndEventListeners();
   }
-    
-    
     // Function to clear all form values and reset the image display
-
-document.addEventListener("DOMContentLoaded", function() {
-  const form = document.getElementById("imageGenerationForm");
-  const clearAllButton = document.getElementById("clearAllButton");
-
-  // Function to hide green dots
-  function hideGreenDots() {
-    selectElements.forEach(function(selectElement) {
-      const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
-      if (dotElement) {
+    function clearAll(event) {
+      /*event.preventDefault(); // Prevent form submission
+      const fileInput = document.getElementById("imageDisplayUrl");
+      fileInput.value = ""; // Clear the file input*/
+      const form = document.getElementById("imageGenerationForm");
+      form.reset(); // Reset the form
+      // Hide all green dots
+      const selectElements = document.querySelectorAll('select');
+      selectElements.forEach(function(selectElement) {
+        const dotElement = document.querySelector('#' + selectElement.id + '+ span.dot');
         dotElement.style.display = 'none';
-      }
-    });
-  }
-
-  // Function to clear all form values and reset the image display
-  function clearAll(event) {
-    event.preventDefault(); // Prevent form submission
-    form.reset(); // Reset the form
-
-    // Hide all green dots
-    hideGreenDots();
-
-    // Disable the "Make the Magic" button
-    const magicButton = document.getElementById("magicButton");
-    magicButton.disabled = true;
-
-    // Clear the thumbnail image and hide the container
-    const thumbnail = document.getElementById("thumbnail");
-    thumbnail.src = '';
-    const thumbContainer = document.querySelector('.thumbImg');
-    thumbContainer.style.display = 'none';
-  }
-
+      });
+      // Enable the "Make the Magic" button
+      const magicButton = document.getElementById("magicButton");
+      magicButton.disabled = false;
+      // Reset the form and event listeners
+      resetFormAndEventListeners();
+    }
+  // Add event listener to the form submission
+  const form = document.getElementById("imageGenerationForm");
+  form.addEventListener("submit", handleSubmit);
+  // Add event listener to the close button of the modal
+  const closeButton = document.getElementsByClassName("close")[0];
+  closeButton.addEventListener("click", closeModal);
   // Add event listener to the "Clear All" button
+  const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);
 });
 
@@ -1189,6 +1178,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //disable MB
 
+const selectElements = document.querySelectorAll("select");
 
 // Function to check if all select options have empty values
 function areAllOptionsEmpty() {
@@ -1270,7 +1260,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 

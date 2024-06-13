@@ -2125,7 +2125,7 @@ border: 1px solid #ffffff42;
     box-shadow: #8c8c8c 0px 0px 0px 2px inset;
 }
 
-/*#clearAllButton {display:none;}*/
+#clearAllButton {display:none;}
 
 .fakeBttn {
     background: #151414;
