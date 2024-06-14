@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Ensure color pickers are enabled/disabled on page load based on switch state
-        switchContainers.forEach(switchElement => {
+        /*switchContainers.forEach(switchElement => {
             const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
             colorPickers.forEach(picker => {
                 picker.disabled = !switchElement.checked;
             });
-        });
+        });*/
     }
 
     // AIDESIGN
