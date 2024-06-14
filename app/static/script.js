@@ -327,25 +327,25 @@ console.log(`Width: ${width}, Height: ${height}`);
   const seedSwitch = document.getElementById("seedSwitch");
   const seedEnabled = seedSwitch.checked;
   const seedValue = seedEnabled ? null : "19071975";
- const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-const promptText = `${promptInit} ${plainText} ${fractalText} ${promptEndy} ${optionalText} ${customText}`;
 
-const prompt = {
+  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+  const prompt = {
     key: apiKey,
-    prompt: promptText,  // Use template literals here
+    prompt: promptText,
     negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
     width: width, 
     height: height, 
     samples: "4",
     guidance_scale: "10",
-    num_inference_steps: "60", 
+    num_inference_steps: "40", 
     seed: seedValue,
     webhook: null,
     safety_checker: false, 
     track_id: null,
-    enhance_style: cinematic // Ensure correct styles as an array
-};
+  };
 
     
     
