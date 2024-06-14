@@ -329,7 +329,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     const prompt = {
         key: apiKey,
-        prompt: promptText,
+        prompt: JSON.stringify(promptText),
         negative_prompt: " (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck ",
         width: width, 
         height: height, 
@@ -357,86 +357,64 @@ if (isImg2Img && imageUrl) {
     
     
 // Fetch request to generate images
-  fetch("/generate-images", {
-        method: "POST",
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+ .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+})
+ .then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, promptText);
+        hideGeneratingImagesDialog();
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result);
+    } else {
+        showError(data);
+    }
+})
+  .catch(error => {
+    showError(error);
+});
+         
+    
+function checkImageStatus(fetchResultUrl) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
         headers: {
-            "Content-Type": "application/json"
+            'Content-Type': 'application/json',
+            // Include any other necessary headers, such as authorization headers if needed
         },
-        body: JSON.stringify(prompt)
+        // If additional data needs to be sent in the request body, include it here
+    body: JSON.stringify(prompt)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        if (data.status === "success" && data.proxy_links) {
-            const imageUrls = data.proxy_links;
-            showModal(imageUrls, data.transformed_prompt);
-            hideGeneratingImagesDialog();
-        } else if (data.status === "processing" && data.id) {
-            checkImageStatus(data.id);
+        if (data.status === 'processing') {
+            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+        } else if (data.status === 'success') {
+            // Handle success
+            // You might want to call a function to process and display the images
         } else {
+            // Handle any other statuses or errors
             showError(data);
         }
     })
     .catch(error => {
+        console.error('Error checking image status:', error);
         showError(error);
     });
 }
-        
-    
-// Function to fetch queued images
-function fetchQueuedImages(id) {
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ key: apiKey })
-    };
-
-    const fetchUrl = `https://modelslab.com/api/v6/realtime/fetch/${id}`;
-
-    return fetch(fetchUrl, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error fetching queued images:', error);
-            throw error;
-        });
-}    
-    
-    
-// Function to check image status
-function checkImageStatus(id) {
-    fetchQueuedImages(id)
-        .then(data => {
-            if (data.status === 'processing') {
-                if (data.eta) {
-                    document.getElementById('etaValue').textContent = data.eta;
-                }
-                setTimeout(() => checkImageStatus(id), 2000); // Check again after 2 seconds
-            } else if (data.status === "success" && data.output) {
-                const imageUrls = data.output;
-                showModal(imageUrls);  // Display images
-                hideGeneratingImagesDialog();  // Hide any loading dialogs
-            } else {
-                showError(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error checking image status:', error);
-            showError(error);
-        });
-}       
-
 
 
 

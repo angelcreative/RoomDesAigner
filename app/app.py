@@ -72,64 +72,22 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        
-        prompt_text = data.get('prompt')
-        if not prompt_text:
-            return jsonify({"error": "Missing prompt text"}), 400
-        
-        transformed_prompt = transform_prompt(prompt_text)
-        data['prompt'] = transformed_prompt
-
         url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
-            result = response.json()
-            result['transformed_prompt'] = transformed_prompt
-
-            if result.get('status') == 'processing' and 'id' in result:
-                return jsonify({
-                    "status": "processing",
-                    "id": result['id']
-                })
-            else:
-                deduct_credits(username, 2)
-                result['proxy_links'] = [f"/proxy-image?url={link}" for link in result.get('output', [])]
-                return jsonify(result)
+            deduct_credits(username, 2)
+            return jsonify(response.json())
         else:
-            logging.error(f"Image generation failed with status code {response.status_code}: {response.text}")
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
     
-    
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
     image_url = request.args.get('url')
-    if not image_url:
-        logging.error("Missing image URL")
-        return Response("Missing image URL", status=400)
-    
-    logging.info(f"Fetching image from URL: {image_url}")
-    
-    try:
-        image_response = requests.get(image_url, stream=True)
-        image_response.raise_for_status()  # Lanzará una excepción si el status code no es 200
-        
-        headers = {
-            'Content-Type': image_response.headers.get('Content-Type', 'application/octet-stream'),
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-            'Access-Control-Allow-Origin': '*'
-        }
-        
-        return Response(image_response.iter_content(chunk_size=4096), headers=headers)
-    except requests.exceptions.HTTPError as http_err:
-        logging.error(f"HTTP error occurred: {http_err}")  # HTTP error
-        return Response(f"HTTP error occurred: {http_err}", status=image_response.status_code)
-    except Exception as err:
-        logging.error(f"Other error occurred: {err}")  # Other errors
-        return Response(f"Error fetching image: {err}", status=500)
+    image_response = requests.get(image_url, stream=True)
+    headers = {'Content-Type': image_response.headers['Content-Type']}
+    return Response(image_response.iter_content(chunk_size=1024), headers=headers)
 
 
 def get_user_data(username):
