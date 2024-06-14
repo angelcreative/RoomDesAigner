@@ -285,55 +285,7 @@ function generateFractalText() {
 
 
     
-// Function to fetch queued images
-function fetchQueuedImages(id) {
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ key: apiKey })
-    };
-
-    const fetchUrl = `https://modelslab.com/api/v6/realtime/fetch/${id}`;
-
-    return fetch(fetchUrl, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .catch(error => {
-            console.error('Error fetching queued images:', error);
-            throw error;
-        });
-}    
-    
-    
-// Function to check image status
-function checkImageStatus(id) {
-    fetchQueuedImages(id)
-        .then(data => {
-            if (data.status === 'processing') {
-                if (data.eta) {
-                    document.getElementById('etaValue').textContent = data.eta;
-                }
-                setTimeout(() => checkImageStatus(id), 2000); // Check again after 2 seconds
-            } else if (data.status === "success" && data.output) {
-                const imageUrls = data.output;
-                showModal(imageUrls);  // Display images
-                hideGeneratingImagesDialog();  // Hide any loading dialogs
-            } else {
-                showError(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error checking image status:', error);
-            showError(error);
-        });
-}    
+ 
  
 // Function to generate images
 function generateImages(imageUrl, selectedValues, isImg2Img) {
@@ -401,49 +353,9 @@ if (isImg2Img && imageUrl) {
     const strengthSlider = document.getElementById("strengthSlider");
     prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
   }
+
     
-   /*   const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
-
-        for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            // Replace "_" with " " in the value
-            const formattedValue = value.replace(/_/g, " ");
-            
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
-
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = formattedValue;
-            } else {
-              chip.textContent = formattedValue;
-            }
-
-            if (formattedValue.includes("_")) {
-              chip.style.visibility = "visible"; // Hide "_" character
-            }
-
-            chipsSV.appendChild(chip);
-          }
-        }*/
-
-
-      // Get the <span> element by its class name
-     // var spanElement = document.querySelector(".chipSV");
-
-      // Get the text content of the <span> element
-    //  var text = spanElement.textContent;
-
-      // Replace all underscore characters with non-breaking spaces
-     // var modifiedText = text.replace(/_/g, "&nbsp;");
-
-      // Update the text content of the <span> element
-   //   spanElement.textContent = modifiedText;
-// Fetch request to generate images
-
+    
 // Fetch request to generate images
   fetch("/generate-images", {
         method: "POST",
@@ -473,7 +385,59 @@ if (isImg2Img && imageUrl) {
         showError(error);
     });
 }
+        
     
+// Function to fetch queued images
+function fetchQueuedImages(id) {
+    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ key: apiKey })
+    };
+
+    const fetchUrl = `https://modelslab.com/api/v6/realtime/fetch/${id}`;
+
+    return fetch(fetchUrl, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error fetching queued images:', error);
+            throw error;
+        });
+}    
+    
+    
+// Function to check image status
+function checkImageStatus(id) {
+    fetchQueuedImages(id)
+        .then(data => {
+            if (data.status === 'processing') {
+                if (data.eta) {
+                    document.getElementById('etaValue').textContent = data.eta;
+                }
+                setTimeout(() => checkImageStatus(id), 2000); // Check again after 2 seconds
+            } else if (data.status === "success" && data.output) {
+                const imageUrls = data.output;
+                showModal(imageUrls);  // Display images
+                hideGeneratingImagesDialog();  // Hide any loading dialogs
+            } else {
+                showError(data);
+            }
+        })
+        .catch(error => {
+            console.error('Error checking image status:', error);
+            showError(error);
+        });
+}       
+
+
 
 
     
