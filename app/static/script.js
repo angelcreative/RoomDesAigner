@@ -232,13 +232,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Slider event listener for displaying value
-  const slider = document.getElementById("strengthSlider");
-  const sliderValueDisplay = document.getElementById("sliderValue");
-
-  slider.addEventListener("input", function() {
-    sliderValueDisplay.textContent = this.value;
-  });
 
   
     const selectedValues = getSelectedValues();
@@ -308,19 +301,15 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1024;
-  height = Math.round((2 / 3) * 1024);  
+  width = 1080;
+  height = Math.round((2 / 3) * 1080);  
 } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1024);  
-  height = 1024;
+  width = Math.round((2 / 3) * 1080);  
+  height = 1080;
 } else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1024;
-  height = 1024;
+  width = 1080;
+  height = 1080;
 }
-
-// Ensure dimensions are divisible by 8
-width = Math.floor(width / 8) * 8;
-height = Math.floor(height / 8) * 8;
 
 console.log(`Width: ${width}, Height: ${height}`);
 
@@ -401,38 +390,38 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-// Fetch request to generate images
-fetch("/generate-images", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(prompt)
+  fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
 })
 .then(response => {
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return response.json(); // Parse JSON only if the response was OK
+    if (!response.ok) {
+        // Directly throw an error with the status to handle it in the catch block
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();  // Parse JSON only if the response was OK
 })
 .then(data => {
-  if (data.status === "success" && data.proxy_links) { // Use proxy_links directly
-    const imageUrls = data.proxy_links; // No need to transform URLs
-
-    // Log the image URLs to ensure they are correct
-    console.log("Image URLs:", imageUrls);
-
-    showModal(imageUrls, data.transformed_prompt); // Pass the transformed prompt here
-    hideGeneratingImagesDialog(); // Hide any loading dialogs
-  } else if (data.status === "processing" && data.fetch_result) {
-    checkImageStatus(data.fetch_result); // Continue checking status if processing
-  } else {
-    showError(data); // Show error if other statuses are encountered
-  }
+    // Handle the API response based on its status
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+    } else {
+        showError(data);  // Show error if other statuses are encountered
+    }
 })
 .catch(error => {
-  showError(error); // Catch and display errors from the fetch operation or JSON parsing
+    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
+
     
 
 // Define the checkImageStatus function
@@ -457,19 +446,19 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
+            showModal(imageUrls, promptText);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-           // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
             // Handle any other statuses or errors
             showError(data);
-            //document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
     
@@ -585,20 +574,18 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
 
-
-    // Function to copy text to clipboard
-    function copyTextToClipboardClip(text) {
+    /*Function to copy text to clipboard
+    function copyTextToClipboard(text) {
       const tempInput = document.createElement("textarea");
       tempInput.value = text;
       document.body.appendChild(tempInput);
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
-
-      alert("Text copied to clipboard!"); // Optional: Alert to show copy success
+      
+      generateMessageDiv("Prompt copied to clipboard!");
     }
-
-    
+    */
     
     // Function to copy text to clipboard
 async function copyTextToClipboard(text) {
@@ -951,84 +938,65 @@ function createButton(text, onClickHandler) {
 }
 
  
-// Function to copy text to clipboard
-async function copyTextToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    generateMessageDiv("Prompt copied to clipboard!");
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    generateMessageDiv("Failed to copy prompt to clipboard.");
-  }
-}
 
-// Function to toggle the visibility of the prompt details
-function toggleContent() {
-  const contentDiv = document.querySelector(".toggle-content");
-  if (contentDiv) {
-    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
-      contentDiv.style.display = "block";
-    } else {
-      contentDiv.style.display = "none";
-    }
-  } else {
-    console.error("Toggle content div not found.");
-  }
+// Helper function to create a button and attach an event listener
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
 }
-
-    
-    
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
-  const modal = document.getElementById("modal");
-  const closeButton = modal.querySelector(".close");
-
-  closeButton.removeEventListener("click", closeModalHandler);
-  closeButton.addEventListener("click", closeModalHandler);
-
-  const thumbnailImage = document.getElementById("thumbnail");
-  const userImageBase64 = thumbnailImage.src;
-
-  const imageGrid = document.getElementById("imageGrid");
-  imageGrid.innerHTML = "";
-
-  imageUrls.forEach(imageUrl => {
-    const imageContainer = document.createElement("div");
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = "Generated Image";
-    image.classList.add("thumbnail");
-
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("image-buttons");
-
-    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
-    const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-
-    [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
-
-    imageContainer.appendChild(image);
-    imageContainer.appendChild(buttonsContainer);
-    imageGrid.appendChild(imageContainer);
-  });
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
     
-      // Update the toggle-content div with the transformed prompt
-  const toggleContentDiv = document.querySelector(".toggle-content");
-  if (toggleContentDiv) {
-    toggleContentDiv.innerHTML = transformedPrompt;
-  } else {
-    console.error("Toggle content div not found.");
-  }
 
-  modal.style.display = "block";
-  showOverlay();
+    // Ensure only one event listener is added
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+    
+     // Get the thumbnail image source (user-uploaded image)
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    imageUrls.forEach(imageUrl => {
+        const imageContainer = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
+
+        // Create buttons
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
+ 
+        // Append buttons to container
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+        imageGrid.appendChild(imageContainer);
+    });
+
+    modal.style.display = "block";
+    showOverlay();
 }
 
+    
+ 
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {

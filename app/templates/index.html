@@ -37,18 +37,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Varela+Round&display=swap" rel="stylesheet">
     <style>
         .toggle-content {
-    display: none;
-    background: hsl(210 34% 5% / 1);
-    padding: 24px;
-    border-radius: 16px;
-    color: hsl(210 34% 83% / 1);
-    font-size: 14px;
-    line-height: 1.5;
-    text-align: left;
-            
+            display: none;
         }
-        
-        
         .chipSV {
             display: block;
             margin: 5px 0;
@@ -403,7 +393,7 @@
         <div class="message-content message">
         <img src="/static/img/modal_img/designing.svg" alt="Imagen de carga">
         <h2 id="dialogTitle" class="bigTitle"></h2>
-        
+        <div id="etaDisplay">Estimated time remaining: <span id="etaValue"></span> seconds</div>
         <div class="preloader"><img src="/static/img/gen.svg" alt="Imagen de loader"></div>
         </div>
         
@@ -445,10 +435,9 @@
 
         <img class="logoApp" src="static/img/logoApp.svg">
             <h1>Your dream room is here</h1>
-             <div> <button onclick="toggleContent()">See prompt details</button>
+            <div style="visibility: hidden; display: block;height: 1px; width: 1px; opacity: 0"> <button onclick="toggleContent()">See prompt details</button>
             <div id="chipsSV" class="toggle-content"></div></div>
             <br>
-            
             <div class="imageGrid" id="imageGrid">
                 <button>Upscale</button>
             </div>
@@ -560,7 +549,6 @@ Image</h1>
         <option value="African_Style_defined_by_rich_colors_tribal_patterns_natural_materials_cultural_motifs">African Style</option>
         <option value="Andalusian_Style_defined_by_intricate_tilework_vibrant_colors_Moorish_influences_courtyards">Andalusian Style</option>
         <option value="Asian_Zen_Style_defined_by_peace_harmony_balance_with_a_minimalist_approach">Asian Zen Style</option>
-        <option value="Balinese_Style_defined_by_tropical_inspiration_wooden_accents_stone_elements_indoor_plants_zen_ambiance">Balinese Style</option>
         <option value="Chinese_Modern_Style_defined_by_traditional_Chinese_elements_blended_with_modern_designs">Chinese Modern Style</option>
         <option value="English_Country_Style_defined_by_floral_patterns_traditional_furnishings_countryside_charm">English Country Style</option>
         <option value="French_Country_Style_defined_by_elegance_with_rustic_elements_inspired_by_rural_France">French Country Style</option>
@@ -568,7 +556,6 @@ Image</h1>
         <option value="Ibicenco_Style_defined_by_white_washed_walls_natural_materials_rustic_elegance_indoor_outdoor_living">Ibicenco Style</option>
         <option value="Japanese_Style_defined_by_simplicity_minimalism_harmony_with_nature_clean_lines_tranquility">Japanese Style</option>
         <option value="Mediterranean_Style_defined_by_warm_colors_natural_textures_rustic_elements_relaxed_ambiance">Mediterranean Style</option>
-        <option value="Mykonos_Santorini_Style_defined_by_Greek_Island_inspiration_whitewashed_walls_blue_accents_minimalist_clean_lines">Mykonos Santorini Style</option>
         <option value="Moroccan_Style_defined_by_vibrant_rich_colors_intricate_patterns_exotic_atmosphere">Moroccan Style</option>
         <option value="Spanish_Mediterranean_Style_defined_by_Spanish_and_Mediterranean_influences_warm_tones_arched_doorways_tilework_wrought_iron_details">Spanish Mediterranean Style</option>
         <option value="Tuscan_Style_defined_by_Italian_Tuscany_inspiration_warm_earth_tones_textured_walls_rustic_elements">Tuscan Style</option>
@@ -1338,7 +1325,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
             <label class="switchLabel">Activate 60 30 10 color rule</label>
-            <input type="checkbox" id="use_colors"  >
+            <input type="checkbox" id="use_colors" checked>
         </div>
         <div class="colorPickers">
             <div class="colorPaletteA">
@@ -1362,7 +1349,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
             <label class="switchLabel">Activate wall color</label>
-            <input type="checkbox" id="use_walls_paint_color"  >
+            <input type="checkbox" id="use_walls_paint_color" checked>
         </div>
         <div class="colorPickers">
             <div class="colorPaletteA">
@@ -1379,7 +1366,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
             <label class="switchLabel">Activate furniture color</label>
-            <input type="checkbox" id="use_furniture_color"  >
+            <input type="checkbox" id="use_furniture_color" checked>
         </div>
         <div class="colorPickers">
             <div class="colorPaletteA">
@@ -1396,6 +1383,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
     <option value="Converts_image_to_black_and_white_eliminating_color" title="Black and White Colors">Black and White Colors</option>
     <option value="Boosts_color_saturation_to_make_colors_more_vivid" title="Hyper Saturated Colors">Hyper Saturated Colors</option>
     <option value="Reduces_color_saturation_for_a_more_subdued_look" title="Low Saturated Colors">Low Saturated Colors</option>
+    <option value="Introduces_a_green_hue_to_the_image_for_a_monochromatic_effect" title="Greenish Colored">Greenish Colored</option>
     <option value="Applies_a_sepia_filter_for_a_classic_vintage_look" title="Sepia Colored">Sepia Colored</option>
     <option value="Introduces_a_red_hue_to_the_image_for_a_vibrant_red_effect" title="Red Colored">Red Colored</option>
     <option value="Introduces_an_orange_hue_to_the_image_for_a_vibrant_orange_effect" title="Orange Colored">Orange Colored</option>
