@@ -946,6 +946,21 @@ function createButton(text, onClickHandler) {
     button.addEventListener("click", onClickHandler);
     return button;
 }
+    
+    
+    // Function to toggle the visibility of the prompt details
+function toggleContent() {
+  const contentDiv = document.querySelector(".toggle-content");
+  if (contentDiv) {
+    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+      contentDiv.style.display = "block";
+    } else {
+      contentDiv.style.display = "none";
+    }
+  } else {
+    console.error("Toggle content div not found.");
+  }
+}
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -991,6 +1006,14 @@ function showModal(imageUrls, transformedPrompt) {
         imageGrid.appendChild(imageContainer);
     });
 
+     // Update the toggle-content div with the transformed prompt
+  const toggleContentDiv = document.querySelector(".toggle-content");
+  if (toggleContentDiv) {
+    toggleContentDiv.innerHTML = transformedPrompt;
+  } else {
+    console.error("Toggle content div not found.");
+  }
+    
     modal.style.display = "block";
     showOverlay();
 }
