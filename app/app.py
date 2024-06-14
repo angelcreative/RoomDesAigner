@@ -105,14 +105,15 @@ def generate_images():
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
     image_url = request.args.get('url')
+    logging.info(f"Fetching image from URL: {image_url}")
     if not image_url:
         return Response("Missing image URL", status=400)
     
     try:
         image_response = requests.get(image_url, stream=True)
-        image_response.raise_for_status()
+        image_response.raise_for_status()  # Esto lanzará una excepción si el status code no es 200
         headers = {
-            'Content-Type': image_response.headers['Content-Type'],
+            'Content-Type': image_response.headers.get('Content-Type', 'application/octet-stream'),
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache',
             'Expires': '0',
