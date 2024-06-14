@@ -12,8 +12,7 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton"); 
 
 document.addEventListener("DOMContentLoaded", function() {
-    
-     // Ensure .switchContainer elements are present
+    // Ensure .switchContainer elements are present
     const switchContainers = document.querySelectorAll('.switchContainer input[type="checkbox"]');
     if (switchContainers.length > 0) {
         switchContainers.forEach(switchElement => {
@@ -34,8 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-
-    //AIDESIGN
+    // AIDESIGN
     // Predefined attributes for randomness
     const attributes = {
         room_size: ['small', 'medium', 'large'],
@@ -47,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Mixing attributes function
     function mixAttributes(baseAttributes) {
-        const mixedAttributes = {...baseAttributes};
+        const mixedAttributes = { ...baseAttributes };
         Object.keys(attributes).forEach(key => {
             // 50% chance to swap
             if (Math.random() > 0.5) {
@@ -205,24 +203,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         return values;
     }
-
-    // Event listener for the color switches
-    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-        switchElement.addEventListener('change', function () {
-            const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-            colorPickers.forEach(picker => {
-                picker.disabled = !this.checked;
-            });
-        });
-    });
-
-    // Ensure color pickers are enabled/disabled on page load based on switch state
-    document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-        colorPickers.forEach(picker => {
-            picker.disabled = !switchElement.checked;
-        });
-    });
 
     // Slider event listener for displaying value
     const slider = document.getElementById("strengthSlider");
@@ -393,6 +373,8 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error(error);
         alert("Error: " + error.message);
     }
+
+    // Ensure that the following functions are defined properly without duplicates or missing closures
 
     // Function to show error message with dismiss button
     function showError(error) {
@@ -577,7 +559,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to open the image in a new tab
     function openImageInNewTab(imageUrl) {
-        window.open(imageUrl, "_blank");
+        window.open(generatedImageUrl, "_blank");
     }
 
     // Green dot
@@ -632,10 +614,15 @@ document.addEventListener("DOMContentLoaded", function() {
         // Enable the "Make the Magic" button
         const magicButton = document.getElementById("magicButton");
         magicButton.disabled = false;
+        // Reset the form and event listeners
+        // resetFormAndEventListeners();
     }
 
     // Function to clear all form values and reset the image display
     function clearAll(event) {
+        /*event.preventDefault(); // Prevent form submission
+        const fileInput = document.getElementById("imageDisplayUrl");
+        fileInput.value = ""; // Clear the file input*/
         const form = document.getElementById("imageGenerationForm");
         form.reset(); // Reset the form
         // Hide all green dots
@@ -716,6 +703,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             setTimeout(function () {
                 splash.style.display = 'none'; // Hide the splash screen
+                // content.style.display = 'block'; // Show the website content
             }, 500); // Wait for the transition to complete (0.5 seconds)
         }, 4000); // 4 seconds (4000 milliseconds)
     });
@@ -750,6 +738,8 @@ document.addEventListener("DOMContentLoaded", function () {
         thumbnail.src = '';
         thumbDiv.style.display = 'none';
     }
+
+    document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
     // Event listener for opening the lightbox when the avatar is clicked
     document.getElementById('avatar').addEventListener('click', function () {
