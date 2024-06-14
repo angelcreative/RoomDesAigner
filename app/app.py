@@ -99,6 +99,24 @@ def generate_images():
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
+    
+    
+    
+
+@app.route('/proxy-image', methods=['GET'])
+def proxy_image():
+    image_url = request.args.get('url')
+    app.logger.info(f"Fetching image from URL: {image_url}")
+    try:
+        image_response = requests.get(image_url, stream=True)
+        image_response.raise_for_status()  # Raise an HTTPError for bad responses
+        headers = {'Content-Type': image_response.headers['Content-Type']}
+        app.logger.info(f"Successfully fetched image from URL: {image_url}")
+        return Response(image_response.iter_content(chunk_size=4096), headers=headers)
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f"Error fetching image: {str(e)}")
+        return Response(f"Error fetching image: {str(e)}", status=500)
+
 
 
 def get_user_data(username):
@@ -127,12 +145,6 @@ def deduct_credits(username, amount):
     headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
     requests.post(update_url, headers=headers, data=json.dumps(update_body))
 
-@app.route('/proxy-image', methods=['GET'])
-def proxy_image():
-    image_url = request.args.get('url')
-    image_response = requests.get(image_url, stream=True)
-    headers = {'Content-Type': image_response.headers['Content-Type']}
-    return Response(image_response.iter_content(chunk_size=1024), headers=headers)
 
 
 @app.route('/', methods=['GET'])
