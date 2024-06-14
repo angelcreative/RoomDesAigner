@@ -63,8 +63,6 @@ def transform_prompt(prompt_text):
 
 
 
-
-
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -85,18 +83,25 @@ def generate_images():
         url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
-            deduct_credits(username, 2)
             result = response.json()
             result['transformed_prompt'] = transformed_prompt
-            result['proxy_links'] = [f"/proxy-image?url={link}" for link in result.get('output', [])]
-            return jsonify(result)
+
+            if result.get('status') == 'processing' and 'id' in result:
+                return jsonify({
+                    "status": "processing",
+                    "id": result['id']
+                })
+            else:
+                deduct_credits(username, 2)
+                result['proxy_links'] = [f"/proxy-image?url={link}" for link in result.get('output', [])]
+                return jsonify(result)
         else:
             logging.error(f"Image generation failed with status code {response.status_code}: {response.text}")
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
     
-
+    
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
     image_url = request.args.get('url')
