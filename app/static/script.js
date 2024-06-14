@@ -12,6 +12,28 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton"); 
 
 document.addEventListener("DOMContentLoaded", function() {
+    
+     // Ensure .switchContainer elements are present
+    const switchContainers = document.querySelectorAll('.switchContainer input[type="checkbox"]');
+    if (switchContainers.length > 0) {
+        switchContainers.forEach(switchElement => {
+            switchElement.addEventListener('change', function () {
+                const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+                colorPickers.forEach(picker => {
+                    picker.disabled = !this.checked;
+                });
+            });
+        });
+
+        // Ensure color pickers are enabled/disabled on page load based on switch state
+        switchContainers.forEach(switchElement => {
+            const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
+            colorPickers.forEach(picker => {
+                picker.disabled = !switchElement.checked;
+            });
+        });
+    }
+
 
     //AIDESIGN
     // Predefined attributes for randomness
