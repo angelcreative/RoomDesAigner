@@ -1,17 +1,17 @@
 // Function to show the overlay
 function showOverlay() {
-  const overlay = document.getElementById("overlay"); 
-  overlay.style.display = "block";
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "block";
 }
 // Function to hide the overlay
 function hideOverlay() {
-  const overlay = document.getElementById("overlay");
-  overlay.style.display = "none";
+    const overlay = document.getElementById("overlay");
+    overlay.style.display = "none";
 }
 // Example usage when "Make the Magic" button is clicked
-const magicButton = document.getElementById("magicButton"); 
+const magicButton = document.getElementById("magicButton");
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Ensure .switchContainer elements are present
     const switchContainers = document.querySelectorAll('.switchContainer input[type="checkbox"]');
     if (switchContainers.length > 0) {
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Event listener for the "AI Design" button
-    document.getElementById('aiDesignButton').addEventListener('click', function() {
+    document.getElementById('aiDesignButton').addEventListener('click', function () {
         const baseValues = getSelectedValues(); // Get current form values
         const mixedValues = mixAttributes(baseValues);
         console.log("Mixed Values for Generation:", mixedValues);
@@ -71,13 +71,13 @@ document.addEventListener("DOMContentLoaded", function() {
         showOverlay();
 
         const fileInput = document.getElementById("imageDisplayUrl");
-        const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
+        const file = fileInput.files[0]; // Ensure to get the first file if present
         const selectedValues = getSelectedValues();
-        const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
+        const isImg2Img = Boolean(file); // Determine if img2img is used based on the presence of a file
 
         if (file) {
-            // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-            const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
+            // Process the image upload to imgbb if a file is selected
+            const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // imgbb API key
             const uploadUrl = "https://api.imgbb.com/1/upload";
             const formData = new FormData();
             formData.append("key", apiKey);
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Si la imagen se subió con éxito, obtén la URL y procede con img2img
+                        // If the image was successfully uploaded, get the URL and proceed with img2img
                         const imageUrl = data.data.url;
                         generateImages(imageUrl, selectedValues, isImg2Img);
                     } else {
@@ -98,11 +98,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 })
                 .catch(error => {
-                    // Manejo de errores en caso de falla en la subida de la imagen
+                    // Handle errors in case of image upload failure
                     handleError(error.message);
                 });
         } else {
-            // Procesa txt2img si no se seleccionó ningún archivo
+            // Process txt2img if no file is selected
             generateImages(null, selectedValues, isImg2Img);
         }
     }
@@ -111,8 +111,8 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error(errorMessage);
         const magicButton = document.getElementById("magicButton");
         magicButton.disabled = false;
-        hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-        alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
+        hideOverlay(); // Ensure this function exists and hides the loading interface
+        alert(errorMessage); // Optional: show the error message in an alert
     }
 
     // Function to get selected values
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (colorInput && colorSwitch && colorSwitch.checked) {
                 values[colorElement.id] = colorInput.value;
             } else {
-                values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+                values[colorElement.id] = ""; // Assign an empty value if the switch is off
             }
         });
 
@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function retryGeneration() {
         hideGeneratingImagesDialog();
-        // Aquí debes llamar a la función que inicia la generación de imágenes
+        // Here you should call the function that starts the image generation
         generateImages();
     }
 
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function generateImages(imageUrl, selectedValues, isImg2Img) {
         showGeneratingImagesDialog();
 
-        const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+        const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your actual API key
         const customText = document.getElementById("customText").value;
         const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,`;
 
@@ -738,8 +738,6 @@ document.addEventListener("DOMContentLoaded", function () {
         thumbnail.src = '';
         thumbDiv.style.display = 'none';
     }
-
-    document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
     // Event listener for opening the lightbox when the avatar is clicked
     document.getElementById('avatar').addEventListener('click', function () {
