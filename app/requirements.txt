@@ -1,10 +1,10 @@
-flask>=2.2.5
+flask>=3.0.3
 flask-cors>=4.0.1
 gunicorn>=22.0.0
 bcrypt==4.1.2
 requests>=2.31.0
 openai==0.28.0
-Werkzeug>=3.0.3
+Werkzeug>=2.2.3
 replicate==0.7.0
 httpx>=0.23.0
 httpcore==0.14.7
