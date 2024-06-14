@@ -232,7 +232,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Slider event listener for displaying value
+  const slider = document.getElementById("strengthSlider");
+  const sliderValueDisplay = document.getElementById("sliderValue");
 
+  slider.addEventListener("input", function() {
+    sliderValueDisplay.textContent = this.value;
+  });
   
     const selectedValues = getSelectedValues();
     console.log(selectedValues);

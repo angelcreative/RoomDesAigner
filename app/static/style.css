@@ -2253,7 +2253,7 @@ option[title]:hover:after {
     margin: 3px;
 }
 
-/*.toggle-content {
+.toggle-content {
     display: none;
     background: hsl(210 34% 5% / 1);
     padding: 24px;
@@ -2261,7 +2261,7 @@ option[title]:hover:after {
     color: hsl(210 34% 83% / 1);
     font-size: 14px;
     line-height: 1.5;
-    text-align: left;*/
+text-align: left;}
 
 .hexDot {
     width: 5px;
@@ -3022,13 +3022,7 @@ loginModal > p {
   }
   
 
- .toggle-content {
-      display: none;
-      background-color: #f9f9f9;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ddd;
-    }    
+  
     
   .thumbnail {
       width: 100%;
