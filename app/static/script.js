@@ -401,13 +401,14 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-// Function to fetch images through proxy and show in modal
-function fetchImagesThroughProxy(imageUrls) {
+
+    
+ // Fetch images through proxy
+function fetchImagesThroughProxy(imageUrls, transformedPrompt) {
     const proxyUrls = imageUrls.map(url => `/proxy-image?url=${encodeURIComponent(url)}`);
-    showModal(proxyUrls, data.transformed_prompt);
+    showModal(proxyUrls, transformedPrompt);
 }
 
-// Fetch request to generate images
 // Fetch request to generate images
 fetch("/generate-images", {
   method: "POST",
@@ -478,11 +479,6 @@ function checkImageStatus(fetchResultUrl) {
     });
 }
 
-// Fetch images through proxy
-function fetchImagesThroughProxy(imageUrls, transformedPrompt) {
-    const proxyUrls = imageUrls.map(url => `/proxy-image?url=${encodeURIComponent(url)}`);
-    showModal(proxyUrls, transformedPrompt);
-}
 
 // Function to show images in a modal
 function showModal(imageUrls, transformedPrompt) {
