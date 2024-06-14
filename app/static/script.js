@@ -1,4 +1,3 @@
-// Function to hide the waiting overlay and loading message 
 // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
@@ -12,63 +11,9 @@ function hideOverlay() {
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton"); 
 
-// modal P
-//document.getElementById('password-form').addEventListener('submit', function(event)  {
-//    event.preventDefault();
-//
-//    var passwordInput = document.getElementById('password');
-//    var errorMessage = document.getElementById('error-message');
-//
-//    if (passwordInput.value === '4yVd4nt3') {
-//        // Password is correct, close the modal or perform desired actions
-//        var modalP = document.querySelector('.modalP');
-//        modalP.style.display = 'none';
-//    } else {
-//        // Password is incorrect, display error message
-//        errorMessage.textContent = 'Invalid password. Schedule a call.';
-//    }
-//});
-
-//end modal P
-
 document.addEventListener("DOMContentLoaded", function() {
 
-
-//AIDESIGN
-// Predefined attributes for randomness
-const attributes = {
-    room_size: ['small', 'medium', 'large'],
-    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
-    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-    wall_type: ['painted', 'wallpaper', 'tiled']
-};
-
-// Mixing attributes function
-function mixAttributes(baseAttributes) {
-    const mixedAttributes = {...baseAttributes};
-    Object.keys(attributes).forEach(key => {
-        // 50% chance to swap
-        if (Math.random() > 0.5) {
-            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
-        }
-    });
-    return mixedAttributes;
-}
-
-// Event listener for the "AI Design" button
-document.getElementById('aiDesignButton').addEventListener('click', function() {
-    const baseValues = getSelectedValues(); // Get current form values
-    const mixedValues = mixAttributes(baseValues);
-    console.log("Mixed Values for Generation:", mixedValues);
-    generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-});
-
-    
-    
-    
-document.addEventListener("DOMContentLoaded", function() {
-    // AIDESIGN
+    //AIDESIGN
     // Predefined attributes for randomness
     const attributes = {
         room_size: ['small', 'medium', 'large'],
@@ -80,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Mixing attributes function
     function mixAttributes(baseAttributes) {
-        const mixedAttributes = { ...baseAttributes };
+        const mixedAttributes = {...baseAttributes};
         Object.keys(attributes).forEach(key => {
             // 50% chance to swap
             if (Math.random() > 0.5) {
@@ -427,8 +372,6 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Error: " + error.message);
     }
 
-    // Ensure that the following functions are defined properly without duplicates or missing closures
-
     // Function to show error message with dismiss button
     function showError(error) {
         console.error("Error generating images:", error);
@@ -612,7 +555,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to open the image in a new tab
     function openImageInNewTab(imageUrl) {
-        window.open(generatedImageUrl, "_blank");
+        window.open(imageUrl, "_blank");
     }
 
     // Green dot
@@ -667,15 +610,10 @@ document.addEventListener("DOMContentLoaded", function() {
         // Enable the "Make the Magic" button
         const magicButton = document.getElementById("magicButton");
         magicButton.disabled = false;
-        // Reset the form and event listeners
-        // resetFormAndEventListeners();
     }
 
     // Function to clear all form values and reset the image display
     function clearAll(event) {
-        /*event.preventDefault(); // Prevent form submission
-        const fileInput = document.getElementById("imageDisplayUrl");
-        fileInput.value = ""; // Clear the file input*/
         const form = document.getElementById("imageGenerationForm");
         form.reset(); // Reset the form
         // Hide all green dots
@@ -756,7 +694,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             setTimeout(function () {
                 splash.style.display = 'none'; // Hide the splash screen
-                // content.style.display = 'block'; // Show the website content
             }, 500); // Wait for the transition to complete (0.5 seconds)
         }, 4000); // 4 seconds (4000 milliseconds)
     });
@@ -791,8 +728,6 @@ document.addEventListener("DOMContentLoaded", function () {
         thumbnail.src = '';
         thumbDiv.style.display = 'none';
     }
-
-    document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
     // Event listener for opening the lightbox when the avatar is clicked
     document.getElementById('avatar').addEventListener('click', function () {
