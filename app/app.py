@@ -105,13 +105,16 @@ def generate_images():
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
     image_url = request.args.get('url')
-    logging.info(f"Fetching image from URL: {image_url}")
     if not image_url:
+        logging.error("Missing image URL")
         return Response("Missing image URL", status=400)
+    
+    logging.info(f"Fetching image from URL: {image_url}")
     
     try:
         image_response = requests.get(image_url, stream=True)
-        image_response.raise_for_status()  # Esto lanzará una excepción si el status code no es 200
+        image_response.raise_for_status()  # Lanzará una excepción si el status code no es 200
+        
         headers = {
             'Content-Type': image_response.headers.get('Content-Type', 'application/octet-stream'),
             'Cache-Control': 'no-cache',
@@ -119,10 +122,14 @@ def proxy_image():
             'Expires': '0',
             'Access-Control-Allow-Origin': '*'
         }
+        
         return Response(image_response.iter_content(chunk_size=4096), headers=headers)
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching image: {str(e)}")
-        return Response(f"Error fetching image: {str(e)}", status=500)
+    except requests.exceptions.HTTPError as http_err:
+        logging.error(f"HTTP error occurred: {http_err}")  # HTTP error
+        return Response(f"HTTP error occurred: {http_err}", status=image_response.status_code)
+    except Exception as err:
+        logging.error(f"Other error occurred: {err}")  # Other errors
+        return Response(f"Error fetching image: {err}", status=500)
 
 
 def get_user_data(username):
