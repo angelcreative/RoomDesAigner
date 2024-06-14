@@ -15,9 +15,10 @@ import openai
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 logging.basicConfig(level=logging.INFO)
+
+app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
@@ -63,6 +64,8 @@ def transform_prompt(prompt_text):
 
 
 
+
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -72,22 +75,30 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
+        
+        # Extract the promptText from the incoming data
+        prompt_text = data.get('prompt')
+        
+        if not prompt_text:
+            return jsonify({"error": "Missing prompt text"}), 400
+        
+        # Transform the prompt using OpenAI API
+        transformed_prompt = transform_prompt(prompt_text)
+        
+        # Update the prompt in the data with the transformed prompt
+        data['prompt'] = transformed_prompt
+        
         url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
             deduct_credits(username, 2)
-            return jsonify(response.json())
+            result = response.json()
+            result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+            return jsonify(result)
         else:
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
-    
-@app.route('/proxy-image', methods=['GET'])
-def proxy_image():
-    image_url = request.args.get('url')
-    image_response = requests.get(image_url, stream=True)
-    headers = {'Content-Type': image_response.headers['Content-Type']}
-    return Response(image_response.iter_content(chunk_size=1024), headers=headers)
 
 
 def get_user_data(username):
@@ -116,6 +127,12 @@ def deduct_credits(username, amount):
     headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
     requests.post(update_url, headers=headers, data=json.dumps(update_body))
 
+@app.route('/proxy-image', methods=['GET'])
+def proxy_image():
+    image_url = request.args.get('url')
+    image_response = requests.get(image_url, stream=True)
+    headers = {'Content-Type': image_response.headers['Content-Type']}
+    return Response(image_response.iter_content(chunk_size=1024), headers=headers)
 
 
 @app.route('/', methods=['GET'])
