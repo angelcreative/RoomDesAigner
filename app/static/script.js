@@ -408,6 +408,7 @@ function fetchImagesThroughProxy(imageUrls) {
 }
 
 // Fetch request to generate images
+// Fetch request to generate images
 fetch("/generate-images", {
   method: "POST",
   headers: {
@@ -428,7 +429,7 @@ fetch("/generate-images", {
     // Log the image URLs to ensure they are correct
     console.log("Image URLs:", imageUrls);
 
-    fetchImagesThroughProxy(imageUrls); // Use proxy to fetch images
+    fetchImagesThroughProxy(imageUrls, data.transformed_prompt); // Use proxy to fetch images
     hideGeneratingImagesDialog(); // Hide any loading dialogs
   } else if (data.status === "processing" && data.fetch_result) {
     checkImageStatus(data.fetch_result); // Continue checking status if processing
@@ -461,7 +462,7 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            fetchImagesThroughProxy(imageUrls);  // Fetch and display images through proxy
+            fetchImagesThroughProxy(imageUrls, data.transformed_prompt);  // Fetch and display images through proxy
             hideGeneratingImagesDialog();  // Hide any loading dialogs
            // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
@@ -478,9 +479,9 @@ function checkImageStatus(fetchResultUrl) {
 }
 
 // Fetch images through proxy
-function fetchImagesThroughProxy(imageUrls) {
+function fetchImagesThroughProxy(imageUrls, transformedPrompt) {
     const proxyUrls = imageUrls.map(url => `/proxy-image?url=${encodeURIComponent(url)}`);
-    showModal(proxyUrls, data.transformed_prompt);
+    showModal(proxyUrls, transformedPrompt);
 }
 
 // Function to show images in a modal
@@ -522,12 +523,14 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
-
+// Function to show error message
 function showError(error) {
-    // Update the user interface to show the error
     console.error(error);
     alert("Error: " + error.message);
 }
+
+// Other necessary functions for handling the modal, overlay, and image actions should also be included
+
 
 function displayImages(images) {
     // Function to display images or handle the successful completion of the task
