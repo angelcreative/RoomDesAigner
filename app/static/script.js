@@ -401,6 +401,12 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
+// Function to fetch images through proxy and show in modal
+function fetchImagesThroughProxy(imageUrls) {
+    const proxyUrls = imageUrls.map(url => `/proxy-image?url=${encodeURIComponent(url)}`);
+    showModal(proxyUrls, data.transformed_prompt);
+}
+
 // Fetch request to generate images
 fetch("/generate-images", {
   method: "POST",
@@ -422,7 +428,7 @@ fetch("/generate-images", {
     // Log the image URLs to ensure they are correct
     console.log("Image URLs:", imageUrls);
 
-    showModal(imageUrls, data.transformed_prompt); // Pass the transformed prompt here
+    fetchImagesThroughProxy(imageUrls); // Use proxy to fetch images
     hideGeneratingImagesDialog(); // Hide any loading dialogs
   } else if (data.status === "processing" && data.fetch_result) {
     checkImageStatus(data.fetch_result); // Continue checking status if processing
@@ -433,9 +439,7 @@ fetch("/generate-images", {
 .catch(error => {
   showError(error); // Catch and display errors from the fetch operation or JSON parsing
 });
-    
 
-// Define the checkImageStatus function
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
@@ -457,7 +461,7 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
+            fetchImagesThroughProxy(imageUrls);  // Fetch and display images through proxy
             hideGeneratingImagesDialog();  // Hide any loading dialogs
            // document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
@@ -472,7 +476,51 @@ function checkImageStatus(fetchResultUrl) {
         //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
-    
+
+// Fetch images through proxy
+function fetchImagesThroughProxy(imageUrls) {
+    const proxyUrls = imageUrls.map(url => `/proxy-image?url=${encodeURIComponent(url)}`);
+    showModal(proxyUrls, data.transformed_prompt);
+}
+
+// Function to show images in a modal
+function showModal(imageUrls, transformedPrompt) {
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
+
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    imageUrls.forEach(proxyUrl => {
+        const imageContainer = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = proxyUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
+
+        const downloadButton = createButton("Download", () => downloadImage(proxyUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(proxyUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(proxyUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt)); // Use transformedPrompt here
+        const upscaleButton = createButton("Upscale", () => upscaleImage(proxyUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(proxyUrl));
+
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+        imageGrid.appendChild(imageContainer);
+    });
+
+    modal.style.display = "block";
+    showOverlay();
+}
 
 
 function showError(error) {

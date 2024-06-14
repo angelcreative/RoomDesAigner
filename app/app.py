@@ -15,10 +15,9 @@ import openai
 
 app = Flask(__name__)
 CORS(app)
+app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 logging.basicConfig(level=logging.INFO)
-
-app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
@@ -106,17 +105,20 @@ def generate_images():
 @app.route('/proxy-image', methods=['GET'])
 def proxy_image():
     image_url = request.args.get('url')
-    app.logger.info(f"Fetching image from URL: {image_url}")
     try:
         image_response = requests.get(image_url, stream=True)
         image_response.raise_for_status()  # Raise an HTTPError for bad responses
-        headers = {'Content-Type': image_response.headers['Content-Type']}
-        app.logger.info(f"Successfully fetched image from URL: {image_url}")
+        headers = {
+            'Content-Type': image_response.headers['Content-Type'],
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'Access-Control-Allow-Origin': '*'
+        }
         return Response(image_response.iter_content(chunk_size=4096), headers=headers)
     except requests.exceptions.RequestException as e:
-        app.logger.error(f"Error fetching image: {str(e)}")
+        logging.error(f"Error fetching image: {str(e)}")
         return Response(f"Error fetching image: {str(e)}", status=500)
-
 
 
 def get_user_data(username):
