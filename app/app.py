@@ -21,12 +21,11 @@ CORS(app, resources={
     r"/*": {
         "origins": [
             "https://roomdesigner.onrender.com",
-            r"https:\/\/pub-[0-9a-f]{32}\.r2\.dev",
-            r"https:\/\/cdn2\.stablediffusionapi\.com"
+            r"https:\/\/pub-[0-9a-f]{32}\.r2\.dev\/generations\/[0-9a-f\-]+\.png",
+            r"https:\/\/cdn2\.stablediffusionapi\.com\/generations\/[0-9a-f\-]+\.png"
         ]
     }
 })
-
 
 logging.basicConfig(level=logging.INFO)
 
