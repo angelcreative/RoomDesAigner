@@ -33,6 +33,118 @@ const magicButton = document.getElementById("magicButton");
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    
+    //PRESETS
+    
+    
+  const savePresetButton = document.getElementById("savePresetButton");
+  const modalPreset = document.getElementById("modalPreset");
+  const closePresetSpan = document.getElementsByClassName("closePreset")[0];
+  const savePreset = document.getElementById("savePreset");
+  const myPresetsButton = document.getElementById("myPresetsButton");
+  const drawerPreset = document.getElementById("drawerPreset");
+  const closeDrawerPresetSpan = document.getElementsByClassName("closeDrawerPreset")[0];
+  const presetsList = document.getElementById("presetsList");
+
+  savePresetButton.addEventListener("click", function() {
+    modalPreset.style.display = "block";
+  });
+
+  closePresetSpan.onclick = function() {
+    modalPreset.style.display = "none";
+  };
+
+  window.onclick = function(event) {
+    if (event.target == modalPreset) {
+      modalPreset.style.display = "none";
+    }
+    if (event.target == drawerPreset) {
+      drawerPreset.style.display = "none";
+    }
+  };
+
+  savePreset.addEventListener("click", function() {
+    const presetName = document.getElementById("presetName").value;
+    if (presetName) {
+      const selectedValues = getSelectedValues();
+      const customText = document.getElementById("customText").value;
+
+      const preset = {
+        name: presetName,
+        values: selectedValues,
+        customText: customText
+      };
+
+      fetch("/save-preset", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(preset)
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Preset saved successfully!");
+          displayPresets();
+          modalPreset.style.display = "none";
+        } else {
+          alert("Error saving preset. Please try again.");
+        }
+      })
+      .catch(error => {
+        console.error("Error saving preset:", error);
+        alert("Error saving preset. Please try again.");
+      });
+    }
+  });
+
+  myPresetsButton.addEventListener("click", function() {
+    drawerPreset.style.display = "block";
+    displayPresets();
+  });
+
+  closeDrawerPresetSpan.onclick = function() {
+    drawerPreset.style.display = "none";
+  };
+
+  function displayPresets() {
+    fetch("/get-presets")
+      .then(response => response.json())
+      .then(data => {
+        presetsList.innerHTML = "";
+        data.presets.forEach(preset => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${preset.name} - ${preset.customText}`;
+          
+          const loadButton = document.createElement("button");
+          loadButton.textContent = "Load Preset";
+          loadButton.addEventListener("click", () => loadPreset(preset));
+
+          listItem.appendChild(loadButton);
+          presetsList.appendChild(listItem);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching presets:", error);
+      });
+  }
+
+  function loadPreset(preset) {
+    Object.entries(preset.values).forEach(([key, value]) => {
+      const element = document.getElementById(key);
+      if (element) {
+        element.value = value;
+      }
+    });
+    document.getElementById("customText").value = preset.customText;
+    drawerPreset.style.display = "none";
+  }
+
+
+    
+
+
 
 //AIDESIGN
 // Predefined attributes for randomness

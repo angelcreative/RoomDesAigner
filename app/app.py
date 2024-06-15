@@ -10,11 +10,50 @@ import requests
 import random
 import logging
 import json
+from flask_sqlalchemy import SQLAlchemy
 import openai
 # Import the json module
 
 app = Flask(__name__)
 CORS(app)
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///presets.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class Preset(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    values = db.Column(db.JSON, nullable=False)
+    customText = db.Column(db.String(200), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'values': self.values,
+            'customText': self.customText
+        }
+
+@app.route('/save-preset', methods=['POST'])
+def save_preset():
+    data = request.json
+    if 'name' in data and 'values' in data and 'customText' in data:
+        new_preset = Preset(name=data['name'], values=data['values'], customText=data['customText'])
+        db.session.add(new_preset)
+        db.session.commit()
+        return jsonify(success=True, id=new_preset.id), 201
+    else:
+        return jsonify(success=False, error="Invalid data"), 400
+
+@app.route('/get-presets', methods=['GET'])
+def get_presets():
+    presets = Preset.query.all()
+    return jsonify(success=True, presets=[preset.to_dict() for preset in presets]), 200
+
+
 
 logging.basicConfig(level=logging.INFO)
 
