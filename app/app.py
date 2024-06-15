@@ -74,9 +74,21 @@ def transform_prompt(prompt_text):
 
 
 
+# Define the polling function to check image availability
+def check_image_availability(url, timeout=60, interval=5):
+    """Poll the URL until the image is available or timeout is reached."""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            response = requests.head(url)
+            if response.status_code == 200:
+                return True
+        except requests.RequestException as e:
+            print(f"Error checking image URL: {e}")
+        time.sleep(interval)
+    return False
 
-
-
+# Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -102,10 +114,20 @@ def generate_images():
         url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/realtime/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
-            deduct_credits(username, 2)
             result = response.json()
-            result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-            return jsonify(result)
+            # Poll the image URLs to check availability
+            all_images_available = True
+            for image_url in result.get('links', []):
+                if not check_image_availability(image_url):
+                    all_images_available = False
+                    break
+
+            if all_images_available:
+                deduct_credits(username, 2)
+                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                return jsonify(result)
+            else:
+                return jsonify({"error": "Image not available within the timeout period"}), 408
         else:
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
