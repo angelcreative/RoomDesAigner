@@ -21,8 +21,8 @@ CORS(app, resources={
     r"/*": {
         "origins": [
             "https://roomdesigner.onrender.com",
-            r"https:\/\/pub-[0-9a-f]{32}\.r2\.dev\/generations\/[0-9a-f\-]+\.png",
-            r"https:\/\/cdn2\.stablediffusionapi\.com\/generations\/[0-9a-f\-]+\.png"
+            r"https:\/\/pub-[0-9a-f]{32}\.r2\.dev\/generations\/.*\.png",
+            r"https:\/\/cdn2\.stablediffusionapi\.com\/generations\/.*\.png"
         ]
     }
 })
