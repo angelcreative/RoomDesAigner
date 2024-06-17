@@ -246,11 +246,11 @@ document.addEventListener('DOMContentLoaded', function() {
    
     // Function to generate the optional text
     function generateOptionalText() {
-      return "(((Rounded organic shapes, rounded shapes, organic shapes)))";
+      return "Architecture and furniture with rounded and organic shapes. Highlight smooth, flowing forms in modern, minimalist designs. Include elements such as rounded walls, curved facades, and organically shaped windows in architecture, and round tables, curved sofas, and organically inspired chairs in furniture. Use soft, natural lighting to emphasize textures and curves.";
     }
  //Function to generate fractal
 function generateFractalText() {
-  return "(((fractal,fractality pattern details)))";
+  return "Architecture and furniture with fractal patterns and details. Highlight intricate, repeating patterns that exhibit fractal and self-similar qualities. Use modern, minimalist designs.";
     }
     
     function showGeneratingImagesDialog() {
