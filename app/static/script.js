@@ -298,7 +298,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `[multiple decorations: numerous decor items:1], [densely furnished: fully equipped:1], [stylishly streamlined: pattern details:1], `;
+  const promptEndy = ` Featuring interiors with multiple decorations, dense furnishings, and stylishly streamlined designs with pattern details. Showcase numerous decor items throughout the space, ensuring it is fully equipped and densely furnished. Highlight stylishly streamlined elements with intricate pattern details. `;
   
  
 
@@ -337,7 +337,8 @@ console.log(`Width: ${width}, Height: ${height}`);
     guidance_scale: "10",
     num_inference_steps: "40", 
     seed: seedValue,
-    "model_id": "juggernaut-xl-v8",
+    model_id: "juggernaut-xl-v8",
+    scheduler:"DPMSolverMultistepScheduler",
     webhook: null,
     safety_checker: false, 
     track_id: null,
