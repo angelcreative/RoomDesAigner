@@ -337,6 +337,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     guidance_scale: "10",
     num_inference_steps: "40", 
     seed: seedValue,
+    "model_id": "juggernaut-xl",
     webhook: null,
     safety_checker: false, 
     track_id: null,
