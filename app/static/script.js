@@ -291,7 +291,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be exceptionally well-defined, featuring soft shadows and the highest quality realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra-detail and sharpness for a stunning, visually appealing result. Capture the essence of a 32K shot on Fujifilm Superia 400 with a large depth of field and vibrant energy. The image should feature HDR (High Dynamic Range) with vivid, rich details, clear shadows, and highlights. Emphasize realistic, intense colors with enhanced contrast and cinematic composition. The final output should exhibit professional color grading, film grain, and an atmospheric, wondrous feel.` ;
+    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature HDR with vivid, rich details, clear shadows, and highlights. The final output should exhibit professional color grading, film grain, and an atmospheric, wondrous feel.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
