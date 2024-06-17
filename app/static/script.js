@@ -291,7 +291,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be highly defined, with soft shadows, the best quality, and a realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra detail and sharpness for a stunning, visually appealing result,` ;
+    const promptInit = `Create a highly detailed and professional photoshoot masterpiece. The photo should be exceptionally well-defined, featuring soft shadows and the highest quality realistic, photo-realistic appearance. Ensure it is in UHD and 16k resolution, captured in RAW format. Focus on ultra-detail and sharpness for a stunning, visually appealing result. Capture the essence of a 32K shot on Fujifilm Superia 400 with a large depth of field and vibrant energy reflecting an influencer's aesthetic. The image should feature HDR (High Dynamic Range) with vivid, rich details, clear shadows, and highlights. Emphasize realistic, intense colors with enhanced contrast and cinematic composition. The final output should exhibit professional color grading, film grain, and an atmospheric, wondrous feel.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -430,8 +430,7 @@ if (isImg2Img && imageUrl) {
 
     
 
-// Define the checkImageStatus function
-// Define the checkImageStatus function
+ // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl) {
     fetch(fetchResultUrl, {
         method: 'POST',
@@ -454,17 +453,17 @@ function checkImageStatus(fetchResultUrl) {
             );
             showModal(imageUrls, promptText);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
             // Handle any other statuses or errors
             showError(data);
-            document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
     
