@@ -291,14 +291,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature HDR with vivid, rich details, clear shadows, and highlights. The final output should exhibit professional color grading, film grain, and an atmospheric, wondrous feel.` ;
+    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature HDR with vivid, rich details, clear shadows, and highlights.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` Featuring interiors with multiple decorations, dense furnishings, and stylishly streamlined designs with pattern details. Showcase numerous decor items throughout the space, ensuring it is fully equipped and densely furnished. Highlight stylishly streamlined elements with intricate pattern details. `;
+  const promptEndy = `Featuring interiors with multiple decorations and dense furnishings.`;
   
  
 
@@ -337,7 +337,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     guidance_scale: "10",
     num_inference_steps: "40", 
     seed: seedValue,
-    model_id: "deliberateappfactory",
+    model_id: "sdxlceshi",
     scheduler:"DPMSolverMultistepScheduler",
     webhook: null,
     safety_checker: false, 
