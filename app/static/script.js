@@ -338,6 +338,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     num_inference_steps: "40", 
     seed: seedValue,
     model_id: "sdxlceshi",
+    lora_model: "polyhedronall-sdxl-10-ski",
     scheduler:"DPMSolverMultistepScheduler",
     webhook: null,
     safety_checker: false, 
