@@ -111,7 +111,7 @@ def generate_images():
         # Update the prompt in the data with the transformed prompt
         data['prompt'] = transformed_prompt
         #else 'https://modelslab.com/api/v6/realtime/text2img'
-        url = 'https://modelslab.com/api/v6/realtime/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
         response = requests.post(url, json=data)
         if response.status_code == 200:
             result = response.json()
