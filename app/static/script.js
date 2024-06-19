@@ -330,7 +330,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "ealistic-vision-v51" : "ealistic-vision-v51";
+        const modelId = personValue ? "realistic-vision-v51" : "realistic-vision-v51";
     
     //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
