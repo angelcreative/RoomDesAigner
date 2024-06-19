@@ -330,9 +330,13 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
+        const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
     
-    
+    //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
   const prompt = {
     key: apiKey,
     prompt: promptText,
