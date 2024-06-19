@@ -292,7 +292,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature vivid, rich details, clear shadows, and highlights. Kodak Ektar 100 filmgrain.` ;
+    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature vivid, rich details, clear shadows, and highlights. Kodak Portra 160 filmgrain.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
