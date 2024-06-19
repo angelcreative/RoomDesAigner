@@ -330,7 +330,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
+        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
     
     //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
@@ -350,13 +350,15 @@ console.log(`Width: ${width}, Height: ${height}`);
       tomesd: "yes",
     seed: seedValue,
     model_id: modelId,  
-    //model_id: "sdxlceshi",
-    //lora_model: "polyhedronall-sdxl-10-ski",
+    lora: "open-lingerie-lora",
+    lora_strength: "0.7",
     scheduler:"UniPCMultistepScheduler",
     webhook: null,
     safety_checker: "no", 
     track_id: null,
     enhance_prompt: "no",
+    embeddings:"verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2,negativehand",
+
   };
 
     
