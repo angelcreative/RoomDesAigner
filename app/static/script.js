@@ -330,7 +330,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
+        const modelId = personValue ? "realistic-vision-v51" : "majicmix-realisticsafeten"; //person - furniture
     
     //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
@@ -338,6 +338,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     //realistic-stock-photo-v2 is slow
     //realistic-vision-v51  fast
     //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
   const prompt = {
     key: apiKey,
     prompt: promptText,
