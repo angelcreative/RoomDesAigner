@@ -415,9 +415,11 @@ if (isImg2Img && imageUrl) {
 
       // Update the text content of the <span> element
    //   spanElement.textContent = modifiedText;
-// Fetch request to generate images
 
-  fetch("/generate-images", {
+   
+// Fetch request to generate images
+    
+    fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -426,33 +428,32 @@ if (isImg2Img && imageUrl) {
 })
 .then(response => {
     if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return response.json();  // Parse JSON only if the response was OK
+    return response.json();
 })
 .then(data => {
-    // Handle the API response based on its status
+    console.log('API response:', data);  // Debugging log
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
+        console.log('Transformed prompt:', data.transformed_prompt);  // Debugging log
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Pass the transformed prompt
+        hideGeneratingImagesDialog();
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Pass the transformed prompt
     } else {
-        showError(data);  // Show error if other statuses are encountered
+        showError(data);
     }
 })
 .catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    showError(error);
 });
 
-    
 
- // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -460,34 +461,35 @@ function checkImageStatus(fetchResultUrl) {
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Image status response:', data);  // Debugging log
+
         if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, promptText);  // Display images
+            console.log('Generated image URLs:', imageUrls);  // Debugging log
+            showModal(imageUrls, transformedPrompt);  // Display images with the correct prompt
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
             // Handle any other statuses or errors
             showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
-    
+
 
 
 function showError(error) {
