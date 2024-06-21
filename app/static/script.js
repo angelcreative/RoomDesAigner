@@ -330,7 +330,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "juggernautxl-v9-rundiffus" : "sdxlceshi"; //person - furniture
+        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi"; //person - furniture
     
     //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
@@ -339,7 +339,9 @@ console.log(`Width: ${width}, Height: ${height}`);
     //realistic-vision-v51  fast
     //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
     // majicmix-realisticsafeten furniture, test
-    //juggernautxl-v9-rundiffus GOOD
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
   const prompt = {
     key: apiKey,
     prompt: promptText,
@@ -353,8 +355,8 @@ console.log(`Width: ${width}, Height: ${height}`);
       tomesd: "yes",
     seed: seedValue,
     model_id: modelId,  
-    //lora_model: "open-lingerie-lora", 
-    //lora_strength: "0.7",
+    lora_model: "add-detail-lora", 
+    lora_strength: "1",
     scheduler:"UniPCMultistepScheduler",
     webhook: null,
     safety_checker: "no", 
