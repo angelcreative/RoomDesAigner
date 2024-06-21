@@ -299,7 +299,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `Featuring interiors with multiple decorations and dense furnishings.`;
+  const promptEndy = `Featuring interiors with dense decorations and furnishings.`;
   
  
 
