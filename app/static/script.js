@@ -292,14 +292,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Capture the essence of a 32K shot with a large depth of field and vibrant energy. The image should feature vivid, rich details, clear shadows, and highlights. Kodak Portra 160 filmgrain.` ;
+    const promptInit = `cinematic photo (art by Mathias Goeritz:0.9) , photograph, specular lighting, film grain, Samsung Galaxy, F/5, (cinematic still:1.2) . 35mm photograph, film,  depth of field , professional, 4k, highly detailed ` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `Featuring interiors with dense decorations and furnishings.`;
+  const promptEndy = ` dense decorations and furnishings.`;
   
  
 
@@ -345,7 +345,7 @@ console.log(`Width: ${width}, Height: ${height}`);
   const prompt = {
     key: apiKey,
     prompt: promptText,
-    negative_prompt: "(((two persons))), ((two women)), ((two men)), (((split image, collage, multiple panels, divided image, diptych, triptych, split screen, multiple views, side by side, dual image, multi-image, composite image, segmented image, fragmented image, photo grid))), multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed iris, deformed pupils, semi-realistic, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, blurry, dehydrated, bad proportions, disfigured, gross proportions, malformed limbs, missing arms, missing legs, fused fingers, too many fingers, long neck, split image, artifacts, watermark, grainy, unrealistic, cartoonish, unnatural skin, missing fingers, warped, asymmetrical, bad lighting, bad composition, extra joints, distorted body, warped background, incorrect perspective, misaligned, glitch, broken, abnormal posture,small boobs, modest boobs",
+    negative_prompt: "3d, cartoon, anime, sketches, (worst quality, bad quality, cropped:1.4) ((monochrome) ), ((grayscale) ), (bad-hands-5:1) , (badhandv4) , (easynegative:0.8) , (bad-artist-anime:) , (bad-artist:) , (bad_prompt:) , (bad-picture-chill-75v:) , (bad_prompt_version2:) , (bad_quality:) , Asian-Less-Neg bad-hands-5 bad_pictures bad artist -neg CyberRealistic_Negative-neg negative_hand-neg ng_deepnegative_v1_75t, verybadimagenegative_v1. 3, lowres, low quality, jpeg, artifacts, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, drawing, painting, crayon, sketch, graphite, impressionist, noisy, soft,small boobs, modest boobs",
     width: width, 
     height: height, 
     samples: "4",
