@@ -417,7 +417,7 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-  fetch("/generate-images", {
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -437,7 +437,7 @@ if (isImg2Img && imageUrl) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
+        showModal(imageUrls, data.transformed_prompt);  // Display images with transformed prompt
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
         checkImageStatus(data.fetch_result);  // Continue checking status if processing
@@ -449,6 +449,7 @@ if (isImg2Img && imageUrl) {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
+
     
 
  // Define the checkImageStatus function
@@ -458,35 +459,29 @@ function checkImageStatus(fetchResultUrl) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ fetchUrl: fetchResultUrl })
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
             setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, promptText);  // Display images
+            showModal(imageUrls, data.transformed_prompt);  // Display images with transformed prompt
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
             // Handle any other statuses or errors
             showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
+
     
 
 
