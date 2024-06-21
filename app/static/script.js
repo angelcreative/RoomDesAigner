@@ -292,14 +292,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `cinematic photo , photograph, specular lighting, film grain, shot on Leika M6 35mm photograph, F/5, (cinematic still:1.2) . film,  depth of field , professional, 4k, highly detailed ` ;
+    const promptInit = `cinematic photo (art by Mathias Goeritz:0.9) , photograph, specular lighting, film grain, Samsung Galaxy, F/5, (cinematic still:1.2) . 35mm photograph, film,  depth of field , professional, 4k, highly detailed ` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `interior design influencer picture`;
+  const promptEndy = ` enough decorations and furnishings.`;
   
  
 
@@ -341,7 +341,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     // majicmix-realisticsafeten furniture, test
     //juggernautxl-v9-rundiffus good for close up
     //aria-v1 perfect lora
-    //skin-hands-malefemale-fro lora
+    //skin-hands-malefemale-fro
   const prompt = {
     key: apiKey,
     prompt: promptText,
