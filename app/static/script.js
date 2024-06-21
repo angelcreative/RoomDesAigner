@@ -330,7 +330,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
  // Determine the model_id based on the selection of the "person" field
         const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi"; //person - furniture
+        const modelId = personValue ? "juggernautxl-v9-rundiffus" : "sdxlceshi"; //person - furniture
     
     //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
@@ -339,10 +339,11 @@ console.log(`Width: ${width}, Height: ${height}`);
     //realistic-vision-v51  fast
     //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
     // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus GOOD
   const prompt = {
     key: apiKey,
     prompt: promptText,
-    negative_prompt: "two persons, two women, two men, split image, collage, multiple panels, divided image, diptych, triptych, split screen, multiple views, side by side, dual image, multi-image, composite image, segmented image, fragmented image, photo grid, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed iris, deformed pupils, semi-realistic, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, blurry, dehydrated, bad proportions, disfigured, gross proportions, malformed limbs, missing arms, missing legs, fused fingers, too many fingers, long neck, split image, artifacts, watermark, grainy, unrealistic, cartoonish, unnatural skin, missing fingers, warped, asymmetrical, bad lighting, bad composition, extra joints, distorted body, warped background, incorrect perspective, misaligned, glitch, broken, abnormal posture,small boobs, modest boobs",
+    negative_prompt: "(((two persons))), ((two women)), ((two men)), (((split image, collage, multiple panels, divided image, diptych, triptych, split screen, multiple views, side by side, dual image, multi-image, composite image, segmented image, fragmented image, photo grid))), multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed iris, deformed pupils, semi-realistic, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, blurry, dehydrated, bad proportions, disfigured, gross proportions, malformed limbs, missing arms, missing legs, fused fingers, too many fingers, long neck, split image, artifacts, watermark, grainy, unrealistic, cartoonish, unnatural skin, missing fingers, warped, asymmetrical, bad lighting, bad composition, extra joints, distorted body, warped background, incorrect perspective, misaligned, glitch, broken, abnormal posture,small boobs, modest boobs",
     width: width, 
     height: height, 
     samples: "4",
@@ -352,8 +353,8 @@ console.log(`Width: ${width}, Height: ${height}`);
       tomesd: "yes",
     seed: seedValue,
     model_id: modelId,  
-    lora_model: "open-lingerie-lora",
-    lora_strength: "0.7",
+    //lora_model: "open-lingerie-lora", 
+    //lora_strength: "0.7",
     scheduler:"UniPCMultistepScheduler",
     webhook: null,
     safety_checker: "no", 
