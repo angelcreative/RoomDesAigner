@@ -292,16 +292,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = ` photograph, specular lighting, film grain, Fujifilm XT3, crystal clear,  depth of field , professional, 8K UHD,, highly detailed ` ;
-//inematic photo , photograph, specular lighting, film grain, Kodak Portra 160, F/5,  cinematic still. 35mm, film,  depth of field , professional, 4k, highly detailed ` ;
+    const promptInit = `32K shot, large depth of field, vibrant energy. Feature vivid, rich details, clear shadows, and highlights. Kodak Ektar 100 filmgrain.` ;
 
-    
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = ` enough decorations and furnishings.`;
+  const promptEndy = `dense furnishings and decorations.`;
   
  
 
@@ -330,11 +328,47 @@ console.log(`Width: ${width}, Height: ${height}`);
   const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
   const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
- // Determine the model_id based on the selection of the "person" field
-        const personValue = document.getElementById("person").value;
-        const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi"; //person - furniture
-    
-    //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+// Determine the model_id based on the selection of the "person" field
+const personValue = document.getElementById("person").value;
+const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
+
+// Initialize an empty array for LoRA models
+let loraModels = [];
+
+// Conditionally add LoRA models based on the selected model
+if (modelId === "realistic-vision-v51") {
+  loraModels.push(
+    { model: "open-lingerie-lora", strength: "1" },
+    { model: "perfect-round-ass-olaz", strength: "1" }
+  );
+} else if (modelId === "sdxlceshi") {
+  loraModels.push(
+    { model: "add-detail-lora", strength: "1" }
+  );
+}
+
+const prompt = {
+  key: apiKey,
+  prompt: promptText,
+  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
+  width: width,
+  height: height,
+  samples: "4",
+  guidance_scale: "7.5",
+  steps: "20",
+  use_karras_sigmas: "yes",
+  tomesd: "yes",
+  seed: seedValue,
+  model_id: modelId,
+  lora_models: loraModels,  // Add LoRA models here
+  scheduler: "UniPCMultistepScheduler",
+  webhook: null,
+  safety_checker: "no",
+  track_id: null,
+  enhance_prompt: "no"
+};
+
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
     //cyberrealistic-41 almost perfect darked skin
     //realistic-stock-photo-v2 is slow
@@ -344,30 +378,7 @@ console.log(`Width: ${width}, Height: ${height}`);
     //juggernautxl-v9-rundiffus good for close up
     //aria-v1 perfect lora
     //skin-hands-malefemale-fro
-  const prompt = {
-    key: apiKey,
-    prompt: promptText,
-    negative_prompt: "two persons, two women, two men, split image, collage, multiple panels, divided image, diptych, triptych, split screen, multiple views, side by side, dual image, multi-image, composite image, segmented image, fragmented image, photo grid, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed iris, deformed pupils, semi-realistic, anime, text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, blurry, dehydrated, bad proportions, disfigured, gross proportions, malformed limbs, missing arms, missing legs, fused fingers, too many fingers, long neck, split image, artifacts, watermark, grainy, unrealistic, cartoonish, unnatural skin, missing fingers, warped, asymmetrical, bad lighting, bad composition, extra joints, distorted body, warped background, incorrect perspective, misaligned, glitch, broken, abnormal posture",
-    width: width, 
-    height: height, 
-    samples: "4",
-    guidance_scale: "7.5",
-   steps: "20",
-      use_karras_sigmas: "yes",
-      tomesd: "yes",
-    seed: seedValue,
-    model_id: modelId,  
-    lora_model: "add-detail-lora", 
-    lora_strength: "1",
-    scheduler:"UniPCMultistepScheduler",
-    webhook: null,
-    safety_checker: "no", 
-    track_id: null,
-    enhance_prompt: "no",
-    embeddings:"verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2,negativehand",
-
-  };
-
+    //westmixappfactory curvy
     
     
  
