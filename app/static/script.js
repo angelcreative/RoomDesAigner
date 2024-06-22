@@ -127,11 +127,14 @@ function handleSubmit(event) {
 function getSelectedValues() {
     const elementIds = [
         "person",
+        "home_room",
+        "design_style",
+        
         "generated_artwork",
         "point_of_view",
         "color_scheme",
         "room_size",
-        "home_room",
+        
         "space_to_be_designed",
         "children_room",
         "pool",
@@ -178,7 +181,6 @@ function getSelectedValues() {
         "stone_material",
         "marble_material",
         "wood_material",
-        "design_style",
         "decorative_elements"
     ];
 
@@ -292,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `32K shot, large depth of field, vibrant energy. Feature vivid, rich details, clear shadows, and highlights. Kodak Ektar 100 filmgrain.` ;
+    const promptInit = `32K shot,  Kodak Ektar 100 filmgrain, large depth of field, rich details, clear shadows, and highlights.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -350,7 +352,7 @@ if (modelId === "realistic-vision-v51") {
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
+  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image)))), (((two humans)))",
   width: width,
   height: height,
   samples: "4",
