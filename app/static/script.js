@@ -334,25 +334,21 @@ console.log(`Width: ${width}, Height: ${height}`);
 const personValue = document.getElementById("person").value;
 const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
 
-// Initialize an empty array for LoRA models
-let lora = [];
+// Initialize variables for LoRA model and strength
+let lora = null;
+let lora_strength = 1;
 
-// Conditionally add LoRA models based on the selected model
+// Conditionally set the LoRA model based on the selected model
 if (modelId === "realistic-vision-v51") {
-  lora.push(
-    { model: "open-lingerie-lora", strength: "1" },
-    { model: "perfect-round-ass-olaz", strength: "1" }
-  );
+  lora = "open-lingerie-lora, perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
-  lora.push(
-    { model: "add-detail-lora", strength: "1" }
-  );
+  lora = "add-detail-lora";
 }
 
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image)))), (((two humans)))",
+  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, multiple persons, multiple women, multiple girls, multiple men, multiple boys, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
   width: width,
   height: height,
   samples: "4",
@@ -362,13 +358,15 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
-  lora: lora,  // Add LoRA models here
+  lora: lora,
+  lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
   scheduler: "UniPCMultistepScheduler",
   webhook: null,
   safety_checker: "no",
   track_id: null,
   enhance_prompt: "no"
 };
+
 
 //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
