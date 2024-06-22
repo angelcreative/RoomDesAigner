@@ -292,7 +292,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `cinematic photo , photograph, specular lighting, film grain, Kodak Portra 160, F/5, (cinematic still:1.2) . 35mm photograph, film,  depth of field , professional, 4k, highly detailed ` ;
+    const promptInit = `cinematic photo , photograph, specular lighting, film grain, Kodak Portra 160, F/5,  cinematic still. 35mm, film,  depth of field , professional, 4k, highly detailed ` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
