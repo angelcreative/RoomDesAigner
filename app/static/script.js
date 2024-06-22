@@ -336,11 +336,11 @@ const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
 let lora = null;
-let lora_strength = .2;
+let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epicrealism-v4") {
-  lora = "open-lingerie-lora";
+  lora = "u58hvdfu4qa";
 } else if (modelId === "sdxlceshi") {
   lora = "add-detail-lora";
 }
@@ -379,6 +379,7 @@ const prompt = {
     //aria-v1 perfect lora
     //skin-hands-malefemale-fro
     //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
     
     
  
