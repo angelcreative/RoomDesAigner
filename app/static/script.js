@@ -335,16 +335,16 @@ const personValue = document.getElementById("person").value;
 const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
 
 // Initialize an empty array for LoRA models
-let loraModels = [];
+let lora = [];
 
 // Conditionally add LoRA models based on the selected model
 if (modelId === "realistic-vision-v51") {
-  loraModels.push(
+  lora.push(
     { model: "open-lingerie-lora", strength: "1" },
     { model: "perfect-round-ass-olaz", strength: "1" }
   );
 } else if (modelId === "sdxlceshi") {
-  loraModels.push(
+  lora.push(
     { model: "add-detail-lora", strength: "1" }
   );
 }
@@ -362,7 +362,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
-  lora_models: loraModels,  // Add LoRA models here
+  lora: loraModels,  // Add LoRA models here
   scheduler: "UniPCMultistepScheduler",
   webhook: null,
   safety_checker: "no",
