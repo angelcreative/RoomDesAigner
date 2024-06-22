@@ -336,7 +336,7 @@ const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
 let lora = null;
-let lora_strength = .2;
+let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epicrealism-v4") {
