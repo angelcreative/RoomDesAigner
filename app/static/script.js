@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `32K shot,  Kodak Ektar 100 filmgrain, large depth of field, rich details, clear shadows, and highlights.` ;
+    const promptInit = `32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -332,7 +332,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 // Determine the model_id based on the selection of the "person" field
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
+const modelId = personValue ? "realistic-vision-v51" : "realistic-vision-v51";
 
 // Initialize variables for LoRA model and strength
 let lora = null;
@@ -340,7 +340,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "realistic-vision-v51") {
-  lora = "open-lingerie-lora, perfect-round-ass-olaz";
+  lora = "add-detail-lora";
 } else if (modelId === "sdxlceshi") {
   lora = "add-detail-lora";
 }
