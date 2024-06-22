@@ -340,8 +340,8 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "realistic-vision-v51") {
-  lora = "add-detail-lora";
-} else if (modelId === "sdxlceshi") {
+  lora = "open-lingerie-lora";
+} else if (modelId === "realistic-vision-v51") {
   lora = "add-detail-lora";
 }
 
