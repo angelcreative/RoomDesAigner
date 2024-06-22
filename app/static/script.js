@@ -362,7 +362,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
-  lora: loraModels,  // Add LoRA models here
+  lora: lora,  // Add LoRA models here
   scheduler: "UniPCMultistepScheduler",
   webhook: null,
   safety_checker: "no",
