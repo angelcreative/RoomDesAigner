@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights.` ;
+    const promptInit = `Phase One XF IQ4 150MP camera shot, rich details, clear shadows, and highlights.` ;
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
