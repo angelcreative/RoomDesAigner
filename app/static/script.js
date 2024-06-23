@@ -340,7 +340,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epicrealism-v4") {
-  lora = "u58hvdfu4qa";
+  lora = "skin-hands-malefemale-fro";
 } else if (modelId === "sdxlceshi") {
   lora = "add-detail-lora";
 }
