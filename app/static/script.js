@@ -340,9 +340,9 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epicrealism-v4") {
-  lora = "skin-hands-malefemale-fro";
+  lora = "clothingadjustloraap";
 } else if (modelId === "sdxlceshi") {
-  lora = "add-detail-lora";
+  lora = "add-more-details-lor";
 }
 
 const prompt = {
@@ -380,7 +380,8 @@ const prompt = {
     //skin-hands-malefemale-fro
     //westmixappfactory curvy
     //u58hvdfu4q good lora, bit manga
-    
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
     
  
     
