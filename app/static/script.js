@@ -332,14 +332,14 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 // Determine the model_id based on the selection of the "person" field
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "realistic-vision-v51" : "sdxlceshi";
+const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
 let lora = null;
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "realistic-vision-v51") {
+if (modelId === "epicrealism-v4") {
   lora = "clothingadjustloraap";
 } else if (modelId === "sdxlceshi") {
   lora = "add-more-details-lor";
