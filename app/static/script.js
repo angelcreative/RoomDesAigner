@@ -340,9 +340,9 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "realistic-vision-v51") {
-  lora = "clothingadjustloraap, better_text";
+  lora = "clothingadjustloraap";
 } else if (modelId === "sdxlceshi") {
-  lora = "add-more-details-lor, better_text";
+  lora = "add-more-details-lor";
 }
 
 const prompt = {
