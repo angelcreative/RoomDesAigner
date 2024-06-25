@@ -335,7 +335,7 @@ const personValue = document.getElementById("person").value;
 const modelId = personValue ? "epicrealism-v4" : "epicrealism-v4";
 
 // Initialize variables for LoRA model and strength
-let lora = null;
+let lora = "clothingadjustloraap";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
