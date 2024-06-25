@@ -301,7 +301,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `walls adorned with trendy wallpaper or framed pictures, creating a stylish and modern ambiance. dense furnishings and decorations.`;
+  const promptEndy = `Stylish ambiance. Dense furnishings and decorations.`;
   
  
 
