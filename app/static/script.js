@@ -301,7 +301,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `Stylish ambiance. Dense furnishings and decorations.`;
+  const promptEndy = `walls adorned with trendy wallpaper or framed pictures, creating a stylish and modern ambiance. dense furnishings and decorations.`;
   
  
 
@@ -335,7 +335,7 @@ const personValue = document.getElementById("person").value;
 const modelId = personValue ? "epicrealism-v4" : "epicrealism-v4";
 
 // Initialize variables for LoRA model and strength
-let lora = "clothingadjustloraap";
+let lora = null;
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
@@ -348,7 +348,7 @@ if (modelId === "epicrealism-v4") {
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, (((multiple persons))), (((multiple women))), (((multiple girls))), (((multiple men))), (((multiple boys))), 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
+  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, multiple persons, multiple women, multiple girls, multiple men, multiple boys, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
   width: width,
   height: height,
   samples: "4",
