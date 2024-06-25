@@ -52,11 +52,11 @@ def transform_prompt(prompt_text):
     messages = [
        {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. All  hex color values must be transform to the corresponding Pantone decorations. Give priority to person, then  design style then home room or area, then Pantone colors, then the rest of values. The description must have all the values selected, brief the description if necessary to assure including all selected values."
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. All  hex color values must be transform to the corresponding Pantone decorations. Give priority to person, then  design style then home room or area, then Pantone colors, then the rest of values. Be brief, precise, describe all the selected values, the aim is to generate images"
         },
         {
             "role": "user",
-            "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 600 characters:\n\n{prompt_text}"
+            "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 550 characters:\n\n{prompt_text}"
         }
     ]
 
