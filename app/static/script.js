@@ -331,11 +331,13 @@ console.log(`Width: ${width}, Height: ${height}`);
   const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
 // Determine the model_id based on the selection of the "person" field
+
+/*
 const personValue = document.getElementById("person").value;
 const modelId = personValue ? "epicrealism-v4" : "epicrealism-v4";
 
 // Initialize variables for LoRA model and strength
-let lora = null;
+let lora = clothingadjustloraap;
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
@@ -343,7 +345,7 @@ if (modelId === "epicrealism-v4") {
   lora = "clothingadjustloraap";
 } else if (modelId === "epicrealism-v4") {
   lora = "clothingadjustloraap";
-}
+}*/
 
 const prompt = {
   key: apiKey,
@@ -357,14 +359,17 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id: modelId,
-  lora: lora,
-  lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
+  model_id:"epicrealism-v4",
+  lora:"clothingadjustloraap",
+  //model_id: modelId,  
+  //lora: lora,
+  //lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
   scheduler: "UniPCMultistepScheduler",
   webhook: null,
   safety_checker: "no",
   track_id: null,
-  enhance_prompt: "no"
+  enhance_prompt: "no",
+highres_fix:"yes"
 };
 
 
