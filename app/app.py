@@ -52,7 +52,7 @@ def transform_prompt(prompt_text):
     messages = [
        {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. All  hex color values must be transform to the corresponding Pantone decorations. Give priority to person, then  design style , then colors  (color scheme, dominant colors or when find hex values make them Pantone colors), then home room or area, , then the rest of values"
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. All  hex color values must be transform to the corresponding Pantone decorations. Give priority to person, then  design style , then colors, then home room or area, then the rest of values. When find hex values make them Pantone."
         },
         {
             "role": "user",
