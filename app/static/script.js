@@ -364,7 +364,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id:"epicrealism-v4",
-  lora_model:"clothingadjustloraap,add-more-details-lor,epicrealismhelper",
+  lora_model:"clothingadjustloraap,more_details,add-details-lora",
   lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
