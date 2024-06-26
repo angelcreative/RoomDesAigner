@@ -294,7 +294,11 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights.` ;
+    const promptInit = `Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate,(centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
+    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
+//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
+//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
+    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -360,7 +364,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id:"epicrealism-v4",
-  lora_model:"clothingadjustloraap,more_details,add-details-lora",
+  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism,epicrealismhelper",
   lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
