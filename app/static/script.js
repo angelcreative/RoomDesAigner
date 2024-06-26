@@ -364,7 +364,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id:"epicrealism-v4",
-  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism,epicrealismhelper",
+  lora_model:"clothingadjustloraap,epicrealismhelper",
   lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
@@ -376,8 +376,9 @@ const prompt = {
   enhance_prompt: "no",
 //highres_fix:"yes"
 };
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
-
+//,epicrealismhelper
 //epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
     //lob-realvisxl-v20 takes some time but good
     //cyberrealistic-41 almost perfect darked skin
