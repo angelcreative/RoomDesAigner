@@ -361,6 +361,7 @@ const prompt = {
   seed: seedValue,
   model_id:"epicrealism-v4",
   lora:"clothingadjustloraap",
+    lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
   //lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
