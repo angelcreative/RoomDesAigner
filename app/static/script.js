@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Kodak Ektra 160, <lora:xl more art full v1:0.75>, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
+    const promptInit = `Kodak Ektra 100 +1 stop, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -364,8 +364,8 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id:"epicrealismnew",
-  lora_model:"null",
-  lora_strength:"null",
+  lora_model:"xl_more_enhancer",
+  lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
   //lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
