@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate,(centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
+    const promptInit = `Canon EOS R3, ISO 200, 1/160s, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -363,9 +363,9 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id:"epicrealism-v4",
-  lora_model:null,
-  lora_strength:null,
+  model_id:"architectureexterior",
+  lora_model:"more_details",
+  lora_strength:"1",
   //model_id: modelId,  
   //lora: lora,
   //lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
@@ -394,7 +394,7 @@ const prompt = {
     //add-more-details-lor furniture lora
     //clothingadjustloraap   lora
     
- 
+ //architectureexterior
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
