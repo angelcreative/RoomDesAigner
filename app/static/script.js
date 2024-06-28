@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Kodak Ektra 100 +1 stop, sharp focus, RAW, unedited, symmetrical balance, in-frame, 8k, hyperrealistic, highly detailed, cinematic lighting, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), volumetric fog, HDR 4K, 8K.` ;
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR 4K, 8K.` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -336,20 +336,20 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 // Determine the model_id based on the selection of the "person" field
 
-/*
+
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epicrealism-v4" : "epicrealism-v4";
+const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = clothingadjustloraap;
+let lora = xl_more_enhancer;
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epicrealism-v4") {
+  lora = "xl_more_enhancer";
+} else if (modelId === "sdxlceshi") {
   lora = "clothingadjustloraap";
-} else if (modelId === "epicrealism-v4") {
-  lora = "clothingadjustloraap";
-}*/
+}
 
 const prompt = {
   key: apiKey,
@@ -358,23 +358,20 @@ const prompt = {
   width: width,
   height: height,
   samples: "4",
-  guidance_scale: "7.5",
+  guidance_scale: 7.5,
   steps: "20",
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id:"epicrealism-v4",
-  lora_model:"xl_more_enhancer",
-  lora_strength:"1",
-  //model_id: modelId,  
-  //lora: lora,
-  //lora_strength: lora ? lora_strength : null,  // Only set lora_strength if lora is not null
+  model_id: modelId,
+  lora_model: lora,
+  lora_strength: lora_strength,
   scheduler: "UniPCMultistepScheduler",
   webhook: null,
   safety_checker: "no",
   track_id: null,
   enhance_prompt: "no",
-//highres_fix:"yes"
+  highres_fix: "yes"
 };
 //  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
@@ -469,7 +466,7 @@ if (isImg2Img && imageUrl) {
         showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result);  // Continue checking status if processing
+        checkImageStatus(data.fetch_result,promptText);  // Continue checking status if processing
     } else {
         showError(data);  // Show error if other statuses are encountered
     }
@@ -501,7 +498,7 @@ function checkImageStatus(fetchResultUrl) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, promptText);  // Display images
+            showModal(imageUrls, transformedPrompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
             //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
