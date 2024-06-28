@@ -466,7 +466,7 @@ if (isImg2Img && imageUrl) {
         showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result,promptText);  // Continue checking status if processing
+        checkImageStatus(data.fetch_result, promptText);  // Continue checking status if processing
     } else {
         showError(data);  // Show error if other statuses are encountered
     }
@@ -475,10 +475,8 @@ if (isImg2Img && imageUrl) {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
-    
-
- // Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl) {
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -493,7 +491,7 @@ function checkImageStatus(fetchResultUrl) {
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -513,7 +511,6 @@ function checkImageStatus(fetchResultUrl) {
         //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
-    
 
 
 function showError(error) {
