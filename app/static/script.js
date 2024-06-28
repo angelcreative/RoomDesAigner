@@ -443,7 +443,7 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-  fetch("/generate-images", {
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -466,7 +466,7 @@ if (isImg2Img && imageUrl) {
         showModal(imageUrls, data.transformed_prompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, promptText);  // Continue checking status if processing
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
     } else {
         showError(data);  // Show error if other statuses are encountered
     }
@@ -1012,13 +1012,10 @@ function toggleContent() {
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
-    
 
-    // Ensure only one event listener is added
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
     
-     // Get the thumbnail image source (user-uploaded image)
     const thumbnailImage = document.getElementById("thumbnail");
     const userImageBase64 = thumbnailImage.src;
 
@@ -1035,16 +1032,13 @@ function showModal(imageUrls, transformedPrompt) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        // Create buttons
         const downloadButton = createButton("Download", () => downloadImage(imageUrl));
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-       /* const searchButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));*/
- 
-        // Append buttons to container
+
         [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
@@ -1052,13 +1046,12 @@ function showModal(imageUrls, transformedPrompt) {
         imageGrid.appendChild(imageContainer);
     });
 
-     // Update the toggle-content div with the transformed prompt
-  const toggleContentDiv = document.querySelector(".toggle-content");
-  if (toggleContentDiv) {
-    toggleContentDiv.innerHTML = transformedPrompt;
-  } else {
-    console.error("Toggle content div not found.");
-  }
+    const toggleContentDiv = document.querySelector(".toggle-content");
+    if (toggleContentDiv) {
+        toggleContentDiv.innerHTML = transformedPrompt;
+    } else {
+        console.error("Toggle content div not found.");
+    }
     
     modal.style.display = "block";
     showOverlay();
