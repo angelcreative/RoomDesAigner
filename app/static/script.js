@@ -371,7 +371,7 @@ const prompt = {
   safety_checker: "no",
   track_id: null,
   enhance_prompt: "no",
-  highres_fix: "yes"
+  //highres_fix: "yes"
 };
 //  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
