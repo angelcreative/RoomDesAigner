@@ -341,7 +341,7 @@ const personValue = document.getElementById("person").value;
 const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = xl_more_enhancer;
+let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
