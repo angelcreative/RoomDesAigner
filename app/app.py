@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
+from PIL import Image
+from IC-Light.briarmbg import relight_image  # Import relighting function from IC-Light
 import hmac
 import hashlib
 import requests
@@ -10,6 +12,8 @@ import requests
 import random
 import logging
 import json
+import io
+import base64
 import openai
 # Import the json module
 
@@ -72,6 +76,8 @@ def transform_prompt(prompt_text):
 
  
 
+    
+    
 
 
 # Define the polling function to check image availability
@@ -87,6 +93,11 @@ def check_image_availability(url, timeout=60, interval=5):
             print(f"Error checking image URL: {e}")
         time.sleep(interval)
     return False
+
+
+
+
+
 
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
@@ -464,9 +475,55 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+@app.route('/relight')
+def relight_page():
+    return render_template('relight.html')
+
+@app.route('/api/relight', methods=['POST'])
+def relight_image():
+    if 'image' not in request.files or 'prompt' not in request.form:
+        return jsonify({'status': 'error', 'message': 'No image or prompt provided'})
+
+    image_file = request.files['image']
+    prompt = request.form['prompt']
+    image = Image.open(image_file.stream)
+
+    # Process the image using IC-Light
+    relighted_image = iclight.relight(image, prompt)
+
+    buffered = io.BytesIO()
+    relighted_image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+    return jsonify({'status': 'success', 'image': img_str, 'prompt': prompt})
 
 
-    
+# Set upload folder
+UPLOAD_FOLDER = 'static/uploads/'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/relight')
+def relight():
+    return render_template('relight.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+    if file:
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filename)
+        prompt = request.form.get('prompt', '')
+        relighted_image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'relighted_' + file.filename)
+        relight_image(filename, relighted_image_path, prompt)  # Call relighting function
+        return jsonify({'relighted_image_url': relighted_image_path})
+    return jsonify({'error': 'File upload failed'}), 500
+
+
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session

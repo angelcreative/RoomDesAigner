@@ -1,0 +1,6 @@
+[submodule "app/app/IC-Light"]
+	path = app/app/IC-Light
+	url = https://github.com/lllyasviel/IC-Light
+[submodule "app/IC-Light"]
+	path = app/IC-Light
+	url = https://github.com/lllyasviel/IC-Light
