@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
 from PIL import Image
-from IC-Light.briarmbg import relight_image  # Import relighting function from IC-Light
+from IC_Light.briarmbg import relight_image  # Corrected import statement
 import hmac
 import hashlib
 import requests
