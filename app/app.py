@@ -56,7 +56,7 @@ def transform_prompt(prompt_text):
     messages = [
        {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. All  hex color values must be transform to the corresponding Pantone decorations. Give priority to person, then  design style , then colors, then home room or area, then the rest of values. When find hex values make them Pantone."
+            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. Give priority to person, then  design style , then colors, then home room or area, then the rest of values. When find hex values make transform them into Pantone color names."
         },
         {
             "role": "user",
@@ -67,7 +67,7 @@ def transform_prompt(prompt_text):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
-        max_tokens=300,  # Adjust the token count as needed
+        max_tokens=700,  # Adjust the token count as needed
         temperature=0.7,
     )
 
