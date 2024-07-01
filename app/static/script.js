@@ -41,7 +41,7 @@ const attributes = {
     color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
     furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
     room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-    wall_type: ['painted', 'wallpaper', 'tiled']
+    wall_type: ['colored', 'wallpaper', 'tiled']
 };
 
 // Mixing attributes function
@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR 4K, 8K.` ;
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 8K.` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -338,16 +338,16 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epicrealism-v4" : "sdxlceshi";
+const modelId = personValue ? "epicrealism-xl" : "epicrealism-xl";
 
 // Initialize variables for LoRA model and strength
 let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "epicrealism-v4") {
+if (modelId === "epicrealism-xl") {
   lora = "xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
-} else if (modelId === "sdxlceshi") {
+} else if (modelId === "epicrealism-xl") {
   lora = "clothingadjustloraap";
 }
 
@@ -390,6 +390,7 @@ const prompt = {
     //u58hvdfu4q good lora, bit manga
     //add-more-details-lor furniture lora
     //clothingadjustloraap   lora
+    //epicrealism-xl
     
  //architectureexterior
     
