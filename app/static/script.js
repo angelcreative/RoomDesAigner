@@ -348,7 +348,7 @@ let lora_strength = 1;
 if (modelId === "epicrealism-xl") {
   lora = "xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "epicrealism-xl") {
-  lora = "clothingadjustloraap";
+  lora = "yqmaterailenhancer";
 }
 
 const prompt = {
@@ -391,8 +391,10 @@ const prompt = {
     //add-more-details-lor furniture lora
     //clothingadjustloraap   lora
     //epicrealism-xl
-    
+    //clothingadjustloraap
  //architectureexterior
+    //yqmaterailenhancer
+    
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
