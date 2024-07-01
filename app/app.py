@@ -473,6 +473,36 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
+    
+
+# A dictionary to store the upscaled images data
+upscales = {}
+
+@app.route('/create-upscale-session', methods=['POST'])
+def create_upscale_session():
+    data = request.json
+    upscaled_image_url = data['upscaledImageUrl']
+
+    # Generate a unique slug
+    slug = str(uuid.uuid4())
+
+    # Store the upscale data
+    upscales[slug] = {
+        'upscaled_image_url': upscaled_image_url
+    }
+
+    return jsonify({'slug': slug})
+
+@app.route('/upscale/<slug>')
+def view_upscaled_image(slug):
+    if slug in upscales:
+        data = upscales[slug]
+        # Render a template that dynamically loads the upscaled image view
+        return render_template('upscale.html', data=data)
+    else:
+        return "Upscaled image not found", 404
+    
+    
 @app.route('/relight')
 def relight_page():
     return render_template('relight.html')

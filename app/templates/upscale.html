@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upscaled Image</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+    <style>
+        html {
+            background: #15202b;
+        }
+        body {
+            text-align: center;
+            color: #a9fff5;
+            font-family: arial, sans-serif;
+            font-size: 12px;
+            padding-top: 60px;
+            margin-top: 40px;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        img {
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        img.logoRD {
+            margin: 20px auto 0 auto;
+            display: block;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
+    <h1>Upscaled Image</h1>
+    <img src="{{ data['upscaled_image_url'] }}" alt="Upscaled Image">
+</body>
+</html>
