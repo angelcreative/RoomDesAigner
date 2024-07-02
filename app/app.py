@@ -63,7 +63,7 @@ def transform_prompt(prompt_text):
     ]
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4-turbo",
         messages=messages,
         max_tokens=700,  # Adjust the token count as needed
         temperature=0.7,
