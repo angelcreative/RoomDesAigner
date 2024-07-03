@@ -39,38 +39,6 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
-#IMAGE REFERENCE
-
-@app.route('/upload-reference-color', methods=['POST'])
-def upload_reference_color():
-    if 'referenceColorImage' not in request.files:
-        return jsonify({"error": "No file part"}), 400
-
-    file = request.files['referenceColorImage']
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
-
-    if file:
-        image = Image.open(file.stream)
-        buffered = BytesIO()
-        image.save(buffered, format="PNG")
-        image_bytes = buffered.getvalue()
-
-        # Use GPT-4 Turbo's vision capabilities to extract colors
-        response = openai.Image.create(
-            file=image_bytes,
-            purpose='fine-tune',
-            task='extract_colors'
-        )
-
-        if 'data' in response:
-            colors = response['data'][0]['colors']
-            return jsonify({"colors": colors})
-        else:
-            return jsonify({"error": "Failed to extract colors"}), 500
-    return jsonify({"error": "File upload failed"}), 500
-
-#END IMAGE REFERENCE
 
 
 # Fetch the API key from the environment
