@@ -123,77 +123,78 @@ function handleSubmit(event) {
 
 //REF IMAGE
     
+  document.addEventListener("DOMContentLoaded", function () {
     let extractedColors = [];
 
-        document.getElementById('referenceColorImage').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const formData = new FormData();
-                formData.append('referenceColorImage', file);
+    document.getElementById('referenceColorImage').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('referenceColorImage', file);
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('uploadedImage');
-                    img.src = e.target.result;
-                    document.getElementById('uploadedImageContainer').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById('uploadedImage');
+                img.src = e.target.result;
+                document.getElementById('uploadedImageContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
 
-                fetch('/upload-reference-color', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.colors) {
-                        extractedColors = data.colors;
-                    } else if (data.error) {
-                        console.error('Error extracting colors:', data.error);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
-        });
-
-        document.getElementById('imageGenerationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const file = document.getElementById('referenceColorImage').files[0];
-            if (file) {
-                formData.append('referenceColorImage', file);
-            }
-
-            const jsonData = {};
-            formData.forEach((value, key) => {
-                jsonData[key] = value;
-            });
-            jsonData['extractedColors'] = JSON.stringify(extractedColors);
-
-            fetch('/generate-images', {
+            fetch('/upload-reference-color', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
-                // Handle the response data
-                if (data.image_url) {
-                    const imageContainer = document.createElement('div');
-                    const image = document.createElement('img');
-                    image.src = data.image_url;
-                    image.alt = 'Generated Image';
-                    image.style.maxWidth = '100%';
-                    imageContainer.appendChild(image);
-                    document.body.appendChild(imageContainer);
+                if (data.colors) {
+                    extractedColors = data.colors;
                 } else if (data.error) {
-                    alert('Failed to generate image: ' + data.error);
+                    console.error('Error extracting colors:', data.error);
                 }
             })
             .catch(error => console.error('Error:', error));
+        }
+    });
+
+    document.getElementById('imageGenerationForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const file = document.getElementById('referenceColorImage').files[0];
+        if (file) {
+            formData.append('referenceColorImage', file);
+        }
+
+        const jsonData = {};
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
         });
-    
+        jsonData['extractedColors'] = JSON.stringify(extractedColors);
+
+        fetch('/generate-images', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.image_url) {
+                const imageContainer = document.createElement('div');
+                const image = document.createElement('img');
+                image.src = data.image_url;
+                image.alt = 'Generated Image';
+                image.style.maxWidth = '100%';
+                imageContainer.appendChild(image);
+                document.body.appendChild(imageContainer);
+            } else if (data.error) {
+                alert('Failed to generate image: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
+
 //END REF IMAGE
     
     
