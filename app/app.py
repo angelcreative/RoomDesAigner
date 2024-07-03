@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
+from PIL import Image
+from io import BytesIO
 import hmac
 import hashlib
 import requests
@@ -37,7 +39,39 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
- 
+#IMAGE REFERENCE
+
+@app.route('/upload-reference-color', methods=['POST'])
+def upload_reference_color():
+    if 'referenceColorImage' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['referenceColorImage']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file:
+        image = Image.open(file.stream)
+        buffered = BytesIO()
+        image.save(buffered, format="PNG")
+        image_bytes = buffered.getvalue()
+
+        # Use GPT-4 Turbo's vision capabilities to extract colors
+        response = openai.Image.create(
+            file=image_bytes,
+            purpose='fine-tune',
+            task='extract_colors'
+        )
+
+        if 'data' in response:
+            colors = response['data'][0]['colors']
+            return jsonify({"colors": colors})
+        else:
+            return jsonify({"error": "Failed to extract colors"}), 500
+    return jsonify({"error": "File upload failed"}), 500
+
+#END IMAGE REFERENCE
+
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -107,24 +141,33 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        
+
         # Extract the promptText from the incoming data
         prompt_text = data.get('prompt')
-        
+
         if not prompt_text:
             return jsonify({"error": "Missing prompt text"}), 400
-        
+
+        # Get extracted colors
+        extracted_colors = data.get('extractedColors')
+        if extracted_colors:
+            colors = json.loads(extracted_colors)
+            color_descriptions = ', '.join(colors)
+            prompt_text += f" using the colors {color_descriptions}"
+
         # Transform the prompt using OpenAI API
         transformed_prompt = transform_prompt(prompt_text)
-        
+
         # Update the prompt in the data with the transformed prompt
         data['prompt'] = transformed_prompt
-        #else 'https://modelslab.com/api/v6/realtime/text2img'
-        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+
+        url = 'https://modelslab.com/api/v6/images/text2img'
+        if 'init_image' in data:
+            url = 'https://modelslab.com/api/v6/images/img2img'
+
         response = requests.post(url, json=data)
         if response.status_code == 200:
             result = response.json()
-            # Poll the image URLs to check availability
             all_images_available = True
             for image_url in result.get('links', []):
                 if not check_image_availability(image_url):
@@ -133,7 +176,7 @@ def generate_images():
 
             if all_images_available:
                 deduct_credits(username, 2)
-                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                result['transformed_prompt'] = transformed_prompt
                 return jsonify(result)
             else:
                 return jsonify({"error": "Image not available within the timeout period"}), 408
@@ -141,7 +184,6 @@ def generate_images():
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
-
 
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
