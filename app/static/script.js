@@ -123,7 +123,7 @@ function handleSubmit(event) {
 
 //REF IMAGE
     
-     let extractedColors = [];
+    let extractedColors = [];
 
         document.getElementById('referenceColorImage').addEventListener('change', function (event) {
             const file = event.target.files[0];
@@ -147,6 +147,8 @@ function handleSubmit(event) {
                 .then(data => {
                     if (data.colors) {
                         extractedColors = data.colors;
+                    } else if (data.error) {
+                        console.error('Error extracting colors:', data.error);
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -185,8 +187,8 @@ function handleSubmit(event) {
                     image.style.maxWidth = '100%';
                     imageContainer.appendChild(image);
                     document.body.appendChild(imageContainer);
-                } else {
-                    alert('Failed to generate image');
+                } else if (data.error) {
+                    alert('Failed to generate image: ' + data.error);
                 }
             })
             .catch(error => console.error('Error:', error));

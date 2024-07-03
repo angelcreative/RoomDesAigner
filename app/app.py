@@ -129,9 +129,40 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
+#REF IMAGE CODE
 
+@app.route('/upload-reference-color', methods=['POST'])
+def upload_reference_color():
+    try:
+        if 'referenceColorImage' not in request.files:
+            return jsonify({"error": "No file part"}), 400
 
-# Define your generate_images endpoint
+        file = request.files['referenceColorImage']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+
+        if file:
+            image = Image.open(file.stream)
+            buffered = BytesIO()
+            image.save(buffered, format="PNG")
+            image_bytes = buffered.getvalue()
+
+            # Use GPT-4 Turbo's vision capabilities to extract colors
+            response = openai.Image.create(
+                file=image_bytes,
+                purpose='fine-tune',
+                task='extract_colors'
+            )
+
+            if 'data' in response:
+                colors = response['data'][0]['colors']
+                return jsonify({"colors": colors})
+            else:
+                return jsonify({"error": "Failed to extract colors"}), 500
+    except Exception as e:
+        logging.error(f"Error processing image: {e}")
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -184,6 +215,8 @@ def generate_images():
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
+
+#END REF IMAGE
 
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
