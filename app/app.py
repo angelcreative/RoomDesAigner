@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
+from PIL import Image
+from io import BytesIO
 import hmac
 import hashlib
 import requests
@@ -93,8 +95,38 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 
+# Define your reference
+@app.route('/upload-reference-color', methods=['POST'])
+def upload_reference_color():
+    try:
+        if 'referenceColorImage' not in request.files:
+            return jsonify({"error": "No file part"}), 400
 
+        file = request.files['referenceColorImage']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
 
+        if file:
+            image = Image.open(file.stream)
+            buffered = BytesIO()
+            image.save(buffered, format="PNG")
+            image_bytes = buffered.getvalue()
+
+            # Use GPT-4 Turbo's vision capabilities to extract colors
+            response = openai.Image.create(
+                file=image_bytes,
+                purpose='fine-tune',
+                task='extract_colors'
+            )
+
+            if 'data' in response:
+                colors = response['data'][0]['colors']
+                return jsonify({"colors": colors})
+            else:
+                return jsonify({"error": "Failed to extract colors"}), 500
+    except Exception as e:
+        logging.error(f"Error processing image: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 # Define your generate_images endpoint
@@ -107,24 +139,48 @@ def generate_images():
     user_data = get_user_data(username)
     if user_data and user_data.get('credits', 0) >= 2:
         data = request.get_json()
-        
-        # Extract the promptText from the incoming data
-        prompt_text = data.get('prompt')
-        
+
+        # Extract the promptText and formData from the incoming data
+        prompt_text = data.get('selectedValues')
+        form_data = data.get('formData')
+
         if not prompt_text:
             return jsonify({"error": "Missing prompt text"}), 400
-        
+
+        # Process the uploaded image if available
+        if 'referenceColorImage' in form_data:
+            file = request.files['referenceColorImage']
+            if file:
+                image = Image.open(file.stream)
+                buffered = BytesIO()
+                image.save(buffered, format="PNG")
+                image_bytes = buffered.getvalue()
+
+                # Use GPT-4 Turbo's vision capabilities to extract colors
+                response = openai.Image.create(
+                    file=image_bytes,
+                    purpose='fine-tune',
+                    task='extract_colors'
+                )
+
+                if 'data' in response:
+                    colors = response['data'][0]['colors']
+                    color_descriptions = ', '.join(colors)
+                    prompt_text += f" using the colors {color_descriptions}"
+
         # Transform the prompt using OpenAI API
         transformed_prompt = transform_prompt(prompt_text)
-        
+
         # Update the prompt in the data with the transformed prompt
         data['prompt'] = transformed_prompt
-        #else 'https://modelslab.com/api/v6/realtime/text2img'
-        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+
+        url = 'https://modelslab.com/api/v6/images/text2img'
+        if 'init_image' in data:
+            url = 'https://modelslab.com/api/v6/images/img2img'
+
         response = requests.post(url, json=data)
         if response.status_code == 200:
             result = response.json()
-            # Poll the image URLs to check availability
             all_images_available = True
             for image_url in result.get('links', []):
                 if not check_image_availability(image_url):
@@ -133,7 +189,7 @@ def generate_images():
 
             if all_images_available:
                 deduct_credits(username, 2)
-                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                result['transformed_prompt'] = transformed_prompt
                 return jsonify(result)
             else:
                 return jsonify({"error": "Image not available within the timeout period"}), 408
