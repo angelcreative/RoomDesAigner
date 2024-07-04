@@ -503,71 +503,6 @@ fetch("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
-    
-function sendGenerateImagesRequest(prompt) {
-    fetch("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, data.transformed_prompt);
-            hideGeneratingImagesDialog();
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);
-        } else {
-            showError(data);
-        }
-    })
-    .catch(error => {
-        showError(error);
-    });
-}
-    
-// Function to check the image status
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ fetchResultUrl, transformedPrompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'processing') {
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000);
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, transformedPrompt);
-            hideGeneratingImagesDialog();
-        } else {
-            showError(data);
-        }
-    })
-    .catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-    });
-}
-
 
 function showError(error) {
     // Update the user interface to show the error
@@ -617,7 +552,118 @@ function hideErrorMessage() {
 }
 }
 
+function sendGenerateImagesRequest(prompt) {
+    fetch("/generate-images", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, data.transformed_prompt);
+            hideGeneratingImagesDialog();
+        } else if (data.status === "processing" && data.fetch_result) {
+            checkImageStatus(data.fetch_result, data.transformed_prompt);
+        } else {
+            showError(data);
+        }
+    })
+    .catch(error => {
+        showError(error);
+    });
+}
 
+// Function to check the image status
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ fetchResultUrl, transformedPrompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'processing') {
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000);
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, transformedPrompt);
+            hideGeneratingImagesDialog();
+        } else {
+            showError(data);
+        }
+    })
+    .catch(error => {
+        console.error('Error checking image status:', error);
+        showError(error);
+    });
+}
+
+// Function to show the modal with generated images
+function showModal(imageUrls, transformedPrompt) {
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
+
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+    
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    imageUrls.forEach(imageUrl => {
+        const imageContainer = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
+
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+        imageGrid.appendChild(imageContainer);
+    });
+
+    const toggleContentDiv = document.querySelector(".toggle-content");
+    if (toggleContentDiv) {
+        toggleContentDiv.innerHTML = transformedPrompt;
+    } else {
+        console.error("Toggle content div not found.");
+    }
+    
+    modal.style.display = "block";
+    showOverlay();
+}
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
@@ -1139,54 +1185,7 @@ function toggleContent() {
   }
 }
 
-// Function to show the modal with generated images
-function showModal(imageUrls, transformedPrompt) {
-    const modal = document.getElementById("modal");
-    const closeButton = modal.querySelector(".close");
 
-    closeButton.removeEventListener("click", closeModalHandler);
-    closeButton.addEventListener("click", closeModalHandler);
-    
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
-
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";
-
-    imageUrls.forEach(imageUrl => {
-        const imageContainer = document.createElement("div");
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
-
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
-
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
-
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        imageGrid.appendChild(imageContainer);
-    });
-
-    const toggleContentDiv = document.querySelector(".toggle-content");
-    if (toggleContentDiv) {
-        toggleContentDiv.innerHTML = transformedPrompt;
-    } else {
-        console.error("Toggle content div not found.");
-    }
-    
-    modal.style.display = "block";
-    showOverlay();
-}
 
  
 
@@ -1446,4 +1445,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
-}
+});
