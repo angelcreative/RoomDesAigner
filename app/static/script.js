@@ -119,7 +119,6 @@ function handleSubmit(event) {
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
 
-    
 
 //ref
 document.getElementById('referenceColorImage').addEventListener('change', function (event) {
@@ -1360,16 +1359,10 @@ for (const select of selectElements) {
   select.addEventListener("change", handleSelectChange);
 }
 
-
-
-
-
-
 // Initial check on page load
 handleSelectChange();
 
-
-
+ 
 window.addEventListener('load', function() {
   setTimeout(function() {
     var splash = document.getElementById('splash');
@@ -1403,8 +1396,6 @@ function clearImage() {
 }
 
 
-
-
 function displayThumbnail(imageSrc) {
     var thumbnail = document.getElementById('thumbnail');
     var thumbDiv = document.querySelector('.thumbImg');
@@ -1420,10 +1411,7 @@ function clearThumbnail() {
 }
 
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
-
-
-
-
+ 
 // Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
     document.getElementById('avatarLightbox').style.display = 'block';
@@ -1445,4 +1433,5 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
+});
 });
