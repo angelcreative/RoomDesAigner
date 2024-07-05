@@ -1391,11 +1391,14 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
    
     <div class="colorPickersGroup">
     <!-- New section for uploading reference color image -->
-                   <input type="file" id="referenceColorImage" accept="image/*">
-                <div id="uploadedImageContainer">
-                    <img id="uploadedImage" alt="Uploaded Image">
-                    <span class="close-icon" onclick="removeImage()">&#10006;</span>
-                </div>
+                     <div class="form-group">
+                        <label for="referenceColorImage">Upload Reference Color Image:</label>
+                        <input type="file" id="referenceColorImage" name="referenceColorImage" accept="image/*">
+                        <!-- Placeholder to show the uploaded image -->
+                        <div id="uploadedImageContainer" style="display:none;">
+                            <img id="uploadedImage" style="max-width: 100%;"/>
+                        </div>
+                    </div>
           </div>
      </div>
 <!--// end img ref -->

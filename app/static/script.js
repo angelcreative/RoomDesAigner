@@ -119,38 +119,10 @@ function handleSubmit(event) {
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
 
-
-//ref
-document.getElementById('referenceColorImage').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.getElementById('uploadedImage');
-                    img.src = e.target.result;
-                    document.getElementById('uploadedImageContainer').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function removeImage() {
-            const img = document.getElementById('uploadedImage');
-            img.src = '';
-            document.getElementById('uploadedImageContainer').style.display = 'none';
-            document.getElementById('referenceColorImage').value = ''; // Clear the file input
-        }
-
-        document.getElementById('imageGenerationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-
-            const file = document.getElementById('referenceColorImage').files[0];
-            if (file) {
-                formData.append('referenceColorImage', file);
-            }    
     
-    
+
+
+// Function to get selected values
 // Function to get selected values
 function getSelectedValues() {
     const elementIds = [
@@ -323,6 +295,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
     const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 8K.` ;
+    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
+//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
+//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
+    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -502,6 +478,43 @@ fetch("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'processing') {
+            // Update the ETA display
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, transformedPrompt);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
+        } else {
+            // Handle any other statuses or errors
+            showError(data);
+           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+        }
+    })
+    .catch(error => {
+        console.error('Error checking image status:', error);
+        showError(error);
+        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
+    });
+}
+
 
 function showError(error) {
     // Update the user interface to show the error
@@ -551,118 +564,7 @@ function hideErrorMessage() {
 }
 }
 
-function sendGenerateImagesRequest(prompt) {
-    fetch("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, data.transformed_prompt);
-            hideGeneratingImagesDialog();
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);
-        } else {
-            showError(data);
-        }
-    })
-    .catch(error => {
-        showError(error);
-    });
-}
 
-// Function to check the image status
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ fetchResultUrl, transformedPrompt })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'processing') {
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000);
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, transformedPrompt);
-            hideGeneratingImagesDialog();
-        } else {
-            showError(data);
-        }
-    })
-    .catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-    });
-}
-
-// Function to show the modal with generated images
-function showModal(imageUrls, transformedPrompt) {
-    const modal = document.getElementById("modal");
-    const closeButton = modal.querySelector(".close");
-
-    closeButton.removeEventListener("click", closeModalHandler);
-    closeButton.addEventListener("click", closeModalHandler);
-    
-    const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
-
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";
-
-    imageUrls.forEach(imageUrl => {
-        const imageContainer = document.createElement("div");
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
-
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
-
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
-
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        imageGrid.appendChild(imageContainer);
-    });
-
-    const toggleContentDiv = document.querySelector(".toggle-content");
-    if (toggleContentDiv) {
-        toggleContentDiv.innerHTML = transformedPrompt;
-    } else {
-        console.error("Toggle content div not found.");
-    }
-    
-    modal.style.display = "block";
-    showOverlay();
-}
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
@@ -1184,8 +1086,56 @@ function toggleContent() {
   }
 }
 
+// Displays modal with generated images and associated action buttons
+function showModal(imageUrls, transformedPrompt) {
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
 
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
+    
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
 
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+
+    imageUrls.forEach(imageUrl => {
+        const imageContainer = document.createElement("div");
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
+
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
+        imageGrid.appendChild(imageContainer);
+    });
+
+    const toggleContentDiv = document.querySelector(".toggle-content");
+    if (toggleContentDiv) {
+        toggleContentDiv.innerHTML = transformedPrompt;
+    } else {
+        console.error("Toggle content div not found.");
+    }
+    
+    modal.style.display = "block";
+    showOverlay();
+}
+
+    
  
 
 // Function to handle the "Close" action of modal
@@ -1359,10 +1309,16 @@ for (const select of selectElements) {
   select.addEventListener("change", handleSelectChange);
 }
 
+
+
+
+
+
 // Initial check on page load
 handleSelectChange();
 
- 
+
+
 window.addEventListener('load', function() {
   setTimeout(function() {
     var splash = document.getElementById('splash');
@@ -1396,6 +1352,8 @@ function clearImage() {
 }
 
 
+
+
 function displayThumbnail(imageSrc) {
     var thumbnail = document.getElementById('thumbnail');
     var thumbDiv = document.querySelector('.thumbImg');
@@ -1411,7 +1369,10 @@ function clearThumbnail() {
 }
 
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
- 
+
+
+
+
 // Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
     document.getElementById('avatarLightbox').style.display = 'block';
@@ -1433,5 +1394,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
-});
 });
