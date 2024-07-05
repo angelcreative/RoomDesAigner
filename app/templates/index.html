@@ -429,26 +429,7 @@
     </div>
 
     <div id="overlay"></div>
-    <div id="modal" class="modal" style="display: none;">
-        <div class="modal-content">
-    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
-
-        <img class="logoApp" src="static/img/logoApp.svg">
-            <h1>Your dream room is here</h1>
-             <div> <button onclick="toggleContent()">See prompt details</button>
-            <div id="chipsSV" class="toggle-content"></div></div>
-            <br>
-            <div class="imageGrid" id="imageGrid">
-                <button>Upscale</button>
-            </div>
-         
-            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
-    width: 220px;
-    margin: 40px auto;">Reroll</button>
-            <div id="resultContainer"></div>
-            <span class="close">&times;</span>
-        </div>
-    </div>
+    
     <!-- ID STYLES -->
     <!-- Add the necessary HTML structure for the modal window -->
     <fieldset>
@@ -2168,6 +2149,8 @@ Manual prompting</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i
             </div>
                 
                 <div class="secondaryContainer">
+                    
+                    <!--buttons magic-->
                     <div class="buttonsCont">
                 <div class="buttonsL">
                     <button id="clearAllButton">Clear All</button>
@@ -2188,7 +2171,32 @@ Manual prompting</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i
 
                 </div>
             </div>
+<!-- // end magic buttons -->
+                    
+                    
+                    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
 
+        <img class="logoApp" src="static/img/logoApp.svg">
+            <h1>Your dream room is here</h1>
+             <div> <button onclick="toggleContent()">See prompt details</button>
+            <div id="chipsSV" class="toggle-content"></div></div>
+            <br>
+            <div class="imageGrid" id="imageGrid">
+                <button>Upscale</button>
+            </div>
+         
+            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
+    width: 220px;
+    margin: 40px auto;">Reroll</button>
+            <div id="resultContainer"></div>
+            <span class="close">&times;</span>
+        </div>
+    </div>
+                    
+                    
+                    
                 </div>
                 
             
