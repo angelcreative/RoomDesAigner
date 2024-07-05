@@ -859,6 +859,8 @@ h2.loginTitle {
 
 }
 
+
+
 .official {
     display: flex;
     flex-direction: row;
@@ -866,8 +868,10 @@ h2.loginTitle {
     align-items: center;
     padding: 0 40px;
     margin: 0 auto 20px;
-    max-width: 100%;
+    width: 100%;
     background: #111b25;
+    position: fixed;
+    z-index: 9;
 }
 
 .avatar img {
@@ -2903,7 +2907,7 @@ color: white;
     height: 100vh;
     overflow: scroll;
     scroll-behavior: smooth;
-    padding-right: 20px;
+    padding: 20px;
 }
 
 
