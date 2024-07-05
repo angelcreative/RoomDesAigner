@@ -1694,25 +1694,16 @@ i {
 }
 
 #modal {
-    position: absolute;
-        z-index: 9;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    width: 100%;
+    height: 100%;
+    background: #111b25;
 }
-
 .modal-content {
-    background: #15202b;
+    background: #111b25;
     padding: 0;
-    position: fixed;
-    display: block;
     margin: 0 auto;
     width: 100%;
     height: 100vh;
-    overflow: hidden;
-    top: 0;
-    left: 0;
     overflow: scroll;
     text-align: center;
     backdrop-filter: blur(8px);
@@ -2053,6 +2044,11 @@ select {
 select:hover {
     background: #111b25;
     color: #6d7b87;
+}
+
+
+textarea {
+    width: calc(100% - 8px);
 }
 
 .dot {
@@ -2864,7 +2860,7 @@ color: white;
     text-align: left;
     outline: none;
     font-size: 15px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #273440;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -2901,8 +2897,13 @@ color: white;
     margin:0 0 0 20px;
 }
 
+
 .mainContainer {
     width: 400px;
+    height: 100vh;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    padding-right: 20px;
 }
 
 
