@@ -372,7 +372,7 @@
         
         <div class="usernameCredits"><span class="username">{{ username }}</span><span class="creditsCoin" id="creditDisplay">{{ credits }}</span><small>🟡 coins</small></div>
     </div>
-                   <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+                   <img class="logoWeb" src="/static/img/logo_web_dark.svg" alt="logo Room DesAigner">
 
         <img class="logoApp" src="static/img/logoApp.svg">
     <div class="logout">
@@ -429,7 +429,26 @@
     </div>
 
     <div id="overlay"></div>
-    
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+
+        <img class="logoApp" src="static/img/logoApp.svg">
+            <h1>Your dream room is here</h1>
+             <div> <button onclick="toggleContent()">See prompt details</button>
+            <div id="chipsSV" class="toggle-content"></div></div>
+            <br>
+            <div class="imageGrid" id="imageGrid">
+                <button>Upscale</button>
+            </div>
+         
+            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
+    width: 220px;
+    margin: 40px auto;">Reroll</button>
+            <div id="resultContainer"></div>
+            <span class="close">&times;</span>
+        </div>
+    </div>
     <!-- ID STYLES -->
     <!-- Add the necessary HTML structure for the modal window -->
     <fieldset>
@@ -869,7 +888,32 @@ Image</h1>
 
                     
                 </div> 
-                 <!-- COLLAPSE -->                    
+                    
+                    
+                 <div class="buttonsCont">
+                <div class="buttonsL">
+                    <button id="clearAllButton">Clear All</button>
+                    <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
+                   
+                
+                
+                </div>
+                <div class="buttonsR">
+                    
+                    
+                    <button class="buttonExt gradient-animation"  type="submit" id="magicButton">Design Your Room!</button>
+                    <p>or</p>
+
+
+<!-- AI Design Button -->
+<button id="aiDesignButton">Generate Random Design</button>
+
+                </div>
+            </div>
+            </div>
+            
+                <div class="secondaryContainer">
+<!-- COLLAPSE -->                    
                
 
             <!-- pro tokens -->
@@ -2143,60 +2187,7 @@ Manual prompting</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i
                     <span class="dot"></span>
                 </div>
                 
- <!-- //COLLAPSE -->   
-                    
-                 
-            </div>
-                
-                <div class="secondaryContainer">
-                    
-                    <!--buttons magic-->
-                    <div class="buttonsCont">
-                <div class="buttonsL">
-                    <button id="clearAllButton">Clear All</button>
-                    <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
-                   
-                
-                
-                </div>
-                <div class="buttonsR">
-                    
-                    
-                    <button class="buttonExt gradient-animation"  type="submit" id="magicButton">Design Your Room!</button>
-                    <p>or</p>
-
-
-<!-- AI Design Button -->
-<button id="aiDesignButton">Generate Random Design</button>
-
-                </div>
-            </div>
-<!-- // end magic buttons -->
-                    
-                    
-                    <div id="modal" class="modal" style="display: block;">
-        <div class="modal-content">
-    <!--<img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
-
-        <img class="logoApp" src="static/img/logoApp.svg">
-            <h1>Your dream room is here</h1>-->
-             <div> <button onclick="toggleContent()">See prompt details</button>
-            <div id="chipsSV" class="toggle-content"></div></div>
-            <br>
-            <div class="imageGrid" id="imageGrid">
-               
-            </div>
-         
-            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
-    width: 220px;
-    margin: 40px auto;">Reroll</button>
-            <div id="resultContainer"></div>
-            <span class="close">&times;</span>
-        </div>
-    </div>
-                    
-                    
-                    
+ <!-- //COLLAPSE -->
                 </div>
                 
             
