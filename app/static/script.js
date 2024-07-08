@@ -294,7 +294,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-  const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 8K.` ;
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 8K.` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -1086,50 +1086,14 @@ function toggleContent() {
   }
 }
 
-    
-
-    
-    
-// Function to enhance image
-function enhanceImage(imageUrl) {
-    fetch('/enhance-image', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ imageUrl: imageUrl })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.enhanced_image_url) {
-            window.open(data.enhanced_image_url, '_blank');
-        } else {
-            alert('Image enhancement failed.');
-        }
-    })
-    .catch(error => {
-        console.error('Error enhancing image:', error);
-    });
-}
-
-// Adding event listeners to generated images
-function addEnhanceButton(imageUrl, container) {
-    const enhanceButton = document.createElement('button');
-    enhanceButton.textContent = 'Enhance';
-    enhanceButton.addEventListener('click', () => enhanceImage(imageUrl));
-
-    container.appendChild(enhanceButton);
-}    
-    
-    
-// Modify showModal function to include enhance button and color extraction
+// Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
-
+    
     const thumbnailImage = document.getElementById("thumbnail");
     const userImageBase64 = thumbnailImage.src;
 
@@ -1150,12 +1114,10 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const colorButton = createButton("Extract Colors", () => extractColors(imageUrl));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-        const enhanceButton = createButton("Enhance", () => enhanceImage(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
 
-        [downloadButton, copyButton, editButton, copyPromptButton, compareButton, colorButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -1168,7 +1130,7 @@ function showModal(imageUrls, transformedPrompt) {
     } else {
         console.error("Toggle content div not found.");
     }
-
+    
     modal.style.display = "block";
     showOverlay();
 }
@@ -1200,7 +1162,13 @@ function createButton(text, onClickHandler) {
 }
 
 
- 
+
+
+function closeModalHandler() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
+    
     
   // Function to open the image in a new tab
   function openImageInNewTab(imageUrl) {

@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request, render_template, Response, redirect, 
 from flask_cors import CORS
 import hmac
 import hashlib
-import torch
 import requests
 import bcrypt
 import os
@@ -14,9 +13,6 @@ import json
 import io
 import base64
 import openai
-from PIL import Image
-from io import BytesIO
-from aura_sr import AuraSR
 # Import the json module
 
 app = Flask(__name__)
@@ -32,76 +28,6 @@ CORS(app, resources={
         ]
     }
 })
-
-
-
-###
-
-# Load the AuraSR model
-aura_sr = AuraSR.from_pretrained("fal-ai/AuraSR")
-
-# imgbb API key
-IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
-
-def upload_to_imgbb(image):
-    buffered = BytesIO()
-    image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
-    
-    response = requests.post(
-        "https://api.imgbb.com/1/upload",
-        data={"key": IMGBB_API_KEY, "image": img_str}
-    )
-    return response.json()
-
-
-@app.route('/enhance-image', methods=['POST'])
-def enhance_image():
-    image_url = request.json['imageUrl']
-    
-    response = requests.get(image_url)
-    img = Image.open(BytesIO(response.content)).resize((256, 256))
-    
-    upscaled_image = aura_sr.upscale_4x(img)
-    
-    imgbb_response = upload_to_imgbb(upscaled_image)
-    if imgbb_response['success']:
-        enhanced_image_url = imgbb_response['data']['url']
-        # Generate a unique slug
-        unique_slug = str(uuid.uuid4())
-        # Save the mapping of slug to URL
-        save_slug_mapping(unique_slug, enhanced_image_url)
-        return jsonify({'enhanced_image_url': f"/enhanced/{unique_slug}"})
-    else:
-        return jsonify({'error': 'Image enhancement failed'}), 500
-
-@app.route('/enhanced/<slug>', methods=['GET'])
-def get_enhanced_image(slug):
-    enhanced_image_url = get_url_from_slug(slug)
-    if enhanced_image_url:
-        return redirect(enhanced_image_url)
-    else:
-        return "Image not found", 404
-
-def save_slug_mapping(slug, url):
-    # Implement saving logic, e.g., save to a database or a file
-    with open('slug_mapping.json', 'a') as f:
-        f.write(f"{slug}: {url}\n")
-
-def get_url_from_slug(slug):
-    # Implement loading logic, e.g., load from a database or a file
-    if os.path.exists('slug_mapping.json'):
-        with open('slug_mapping.json', 'r') as f:
-            for line in f:
-                stored_slug, stored_url = line.strip().split(": ")
-                if stored_slug == slug:
-                    return stored_url
-    return None
-
-###
-
-
-
 
 logging.basicConfig(level=logging.INFO)
 
