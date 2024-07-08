@@ -338,16 +338,16 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epicrealism-xl" : "sdxlceshi";
+const modelId = personValue ? "ae-sdxl-v1" : "ae-sdxl-v1";
 
 // Initialize variables for LoRA model and strength
 let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "epicrealism-xl") {
+if (modelId === "ae-sdxl-v1") {
   lora = "xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
-} else if (modelId === "sdxlceshi") {
+} else if (modelId === "ae-sdxl-v1") {
   lora = "yqmaterailenhancer";
 }
 
@@ -394,7 +394,7 @@ const prompt = {
     //clothingadjustloraap
  //architectureexterior
     //yqmaterailenhancer
-    
+    //ae-sdxl-v1
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
