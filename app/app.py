@@ -15,7 +15,7 @@ import base64
 import openai
 from PIL import Image
 from io import BytesIO
-from colorthief import ColorThief
+#from colorthief import ColorThief
 from aura_sr import AuraSR
 # Import the json module
 
