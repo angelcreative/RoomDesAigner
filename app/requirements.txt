@@ -16,8 +16,6 @@ protobuf==4.21.12
 grpcio-tools==1.53.0
 stability-sdk==0.8.1
 aura-sr==0.0.2
-torch==2.0.0
-torchvision==0.15.1
 numpy>=1.25.0
 einops>=0.8.0
 huggingface-hub>=0.23.4
