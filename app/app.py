@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
-from colorthief import ColorThief
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -53,25 +52,6 @@ def upload_to_imgbb(image):
         data={"key": IMGBB_API_KEY, "image": img_str}
     )
     return response.json()
-
-@app.route('/extract-colors', methods=['POST'])
-def extract_colors():
-    data = request.get_json()
-    image_url = data.get('imageUrl')
-
-    if not image_url:
-        return jsonify({'error': 'Image URL is required'}), 400
-
-    response = requests.get(image_url)
-    image_data = BytesIO(response.content)
-
-    color_thief = ColorThief(image_data)
-    palette = color_thief.get_palette(color_count=5)
-
-    # Convert the palette to hex colors
-    hex_palette = [f'#{r:02x}{g:02x}{b:02x}' for r, g, b in palette]
-
-    return jsonify({'palette': hex_palette})
 
 
 @app.route('/enhance-image', methods=['POST'])
