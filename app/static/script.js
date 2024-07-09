@@ -338,17 +338,17 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epicrealism-xl" : "sdxlceshi";
+const modelId = personValue ? "epic-realism-rc1epic-realism-rc1" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
 let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "epicrealism-xl") {
-  lora = "perfect-eyes-xl,real-skin-lora,greatlightningmiracle,scene,xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
+if (modelId === "epic-realism-rc1") {
+  lora = "perfect-eyes-xl,real-skin-lora,hand-detail-xl,better-portrait-lighting,scene,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
-  lora = "yqmaterailenhancer,greatlightningmiracle,add-uhd-detail";
+  lora = "yqmaterailenhancer,better-portrait-lighting,add-uhd-detail";
 }
 
 const prompt = {
@@ -373,6 +373,10 @@ const prompt = {
   enhance_prompt: "no",
   //highres_fix: "yes"
 };
+    
+    //xl_more_enhancer,
+    
+    //lora greatlightningmiracle
 //  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
 //,epicrealismhelper
