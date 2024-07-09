@@ -338,17 +338,17 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epicrealism-xl" : "sdxlceshi";
+const modelId = personValue ? "ae-sdxl-v1" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = "greatlightningmiracle";
+let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "epicrealism-xl") {
-  lora = "perfect-eyes-xl,hand-detail-xl,real-skin-lora,greatlightningmiracle,add-uhd-detail,open-lingerie-lora,perfect-round-ass-olaz";
+if (modelId === "ae-sdxl-v1") {
+  lora = "xl_more_enhancer";
 } else if (modelId === "sdxlceshi") {
-  lora = "yqmaterailenhancer,greatlightningmiracle,add-uhd-detail";
+  lora = "yqmaterailenhancer,xl_more_enhancer";
 }
     
     
