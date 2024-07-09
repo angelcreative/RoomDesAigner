@@ -258,21 +258,30 @@ function generateFractalText() {
     function showGeneratingImagesDialog() {
     document.getElementById('generatingImagesDialog').style.display = 'block';
     document.getElementById('dialogTitle').innerHTML = `
-        <h1>Generating design</h1>
+        
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, creating your design takes less than 120 seconds</p>
-        <p id="chronometer">00:00</p>
+        <p>Sit back and relax, your design will<br>be ready in less than 120 seconds.</p>
+         <p id="chronometer">00:00:00</p>
     `;
 
     const changingMessages = [
-        'painting walls', 'furnishing room', 'choosing decoration', 
-        'adding plants', 'hanging lamps', 'placing furniture', 
-        'adjusting lighting', 'selecting colors', 'arranging art', 
-        'organizing shelves', 'setting the table', 'tidying up', 
-        'adding textures', 'installing hardware', 'finishing touches', 
-        'polishing surfaces', 'applying finishes', 'arranging flowers', 
-        'laying carpets', 'curating books', 'mounting frames', 
-        'setting up tech'
+       'painting walls', 'furnishing room', 'choosing decoration', 
+    'adding plants', 'hanging lamps', 'placing furniture', 
+    'adjusting lighting', 'selecting colors', 'arranging art', 
+    'organizing shelves', 'setting the table', 'tidying up', 
+    'adding textures', 'installing hardware', 'finishing touches', 
+    'polishing surfaces', 'applying finishes', 'arranging flowers', 
+    'laying carpets', 'curating books', 'mounting frames', 
+    'setting up tech', 'installing curtains', 'hanging mirrors',
+    'refinishing floors', 'installing lighting fixtures', 'choosing fabrics',
+    'updating hardware', 'placing rugs', 'installing shelves',
+    'mounting TVs', 'cleaning windows', 'arranging pillows', 
+    'painting trim', 'hanging blinds', 'decorating with candles',
+    'adding greenery', 'staging furniture', 'setting up appliances',
+    'installing art', 'organizing pantry', 'decorating walls', 
+    'designing layout', 'setting up workspace', 'choosing flooring',
+    'placing decor items', 'organizing closet', 'setting up entertainment system',
+    'arranging outdoor furniture'
     ];
 
     let chronometerInterval;
