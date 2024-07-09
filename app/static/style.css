@@ -27,7 +27,28 @@ body {
     font-size: 14px;
     color: #677580;
 }
+#dialogTitle {
+    font-size: 16px;
+    text-align: center;
+}
 
+#dialogTitle h1 {
+    font-size: 18px;
+    text-align: center;
+}
+
+#dialogTitle h2 {
+    font-size: 16px;
+    text-align: center;
+}
+
+#dialogTitle p {
+    font-size:12px;
+    color:#4f5c67
+}
+
+
+#changingText {text-transform: capitalize;font-size: 14px;}
 #roomFurniture option {
     display: flex;
     flex-direction: column;

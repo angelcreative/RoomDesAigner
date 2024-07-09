@@ -260,7 +260,7 @@ function generateFractalText() {
     document.getElementById('dialogTitle').innerHTML = `
         <h1>Generating design</h1>
         <h2 id="changingText">painting walls</h2>
-        <p>It takes less than a minute</p>
+        <p>Sit back and relax, creating your design takes less than 120 seconds</p>
         <p id="chronometer">00:00</p>
     `;
 
@@ -281,16 +281,17 @@ function generateFractalText() {
     function resetChronometer() {
         clearInterval(chronometerInterval);
         const chronometer = document.getElementById('chronometer');
-        let seconds = 0;
+        let milliseconds = 0;
 
-        chronometer.textContent = '00:00';
+        chronometer.textContent = '00:00:00';
 
         chronometerInterval = setInterval(() => {
-            seconds++;
-            const minutes = Math.floor(seconds / 60);
-            const displaySeconds = seconds % 60;
-            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
-        }, 1000);
+            milliseconds += 10;
+            const minutes = Math.floor((milliseconds / 1000) / 60);
+            const seconds = Math.floor((milliseconds / 1000) % 60);
+            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
+            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
+        }, 10);
     }
 
     function changeText() {
@@ -391,14 +392,14 @@ const personValue = document.getElementById("person").value;
 const modelId = personValue ? "ae-sdxl-v1" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = "xl_more_enhancer";
+let lora = "clothingadjustloraap";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "ae-sdxl-v1") {
-  lora = "xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
-  lora = "yqmaterailenhancer,xl_more_enhancer";
+  lora = "clothingadjustloraap";
 }
     
     
