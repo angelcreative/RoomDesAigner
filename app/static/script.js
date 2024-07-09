@@ -346,7 +346,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epic-realism-rc1") {
-  lora = "perfect-eyes-xl,real-skin-lora,hand-detail-xl,better-portrait-lighting,scene,open-lingerie-lora,perfect-round-ass-olaz";
+  lora = "perfect-eyes-xl,hand-detail-xl,better-portrait-lighting,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
   lora = "yqmaterailenhancer,better-portrait-lighting,add-uhd-detail";
 }
@@ -375,7 +375,7 @@ const prompt = {
 };
     
     //xl_more_enhancer,
-    
+    //real-skin-lora
     //lora greatlightningmiracle
 //  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
