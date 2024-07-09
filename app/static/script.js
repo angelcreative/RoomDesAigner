@@ -346,7 +346,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "epic-realism-rc1") {
-  lora = "real-skin-lora,greatlightningmiracle,add-uhd-detail,open-lingerie-lora,perfect-round-ass-olaz";
+  lora = "greatlightningmiracle,add-uhd-detail,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
   lora = "yqmaterailenhancer,greatlightningmiracle,add-uhd-detail";
 }
