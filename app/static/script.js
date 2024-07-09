@@ -256,10 +256,60 @@ function generateFractalText() {
     }
     
     function showGeneratingImagesDialog() {
-        document.getElementById('generatingImagesDialog').style.display = 'block';
-        document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
-  
+    document.getElementById('generatingImagesDialog').style.display = 'block';
+    document.getElementById('dialogTitle').innerHTML = `
+        <h1>Generating design</h1>
+        <h2 id="changingText">painting walls</h2>
+        <p>It takes less than a minute</p>
+        <p id="chronometer">00:00</p>
+    `;
+
+    const changingMessages = [
+        'painting walls', 'furnishing room', 'choosing decoration', 
+        'adding plants', 'hanging lamps', 'placing furniture', 
+        'adjusting lighting', 'selecting colors', 'arranging art', 
+        'organizing shelves', 'setting the table', 'tidying up', 
+        'adding textures', 'installing hardware', 'finishing touches', 
+        'polishing surfaces', 'applying finishes', 'arranging flowers', 
+        'laying carpets', 'curating books', 'mounting frames', 
+        'setting up tech'
+    ];
+
+    let chronometerInterval;
+    let textChangeInterval;
+
+    function resetChronometer() {
+        clearInterval(chronometerInterval);
+        const chronometer = document.getElementById('chronometer');
+        let seconds = 0;
+
+        chronometer.textContent = '00:00';
+
+        chronometerInterval = setInterval(() => {
+            seconds++;
+            const minutes = Math.floor(seconds / 60);
+            const displaySeconds = seconds % 60;
+            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${displaySeconds.toString().padStart(2, '0')}`;
+        }, 1000);
     }
+
+    function changeText() {
+        let index = 0;
+        const changingText = document.getElementById('changingText');
+        
+        changingText.textContent = changingMessages[index];
+
+        clearInterval(textChangeInterval);
+
+        textChangeInterval = setInterval(() => {
+            index = (index + 1) % changingMessages.length;
+            changingText.textContent = changingMessages[index];
+        }, 4000);
+    }
+
+    resetChronometer();
+    changeText();
+}
 
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
