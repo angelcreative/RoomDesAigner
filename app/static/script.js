@@ -338,10 +338,10 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "epic-realism-rc1epic-realism-rc1" : "sdxlceshi";
+const modelId = personValue ? "epic-realism-rc1" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = "xl_more_enhancer";
+let lora = "better-portrait-lighting";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
