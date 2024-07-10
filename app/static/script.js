@@ -260,7 +260,7 @@ function generateFractalText() {
     document.getElementById('dialogTitle').innerHTML = `
         
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will<br>be ready in less than 120 seconds.</p>
+        <p>Sit back and relax, your design will be ready in less than 120 seconds.</p>
          <p id="chronometer">00:00:00</p>
     `;
 
@@ -398,7 +398,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "ae-sdxl-v1" : "sdxlceshi";
+const modelId = personValue ? "ae-sdxl-v1" : "ae-sdxl-v1";
 
 // Initialize variables for LoRA model and strength
 let lora = "clothingadjustloraap";
@@ -407,7 +407,7 @@ let lora_strength = 1;
 // Conditionally set the LoRA model based on the selected model
 if (modelId === "ae-sdxl-v1") {
   lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
-} else if (modelId === "sdxlceshi") {
+} else if (modelId === "ae-sdxl-v1") {
   lora = "clothingadjustloraap";
 }
     
