@@ -346,297 +346,198 @@ function generateFractalText() {
 
 
 
- 
-function generateImages(imageUrl, selectedValues, isImg2Img) {
-  showGeneratingImagesDialog();
+//NEW THIEF
+document.addEventListener("DOMContentLoaded", function() {
+    const magicButton = document.getElementById("magicButton");
+    magicButton.addEventListener("click", handleMagicButtonClick);
 
-  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-  const customText = document.getElementById("customText").value;
-  const pictureSelect = document.getElementById("imageDisplayUrl");
-  const selectedPicture = pictureSelect.value;
-    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 35mm film photography Unedited 8K photograph .` ;
-    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
-//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
-//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
-    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
+    function handleMagicButtonClick() {
+        const colorExtractorInput = document.getElementById("colorExtractor");
+        const file = colorExtractorInput.files[0];
 
-  let plainText = Object.entries(selectedValues)
-    .filter(([key, value]) => value && key !== "imageUrl")
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(", ");
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const image = new Image();
+                image.src = event.target.result;
+                image.onload = function() {
+                    const colorThief = new ColorThief();
+                    const colors = colorThief.getPalette(image, 5); // Extract the top 5 colors
 
-  const promptEndy = `dense furnishings and decorations.`;
-  
- 
+                    const hexColors = colors.map(rgbToHex);
+                    const promptEndy = `dense furnishings and decorations. Colors: ${hexColors.join(', ')}.`;
 
-const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+                    // Display the uploaded image
+                    document.getElementById("uploadedImage").src = event.target.result;
+                    document.getElementById("uploadedImageContainer").style.display = 'block';
 
-let width, height;
+                    // Call the generateImages function with the updated promptEndy
+                    generateImages(null, getSelectedValues(), false, promptEndy);
+                }
+            }
+            reader.readAsDataURL(file);
+        } else {
+            const promptEndy = `dense furnishings and decorations.`;
+            generateImages(null, getSelectedValues(), false, promptEndy);
+        }
+    }
 
-if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1080;
-  height = Math.round((2 / 3) * 1080);  
-} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
-  height = 1080;
-} else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1080;
-  height = 1080;
-}
+    function rgbToHex(rgb) {
+        return `#${((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1)}`;
+    }
 
-console.log(`Width: ${width}, Height: ${height}`);
+    // The existing generateImages function should accept promptEndy as an additional parameter
+    function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
+        showGeneratingImagesDialog();
 
-  const seedSwitch = document.getElementById("seedSwitch");
-  const seedEnabled = seedSwitch.checked;
-  const seedValue = seedEnabled ? null : "19071975";
+        const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Replace with your real API key
+        const customText = document.getElementById("customText").value;
+        const pictureSelect = document.getElementById("imageDisplayUrl");
+        const selectedPicture = pictureSelect.value;
+        const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame, hyperrealistic, highly detailed, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 35mm film photography Unedited 8K photograph.`;
 
-  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+        let plainText = Object.entries(selectedValues)
+            .filter(([key, value]) => value && key !== "imageUrl")
+            .map(([key, value]) => `${key}: ${value}`)
+            .join(", ");
 
-// Determine the model_id based on the selection of the "person" field
+        const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
+        let width, height;
 
+        if (aspectRatio === "landscape") { // 3:2 aspect ratio
+            width = 1080;
+            height = Math.round((2 / 3) * 1080);  
+        } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+            width = Math.round((2 / 3) * 1080);  
+            height = 1080;
+        } else if (aspectRatio === "square") { // 1:1 aspect ratio
+            width = 1080;
+            height = 1080;
+        }
 
-// Get selected models from the form
-const personValue = document.getElementById("personModel").value || "ae-sdxl-v1"; // Default to ae-sdxl-v1 if no selection
-const furnitureValue = document.getElementById("furnitureModel").value || "ae-sdxl-v1"; // Default to ae-sdxl-v1 if no selection
+        console.log(`Width: ${width}, Height: ${height}`);
 
-// Determine if the person model or furniture model should be used
-const modelId = personValue ? personValue : furnitureValue;
+        const seedSwitch = document.getElementById("seedSwitch");
+        const seedEnabled = seedSwitch.checked;
+        const seedValue = seedEnabled ? null : "19071975";
 
-// Initialize variables for LoRA model and strength
-let lora = "clothingadjustloraap";
-let lora_strength = 1;
+        const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+        const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+        const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
 
-// Conditionally set the LoRA model based on the selected model
-if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
-} else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap";
-}
-    
-    
-    
+        const personValue = document.getElementById("personModel").value || "ae-sdxl-v1"; // Default to ae-sdxl-v1 if no selection
+        const furnitureValue = document.getElementById("furnitureModel").value || "ae-sdxl-v1"; // Default to ae-sdxl-v1 if no selection
 
+        const modelId = personValue ? personValue : furnitureValue;
 
-const prompt = {
-  key: apiKey,
-  prompt: promptText,
-  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, multiple persons, multiple women, multiple girls, multiple men, multiple boys, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
-  width: width,
-  height: height,
-  samples: 4,
-  guidance_scale: 7.5,
-  steps: 20,
-  use_karras_sigmas: "yes",
-  tomesd: "yes",
-  seed: seedValue,
-  model_id: modelId,
-  lora_model: lora,
-  lora_strength: lora_strength,
-  scheduler: "UniPCMultistepScheduler",
-  webhook: null,
-  safety_checker: "no",
-  track_id: null,
-  enhance_prompt: "no",
-  //highres_fix: "yes"
-};
-    
-    //xl_more_enhancer,
-    //real-skin-lora
-    //lora 
-    //perfect-eyes-xl,hand-detail-xl,
-//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
+        let lora = "clothingadjustloraap";
+        let lora_strength = 1;
 
-//,epicrealismhelper
-//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
-    //lob-realvisxl-v20 takes some time but good
-    //cyberrealistic-41 almost perfect darked skin
-    //realistic-stock-photo-v2 is slow
-    //realistic-vision-v51  fast
-    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
-    // majicmix-realisticsafeten furniture, test
-    //juggernautxl-v9-rundiffus good for close up
-    //aria-v1 perfect lora
-    //skin-hands-malefemale-fro
-    //westmixappfactory curvy
-    //u58hvdfu4q good lora, bit manga
-    //add-more-details-lor furniture lora
-    //clothingadjustloraap   lora
-    //epicrealism-xl
-    //clothingadjustloraap
- //architectureexterior
-    //yqmaterailenhancer
-    
-    
-if (isImg2Img && imageUrl) {
-    prompt.init_image = imageUrl;
+        if (modelId === personValue) {
+            lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
+        } else if (modelId === furnitureValue) {
+            lora = "clothingadjustloraap";
+        }
 
-    // Get the strength value from the slider
-    const strengthSlider = document.getElementById("strengthSlider");
-    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
-  }
-    
-   /*   const chipsSV = document.getElementById("chipsSV");
-        chipsSV.innerHTML = ""; // Clear the existing content
+        const prompt = {
+            key: apiKey,
+            prompt: promptText,
+            negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, multiple persons, multiple women, multiple girls, multiple men, multiple boys, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
+            width: width,
+            height: height,
+            samples: 4,
+            guidance_scale: 7.5,
+            steps: 20,
+            use_karras_sigmas: "yes",
+            tomesd: "yes",
+            seed: seedValue,
+            model_id: modelId,
+            lora_model: lora,
+            lora_strength: lora_strength,
+            scheduler: "UniPCMultistepScheduler",
+            webhook: null,
+            safety_checker: "no",
+            track_id: null,
+            enhance_prompt: "no",
+        };
 
-        for (const [key, value] of Object.entries(selectedValues)) {
-          if (value) {
-            // Replace "_" with " " in the value
-            const formattedValue = value.replace(/_/g, " ");
-            
-            const chip = document.createElement("span");
-            chip.classList.add("chipSV");
+        if (isImg2Img && imageUrl) {
+            prompt.init_image = imageUrl;
+            const strengthSlider = document.getElementById("strengthSlider");
+            prompt.strength = parseFloat(strengthSlider.value);
+        }
 
-            // Check if the value is a valid hex color
-            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
-            if (isHexColor) {
-              chip.classList.add("hexDot"); // Add the "hexDot" class
-              chip.style.backgroundColor = formattedValue;
+        fetch("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === "success" && data.output) {
+                const imageUrls = data.output.map(url =>
+                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+                );
+                showModal(imageUrls, data.transformed_prompt);
+                hideGeneratingImagesDialog();
+            } else if (data.status === "processing" && data.fetch_result) {
+                checkImageStatus(data.fetch_result, data.transformed_prompt);
             } else {
-              chip.textContent = formattedValue;
+                showError(data);
             }
+        })
+        .catch(error => {
+            showError(error);
+        });
 
-            if (formattedValue.includes("_")) {
-              chip.style.visibility = "visible"; // Hide "_" character
-            }
+        function checkImageStatus(fetchResultUrl, transformedPrompt) {
+            fetch(fetchResultUrl, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(prompt)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'processing') {
+                    if (data.eta) {
+                        document.getElementById('etaValue').textContent = data.eta;
+                    }
+                    setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000);
+                } else if (data.status === "success" && data.output) {
+                    const imageUrls = data.output.map(url =>
+                        url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+                    );
+                    showModal(imageUrls, transformedPrompt);
+                    hideGeneratingImagesDialog();
+                } else {
+                    showError(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error checking image status:', error);
+                showError(error);
+            });
+        }
 
-            chipsSV.appendChild(chip);
-          }
-        }*/
-
-
-      // Get the <span> element by its class name
-     // var spanElement = document.querySelector(".chipSV");
-
-      // Get the text content of the <span> element
-    //  var text = spanElement.textContent;
-
-      // Replace all underscore characters with non-breaking spaces
-     // var modifiedText = text.replace(/_/g, "&nbsp;");
-
-      // Update the text content of the <span> element
-   //   spanElement.textContent = modifiedText;
-// Fetch request to generate images
-
-fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => {
-    if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        function showError(error) {
+            console.error(error);
+            alert("Error: " + error.message);
+        }
     }
-    return response.json();  // Parse JSON only if the response was OK
-})
-.then(data => {
-    // Handle the API response based on its status
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
-    } else {
-        showError(data);  // Show error if other statuses are encountered
-    }
-})
-.catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, transformedPrompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
-        } else {
-            // Handle any other statuses or errors
-            showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
-        }
-    })
-    .catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
-    });
-}
 
-
-function showError(error) {
-    // Update the user interface to show the error
-    console.error(error);
-    alert("Error: " + error.message);
-}
-
-function displayImages(images) {
-    // Function to display images or handle the successful completion of the task
-    console.log('Displaying images:', images);
-}
-
-
-    // Function to show error message with dismiss button
-function showError(error) {
-    console.error("Error generating images:", error);
-    const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
-    processingMessageContainer.style.display = 'block';
-    hideOverlay(); // Hide the overlay and loading message
-
-    // Add event listener for the dismiss button
-    const dismissButton = document.getElementById("dismissErrorButton");
-    dismissButton.addEventListener('click', hideErrorMessage);
-}
-
-// Function to hide the error message
-function hideErrorMessage() {
-    const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.style.display = 'none';
-}
-    // Function to display the error modal window
-   function displayErrorModal() {
-    const errorModal = document.getElementById("errorGenerating");
-    errorModal.style.display = "block";
-
-    const tryAgainButton = document.getElementById("errorButton");
-    tryAgainButton.addEventListener("click", () => {
-        errorModal.style.display = "none";
-        generateImages(imageUrl, selectedValues); // Relaunch the query
-    });
-
-    const closeButton = document.querySelector("#errorGenerating .closeError");
-    closeButton.addEventListener("click", () => {
-        errorModal.style.display = "none";
-    });
-}
-}
+// END THIEF
 
 
     
