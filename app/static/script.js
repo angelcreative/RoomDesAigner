@@ -397,9 +397,6 @@ console.log(`Width: ${width}, Height: ${height}`);
 // Determine the model_id based on the selection of the "person" field
 
 
-
-
-    
 // Get selected models from the form
 const personValue = document.getElementById("personModel").value;
 const furnitureValue = document.getElementById("furnitureModel").value;
@@ -407,9 +404,9 @@ const furnitureValue = document.getElementById("furnitureModel").value;
 // Determine if the person model or furniture model should be used
 let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
 
-if (personValue) {
+if (personValue !== "") {
   modelId = personValue;
-} else if (furnitureValue) {
+} else if (furnitureValue !== "") {
   modelId = furnitureValue;
 }
 
@@ -422,7 +419,8 @@ if (modelId === personValue) {
   lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-eyes-xl,hand-detail-xl";
 } else if (modelId === furnitureValue) {
   lora = "clothingadjustloraap";
-}    
+}  
+
 
 
 const prompt = {
