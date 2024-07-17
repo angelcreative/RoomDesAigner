@@ -2993,6 +2993,86 @@ loginModal > p {
 }
 
 
+ .custom-dropdown {
+        position: relative;
+        display: inline-block;
+        width: 300px;
+        font-family: Arial, sans-serif;
+        margin-bottom: 20px;
+    }
+
+    .dropdown-selected {
+        padding: 10px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .dropdown-selected .clear-selection {
+        display: none;
+        margin-left: 10px;
+        cursor: pointer;
+        color: red;
+        font-weight: bold;
+    }
+
+    .dropdown-selected.selected .clear-selection {
+        display: inline;
+    }
+
+    .dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        width: 100%;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .dropdown-options.show {
+        display: block;
+    }
+
+    .dropdown-options .optgroup-label {
+        padding: 8px 16px;
+        background-color: #eee;
+        cursor: default;
+        font-weight: bold;
+    }
+
+    .dropdown-options .option {
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .dropdown-options .option:hover {
+        background-color: #f1f1f1;
+    }
+
+    .color-swatch {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    .selected-value {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #333;
+    }
+
+    select {
+        display: none;
+    }
+
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
