@@ -1342,16 +1342,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //disable MB
 
-const selectElements = document.querySelectorAll("select");
 const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
 
-// Function to check if all select and hidden input options have empty values
+// Function to check if all hidden input options have empty values
 function areAllOptionsEmpty() {
-  for (const select of selectElements) {
-    if (select.value !== "") {
-      return false; // At least one option has a non-empty value
-    }
-  }
   for (const input of hiddenInputs) {
     if (input.value !== "") {
       return false; // At least one hidden input has a non-empty value
@@ -1360,24 +1354,20 @@ function areAllOptionsEmpty() {
   return true; // All options have empty values
 }
 
-// Function to handle changes in select elements
-function handleSelectChange() {
+// Function to handle changes in hidden input elements
+function handleInputChange() {
   const allOptionsEmpty = areAllOptionsEmpty();
   magicButton.disabled = allOptionsEmpty; // Disable magicButton if all options have empty values
 }
 
-// Listen for changes in select elements
-for (const select of selectElements) {
-  select.addEventListener("change", handleSelectChange);
-}
-
 // Listen for changes in hidden input elements
 for (const input of hiddenInputs) {
-  input.addEventListener("change", handleSelectChange);
+  input.addEventListener("change", handleInputChange);
 }
 
 // Initial check on page load
-handleSelectChange();
+handleInputChange();
+
 
 
 
