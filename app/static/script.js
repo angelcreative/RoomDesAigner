@@ -145,7 +145,6 @@ function getSelectedValues() {
         "designed_by_this_interior_designer",
         "designed_by_this_architect",
         "lens_used",
-        "image_color",
         "photo_lighting_type",
         "illumination",
         "door",
@@ -1344,17 +1343,23 @@ document.addEventListener("DOMContentLoaded", function() {
 //disable MB
 
 const selectElements = document.querySelectorAll("select");
+const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
 
-// Function to check if all select options have empty values
+// Function to check if all select and hidden input options have empty values
 function areAllOptionsEmpty() {
   for (const select of selectElements) {
     if (select.value !== "") {
       return false; // At least one option has a non-empty value
     }
   }
+  for (const input of hiddenInputs) {
+    if (input.value !== "") {
+      return false; // At least one hidden input has a non-empty value
+    }
+  }
   return true; // All options have empty values
 }
-//test
+
 // Function to handle changes in select elements
 function handleSelectChange() {
   const allOptionsEmpty = areAllOptionsEmpty();
@@ -1366,13 +1371,14 @@ for (const select of selectElements) {
   select.addEventListener("change", handleSelectChange);
 }
 
-
-
-
-
+// Listen for changes in hidden input elements
+for (const input of hiddenInputs) {
+  input.addEventListener("change", handleSelectChange);
+}
 
 // Initial check on page load
 handleSelectChange();
+
 
 
 
