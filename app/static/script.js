@@ -1341,7 +1341,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 //disable MB
-const magicButton = document.getElementById("magicButton");
 
 const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
 

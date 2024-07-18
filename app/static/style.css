@@ -2994,30 +2994,39 @@ loginModal > p {
 
 
  .custom-dropdown {
-        position: relative;
-        display: inline-block;
-        width: 300px;
-        font-family: Arial, sans-serif;
-        margin-bottom: 20px;
-    }
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
 
-    .dropdown-selected {
-        padding: 10px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        background-color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
+ .dropdown-selected {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    box-shadow: inset 0px 1px 3px rgb(0 0 0 / 8%);
+    color: #677580;
+    font-family: courier, sans-serif;
+    font-size: 14px;
+    height: 30px;
+}
     .dropdown-selected .clear-selection {
-        display: none;
-        margin-left: 10px;
-        cursor: pointer;
-        color: red;
-        font-weight: bold;
-    }
+    display: none;
+    margin-left: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    background: #4f5c674a;
+    padding: 4px 7px;
+    border-radius: 100px;
+}
 
     .dropdown-selected.selected .clear-selection {
         display: inline;
@@ -3062,11 +3071,12 @@ loginModal > p {
         margin-right: 10px;
     }
 
-    .selected-value {
-        margin-top: 10px;
-        font-size: 14px;
-        color: #333;
-    }
+.selected-value {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #677580;
+    font-family: courier, sans-serif;
+}
 
     select {
         display: none;
