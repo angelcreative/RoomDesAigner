@@ -123,18 +123,15 @@ function handleSubmit(event) {
 
 
 // Function to get selected values
-// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
         "home_room",
         "design_style",
-        
         "generated_artwork",
         "point_of_view",
         "color_scheme",
         "room_size",
-        
         "space_to_be_designed",
         "children_room",
         "pool",
@@ -184,14 +181,6 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
-    const colorElements = [
-        { id: "dominant_color", switchId: "use_colors" },
-        { id: "secondary_color", switchId: "use_colors" },
-        { id: "accent_color", switchId: "use_colors" },
-        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-        { id: "furniture_color", switchId: "use_furniture_color" }
-    ];
-
     const values = {};
 
     elementIds.forEach(elementId => {
@@ -201,18 +190,9 @@ function getSelectedValues() {
         }
     });
 
-    colorElements.forEach(colorElement => {
-        const colorInput = document.getElementById(colorElement.id);
-        const colorSwitch = document.getElementById(colorElement.switchId);
-        if (colorInput && colorSwitch && colorSwitch.checked) {
-            values[colorElement.id] = colorInput.value;
-        } else {
-            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-        }
-    });
-
     return values;
 }
+
 
 // Event listener for the color switches
 document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
