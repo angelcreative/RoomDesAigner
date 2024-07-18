@@ -1341,6 +1341,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 //disable MB
+const magicButton = document.getElementById("magicButton");
 
 const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
 
@@ -1368,6 +1369,31 @@ for (const input of hiddenInputs) {
 // Initial check on page load
 handleInputChange();
 
+// Add event listeners for custom dropdowns
+document.querySelectorAll('.custom-dropdown .option').forEach(option => {
+  option.addEventListener('click', function() {
+    const dropdown = this.closest('.custom-dropdown');
+    const selectedText = dropdown.querySelector('.selected-text');
+    const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+    
+    selectedText.textContent = this.textContent;
+    hiddenInput.value = this.getAttribute('value');
+    hiddenInput.dispatchEvent(new Event('change')); // Trigger change event
+  });
+});
+
+// Add event listeners for clear selection buttons
+document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button => {
+  button.addEventListener('click', function() {
+    const dropdown = this.closest('.custom-dropdown');
+    const selectedText = dropdown.querySelector('.selected-text');
+    const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+    
+    selectedText.textContent = dropdown.getAttribute('data-placeholder');
+    hiddenInput.value = '';
+    hiddenInput.dispatchEvent(new Event('change')); // Trigger change event
+  });
+});
 
 
 
