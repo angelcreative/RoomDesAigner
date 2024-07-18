@@ -1909,11 +1909,11 @@ h1 {
 
 sub {
     font-size: 12px;
-    color: #66737f;
+    color: #66737fab;
     display: block;
-    margin: 4px 0 0 20px;
+    margin: 0;
+    padding: 4px 0 0 0;
 }
-
 
     fieldset {
       max-width: 100%;
@@ -2993,12 +2993,11 @@ loginModal > p {
 }
 
 
- .custom-dropdown {
-    position: relative;
+.custom-dropdown {
+    position: inherit;
     display: inline-block;
     width: 100%;
     font-family: Arial, sans-serif;
-    margin-bottom: 20px;
 }
 
  .dropdown-selected {
@@ -3020,28 +3019,31 @@ loginModal > p {
     display: none;
     margin-left: 10px;
     cursor: pointer;
-    color: #fff;
+    color: #629791;
     font-weight: bold;
     font-size: 12px;
-    background: #4f5c674a;
+    background: #bcf8f1;
     padding: 4px 7px;
     border-radius: 100px;
 }
-
     .dropdown-selected.selected .clear-selection {
         display: inline;
     }
 
-    .dropdown-options {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        width: 100%;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        max-height: 200px;
-        overflow-y: auto;
-    }
+   .dropdown-options {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    width: 360px;
+    box-shadow: 0px 5px 8px 7px rgb(12 47 77 / 11%);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: courier;
+    font-size: 14px;
+    color: #4f5c67;
+    border-radius: 12px;
+}
 
     .dropdown-options.show {
         display: block;
@@ -3072,7 +3074,7 @@ loginModal > p {
     }
 
 .selected-value {
-    margin-top: 10px;
+    margin: 4px 0 8px 0;
     font-size: 14px;
     color: #677580;
     font-family: courier, sans-serif;
