@@ -505,14 +505,27 @@ if (isImg2Img && imageUrl) {
     
 async function fetchWithRetry(url, options, retries = 20, delay = 2000) {
     for (let i = 0; i < retries; i++) {
-        const response = await fetch(url, options);
-        if (response.ok) {
-            return response;
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return response;
+            } else if (response.status >= 500 && response.status < 600) {
+                // Only retry for server errors (5xx)
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+            } else {
+                // For client errors or other issues, do not retry
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error; // If it's the last attempt, rethrow the error
+            }
         }
         await new Promise(resolve => setTimeout(resolve, delay));
     }
-    throw new Error(`HTTP error! Status: ${response.status}`);
-}    
+}
+  
     
 fetchWithRetry("/generate-images", {
     method: "POST",
@@ -523,7 +536,6 @@ fetchWithRetry("/generate-images", {
 })
 .then(response => response.json())
 .then(data => {
-    // Handle the API response based on its status
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -540,9 +552,10 @@ fetchWithRetry("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
+
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetchWithRetry(fetchResultUrl, {
+   fetchWithRetry(fetchResultUrl, {
     method: 'POST',
     headers: {
         "Content-Type": "application/json"
@@ -552,7 +565,6 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
 .then(response => response.json())
 .then(data => {
     if (data.status === 'processing') {
-        // Update the ETA display
         if (data.eta) {
             document.getElementById('etaValue').textContent = data.eta;
         }
@@ -564,7 +576,6 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         showModal(imageUrls, transformedPrompt);  // Display images
         hideGeneratingImagesDialog();  // Hide any loading dialogs
     } else {
-        // Handle any other statuses or errors
         showError(data);
     }
 })
@@ -572,6 +583,7 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
     console.error('Error checking image status:', error);
     showError(error);
 });
+
 }
 
 
