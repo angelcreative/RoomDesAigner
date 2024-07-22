@@ -502,31 +502,29 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-    
 async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
             if (response.ok) {
-                return response;
+                return response.json();  // Directly return the parsed JSON
             } else if (response.status >= 500 && response.status < 600) {
-                // Only retry for server errors (5xx)
                 console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
             } else {
-                // For client errors or other issues, do not retry
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
             }
         } catch (error) {
             console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
             if (i === retries - 1) {
-                throw error; // If it's the last attempt, rethrow the error
+                throw error;
             }
         }
         await new Promise(resolve => setTimeout(resolve, delay));
     }
 }
-  
-    
+
+// Llamada a fetchWithRetry en generateImages
 fetchWithRetry("/generate-images", {
     method: "POST",
     headers: {
@@ -534,7 +532,6 @@ fetchWithRetry("/generate-images", {
     },
     body: JSON.stringify(prompt)
 })
-.then(response => response.json())
 .then(data => {
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
@@ -552,38 +549,35 @@ fetchWithRetry("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
-
-// Define the checkImageStatus function
+// Llamada a fetchWithRetry en checkImageStatus
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
-   fetchWithRetry(fetchResultUrl, {
-    method: 'POST',
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => response.json())
-.then(data => {
-    if (data.status === 'processing') {
-        if (data.eta) {
-            document.getElementById('etaValue').textContent = data.eta;
+    fetchWithRetry(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(data => {
+        if (data.status === 'processing') {
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, transformedPrompt);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+        } else {
+            showError(data);
         }
-        setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
-    } else if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, transformedPrompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
-    } else {
-        showError(data);
-    }
-})
-.catch(error => {
-    console.error('Error checking image status:', error);
-    showError(error);
-});
-
+    })
+    .catch(error => {
+        console.error('Error checking image status:', error);
+        showError(error);
+    });
 }
 
 
