@@ -503,7 +503,7 @@ if (isImg2Img && imageUrl) {
 // Fetch request to generate images
 
     
-async function fetchWithRetry(url, options, retries = 20, delay = 2000) {
+async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
