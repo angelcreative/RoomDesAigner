@@ -502,20 +502,26 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-fetch("/generate-images", {
+    
+async function fetchWithRetry(url, options, retries = 20, delay = 2000) {
+    for (let i = 0; i < retries; i++) {
+        const response = await fetch(url, options);
+        if (response.ok) {
+            return response;
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+    throw new Error(`HTTP error! Status: ${response.status}`);
+}    
+    
+fetchWithRetry("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
 })
-.then(response => {
-    if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();  // Parse JSON only if the response was OK
-})
+.then(response => response.json())
 .then(data => {
     // Handle the API response based on its status
     if (data.status === "success" && data.output) {
@@ -536,39 +542,36 @@ fetch("/generate-images", {
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetch(fetchResultUrl, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'processing') {
-            // Update the ETA display
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
-            }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, transformedPrompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
-        } else {
-            // Handle any other statuses or errors
-            showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
+    fetchWithRetry(fetchResultUrl, {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'processing') {
+        // Update the ETA display
+        if (data.eta) {
+            document.getElementById('etaValue').textContent = data.eta;
         }
-    })
-    .catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
-    });
+        setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+    } else if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, transformedPrompt);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    } else {
+        // Handle any other statuses or errors
+        showError(data);
+    }
+})
+.catch(error => {
+    console.error('Error checking image status:', error);
+    showError(error);
+});
 }
 
 
