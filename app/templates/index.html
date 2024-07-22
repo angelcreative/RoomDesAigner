@@ -2721,7 +2721,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         window.onclick = function(event) {
-            if (!event.target.matches('.dropdown-selected') && !event.target.matches('.clear-selection')) {
+            if (!event.target.closest('.dropdown-selected') && !event.target.matches('.clear-selection')) {
                 const dropdowns = document.getElementsByClassName("dropdown-options");
                 for (let i = 0; i < dropdowns.length; i++) {
                     const openDropdown = dropdowns[i];
@@ -2733,6 +2733,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     });
 });
+
 </script>
 
 
