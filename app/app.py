@@ -344,7 +344,7 @@ def signup():
 
     return render_template('signup.html')
 
-
+"""
 @app.route('/get-credits', methods=['GET'])
 def get_credits():
     if 'username' not in session:
@@ -356,6 +356,7 @@ def get_credits():
         return jsonify({"credits": user_data.get('credits', 0)})
     else:
         return jsonify({"error": "User data not found"}), 404
+""" 
 
 @app.route('/change-avatar', methods=['POST'])
 def change_avatar():
@@ -383,7 +384,7 @@ def change_avatar():
             return 'Error updating avatar in database', 500
     else:
         return 'User not logged in', 401
-      
+     
     
 import logging
 
