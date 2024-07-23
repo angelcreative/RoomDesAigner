@@ -2074,6 +2074,7 @@ select, textarea {
     margin-left: 10px;
 }
 
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -2089,6 +2090,26 @@ select:hover {
     box-shadow: inset 0px 0px 0px 3px #1fdab9 !important;
     border: none !important;
     background: #bcf8f154 !important;
+}
+
+textarea {
+    display: flex;
+    font-family: courier, slab-serif;
+    flex-direction: column;
+    margin: 0;
+    border-radius: 8px;
+    padding: 20px;
+    border: none;
+    background: #eeeeee;
+    color: #6d7b87;
+    width: calc(100% - 40px);
+    transition: background ease-in-out 500ms, color ease-in-out 550ms;
+}
+
+textarea:focus,
+textarea:hover {
+    border: 2px solid #1fdab9;
+    background: #e6faf7;
 }
 
 .p.placeholderImg {
