@@ -65,7 +65,25 @@ document.getElementById('aiDesignButton').addEventListener('click', function() {
 });
 //AIDESIGN
 
-  
+ 
+    
+ //ONLY MAGIC AND AI
+    
+     // Remove existing event listeners from magicButton and aiDesignButton
+    const newMagicButton = magicButton.cloneNode(true);
+    magicButton.parentNode.replaceChild(newMagicButton, magicButton);
+
+    const newAIDesignButton = aiDesignButton.cloneNode(true);
+    aiDesignButton.parentNode.replaceChild(newAIDesignButton, aiDesignButton);
+
+    // Add event listeners only to magicButton and aiDesignButton
+    newMagicButton.addEventListener("click", handleSubmit);
+    newAIDesignButton.addEventListener("click", function() {
+        const baseValues = getSelectedValues(); // Get current form values
+        const mixedValues = mixAttributes(baseValues);
+        console.log("Mixed Values for Generation:", mixedValues);
+        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
+    });
  
 // Function to handle the form submission
 function handleSubmit(event) {
