@@ -525,12 +525,29 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
 }
 
 // Llamada a fetchWithRetry en generateImages
-fetchWithRetry("/generate-images", {
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
     body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        if (response.status >= 500 && response.status < 600) {
+            // En caso de error 500, pasa directamente a checkImageStatus
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    return checkImageStatus(data.fetch_result, data.transformed_prompt);
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    }
+    return response.json();
 })
 .then(data => {
     if (data.status === "success" && data.output) {
@@ -549,21 +566,23 @@ fetchWithRetry("/generate-images", {
     showError(error);  // Catch and display errors from the fetch operation or JSON parsing
 });
 
+
 // Llamada a fetchWithRetry en checkImageStatus
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
-    fetchWithRetry(fetchResultUrl, {
+    fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(prompt)
     })
+    .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
