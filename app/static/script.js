@@ -524,8 +524,9 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 }
 
-// Llamada a fetchWithRetry en generateImages
-fetch("/generate-images", {
+    
+//llama a imagenes    
+  fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -534,13 +535,27 @@ fetch("/generate-images", {
 })
 .then(response => {
     if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status >= 500 && response.status < 600) {
+            // En caso de error 500, pasa directamente a checkImageStatus
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                // Manejar el caso donde response.json() falla
+                checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
+                throw new Error(`Image generation in progress. Checking status...`);
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
     }
-    return response.json();  // Parse JSON only if the response was OK
+    return response.json();
 })
 .then(data => {
-    // Handle the API response based on its status
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -554,11 +569,12 @@ fetch("/generate-images", {
     }
 })
 .catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    }
 });
 
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
+    function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -569,28 +585,23 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            // Update the ETA display
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, transformedPrompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
-            // Handle any other statuses or errors
             showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
 
