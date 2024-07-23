@@ -126,6 +126,7 @@ function handleSubmit(event) {
 function getSelectedValues() {
     const elementIds = [
         "person",
+        "person_photography_type",
         "home_room",
         "design_style",
         "generated_artwork",
