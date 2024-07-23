@@ -3,6 +3,11 @@ html {
   width: 100%;
 }
 
+html, body, div, p, a, select, input, span, sub, sup, h1, h2, h3, b, strong {
+    font-family: system-ui !important;
+    font-weight: 400;
+}
+
 div#mainUI, html {
     background: #fafafa;
 }
@@ -2075,6 +2080,12 @@ select:hover {
     color: #6d7b87;
 }
 
+.selected {
+    box-shadow: 0px 0px 0px 3px #1fdab9;
+    border: none;
+    background: #bcf8f129;
+}
+
 .dot {
     background: #1fdab9;
     height: 8px;
@@ -2102,9 +2113,16 @@ select:hover {
 }
 
 .buttonsCont {
-    display: flex;
+  display: flex;
     justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    background: #eeeeee;
+    width: 100%;
     flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0 20px;
+    margin: 0 -20px;
 }
 
 
@@ -2116,13 +2134,14 @@ select:hover {
 }
 
 .buttonsR {
-   display: flex;
-    flex-direction: column;
+  display: flex;
+    flex-direction: row;
     position: relative;
     width: 100%;
-    margin-top: 20px;
     font-family: courier;
     align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
 }
 
 .buttonsL {
@@ -2192,7 +2211,7 @@ border: 1px solid #ffffff42;
 
 
 .buttonExt {
-    border-radius: 0.5rem;
+  border-radius: 0.5rem;
     color: #ffffff;
     transition: background ease-in-out 300ms;
     z-index: 2;
@@ -2207,7 +2226,7 @@ border: 1px solid #ffffff42;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 30%;
     font-family: courier;
 }
 
@@ -2915,16 +2934,24 @@ loginModal > p {
     justify-content: space-between;
 }
 
+
+
+
 .secondaryContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
-        margin-top: 44px;
     position: relative;
+    background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat;
+    background-size: 50%;
 }
 
 .mainContainer {
-    width: 360px;
+    width: 500px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    height: 800px;
+    padding-right: 20px;
 }
 
 
@@ -3043,7 +3070,7 @@ loginModal > p {
     font-family: courier;
     font-size: 14px;
     color: #4f5c67;
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
     .dropdown-options.show {
@@ -3185,7 +3212,6 @@ loginModal > p {
   
   
   .modal-content {
-      background: #1f1f1f;
           padding: 2rem 1rem;
           position: relative;
           display: block;
