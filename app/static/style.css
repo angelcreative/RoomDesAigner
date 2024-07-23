@@ -157,6 +157,13 @@ input#secretKeyInput {
     color: #00BCD4;
 }
 
+.placeholderImg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 120px;
+    color: #4f5c67;
+}
 .SGmodal {
   display: flex;
   justify-content: center;
@@ -2129,7 +2136,7 @@ select:hover {
     flex-direction: row;
     flex-wrap: nowrap;
     padding: 0 20px;
-    margin: 0 -20px;
+    margin: 0 -40px;
 }
 
 
@@ -2936,7 +2943,7 @@ loginModal > p {
     flex-direction: row;
     /* background: #111b25; */
     border-radius: 2%;
-    padding: 2%;
+   
     width: calc(100% - 40px);
     justify-content: space-between;
 }
@@ -2948,17 +2955,17 @@ loginModal > p {
     display: flex;
     flex-direction: column;
     width: 100%;
-    position: relative;
     background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat;
-    background-size: 50%;
+    background-size: 360px;
+    position: relative;
 }
 
 .mainContainer {
     width: 500px;
     overflow: scroll;
     scroll-behavior: smooth;
-    height: 800px;
-    padding-right: 20px;
+    height: 860px;
+    padding: 0 20px;
 }
 
 
@@ -3035,20 +3042,26 @@ loginModal > p {
     font-family: Arial, sans-serif;
 }
 
- .dropdown-selected {
+
+.dropdown-selected {
     padding: 8px 10px;
     border: 1px solid #ccc;
     cursor: pointer;
-    background-color: #eee;
+    background-color: #f4f2f1bf;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 8px;
-    box-shadow: inset 0px 1px 3px rgb(0 0 0 / 8%);
+    box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
     color: #677580;
     font-family: courier, sans-serif;
     font-size: 14px;
     height: 30px;
+    transition: background 300ms ease-out
+}
+
+.dropdown-selected:hover {
+    background:white
 }
     .dropdown-selected .clear-selection {
     display: none;
