@@ -104,7 +104,6 @@ function handleSubmit(event) {
     }
 }
     
-    
     // Attach handleSubmit only to the form
 const form = document.getElementById("imageGenerationForm");
 if (form) {
@@ -133,7 +132,24 @@ document.getElementById('magicButton').addEventListener('click', function() {
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
 
-    
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("imageGenerationForm");
+    if (form) {
+        form.addEventListener("submit", handleSubmit);
+    }
+
+    // Asegurarse de que solo los botones relevantes disparen la generación de imágenes
+    document.getElementById('aiDesignButton').addEventListener('click', function() {
+        const baseValues = getSelectedValues(); // Get current form values
+        const mixedValues = mixAttributes(baseValues);
+        console.log("Mixed Values for Generation:", mixedValues);
+        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
+    });
+
+    document.getElementById('magicButton').addEventListener('click', function() {
+        form.submit();
+    });
+});  
 
 
 // Function to get selected values
@@ -1188,6 +1204,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
+// Función para mostrar el modal con las imágenes generadas y los botones asociados
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -1213,26 +1230,32 @@ function showModal(imageUrls, transformedPrompt) {
 
         const downloadButton = createButton("Download", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             downloadImage(imageUrl);
         });
         const copyButton = createButton("Copy URL", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             copyImageUrlToClipboard(imageUrl);
         });
         const editButton = createButton("Edit in Photopea", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             openPhotopeaWithImage(imageUrl);
         });
         const copyPromptButton = createButton("Copy Prompt", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             copyTextToClipboard(transformedPrompt);
         });
         const upscaleButton = createButton("Upscale", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             upscaleImage(imageUrl);
         });
         const compareButton = createButton("Compare", (event) => {
             event.stopPropagation();
+            event.preventDefault();
             openComparisonWindow(userImageBase64, imageUrl);
         });
 
@@ -1253,7 +1276,6 @@ function showModal(imageUrls, transformedPrompt) {
     modal.style.display = "block";
     showOverlay();
 }
-
 function createButton(text, onClickHandler) {
     const button = document.createElement("button");
     button.textContent = text;
