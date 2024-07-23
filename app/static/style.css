@@ -2070,7 +2070,7 @@ select, textarea {
     border: 1px solid #273440;
     /* background: #273440; */
     color: #6d7b87;
-    width: 100%;
+    width: 90%;
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
     margin-left: 10px;
 }
