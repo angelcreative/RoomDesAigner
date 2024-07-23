@@ -1746,6 +1746,7 @@ i {
     left: 0;
     overflow: scroll;
     text-align: center;
+    background: #fafafa
 }
 
 #clearImg,
@@ -2157,6 +2158,7 @@ textarea:hover {
     flex-wrap: nowrap;
     padding: 0 20px;
     margin: 0 -40px;
+    z-index: 10;
 }
 
 
@@ -2383,7 +2385,7 @@ text-align: left;}
 }
 
 #imageGrid div {
-    width: 33%;
+    width: 23%;
 }
 
 .thumbnail {
@@ -3281,6 +3283,7 @@ loginModal > p {
       max-width: 80%;
       justify-content: space-between;
       margin: 0 auto;
+      background: #fafafa;
   }
   
   #imageGrid div {

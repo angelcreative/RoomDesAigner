@@ -69,7 +69,10 @@ document.getElementById('aiDesignButton').addEventListener('click', function() {
     
  //ONLY MAGIC AND AI
     
-     // Remove existing event listeners from magicButton and aiDesignButton
+    const magicButton = document.getElementById("magicButton");
+    const aiDesignButton = document.getElementById("aiDesignButton");
+
+    // Remove existing event listeners from magicButton and aiDesignButton
     const newMagicButton = magicButton.cloneNode(true);
     magicButton.parentNode.replaceChild(newMagicButton, magicButton);
 
@@ -86,11 +89,10 @@ document.getElementById('aiDesignButton').addEventListener('click', function() {
     });
  
 // Function to handle the form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  showOverlay();
+ function handleSubmit(event) {
+        event.preventDefault();
+        newMagicButton.disabled = false;
+        showOverlay();
 
   const fileInput = document.getElementById("imageDisplayUrl");
   const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
@@ -129,13 +131,13 @@ function handleSubmit(event) {
   }
 }
 
-  function handleError(errorMessage) {
-  console.error(errorMessage);
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
-}
+ function handleError(errorMessage) {
+        console.error(errorMessage);
+        newMagicButton.disabled = false;
+        hideOverlay(); // Ensure this function exists and hides the loading interface
+        alert(errorMessage); // Optional: display the error message in an alert
+    }
+
 
     
 
