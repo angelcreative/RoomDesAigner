@@ -56,60 +56,74 @@ function mixAttributes(baseAttributes) {
     return mixedAttributes;
 }
 
-// Event listener for the "AI Design" button
+
+
+  
+ 
+// Function to handle the form submission
+function handleSubmit(event) {
+    event.preventDefault();
+    const magicButton = document.getElementById("magicButton");
+    magicButton.disabled = false;
+    showOverlay();
+
+    const fileInput = document.getElementById("imageDisplayUrl");
+    const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
+    const selectedValues = getSelectedValues();
+    const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
+
+    if (file) {
+        // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
+        const uploadUrl = "https://api.imgbb.com/1/upload";
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+
+        fetch(uploadUrl, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Si la imagen se subió con éxito, obtén la URL y procede con img2img
+                const imageUrl = data.data.url;
+                generateImages(imageUrl, selectedValues, isImg2Img);
+            } else {
+                throw new Error("Image upload failed: " + data.error.message);
+            }
+        })
+        .catch(error => {
+            // Manejo de errores en caso de falla en la subida de la imagen
+            handleError(error.message);
+        });
+    } else {
+        // Procesa txt2img si no se seleccionó ningún archivo
+        generateImages(null, selectedValues, isImg2Img);
+    }
+}
+    
+    
+    // Attach handleSubmit only to the form
+const form = document.getElementById("imageGenerationForm");
+if (form) {
+    form.addEventListener("submit", handleSubmit);
+}
+
+    // Event listener for the "AI Design" button
+// Asegurarse de que solo los botones relevantes disparen la generación de imágenes
 document.getElementById('aiDesignButton').addEventListener('click', function() {
     const baseValues = getSelectedValues(); // Get current form values
     const mixedValues = mixAttributes(baseValues);
     console.log("Mixed Values for Generation:", mixedValues);
     generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
 });
+
 //AIDESIGN
-
-  
- 
-// Function to handle the form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  showOverlay();
-
-  const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
-  const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
-
-  if (file) {
-    // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
-    const uploadUrl = "https://api.imgbb.com/1/upload";
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("image", file);
-
-    fetch(uploadUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        // Si la imagen se subió con éxito, obtén la URL y procede con img2img
-        const imageUrl = data.data.url;
-        generateImages(imageUrl, selectedValues, isImg2Img);
-      } else {
-        throw new Error("Image upload failed: " + data.error.message);
-      }
-    })
-    .catch(error => {
-      // Manejo de errores en caso de falla en la subida de la imagen
-      handleError(error.message);
-    });
-  } else {
-    // Procesa txt2img si no se seleccionó ningún archivo
-    generateImages(null, selectedValues, isImg2Img);
-  }
-}
+document.getElementById('magicButton').addEventListener('click', function() {
+    document.getElementById("imageGenerationForm").submit();
+});
 
   function handleError(errorMessage) {
   console.error(errorMessage);
@@ -694,25 +708,25 @@ rerollButton.addEventListener("click", rerollImages);
     
     // Function to generate message
  function generateMessageDiv(message) {
-      var messageDiv = document.createElement('div');
-      messageDiv.id = 'message';
-      messageDiv.innerHTML = `
-        <div class="message-content">
-      
-              <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
-          <p class="message-microcopy">${message}</p>
-          <button class="message-close-btn" onclick="closeMessage()">Close</button>
-        </div>
-      `;
-      document.body.appendChild(messageDiv);
-    }
-    window.closeMessage = function () {
-      var messageDiv = document.getElementById('message');
-      if (messageDiv) {
+    var messageDiv = document.createElement('div');
+    messageDiv.id = 'message';
+    messageDiv.innerHTML = `
+      <div class="message-content">
+        <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
+        <p class="message-microcopy">${message}</p>
+        <button class="message-close-btn" onclick="closeMessage()">Close</button>
+      </div>
+    `;
+    document.body.appendChild(messageDiv);
+}
+
+window.closeMessage = function () {
+    var messageDiv = document.getElementById('message');
+    if (messageDiv) {
         messageDiv.remove();
-      }
     }
-    
+}
+
 
     /*Function to copy text to clipboard
     function copyTextToClipboard(text) {
@@ -728,14 +742,15 @@ rerollButton.addEventListener("click", rerollImages);
     */
     
     // Function to copy text to clipboard
-async function copyTextToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
+function copyTextToClipboard(text) {
+    const tempInput = document.createElement("textarea");
+    tempInput.value = text;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    
     generateMessageDiv("Prompt copied to clipboard!");
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    generateMessageDiv("Failed to copy prompt to clipboard.");
-  }
 }
 
     
@@ -1120,28 +1135,23 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
  
     
     // Function to copy image URL to clipboard
-    function copyImageUrlToClipboard(imageUrl) {
-      const tempInput = document.createElement("textarea");
-      tempInput.value = imageUrl;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      
-      generateMessageDiv("Image URL copied to clipboard!");
-    }
+  function copyImageUrlToClipboard(imageUrl) {
+    const tempInput = document.createElement("textarea");
+    tempInput.value = imageUrl;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    
+    generateMessageDiv("Image URL copied to clipboard!");
+}
    
     
     // Function to open Photopea with the specified image
 function openPhotopeaWithImage(imageUrl) {
-    const photopeaUrl = `https://www.photopea.com#`;
-    const photopeaConfig = {
-        files: [imageUrl] 
-    };
-    const encodedConfig = encodeURIComponent(JSON.stringify(photopeaConfig));
-    window.open(photopeaUrl + encodedConfig, '_blank');
+    const photopeaUrl = `https://www.photopea.com/#${encodeURIComponent(imageUrl)}`;
+    window.open(photopeaUrl, '_blank');
 }
-
     
     
 // Helper function to create a button and attach an event listener
@@ -1201,7 +1211,6 @@ function showModal(imageUrls, transformedPrompt) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        // Crear botones con sus respectivas funciones sin disparar la generación de imágenes
         const downloadButton = createButton("Download", (event) => {
             event.stopPropagation();
             downloadImage(imageUrl);
@@ -1250,8 +1259,7 @@ function createButton(text, onClickHandler) {
     button.textContent = text;
     button.addEventListener("click", onClickHandler);
     return button;
-}
-    
+} 
  
 
 // Function to handle the "Close" action of modal
@@ -1329,9 +1337,14 @@ function closeModalHandler() {
       });
     }
 
+// Functions for the buttons
 function downloadImage(imageUrl) {
-    console.log("Opening image in new tab:", imageUrl); // Debugging log
-    window.open(imageUrl, "_blank");
+    const link = document.createElement("a");
+    link.href = imageUrl;
+    link.download = 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 
