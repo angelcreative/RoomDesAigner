@@ -318,7 +318,6 @@ def signup():
 
     return render_template('signup.html')
 
-"""
 @app.route('/get-credits', methods=['GET'])
 def get_credits():
     if 'username' not in session:
@@ -327,10 +326,11 @@ def get_credits():
     username = session['username']
     user_data = get_user_data(username)
     if user_data:
+        logging.info(f"/get-credits request from {username}")
         return jsonify({"credits": user_data.get('credits', 0)})
     else:
+        logging.info(f"/get-credits request - User data not found for {username}")
         return jsonify({"error": "User data not found"}), 404
-"""
 
 @app.route('/change-avatar', methods=['POST'])
 def change_avatar():
