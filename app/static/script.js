@@ -21,76 +21,9 @@
 
 //end modal P
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const magicButton = document.getElementById("magicButton");
     const aiDesignButton = document.getElementById("aiDesignButton");
-
-    // Remove existing event listeners from magicButton and aiDesignButton
-    const newMagicButton = magicButton.cloneNode(true);
-    magicButton.parentNode.replaceChild(newMagicButton, magicButton);
-
-    const newAIDesignButton = aiDesignButton.cloneNode(true);
-    aiDesignButton.parentNode.replaceChild(newAIDesignButton, aiDesignButton);
-
-    // Add event listeners only to magicButton and aiDesignButton
-    newMagicButton.addEventListener("click", handleSubmit);
-    newAIDesignButton.addEventListener("click", function() {
-        const baseValues = getSelectedValues(); // Get current form values
-        const mixedValues = mixAttributes(baseValues);
-        console.log("Mixed Values for Generation:", mixedValues);
-        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
-    });
-
-    // Function to handle the form submission
-    function handleSubmit(event) {
-        event.preventDefault();
-        newMagicButton.disabled = false;
-        showOverlay();
-
-        const fileInput = document.getElementById("imageDisplayUrl");
-        const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
-        const selectedValues = getSelectedValues();
-        const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
-
-        if (file) {
-            // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-            const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
-            const uploadUrl = "https://api.imgbb.com/1/upload";
-            const formData = new FormData();
-            formData.append("key", apiKey);
-            formData.append("image", file);
-
-            fetch(uploadUrl, {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Si la imagen se subió con éxito, obtén la URL y procede con img2img
-                    const imageUrl = data.data.url;
-                    generateImages(imageUrl, selectedValues, isImg2Img);
-                } else {
-                    throw new Error("Image upload failed: " + data.error.message);
-                }
-            })
-            .catch(error => {
-                // Manejo de errores en caso de falla en la subida de la imagen
-                handleError(error.message);
-            });
-        } else {
-            // Procesa txt2img si no se seleccionó ningún archivo
-            generateImages(null, selectedValues, isImg2Img);
-        }
-    }
-
-    function handleError(errorMessage) {
-        console.error(errorMessage);
-        newMagicButton.disabled = false;
-        hideOverlay(); // Ensure this function exists and hides the loading interface
-        alert(errorMessage); // Optional: display the error message in an alert
-    }
 
     // Function to get selected values
     function getSelectedValues() {
@@ -163,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return values;
     }
 
-    // Mixing attributes function
+    // Function to mix attributes
     function mixAttributes(baseAttributes) {
         const attributes = {
             room_size: ['small', 'medium', 'large'],
@@ -181,6 +114,56 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
         return mixedAttributes;
+    }
+
+    // Function to handle the form submission
+    function handleSubmit(event) {
+        event.preventDefault();
+        newMagicButton.disabled = false;
+        showOverlay();
+
+        const fileInput = document.getElementById("imageDisplayUrl");
+        const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
+        const selectedValues = getSelectedValues();
+        const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
+
+        if (file) {
+            // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
+            const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
+            const uploadUrl = "https://api.imgbb.com/1/upload";
+            const formData = new FormData();
+            formData.append("key", apiKey);
+            formData.append("image", file);
+
+            fetch(uploadUrl, {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Si la imagen se subió con éxito, obtén la URL y procede con img2img
+                    const imageUrl = data.data.url;
+                    generateImages(imageUrl, selectedValues, isImg2Img);
+                } else {
+                    throw new Error("Image upload failed: " + data.error.message);
+                }
+            })
+            .catch(error => {
+                // Manejo de errores en caso de falla en la subida de la imagen
+                handleError(error.message);
+            });
+        } else {
+            // Procesa txt2img si no se seleccionó ningún archivo
+            generateImages(null, selectedValues, isImg2Img);
+        }
+    }
+
+    function handleError(errorMessage) {
+        console.error(errorMessage);
+        newMagicButton.disabled = false;
+        hideOverlay(); // Ensure this function exists and hides the loading interface
+        alert(errorMessage); // Optional: display the error message in an alert
     }
 
     // Function to show the overlay
@@ -515,7 +498,24 @@ document.addEventListener("DOMContentLoaded", function() {
             modal.style.display = "none";
         }
     }
+
+    // Remove existing event listeners from magicButton and aiDesignButton
+    const newMagicButton = magicButton.cloneNode(true);
+    magicButton.parentNode.replaceChild(newMagicButton, magicButton);
+
+    const newAIDesignButton = aiDesignButton.cloneNode(true);
+    aiDesignButton.parentNode.replaceChild(newAIDesignButton, aiDesignButton);
+
+    // Add event listeners only to magicButton and aiDesignButton
+    newMagicButton.addEventListener("click", handleSubmit);
+    newAIDesignButton.addEventListener("click", function() {
+        const baseValues = getSelectedValues(); // Get current form values
+        const mixedValues = mixAttributes(baseValues);
+        console.log("Mixed Values for Generation:", mixedValues);
+        generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
+    });
 });
+
 
 document.addEventListener("DOMContentLoaded", function() {
 
