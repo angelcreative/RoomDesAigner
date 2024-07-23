@@ -5,7 +5,7 @@ html {
 
 html, body, div, p, a, select, input, span, sub, sup, h1, h2, h3, b, strong {
     font-family: system-ui !important;
-    font-weight: 400;
+    font-weight: 400 !important;
 }
 
 div#mainUI, html {
@@ -2079,11 +2079,18 @@ select:hover {
     background: #eeeeee;
     color: #6d7b87;
 }
-
 .selected {
-    box-shadow: 0px 0px 0px 3px #1fdab9;
-    border: none;
-    background: #bcf8f129;
+    box-shadow: inset 0px 0px 0px 3px #1fdab9 !important;
+    border: none !important;
+    background: #bcf8f154 !important;
+}
+
+.p.placeholderImg {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 60px auto;
 }
 
 .dot {
@@ -3060,10 +3067,10 @@ loginModal > p {
 
    .dropdown-options {
     display: none;
-    position: absolute;
+    position: relative;
     background-color: #f9f9f9;
-    width: 360px;
-    box-shadow: 0px 5px 8px 7px rgb(12 47 77 / 11%);
+    width: 100%;
+    box-shadow:0px 5px 4px 2px rgb(12 47 77 / 11%);
     z-index: 3;
     max-height: 200px;
     overflow-y: auto;
