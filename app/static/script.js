@@ -1201,12 +1201,31 @@ function showModal(imageUrls, transformedPrompt) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        // Crear botones con sus respectivas funciones sin disparar la generación de imágenes
+        const downloadButton = createButton("Download", (event) => {
+            event.stopPropagation();
+            downloadImage(imageUrl);
+        });
+        const copyButton = createButton("Copy URL", (event) => {
+            event.stopPropagation();
+            copyImageUrlToClipboard(imageUrl);
+        });
+        const editButton = createButton("Edit in Photopea", (event) => {
+            event.stopPropagation();
+            openPhotopeaWithImage(imageUrl);
+        });
+        const copyPromptButton = createButton("Copy Prompt", (event) => {
+            event.stopPropagation();
+            copyTextToClipboard(transformedPrompt);
+        });
+        const upscaleButton = createButton("Upscale", (event) => {
+            event.stopPropagation();
+            upscaleImage(imageUrl);
+        });
+        const compareButton = createButton("Compare", (event) => {
+            event.stopPropagation();
+            openComparisonWindow(userImageBase64, imageUrl);
+        });
 
         [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
 
@@ -1226,6 +1245,12 @@ function showModal(imageUrls, transformedPrompt) {
     showOverlay();
 }
 
+function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
     
  
 
