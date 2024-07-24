@@ -846,7 +846,41 @@ Image</h1>
                 </div> 
                  
                     
-                    
+ <!-- person type -->
+                    <div class="custom-dropdown" data-placeholder="Select Descriptor">
+    <div class="dropdown-selected">
+        <span class="selected-text">Select Descriptor</span>
+        <span class="clear-selection">X</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="who_is_bald" title="who_is_bald">Who is bald</div>
+        <div class="option" value="who_is_petite" title="who_is_petite">Who is petite</div>
+        <div class="option" value="who_is_tall" title="who_is_tall">Who is tall</div>
+        <div class="option" value="with_acne" title="with_acne">With acne</div>
+        <div class="option" value="with_a_birthmark" title="with_a_birthmark">With a birthmark</div>
+        <div class="option" value="with_a_hearing_aid" title="with_a_hearing_aid">With a hearing aid</div>
+        <div class="option" value="with_a_muscular_build" title="with_a_muscular_build">With a muscular build</div>
+        <div class="option" value="with_a_plus_sized_body" title="with_a_plus_sized_body">With a plus-sized body</div>
+        <div class="option" value="with_a_prosthetic_limb" title="with_a_prosthetic_limb">With a prosthetic limb</div>
+        <div class="option" value="with_a_scar" title="with_a_scar">With a scar</div>
+        <div class="option" value="with_a_unique_hairstyle" title="with_a_unique_hairstyle">With a unique hairstyle</div>
+        <div class="option" value="with_alopecia" title="with_alopecia">With alopecia</div>
+        <div class="option" value="with_curly_hair" title="with_curly_hair">With curly hair</div>
+        <div class="option" value="with_dyed_hair" title="with_dyed_hair">With dyed hair</div>
+        <div class="option" value="with_glasses" title="with_glasses">With glasses</div>
+        <div class="option" value="with_heterochromia" title="with_heterochromia">With heterochromia</div>
+        <div class="option" value="with_long_hair" title="with_long_hair">With long hair</div>
+        <div class="option" value="with_no_hair" title="with_no_hair">With no hair</div>
+        <div class="option" value="with_piercings" title="with_piercings">With piercings</div>
+        <div class="option" value="with_short_hair" title="with_short_hair">With short hair</div>
+        <div class="option" value="with_tattoos" title="with_tattoos">With tattoos</div>
+        <div class="option" value="with_vitiligo" title="with_vitiligo">With vitiligo</div>
+        <div class="option" value="with_wrinkles" title="with_wrinkles">With wrinkles</div>
+    </div>
+    <input type="hidden" name="descriptor" id="person_descriptor" value="">
+</div>
+
                  
 <!-- model -->
                    
@@ -866,6 +900,7 @@ Image</h1>
         <div class="option" value="unreal-realism">Unreal Realism</div>
         <div class="option" value="maky-base-00001">Maky Base</div>
         <div class="option" value="crystal-clear-xlv1">Crystal Clear</div>
+        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
 
     </div>
     <input type="hidden" name="personModel" id="personModel" value="">
@@ -889,6 +924,7 @@ Image</h1>
         <div class="option" value="unreal-realism">Unreal Realism</div>
         <div class="option" value="maky-base-00001">Maky Base</div>
         <div class="option" value="crystal-clear-xlv1">Crystal Clear</div>
+        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
 
     </div>
     <input type="hidden" name="furnitureModel" id="furnitureModel" value="">
@@ -931,7 +967,7 @@ Image</h1>
 
             <!-- pro tokens -->
             <section type="button" class="collapsible"><h1><i class="fa fa-cogs" aria-hidden="true"></i>
-Pro tokens</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
+Shot settings</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
 
 </section>
             <div class="content">     
@@ -991,12 +1027,82 @@ Pro tokens</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
     <input type="hidden" name="generated_artwork" id="generated_artwork" value="">
 </div>
 
+                
+                <!-- camera -->
+                <div class="custom-dropdown" data-placeholder="Select Camera" >
+    <div class="dropdown-selected">
+        <span class="selected-text">Select Camera</span>
+        <span class="clear-selection">X</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Aaton_Penelope" title="Aaton_Penelope">Aaton Penelope</div>
+        <div class="option" value="ARRI_Alexa_Mini" title="ARRI_Alexa_Mini">ARRI Alexa Mini</div>
+        <div class="option" value="Bell_&_Howell" title="Bell_&_Howell">Bell & Howell</div>
+        <div class="option" value="Canon_1D_X" title="Canon_1D_X">Canon 1D X</div>
+        <div class="option" value="Canon_C500" title="Canon_C500">Canon C500</div>
+        <div class="option" value="Fujifilm_GFX_100" title="Fujifilm_GFX_100">Fujifilm GFX 100</div>
+        <div class="option" value="GoPro_HERO" title="GoPro_HERO">GoPro HERO</div>
+        <div class="option" value="Hasselblad_H6D" title="Hasselblad_H6D">Hasselblad H6D</div>
+        <div class="option" value="Infrared_Cameras" title="Infrared_Cameras">Infrared Cameras</div>
+        <div class="option" value="Insta360_ONE_R" title="Insta360_ONE_R">Insta360 ONE R</div>
+        <div class="option" value="Instax_Square_SQ6" title="Instax_Square_SQ6">Instax Square SQ6</div>
+        <div class="option" value="Kodak_Super_8" title="Kodak_Super_8">Kodak Super 8</div>
+        <div class="option" value="Krasnogorsk-3" title="Krasnogorsk-3">Krasnogorsk-3</div>
+        <div class="option" value="Leica_M10-R" title="Leica_M10-R">Leica M10-R</div>
+        <div class="option" value="Lensbaby_Velvet_56" title="Lensbaby_Velvet_56">Lensbaby Velvet 56</div>
+        <div class="option" value="Lomo'Instant_Wide" title="Lomo'Instant_Wide">Lomo'Instant Wide</div>
+        <div class="option" value="Nikon_D850" title="Nikon_D850">Nikon D850</div>
+        <div class="option" value="Panavision_DXL2" title="Panavision_DXL2">Panavision DXL2</div>
+        <div class="option" value="Polaroid_SX-70" title="Polaroid_SX-70">Polaroid SX-70</div>
+        <div class="option" value="RED_Monstro_8K" title="RED_Monstro_8K">RED Monstro 8K</div>
+        <div class="option" value="Sony_A7R_IV" title="Sony_A7R_IV">Sony A7R IV</div>
+        <div class="option" value="Sony_Venice" title="Sony_Venice">Sony Venice</div>
+    </div>
+    <input type="hidden" name="camera" id="camera_select" value="">
+</div>
+
+                
+                <!-- film grain -->
+                <div class="custom-dropdown" data-placeholder="Select Film" >
+    <div class="dropdown-selected">
+        <span class="selected-text">Film grain</span>
+        <span class="clear-selection">X</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Adox_Implosion" title="Adox_Implosion">Adox Implosion</div>
+        <div class="option" value="Agfa_Scala" title="Agfa_Scala">Agfa Scala</div>
+        <div class="option" value="AgfaPhoto_CT" title="AgfaPhoto_CT">AgfaPhoto CT</div>
+        <div class="option" value="AgfaPhoto_Vista" title="AgfaPhoto_Vista">AgfaPhoto Vista</div>
+        <div class="option" value="Bergger_Pancro" title="Bergger_Pancro">Bergger Pancro</div>
+        <div class="option" value="Cinestill_800T" title="Cinestill_800T">Cinestill 800T</div>
+        <div class="option" value="Foma_Fomapan" title="Foma_Fomapan">Foma Fomapan</div>
+        <div class="option" value="Fujifilm_Provia" title="Fujifilm_Provia">Fujifilm Provia</div>
+        <div class="option" value="Fujifilm_Superia" title="Fujifilm_Superia">Fujifilm Superia</div>
+        <div class="option" value="Ilford_Delta" title="Ilford_Delta">Ilford Delta</div>
+        <div class="option" value="Ilford_HP5" title="Ilford_HP5">Ilford HP5</div>
+        <div class="option" value="Kodak_Aerochrome" title="Kodak_Aerochrome">Kodak Aerochrome</div>
+        <div class="option" value="Kodak_Ektachrome" title="Kodak_Ektachrome">Kodak Ektachrome</div>
+        <div class="option" value="Kodak_Elite" title="Kodak_Elite">Kodak Elite</div>
+        <div class="option" value="Kodak_Portra" title="Kodak_Portra">Kodak Portra</div>
+        <div class="option" value="Kodak_Tri-X" title="Kodak_Tri-X">Kodak Tri-X</div>
+        <div class="option" value="Lomo_Redscale" title="Lomo_Redscale">Lomo Redscale</div>
+        <div class="option" value="LomoChrome_Purple" title="LomoChrome_Purple">LomoChrome Purple</div>
+        <div class="option" value="Polaroid_600" title="Polaroid_600">Polaroid 600</div>
+        <div class="option" value="Revolog_Texture" title="Revolog_Texture">Revolog Texture</div>
+        <div class="option" value="Rollei_Retro" title="Rollei_Retro">Rollei Retro</div>
+        <div class="option" value="Velvia_50" title="Velvia_50">Velvia 50</div>
+    </div>
+    <input type="hidden" name="film" id="film_grain" value="">
+</div>
+
                     
                     <!-- level shot -->
                     <h4>Point of view</h4>
                   <div class="custom-dropdown" data-placeholder="Level shot">
     <div class="dropdown-selected">
-        <span class="selected-text">Level shot</span>
+        <span class="selected-text">Photo level shot</span>
         <span class="clear-selection">✕</span>
     </div>
     <div class="selected-value"></div>
@@ -1018,7 +1124,64 @@ Pro tokens</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
     </div>
     <input type="hidden" name="point_of_view" id="point_of_view" value="">
 </div>
+<div class="custom-dropdown" data-placeholder="Person photo shot">
+    <div class="dropdown-selected">
+        <span class="selected-text">Person photo type</span>
+        <span class="clear-selection">X</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Action_shot_of" title="Action_shot_of">Action shot </div>
+        <div class="option" value="Candid_photo_of" title="Candid_photo_of">Candid photo </div>
+        <div class="option" value="Close-up_of" title="Close-up_of">Close-up of</div>
+        <div class="option" value="Face_profile_of" title="Face_profile_of">Face profile </div>
+        <div class="option" value="Fashion_shoot_of" title="Fashion_shoot_of">Fashion shoot </div>
+        <div class="option" value="Full_body_shot_of" title="Full_body_shot_of">Full body shot</div>
+        <div class="option" value="Half_body_shot_of" title="Half_body_shot_of">Half body shot </div>
+        <div class="option" value="Headshot_of" title="Headshot_of">Headshot of</div>
+        <div class="option" value="Lifestyle_photo_of" title="Lifestyle_photo_of">Lifestyle photo </div>
+        <div class="option" value="Portrait_of" title="Portrait_of">Portrait </div>
+        <div class="option" value="Silhouette_of" title="Silhouette_of">Silhouette </div>
+    </div>
+    <input type="hidden" name="person_photography_type" id="type_select" value="">
+</div>
 
+                
+                <!-- action -->
+                <div class="custom-dropdown" data-placeholder="Select Action">
+    <div class="dropdown-selected">
+        <span class="selected-text">Select Action</span>
+        <span class="clear-selection">X</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="biking" title="biking">Biking</div>
+        <div class="option" value="cooking" title="cooking">Cooking</div>
+        <div class="option" value="dancing" title="dancing">Dancing</div>
+        <div class="option" value="doing_exercises" title="doing_exercises">Doing Exercises</div>
+        <div class="option" value="drawing" title="drawing">Drawing</div>
+        <div class="option" value="gardening" title="gardening">Gardening</div>
+        <div class="option" value="hiking" title="hiking">Hiking</div>
+        <div class="option" value="laughing" title="laughing">Laughing</div>
+        <div class="option" value="listening_to_music" title="listening_to_music">Listening to Music</div>
+        <div class="option" value="meditating" title="meditating">Meditating</div>
+        <div class="option" value="painting" title="painting">Painting</div>
+        <div class="option" value="playing_a_sport" title="playing_a_sport">Playing a Sport</div>
+        <div class="option" value="playing_an_instrument" title="playing_an_instrument">Playing an Instrument</div>
+        <div class="option" value="reading" title="reading">Reading</div>
+        <div class="option" value="running" title="running">Running</div>
+        <div class="option" value="shopping" title="shopping">Shopping</div>
+        <div class="option" value="singing" title="singing">Singing</div>
+        <div class="option" value="sleeping" title="sleeping">Sleeping</div>
+        <div class="option" value="studying" title="studying">Studying</div>
+        <div class="option" value="swimming" title="swimming">Swimming</div>
+        <div class="option" value="walking" title="walking">Walking</div>
+        <div class="option" value="watching_TV" title="watching_TV">Watching TV</div>
+        <div class="option" value="working" title="working">Working</div>
+        <div class="option" value="writing" title="writing">Writing</div>
+    </div>
+    <input type="hidden" name="action" id="action_select" value="">
+</div>
 
                  <!-- lens -->
                     
@@ -1063,38 +1226,61 @@ Pro tokens</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
 
                
                 <!-- lights -->
-              <div class="custom-dropdown" data-placeholder="Select photography lighting type">
+                              <!-- lights -->
+              <div class="custom-dropdown" data-placeholder="Photography lighting type">
     <div class="dropdown-selected">
         <span class="selected-text">Select photography lighting type</span>
-        <span class="clear-selection">✕</span>
+        <span class="clear-selection">X</span>
     </div>
     <div class="selected-value"></div>
     <div class="dropdown-options">
         <div class="optgroup">
             <div class="optgroup-label">Ambient and Natural Light</div>
-            <div class="option" value="bright_natural_light_from_the_sun">Sunlight</div>
-            <div class="option" value="strong_and_direct_lighting_from_the_sun_during_clear_days">Direct Sunlight</div>
-            <div class="option" value="soft_diffused_light_coming_through_a_window">Window Light</div>
-            <div class="option" value="soft_warm_lighting_just_before_sunset_and_after_sunrise">Golden Hour</div>
-            <div class="option" value="cool_soft_lighting_just_before_sunrise_and_after_sunset">Blue Hour</div>
+            <div class="option" value="Ambient_Light" title="Ambient_Light">Ambient Light</div>
+            <div class="option" value="Sunlight_bright_natural_light_from_the_sun" title="bright_natural_light_from_the_sun">Sunlight</div>
+            <div class="option" value="Direct_Sunlight_strong_and_direct_lighting_from_the_sun_during_clear_days" title="strong_and_direct_lighting_from_the_sun_during_clear_days">Direct Sunlight</div>
+            <div class="option" value="Window_Light_soft_diffused_light_coming_through_a_window" title="soft_diffused_light_coming_through_a_window">Window Light</div>
+            <div class="option" value="Golden_Hour_soft_warm_lighting_just_before_sunset_and_after_sunrise" title="soft_warm_lighting_just_before_sunset_and_after_sunrise">Golden Hour</div>
+            <div class="option" value="Blue_Hour_cool_soft_lighting_just_before_sunrise_and_after_sunset" title="cool_soft_lighting_just_before_sunrise_and_after_sunset">Blue Hour</div>
+            <div class="option" value="Dawn_lighting_early_morning" title="lighting_early_morning">Dawn</div>
+            <div class="option" value="Dusk_lighting_early_evening" title="lighting_early_evening">Dusk</div>
+            <div class="option" value="Overcast_soft_diffused_light_due_to_cloud_coverage" title="soft_diffused_light_due_to_cloud_coverage">Overcast</div>
         </div>
         <div class="optgroup">
             <div class="optgroup-label">Directional and Dramatic Light</div>
-            <div class="option" value="lighting_from_behind_the_subject_early_in_the_morning">Backlit (Morning)</div>
-            <div class="option" value="lighting_from_behind_the_subject_late_in_the_evening">Backlit (Evening)</div>
-            <div class="option" value="lighting_coming_from_a_specific_direction_to_create_shadows">Directional Light</div>
-            <div class="option" value="light_hitting_the_subject_from_the_side">Side Lighting</div>
-            <div class="option" value="light_coming_from_above_the_subject">Top Light</div>
-            <div class="option" value="a_technique_that_creates_a_small_triangle_of_light_on_the_subjects_cheek">Rembrandt Lighting</div>
-            <div class="option" value="lighting_that_creates_a_movie_like_atmosphere">Cinematic Lighting</div>
+            <div class="option" value="Backlit_lighting_from_behind_the_subject" title="lighting_from_behind_the_subject">Backlit</div>
+            <div class="option" value="Backlit_Morning_lighting_from_behind_the_subject_early_in_the_morning" title="lighting_from_behind_the_subject_early_in_the_morning">Backlit (Morning)</div>
+            <div class="option" value="Backlit_Evening_lighting_from_behind_the_subject_late_in_the_evening" title="lighting_from_behind_the_subject_late_in_the_evening">Backlit (Evening)</div>
+            <div class="option" value="Chiaroscuro_Lighting_lighting_with_strong_contrasts" title="lighting_with_strong_contrasts">Chiaroscuro Lighting</div>
+            <div class="option" value="Directional_Light_lighting_coming_from_a_specific_direction_to_create_shadows" title="lighting_coming_from_a_specific_direction_to_create_shadows">Directional Light</div>
+            <div class="option" value="Side_Lighting_light_hitting_the_subject_from_the_side" title="light_hitting_the_subject_from_the_side">Side Lighting</div>
+            <div class="option" value="Top_Light_light_coming_from_above_the_subject" title="light_coming_from_above_the_subject">Top Light</div>
+            <div class="option" value="Cinematic_Lighting_lighting_that_creates_a_movie_like_atmosphere" title="lighting_that_creates_a_movie_like_atmosphere">Cinematic Lighting</div>
         </div>
         <div class="optgroup">
             <div class="optgroup-label">Creative and Decorative Light</div>
-            <div class="option" value="vibrant_and_colorful_artificial_lighting">Neon Lighting</div>
-            <div class="option" value="small_decorative_lights_often_used_for_subtle_illumination">Fairy Lights</div>
-            <div class="option" value="lighting_that_simulates_beams_of_light_in_a_misty_environment">Volumetric Lighting</div>
-            <div class="option" value="unintended_exposure_that_creates_a_dreamy_effect_in_photographs">Light Leaks</div>
-            <div class="option" value="colored_filters_that_alter_the_color_of_the_entire_light_output">Color Gels</div>
+            <div class="option" value="Neon_Lighting_vibrant_and_colorful_artificial_lighting" title="vibrant_and_colorful_artificial_lighting">Neon Lighting</div>
+            <div class="option" value="Fairy_Lights_small_decorative_lights_often_used_for_subtle_illumination" title="small_decorative_lights_often_used_for_subtle_illumination">Fairy Lights</div>
+            <div class="option" value="Volumetric_Lighting_lighting_that_simulates_beams_of_light_in_a_misty_environment" title="lighting_that_simulates_beams_of_light_in_a_misty_environment">Volumetric Lighting</div>
+            <div class="option" value="Light_Leaks_unintended_exposure_that_creates_a_dreamy_effect_in_photographs" title="unintended_exposure_that_creates_a_dreamy_effect_in_photographs">Light Leaks</div>
+            <div class="option" value="Color_Gels_colored_filters_that_alter_the_color_of_the_entire_light_output" title="colored_filters_that_alter_the_color_of_the_entire_light_output">Color Gels</div>
+            <div class="option" value="Ethereal_Lighting_ethereal_lighting" title="ethereal_lighting">Ethereal Lighting</div>
+            <div class="option" value="Flash_Light_flash_light" title="flash_light">Flash Light</div>
+            <div class="option" value="Focused_Light_focused_light" title="focused_light">Focused Light</div>
+            <div class="option" value="Frontlit_frontlit" title="frontlit">Frontlit</div>
+            <div class="option" value="Hard_Light_hard_light" title="hard_light">Hard Light</div>
+            <div class="option" value="Harsh_Lighting_harsh_lighting" title="harsh_lighting">Harsh Lighting</div>
+            <div class="option" value="Midday_midday" title="midday">Midday</div>
+            <div class="option" value="Night_night" title="night">Night</div>
+            <div class="option" value="Nocturnal_Lighting_nocturnal_lighting" title="nocturnal_lighting">Nocturnal Lighting</div>
+            <div class="option" value="Ring_Light_ring_light" title="ring_light">Ring Light</div>
+            <div class="option" value="Sidelit_sidelit" title="sidelit">Sidelit</div>
+            <div class="option" value="Soft_Light_soft_light" title="soft_light">Soft Light</div>
+            <div class="option" value="Stark_Lighting_stark_lighting" title="stark_lighting">Stark Lighting</div>
+            <div class="option" value="Sultry_Lighting_sultry_lighting" title="sultry_lighting">Sultry Lighting</div>
+            <div class="option" value="Toplit_toplit" title="toplit">Toplit</div>
+            <div class="option" value="Twilight_twilight" title="twilight">Twilight</div>
+            <div class="option" value="Underlit_underlit" title="underlit">Underlit</div>
         </div>
     </div>
     <input type="hidden" name="photo_lighting_type" id="photo_lighting_type" value="">

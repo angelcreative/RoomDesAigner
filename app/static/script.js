@@ -131,6 +131,10 @@ function getSelectedValues() {
         "generated_artwork",
         "point_of_view",
         "color_scheme",
+        "camera_select",
+        "film_grain",
+        "action_select",
+        "person_descriptor",
         "room_size",
         "space_to_be_designed",
         "children_room",
@@ -502,7 +506,31 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-fetch("/generate-images", {
+async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return response.json();  // Directly return the parsed JSON
+            } else if (response.status >= 500 && response.status < 600) {
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+            } else {
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error;
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+}
+
+    
+//llama a imagenes    
+  fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -511,13 +539,27 @@ fetch("/generate-images", {
 })
 .then(response => {
     if (!response.ok) {
-        // Directly throw an error with the status to handle it in the catch block
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status >= 500 && response.status < 600) {
+            // En caso de error 500, pasa directamente a checkImageStatus
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                // Manejar el caso donde response.json() falla
+                checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
+                throw new Error(`Image generation in progress. Checking status...`);
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
     }
-    return response.json();  // Parse JSON only if the response was OK
+    return response.json();
 })
 .then(data => {
-    // Handle the API response based on its status
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -531,11 +573,12 @@ fetch("/generate-images", {
     }
 })
 .catch(error => {
-    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    }
 });
 
-// Define the checkImageStatus function
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
+    function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -546,28 +589,23 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            // Update the ETA display
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, transformedPrompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
-            // Handle any other statuses or errors
             showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
 
