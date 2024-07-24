@@ -539,7 +539,6 @@ fetch("/generate-images", {
 .then(response => {
     if (!response.ok) {
         if (response.status >= 500 && response.status < 600) {
-            // En caso de error 500, pasa directamente a checkImageStatus
             return response.json().then(data => {
                 if (data.fetch_result) {
                     checkImageStatus(data.fetch_result, data.transformed_prompt);
@@ -548,7 +547,6 @@ fetch("/generate-images", {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             }).catch(() => {
-                // Manejar el caso donde response.json() falla
                 checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
                 throw new Error(`Image generation in progress. Checking status...`);
             });
@@ -576,6 +574,7 @@ fetch("/generate-images", {
         showError(error);  // Catch and display errors from the fetch operation or JSON parsing
     }
 });
+
 
 
 // Define the checkImageStatus function
@@ -612,9 +611,9 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
 
 
 function showError(error) {
-    // Update the user interface to show the error
-    console.error(error);
-    alert("Error: " + error.message);
+    console.error("Error generating images:", error);
+    alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
+    hideOverlay(); // Oculta la superposición y el mensaje de carga
 }
 
 function displayImages(images) {
