@@ -184,12 +184,31 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
+    
+     const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
+    
     const values = {};
 
     elementIds.forEach(elementId => {
         const element = document.getElementById(elementId);
         if (element) {
             values[elementId] = element.value;
+        }
+    });
+    
+     colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        if (colorInput && colorSwitch && colorSwitch.checked) {
+            values[colorElement.id] = colorInput.value;
+        } else {
+            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
         }
     });
 
