@@ -1712,7 +1712,7 @@ i {
 }
 
 .secondaryContainer textarea {
-    width: 310px;
+    width: calc(100% - 40px)
 }
 
 .closerI {
@@ -2107,12 +2107,10 @@ textarea {
     transition: background ease-in-out 500ms, color ease-in-out 550ms;
 }
 
-textarea:focus,
-textarea:hover {
-    border: 2px solid #1fdab9;
+textarea:focus, textarea:hover {
+    box-shadow: inset 0px 0px 0px 2px #1fdab9;
     background: #e6faf7;
 }
-
 .p.placeholderImg {
     position: relative;
     display: flex;
@@ -2148,16 +2146,14 @@ textarea:hover {
 }
 
 .buttonsCont {
-  display: flex;
+    display: flex;
     justify-content: space-around;
-    position: fixed;
+    /* position: fixed; */
     bottom: 0;
-    background: #eeeeee;
+     
     width: 100%;
-    flex-direction: row;
-    flex-wrap: nowrap;
     padding: 0 20px;
-    margin: 0 -40px;
+    /* margin: 0 -40px; */
     z-index: 10;
 }
 
@@ -2170,14 +2166,15 @@ textarea:hover {
 }
 
 .buttonsR {
-  display: flex;
-    flex-direction: row;
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
     font-family: courier;
-    align-items: center;
     justify-content: center;
     flex-wrap: nowrap;
+    align-items: stretch;
+    text-align: center;
 }
 
 .buttonsL {
@@ -2252,7 +2249,7 @@ border: 1px solid #ffffff42;
     transition: background ease-in-out 300ms;
     z-index: 2;
     position: relative;
-    right: 4px;
+     
     font-size: 13px;
     font-size: 18px;
     box-shadow: 0px 4px 20px 7px #1d82fd2b;
@@ -2262,7 +2259,7 @@ border: 1px solid #ffffff42;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    width: 30%;
+    width: auto;
     font-family: courier;
 }
 
@@ -2367,9 +2364,8 @@ text-align: left;}
     flex-direction: column;
     border-radius: 1rem;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
     align-items: center;
-    /* background: #15202b; */
 }
 
 
@@ -2931,21 +2927,22 @@ loginModal > p {
 
 /*collapsible*/
 .collapsible {
-  color: white;
-  cursor: pointer;
-  padding: 8px;
-  width: auto;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-  border-bottom: 1px solid #eeeeee;
-  border-radius: 6px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
+    background: #eeeeee;
+    cursor: pointer;
+    padding: 8px;
+    width: auto;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
 .active, .collapsible:hover {
@@ -2953,10 +2950,10 @@ loginModal > p {
 }
 
 .content {
-  padding: 16px 16px 16px 8px;
-  display: none;
-  overflow: hidden;
-  /* background-color: #eeeeee; */
+    /* padding: 16px 16px 16px 8px; */
+    display: none;
+    overflow: hidden;
+    /* background-color: #eeeeee; */
 }
 
 /* new container*/
@@ -2964,33 +2961,30 @@ loginModal > p {
 .formContainer {
     display: flex;
     flex-direction: row;
-    /* background: #111b25; */
     border-radius: 2%;
-   
-    width: calc(100% - 40px);
-    justify-content: space-between;
+    width: 960px;
+    justify-content: center;
+    align-items: stretch;
 }
-
 
 
 
 .secondaryContainer {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat;
+    width: 40%;
+    /* background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat; */
     background-size: 360px;
     position: relative;
+    margin-top: 46px;
 }
 
 .mainContainer {
-    width: 500px;
+    width: 40%;
     overflow: scroll;
     scroll-behavior: smooth;
-    height: 860px;
     padding: 0 20px;
 }
-
 
 /*== PRESETS ==*/
 
