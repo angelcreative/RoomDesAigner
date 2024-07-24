@@ -222,6 +222,18 @@ h2.loginTitle {
         }
 /* end ref */
 
+.modal-content span.close {
+    background: #181719;
+    border-radius: 900rem;
+    padding: 0px 8px 4px 8px;
+    position: absolute;
+    cursor: pointer;
+    color: #ffffff75;
+    top: 20px;
+    right: 40px;
+    transform:rotate(90deg)
+}
+
 .rightOff {
     margin-bottom: 8px;
     display: flex;
