@@ -528,9 +528,8 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 }
 
-    
-//llama a imagenes    
-  fetch("/generate-images", {
+// Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -578,7 +577,9 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 });
 
-    function checkImageStatus(fetchResultUrl, transformedPrompt) {
+
+// Define the checkImageStatus function
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
@@ -1511,3 +1512,5 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
         }
     });
 });
+
+
