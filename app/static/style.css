@@ -2152,7 +2152,6 @@ textarea:focus, textarea:hover {
     bottom: 0;
      
     width: 100%;
-    padding: 0 20px;
     /* margin: 0 -40px; */
     z-index: 10;
 }
@@ -3158,16 +3157,16 @@ loginModal > p {
   #imageGenerationForm {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
     margin: 0 auto;
   }
   
 
     .formContainer {
-        display: flex;
+       display: flex;
         flex-direction: column;
         width: auto;
         padding: 0;
+        align-items: center;
         }
 
     .secondaryContainer {
@@ -3179,9 +3178,10 @@ loginModal > p {
     max-width: 400px;
 }
 
-.buttonExt {
- width: auto;
-}    
+.buttonExt, #aiDesignButton {
+        width: auto;
+        margin: 0;
+    }   
     
   #loadingMessage {
       width:64%
@@ -3284,7 +3284,11 @@ loginModal > p {
       width: 100%;
   }
   
-
+.mainContainer {
+    width: 90%;
+   
+    padding: 0 20px;
+}
   
     
   .thumbnail {
@@ -3299,32 +3303,36 @@ loginModal > p {
       border-top: none;
   }
   
-  .buttonsCont {
-      display: flex;
-      width: 100%;
-      justify-content: space-around;
-      position: fixed;
-      bottom: 0;
-      background: #111b25;
-      box-shadow: -1px 1px 20px 14px #0000006e;
-      left: 0;
-      z-index: 1;
-  }
-  
+.buttonsCont {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        position: fixed;
+        bottom: 0;
+        background: #eeeeee;
+        box-shadow: -1px 1px 20px 14px #3c3e5129;
+        left: 0;
+        z-index: 1;
+        padding: 0;
+        font-size: 12px;
+    }
   
   .buttonsL {
       display: flex;
       flex-direction: row;
   }
   
-         .buttonsR {
+            .buttonsR {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         width: 100%;
-        margin: 0;
-        justify-content: space-evenly;
+        margin: 0 auto;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        justify-content: flex-start;
+        padding: 20px;
+        color: #4f5c67;
     }
- 
  
  select {
      width: 100%;
