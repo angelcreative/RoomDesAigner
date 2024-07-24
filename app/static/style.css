@@ -899,7 +899,11 @@ h2.loginTitle {
     align-items: center;
     padding: 0;
     margin: 0 auto;
-    max-width: 90%;
+    width: 100%;
+    position: fixed;
+    background: #ffffffbf;
+    backdrop-filter: blur(2px);
+    z-index: 1;
 }
 
 .avatar img {
@@ -2961,11 +2965,11 @@ loginModal > p {
     display: flex;
     flex-direction: row;
     border-radius: 2%;
-    width: 960px;
+    width: 100%;
     justify-content: center;
     align-items: stretch;
+    margin-top: 140px;
 }
-
 
 
 .secondaryContainer {
@@ -3094,12 +3098,12 @@ loginModal > p {
         display: inline;
     }
 
-   .dropdown-options {
+  .dropdown-options {
     display: none;
     position: relative;
     background-color: #f9f9f9;
-    width: 100%;
-    box-shadow:0px 5px 4px 2px rgb(12 47 77 / 11%);
+    width: calc(100% - 20px);
+    box-shadow: 0px 5px 4px 2px rgb(12 47 77 / 11%);
     z-index: 3;
     max-height: 200px;
     overflow-y: auto;
@@ -3107,6 +3111,7 @@ loginModal > p {
     font-size: 14px;
     color: #4f5c67;
     border-radius: 8px;
+    margin: 0 auto;
 }
 
     .dropdown-options.show {
@@ -3286,10 +3291,8 @@ loginModal > p {
   }
   
 .mainContainer {
-    width: 90%;
-   
-    padding: 0 20px;
-}
+        width: calc(95% - 30px);
+    }
   
     
   .thumbnail {
