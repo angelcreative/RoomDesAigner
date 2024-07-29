@@ -24,6 +24,8 @@ body {
     filter: contrast(0.5);
 }
 
+
+
 .ar {
     display: flex;
     flex-direction: row;
@@ -2161,18 +2163,6 @@ textarea:focus, textarea:hover {
     position: relative;
 }
 
-.buttonsCont {
-    display: flex;
-    justify-content: space-around;
-    /* position: fixed; */
-    bottom: 0;
-     
-    width: 100%;
-    /* margin: 0 -40px; */
-    z-index: 10;
-}
-
-
 .buttons {
    display: flex;
     flex-direction: row;
@@ -2181,16 +2171,18 @@ textarea:focus, textarea:hover {
 }
 
 .buttonsR {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    font-family: courier;
-    justify-content: center;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    text-align: center;
-}
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        margin: 0 auto;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        color: #4f5c67;
+        row-gap: 20px;
+        column-gap: 20px;
+    }
 
 .buttonsL {
     display: flex;
@@ -3166,6 +3158,36 @@ loginModal > p {
     }
 
 
+
+
+#magicButton {
+    border-radius: 900px;
+    height: 60px;
+    width: 60px;
+}
+
+#magicButton .fa.fa-arrow-right {
+    color: #fff;
+    margin: 0;
+}
+
+#aiDesignButton {
+    background: #4f5c67;
+    border-radius: 900px;
+    height: 40px;
+    width: 40px;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+#aiDesignButton i.fa.fa-random {
+    color: #fff;
+    margin: 0;
+}
+
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
@@ -3196,7 +3218,7 @@ loginModal > p {
     max-width: 400px;
 }
 
-.buttonExt, #aiDesignButton {
+.buttonExt {
         width: auto;
         margin: 0;
     }   
@@ -3320,13 +3342,13 @@ loginModal > p {
   }
   
     .buttonsCont {
-        display: flex;
+      display: flex;
         width: 100%;
         justify-content: space-around;
         position: fixed;
         bottom: 0;
-        background: #f5f5f56e;
-        box-shadow: -1px 1px 20px 14px #3c3e5129;
+        background: #ffffff2e;
+        box-shadow: inset 0px 20px 0px 20px #0018ff00;
         left: 0;
         z-index: 1;
         padding: 0;
@@ -3344,10 +3366,12 @@ loginModal > p {
         width: 100%;
         margin: 0 auto;
         flex-wrap: nowrap;
-        align-items: stretch;
-        justify-content: space-evenly;
-        padding: 20px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
         color: #4f5c67;
+        row-gap: 20px;
+        column-gap: 20px;
     }
     
     
