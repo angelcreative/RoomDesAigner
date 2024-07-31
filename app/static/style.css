@@ -1764,7 +1764,7 @@ i {
 }
 
 .modal-content {
-    padding: 0;
+    padding: 100px 0 ;
     position: relative;
     display: block;
     margin: 0 auto;
@@ -1775,7 +1775,7 @@ i {
     left: 0;
     overflow: scroll;
     text-align: center;
-    background: #0a0f14
+    background: #eee;
 }
 
 #clearImg,
@@ -2388,19 +2388,19 @@ text-align: left;}
 
 
 .imageGrid {
- display: flex;
-    flex-wrap: nowrap;
+display: flex;
+    flex-wrap: wrap;
     column-gap: 16px;
     row-gap: 16px;
     max-width: 100%;
     justify-content: center;
     margin: 0 auto;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 #imageGrid div {
-    width: 80%;
+    width: 45%;
 }
 
 .thumbnail {
@@ -2980,7 +2980,7 @@ loginModal > p {
     display: flex;
     flex-direction: row;
     border-radius: 2%;
-    width: 100%;
+    width: calc(100% - 20px);
     justify-content: center;
     align-items: stretch;
     margin-top: 140px;
@@ -3001,7 +3001,7 @@ loginModal > p {
 }
 
 .mainContainer {
-     
+     padding-bottom: 100px;
     overflow: scroll;
     scroll-behavior: smooth;
  }
@@ -3326,7 +3326,7 @@ loginModal > p {
     height: 100vh;
     overflow: scroll;
     text-align: center;
-    background: #eeeeee;
+    background: #181719;
     flex-wrap: nowrap;
     align-items: center;
     flex-direction: column;
@@ -3354,7 +3354,7 @@ loginModal > p {
   }
   
   #imageGrid div {
-      width: 40%;
+      width: 100%;
   }
   
 .mainContainer {
@@ -3401,7 +3401,6 @@ loginModal > p {
         flex-wrap: nowrap;
         align-items: center;
         justify-content: center;
-        padding: 10px;
         color: #4f5c67;
         row-gap: 20px;
         column-gap: 20px;

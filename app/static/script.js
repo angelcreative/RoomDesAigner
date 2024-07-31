@@ -936,18 +936,15 @@ const upscaleImage = async (imageUrl) => {
 
     
 // END UPSCALE
+
+
+//reverse
     
-//REVERSE
-
-
-
 // Function to search an image on RapidAPI and display results in a new tab
-function searchImageOnRapidAPI(imageUrl) {
+async function searchImageOnRapidAPI(imageUrl) {
     const url = 'https://reverse-image-search-by-copyseeker.p.rapidapi.com/';
     const params = new URLSearchParams({
-        url: imageUrl,
-        language: 'en',
-        country: 'us'
+        url: imageUrl
     });
 
     const options = {
@@ -958,142 +955,124 @@ function searchImageOnRapidAPI(imageUrl) {
         }
     };
 
-    fetch(`${url}?${params.toString()}`, options)
-        .then(response => response.json())
-        .then(data => displayResultsInNewTab(data))
-        .catch(err => console.error('Error:', err));
+    try {
+        const response = await fetch(`${url}?${params.toString()}`, options);
+        const result = await response.json();
+        displayResultsInNewTab(result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 // Function to display search results in a new tab
-
-
-  function displayResultsInNewTab(data) {
+function displayResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
     const htmlContent = `
         <html>
         <head>
             <title>Search Results</title>
-             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+            <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
             <style>
-
-            html {
-    background: #15202b;
-}
-
-img.logoRD {
-    margin: 20px auto 0 auto;
-    display: block;
-    height: 50px;
-}
-
-.maskImage {
-    height: 160px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    overflow: hidden;
-    width: 200px;
-}
-
-.provider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    font-size: 12px;
-    margin-bottom: 12px;
-}
-
-
-
-
-h3 {
-    padding: 10px;
-    white-space: pre-wrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 160px;
-    font-weight: 300;
-    font-size: 12px;
-}
-
-h1 {
-    color: #a9fff5;
-    margin: 2rem 0;
-    font-weight: lighter;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 20px;
-}
-
-
+                html {
+                    background: #15202b;
+                }
+                img.logoRD {
+                    margin: 20px auto 0 auto;
+                    display: block;
+                    height: 50px;
+                }
+                .maskImage {
+                    height: 160px;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;
+                    overflow: hidden;
+                    width: 200px;
+                }
+                .provider {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: row;
+                    font-size: 12px;
+                    margin-bottom: 12px;
+                }
+                h3 {
+                    padding: 10px;
+                    white-space: pre-wrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 160px;
+                    font-weight: 300;
+                    font-size: 12px;
+                }
+                h1 {
+                    color: #a9fff5;
+                    margin: 2rem 0;
+                    font-weight: lighter;
+                    text-align: center;
+                    font-family: sans-serif;
+                    font-size: 20px;
+                }
                 .card-container {
                     display: flex;
                     flex-wrap: wrap;
                     gap: 20px;
                     justify-content: space-around;
                 }
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 200px;
-    padding: 0 0 20px 0;
-    text-align: center;
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    color: #6d7b87;
-    font-family: courier;
-    font-size: 14px;
-}
-
-
-p {
-    text-align: center;
-    color: #6d7b87;
-    font-family: courier;
-}
-
-p a {
-font-size:16px;
-}
+                .card {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    width: 200px;
+                    padding: 0 0 20px 0;
+                    text-align: center;
+                    background: #fff;
+                    border-radius: 8px;
+                    overflow: hidden;
+                    color: #6d7b87;
+                    font-family: courier;
+                    font-size: 14px;
+                }
+                p {
+                    text-align: center;
+                    color: #6d7b87;
+                    font-family: courier;
+                }
+                p a {
+                    font-size: 16px;
+                }
                 .card img {
                     width: 100%;
                     height: auto;
                     border-radius: 4px;
                 }
-               .source-icon {
-    width: 20px !important;
-    height: 20px !important;
-    margin-right: 4px;
-}
+                .source-icon {
+                    width: 20px !important;
+                    height: 20px !important;
+                    margin-right: 4px;
+                }
                 a {
-    color: #9aabba;
-    font-size: 12px;
-    text-decoration: underline;
-}
+                    color: #9aabba;
+                    font-size: 12px;
+                    text-decoration: underline;
+                }
             </style>
         </head>
         <body>
-           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
+            <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
             <h1 class="headerStore">Image Search Results</h1>
-            <p>For refined product search, download the desired image,<a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
-
+            <p>For refined product search, download the desired image, <a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
             <div class="card-container">
-                ${data.data.visual_matches.map(match => `
+                ${data.VisuallySimilar.map(match => `
                     <div class="card">
                         <div class="maskImage">
-                        <img src="${match.thumbnail}" alt="Thumbnail">
+                            <img src="${match}" alt="Thumbnail">
                         </div>
-                        <h3 class="cardTitle">${match.title}</h3>
-                        <div class="provider"><img class="source-icon" src="${match.source_icon}" alt="Source Icon">  <p>${match.source}</p></div>
-                       
-                        <a href="${match.link}" target="_blank">Visit product</a>
                     </div>
                 `).join('')}
             </div>
@@ -1104,10 +1083,7 @@ font-size:16px;
     newWindow.document.close();
 }
 
-
-
-
-//END REVERSE
+    //end reverse
 
 
 
