@@ -943,7 +943,7 @@ const upscaleImage = async (imageUrl) => {
 
 // Function to search an image on RapidAPI and display results in a new tab
 function searchImageOnRapidAPI(imageUrl) {
-    const url = 'https://real-time-lens-data.p.rapidapi.com/search';
+    const url = 'https://reverse-image-search-by-copyseeker.p.rapidapi.com/';
     const params = new URLSearchParams({
         url: imageUrl,
         language: 'en',
@@ -953,8 +953,8 @@ function searchImageOnRapidAPI(imageUrl) {
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
+            'X-RapidAPI-Key': '397b9622b6mshdcad3d01de5d22fp110064jsn7b977be6f115',
+            'X-RapidAPI-Host': 'reverse-image-search-by-copyseeker.p.rapidapi.com'
         }
     };
 
@@ -1229,8 +1229,13 @@ function showModal(imageUrls, transformedPrompt) {
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+
+[downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+        
+      
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);

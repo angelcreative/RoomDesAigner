@@ -231,7 +231,7 @@ h2.loginTitle {
     position: absolute;
     cursor: pointer;
     color: #ffffff75;
-    top: 20px;
+    top: 110px;
     right: 40px;
     transform:rotate(90deg)
 }
@@ -1752,11 +1752,15 @@ i {
 
 #modal {
     position: absolute;
-        z-index: 9;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    /* z-index: 9; */
+    top: 0;
+    left: 30%;
+    /* width: 100%; */
+    /* height: 100%; */
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    margin-right: 30%;
 }
 
 .modal-content {
@@ -2384,18 +2388,19 @@ text-align: left;}
 
 
 .imageGrid {
-    display: flex;
-    flex-wrap: wrap;
+ display: flex;
+    flex-wrap: nowrap;
     column-gap: 16px;
     row-gap: 16px;
-    flex-direction: row;
     max-width: 100%;
     justify-content: center;
     margin: 0 auto;
+    align-items: center;
+    flex-direction: column;
 }
 
 #imageGrid div {
-    width: 23%;
+    width: 80%;
 }
 
 .thumbnail {
@@ -2410,7 +2415,6 @@ text-align: left;}
     border-top: none;
 }
 .thumbnail:hover {
-    opacity: .7;
     transform: scale(1.05);
 }
 
@@ -2982,24 +2986,25 @@ loginModal > p {
     margin-top: 140px;
 }
 
+.middleContainer {
+    background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat;
+    background-size: 360px;
+}
 
 .secondaryContainer {
     display: flex;
     flex-direction: column;
-    width: 40%;
-    /* background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat; */
-    background-size: 360px;
+    
     position: relative;
     margin-top: 46px;
     padding-bottom: 100px;
 }
 
 .mainContainer {
-    width: 40%;
+     
     overflow: scroll;
     scroll-behavior: smooth;
-    padding: 0 20px;
-}
+ }
 
 /*== PRESETS ==*/
 
@@ -3196,6 +3201,23 @@ loginModal > p {
 }
 
 
+ .col-3 {
+      flex: 0 0 25%;
+      max-width: 25%;
+    }
+
+    .col-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+
+    .col-12 {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
@@ -3295,18 +3317,21 @@ loginModal > p {
           overflow: scroll;
   }
   
-  
-  .modal-content {
-          padding: 2rem 1rem;
-          position: relative;
-          display: block;
-          margin: 0 auto;
-          width: calc(100% - 2rem);
-          height: 100vh;
-          overflow: auto;
-          top: 0;
-          left: 0;
-  }
+.modal-content {
+    padding: 100px 0 160px 0;
+    position: relative;
+    display: flex;
+    margin: 0 auto;
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+    text-align: center;
+    background: #eeeeee;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+}
   
   .modal-content > svg {
       position: absolute;
@@ -3329,7 +3354,7 @@ loginModal > p {
   }
   
   #imageGrid div {
-      width: 100%;
+      width: 40%;
   }
   
 .mainContainer {
