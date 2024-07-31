@@ -941,12 +941,8 @@ const upscaleImage = async (imageUrl) => {
 //reverse
     
 // Function to search an image on RapidAPI and display results in a new tab
-// Function to search an image on RapidAPI and display results in a new tab
 async function searchImageOnRapidAPI(imageUrl) {
-    const url = 'https://reverse-image-search-by-copyseeker.p.rapidapi.com/';
-    const params = new URLSearchParams({
-        url: imageUrl
-    });
+    const url = `https://reverse-image-search-by-copyseeker.p.rapidapi.com/?imageUrl=${encodeURIComponent(imageUrl)}`;
 
     const options = {
         method: 'GET',
@@ -957,7 +953,7 @@ async function searchImageOnRapidAPI(imageUrl) {
     };
 
     try {
-        const response = await fetch(`${url}?${params.toString()}`, options);
+        const response = await fetch(url, options);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -1086,7 +1082,6 @@ function displayResultsInNewTab(data) {
     newWindow.document.write(htmlContent);
     newWindow.document.close();
 }
-
 
     //end reverse
 

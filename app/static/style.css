@@ -9,7 +9,7 @@ html, body, div, p, a, select, input, span, sub, sup, h1, h2, h3, b, strong {
 }
 
 div#mainUI, html {
-    background: #fafafa;
+    background: #eee;
 }
 
 body {
