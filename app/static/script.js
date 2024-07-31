@@ -984,22 +984,7 @@ function displayResultsInNewTab(data) {
                     display: block;
                     height: 50px;
                 }
-                .maskImage {
-                    height: 160px;
-                    display: flex;
-                    align-items: flex-start;
-                    justify-content: center;
-                    overflow: hidden;
-                    width: 200px;
-                }
-                .provider {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: row;
-                    font-size: 12px;
-                    margin-bottom: 12px;
-                }
+                
                 h3 {
                     padding: 10px;
                     white-space: pre-wrap;
@@ -1017,27 +1002,7 @@ function displayResultsInNewTab(data) {
                     font-family: sans-serif;
                     font-size: 20px;
                 }
-                .card-container {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    justify-content: space-around;
-                }
-                .card {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                    width: 200px;
-                    padding: 0 0 20px 0;
-                    text-align: center;
-                    background: #fff;
-                    border-radius: 8px;
-                    overflow: hidden;
-                    color: #6d7b87;
-                    font-family: courier;
-                    font-size: 14px;
-                }
+                
                 p {
                     text-align: center;
                     color: #6d7b87;
@@ -1061,6 +1026,42 @@ function displayResultsInNewTab(data) {
                     font-size: 12px;
                     text-decoration: underline;
                 }
+
+
+.card-container {
+    column-count: 4; /* Number of columns */
+    column-gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #6d7b87;
+    font-family: courier;
+    font-size: 14px;
+}
+
+.maskImage {
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.maskImage img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
             </style>
         </head>
         <body>
