@@ -423,8 +423,7 @@ if (modelId === personValue) {
   lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
 
-
-
+// Now build the JSON object with the updated values
 const prompt = {
   key: apiKey,
   prompt: promptText,
@@ -447,7 +446,6 @@ const prompt = {
   enhance_prompt: "no",
   //highres_fix: "yes"
 };
-    
     //xl_more_enhancer,
     //real-skin-lora
     //lora 
