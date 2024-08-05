@@ -437,7 +437,7 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
-  lora: lora,
+  lora_model: lora,
   lora_strength: lora_strength,
   scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
