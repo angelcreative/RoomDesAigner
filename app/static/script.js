@@ -418,9 +418,9 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,xl_more_enhancer";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
 } else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap,xl_more_enhancer";
+  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
 
 
