@@ -1377,7 +1377,7 @@ h4 {
 
 .buttonsCont {
    position: fixed;
-   /* top: 0; */
+   top: 0;
    width: auto;
    z-index: 1;
    background: transparent;
@@ -3405,6 +3405,7 @@ body {
       font-size: 12px;
       backdrop-filter: blur(5px);
       height: 60px;
+      top: 90vh;
     }
   .buttonsL {
       display: flex;
