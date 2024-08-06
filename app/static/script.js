@@ -862,62 +862,76 @@ const upscaleImage = async (imageUrl) => {
 
 const upscaleImage = async (imageUrl) => {
     try {
-        const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
+        const apiKey = 'e34de83ffceb02ab41dfa5de4c9ed6229bedd7e1'; // Replace with your actual API token
+        const version = 'dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e'; // Replace with the correct model version
+
+        const input = {
+            version: version,
+            input: {
+                image: imageUrl
+            }
+        };
+
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-                'X-RapidAPI-Host': 'image-upscale-ai-resolution-x4.p.rapidapi.com'
+                'Authorization': `Bearer ${apiKey}`
             },
-            body: JSON.stringify({
-                input: {
-                    input_image_url: imageUrl
-                }
-            })
+            body: JSON.stringify(input)
         };
 
-        const response = await fetch(url, options);
-        const data = await response.json();  // Parse the response to JSON
+        const response = await fetch('https://api.replicate.com/v1/predictions', options);
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}, Message: ${data.detail}`);
         }
 
-        // Parsing the nested JSON string inside the 'body' property
-        if (data.output && data.output.body) {
-            const body = JSON.parse(data.output.body);
-            const upscaledImageUrl = body.output_image_url;
+        const predictionUrl = data.urls.get;
 
-            if (upscaledImageUrl) {
-                // Send the upscaled image URL to the server to generate a unique slug
-                fetch('/create-upscale-session', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        upscaledImageUrl: upscaledImageUrl
-                    })
+        // Polling for updates
+        let predictionStatus = data.status;
+        let upscaledImageUrl = null;
+
+        while (predictionStatus === 'starting' || predictionStatus === 'processing') {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
+
+            const statusResponse = await fetch(predictionUrl, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            });
+            const statusData = await statusResponse.json();
+            predictionStatus = statusData.status;
+
+            if (predictionStatus === 'succeeded') {
+                upscaledImageUrl = statusData.output;
+            } else if (predictionStatus === 'failed') {
+                throw new Error('Image upscaling failed.');
+            }
+        }
+
+        if (upscaledImageUrl) {
+            // Send the upscaled image URL to the server to generate a unique slug
+            const slugResponse = await fetch('/create-upscale-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    upscaledImageUrl: upscaledImageUrl
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.slug) {
-                        // Open the new window with the unique URL
-                        const url = `https://roomdesaigner.onrender.com/upscale/${data.slug}`;
-                        window.open(url, '_blank');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } else {
-                console.error('No upscaled image URL found:', body);
-                alert('Failed to retrieve the upscaled image. Please check the console for more details.');
+            });
+
+            const slugData = await slugResponse.json();
+            if (slugData.slug) {
+                const url = `https://roomdesaigner.onrender.com/upscale/${slugData.slug}`;
+                window.open(url, '_blank');
             }
         } else {
-            console.error('Invalid API response structure:', data);
-            alert('Failed to process the API response. Please check the console for more details.');
+            console.error('No upscaled image URL found.');
+            alert('Failed to retrieve the upscaled image. Please check the console for more details.');
         }
     } catch (error) {
         console.error('Error upscaling image:', error);
@@ -925,7 +939,6 @@ const upscaleImage = async (imageUrl) => {
     }
 };
 
-    
 // END ENHANCE
 
     
