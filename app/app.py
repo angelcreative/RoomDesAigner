@@ -12,7 +12,6 @@ import json
 import io
 import base64
 import openai
-import replicate
 
 app = Flask(__name__)
 
@@ -34,14 +33,6 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
-
-
-# Asegúrate de que el REPLICATE_API_TOKEN esté configurado en tu entorno
-REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
-if REPLICATE_API_TOKEN is None:
-    raise ValueError("La variable de entorno REPLICATE_API_TOKEN no está configurada")
-
-os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -76,7 +67,7 @@ def transform_prompt(prompt_text):
     return transformed_prompt
 
 # Define the polling function to check image availability
-def check_image_availability(url, timeout=60, interval=5):
+def check_image_availability(url, timeout=120, interval=5):
     """Poll the URL until the image is available or timeout is reached."""
     start_time = time.time()
     while time.time() - start_time < timeout:
@@ -90,8 +81,6 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 # Define your generate_images endpoint
-#flux:
-
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -111,55 +100,31 @@ def generate_images():
         # Transform the prompt using OpenAI API
         transformed_prompt = transform_prompt(prompt_text)
         
-        # Prepare the input for Replicate API
-        input = {
-            "prompt": transformed_prompt,
-        }
-        
-        # Check for img2img parameters and validate them
-        if 'init_image' in data and data['init_image']:
-            input['init_image'] = data['init_image']
-            if 'strength' in data:
-                try:
-                    strength = float(data['strength'])
-                    if 0.0 <= strength <= 1.0:
-                        input['strength'] = strength
-                    else:
-                        return jsonify({"error": "Strength value must be between 0.0 and 1.0"}), 400
-                except ValueError:
-                    return jsonify({"error": "Strength must be a float"}), 400
+        # Update the prompt in the data with the transformed prompt
+        data['prompt'] = transformed_prompt
+        #else 'https://modelslab.com/api/v6/realtime/text2img'
+        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            result = response.json()
+            # Poll the image URLs to check availability
+            all_images_available = True
+            for image_url in result.get('links', []):
+                if not check_image_availability(image_url):
+                    all_images_available = False
+                    break
 
-        try:
-            # Create a prediction using the replicate API
-            prediction = replicate.predictions.create(
-                version="YOUR_VERSION_ID",  # replace with actual version ID if needed
-                input=input
-            )
-            
-            # Poll the prediction until it's complete
-            while prediction.status not in ["succeeded", "failed", "canceled"]:
-                time.sleep(5)
-                prediction.reload()
-
-            if prediction.status == "succeeded":
-                output_urls = prediction.output
-                all_images_available = all(check_image_availability(url) for url in output_urls)
-                
-                if all_images_available:
-                    deduct_credits(username, 2)
-                    return jsonify({"status": "succeeded", "output": output_urls, "transformed_prompt": transformed_prompt}), 200
-                else:
-                    return jsonify({"error": "Image not available within the timeout period"}), 408
+            if all_images_available:
+                deduct_credits(username, 2)
+                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                return jsonify(result)
             else:
-                return jsonify({"error": f"Prediction failed with status: {prediction.status}"}), 500
-                
-        except Exception as e:
-            return jsonify({"status": "failed", "error": str(e)}), 500
+                return jsonify({"error": "Image not available within the timeout period"}), 408
+        else:
+            return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
-    
-    
-    
+
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
     query_body = {
