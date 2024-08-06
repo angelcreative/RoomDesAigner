@@ -1,13 +1,13 @@
 flask>=2.2.5
 flask-cors>=4.0.1
-gunicorn>=22.0.0
+gunicorn>=20.0.4
 bcrypt==4.1.2
 requests>=2.31.0
 openai==0.28.0
 Werkzeug>=2.2.3
 replicate==0.7.0
-httpx==0.23.0  # Actualizado a una versión compatible
-httpcore==0.15.0
+httpx>=0.23.0
+httpcore>=0.15.0
 urllib3>=1.26.18
 SQLAlchemy==2.0.30
 Flask-SQLAlchemy==3.0.5
