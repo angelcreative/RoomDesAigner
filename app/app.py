@@ -12,6 +12,7 @@ import json
 import io
 import base64
 import openai
+import replicate
 
 app = Flask(__name__)
 
@@ -33,6 +34,14 @@ app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
+
+
+# Asegúrate de que el REPLICATE_API_TOKEN esté configurado en tu entorno
+REPLICATE_API_TOKEN = os.getenv("REPLICATE_API_TOKEN")
+if REPLICATE_API_TOKEN is None:
+    raise ValueError("La variable de entorno REPLICATE_API_TOKEN no está configurada")
+
+os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -81,6 +90,8 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 # Define your generate_images endpoint
+#flux:
+
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -102,28 +113,35 @@ def generate_images():
         
         # Update the prompt in the data with the transformed prompt
         data['prompt'] = transformed_prompt
-        #else 'https://modelslab.com/api/v6/realtime/text2img'
-        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-        response = requests.post(url, json=data)
-        if response.status_code == 200:
-            result = response.json()
-            # Poll the image URLs to check availability
-            all_images_available = True
-            for image_url in result.get('links', []):
-                if not check_image_availability(image_url):
-                    all_images_available = False
-                    break
-
+        
+        # Prepare the input for Replicate API
+        input = {
+            "prompt": transformed_prompt,
+            "init_image": data.get('init_image', None),
+            "strength": data.get('strength', None)
+        }
+        
+        try:
+            output = replicate.run(
+                "black-forest-labs/flux-schnell",
+                input=input
+            )
+            
+            # Check if the output contains valid image URLs
+            all_images_available = all(check_image_availability(url) for url in output)
+            
             if all_images_available:
                 deduct_credits(username, 2)
-                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                return jsonify(result)
+                return jsonify({"status": "succeeded", "output": output, "transformed_prompt": transformed_prompt}), 200
             else:
                 return jsonify({"error": "Image not available within the timeout period"}), 408
-        else:
-            return jsonify({"error": "Image generation failed"}), response.status_code
+                
+        except Exception as e:
+            return jsonify({"status": "failed", "error": str(e)}), 500
     else:
         return jsonify({"error": "Insufficient credits"}), 403
+
+#end flux
 
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
