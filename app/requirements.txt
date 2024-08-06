@@ -6,7 +6,7 @@ requests>=2.31.0
 openai==0.28.0
 Werkzeug>=2.2.3
 replicate==0.7.0
-httpx==0.24.1
+httpx==0.23.0  # Actualizado a una versión compatible
 httpcore==0.15.0
 urllib3>=1.26.18
 SQLAlchemy==2.0.30
@@ -15,4 +15,3 @@ greenlet==3.0.3
 protobuf==4.21.12
 grpcio-tools==1.53.0
 stability-sdk==0.8.1
-# add other dependencies 

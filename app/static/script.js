@@ -64,9 +64,26 @@ document.getElementById('aiDesignButton').addEventListener('click', function() {
     generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
 });
 //AIDESIGN
+    
+    
+document.addEventListener("DOMContentLoaded", function() {
+    const fileInput = document.getElementById("imageDisplayUrl");
+    const thumbnailContainer = document.querySelector(".thumbImg");
+    const thumbnailImage = document.getElementById("thumbnail");
 
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                thumbnailImage.src = e.target.result;
+                thumbnailContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+});
   
- 
 // Function to handle the form submission
 function handleSubmit(event) {
     event.preventDefault();
@@ -90,6 +107,7 @@ function handleSubmit(event) {
         generateImages(null, selectedValues, isImg2Img);
     }
 }
+
 
   function handleError(errorMessage) {
   console.error(errorMessage);
@@ -325,7 +343,6 @@ function generateFractalText() {
         document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
-
 function buildPromptText(selectedValues) {
     const promptInit = "Sharp focus, RAW, unedited, symmetrical balance, in-frame, hyperrealistic, highly detailed, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph.";
     let plainText = Object.entries(selectedValues)
@@ -337,7 +354,7 @@ function buildPromptText(selectedValues) {
     return `${promptInit} ${plainText} ${promptEnd}`;
 }
 
-
+// Function to generate images using Replicate API
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
@@ -373,8 +390,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);
     }
 }
-
-    
+   
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
     // Function to reroll the images

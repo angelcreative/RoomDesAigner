@@ -111,38 +111,55 @@ def generate_images():
         # Transform the prompt using OpenAI API
         transformed_prompt = transform_prompt(prompt_text)
         
-        # Update the prompt in the data with the transformed prompt
-        data['prompt'] = transformed_prompt
-        
         # Prepare the input for Replicate API
         input = {
             "prompt": transformed_prompt,
-            "init_image": data.get('init_image', None),
-            "strength": data.get('strength', None)
         }
         
+        # Check for img2img parameters and validate them
+        if 'init_image' in data and data['init_image']:
+            input['init_image'] = data['init_image']
+            if 'strength' in data:
+                try:
+                    strength = float(data['strength'])
+                    if 0.0 <= strength <= 1.0:
+                        input['strength'] = strength
+                    else:
+                        return jsonify({"error": "Strength value must be between 0.0 and 1.0"}), 400
+                except ValueError:
+                    return jsonify({"error": "Strength must be a float"}), 400
+
         try:
-            output = replicate.run(
-                "black-forest-labs/flux-schnell",
+            # Create a prediction using the replicate API
+            prediction = replicate.predictions.create(
+                version="YOUR_VERSION_ID",  # replace with actual version ID if needed
                 input=input
             )
             
-            # Check if the output contains valid image URLs
-            all_images_available = all(check_image_availability(url) for url in output)
-            
-            if all_images_available:
-                deduct_credits(username, 2)
-                return jsonify({"status": "succeeded", "output": output, "transformed_prompt": transformed_prompt}), 200
+            # Poll the prediction until it's complete
+            while prediction.status not in ["succeeded", "failed", "canceled"]:
+                time.sleep(5)
+                prediction.reload()
+
+            if prediction.status == "succeeded":
+                output_urls = prediction.output
+                all_images_available = all(check_image_availability(url) for url in output_urls)
+                
+                if all_images_available:
+                    deduct_credits(username, 2)
+                    return jsonify({"status": "succeeded", "output": output_urls, "transformed_prompt": transformed_prompt}), 200
+                else:
+                    return jsonify({"error": "Image not available within the timeout period"}), 408
             else:
-                return jsonify({"error": "Image not available within the timeout period"}), 408
+                return jsonify({"error": f"Prediction failed with status: {prediction.status}"}), 500
                 
         except Exception as e:
             return jsonify({"status": "failed", "error": str(e)}), 500
     else:
         return jsonify({"error": "Insufficient credits"}), 403
-
-#end flux
-
+    
+    
+    
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
     query_body = {
