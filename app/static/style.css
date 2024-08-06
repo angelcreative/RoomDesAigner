@@ -293,7 +293,7 @@ h2.loginTitle {
 }
 
 .loginBox p {
-    color: #fff;
+    color: #6f7680;
     margin: 16px auto;
 }
 
@@ -303,7 +303,7 @@ h2.loginTitle {
 }
 
 .loginBox p a {
-    color: #a9fff5
+    color: #1fdab9;
 }
 
 .loginModal {
@@ -932,14 +932,16 @@ form.loginForm {
     text-align: left;
     margin: 0px auto;
     width: 260px;
+    color: #6f7680;
 }
 
 form.loginForm input {
     padding: 12px 8px;
     margin: 0 0 10px 0;
     border-radius: 12px;
-    border: 1px solid #1f1f1f;
+    border: 1px solid #979ca3;
     width: calc(100% - 16px);
+    background: #dddedf57;
 }
 
 .loginForm button {
@@ -1388,7 +1390,7 @@ h4 {
     margin: 20px auto;
     display: block;
     height: 60px;
-    position: fixed;
+    /* position: fixed; */
     left: 50%;
 }
  
@@ -3080,6 +3082,11 @@ loginModal > p {
     display: inline-block;
     width: 100%;
     font-family: Arial, sans-serif;
+}
+
+.middleContainer {
+    background: url(/static/img/modal_img/designing.svg) no-repeat center center;
+    background-size: 40%;
 }
 
 
