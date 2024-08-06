@@ -859,10 +859,9 @@ const upscaleImage = async (imageUrl) => {
 };
 
 */
-
 const upscaleImage = async (imageUrl) => {
     try {
-        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image';
+        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image'; // Esta es la URL de tu servidor en Render
 
         const response = await fetch(proxyUrl, {
             method: 'POST',
@@ -889,7 +888,7 @@ const upscaleImage = async (imageUrl) => {
 
             const statusResponse = await fetch(predictionUrl, {
                 headers: {
-                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN`
+                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN` // Asegúrate de que esto esté correcto en tu servidor
                 }
             });
             const statusData = await statusResponse.json();
@@ -928,7 +927,6 @@ const upscaleImage = async (imageUrl) => {
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
-
 
 // END ENHANCE
 
