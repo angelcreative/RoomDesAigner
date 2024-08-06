@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'static')));
 app.set('views', path.join(__dirname, 'templates'));
-app.set('view engine', 'html');
+app.set('view engine', 'ejs');
 
 // Middleware to handle HTML rendering
 const ejs = require('ejs');
