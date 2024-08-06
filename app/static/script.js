@@ -862,26 +862,16 @@ const upscaleImage = async (imageUrl) => {
 
 const upscaleImage = async (imageUrl) => {
     try {
-        const apiKey = 'e34de83ffceb02ab41dfa5de4c9ed6229bedd7e1'; // Replace with your actual API token
-        const version = 'dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e'; // Replace with the correct model version
+        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image';
 
-        const input = {
-            version: version,
-            input: {
-                image: imageUrl
-            }
-        };
-
-        const options = {
+        const response = await fetch(proxyUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(input)
-        };
+            body: JSON.stringify({ imageUrl })
+        });
 
-        const response = await fetch('https://api.replicate.com/v1/predictions', options);
         const data = await response.json();
 
         if (!response.ok) {
@@ -895,11 +885,11 @@ const upscaleImage = async (imageUrl) => {
         let upscaledImageUrl = null;
 
         while (predictionStatus === 'starting' || predictionStatus === 'processing') {
-            await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds before checking again
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos antes de chequear nuevamente
 
             const statusResponse = await fetch(predictionUrl, {
                 headers: {
-                    'Authorization': `Bearer ${apiKey}`
+                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN`
                 }
             });
             const statusData = await statusResponse.json();
@@ -913,7 +903,7 @@ const upscaleImage = async (imageUrl) => {
         }
 
         if (upscaledImageUrl) {
-            // Send the upscaled image URL to the server to generate a unique slug
+            // Enviar la URL de la imagen mejorada al servidor para generar un slug único
             const slugResponse = await fetch('/create-upscale-session', {
                 method: 'POST',
                 headers: {
@@ -938,6 +928,7 @@ const upscaleImage = async (imageUrl) => {
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
+
 
 // END ENHANCE
 
