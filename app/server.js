@@ -1,8 +1,16 @@
 const express = require('express');
 const fetch = require('node-fetch');
+const path = require('path');
 const app = express();
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'static')));
+app.set('views', path.join(__dirname, 'templates'));
+app.set('view engine', 'html');
+
+// Middleware to handle HTML rendering
+const ejs = require('ejs');
+app.engine('html', ejs.renderFile);
 
 app.post('/upscale-image', async (req, res) => {
     const { imageUrl } = req.body;
@@ -27,7 +35,13 @@ app.post('/upscale-image', async (req, res) => {
         });
 
         const data = await response.json();
-        res.json(data);
+
+        if (data.status === 'succeeded') {
+            const upscaledImageUrl = data.output[0];
+            res.render('upscale-image', { upscaled_image_url: upscaledImageUrl });
+        } else {
+            res.status(500).json({ error: 'Upscaling failed' });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

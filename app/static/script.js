@@ -861,7 +861,7 @@ const upscaleImage = async (imageUrl) => {
 */
 const upscaleImage = async (imageUrl) => {
     try {
-        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image'; // Esta es la URL de tu servidor en Render
+        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image';
 
         const response = await fetch(proxyUrl, {
             method: 'POST',
@@ -871,10 +871,14 @@ const upscaleImage = async (imageUrl) => {
             body: JSON.stringify({ imageUrl })
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}, Message: ${data.detail}`);
+        if (data.error) {
+            throw new Error(`Server error: ${data.error}`);
         }
 
         const predictionUrl = data.urls.get;
@@ -888,36 +892,27 @@ const upscaleImage = async (imageUrl) => {
 
             const statusResponse = await fetch(predictionUrl, {
                 headers: {
-                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN` // Asegúrate de que esto esté correcto en tu servidor
+                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN`
                 }
             });
+
+            if (!statusResponse.ok) {
+                throw new Error(`Status response error: ${statusResponse.status}`);
+            }
+
             const statusData = await statusResponse.json();
             predictionStatus = statusData.status;
 
             if (predictionStatus === 'succeeded') {
-                upscaledImageUrl = statusData.output;
+                upscaledImageUrl = statusData.output[0];
+                break;
             } else if (predictionStatus === 'failed') {
                 throw new Error('Image upscaling failed.');
             }
         }
 
         if (upscaledImageUrl) {
-            // Enviar la URL de la imagen mejorada al servidor para generar un slug único
-            const slugResponse = await fetch('/create-upscale-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    upscaledImageUrl: upscaledImageUrl
-                })
-            });
-
-            const slugData = await slugResponse.json();
-            if (slugData.slug) {
-                const url = `https://roomdesaigner.onrender.com/upscale/${slugData.slug}`;
-                window.open(url, '_blank');
-            }
+            window.location.href = `/upscale-image?upscaled_image_url=${encodeURIComponent(upscaledImageUrl)}`;
         } else {
             console.error('No upscaled image URL found.');
             alert('Failed to retrieve the upscaled image. Please check the console for more details.');
@@ -927,6 +922,7 @@ const upscaleImage = async (imageUrl) => {
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
+
 
 // END ENHANCE
 
