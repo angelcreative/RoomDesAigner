@@ -26,6 +26,9 @@ CORS(app, resources={
     }
 })
 
+
+
+
 logging.basicConfig(level=logging.INFO)
 
 app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
@@ -474,6 +477,31 @@ def view_upscaled_image(slug):
     else:
         return "Upscaled image not found", 404
 
+@app.route('/upscale-image', methods=['POST'])
+def upscale_image():
+    data = request.get_json()
+    image_url = data.get('imageUrl')
+
+    if not image_url:
+        return jsonify({'error': 'No image URL provided'}), 400
+
+    input = {
+        "image": image_url
+    }
+
+    try:
+        # Ejecutar el modelo usando la API de Replicate
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input
+        )
+
+        # Renderizar la plantilla HTML con la URL de la imagen mejorada
+        return render_template('upscale-image.html', upscaled_image_url=output[0])
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
 @app.route('/relight')
 def relight_page():
     return render_template('relight.html')

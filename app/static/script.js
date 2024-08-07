@@ -860,9 +860,9 @@ const upscaleImage = async (imageUrl) => {
 
 */
 
-    const upscaleImage = async (imageUrl) => {
+  const upscaleImage = async (imageUrl) => {
     try {
-        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image'; // Esta es la URL de tu servidor
+        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image';
 
         const response = await fetch(proxyUrl, {
             method: 'POST',
@@ -876,48 +876,12 @@ const upscaleImage = async (imageUrl) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = await response.text(); // Change from json() to text() to handle HTML response
 
-        if (data.error) {
-            throw new Error(`Server error: ${data.error}`);
-        }
-
-        const predictionUrl = data.urls.get;
-
-        // Polling for updates
-        let predictionStatus = data.status;
-        let upscaledImageUrl = null;
-
-        while (predictionStatus === 'starting' || predictionStatus === 'processing') {
-            await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos antes de chequear nuevamente
-
-            const statusResponse = await fetch(predictionUrl, {
-                headers: {
-                    'Authorization': `Bearer YOUR_REPLICATE_API_TOKEN`
-                }
-            });
-
-            if (!statusResponse.ok) {
-                throw new Error(`Status response error: ${statusResponse.status}`);
-            }
-
-            const statusData = await statusResponse.json();
-            predictionStatus = statusData.status;
-
-            if (predictionStatus === 'succeeded') {
-                upscaledImageUrl = statusData.output[0];
-                break;
-            } else if (predictionStatus === 'failed') {
-                throw new Error('Image upscaling failed.');
-            }
-        }
-
-        if (upscaledImageUrl) {
-            window.location.href = `/upscale-image?upscaled_image_url=${encodeURIComponent(upscaledImageUrl)}`;
-        } else {
-            console.error('No upscaled image URL found.');
-            alert('Failed to retrieve the upscaled image. Please check the console for more details.');
-        }
+        // Assuming you want to open the returned HTML in a new tab
+        const newWindow = window.open();
+        newWindow.document.write(data);
+        newWindow.document.close();
     } catch (error) {
         console.error('Error upscaling image:', error);
         alert(`Failed to upscale image: ${error.message}`);
