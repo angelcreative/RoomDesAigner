@@ -477,6 +477,10 @@ def view_upscaled_image(slug):
     else:
         return "Upscaled image not found", 404
 
+# Verificar que la variable de entorno esté configurada
+if 'REPLICATE_API_TOKEN' not in os.environ:
+    raise EnvironmentError("REPLICATE_API_TOKEN not found in environment variables")
+
 @app.route('/upscale-image', methods=['POST'])
 def upscale_image():
     data = request.get_json()
@@ -496,11 +500,17 @@ def upscale_image():
             input=input
         )
 
+        # Registro de depuración
+        print(f"Output: {output}")
+
         # Renderizar la plantilla HTML con la URL de la imagen mejorada
         return render_template('upscale-image.html', upscaled_image_url=output[0])
 
     except Exception as e:
+        # Registro de depuración
+        print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
     
 @app.route('/relight')
 def relight_page():
