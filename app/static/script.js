@@ -859,9 +859,10 @@ const upscaleImage = async (imageUrl) => {
 };
 
 */
-const upscaleImage = async (imageUrl) => {
+
+    const upscaleImage = async (imageUrl) => {
     try {
-        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image'; // URL correcta de tu servidor
+        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image'; // Esta es la URL de tu servidor
 
         const response = await fetch(proxyUrl, {
             method: 'POST',
@@ -922,7 +923,6 @@ const upscaleImage = async (imageUrl) => {
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
-
 
 // END ENHANCE
 
