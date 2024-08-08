@@ -1967,6 +1967,8 @@ sub {
     border: none;
     flex-direction: column;
     padding: 0;
+        background: url(/static/img/modal_img/designing.svg) no-repeat center center;
+    background-size: 200px;
     }
     
  /* max-width: fit-content;
@@ -3084,8 +3086,7 @@ loginModal > p {
 }
 
 .middleContainer {
-    background: url(/static/img/modal_img/designing.svg) no-repeat center center;
-    background-size: 40%;
+   
 }
 
 
@@ -3218,7 +3219,10 @@ textarea { cursor: default; height: 80px;}
 
     .col-6 {
       flex: 0 0 50%;
-      max-width: 50%;
+    max-width: 40%;
+    margin: 0 40px;
+    background: #4f5c671a;
+    border-radius: 16px;
     }
 
     .col-12 {
