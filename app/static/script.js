@@ -418,12 +418,13 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,xl_more_enhancer";
 } else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+  lora = "clothingadjustloraap,xl_more_enhancer";
 }  
 
-// Now build the JSON object with the updated values
+
+
 const prompt = {
   key: apiKey,
   prompt: promptText,
@@ -446,6 +447,7 @@ const prompt = {
   enhance_prompt: "no",
   //highres_fix: "yes"
 };
+    
     //xl_more_enhancer,
     //real-skin-lora
     //lora 
@@ -860,34 +862,72 @@ const upscaleImage = async (imageUrl) => {
 
 */
 
-  const upscaleImage = async (imageUrl) => {
+const upscaleImage = async (imageUrl) => {
     try {
-        const proxyUrl = 'https://roomdesaigner.onrender.com/upscale-image';
-
-        const response = await fetch(proxyUrl, {
+        const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
+        const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
+                'X-RapidAPI-Host': 'image-upscale-ai-resolution-x4.p.rapidapi.com'
             },
-            body: JSON.stringify({ imageUrl })
-        });
+            body: JSON.stringify({
+                input: {
+                    input_image_url: imageUrl
+                }
+            })
+        };
+
+        const response = await fetch(url, options);
+        const data = await response.json();  // Parse the response to JSON
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.text(); // Change from json() to text() to handle HTML response
+        // Parsing the nested JSON string inside the 'body' property
+        if (data.output && data.output.body) {
+            const body = JSON.parse(data.output.body);
+            const upscaledImageUrl = body.output_image_url;
 
-        // Assuming you want to open the returned HTML in a new tab
-        const newWindow = window.open();
-        newWindow.document.write(data);
-        newWindow.document.close();
+            if (upscaledImageUrl) {
+                // Send the upscaled image URL to the server to generate a unique slug
+                fetch('/create-upscale-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        upscaledImageUrl: upscaledImageUrl
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.slug) {
+                        // Open the new window with the unique URL
+                        const url = `https://roomdesaigner.onrender.com/upscale/${data.slug}`;
+                        window.open(url, '_blank');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            } else {
+                console.error('No upscaled image URL found:', body);
+                alert('Failed to retrieve the upscaled image. Please check the console for more details.');
+            }
+        } else {
+            console.error('Invalid API response structure:', data);
+            alert('Failed to process the API response. Please check the console for more details.');
+        }
     } catch (error) {
         console.error('Error upscaling image:', error);
         alert(`Failed to upscale image: ${error.message}`);
     }
 };
 
+    
 // END ENHANCE
 
     
