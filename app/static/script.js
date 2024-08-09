@@ -376,14 +376,14 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1080;
-  height = Math.round((2 / 3) * 1080);  
+  width = 1024;
+  height = Math.round((2 / 3) * 1024);  
 } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
-  height = 1080;
+  width = Math.round((2 / 3) * 1024);  
+  height = 1024;
 } else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1080;
-  height = 1080;
+  width = 1024;
+  height = 1024;
 }
 
 console.log(`Width: ${width}, Height: ${height}`);
