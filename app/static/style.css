@@ -2391,7 +2391,7 @@ text-align: left;}
     height: 100vh;
     overflow: auto;
     align-items: center;
-    background: transparent url(/static/img/modal_img/welcome.svg) center center no-repeat;
+    
     background-size: 300px;
 }
 
