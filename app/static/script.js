@@ -525,7 +525,7 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
-async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+async function fetchWithRetry(url, options, retries = 10, delay = 20000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
@@ -548,6 +548,7 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
 }
 
 // Llamada a fetchWithRetry en generateImages
+// Llamada a fetchWithRetry en generateImages
 fetch("/generate-images", {
     method: "POST",
     headers: {
@@ -566,8 +567,7 @@ fetch("/generate-images", {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             }).catch(() => {
-                checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
-                throw new Error(`Image generation in progress. Checking status...`);
+                throw new Error(`Image generation in progress. But no status URL provided.`);
             });
         } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -595,7 +595,6 @@ fetch("/generate-images", {
 });
 
 
-
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
     fetch(fetchResultUrl, {
@@ -605,7 +604,12 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error fetching image status. Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === 'processing') {
             if (data.eta) {
@@ -627,7 +631,6 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         showError(error);
     });
 }
-
 
 function showError(error) {
     console.error("Error generating images:", error);
