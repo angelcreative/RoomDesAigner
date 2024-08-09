@@ -3401,15 +3401,12 @@ body {
       border-top: none;
   }
 .buttonsCont {
-      position: absolute;
-    bottom: 0;
-    width: fit-content;
-    z-index: 1;
-    background: #ffffffc2;
+width: fit-content;
     display: flex;
     justify-content: center;
     padding: 0px 20px;
     border-radius: 16px;
+    margin: 40px auto;
     }
   .buttonsL {
       display: flex;
