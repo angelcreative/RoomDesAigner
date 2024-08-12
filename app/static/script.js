@@ -349,9 +349,9 @@ function generateFractalText() {
 
 
 //new code image
-
 // Variable para almacenar los colores extraídos
 let extractedColors = null;
+let imageUrl = null;  // Para almacenar la URL de la imagen cargada
 
 // Función para extraer colores usando Color Thief
 function extractColors(imageElement) {
@@ -371,6 +371,7 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
         reader.onload = function(e) {
             const image = new Image();
             image.src = e.target.result;
+            imageUrl = image.src;  // Guardar la URL de la imagen para su uso posterior
 
             // Mostrar la miniatura
             const thumbnailContainer = document.querySelector(".colorThumbImg");
@@ -382,7 +383,7 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
                 // Extraer los colores y almacenarlos en la variable global
                 extractedColors = extractColors(image);
                 console.log('Colores extraídos:', extractedColors);
-                // Aquí ya no llamamos a generateImages, solo guardamos los colores
+                // Aquí NO llamamos a generateImages, solo guardamos los colores
             };
         };
         reader.readAsDataURL(file);
@@ -399,8 +400,8 @@ document.getElementById('magicButton').addEventListener('click', function() {
         promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
     }
 
-    // Llama a generateImages con el promptEndy modificado
-    generateImages(null, selectedValues, false, promptEndy);
+    // Llama a generateImages con la URL de la imagen y el promptEndy modificado
+    generateImages(imageUrl, selectedValues, !!imageUrl, promptEndy);
 });
 
 // Función para limpiar la miniatura de la extracción de colores
@@ -409,12 +410,14 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
     thumbnailImage.src = '';
     const thumbnailContainer = document.querySelector(".colorThumbImg");
     thumbnailContainer.style.display = 'none';
-    // También limpiamos los colores extraídos
+    // También limpiamos los colores extraídos y la URL de la imagen
     extractedColors = null;
+    imageUrl = null;
 });
 
 // Función principal para generar imágenes
 function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
+    // Asegúrate de que la función no se llama antes de que se haya realizado la configuración necesaria
     showGeneratingImagesDialog();
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
@@ -619,7 +622,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     }
 }
 
-// Fin del código de imagen
 
 //end code image
     
