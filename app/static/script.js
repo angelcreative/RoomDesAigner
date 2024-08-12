@@ -348,16 +348,9 @@ function generateFractalText() {
 
 
 
-
-/////////////////////////new code image
-
-    
-    
-    
-    
-    // Variables globales para almacenar datos
-let extractedColors = null;  // Para almacenar los colores extraídos
-let img2imgImageUrl = null;  // Para almacenar la URL de la imagen usada en el proceso img2img
+//new code image
+// Variable para almacenar los colores extraídos
+let extractedColors = null;
 
 // Función para extraer colores usando Color Thief
 function extractColors(imageElement) {
@@ -388,23 +381,8 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
                 // Extraer los colores y almacenarlos en la variable global
                 extractedColors = extractColors(image);
                 console.log('Colores extraídos:', extractedColors);
+                // Aquí ya no llamamos a generateImages, solo guardamos los colores
             };
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Manejar la carga de la imagen para el proceso img2img
-document.getElementById('img2imgImageInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const image = new Image();
-            image.src = e.target.result;
-            img2imgImageUrl = image.src;  // Guardar la URL de la imagen para el proceso img2img
-
-            // Aquí podrías mostrar una miniatura o hacer algo relacionado con img2img si es necesario
         };
         reader.readAsDataURL(file);
     }
@@ -414,14 +392,14 @@ document.getElementById('img2imgImageInput').addEventListener('change', function
 document.getElementById('magicButton').addEventListener('click', function() {
     const selectedValues = getSelectedValues();
 
-    // Usar los colores extraídos si están disponibles, si no, usa el promptEndy por defecto
+    // Usar los colores extraídos si están disponibles
     let promptEndy = `dense furnishings and decorations.`;
     if (extractedColors && extractedColors.length > 0) {
         promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
     }
 
-    // Llama a generateImages con la URL de la imagen de img2img y el promptEndy modificado
-    generateImages(img2imgImageUrl, selectedValues, !!img2imgImageUrl, promptEndy);
+    // Llama a generateImages con el promptEndy modificado
+    generateImages(null, selectedValues, false, promptEndy);
 });
 
 // Función para limpiar la miniatura de la extracción de colores
@@ -526,9 +504,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         enhance_prompt: "no"
     };
 
-    // Si es un proceso img2img, agregar la imagen al prompt
     if (isImg2Img && imageUrl) {
-        prompt.init_image = imageUrl; // Asegurarse de que la imagen de referencia se use
+        prompt.init_image = imageUrl;
 
         // Obtener el valor de fuerza del deslizador
         const strengthSlider = document.getElementById("strengthSlider");
@@ -641,11 +618,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     }
 }
 
-    
-    
-    
+// Fin del código de imagen
 
-/////////////////////////end code image
+//end code image
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
