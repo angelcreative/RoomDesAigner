@@ -350,6 +350,7 @@ function generateFractalText() {
 
 //new code image
 // Variable para almacenar los colores extraídos
+// Variable para almacenar los colores extraídos
 let extractedColors = null;
 let isGenerating = false; // Nuevo flag para controlar la generación de imágenes
 
@@ -394,20 +395,22 @@ document.getElementById('magicButton').addEventListener('click', function() {
     isGenerating = true; // Bloquear nueva generación hasta que se complete
 
     const selectedValues = getSelectedValues();
-
-    // Usar los colores extraídos si están disponibles
     let promptEndy = `dense furnishings and decorations.`;
+
+    // Verificar si hay colores extraídos y modificar el prompt
     if (extractedColors && extractedColors.length > 0) {
         promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
+    } else {
+        console.warn('No colors extracted, generating default image.');
     }
 
-    // Llama a generateImages con el promptEndy modificado
+    // Generar la imagen solo una vez, ya sea con los colores extraídos o con el prompt por defecto
     generateImages(null, selectedValues, false, promptEndy);
 
     // Liberar la bandera después de la ejecución de generateImages
     setTimeout(() => {
         isGenerating = false;
-    }, 1000); // Asumimos que el proceso toma menos de un segundo, ajusta el tiempo según tu caso.
+    }, 1000); // Ajusta el tiempo según sea necesario
 });
 
 // Función para limpiar la miniatura de la extracción de colores
@@ -419,6 +422,8 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
     // También limpiamos los colores extraídos
     extractedColors = null;
 });
+    
+    
 // Función principal para generar imágenes
 function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     showGeneratingImagesDialog();
