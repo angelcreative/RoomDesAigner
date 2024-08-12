@@ -1440,6 +1440,25 @@ Design</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section
 
 Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>     
  <div class="content">
+     
+     
+     <div id="imageUploadSection">
+    <label class="imageup" for="colorExtractionImageInput">
+        Upload your image for color extraction <span>↑</span>
+        <small>Use a good resolution image<br>less than 500Kb</small>
+        <input type="file" id="colorExtractionImageInput" accept="image/*">
+    </label>
+    <div class="colorThumbImg" style="display: none;">
+        <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
+        <img id="colorThumbnail" src="" alt="Thumbnail for Color Extraction">
+    </div>
+</div>
+
+<div id="urlImageSection">
+    <label for="imageUrlInput">Enter Image URL for Color Extraction:</label>
+    <input type="text" id="imageUrlInput" placeholder="https://example.com/image.jpg">
+    <button id="extractColorsFromUrlButton">Extract Colors</button>
+</div>
    
       <div class="coloresWheel colorPalette">
     <!--start 603010-->
@@ -1486,14 +1505,9 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
                 <input type="color" id="walls_paint_color" value="#ffffff" class="colorPicker">
             </div>
         </div>
-    </div>
-    <!--// end wall color-->
-       </div>
-     
-          <div class="coloresWheel colorPalette">
-
+   
     <!-- furniture color -->
-    <div class="colorPickersGroup">
+   
         <div class="switchContainer colorSC">
             <label class="switchLabel">Activate furniture color</label>
             <input type="checkbox" id="use_furniture_color"  >
@@ -1509,17 +1523,7 @@ Color</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></section>
 
       
      
-<div id="colorExtractionSection">
-  <label class="imageup" for="colorExtractionImageInput">
-    Upload your image for color extraction <span>↑</span>
-    <small>Use a good resolution image<br>less than 500Kb and 1024x1204 size</small>
-    <input type="file" id="colorExtractionImageInput" accept="image/*">
-  </label>
-  <div class="colorThumbImg" style="display: none;">
-    <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
-    <img id="colorThumbnail" src="" alt="Thumbnail for Color Extraction">
-  </div>
-</div>
+
 
 
      
