@@ -349,6 +349,9 @@ function generateFractalText() {
 
 
 //new code image
+// Variable para almacenar los colores extraídos
+let extractedColors = null;
+
 // Función para extraer colores usando Color Thief
 function extractColors(imageElement) {
     const colorThief = new ColorThief();
@@ -375,21 +378,28 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
             thumbnailContainer.style.display = 'block';
 
             image.onload = function() {
-                // Extraer los colores
-                const hexColors = extractColors(image);
-
-                // Actualizar el promptEndy con los colores extraídos
-                let promptEndy = `dense furnishings and decorations.`;
-                if (hexColors.length > 0) {
-                    promptEndy += ` Use this color palette ${hexColors.join(', ')}`;
-                }
-
-                // Llama a generateImages con el promptEndy modificado
-                generateImages(null, selectedValues, false, promptEndy);
+                // Extraer los colores y almacenarlos en la variable global
+                extractedColors = extractColors(image);
+                console.log('Colores extraídos:', extractedColors);
+                // Aquí ya no llamamos a generateImages, solo guardamos los colores
             };
         };
         reader.readAsDataURL(file);
     }
+});
+
+// Manejar la generación de imágenes solo cuando se haga clic en el botón magicButton
+document.getElementById('magicButton').addEventListener('click', function() {
+    const selectedValues = getSelectedValues();
+
+    // Usar los colores extraídos si están disponibles
+    let promptEndy = `dense furnishings and decorations.`;
+    if (extractedColors && extractedColors.length > 0) {
+        promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
+    }
+
+    // Llama a generateImages con el promptEndy modificado
+    generateImages(null, selectedValues, false, promptEndy);
 });
 
 // Función para limpiar la miniatura de la extracción de colores
@@ -398,6 +408,8 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
     thumbnailImage.src = '';
     const thumbnailContainer = document.querySelector(".colorThumbImg");
     thumbnailContainer.style.display = 'none';
+    // También limpiamos los colores extraídos
+    extractedColors = null;
 });
 
 // Función principal para generar imágenes
@@ -414,7 +426,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    // Si promptEndy ya fue modificado con colores, lo usas, si no, usa el valor predeterminado
+    // Si promptEndy ya fue modificado con colores, lo usas; si no, usa el valor predeterminado
     promptEndy = promptEndy || `dense furnishings and decorations.`;
 
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
@@ -438,31 +450,30 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
 
     console.log(`Width: ${width}, Height: ${height}`);
 
- 
-// Get selected models from the form
-const personValue = document.getElementById("personModel").value;
-const furnitureValue = document.getElementById("furnitureModel").value;
+    // Obtener modelos seleccionados del formulario
+    const personValue = document.getElementById("personModel").value;
+    const furnitureValue = document.getElementById("furnitureModel").value;
 
-// Determine if the person model or furniture model should be used
-let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+    // Determinar si se debe usar el modelo de persona o el de muebles
+    let modelId = "ae-sdxl-v1"; // Por defecto, usa ae-sdxl-v1
 
-if (personValue !== "") {
-  modelId = personValue;
-} else if (furnitureValue !== "") {
-  modelId = furnitureValue;
-}
+    if (personValue !== "") {
+        modelId = personValue;
+    } else if (furnitureValue !== "") {
+        modelId = furnitureValue;
+    }
 
-// Initialize variables for LoRA model and strength
-let lora = "clothingadjustloraap";
-let lora_strength = 1;
+    // Inicializar variables para el modelo LoRA y su fuerza
+    let lora = "clothingadjustloraap";
+    let lora_strength = 1;
 
-// Conditionally set the LoRA model based on the selected model
-if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
-} else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
-}  
-    
+    // Condicionalmente establece el modelo LoRA basado en el modelo seleccionado
+    if (modelId === personValue) {
+        lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+    } else if (modelId === furnitureValue) {
+        lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+    }
+
     const seedSwitch = document.getElementById("seedSwitch");
     const seedEnabled = seedSwitch.checked;
     const seedValue = seedEnabled ? null : "19071975";
@@ -496,9 +507,9 @@ if (modelId === personValue) {
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
 
-        // Get the strength value from the slider
+        // Obtener el valor de fuerza del deslizador
         const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+        prompt.strength = parseFloat(strengthSlider.value); // Usar el valor del deslizador en lugar de un valor fijo
     }
 
     async function fetchWithRetry(url, options, retries = 10, delay = 20000) {
@@ -506,15 +517,15 @@ if (modelId === personValue) {
             try {
                 const response = await fetch(url, options);
                 if (response.ok) {
-                    return response.json();  // Directly return the parsed JSON
+                    return response.json();  // Directamente devuelve el JSON parseado
                 } else if (response.status >= 500 && response.status < 600) {
-                    console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+                    console.warn(`Error del servidor (status: ${response.status}). Reintentando... (${i + 1}/${retries})`);
                 } else {
                     const errorResponse = await response.json();
-                    throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+                    throw new Error(`Error HTTP! Status: ${response.status}, Message: ${errorResponse.message}`);
                 }
             } catch (error) {
-                console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+                console.error(`Intento de fetch ${i + 1} fallido: ${error.message}`);
                 if (i === retries - 1) {
                     throw error;
                 }
@@ -537,15 +548,15 @@ if (modelId === personValue) {
                 return response.json().then(data => {
                     if (data.fetch_result) {
                         checkImageStatus(data.fetch_result, data.transformed_prompt);
-                        throw new Error(`Image generation in progress. Checking status...`);
+                        throw new Error(`Generación de imagen en progreso. Comprobando estado...`);
                     } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw new Error(`Error HTTP! Status: ${response.status}`);
                     }
                 }).catch(() => {
-                    throw new Error(`Image generation in progress. But no status URL provided.`);
+                    throw new Error(`Generación de imagen en progreso. Pero no se proporcionó URL de estado.`);
                 });
             } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Error HTTP! Status: ${response.status}`);
             }
         }
         return response.json();
@@ -555,21 +566,21 @@ if (modelId === personValue) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
+            showModal(imageUrls, data.transformed_prompt);  // Mostrar imágenes
+            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
         } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continuar comprobando el estado si está procesando
         } else {
-            showError(data);  // Show error if other statuses are encountered
+            showError(data);  // Mostrar error si se encuentran otros estados
         }
     })
     .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+        if (!error.message.includes("Generación de imagen en progreso")) {
+            showError(error);  // Captura y muestra errores del fetch o del parseo JSON
         }
     });
 
-    // Define the checkImageStatus function
+    // Definir la función checkImageStatus
     function checkImageStatus(fetchResultUrl, transformedPrompt) {
         fetch(fetchResultUrl, {
             method: 'POST',
@@ -580,7 +591,7 @@ if (modelId === personValue) {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Error fetching image status. Status: ${response.status}`);
+                throw new Error(`Error al buscar el estado de la imagen. Status: ${response.status}`);
             }
             return response.json();
         })
@@ -589,23 +600,25 @@ if (modelId === personValue) {
                 if (data.eta) {
                     document.getElementById('etaValue').textContent = data.eta;
                 }
-                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Verificar nuevamente después de 5 segundos
             } else if (data.status === "success" && data.output) {
                 const imageUrls = data.output.map(url =>
                     url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
                 );
-                showModal(imageUrls, transformedPrompt);  // Display images
-                hideGeneratingImagesDialog();  // Hide any loading dialogs
+                showModal(imageUrls, transformedPrompt);  // Mostrar imágenes
+                hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
             } else {
                 showError(data);
             }
         })
         .catch(error => {
-            console.error('Error checking image status:', error);
+            console.error('Error al comprobar el estado de la imagen:', error);
             showError(error);
         });
     }
 }
+
+// Fin del código de imagen
 
 //end code image
     
