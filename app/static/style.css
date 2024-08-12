@@ -3400,6 +3400,44 @@ body {
       border: 1px solid #ffffff47;
       border-top: none;
   }
+    
+    
+    img#colorThumbnail {
+    max-width: 180px;
+    display: flex;
+    margin: 0 auto 10px auto;
+}
+
+div#urlImageSection {
+    font-size: 14px;
+    color: #677580;
+}
+
+input#imageUrlInput {
+    width: 90%;
+    margin: 10px 0 0 0;
+    padding: 8px;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #f4f2f1bf;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
+    color: #677580;
+    font-family: courier, sans-serif;
+    font-size: 14px;
+    height: 30px;
+    transition: background 300ms ease-out;
+}
+
+button#extractColorsFromUrlButton {
+    background: #4f5c67;
+    color: #eeeeee;
+    margin: 8px 0;
+}
 .buttonsCont {
 width: 100%;
         display: flex;
