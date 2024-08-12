@@ -350,7 +350,9 @@ function generateFractalText() {
 
 //new code image
 // Variable para almacenar los colores extraídos
+// Variable para almacenar los colores extraídos
 let extractedColors = null;
+let isGenerating = false; // Nuevo flag para controlar la generación de imágenes
 
 // Función para extraer colores usando Color Thief
 function extractColors(imageElement) {
@@ -381,7 +383,6 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
                 // Extraer los colores y almacenarlos en la variable global
                 extractedColors = extractColors(image);
                 console.log('Colores extraídos:', extractedColors);
-                // Aquí ya no llamamos a generateImages, solo guardamos los colores
             };
         };
         reader.readAsDataURL(file);
@@ -390,6 +391,9 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
 
 // Manejar la generación de imágenes solo cuando se haga clic en el botón magicButton
 document.getElementById('magicButton').addEventListener('click', function() {
+    if (isGenerating) return; // Evitar doble ejecución
+    isGenerating = true; // Bloquear nueva generación hasta que se complete
+
     const selectedValues = getSelectedValues();
 
     // Usar los colores extraídos si están disponibles
@@ -399,7 +403,9 @@ document.getElementById('magicButton').addEventListener('click', function() {
     }
 
     // Llama a generateImages con el promptEndy modificado
-    generateImages(null, selectedValues, false, promptEndy);
+    generateImages(null, selectedValues, false, promptEndy).finally(() => {
+        isGenerating = false; // Permitir nuevas ejecuciones una vez completada la generación
+    });
 });
 
 // Función para limpiar la miniatura de la extracción de colores
