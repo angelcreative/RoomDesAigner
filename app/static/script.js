@@ -350,7 +350,6 @@ function generateFractalText() {
 
 //new code image
 // Variable para almacenar los colores extraídos
-// Variable para almacenar los colores extraídos
 let extractedColors = null;
 let isGenerating = false; // Nuevo flag para controlar la generación de imágenes
 
@@ -389,23 +388,46 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
     }
 });
 
-// Manejar la generación de imágenes solo cuando se haga clic en el botón magicButton
+// Manejador de la generación de imágenes solo cuando se haga clic en el botón magicButton
 document.getElementById('magicButton').addEventListener('click', function() {
     if (isGenerating) return; // Evitar doble ejecución
     isGenerating = true; // Bloquear nueva generación hasta que se complete
 
+    const fileInput = document.getElementById("imageDisplayUrl");
+    const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
     const selectedValues = getSelectedValues();
-    let promptEndy = `dense furnishings and decorations.`;
+    const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
 
-    // Verificar si hay colores extraídos y modificar el prompt
-    if (extractedColors && extractedColors.length > 0) {
-        promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
+    if (file) {
+        // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
+        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
+        const uploadUrl = "https://api.imgbb.com/1/upload";
+        const formData = new FormData();
+        formData.append("key", apiKey);
+        formData.append("image", file);
+
+        fetch(uploadUrl, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Si la imagen se subió con éxito, obtén la URL y procede con img2img
+                const imageUrl = data.data.url;
+                generateImages(imageUrl, selectedValues, isImg2Img);
+            } else {
+                throw new Error("Image upload failed: " + data.error.message);
+            }
+        })
+        .catch(error => {
+            // Manejo de errores en caso de falla en la subida de la imagen
+            handleError(error.message);
+        });
     } else {
-        console.warn('No colors extracted, generating default image.');
+        // Procesa txt2img si no se seleccionó ningún archivo
+        generateImages(null, selectedValues, isImg2Img);
     }
-
-    // Generar la imagen solo una vez, ya sea con los colores extraídos o con el prompt por defecto
-    generateImages(null, selectedValues, false, promptEndy);
 
     // Liberar la bandera después de la ejecución de generateImages
     setTimeout(() => {
@@ -413,16 +435,6 @@ document.getElementById('magicButton').addEventListener('click', function() {
     }, 1000); // Ajusta el tiempo según sea necesario
 });
 
-// Función para limpiar la miniatura de la extracción de colores
-document.getElementById('clearColorImg').addEventListener('click', function() {
-    const thumbnailImage = document.getElementById("colorThumbnail");
-    thumbnailImage.src = '';
-    const thumbnailContainer = document.querySelector(".colorThumbImg");
-    thumbnailContainer.style.display = 'none';
-    // También limpiamos los colores extraídos
-    extractedColors = null;
-});
-    
     
 // Función principal para generar imágenes
 function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
