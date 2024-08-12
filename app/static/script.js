@@ -348,8 +348,60 @@ function generateFractalText() {
 
 
 
- 
-function generateImages(imageUrl, selectedValues, isImg2Img) {
+//new code image
+// Función para extraer colores usando Color Thief
+function extractColors(imageElement) {
+    const colorThief = new ColorThief();
+    const colors = colorThief.getPalette(imageElement, 5); // Extrae los 5 colores principales
+
+    // Convierte los colores a formato HEX
+    const hexColors = colors.map(color => `#${color.map(val => val.toString(16).padStart(2, '0')).join('')}`);
+    return hexColors;
+}
+
+// Manejar la carga de la imagen para la extracción de colores
+document.getElementById('colorExtractionImageInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const image = new Image();
+            image.src = e.target.result;
+
+            // Mostrar la miniatura
+            const thumbnailContainer = document.querySelector(".colorThumbImg");
+            const thumbnailImage = document.getElementById("colorThumbnail");
+            thumbnailImage.src = image.src;
+            thumbnailContainer.style.display = 'block';
+
+            image.onload = function() {
+                // Extraer los colores
+                const hexColors = extractColors(image);
+
+                // Actualizar el promptEndy con los colores extraídos
+                let promptEndy = `dense furnishings and decorations.`;
+                if (hexColors.length > 0) {
+                    promptEndy += ` Use this color palette ${hexColors.join(', ')}`;
+                }
+
+                // Llama a generateImages con el promptEndy modificado
+                generateImages(null, selectedValues, false, promptEndy);
+            };
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Función para limpiar la miniatura de la extracción de colores
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    const thumbnailImage = document.getElementById("colorThumbnail");
+    thumbnailImage.src = '';
+    const thumbnailContainer = document.querySelector(".colorThumbImg");
+    thumbnailContainer.style.display = 'none';
+});
+
+// Función principal para generar imágenes
+function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     showGeneratingImagesDialog();
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
@@ -362,7 +414,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    const promptEndy = `dense furnishings and decorations.`;
+    // Si promptEndy ya fue modificado con colores, lo usas, si no, usa el valor predeterminado
+    promptEndy = promptEndy || `dense furnishings and decorations.`;
 
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
@@ -385,6 +438,17 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     console.log(`Width: ${width}, Height: ${height}`);
 
+  // Initialize variables for LoRA model and strength
+let lora = "clothingadjustloraap";
+let lora_strength = 1;
+
+// Conditionally set the LoRA model based on the selected model
+if (modelId === personValue) {
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,xl_more_enhancer";
+} else if (modelId === furnitureValue) {
+  lora = "clothingadjustloraap,xl_more_enhancer";
+}  
+    
     const seedSwitch = document.getElementById("seedSwitch");
     const seedEnabled = seedSwitch.checked;
     const seedValue = seedEnabled ? null : "19071975";
@@ -405,8 +469,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
-        model_id: "ae-sdxl-v1", // Ejemplo, puedes cambiarlo según tu modelo
-        lora_model: "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl",
+        model_id: modelId,
+        lora_model: lora,
         lora_strength: 1,
         scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
@@ -529,7 +593,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 }
 
-
+//end code image
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
