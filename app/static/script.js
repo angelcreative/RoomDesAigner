@@ -350,18 +350,15 @@ function generateFractalText() {
 
 //new code image
 // Variable para almacenar los colores extraídos
-// Variable para almacenar los colores extraídos
 let extractedColors = null;
-let isGenerating = false; // Nuevo flag para controlar la generación de imágenes
+let isGenerating = false; // Flag para controlar la generación de imágenes
 
 // Función para extraer colores usando Color Thief
 function extractColors(imageElement) {
     const colorThief = new ColorThief();
     const colors = colorThief.getPalette(imageElement, 5); // Extrae los 5 colores principales
-
     // Convierte los colores a formato HEX
-    const hexColors = colors.map(color => `#${color.map(val => val.toString(16).padStart(2, '0')).join('')}`);
-    return hexColors;
+    return colors.map(color => `#${color.map(val => val.toString(16).padStart(2, '0')).join('')}`);
 }
 
 // Manejar la carga de la imagen para la extracción de colores
@@ -400,17 +397,10 @@ document.getElementById('magicButton').addEventListener('click', function() {
     // Verificar si hay colores extraídos y modificar el prompt
     if (extractedColors && extractedColors.length > 0) {
         promptEndy += ` Use this color palette ${extractedColors.join(', ')}`;
-    } else {
-        console.warn('No colors extracted, generating default image.');
     }
 
-    // Generar la imagen solo una vez, ya sea con los colores extraídos o con el prompt por defecto
+    // Generar la imagen solo una vez
     generateImages(null, selectedValues, false, promptEndy);
-
-    // Liberar la bandera después de la ejecución de generateImages
-    setTimeout(() => {
-        isGenerating = false;
-    }, 1000); // Ajusta el tiempo según sea necesario
 });
 
 // Función para limpiar la miniatura de la extracción de colores
@@ -422,8 +412,7 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
     // También limpiamos los colores extraídos
     extractedColors = null;
 });
-    
-    
+
 // Función principal para generar imágenes
 function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     showGeneratingImagesDialog();
@@ -438,22 +427,15 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    // Si promptEndy ya fue modificado con colores, lo usas; si no, usa el valor predeterminado
-    promptEndy = promptEndy || `dense furnishings and decorations.`;
-
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
     let width, height;
-
-    if (aspectRatio === "landscape") { // 3:2 aspect ratio
-        width = 1080;
-        height = Math.round((2 / 3) * 1080);  
-    } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-        width = Math.round((2 / 3) * 1080);  
-        height = 1080;
-    } else if (aspectRatio === "square") { // 1:1 aspect ratio
-        width = 1080;
-        height = 1080;
+    if (aspectRatio === "landscape") {
+        width = 1080; height = Math.round((2 / 3) * 1080);
+    } else if (aspectRatio === "portrait") {
+        width = Math.round((2 / 3) * 1080); height = 1080;
+    } else if (aspectRatio === "square") {
+        width = 1080; height = 1080;
     }
 
     // Asegúrate de que las dimensiones sean divisibles por 8
@@ -466,20 +448,16 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     const personValue = document.getElementById("personModel").value;
     const furnitureValue = document.getElementById("furnitureModel").value;
 
-    // Determinar si se debe usar el modelo de persona o el de muebles
     let modelId = "ae-sdxl-v1"; // Por defecto, usa ae-sdxl-v1
-
     if (personValue !== "") {
         modelId = personValue;
     } else if (furnitureValue !== "") {
         modelId = furnitureValue;
     }
 
-    // Inicializar variables para el modelo LoRA y su fuerza
     let lora = "clothingadjustloraap";
     let lora_strength = 1;
 
-    // Condicionalmente establece el modelo LoRA basado en el modelo seleccionado
     if (modelId === personValue) {
         lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
     } else if (modelId === furnitureValue) {
@@ -518,35 +496,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
 
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
-
-        // Obtener el valor de fuerza del deslizador
         const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value); // Usar el valor del deslizador en lugar de un valor fijo
+        prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    async function fetchWithRetry(url, options, retries = 10, delay = 20000) {
-        for (let i = 0; i < retries; i++) {
-            try {
-                const response = await fetch(url, options);
-                if (response.ok) {
-                    return response.json();  // Directamente devuelve el JSON parseado
-                } else if (response.status >= 500 && response.status < 600) {
-                    console.warn(`Error del servidor (status: ${response.status}). Reintentando... (${i + 1}/${retries})`);
-                } else {
-                    const errorResponse = await response.json();
-                    throw new Error(`Error HTTP! Status: ${response.status}, Message: ${errorResponse.message}`);
-                }
-            } catch (error) {
-                console.error(`Intento de fetch ${i + 1} fallido: ${error.message}`);
-                if (i === retries - 1) {
-                    throw error;
-                }
-            }
-            await new Promise(resolve => setTimeout(resolve, delay));
-        }
-    }
-
-    // Llamada a fetchWithRetry en generateImages
     fetch("/generate-images", {
         method: "POST",
         headers: {
@@ -578,56 +531,58 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Mostrar imágenes
-            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+            showModal(imageUrls, data.transformed_prompt);
+            hideGeneratingImagesDialog();
         } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continuar comprobando el estado si está procesando
+            checkImageStatus(data.fetch_result, data.transformed_prompt);
         } else {
-            showError(data);  // Mostrar error si se encuentran otros estados
+            showError(data);
         }
     })
     .catch(error => {
         if (!error.message.includes("Generación de imagen en progreso")) {
-            showError(error);  // Captura y muestra errores del fetch o del parseo JSON
-        }
-    });
-
-    // Definir la función checkImageStatus
-    function checkImageStatus(fetchResultUrl, transformedPrompt) {
-        fetch(fetchResultUrl, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error al buscar el estado de la imagen. Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'processing') {
-                if (data.eta) {
-                    document.getElementById('etaValue').textContent = data.eta;
-                }
-                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Verificar nuevamente después de 5 segundos
-            } else if (data.status === "success" && data.output) {
-                const imageUrls = data.output.map(url =>
-                    url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-                );
-                showModal(imageUrls, transformedPrompt);  // Mostrar imágenes
-                hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
-            } else {
-                showError(data);
-            }
-        })
-        .catch(error => {
-            console.error('Error al comprobar el estado de la imagen:', error);
             showError(error);
-        });
-    }
+        }
+    })
+    .finally(() => {
+        isGenerating = false; // Liberar el flag de generación
+    });
+}
+
+function checkImageStatus(fetchResultUrl, transformedPrompt) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ key: apiKey }) // Asume que apiKey está definida globalmente
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al buscar el estado de la imagen. Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'processing') {
+            if (data.eta) {
+                document.getElementById('etaValue').textContent = data.eta;
+            }
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000);
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, transformedPrompt);
+            hideGeneratingImagesDialog();
+        } else {
+            showError(data);
+        }
+    })
+    .catch(error => {
+        console.error('Error al comprobar el estado de la imagen:', error);
+        showError(error);
+    });
 }
 
 // Fin del código de imagen
