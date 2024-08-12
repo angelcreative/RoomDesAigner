@@ -349,6 +349,7 @@ function generateFractalText() {
 
 
 //new code image
+
 // Variable para almacenar los colores extraídos
 let extractedColors = null;
 
@@ -388,36 +389,6 @@ document.getElementById('colorExtractionImageInput').addEventListener('change', 
     }
 });
 
-// Manejar la extracción de colores desde una URL de imagen
-document.getElementById('extractColorsFromUrlButton').addEventListener('click', function() {
-    const imageUrl = document.getElementById('imageUrlInput').value;
-    if (imageUrl) {
-        const image = new Image();
-        image.crossOrigin = "Anonymous"; // Necesario para evitar problemas de CORS
-        image.src = imageUrl;
-
-        // Mostrar la miniatura
-        image.onload = function() {
-            const thumbnailContainer = document.querySelector(".colorThumbImg");
-            const thumbnailImage = document.getElementById("colorThumbnail");
-            thumbnailImage.src = image.src;
-            thumbnailContainer.style.display = 'block';
-
-            // Extraer los colores y almacenarlos en la variable global
-            extractedColors = extractColors(image);
-            console.log('Colores extraídos:', extractedColors);
-        };
-
-        image.onerror = function() {
-            console.error("No se pudo cargar la imagen desde la URL proporcionada.");
-            alert("No se pudo cargar la imagen desde la URL proporcionada. Verifica la URL e intenta de nuevo.");
-        };
-    } else {
-        alert("Por favor, introduce una URL de imagen válida.");
-    }
-});
-    
-    
 // Manejar la generación de imágenes solo cuando se haga clic en el botón magicButton
 document.getElementById('magicButton').addEventListener('click', function() {
     const selectedValues = getSelectedValues();
