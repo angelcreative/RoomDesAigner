@@ -438,15 +438,29 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
 
     console.log(`Width: ${width}, Height: ${height}`);
 
-  // Initialize variables for LoRA model and strength
+ 
+// Get selected models from the form
+const personValue = document.getElementById("personModel").value;
+const furnitureValue = document.getElementById("furnitureModel").value;
+
+// Determine if the person model or furniture model should be used
+let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+
+if (personValue !== "") {
+  modelId = personValue;
+} else if (furnitureValue !== "") {
+  modelId = furnitureValue;
+}
+
+// Initialize variables for LoRA model and strength
 let lora = "clothingadjustloraap";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,xl_more_enhancer";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
 } else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap,xl_more_enhancer";
+  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
     
     const seedSwitch = document.getElementById("seedSwitch");
