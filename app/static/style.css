@@ -3402,12 +3402,26 @@ body {
   }
     
     
+
+
     img#colorThumbnail {
     max-width: 180px;
+    margin: 0 auto;
     display: flex;
-    margin: 0 auto 10px auto;
+    align-items: center;
+    justify-content: center;
 }
 
+i#clearColorImg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: rotate(45deg);
+}
+
+.colorThumbImg {
+    position: relative;
+}
 div#urlImageSection {
     font-size: 14px;
     color: #677580;
