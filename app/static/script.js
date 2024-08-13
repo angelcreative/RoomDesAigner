@@ -346,8 +346,67 @@ function generateFractalText() {
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
 
+// COLORSEX
+
+// Variable global para almacenar los colores extraídos
+let extractedColors = [];
+
+// Función para manejar la carga de la imagen y extraer los colores
+document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const thumbnailImage = document.getElementById("thumbnail");
+            thumbnailImage.src = e.target.result;
+
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const colorThief = new ColorThief(); // Suponiendo que usas la librería color-thief
+                extractedColors = colorThief.getPalette(img, 5).map(rgbArray => {
+                    return rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
+                });
+
+                console.log("Extracted Colors:", extractedColors);
+            };
+
+            // Mostrar la miniatura
+            const thumbnailContainer = document.querySelector(".thumbImg");
+            thumbnailContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Función para convertir RGB a HEX
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+}
+
+// Función para limpiar la imagen y los colores extraídos
+document.getElementById('clearImg').addEventListener('click', function() {
+    clearImage();
+    extractedColors = []; // Limpiar colores extraídos
+    console.log("Extracted Colors cleared:", extractedColors);
+
+    // Resetear el input de archivo
+    document.getElementById('colorExtractionInput').value = '';
+});
+
+function clearImage() {
+    // Resetear la miniatura
+    const thumbnail = document.getElementById('thumbnail');
+    thumbnail.src = '';
+
+    // Ocultar el contenedor de la miniatura
+    const thumbContainer = document.querySelector('.thumbImg');
+    thumbContainer.style.display = 'none';
+}
 
 
+
+// END COLORSEX
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -367,7 +426,15 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-  const promptEndy = `dense furnishings and decorations.`;
+let promptEndy = `dense furnishings and decorations.`;
+
+if (extractedColors.length > 0) {
+    const colorsString = extractedColors.join(', '); // Convierte el array de colores a una cadena
+    promptEndy += ` Colors used: ${colorsString}.`;
+}
+
+// Ejemplo del uso final de promptEndy
+console.log(promptEndy);
   
  
 
