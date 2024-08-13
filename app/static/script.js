@@ -348,96 +348,8 @@ function generateFractalText() {
 
 
 
-//new code image
-// Variable para almacenar los colores extraídos
-let extractedColors = null;
-let isGenerating = false; // Nuevo flag para controlar la generación de imágenes
-
-// Función para extraer colores usando Color Thief
-function extractColors(imageElement) {
-    const colorThief = new ColorThief();
-    const colors = colorThief.getPalette(imageElement, 5); // Extrae los 5 colores principales
-
-    // Convierte los colores a formato HEX
-    const hexColors = colors.map(color => `#${color.map(val => val.toString(16).padStart(2, '0')).join('')}`);
-    return hexColors;
-}
-
-// Manejar la carga de la imagen para la extracción de colores
-document.getElementById('colorExtractionImageInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const image = new Image();
-            image.src = e.target.result;
-
-            // Mostrar la miniatura
-            const thumbnailContainer = document.querySelector(".colorThumbImg");
-            const thumbnailImage = document.getElementById("colorThumbnail");
-            thumbnailImage.src = image.src;
-            thumbnailContainer.style.display = 'block';
-
-            image.onload = function() {
-                // Extraer los colores y almacenarlos en la variable global
-                extractedColors = extractColors(image);
-                console.log('Colores extraídos:', extractedColors);
-            };
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-// Manejador de la generación de imágenes solo cuando se haga clic en el botón magicButton
-document.getElementById('magicButton').addEventListener('click', function() {
-    if (isGenerating) return; // Evitar doble ejecución
-    isGenerating = true; // Bloquear nueva generación hasta que se complete
-
-    const fileInput = document.getElementById("imageDisplayUrl");
-    const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
-    const selectedValues = getSelectedValues();
-    const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
-
-    if (file) {
-        // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-        const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
-        const uploadUrl = "https://api.imgbb.com/1/upload";
-        const formData = new FormData();
-        formData.append("key", apiKey);
-        formData.append("image", file);
-
-        fetch(uploadUrl, {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Si la imagen se subió con éxito, obtén la URL y procede con img2img
-                const imageUrl = data.data.url;
-                generateImages(imageUrl, selectedValues, isImg2Img);
-            } else {
-                throw new Error("Image upload failed: " + data.error.message);
-            }
-        })
-        .catch(error => {
-            // Manejo de errores en caso de falla en la subida de la imagen
-            handleError(error.message);
-        });
-    } else {
-        // Procesa txt2img si no se seleccionó ningún archivo
-        generateImages(null, selectedValues, isImg2Img);
-    }
-
-    // Liberar la bandera después de la ejecución de generateImages
-    setTimeout(() => {
-        isGenerating = false;
-    }, 1000); // Ajusta el tiempo según sea necesario
-});
-
-    
-// Función principal para generar imágenes
-function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
+ 
+function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
@@ -450,8 +362,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    // Si promptEndy ya fue modificado con colores, lo usas; si no, usa el valor predeterminado
-    promptEndy = promptEndy || `dense furnishings and decorations.`;
+    const promptEndy = `dense furnishings and decorations.`;
 
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
@@ -474,30 +385,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
 
     console.log(`Width: ${width}, Height: ${height}`);
 
-    // Obtener modelos seleccionados del formulario
-    const personValue = document.getElementById("personModel").value;
-    const furnitureValue = document.getElementById("furnitureModel").value;
-
-    // Determinar si se debe usar el modelo de persona o el de muebles
-    let modelId = "ae-sdxl-v1"; // Por defecto, usa ae-sdxl-v1
-
-    if (personValue !== "") {
-        modelId = personValue;
-    } else if (furnitureValue !== "") {
-        modelId = furnitureValue;
-    }
-
-    // Inicializar variables para el modelo LoRA y su fuerza
-    let lora = "clothingadjustloraap";
-    let lora_strength = 1;
-
-    // Condicionalmente establece el modelo LoRA basado en el modelo seleccionado
-    if (modelId === personValue) {
-        lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
-    } else if (modelId === furnitureValue) {
-        lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
-    }
-
     const seedSwitch = document.getElementById("seedSwitch");
     const seedEnabled = seedSwitch.checked;
     const seedValue = seedEnabled ? null : "19071975";
@@ -518,8 +405,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
-        model_id: modelId,
-        lora_model: lora,
+        model_id: "ae-sdxl-v1", // Ejemplo, puedes cambiarlo según tu modelo
+        lora_model: "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl",
         lora_strength: 1,
         scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
@@ -531,9 +418,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
 
-        // Obtener el valor de fuerza del deslizador
+        // Get the strength value from the slider
         const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value); // Usar el valor del deslizador en lugar de un valor fijo
+        prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
     }
 
     async function fetchWithRetry(url, options, retries = 10, delay = 20000) {
@@ -541,15 +428,15 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
             try {
                 const response = await fetch(url, options);
                 if (response.ok) {
-                    return response.json();  // Directamente devuelve el JSON parseado
+                    return response.json();  // Directly return the parsed JSON
                 } else if (response.status >= 500 && response.status < 600) {
-                    console.warn(`Error del servidor (status: ${response.status}). Reintentando... (${i + 1}/${retries})`);
+                    console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
                 } else {
                     const errorResponse = await response.json();
-                    throw new Error(`Error HTTP! Status: ${response.status}, Message: ${errorResponse.message}`);
+                    throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
                 }
             } catch (error) {
-                console.error(`Intento de fetch ${i + 1} fallido: ${error.message}`);
+                console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
                 if (i === retries - 1) {
                     throw error;
                 }
@@ -572,15 +459,15 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
                 return response.json().then(data => {
                     if (data.fetch_result) {
                         checkImageStatus(data.fetch_result, data.transformed_prompt);
-                        throw new Error(`Generación de imagen en progreso. Comprobando estado...`);
+                        throw new Error(`Image generation in progress. Checking status...`);
                     } else {
-                        throw new Error(`Error HTTP! Status: ${response.status}`);
+                        throw new Error(`HTTP error! Status: ${response.status}`);
                     }
                 }).catch(() => {
-                    throw new Error(`Generación de imagen en progreso. Pero no se proporcionó URL de estado.`);
+                    throw new Error(`Image generation in progress. But no status URL provided.`);
                 });
             } else {
-                throw new Error(`Error HTTP! Status: ${response.status}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
         }
         return response.json();
@@ -590,21 +477,21 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Mostrar imágenes
-            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+            showModal(imageUrls, data.transformed_prompt);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
         } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continuar comprobando el estado si está procesando
+            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
         } else {
-            showError(data);  // Mostrar error si se encuentran otros estados
+            showError(data);  // Show error if other statuses are encountered
         }
     })
     .catch(error => {
-        if (!error.message.includes("Generación de imagen en progreso")) {
-            showError(error);  // Captura y muestra errores del fetch o del parseo JSON
+        if (!error.message.includes("Image generation in progress")) {
+            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
         }
     });
 
-    // Definir la función checkImageStatus
+    // Define the checkImageStatus function
     function checkImageStatus(fetchResultUrl, transformedPrompt) {
         fetch(fetchResultUrl, {
             method: 'POST',
@@ -615,7 +502,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Error al buscar el estado de la imagen. Status: ${response.status}`);
+                throw new Error(`Error fetching image status. Status: ${response.status}`);
             }
             return response.json();
         })
@@ -624,27 +511,25 @@ function generateImages(imageUrl, selectedValues, isImg2Img, promptEndy) {
                 if (data.eta) {
                     document.getElementById('etaValue').textContent = data.eta;
                 }
-                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Verificar nuevamente después de 5 segundos
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
             } else if (data.status === "success" && data.output) {
                 const imageUrls = data.output.map(url =>
                     url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
                 );
-                showModal(imageUrls, transformedPrompt);  // Mostrar imágenes
-                hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+                showModal(imageUrls, transformedPrompt);  // Display images
+                hideGeneratingImagesDialog();  // Hide any loading dialogs
             } else {
                 showError(data);
             }
         })
         .catch(error => {
-            console.error('Error al comprobar el estado de la imagen:', error);
+            console.error('Error checking image status:', error);
             showError(error);
         });
     }
 }
 
-// Fin del código de imagen
 
-//end code image
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
