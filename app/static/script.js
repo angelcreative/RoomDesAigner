@@ -614,8 +614,8 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
 
 //FWR
 
-    
- function generateImagesWithRetry(prompt, retries = 5, delay = 2000) {
+// Llamada a fetchWithRetry en generateImages
+function generateImagesWithRetry(prompt, retries = 5, delay = 2000) {
     fetch("/generate-images", {
         method: "POST",
         headers: {
@@ -624,33 +624,31 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
         body: JSON.stringify(prompt)
     })
     .then(response => {
-        if (!response.ok) {
-            if (response.status >= 500 && response.status < 600) {
-                return response.json().then(data => {
+        return response.json().then(data => {
+            if (!response.ok) {
+                if (response.status >= 500 && response.status < 600) {
                     if (data.fetch_result) {
                         checkImageStatus(data.fetch_result, data.transformed_prompt);
                         throw new Error(`Image generation in progress. Checking status...`);
                     } else {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
-                }).catch(() => {
+                } else {
                     throw new Error(`HTTP error! Status: ${response.status}`);
-                });
-            } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
             }
-        }
-        return response.json();
+            return data;
+        });
     })
     .then(data => {
         if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
+            showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
         } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
@@ -659,7 +657,7 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
         if (retries > 0) {
             setTimeout(() => generateImagesWithRetry(prompt, retries - 1, delay * 2), delay);
         } else if (!error.message.includes("Image generation in progress")) {
-            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+            showError(error);  // Mostrar errores si se agotaron los reintentos
         }
     });
 }
@@ -674,23 +672,25 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         body: JSON.stringify({ prompt: transformedPrompt })
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
+        return response.json().then(data => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return data;
+        });
     })
     .then(data => {
         if (data.status === 'processing') {
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Revisar de nuevo después de 5 segundos
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, transformedPrompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
+            showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
+            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
@@ -700,8 +700,10 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         showError(error);
     });
 }
-   
-    
+
+// Inicia el proceso de generación con reintentos
+generateImagesWithRetry(prompt);
+
     
 //end FWR
 
