@@ -357,8 +357,8 @@ document.getElementById("colorExtractionInput").addEventListener("change", funct
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const thumbnailImage = document.getElementById("colorThumbnail");
-            thumbnailImage.src = e.target.result;
+            const colorThumbnail = document.getElementById("colorThumbnail");
+            colorThumbnail.src = e.target.result;
 
             const img = new Image();
             img.src = e.target.result;
@@ -372,8 +372,8 @@ document.getElementById("colorExtractionInput").addEventListener("change", funct
             };
 
             // Mostrar la miniatura
-            const thumbnailContainer = document.querySelector(".thumbImg");
-            thumbnailContainer.style.display = 'block';
+            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+            colorThumbContainer.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
@@ -385,8 +385,8 @@ function rgbToHex(r, g, b) {
 }
 
 // Función para limpiar la imagen y los colores extraídos
-document.getElementById('clearImg').addEventListener('click', function() {
-    clearImage();
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    clearColorImage();
     extractedColors = []; // Limpiar colores extraídos
     console.log("Extracted Colors cleared:", extractedColors);
 
@@ -394,14 +394,14 @@ document.getElementById('clearImg').addEventListener('click', function() {
     document.getElementById('colorExtractionInput').value = '';
 });
 
-function clearImage() {
+function clearColorImage() {
     // Resetear la miniatura
-    const thumbnail = document.getElementById('thumbnail');
-    thumbnail.src = '';
+    const colorThumbnail = document.getElementById('colorThumbnail');
+    colorThumbnail.src = '';
 
     // Ocultar el contenedor de la miniatura
-    const thumbContainer = document.querySelector('.thumbImg');
-    thumbContainer.style.display = 'none';
+    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+    colorThumbContainer.style.display = 'none';
 }
 
 
