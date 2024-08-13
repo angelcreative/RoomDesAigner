@@ -612,52 +612,57 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 }
 
-// Llamada a fetchWithRetry en generateImages
-fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => {
-    if (!response.ok) {
-        if (response.status >= 500 && response.status < 600) {
-            return response.json().then(data => {
-                if (data.fetch_result) {
-                    checkImageStatus(data.fetch_result, data.transformed_prompt);
-                    throw new Error(`Image generation in progress. Checking status...`);
-                } else {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            }).catch(() => {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            });
-        } else {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    }
-    return response.json();
-})
-.then(data => {
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Display images
-        hideGeneratingImagesDialog();  // Hide any loading dialogs
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
-    } else {
-        throw new Error('Image generation failed or unexpected status.');
-    }
-})
-.catch(error => {
-    if (!error.message.includes("Image generation in progress")) {
-        showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-    }
-});
+//FWR
 
+    
+ function generateImagesWithRetry(prompt, retries = 5, delay = 2000) {
+    fetch("/generate-images", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status >= 500 && response.status < 600) {
+                return response.json().then(data => {
+                    if (data.fetch_result) {
+                        checkImageStatus(data.fetch_result, data.transformed_prompt);
+                        throw new Error(`Image generation in progress. Checking status...`);
+                    } else {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                }).catch(() => {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                });
+            } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, data.transformed_prompt);  // Display images
+            hideGeneratingImagesDialog();  // Hide any loading dialogs
+        } else if (data.status === "processing" && data.fetch_result) {
+            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+        } else {
+            throw new Error('Image generation failed or unexpected status.');
+        }
+    })
+    .catch(error => {
+        if (retries > 0) {
+            setTimeout(() => generateImagesWithRetry(prompt, retries - 1, delay * 2), delay);
+        } else if (!error.message.includes("Image generation in progress")) {
+            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+        }
+    });
+}
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
@@ -666,7 +671,7 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ prompt: transformedPrompt })
     })
     .then(response => {
         if (!response.ok) {
@@ -695,6 +700,10 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         showError(error);
     });
 }
+   
+    
+    
+//end FWR
 
 
 function showError(error) {
