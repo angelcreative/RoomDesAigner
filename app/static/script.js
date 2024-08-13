@@ -372,7 +372,7 @@ document.getElementById("colorExtractionInput").addEventListener("change", funct
             };
 
             // Mostrar la miniatura
-            const colorThumbContainer = document.querySelector(".thumbImg");
+            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
             colorThumbContainer.style.display = 'block';
         };
         reader.readAsDataURL(file);
@@ -400,7 +400,7 @@ function clearColorImage() {
     colorThumbnail.src = '';
 
     // Ocultar el contenedor de la miniatura
-    const colorThumbContainer = document.querySelector(".thumbImg");
+    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
     colorThumbContainer.style.display = 'none';
 }
 
