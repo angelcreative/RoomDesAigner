@@ -631,8 +631,7 @@ fetch("/generate-images", {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
             }).catch(() => {
-                checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
-                throw new Error(`Image generation in progress. Checking status...`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             });
         } else {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -650,7 +649,7 @@ fetch("/generate-images", {
     } else if (data.status === "processing" && data.fetch_result) {
         checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
     } else {
-        showError(data);  // Show error if other statuses are encountered
+        throw new Error('Image generation failed or unexpected status.');
     }
 })
 .catch(error => {
@@ -658,7 +657,6 @@ fetch("/generate-images", {
         showError(error);  // Catch and display errors from the fetch operation or JSON parsing
     }
 });
-
 
 
 // Define the checkImageStatus function
@@ -670,7 +668,12 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === 'processing') {
             if (data.eta) {
@@ -684,7 +687,7 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
             showModal(imageUrls, transformedPrompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
         } else {
-            showError(data);
+            throw new Error('Image generation failed or unexpected status.');
         }
     })
     .catch(error => {
