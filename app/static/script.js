@@ -491,7 +491,10 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         }
     });
 
-    // Define the checkImageStatus function
+   
+}
+
+ // Define the checkImageStatus function
     function checkImageStatus(fetchResultUrl, transformedPrompt) {
         fetch(fetchResultUrl, {
             method: 'POST',
@@ -527,9 +530,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
             showError(error);
         });
     }
-}
-
-
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
 
