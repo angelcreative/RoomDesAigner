@@ -256,70 +256,10 @@ function generateFractalText() {
     }
     
     function showGeneratingImagesDialog() {
-    document.getElementById('generatingImagesDialog').style.display = 'block';
-    document.getElementById('dialogTitle').innerHTML = `
-        
-        <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will<br>be ready in less than 120 seconds.</p>
-         <p id="chronometer">00:00:00</p>
-    `;
-
-    const changingMessages = [
-       'painting walls', 'furnishing room', 'choosing decoration', 
-    'adding plants', 'hanging lamps', 'placing furniture', 
-    'adjusting lighting', 'selecting colors', 'arranging art', 
-    'organizing shelves', 'setting the table', 'tidying up', 
-    'adding textures', 'installing hardware', 'finishing touches', 
-    'polishing surfaces', 'applying finishes', 'arranging flowers', 
-    'laying carpets', 'curating books', 'mounting frames', 
-    'setting up tech', 'installing curtains', 'hanging mirrors',
-    'refinishing floors', 'installing lighting fixtures', 'choosing fabrics',
-    'updating hardware', 'placing rugs', 'installing shelves',
-    'mounting TVs', 'cleaning windows', 'arranging pillows', 
-    'painting trim', 'hanging blinds', 'decorating with candles',
-    'adding greenery', 'staging furniture', 'setting up appliances',
-    'installing art', 'organizing pantry', 'decorating walls', 
-    'designing layout', 'setting up workspace', 'choosing flooring',
-    'placing decor items', 'organizing closet', 'setting up entertainment system',
-    'arranging outdoor furniture'
-    ];
-
-    let chronometerInterval;
-    let textChangeInterval;
-
-    function resetChronometer() {
-        clearInterval(chronometerInterval);
-        const chronometer = document.getElementById('chronometer');
-        let milliseconds = 0;
-
-        chronometer.textContent = '00:00:00';
-
-        chronometerInterval = setInterval(() => {
-            milliseconds += 10;
-            const minutes = Math.floor((milliseconds / 1000) / 60);
-            const seconds = Math.floor((milliseconds / 1000) % 60);
-            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
-            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
-        }, 10);
+        document.getElementById('generatingImagesDialog').style.display = 'block';
+        document.getElementById('dialogTitle').textContent = 'Crafting Your Vision';
+  
     }
-
-    function changeText() {
-        let index = 0;
-        const changingText = document.getElementById('changingText');
-        
-        changingText.textContent = changingMessages[index];
-
-        clearInterval(textChangeInterval);
-
-        textChangeInterval = setInterval(() => {
-            index = (index + 1) % changingMessages.length;
-            changingText.textContent = changingMessages[index];
-        }, 4000);
-    }
-
-    resetChronometer();
-    changeText();
-}
 
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
@@ -398,23 +338,18 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 
 const personValue = document.getElementById("person").value;
-const modelId = personValue ? "ae-sdxl-v1" : "sdxlceshi";
+const modelId = personValue ? "epicrealism-xl" : "sdxlceshi";
 
 // Initialize variables for LoRA model and strength
-let lora = "clothingadjustloraap";
+let lora = "xl_more_enhancer";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "ae-sdxl-v1") {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
+if (modelId === "epicrealism-xl") {
+  lora = "perfect-eyes-xl,real-skin-lora,greatlightningmiracle,scene,xl_more_enhancer,open-lingerie-lora,perfect-round-ass-olaz";
 } else if (modelId === "sdxlceshi") {
-  lora = "clothingadjustloraap";
+  lora = "yqmaterailenhancer,greatlightningmiracle,add-uhd-detail";
 }
-    
-    
-    
-    
-
 
 const prompt = {
   key: apiKey,
@@ -438,8 +373,28 @@ const prompt = {
   enhance_prompt: "no",
   //highres_fix: "yes"
 };
-    
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
+//,epicrealismhelper
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
+    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
+    //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
+    //epicrealism-xl
+    //clothingadjustloraap
+ //architectureexterior
+    //yqmaterailenhancer
+    
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
@@ -491,50 +446,37 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
- fetch("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status >= 500 && response.status < 600) {
-                return response.json().then(data => {
-                    if (data.fetch_result) {
-                        checkImageStatus(data.fetch_result, data.transformed_prompt);
-                        throw new Error(`Image generation in progress. Checking status...`);
-                    } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                }).catch(() => {
-                    throw new Error(`Image generation in progress. But no status URL provided.`);
-                });
-            } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
-        } else {
-            showError(data);  // Show error if other statuses are encountered
-        }
-    })
-    .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-        }
-    });
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        // Directly throw an error with the status to handle it in the catch block
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();  // Parse JSON only if the response was OK
+})
+.then(data => {
+    // Handle the API response based on its status
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+    } else {
+        showError(data);  // Show error if other statuses are encountered
+    }
+})
+.catch(error => {
+    showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+});
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
