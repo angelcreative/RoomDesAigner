@@ -123,18 +123,19 @@ function handleSubmit(event) {
 
 
 // Function to get selected values
-// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
         "home_room",
         "design_style",
-        
         "generated_artwork",
         "point_of_view",
         "color_scheme",
+        "camera_select",
+        "film_grain",
+        "action_select",
+        "person_descriptor",
         "room_size",
-        
         "space_to_be_designed",
         "children_room",
         "pool",
@@ -148,7 +149,6 @@ function getSelectedValues() {
         "designed_by_this_interior_designer",
         "designed_by_this_architect",
         "lens_used",
-        "image_color",
         "photo_lighting_type",
         "illumination",
         "door",
@@ -184,14 +184,15 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
-    const colorElements = [
+    
+     const colorElements = [
         { id: "dominant_color", switchId: "use_colors" },
         { id: "secondary_color", switchId: "use_colors" },
         { id: "accent_color", switchId: "use_colors" },
         { id: "walls_paint_color", switchId: "use_walls_paint_color" },
         { id: "furniture_color", switchId: "use_furniture_color" }
     ];
-
+    
     const values = {};
 
     elementIds.forEach(elementId => {
@@ -200,8 +201,8 @@ function getSelectedValues() {
             values[elementId] = element.value;
         }
     });
-
-    colorElements.forEach(colorElement => {
+    
+     colorElements.forEach(colorElement => {
         const colorInput = document.getElementById(colorElement.id);
         const colorSwitch = document.getElementById(colorElement.switchId);
         if (colorInput && colorSwitch && colorSwitch.checked) {
@@ -213,6 +214,7 @@ function getSelectedValues() {
 
     return values;
 }
+
 
 // Event listener for the color switches
 document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
@@ -260,7 +262,7 @@ function generateFractalText() {
     document.getElementById('dialogTitle').innerHTML = `
         
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will<br>be ready in less than 120 seconds.</p>
+        <p>Sit back and relax, your design will be ready in less than 120 seconds.</p>
          <p id="chronometer">00:00:00</p>
     `;
 
@@ -354,7 +356,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, 8K.` ;
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph .` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -397,49 +399,79 @@ console.log(`Width: ${width}, Height: ${height}`);
 // Determine the model_id based on the selection of the "person" field
 
 
-const personValue = document.getElementById("person").value;
-const modelId = personValue ? "ae-sdxl-v1" : "sdxlceshi";
+// Get selected models from the form
+const personValue = document.getElementById("personModel").value;
+const furnitureValue = document.getElementById("furnitureModel").value;
+
+// Determine if the person model or furniture model should be used
+let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+
+if (personValue !== "") {
+  modelId = personValue;
+} else if (furnitureValue !== "") {
+  modelId = furnitureValue;
+}
 
 // Initialize variables for LoRA model and strength
 let lora = "clothingadjustloraap";
 let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
-if (modelId === "ae-sdxl-v1") {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz";
-} else if (modelId === "sdxlceshi") {
-  lora = "clothingadjustloraap";
-}
-    
-    
-    
-    
+if (modelId === personValue) {
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+} else if (modelId === furnitureValue) {
+  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+}  
 
-
+// Now build the JSON object with the updated values
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "lipstick, makeup, nudity, multiple faces, deformed face, two persons, two humans, multiple persons, multiple women, multiple girls, multiple men, multiple boys, 2girl, cloned face, double torso, extra arms, extra hands, ugly, deformed hands, deformed feet, extra limbs, deformed limbs, disfigured, deformed, body out of frame, bad anatomy, distorted face, deformed face, (deformed iris), (deformed pupils), semi-realistic, (anime:1), text, close up, cropped, out of frame, worst quality, (((low quality))), jpeg artifacts, (ugly:1), duplicate, morbid, mutilated, ((extra fingers:1)), mutated hands, ((poorly drawn hands:1)), poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, ((extra limbs:1)), cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, (((fused fingers:1))), (too many fingers:1), long neck, ((((split image))))",
+  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 7.5,
-  steps: 20,
+  guidance_scale: 5,
+  steps: 41,
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
   lora_model: lora,
   lora_strength: lora_strength,
-  scheduler: "UniPCMultistepScheduler",
+  scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
   safety_checker: "no",
   track_id: null,
   enhance_prompt: "no",
   //highres_fix: "yes"
 };
-    
+    //xl_more_enhancer,
+    //real-skin-lora
+    //lora 
+    //perfect-eyes-xl,hand-detail-xl,
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
+//,epicrealismhelper
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
+    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
+    //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
+    //epicrealism-xl
+    //clothingadjustloraap
+ //architectureexterior
+    //yqmaterailenhancer
+    
     
 if (isImg2Img && imageUrl) {
     prompt.init_image = imageUrl;
@@ -491,50 +523,76 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 // Fetch request to generate images
 
- fetch("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status >= 500 && response.status < 600) {
-                return response.json().then(data => {
-                    if (data.fetch_result) {
-                        checkImageStatus(data.fetch_result, data.transformed_prompt);
-                        throw new Error(`Image generation in progress. Checking status...`);
-                    } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                }).catch(() => {
-                    throw new Error(`Image generation in progress. But no status URL provided.`);
-                });
+async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return response.json();  // Directly return the parsed JSON
+            } else if (response.status >= 500 && response.status < 600) {
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
             } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error;
             }
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, data.transformed_prompt);  // Display images
-            hideGeneratingImagesDialog();  // Hide any loading dialogs
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+}
+
+// Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        if (response.status >= 500 && response.status < 600) {
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                checkImageStatus("/check-status-url", ""); // Usa un URL de estado genérico si es necesario
+                throw new Error(`Image generation in progress. Checking status...`);
+            });
         } else {
-            showError(data);  // Show error if other statuses are encountered
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    })
-    .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);  // Catch and display errors from the fetch operation or JSON parsing
-        }
-    });
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Display images
+        hideGeneratingImagesDialog();  // Hide any loading dialogs
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Continue checking status if processing
+    } else {
+        showError(data);  // Show error if other statuses are encountered
+    }
+})
+.catch(error => {
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Catch and display errors from the fetch operation or JSON parsing
+    }
+});
+
+
 
 // Define the checkImageStatus function
 function checkImageStatus(fetchResultUrl, transformedPrompt) {
@@ -548,36 +606,31 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            // Update the ETA display
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 2000); // Check again after 2 seconds
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Check again after 5 seconds
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, transformedPrompt);  // Display images
             hideGeneratingImagesDialog();  // Hide any loading dialogs
-            //document.getElementById('etaDisplay').textContent = "Images are ready!";  // Update ETA display
         } else {
-            // Handle any other statuses or errors
             showError(data);
-           // document.getElementById('etaDisplay').textContent = "Error processing images.";  // Update ETA display on error
         }
     })
     .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-        //document.getElementById('etaDisplay').textContent = "Failed to check image status.";  // Update ETA display on fetch error
     });
 }
 
 
 function showError(error) {
-    // Update the user interface to show the error
-    console.error(error);
-    alert("Error: " + error.message);
+    console.error("Error generating images:", error);
+    alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
+    hideOverlay(); // Oculta la superposición y el mensaje de carga
 }
 
 function displayImages(images) {
@@ -881,114 +934,110 @@ const upscaleImage = async (imageUrl) => {
 
     
 // END UPSCALE
+
+
+//reverse
     
-//REVERSE
-
-
-
 // Function to search an image on RapidAPI and display results in a new tab
-function searchImageOnRapidAPI(imageUrl) {
-    const url = 'https://real-time-lens-data.p.rapidapi.com/search';
-    const params = new URLSearchParams({
-        url: imageUrl,
-        language: 'en',
-        country: 'us'
-    });
+async function searchImageOnRapidAPI(imageUrl) {
+    const url = `https://reverse-image-search-by-copyseeker.p.rapidapi.com/?imageUrl=${encodeURIComponent(imageUrl)}`;
 
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-            'X-RapidAPI-Host': 'real-time-lens-data.p.rapidapi.com'
+            'X-RapidAPI-Key': '397b9622b6mshdcad3d01de5d22fp110064jsn7b977be6f115',
+            'X-RapidAPI-Host': 'reverse-image-search-by-copyseeker.p.rapidapi.com'
         }
     };
 
-    fetch(`${url}?${params.toString()}`, options)
-        .then(response => response.json())
-        .then(data => displayResultsInNewTab(data))
-        .catch(err => console.error('Error:', err));
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        displayResultsInNewTab(result);
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 // Function to display search results in a new tab
-
-
-  function displayResultsInNewTab(data) {
+function displayResultsInNewTab(data) {
     const newWindow = window.open('', '_blank');
     const htmlContent = `
         <html>
         <head>
             <title>Search Results</title>
-             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
+            <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
             <style>
-
-            html {
-    background: #15202b;
-}
-
-img.logoRD {
-    margin: 20px auto 0 auto;
-    display: block;
-    height: 50px;
-}
-
-.maskImage {
-    height: 160px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    overflow: hidden;
-    width: 200px;
-}
-
-.provider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    font-size: 12px;
-    margin-bottom: 12px;
-}
-
-
-
-
-h3 {
-    padding: 10px;
-    white-space: pre-wrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 160px;
-    font-weight: 300;
-    font-size: 12px;
-}
-
-h1 {
-    color: #a9fff5;
-    margin: 2rem 0;
-    font-weight: lighter;
-    text-align: center;
-    font-family: sans-serif;
-    font-size: 20px;
-}
-
-
-                .card-container {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    justify-content: space-around;
+                html {
+                    background: #15202b;
                 }
-  .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+                img.logoRD {
+                    margin: 20px auto 0 auto;
+                    display: block;
+                    height: 50px;
+                }
+                
+                h3 {
+                    padding: 10px;
+                    white-space: pre-wrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 160px;
+                    font-weight: 300;
+                    font-size: 12px;
+                }
+                h1 {
+                    color: #a9fff5;
+                    margin: 2rem 0;
+                    font-weight: lighter;
+                    text-align: center;
+                    font-family: sans-serif;
+                    font-size: 20px;
+                }
+                
+                p {
+                    text-align: center;
+                    color: #6d7b87;
+                    font-family: courier;
+                }
+                p a {
+                    font-size: 16px;
+                }
+                .card img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                }
+                .source-icon {
+                    width: 20px !important;
+                    height: 20px !important;
+                    margin-right: 4px;
+                }
+                a {
+                    color: #9aabba;
+                    font-size: 12px;
+                    text-decoration: underline;
+                }
+
+
+.card-container {
+    column-count: 4; /* Number of columns */
+    column-gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    break-inside: avoid;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 200px;
-    padding: 0 0 20px 0;
-    text-align: center;
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
@@ -997,48 +1046,32 @@ h1 {
     font-size: 14px;
 }
 
-
-p {
-    text-align: center;
-    color: #6d7b87;
-    font-family: courier;
+.maskImage {
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
 }
 
-p a {
-font-size:16px;
-}
-                .card img {
-                    width: 100%;
-                    height: auto;
-                    border-radius: 4px;
-                }
-               .source-icon {
-    width: 20px !important;
-    height: 20px !important;
-    margin-right: 4px;
-}
-                a {
-    color: #9aabba;
-    font-size: 12px;
-    text-decoration: underline;
+.maskImage img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
 }
             </style>
         </head>
         <body>
-           <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
+            <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
             <h1 class="headerStore">Image Search Results</h1>
-            <p>For refined product search, download the desired image,<a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
-
+            <p>For refined product search, download the desired image, <a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
             <div class="card-container">
-                ${data.data.visual_matches.map(match => `
+                ${data.VisuallySimilar.map(match => `
                     <div class="card">
                         <div class="maskImage">
-                        <img src="${match.thumbnail}" alt="Thumbnail">
+                            <img src="${match}" alt="Thumbnail">
                         </div>
-                        <h3 class="cardTitle">${match.title}</h3>
-                        <div class="provider"><img class="source-icon" src="${match.source_icon}" alt="Source Icon">  <p>${match.source}</p></div>
-                       
-                        <a href="${match.link}" target="_blank">Visit product</a>
                     </div>
                 `).join('')}
             </div>
@@ -1049,10 +1082,7 @@ font-size:16px;
     newWindow.document.close();
 }
 
-
-
-
-//END REVERSE
+    //end reverse
 
 
 
@@ -1174,8 +1204,13 @@ function showModal(imageUrls, transformedPrompt) {
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
         const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
-        [downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton].forEach(button => buttonsContainer.appendChild(button));
+
+
+[downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+        
+      
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
@@ -1344,36 +1379,58 @@ document.addEventListener("DOMContentLoaded", function() {
 
 //disable MB
 
-const selectElements = document.querySelectorAll("select");
+const hiddenInputs = document.querySelectorAll('input[type="hidden"]');
 
-// Function to check if all select options have empty values
+// Function to check if all hidden input options have empty values
 function areAllOptionsEmpty() {
-  for (const select of selectElements) {
-    if (select.value !== "") {
-      return false; // At least one option has a non-empty value
+  for (const input of hiddenInputs) {
+    if (input.value !== "") {
+      return false; // At least one hidden input has a non-empty value
     }
   }
   return true; // All options have empty values
 }
-//test
-// Function to handle changes in select elements
-function handleSelectChange() {
+
+// Function to handle changes in hidden input elements
+function handleInputChange() {
   const allOptionsEmpty = areAllOptionsEmpty();
   magicButton.disabled = allOptionsEmpty; // Disable magicButton if all options have empty values
 }
 
-// Listen for changes in select elements
-for (const select of selectElements) {
-  select.addEventListener("change", handleSelectChange);
+// Listen for changes in hidden input elements
+for (const input of hiddenInputs) {
+  input.addEventListener("change", handleInputChange);
 }
 
-
-
-
-
-
 // Initial check on page load
-handleSelectChange();
+handleInputChange();
+
+// Add event listeners for custom dropdowns
+document.querySelectorAll('.custom-dropdown .option').forEach(option => {
+  option.addEventListener('click', function() {
+    const dropdown = this.closest('.custom-dropdown');
+    const selectedText = dropdown.querySelector('.selected-text');
+    const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+    
+    selectedText.textContent = this.textContent;
+    hiddenInput.value = this.getAttribute('value');
+    hiddenInput.dispatchEvent(new Event('change')); // Trigger change event
+  });
+});
+
+// Add event listeners for clear selection buttons
+document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button => {
+  button.addEventListener('click', function() {
+    const dropdown = this.closest('.custom-dropdown');
+    const selectedText = dropdown.querySelector('.selected-text');
+    const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+    
+    selectedText.textContent = dropdown.getAttribute('data-placeholder');
+    hiddenInput.value = '';
+    hiddenInput.dispatchEvent(new Event('change')); // Trigger change event
+  });
+});
+
 
 
 
@@ -1453,3 +1510,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
         }
     });
 });
+
