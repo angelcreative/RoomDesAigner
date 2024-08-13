@@ -357,7 +357,7 @@ document.getElementById("colorExtractionInput").addEventListener("change", funct
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const thumbnailImage = document.getElementById("thumbnail");
+            const thumbnailImage = document.getElementById("colorThumbnail");
             thumbnailImage.src = e.target.result;
 
             const img = new Image();
