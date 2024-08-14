@@ -81,7 +81,6 @@ def check_image_availability(url, timeout=60, interval=5):
         time.sleep(interval)
     return False
 
-# Define your generate_images endpoint
 
 
 # Define your generate_images endpoint
@@ -101,7 +100,7 @@ def generate_images():
         if not prompt_text:
             return jsonify({"error": "Missing prompt text"}), 400
         
-        # Transform the prompt using OpenAI API
+        # Transform the prompt using OpenAI API (or any other transformation)
         transformed_prompt = transform_prompt(prompt_text)
         
         # Update the prompt in the data with the transformed prompt
@@ -118,14 +117,14 @@ def generate_images():
             if not request_id:
                 return jsonify({"error": "No request_id returned by the server"}), 500
             
-            # Poll the fetch API to check if the images are ready
+            # Fetch the images using the request_id
             fetch_url = 'https://modelslab.com/api/v6/images/fetch'
             fetch_payload = {
                 "key": data.get('key'),  # Assuming the API key is passed in the original request
                 "request_id": request_id
             }
             
-            # Retry up to 10 times with increasing delays
+            # Poll the fetch API to check if the images are ready
             retries = 10
             delay = 5  # Start with a 5-second delay
             
@@ -148,7 +147,9 @@ def generate_images():
     else:
         return jsonify({"error": "Insufficient credits"}), 403
 
-
+    
+    
+    
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'
     query_body = {
