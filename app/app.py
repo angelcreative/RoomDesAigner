@@ -11,6 +11,7 @@ import logging
 import json
 import io
 import base64
+import time
 import openai
 
 app = Flask(__name__)
@@ -81,6 +82,9 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 # Define your generate_images endpoint
+
+
+# Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     if 'username' not in session:
@@ -102,28 +106,48 @@ def generate_images():
         
         # Update the prompt in the data with the transformed prompt
         data['prompt'] = transformed_prompt
-        #else 'https://modelslab.com/api/v6/realtime/text2img'
+        
+        # Choose the correct URL based on whether it's an img2img request
         url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
         response = requests.post(url, json=data)
+        
         if response.status_code == 200:
             result = response.json()
-            # Poll the image URLs to check availability
-            all_images_available = True
-            for image_url in result.get('links', []):
-                if not check_image_availability(image_url):
-                    all_images_available = False
-                    break
+            request_id = result.get('id')  # Get the request_id to fetch images later
+            
+            if not request_id:
+                return jsonify({"error": "No request_id returned by the server"}), 500
+            
+            # Poll the fetch API to check if the images are ready
+            fetch_url = 'https://modelslab.com/api/v6/images/fetch'
+            fetch_payload = {
+                "key": data.get('key'),  # Assuming the API key is passed in the original request
+                "request_id": request_id
+            }
+            
+            # Retry up to 10 times with increasing delays
+            retries = 10
+            delay = 5  # Start with a 5-second delay
+            
+            for i in range(retries):
+                fetch_response = requests.post(fetch_url, json=fetch_payload)
+                if fetch_response.status_code == 200:
+                    fetch_result = fetch_response.json()
+                    if fetch_result['status'] == "success":
+                        # Images are ready, return them to the user
+                        deduct_credits(username, 2)
+                        fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                        return jsonify(fetch_result)
+                else:
+                    time.sleep(delay)  # Wait for the delay before retrying
+                    delay *= 2  # Exponential backoff: double the delay each time
 
-            if all_images_available:
-                deduct_credits(username, 2)
-                result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                return jsonify(result)
-            else:
-                return jsonify({"error": "Image not available within the timeout period"}), 408
+            return jsonify({"error": "Image generation timed out"}), 408
         else:
             return jsonify({"error": "Image generation failed"}), response.status_code
     else:
         return jsonify({"error": "Insufficient credits"}), 403
+
 
 def get_user_data(username):
     query_url = f'{mongo_data_api_url}/action/findOne'

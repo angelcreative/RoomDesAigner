@@ -671,31 +671,25 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
         },
         body: JSON.stringify({ prompt: transformedPrompt })
     })
-    .then(response => {
-        if (!response.ok) {
-            if (retries > 0) {
-                console.warn(`Error al verificar estado (reintentando en ${delay / 1000} segundos)... Quedan ${retries} intentos.`);
-                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
-            } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
-            if (data.eta) {
-                document.getElementById('etaValue').textContent = data.eta;
+            if (retries > 0) {
+                console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
+            } else {
+                throw new Error('Image generation is taking too long. Please try again later.');
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries, delay), delay); // Revisar de nuevo después de un tiempo más largo
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
             hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+        } else if (data.status === "failed") {
+            throw new Error('Image generation failed.');
         } else {
-            throw new Error('Image generation failed or unexpected status.');
+            throw new Error('Unexpected status received from the server.');
         }
     })
     .catch(error => {
