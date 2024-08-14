@@ -614,7 +614,6 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
 
 //FWR
  
-    
     // Llamada a fetchWithRetry en generateImages
 fetch("/generate-images", {
     method: "POST",
@@ -663,20 +662,23 @@ fetch("/generate-images", {
     }
 });
 
-// Define la función checkImageStatus
-function checkImageStatus(fetchResultUrl, transformedPrompt) {
+// Define la función checkImageStatus con mayor retraso y más reintentos
+function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
     fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ prompt: transformedPrompt })
     })
     .then(response => {
         if (!response.ok) {
-            // Si no obtenemos una respuesta válida, volvemos a llamar a checkImageStatus después de un tiempo
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Reintentar después de 5 segundos
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            if (retries > 0) {
+                console.warn(`Error al verificar estado (reintentando en ${delay / 1000} segundos)... Quedan ${retries} intentos.`);
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
+            } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
         }
         return response.json();
     })
@@ -685,7 +687,7 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
             if (data.eta) {
                 document.getElementById('etaValue').textContent = data.eta;
             }
-            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt), 5000); // Revisar de nuevo después de 5 segundos
+            setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries, delay), delay); // Revisar de nuevo después de un tiempo más largo
         } else if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
@@ -698,10 +700,10 @@ function checkImageStatus(fetchResultUrl, transformedPrompt) {
     })
     .catch(error => {
         console.error('Error checking image status:', error);
-        // Aquí podría añadirse lógica para manejar un error continuo, pero por ahora solo se mostrará el error
         showError(error);
     });
 }
+
 
 
     
