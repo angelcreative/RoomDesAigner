@@ -108,7 +108,8 @@ def generate_images():
         
         # Choose the correct URL based on whether it's an img2img request
         url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-        response = requests.post(url, json=data)
+        response = requests.post(url, json=data, timeout=180)  # Aumenta el tiempo de espera a 180 segundos
+
         
         if response.status_code == 200:
             result = response.json()
