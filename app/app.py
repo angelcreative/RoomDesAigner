@@ -86,67 +86,76 @@ def check_image_availability(url, timeout=60, interval=5):
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
-    if 'username' not in session:
-        return jsonify({"error": "Not logged in"}), 401
+    try:
+        if 'username' not in session:
+            return jsonify({"error": "Not logged in"}), 401
 
-    username = session['username']
-    user_data = get_user_data(username)
-    if user_data and user_data.get('credits', 0) >= 2:
-        data = request.get_json()
-        
-        # Extract the promptText from the incoming data
-        prompt_text = data.get('prompt')
-        
-        if not prompt_text:
-            return jsonify({"error": "Missing prompt text"}), 400
-        
-        # Transform the prompt using OpenAI API (or any other transformation)
-        transformed_prompt = transform_prompt(prompt_text)
-        
-        # Update the prompt in the data with the transformed prompt
-        data['prompt'] = transformed_prompt
-        
-        # Choose the correct URL based on whether it's an img2img request
-        url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-        response = requests.post(url, json=data, timeout=180)  # Aumenta el tiempo de espera a 180 segundos
+        username = session['username']
+        user_data = get_user_data(username)
+        if user_data and user_data.get('credits', 0) >= 2:
+            data = request.get_json()
 
-        
-        if response.status_code == 200:
-            result = response.json()
-            request_id = result.get('id')  # Get the request_id to fetch images later
-            
-            if not request_id:
-                return jsonify({"error": "No request_id returned by the server"}), 500
-            
-            # Fetch the images using the request_id
-            fetch_url = 'https://modelslab.com/api/v6/images/fetch'
-            fetch_payload = {
-                "key": data.get('key'),  # Assuming the API key is passed in the original request
-                "request_id": request_id
-            }
-            
-            # Poll the fetch API to check if the images are ready
-            retries = 10
-            delay = 5  # Start with a 5-second delay
-            
-            for i in range(retries):
-                fetch_response = requests.post(fetch_url, json=fetch_payload)
-                if fetch_response.status_code == 200:
-                    fetch_result = fetch_response.json()
-                    if fetch_result['status'] == "success":
-                        # Images are ready, return them to the user
-                        deduct_credits(username, 2)
-                        fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                        return jsonify(fetch_result)
-                else:
+            # Extract the promptText from the incoming data
+            prompt_text = data.get('prompt')
+
+            if not prompt_text:
+                return jsonify({"error": "Missing prompt text"}), 400
+
+            # Transform the prompt using OpenAI API (or any other transformation)
+            transformed_prompt = transform_prompt(prompt_text)
+
+            # Update the prompt in the data with the transformed prompt
+            data['prompt'] = transformed_prompt
+
+            # Choose the correct URL based on whether it's an img2img request
+            url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+            response = requests.post(url, json=data, timeout=180)  # Aumenta el tiempo de espera a 180 segundos
+
+            if response.status_code == 200:
+                result = response.json()
+                request_id = result.get('id')  # Get the request_id to fetch images later
+
+                if not request_id:
+                    return jsonify({"error": "No request_id returned by the server"}), 500
+
+                # Fetch the images using the request_id
+                fetch_url = 'https://modelslab.com/api/v6/images/fetch'
+                fetch_payload = {
+                    "key": data.get('key'),  # Assuming the API key is passed in the original request
+                    "request_id": request_id
+                }
+
+                # Poll the fetch API to check if the images are ready
+                retries = 10
+                delay = 5  # Start with a 5-second delay
+
+                for i in range(retries):
+                    fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
+                    if fetch_response.status_code == 200:
+                        fetch_result = fetch_response.json()
+                        if fetch_result['status'] == "success":
+                            # Images are ready, return them to the user
+                            deduct_credits(username, 2)
+                            fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
+                            return jsonify(fetch_result)
                     time.sleep(delay)  # Wait for the delay before retrying
                     delay *= 2  # Exponential backoff: double the delay each time
 
-            return jsonify({"error": "Image generation timed out"}), 408
+                return jsonify({"error": "Image generation timed out"}), 408
+            else:
+                return jsonify({"error": "Image generation failed"}), response.status_code
         else:
-            return jsonify({"error": "Image generation failed"}), response.status_code
-    else:
-        return jsonify({"error": "Insufficient credits"}), 403
+            return jsonify({"error": "Insufficient credits"}), 403
+
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "The request timed out. Please try again."}), 504  # Gateway Timeout
+    except requests.exceptions.RequestException as e:
+        # Catch all other requests exceptions and return an error
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    except Exception as e:
+        # Catch any other exceptions and return an error
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+
 
     
     
