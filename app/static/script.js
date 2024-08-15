@@ -185,54 +185,32 @@ function getSelectedValues() {
     ];
 
     
-    // color hex
+     const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
     
-   const colorElements = [
-    { id: "dominant_color", switchId: "use_colors" },
-    { id: "secondary_color", switchId: "use_colors" },
-    { id: "accent_color", switchId: "use_colors" },
-    { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-    { id: "furniture_color", switchId: "use_furniture_color" }
-];
+    const values = {};
 
-const values = {};
-
-colorElements.forEach(colorElement => {
-    const colorInput = document.getElementById(colorElement.id);
-    const colorSwitch = document.getElementById(colorElement.switchId);
-    const colorNameSpan = document.getElementById(`${colorElement.id}_name`);
-
-    if (colorInput && colorSwitch) {
-        // Actualiza el nombre del color cuando cambia el color o se activa el switch
-        const updateColor = () => {
-            const hexColor = colorInput.value;
-            const n_match = ntc.name(hexColor);
-            const colorName = n_match[1]; // Obtiene el nombre del color
-
-            if (colorSwitch.checked) {
-                values[colorElement.id] = hexColor; // Guarda el valor HEX del color
-                colorNameSpan.textContent = colorName; // Muestra el nombre del color debajo del selector
-            } else {
-                values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-                colorNameSpan.textContent = ""; // Limpia el nombre del color mostrado
-            }
-        };
-
-        // Escucha los cambios en el input de color y el checkbox
-        colorInput.addEventListener('input', updateColor);
-        colorSwitch.addEventListener('change', updateColor);
-
-        // Inicializa el nombre del color al cargar la página
-        updateColor();
-    }
-});
-
-// Ejemplo para ver el resultado
-console.log(values);
-
-
+    elementIds.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            values[elementId] = element.value;
+        }
+    });
     
-    //end color hex
+     colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        if (colorInput && colorSwitch && colorSwitch.checked) {
+            values[colorElement.id] = colorInput.value;
+        } else {
+            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+        }
+    });
 
     return values;
 }
@@ -423,9 +401,8 @@ function displayExtractedColors(colors) {
         const colorName = color.name;
 
         colorCircle.style.backgroundColor = hexColor;
-        colorCircle.style.width = '30px';
-        colorCircle.style.height = '30px';
-        colorCircle.style.borderRadius = '50%';
+        colorCircle.style.width = '40px';
+        colorCircle.style.height = '40px';
         colorCircle.style.display = 'inline-block';
         colorCircle.style.marginRight = '5px';
 
