@@ -348,8 +348,7 @@ function generateFractalText() {
 
 // COLORSEX
 
-// Variable global para almacenar los colores extraídos
-let extractedColors = [];
+    let extractedColors = [];
 
 document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
     const file = event.target.files[0];
@@ -365,16 +364,19 @@ document.getElementById("colorExtractionInput").addEventListener("change", funct
                 const colorThief = new ColorThief();
                 const palette = colorThief.getPalette(img, 5); // Extrae la paleta de colores
 
-                // Convierte los colores a HEX y luego a nombres
+                // Convierte los colores a HEX y luego a nombres, almacenando ambos
                 extractedColors = palette.map(rgbArray => {
                     const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
                     const n_match = ntc.name(hexColor);
-                    return n_match[1]; // Aquí guardamos el nombre del color en lugar del código HEX
+                    return {
+                        name: n_match[1],  // Guardamos el nombre del color
+                        hex: hexColor      // Guardamos el código HEX
+                    };
                 });
 
                 // Mostrar los colores extraídos con nombres
                 displayExtractedColors(extractedColors);
-                console.log("Extracted Color Names:", extractedColors);
+                console.log("Extracted Color Names and HEX:", extractedColors);
             };
 
             const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
@@ -391,11 +393,12 @@ function rgbToHex(r, g, b) {
 function displayExtractedColors(colors) {
     const colorContainer = document.querySelector('.thumbExt');
     colorContainer.innerHTML = ''; // Limpiar cualquier color previo
-    colors.forEach(colorName => {
+    colors.forEach(color => {
         const colorCircle = document.createElement('div');
         
-        // Usar ntc.js para obtener el HEX correspondiente al nombre del color
-        const hexColor = ntc.nameToHex(colorName); // Si ntc.js no tiene esta función, debemos guardar ambos valores (nombre y HEX)
+        // Usamos el HEX para establecer el color de fondo
+        const hexColor = color.hex;
+        const colorName = color.name;
 
         colorCircle.style.backgroundColor = hexColor;
         colorCircle.style.width = '30px';
@@ -424,7 +427,7 @@ function displayExtractedColors(colors) {
 document.getElementById('clearColorImg').addEventListener('click', function() {
     clearColorImage();
     extractedColors = []; // Limpiar colores extraídos
-    console.log("Extracted Color Names cleared:", extractedColors);
+    console.log("Extracted Color Names and HEX cleared:", extractedColors);
 
     document.getElementById('colorExtractionInput').value = '';
 });
@@ -464,12 +467,14 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 let promptEndy = `dense furnishings and decorations.`;
 
 if (extractedColors.length > 0) {
-    const colorsString = extractedColors.join(', '); // Convierte el array de colores a una cadena
+    const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
+    const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
     promptEndy += ` Colors used: ${colorsString}.`;
 }
 
 // Ejemplo del uso final de promptEndy
 console.log(promptEndy);
+
   
  
 
