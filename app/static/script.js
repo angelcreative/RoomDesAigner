@@ -185,32 +185,48 @@ function getSelectedValues() {
     ];
 
     
-     const colorElements = [
-        { id: "dominant_color", switchId: "use_colors" },
-        { id: "secondary_color", switchId: "use_colors" },
-        { id: "accent_color", switchId: "use_colors" },
-        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-        { id: "furniture_color", switchId: "use_furniture_color" }
-    ];
-    
-    const values = {};
+ const colorElements = [
+    { id: "dominant_color", switchId: "use_colors" },
+    { id: "secondary_color", switchId: "use_colors" },
+    { id: "accent_color", switchId: "use_colors" },
+    { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+    { id: "furniture_color", switchId: "use_furniture_color" }
+];
 
-    elementIds.forEach(elementId => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            values[elementId] = element.value;
-        }
-    });
-    
-     colorElements.forEach(colorElement => {
-        const colorInput = document.getElementById(colorElement.id);
-        const colorSwitch = document.getElementById(colorElement.switchId);
-        if (colorInput && colorSwitch && colorSwitch.checked) {
-            values[colorElement.id] = colorInput.value;
-        } else {
-            values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-        }
-    });
+const values = {};
+
+colorElements.forEach(colorElement => {
+    const colorInput = document.getElementById(colorElement.id);
+    const colorSwitch = document.getElementById(colorElement.switchId);
+    const colorNameSpan = document.getElementById(`${colorElement.id}_name`);
+
+    if (colorInput && colorSwitch) {
+        // Actualiza el nombre del color cuando cambia el color o se activa el switch
+        const updateColorName = () => {
+            const hexColor = colorInput.value;
+            const n_match = ntc.name(hexColor);
+            const colorName = n_match[1];
+
+            if (colorSwitch.checked) {
+                values[colorElement.id] = colorName; // Guarda el nombre del color
+                colorNameSpan.textContent = colorName; // Muestra el nombre del color debajo del selector
+            } else {
+                values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
+                colorNameSpan.textContent = ""; // Limpia el nombre del color mostrado
+            }
+        };
+
+        // Escucha los cambios en el input de color y el checkbox
+        colorInput.addEventListener('input', updateColorName);
+        colorSwitch.addEventListener('change', updateColorName);
+
+        // Inicializa el nombre del color al cargar la página
+        updateColorName();
+    }
+});
+
+// Ejemplo para ver el resultado
+console.log(values);
 
     return values;
 }

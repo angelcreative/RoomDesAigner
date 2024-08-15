@@ -1483,28 +1483,7 @@ Color schemes</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></
 
 
    
-      <div class="coloresWheel colorPalette">
-    <!--start 603010-->
-    <div class="colorPickersGroup">
-        <div class="switchContainer colorSC">
-            <label class="switchLabel">Activate 60 30 10 color rule</label>
-            <input type="checkbox" id="use_colors"  >
-        </div>
-        <div class="colorPickers">
-            <div class="colorPaletteA">
-                <input type="color" id="dominant_color" value="#ffffff" class="colorPicker">
-            </div>
-            <div class="colorPaletteA">
-                <input type="color" id="secondary_color" value="#dddddd" class="colorPicker">
-            </div>
-            <div class="colorPaletteA">
-                <input type="color" id="accent_color" value="#1f1f1f" class="colorPicker">
-            </div>
-        </div>
-        <small>This decorating rule suggests that you should cover your room with 60% of a dominant color, 30% of a secondary color, and 10% of an accent shade</small>
-    </div>
-    <!--//end start 603010 -->
-    </div>
+   
      
      
      
@@ -1530,29 +1509,52 @@ Color schemes</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></
       <div class="coloresWheel colorPalette">
 
     <!-- wall color -->
+    <div class="coloresWheel colorPalette">
+    <!--start 603010-->
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
-            <label class="switchLabel">Activate wall color</label>
-            <input type="checkbox" id="use_walls_paint_color"  >
+            <label class="switchLabel">Activate 60 30 10 color rule</label>
+            <input type="checkbox" id="use_colors">
         </div>
         <div class="colorPickers">
             <div class="colorPaletteA">
-                <input type="color" id="walls_paint_color" value="#ffffff" class="colorPicker">
+                <input type="color" id="dominant_color" value="#ffffff" class="colorPicker">
+                <span id="dominant_color_name" class="colorName">White</span> <!-- Span para mostrar el nombre -->
             </div>
-        </div>
-   
-    <!-- furniture color -->
-   
-        <div class="switchContainer colorSC">
-            <label class="switchLabel">Activate furniture color</label>
-            <input type="checkbox" id="use_furniture_color"  >
-        </div>
-        <div class="colorPickers">
             <div class="colorPaletteA">
-                <input type="color" id="furniture_color" value="#ffffff" class="colorPicker">
+                <input type="color" id="secondary_color" value="#dddddd" class="colorPicker">
+                <span id="secondary_color_name" class="colorName">Light Gray</span> <!-- Span para mostrar el nombre -->
+            </div>
+            <div class="colorPaletteA">
+                <input type="color" id="accent_color" value="#1f1f1f" class="colorPicker">
+                <span id="accent_color_name" class="colorName">Dark Gray</span> <!-- Span para mostrar el nombre -->
             </div>
         </div>
+        <small>This decorating rule suggests that you should cover your room with 60% of a dominant color, 30% of a secondary color, and 10% of an accent shade</small>
     </div>
+    <!--//end start 603010 -->
+</div>
+
+<div class="colorOptions">
+    <div class="switchContainer colorSC">
+        <label class="switchLabel">Use wall paint color</label>
+        <input type="checkbox" id="use_walls_paint_color">
+    </div>
+    <div class="colorPaletteA">
+        <input type="color" id="walls_paint_color" value="#cccccc" class="colorPicker">
+        <span id="walls_paint_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
+    </div>
+
+    <div class="switchContainer colorSC">
+        <label class="switchLabel">Use furniture color</label>
+        <input type="checkbox" id="use_furniture_color">
+    </div>
+    <div class="colorPaletteA">
+        <input type="color" id="furniture_color" value="#999999" class="colorPicker">
+        <span id="furniture_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
+    </div>
+</div>
+
     <!-- // furniture color-->
 </div>
 
