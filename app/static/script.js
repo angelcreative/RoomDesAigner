@@ -214,7 +214,7 @@ function getSelectedValues() {
                 const colorName = n_match[1]; // Only the color name
 
                 if (colorSwitch.checked) {
-                    values[colorElement.id] = colorName; // Save only the color name
+                    values[colorElement.id] = `${colorName} (${hexColor})`; // Save the color name and HEX
                     colorNameSpan.textContent = colorName; // Display the color name under the picker
                 } else {
                     values[colorElement.id] = ""; // Assign an empty value if the switch is off
