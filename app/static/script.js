@@ -185,7 +185,9 @@ function getSelectedValues() {
     ];
 
     
-const colorElements = [
+    // color hex
+    
+   const colorElements = [
     { id: "dominant_color", switchId: "use_colors" },
     { id: "secondary_color", switchId: "use_colors" },
     { id: "accent_color", switchId: "use_colors" },
@@ -202,7 +204,7 @@ colorElements.forEach(colorElement => {
 
     if (colorInput && colorSwitch) {
         // Actualiza el nombre del color cuando cambia el color o se activa el switch
-        const updateColorName = () => {
+        const updateColor = () => {
             const hexColor = colorInput.value;
             const n_match = ntc.name(hexColor);
             const colorName = n_match[1]; // Obtiene el nombre del color
@@ -217,11 +219,11 @@ colorElements.forEach(colorElement => {
         };
 
         // Escucha los cambios en el input de color y el checkbox
-        colorInput.addEventListener('input', updateColorName);
-        colorSwitch.addEventListener('change', updateColorName);
+        colorInput.addEventListener('input', updateColor);
+        colorSwitch.addEventListener('change', updateColor);
 
         // Inicializa el nombre del color al cargar la página
-        updateColorName();
+        updateColor();
     }
 });
 
@@ -229,6 +231,8 @@ colorElements.forEach(colorElement => {
 console.log(values);
 
 
+    
+    //end color hex
 
     return values;
 }
@@ -419,9 +423,9 @@ function displayExtractedColors(colors) {
         const colorName = color.name;
 
         colorCircle.style.backgroundColor = hexColor;
-        colorCircle.style.width = '40px';
-        colorCircle.style.height = '40px';
-        colorCircle.style.borderRadius = '0%';
+        colorCircle.style.width = '30px';
+        colorCircle.style.height = '30px';
+        colorCircle.style.borderRadius = '50%';
         colorCircle.style.display = 'inline-block';
         colorCircle.style.marginRight = '5px';
 
@@ -485,8 +489,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 let promptEndy = `dense furnishings and decorations.`;
 
 if (extractedColors.length > 0) {
-    const colorHexes = extractedColors.map(color => color.hex); // Accede solo al HEX de cada color
-    const colorsString = colorHexes.join(', '); // Convierte el array de HEX a una cadena
+    const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
+    const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
     promptEndy += ` Colors used: ${colorsString}.`;
 }
 
@@ -1645,4 +1649,3 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
         }
     });
 });
-
