@@ -351,89 +351,95 @@ function generateFractalText() {
 // Variable global para almacenar los colores extraídos
 let extractedColors = [];
 
-    document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const colorThumbnail = document.getElementById("colorThumbnail");
-                colorThumbnail.src = e.target.result;
+document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const colorThumbnail = document.getElementById("colorThumbnail");
+            colorThumbnail.src = e.target.result;
 
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    const colorThief = new ColorThief(); // Suponiendo que usas la librería color-thief
-                    extractedColors = colorThief.getPalette(img, 5).map(rgbArray => {
-                        return rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
-                    });
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const colorThief = new ColorThief();
+                const palette = colorThief.getPalette(img, 5); // Extrae la paleta de colores
 
-                    // Mostrar los colores extraídos con nombres
-                    displayExtractedColors(extractedColors);
-                    console.log("Extracted Colors:", extractedColors);
-                };
+                // Convierte los colores a HEX y luego a nombres
+                extractedColors = palette.map(rgbArray => {
+                    const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
+                    const n_match = ntc.name(hexColor);
+                    return n_match[1]; // Aquí guardamos el nombre del color en lugar del código HEX
+                });
 
-                const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-                colorThumbContainer.style.display = 'block';
+                // Mostrar los colores extraídos con nombres
+                displayExtractedColors(extractedColors);
+                console.log("Extracted Color Names:", extractedColors);
             };
-            reader.readAsDataURL(file);
-        }
+
+            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+            colorThumbContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+}
+
+function displayExtractedColors(colors) {
+    const colorContainer = document.querySelector('.thumbExt');
+    colorContainer.innerHTML = ''; // Limpiar cualquier color previo
+    colors.forEach(colorName => {
+        const colorCircle = document.createElement('div');
+        
+        // Usar ntc.js para obtener el HEX correspondiente al nombre del color
+        const hexColor = ntc.nameToHex(colorName); // Si ntc.js no tiene esta función, debemos guardar ambos valores (nombre y HEX)
+
+        colorCircle.style.backgroundColor = hexColor;
+        colorCircle.style.width = '30px';
+        colorCircle.style.height = '30px';
+        colorCircle.style.borderRadius = '50%';
+        colorCircle.style.display = 'inline-block';
+        colorCircle.style.marginRight = '5px';
+
+        const colorLabel = document.createElement('span');
+        colorLabel.textContent = colorName;
+        colorLabel.style.display = 'block';
+        colorLabel.style.textAlign = 'center';
+        colorLabel.style.fontSize = '12px';
+
+        const colorWrapper = document.createElement('div');
+        colorWrapper.style.display = 'inline-block';
+        colorWrapper.style.marginRight = '10px';
+        colorWrapper.style.textAlign = 'center';
+        colorWrapper.appendChild(colorCircle);
+        colorWrapper.appendChild(colorLabel);
+
+        colorContainer.appendChild(colorWrapper);
     });
+}
 
-    function rgbToHex(r, g, b) {
-        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-    }
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    clearColorImage();
+    extractedColors = []; // Limpiar colores extraídos
+    console.log("Extracted Color Names cleared:", extractedColors);
 
-    function displayExtractedColors(colors) {
-        const colorContainer = document.querySelector('.thumbExt');
-        colorContainer.innerHTML = ''; // Limpiar cualquier color previo
-        colors.forEach(color => {
-            const colorCircle = document.createElement('div');
-            colorCircle.style.backgroundColor = color;
-            colorCircle.style.width = '30px';
-            colorCircle.style.height = '30px';
-            colorCircle.style.borderRadius = '50%';
-            colorCircle.style.display = 'inline-block';
-            colorCircle.style.marginRight = '5px';
+    document.getElementById('colorExtractionInput').value = '';
+});
 
-            // Obtener el nombre del color usando ntc.js
-            const n_match = ntc.name(color);
-            const colorName = n_match[1]; // n_match[1] contiene el nombre del color
+function clearColorImage() {
+    const colorThumbnail = document.getElementById('colorThumbnail');
+    colorThumbnail.src = '';
 
-            const colorLabel = document.createElement('span');
-            colorLabel.textContent = colorName;
-            colorLabel.style.display = 'block';
-            colorLabel.style.textAlign = 'center';
-            colorLabel.style.fontSize = '12px';
+    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+    colorThumbContainer.style.display = 'none';
 
-            const colorWrapper = document.createElement('div');
-            colorWrapper.style.display = 'inline-block';
-            colorWrapper.style.marginRight = '10px';
-            colorWrapper.style.textAlign = 'center';
-            colorWrapper.appendChild(colorCircle);
-            colorWrapper.appendChild(colorLabel);
+    const colorContainer = document.querySelector('.thumbExt');
+    colorContainer.innerHTML = '';
+}
 
-            colorContainer.appendChild(colorWrapper);
-        });
-    }
-
-    document.getElementById('clearColorImg').addEventListener('click', function() {
-        clearColorImage();
-        extractedColors = []; // Limpiar colores extraídos
-        console.log("Extracted Colors cleared:", extractedColors);
-
-        document.getElementById('colorExtractionInput').value = '';
-    });
-
-    function clearColorImage() {
-        const colorThumbnail = document.getElementById('colorThumbnail');
-        colorThumbnail.src = '';
-
-        const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-        colorThumbContainer.style.display = 'none';
-
-        const colorContainer = document.querySelector('.thumbExt');
-        colorContainer.innerHTML = '';
-    }
 
 // END COLORSEX
  
