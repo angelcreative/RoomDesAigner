@@ -185,7 +185,7 @@ function getSelectedValues() {
     ];
 
     
- const colorElements = [
+const colorElements = [
     { id: "dominant_color", switchId: "use_colors" },
     { id: "secondary_color", switchId: "use_colors" },
     { id: "accent_color", switchId: "use_colors" },
@@ -205,10 +205,10 @@ colorElements.forEach(colorElement => {
         const updateColorName = () => {
             const hexColor = colorInput.value;
             const n_match = ntc.name(hexColor);
-            const colorName = n_match[1];
+            const colorName = n_match[1]; // Obtiene el nombre del color
 
             if (colorSwitch.checked) {
-                values[colorElement.id] = colorName; // Guarda el nombre del color
+                values[colorElement.id] = hexColor; // Guarda el valor HEX del color
                 colorNameSpan.textContent = colorName; // Muestra el nombre del color debajo del selector
             } else {
                 values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
@@ -227,6 +227,8 @@ colorElements.forEach(colorElement => {
 
 // Ejemplo para ver el resultado
 console.log(values);
+
+
 
     return values;
 }
@@ -483,8 +485,8 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
 let promptEndy = `dense furnishings and decorations.`;
 
 if (extractedColors.length > 0) {
-    const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
-    const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
+    const colorHexes = extractedColors.map(color => color.hex); // Accede solo al HEX de cada color
+    const colorsString = colorHexes.join(', '); // Convierte el array de HEX a una cadena
     promptEndy += ` Colors used: ${colorsString}.`;
 }
 

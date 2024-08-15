@@ -1115,17 +1115,19 @@ img#thumbnail {
     position: relative;
 }
 
-
+   
 .thumbExt {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
     row-gap: 12px;
     margin-bottom: 24px;
     color: #6d7b87;
 }
+
+
 .message {
     position: fixed;
     top: 50%;
@@ -1480,7 +1482,7 @@ h4 {
 display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin: 12px 0;
     column-gap: 24px;
     align-items: flex-start;
