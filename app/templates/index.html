@@ -82,6 +82,8 @@
     </script>
    
 <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+<script src="{{ url_for('static', filename='ntc.js') }}"></script>
+
   <!--  <script id='sc-script' src="https://cdn.smartcat-proxy.com/de10bee7679942e5b623ea375f520920/script-v1/__translator.js?hash=c1e4a26903725fa3dca2056d434674a7"></script>-->
 </head>
 
@@ -1516,7 +1518,8 @@ Color schemes</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i></
   </label>
   <div class="thumbImg" style="display: none;">
     <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
-    <img id="colorThumbnail" src="" alt="Thumbnail">
+    <div class="thumbExt"></div>
+    <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;">
   </div>
 </div>
     

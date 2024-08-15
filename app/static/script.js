@@ -351,60 +351,89 @@ function generateFractalText() {
 // Variable global para almacenar los colores extraídos
 let extractedColors = [];
 
-// Función para manejar la carga de la imagen y extraer los colores
-document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const colorThumbnail = document.getElementById("colorThumbnail");
-            colorThumbnail.src = e.target.result;
+    document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const colorThumbnail = document.getElementById("colorThumbnail");
+                colorThumbnail.src = e.target.result;
 
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                const colorThief = new ColorThief(); // Suponiendo que usas la librería color-thief
-                extractedColors = colorThief.getPalette(img, 5).map(rgbArray => {
-                    return rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
-                });
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    const colorThief = new ColorThief(); // Suponiendo que usas la librería color-thief
+                    extractedColors = colorThief.getPalette(img, 5).map(rgbArray => {
+                        return rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
+                    });
 
-                console.log("Extracted Colors:", extractedColors);
+                    // Mostrar los colores extraídos con nombres
+                    displayExtractedColors(extractedColors);
+                    console.log("Extracted Colors:", extractedColors);
+                };
+
+                const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+                colorThumbContainer.style.display = 'block';
             };
+            reader.readAsDataURL(file);
+        }
+    });
 
-            // Mostrar la miniatura
-            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-            colorThumbContainer.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
+    function rgbToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
     }
-});
 
-// Función para convertir RGB a HEX
-function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-}
+    function displayExtractedColors(colors) {
+        const colorContainer = document.querySelector('.thumbExt');
+        colorContainer.innerHTML = ''; // Limpiar cualquier color previo
+        colors.forEach(color => {
+            const colorCircle = document.createElement('div');
+            colorCircle.style.backgroundColor = color;
+            colorCircle.style.width = '30px';
+            colorCircle.style.height = '30px';
+            colorCircle.style.borderRadius = '50%';
+            colorCircle.style.display = 'inline-block';
+            colorCircle.style.marginRight = '5px';
 
-// Función para limpiar la imagen y los colores extraídos
-document.getElementById('clearColorImg').addEventListener('click', function() {
-    clearColorImage();
-    extractedColors = []; // Limpiar colores extraídos
-    console.log("Extracted Colors cleared:", extractedColors);
+            // Obtener el nombre del color usando ntc.js
+            const n_match = ntc.name(color);
+            const colorName = n_match[1]; // n_match[1] contiene el nombre del color
 
-    // Resetear el input de archivo
-    document.getElementById('colorExtractionInput').value = '';
-});
+            const colorLabel = document.createElement('span');
+            colorLabel.textContent = colorName;
+            colorLabel.style.display = 'block';
+            colorLabel.style.textAlign = 'center';
+            colorLabel.style.fontSize = '12px';
 
-function clearColorImage() {
-    // Resetear la miniatura
-    const colorThumbnail = document.getElementById('colorThumbnail');
-    colorThumbnail.src = '';
+            const colorWrapper = document.createElement('div');
+            colorWrapper.style.display = 'inline-block';
+            colorWrapper.style.marginRight = '10px';
+            colorWrapper.style.textAlign = 'center';
+            colorWrapper.appendChild(colorCircle);
+            colorWrapper.appendChild(colorLabel);
 
-    // Ocultar el contenedor de la miniatura
-    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-    colorThumbContainer.style.display = 'none';
-}
+            colorContainer.appendChild(colorWrapper);
+        });
+    }
 
+    document.getElementById('clearColorImg').addEventListener('click', function() {
+        clearColorImage();
+        extractedColors = []; // Limpiar colores extraídos
+        console.log("Extracted Colors cleared:", extractedColors);
 
+        document.getElementById('colorExtractionInput').value = '';
+    });
+
+    function clearColorImage() {
+        const colorThumbnail = document.getElementById('colorThumbnail');
+        colorThumbnail.src = '';
+
+        const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+        colorThumbContainer.style.display = 'none';
+
+        const colorContainer = document.querySelector('.thumbExt');
+        colorContainer.innerHTML = '';
+    }
 
 // END COLORSEX
  
