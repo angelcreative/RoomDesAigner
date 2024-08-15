@@ -122,7 +122,6 @@ function handleSubmit(event) {
     
 
 
-// Function to get selected values
 function getSelectedValues() {
     const elementIds = [
         "person",
@@ -184,49 +183,57 @@ function getSelectedValues() {
         "decorative_elements"
     ];
 
-    
-   const colorElements = [
-    { id: "dominant_color", switchId: "use_colors" },
-    { id: "secondary_color", switchId: "use_colors" },
-    { id: "accent_color", switchId: "use_colors" },
-    { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-    { id: "furniture_color", switchId: "use_furniture_color" }
-];
+    const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
 
-const values = {};
+    const values = {};
 
-colorElements.forEach(colorElement => {
-    const colorInput = document.getElementById(colorElement.id);
-    const colorSwitch = document.getElementById(colorElement.switchId);
-    const colorNameSpan = document.getElementById(`${colorElement.id}_name`);
+    // Capture values for general elements
+    elementIds.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            values[elementId] = element.value;
+        }
+    });
 
-    if (colorInput && colorSwitch) {
-        // Actualiza el nombre del color cuando cambia el color o se activa el switch
-        const updateColor = () => {
-            const hexColor = colorInput.value;
-            const n_match = ntc.name(hexColor);
-            const colorName = n_match[1]; // Solo el nombre del color
+    // Capture values for color elements
+    colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        const colorNameSpan = document.getElementById(`${colorElement.id}_name`);
 
-            if (colorSwitch.checked) {
-                values[colorElement.id] = colorName; // Guarda solo el nombre del color
-                colorNameSpan.textContent = colorName; // Muestra el nombre del color debajo del selector
-            } else {
-                values[colorElement.id] = ""; // Si el interruptor está apagado, asigna un valor vacío
-                colorNameSpan.textContent = ""; // Limpia el nombre del color mostrado
-            }
-        };
+        if (colorInput && colorSwitch) {
+            const updateColor = () => {
+                const hexColor = colorInput.value;
+                const n_match = ntc.name(hexColor);
+                const colorName = n_match[1]; // Only the color name
 
-        // Escucha los cambios en el input de color y el checkbox
-        colorInput.addEventListener('input', updateColor);
-        colorSwitch.addEventListener('change', updateColor);
+                if (colorSwitch.checked) {
+                    values[colorElement.id] = colorName; // Save only the color name
+                    colorNameSpan.textContent = colorName; // Display the color name under the picker
+                } else {
+                    values[colorElement.id] = ""; // Assign an empty value if the switch is off
+                    colorNameSpan.textContent = ""; // Clear the displayed color name
+                }
+            };
 
-        // Inicializa el nombre del color al cargar la página
-        updateColor();
-    }
-});
+            // Listen for changes in the color input and the checkbox
+            colorInput.addEventListener('input', updateColor);
+            colorSwitch.addEventListener('change', updateColor);
+
+            // Initialize the color name when the page loads
+            updateColor();
+        }
+    });
 
     return values;
 }
+
 
 
 // Event listener for the color switches
