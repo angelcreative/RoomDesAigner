@@ -417,9 +417,9 @@ function displayExtractedColors(colors) {
         const colorName = color.name;
 
         colorCircle.style.backgroundColor = hexColor;
-        colorCircle.style.width = '30px';
-        colorCircle.style.height = '30px';
-        colorCircle.style.borderRadius = '50%';
+        colorCircle.style.width = '40px';
+        colorCircle.style.height = '40px';
+        colorCircle.style.borderRadius = '0%';
         colorCircle.style.display = 'inline-block';
         colorCircle.style.marginRight = '5px';
 
