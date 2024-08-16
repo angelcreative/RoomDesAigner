@@ -420,11 +420,13 @@ function displayExtractedColors(colors) {
         const hexColor = color.hex;
         const colorName = color.name;
 
-        colorCircle.style.backgroundColor = hexColor;
-        colorCircle.style.width = '40px';
-        colorCircle.style.height = '40px';
-        colorCircle.style.display = 'inline-block';
-        colorCircle.style.marginRight = '5px';
+        colorCircle.style.width = '100%';
+colorCircle.style.height = '40px';
+colorCircle.style.display = 'flex';
+colorCircle.style.border = '1px solid #777777';
+colorCircle.style.flexDirection = 'column';
+colorCircle.style.justifyContent = 'flex-start';
+colorCircle.style.alignItems = 'center';
 
         const colorLabel = document.createElement('span');
         colorLabel.textContent = colorName;

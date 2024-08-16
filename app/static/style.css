@@ -1128,6 +1128,17 @@ img#thumbnail {
 }
 
 
+.thumbExt > div {
+    border: 1px solid #e6e6e6;
+    background: white;
+    padding: 8px 4px;
+    border-radius: 8px;
+    height: 100%;
+    
+
+}
+
+
 .message {
     position: fixed;
     top: 50%;
@@ -1492,11 +1503,16 @@ display: flex;
 }
 
 .colorPaletteA {
-   display: flex;
+display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     margin-bottom: 12px;
+    border: 1px solid #e6e6e6;
+    background: #f8f8f8;
+    padding: 8px 4px;
+    border-radius: 8px;
+    height: 100%;
 }
 
 
