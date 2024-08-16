@@ -744,48 +744,64 @@ fetch("/generate-images", {
     
     
     // FLUX 
- function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
-    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa"; // Cambia esto por tu API key real
+function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
+    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa";
 
-    // Usa el transformedPrompt generado previamente por OpenAI
-    const promptText = transformedPrompt;
-
-    // Configuración específica para Flux Schnell
-    const fluxPayload = {
+    // Usa el mismo promptText que se utiliza en generateImages
+    const prompt = {
         key: apiKey,
-        model_id: "black-forest-labs/flux1-schnell:v2",
-        prompt: promptText,
+        prompt: promptText,  // Usa promptText en lugar de transformedPrompt
         height: 1024,
         width: 1024,
         num_inference_steps: 40,
-        num_images_per_prompt: 2
+        num_images_per_prompt: 2,
+        // Agrega otros parámetros si es necesario
     };
 
-    // Fetch para enviar la solicitud a Flux Schnell
     fetch("/flux-schnell-api", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(fluxPayload)
+        body: JSON.stringify(prompt)
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            if (response.status >= 500 && response.status < 600) {
+                return response.json().then(data => {
+                    if (data.fetch_result) {
+                        checkImageStatus(data.fetch_result, data.transformed_prompt);
+                        throw new Error(`Image generation in progress. Checking status...`);
+                    } else {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                }).catch(() => {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                });
+            } else {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.status === "success") {
-            const imageUrls = data.image_url; // Asegúrate de que image_url es una lista de URLs
-            showModal(imageUrls); // Mostrar las imágenes en el modal
+        if (data.status === "success" && data.image_url) {
+            showModal(data.image_url);  // Mostrar las imágenes
+            hideGeneratingImagesDialog();
+        } else if (data.status === "processing" && data.fetch_result) {
+            checkImageStatus(data.fetch_result, data.transformed_prompt);
         } else {
-            throw new Error('Generación fallida');
+            throw new Error('Image generation failed or unexpected status.');
         }
     })
     .catch(error => {
-        showError(error.message);
+        if (!error.message.includes("Image generation in progress")) {
+            showError(error);
+        }
     });
 }
 
 
-    
-    
     // END FLUX
     
     
