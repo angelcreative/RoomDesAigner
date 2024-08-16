@@ -745,7 +745,7 @@ fetch("/generate-images", {
 
 // Función específica para manejar Flux Schnell
 function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
-    const promptText = selectedValues.prompt;  // Asumiendo que `selectedValues` tiene el prompt
+    const promptText = selectedValues.prompt || promptText;  // Usa el prompt de `selectedValues` o el existente
 
     const payload = {
         prompt: promptText,
@@ -775,8 +775,8 @@ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     .catch(error => {
         showError(error.message);
     });
-}  
-   
+}
+
     
 // Define la función checkImageStatus con mayor retraso y más reintentos
 function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
