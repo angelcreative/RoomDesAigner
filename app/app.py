@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
-from pipeline.cloud.pipelines import run_pipeline
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -89,24 +88,42 @@ def check_image_availability(url, timeout=60, interval=5):
 def flux_schnell_api():
     data = request.json
 
-    # Ejecución del pipeline usando run_pipeline
-    result = run_pipeline(
-        "black-forest-labs/flux1-schnell:v2",
-        data['prompt'],
-        dict(
-            height=data['height'],
-            max_sequence_length=256,
-            num_images_per_prompt=data['num_images_per_prompt'],
-            num_inference_steps=data['num_inference_steps'],
-            seed=data.get('seed', None),
-            width=data['width'],
-        ),
-    )
+    # Configuración de la solicitud
+    url = 'https://www.mystic.ai/v4/runs'
+    headers = {
+        'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
+        'Content-Type': 'application/json'
+    }
+    payload = {
+        "pipeline": "black-forest-labs/flux1-schnell:v2",
+        "inputs": [
+            {
+                "type": "string",
+                "value": data['prompt']
+            },
+            {
+                "type": "dictionary",
+                "value": {
+                    "height": data['height'],
+                    "max_sequence_length": 256,
+                    "num_images_per_prompt": data['num_images_per_prompt'],
+                    "num_inference_steps": data['num_inference_steps'],
+                    "seed": data.get('seed', None),
+                    "width": data['width']
+                }
+            }
+        ]
+    }
 
-    # Obtiene y devuelve los resultados
-    image_url = result.outputs_formatted()[0]  # Asumiendo que outputs_formatted devuelve la URL de la imagen
-    return jsonify({"status": "success", "image_url": image_url})
+    # Haciendo la solicitud a la API
+    response = requests.post(url, headers=headers, json=payload)
 
+    if response.status_code == 200:
+        result = response.json()
+        image_url = result['outputs'][0]['url']  # Ajusta esto según la estructura de la respuesta
+        return jsonify({"status": "success", "image_url": image_url})
+    else:
+        return jsonify({"status": "error", "message": response.text}), response.status_code
 
 
 # Define your generate_images endpoint
