@@ -528,29 +528,36 @@ console.log(`Width: ${width}, Height: ${height}`);
 // Determine the model_id based on the selection of the "person" field
 
 
-// Get selected models from the form
+// Obtiene los valores seleccionados del formulario
 const personValue = document.getElementById("personModel").value;
 const furnitureValue = document.getElementById("furnitureModel").value;
 
-// Determine if the person model or furniture model should be used
-let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+// Determina el modelo a usar basado en la selección
+let modelId = "ae-sdxl-v1"; // Valor por defecto
 
 if (personValue !== "") {
-  modelId = personValue;
+    modelId = personValue;
 } else if (furnitureValue !== "") {
-  modelId = furnitureValue;
+    modelId = furnitureValue;
 }
 
-// Initialize variables for LoRA model and strength
+// Inicializa las variables para el modelo LoRA y su intensidad
 let lora = "clothingadjustloraap";
 let lora_strength = 1;
 
-// Conditionally set the LoRA model based on the selected model
+// Configura el modelo LoRA según el modelo seleccionado
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+    lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
 } else if (modelId === furnitureValue) {
-  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+    lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
+
+if (modelId === "flux-schnell") {
+    console.log("Flux Schnell model selected");
+    generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img);
+    return;
+}
+
 
 // Now build the JSON object with the updated values
 const prompt = {
@@ -675,6 +682,67 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
 }
 
     
+   
+    
+    
+    
+//FWR
+ 
+    
+    
+    
+    
+    // Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        if (response.status >= 500 && response.status < 600) {
+            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
+    } else {
+        throw new Error('Image generation failed or unexpected status.');
+    }
+})
+.catch(error => {
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Mostrar errores si no es un caso de generación en progreso
+    }
+});
+
+    
+    
+    
     // FLUX 
     
     
@@ -739,61 +807,6 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     // END FLUX
     
     
-    
-//FWR
- 
-    
-    
-    
-    
-    // Llamada a fetchWithRetry en generateImages
-fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => {
-    if (!response.ok) {
-        if (response.status >= 500 && response.status < 600) {
-            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
-            return response.json().then(data => {
-                if (data.fetch_result) {
-                    checkImageStatus(data.fetch_result, data.transformed_prompt);
-                    throw new Error(`Image generation in progress. Checking status...`);
-                } else {
-                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            }).catch(() => {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            });
-        } else {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-    }
-    return response.json();
-})
-.then(data => {
-    if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
-        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
-    } else {
-        throw new Error('Image generation failed or unexpected status.');
-    }
-})
-.catch(error => {
-    if (!error.message.includes("Image generation in progress")) {
-        showError(error);  // Mostrar errores si no es un caso de generación en progreso
-    }
-});
-
 // Define la función checkImageStatus con mayor retraso y más reintentos
 function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
     fetch(fetchResultUrl, {
@@ -834,6 +847,10 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
 
     
 //end FWR
+    
+    
+    
+ 
 
 
 function showError(error) {
