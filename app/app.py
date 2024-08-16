@@ -115,15 +115,18 @@ def flux_schnell_api():
         ]
     }
 
-    # Haciendo la solicitud a la API
-    response = requests.post(url, headers=headers, json=payload)
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        print(response.text)  # Depuración: Ver el contenido completo de la respuesta
 
-    if response.status_code == 200:
-        result = response.json()
-        image_url = result['outputs'][0]['url']  # Ajusta esto según la estructura de la respuesta
-        return jsonify({"status": "success", "image_url": image_url})
-    else:
-        return jsonify({"status": "error", "message": response.text}), response.status_code
+        if response.status_code == 200:
+            result = response.json()
+            image_url = result['outputs'][0]['url']  # Ajusta esto según la estructura de la respuesta
+            return jsonify({"status": "success", "image_url": image_url})
+        else:
+            return jsonify({"status": "error", "message": response.text}), response.status_code
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # Define your generate_images endpoint
