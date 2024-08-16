@@ -792,7 +792,9 @@ fetch("/generate-images", {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            showModal([data.image_url]); // Mostrar la imagen en el modal
+            // Ajuste: procesar la respuesta y extraer las URLs de las imágenes
+            const imageUrls = data.image_url.map(file => file.url); // Si 'data.image_url' devuelve la lista de imágenes
+            showModal(imageUrls); // Mostrar las imágenes en el modal
         } else {
             throw new Error('Generación fallida');
         }
@@ -801,6 +803,7 @@ fetch("/generate-images", {
         showError(error.message);
     });
 }
+
 
     
     
