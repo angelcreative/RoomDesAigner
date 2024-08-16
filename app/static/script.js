@@ -778,7 +778,7 @@ fetch("/generate-images", {
         height: 1024,  // Ajusta según sea necesario
         width: 1024,   // Ajusta según sea necesario
         num_inference_steps: 40,
-        num_images_per_prompt: 4
+        num_images_per_prompt: 2
     };
 
     // Fetch para enviar la solicitud a Flux Schnell
