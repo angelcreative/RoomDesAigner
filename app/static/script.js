@@ -746,16 +746,13 @@ fetch("/generate-images", {
     // FLUX 
 function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa";
-
-    // Usa el mismo promptText que se utiliza en generateImages
     const prompt = {
         key: apiKey,
-        prompt: promptText,  // Usa promptText en lugar de transformedPrompt
+        prompt: promptText,
         height: 1024,
         width: 1024,
         num_inference_steps: 40,
         num_images_per_prompt: 2,
-        // Agrega otros parámetros si es necesario
     };
 
     fetch("/flux-schnell-api", {
@@ -765,31 +762,12 @@ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
         },
         body: JSON.stringify(prompt)
     })
-    .then(response => {
-        if (!response.ok) {
-            if (response.status >= 500 && response.status < 600) {
-                return response.json().then(data => {
-                    if (data.fetch_result) {
-                        checkImageStatus(data.fetch_result, data.transformed_prompt);
-                        throw new Error(`Image generation in progress. Checking status...`);
-                    } else {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                }).catch(() => {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                });
-            } else {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        if (data.status === "success" && data.image_url) {
-            showModal(data.image_url);  // Mostrar las imágenes
+        if (data.status === "success" && Array.isArray(data.image_url)) {
+            const imageUrls = data.image_url;  // Using the correct data field
+            showModal(imageUrls);  // Display the images in the modal
             hideGeneratingImagesDialog();
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
