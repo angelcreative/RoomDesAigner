@@ -745,38 +745,19 @@ fetch("/generate-images", {
     
     // FLUX 
     
-    
    function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa"; // Cambia esto por tu API key real
 
-    // Aquí usamos el mismo código que genera el prompt en generateImages
-    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame, hyperrealistic, highly detailed, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph.`;
-    
-    let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
-
-    let promptEndy = `dense furnishings and decorations.`;
-
-    if (extractedColors.length > 0) {
-        const colorNames = extractedColors.map(color => color.name);
-        const colorsString = colorNames.join(', ');
-        promptEndy += ` Colors used: ${colorsString}.`;
-    }
-
-    const customText = document.getElementById("customText").value;
-    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-    const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+    // Usa el transformedPrompt generado previamente por OpenAI
+    const promptText = transformedPrompt;
 
     // Configuración específica para Flux Schnell
     const fluxPayload = {
         key: apiKey,
         model_id: "black-forest-labs/flux1-schnell:v2",
         prompt: promptText,
-        height: 1024,  // Ajusta según sea necesario
-        width: 1024,   // Ajusta según sea necesario
+        height: 1024,
+        width: 1024,
         num_inference_steps: 40,
         num_images_per_prompt: 2
     };
@@ -792,8 +773,7 @@ fetch("/generate-images", {
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            // Ajuste: procesar la respuesta y extraer las URLs de las imágenes
-            const imageUrls = data.image_url.map(file => file.url); // Si 'data.image_url' devuelve la lista de imágenes
+            const imageUrls = data.image_url; // Asegúrate de que image_url es una lista de URLs
             showModal(imageUrls); // Mostrar las imágenes en el modal
         } else {
             throw new Error('Generación fallida');
