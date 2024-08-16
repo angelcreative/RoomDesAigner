@@ -744,41 +744,24 @@ fetch("/generate-images", {
     
     
     // FLUX 
-function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
-    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa";
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        height: 1024,
-        width: 1024,
-        num_inference_steps: 40,
-        num_images_per_prompt: 2,
-    };
-
+function generateFluxSchnellImages(promptText) {
     fetch("/flux-schnell-api", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(prompt)
+        body: JSON.stringify({ prompt: promptText })
     })
     .then(response => response.json())
-   .then(data => {
-    if (data.status === "success" && Array.isArray(data.image_url)) {
-        const imageUrls = data.image_url;
-        showModal(imageUrls);  // Mostrar las imágenes en el modal
-        hideGeneratingImagesDialog();
-    } else {
-        throw new Error('Image generation failed or unexpected status.');
-    }
-})
-
+    .then(data => {
+        const imageUrls = data.images.map(img => img.url);
+        showModal(imageUrls); // Mostrar las imágenes en el modal
+    })
     .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);
-        }
+        showError("Error generating images: " + error.message);
     });
 }
+
 
 
     // END FLUX

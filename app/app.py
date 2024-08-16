@@ -13,6 +13,8 @@ import io
 import base64
 import time
 import openai
+import fal_client
+
 
 
 app = Flask(__name__)
@@ -86,48 +88,19 @@ def check_image_availability(url, timeout=60, interval=5):
 
 @app.route('/flux-schnell-api', methods=['POST'])
 def flux_schnell_api():
-    try:
-        data = request.json
-        print("Received data:", data)  # Depuración
-
-        # Configuración de la solicitud a Mystic API
-        url = 'https://www.mystic.ai/v4/runs'
-        headers = {
-            'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            "pipeline": "black-forest-labs/flux1-schnell:v2",
-            "inputs": [
-                {"type": "string", "value": data['prompt']},
-                {"type": "dictionary", "value": {
-                    "height": data['height'],
-                    "max_sequence_length": 256,
-                    "num_images_per_prompt": data['num_images_per_prompt'],
-                    "num_inference_steps": data['num_inference_steps'],
-                    "seed": data.get('seed', None),
-                    "width": data['width']
-                }}
-            ]
-        }
-
-        print("Payload to send:", payload)  # Depuración
-
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-
-        result = response.json()
-        print("API response:", result)  # Depuración
-
-        image_urls = [file['file']['url'] for file in result['output'][0]['value']]
-        return jsonify({"status": "success", "image_url": image_urls})
-
-    except requests.exceptions.RequestException as e:
-        print(f"RequestException: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-    except Exception as e:
-        print(f"Exception: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
+    data = request.json
+    handler = fal_client.submit(
+        "fal-ai/flux/schnell",
+        arguments={
+            "prompt": data['prompt'],
+            "image_size": data.get('image_size', 'landscape_4_3'),
+            "num_inference_steps": data.get('num_inference_steps', 4),
+            "num_images": data.get('num_images', 1),
+            "enable_safety_checker": data.get('enable_safety_checker', True)
+        },
+    )
+    result = handler.get()
+    return jsonify(result)
 
 
 # Define your generate_images endpoint
