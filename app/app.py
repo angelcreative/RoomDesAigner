@@ -13,9 +13,6 @@ import io
 import base64
 import time
 import openai
-import fal_client
-import asyncio
-
 
 
 
