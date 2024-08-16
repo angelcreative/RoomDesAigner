@@ -743,9 +743,9 @@ fetch("/generate-images", {
     
   //FLUX
 
-// Función específica para manejar Flux Schnell
 function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
-    const promptText = selectedValues.prompt || promptText;  // Usa el prompt de `selectedValues` o el existente
+    // Asegúrate de que `selectedValues.prompt` esté definido antes de asignarlo a `promptText`
+    const promptText = selectedValues.prompt;  
 
     const payload = {
         prompt: promptText,
