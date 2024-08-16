@@ -14,6 +14,8 @@ import base64
 import time
 import openai
 import fal_client
+import asyncio
+
 
 
 
@@ -87,21 +89,29 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 @app.route('/flux-schnell-api', methods=['POST'])
-def flux_schnell_api():
-    data = request.json
-    handler = fal_client.submit(
-        "fal-ai/flux/schnell",
-        arguments={
-            "prompt": data['prompt'],
-            "image_size": data.get('image_size', 'landscape_4_3'),
-            "num_inference_steps": data.get('num_inference_steps', 4),
-            "num_images": data.get('num_images', 1),
-            "enable_safety_checker": data.get('enable_safety_checker', True)
-        },
-    )
-    result = handler.get()
-    return jsonify(result)
+async def flux_schnell_api():
+    try:
+        # API Key directamente en el código
+        api_key = "39f5bd7c-eb8d-455c-99a7-8a6d99cab825:1fa58d8adc3c1edeff44d04d60d141f7"
+        
+        handler = await fal_client.submit_async(
+            "fal-ai/flux/schnell",
+            arguments={
+                "prompt": request.json['prompt'],
+                "image_size": request.json.get('image_size', 'landscape_4_3'),
+                "num_inference_steps": request.json.get('num_inference_steps', 4),
+                "num_images": request.json.get('num_images', 1),
+                "enable_safety_checker": request.json.get('enable_safety_checker', True)
+            },
+            api_key=api_key  # Incluye la API key en la solicitud
+        )
 
+        result = await handler.get()
+
+        return jsonify(result)
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
