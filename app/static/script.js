@@ -420,6 +420,7 @@ function displayExtractedColors(colors) {
         const hexColor = color.hex;
         const colorName = color.name;
 
+        colorCircle.style.backgroundColor = hexColor;
         colorCircle.style.width = '100%';
 colorCircle.style.height = '40px';
 colorCircle.style.display = 'flex';
