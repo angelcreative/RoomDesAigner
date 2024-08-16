@@ -741,31 +741,42 @@ fetch("/generate-images", {
 });
 
     
-    
-    
-    // FLUX 
-function generateFluxSchnellImages(promptText) {
+  //FLUX
+
+// Función específica para manejar Flux Schnell
+function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
+    const promptText = selectedValues.prompt;  // Asumiendo que `selectedValues` tiene el prompt
+
+    const payload = {
+        prompt: promptText,
+        height: 1024,
+        width: 1024,
+        num_inference_steps: 40,
+        num_images_per_prompt: 2,
+    };
+
     fetch("/flux-schnell-api", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt: promptText })
+        body: JSON.stringify(payload)
     })
     .then(response => response.json())
     .then(data => {
-        const imageUrls = data.images.map(img => img.url);
-        showModal(imageUrls); // Mostrar las imágenes en el modal
+        if (data.status === "success" && Array.isArray(data.image_url)) {
+            const imageUrls = data.image_url;
+            showModal(imageUrls);  // Mostrar las imágenes en el modal
+            hideGeneratingImagesDialog();
+        } else {
+            throw new Error('Image generation failed or unexpected status.');
+        }
     })
     .catch(error => {
-        showError("Error generating images: " + error.message);
+        showError(error.message);
     });
-}
-
-
-
-    // END FLUX
-    
+}  
+   
     
 // Define la función checkImageStatus con mayor retraso y más reintentos
 function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {

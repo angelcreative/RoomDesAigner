@@ -89,26 +89,47 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 @app.route('/flux-schnell-api', methods=['POST'])
-async def flux_schnell_api():
+def flux_schnell_api():
     try:
-        # API Key obtenida de la variable de entorno
-        api_key = os.getenv('FAL_KEY')
+        # Recupera la API Key de la variable de entorno
+        api_key = os.getenv('MYSTIC_API_KEY')
+        if not api_key:
+            return jsonify({"status": "error", "message": "API Key no configurada"}), 500
         
-        handler = await fal_client.submit_async(
-            "fal-ai/flux/schnell",
-            arguments={
-                "prompt": request.json['prompt'],
-                "image_size": request.json.get('image_size', 'landscape_4_3'),
-                "num_inference_steps": request.json.get('num_inference_steps', 4),
-                "num_images": request.json.get('num_images', 1),
-                "enable_safety_checker": request.json.get('enable_safety_checker', True)
-            },
-            api_key=api_key  # Usando la API Key
-        )
+        url = 'https://api.mystic.ai/v4/runs'
+        headers = {
+            'Authorization': f'Bearer {api_key}',
+            'Content-Type': 'application/json'
+        }
 
-        result = await handler.get()
-        return jsonify(result)
+        # Construye el payload a partir de los datos recibidos en la solicitud
+        payload = {
+            "pipeline": "black-forest-labs/flux1-schnell:v2",
+            "inputs": [
+                {"type": "string", "value": request.json['prompt']},
+                {"type": "dictionary", "value": {
+                    "height": request.json.get('height', 512),
+                    "max_sequence_length": request.json.get('max_sequence_length', 256),
+                    "num_images_per_prompt": request.json.get('num_images_per_prompt', 1),
+                    "num_inference_steps": request.json.get('num_inference_steps', 2),
+                    "seed": request.json.get('seed', 1),
+                    "width": request.json.get('width', 512)
+                }}
+            ]
+        }
 
+        # Realiza la solicitud a la API de Mystic
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()  # Lanza una excepción si la respuesta no es exitosa
+        
+        result = response.json()
+
+        # Procesa y devuelve las URLs de las imágenes generadas
+        image_urls = [file['file']['url'] for file in result['output'][0]['value']]
+        return jsonify({"status": "success", "image_url": image_urls})
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
