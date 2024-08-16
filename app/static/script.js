@@ -674,8 +674,78 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 }
 
+    
+    // FLUX 
+    
+    
+   function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
+    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa"; // Cambia esto por tu API key real
+
+    // Aquí usamos el mismo código que genera el prompt en generateImages
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame, hyperrealistic, highly detailed, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph.`;
+    
+    let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+
+    let promptEndy = `dense furnishings and decorations.`;
+
+    if (extractedColors.length > 0) {
+        const colorNames = extractedColors.map(color => color.name);
+        const colorsString = colorNames.join(', ');
+        promptEndy += ` Colors used: ${colorsString}.`;
+    }
+
+    const customText = document.getElementById("customText").value;
+    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+    const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+    // Configuración específica para Flux Schnell
+    const fluxPayload = {
+        key: apiKey,
+        model_id: "black-forest-labs/flux1-schnell:v2",
+        prompt: promptText,
+        height: 1024,  // Ajusta según sea necesario
+        width: 1024,   // Ajusta según sea necesario
+        num_inference_steps: 40,
+        num_images_per_prompt: 4
+    };
+
+    // Fetch para enviar la solicitud a Flux Schnell
+    fetch("/flux-schnell-api", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(fluxPayload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            showModal([data.image_url]); // Mostrar la imagen en el modal
+        } else {
+            throw new Error('Generación fallida');
+        }
+    })
+    .catch(error => {
+        showError(error.message);
+    });
+}
+
+    
+    
+    // END FLUX
+    
+    
+    
 //FWR
  
+    
+    
+    
+    
     // Llamada a fetchWithRetry en generateImages
 fetch("/generate-images", {
     method: "POST",
