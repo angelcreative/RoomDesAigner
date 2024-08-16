@@ -88,7 +88,7 @@ def check_image_availability(url, timeout=60, interval=5):
 def flux_schnell_api():
     data = request.json
 
-    # Configuración de la solicitud
+    # Configuración de la solicitud a Mystic API
     url = 'https://www.mystic.ai/v4/runs'
     headers = {
         'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
@@ -115,19 +115,14 @@ def flux_schnell_api():
         ]
     }
 
-    try:
-        response = requests.post(url, headers=headers, json=payload)
+    response = requests.post(url, headers=headers, json=payload)
+    if response.status_code == 200:
         result = response.json()
-
-        if response.status_code == 200:
-            # Recoge las URLs de las imágenes generadas
-            image_urls = [file['file']['url'] for file in result['output'][0]['value']]
-            return jsonify({"status": "success", "image_url": image_urls})
-        else:
-            return jsonify({"status": "error", "message": response.text}), response.status_code
-    except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500
-
+        # Recoge las URLs de las imágenes generadas
+        image_urls = [file['file']['url'] for file in result['output'][0]['value']]
+        return jsonify({"status": "success", "image_url": image_urls})
+    else:
+        return jsonify({"status": "error", "message": response.text}), response.status_code
 
 
 # Define your generate_images endpoint

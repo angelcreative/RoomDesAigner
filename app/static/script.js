@@ -744,8 +744,7 @@ fetch("/generate-images", {
     
     
     // FLUX 
-    
-   function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
+ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa"; // Cambia esto por tu API key real
 
     // Usa el transformedPrompt generado previamente por OpenAI
