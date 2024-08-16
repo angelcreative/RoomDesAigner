@@ -764,14 +764,15 @@ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status === "success" && Array.isArray(data.image_url)) {
-            const imageUrls = data.image_url;  // Using the correct data field
-            showModal(imageUrls);  // Display the images in the modal
-            hideGeneratingImagesDialog();
-        } else {
-            throw new Error('Image generation failed or unexpected status.');
-        }
-    })
+    if (data.status === "success" && Array.isArray(data.image_url)) {
+        // Extract URLs from the `file` objects
+        const imageUrls = data.image_url.map(item => item.file.url);
+        showModal(imageUrls);  // Display the images in the modal
+        hideGeneratingImagesDialog();
+    } else {
+        throw new Error('Image generation failed or unexpected status.');
+    }
+})
     .catch(error => {
         if (!error.message.includes("Image generation in progress")) {
             showError(error);
