@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from flask_cors import CORS
+from pipeline.cloud.pipelines import run_pipeline
 import hmac
 import hashlib
 import requests
@@ -89,43 +90,25 @@ def flux_schnell_api():
     try:
         data = request.json
 
-        # Configuración de la solicitud a Mystic API
-        url = 'https://www.mystic.ai/v4/runs'
-        headers = {
-            'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            "pipeline": "black-forest-labs/flux1-schnell:v2",
-            "inputs": [
-                {"type": "string", "value": data['prompt']},
-                {"type": "dictionary", "value": {
-                    "height": data['height'],
-                    "max_sequence_length": 256,
-                    "num_images_per_prompt": data['num_images_per_prompt'],
-                    "num_inference_steps": data['num_inference_steps'],
-                    "seed": data.get('seed', None),
-                    "width": data['width']
-                }}
-            ]
-        }
+        # Ejecutar el pipeline usando run_pipeline
+        result = run_pipeline(
+            "black-forest-labs/flux1-schnell:v2",
+            data['prompt'],
+            dict(
+                height=data['height'],
+                max_sequence_length=256,
+                num_images_per_prompt=data['num_images_per_prompt'],
+                num_inference_steps=data['num_inference_steps'],
+                seed=data.get('seed', None),
+                width=data['width'],
+            ),
+        )
 
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
-
-        result = response.json()
-
-        # Debugging: Print the full result
-        print(result)
-
-        # Recoge las URLs de las imágenes generadas
-        image_urls = [file['file']['url'] for file in result['output'][0]['value']]
+        # Obtener las URLs de las imágenes generadas
+        image_urls = result.outputs_formatted()
 
         return jsonify({"status": "success", "image_url": image_urls})
 
-    except requests.exceptions.RequestException as e:
-        print(f"RequestException: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500

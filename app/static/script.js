@@ -763,16 +763,16 @@ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
         body: JSON.stringify(prompt)
     })
     .then(response => response.json())
-    .then(data => {
+   .then(data => {
     if (data.status === "success" && Array.isArray(data.image_url)) {
-        // Extract URLs from the `file` objects
-        const imageUrls = data.image_url.map(item => item.file.url);
-        showModal(imageUrls);  // Display the images in the modal
+        const imageUrls = data.image_url;
+        showModal(imageUrls);  // Mostrar las imágenes en el modal
         hideGeneratingImagesDialog();
     } else {
         throw new Error('Image generation failed or unexpected status.');
     }
 })
+
     .catch(error => {
         if (!error.message.includes("Image generation in progress")) {
             showError(error);
