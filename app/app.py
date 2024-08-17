@@ -85,7 +85,6 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
-#flux
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     try:
@@ -120,7 +119,9 @@ def generate_images():
                             "height": 1024,
                             "width": 1024,
                             "num_images_per_prompt": 2,
-                            "num_inference_steps": 40
+                            "num_inference_steps": 40,
+                            "max_sequence_length": 256,  # Asegúrate de incluir este valor
+                            "seed": None
                         }}
                     ]
                 }
@@ -195,8 +196,6 @@ def generate_images():
     except Exception as e:
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
- 
-    
     
     
 def get_user_data(username):
