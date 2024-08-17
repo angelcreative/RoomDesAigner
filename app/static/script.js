@@ -764,21 +764,20 @@ function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
     })
     .then(response => response.json())
     .then(data => {
-    if (data.status === "success" && Array.isArray(data.image_url)) {
-        // Extract URLs from the `file` objects
-        const imageUrls = data.image_url.map(item => item.file.url);
-        showModal(imageUrls);  // Display the images in the modal
-        hideGeneratingImagesDialog();
-    } else {
-        throw new Error('Image generation failed or unexpected status.');
-    }
-})
+        if (data.status === "success" && Array.isArray(data.image_url)) {
+            showModal(data.image_url);  // Muestra las imágenes en el modal
+            hideGeneratingImagesDialog();
+        } else {
+            throw new Error('Image generation failed or unexpected status.');
+        }
+    })
     .catch(error => {
         if (!error.message.includes("Image generation in progress")) {
             showError(error);
         }
     });
 }
+
 
 
     // END FLUX
@@ -830,11 +829,11 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
  
 
 
-function showError(error) {
+/*function showError(error) {
     console.error("Error generating images:", error);
     alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
     hideOverlay(); // Oculta la superposición y el mensaje de carga
-}
+}*/
 
 function displayImages(images) {
     // Function to display images or handle the successful completion of the task

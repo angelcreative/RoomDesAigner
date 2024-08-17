@@ -83,11 +83,11 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 
-
 @app.route('/flux-schnell-api', methods=['POST'])
 def flux_schnell_api():
     try:
         data = request.json
+        print("Datos recibidos:", data)  # Imprime los datos para depuración
 
         # Configuración de la solicitud a Mystic API
         url = 'https://www.mystic.ai/v4/runs'
@@ -115,9 +115,6 @@ def flux_schnell_api():
 
         result = response.json()
 
-        # Debugging: Print the full result
-        print(result)
-
         # Recoge las URLs de las imágenes generadas
         image_urls = [file['file']['url'] for file in result['output'][0]['value']]
 
@@ -129,6 +126,7 @@ def flux_schnell_api():
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
