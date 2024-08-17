@@ -505,14 +505,14 @@ const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').
 let width, height;
 
 if (aspectRatio === "landscape") { // 3:2 aspect ratio
-  width = 1080;
-  height = Math.round((2 / 3) * 1080);  
+  width = 1024;
+  height = 768;  
 } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-  width = Math.round((2 / 3) * 1080);  
-  height = 1080;
+  height = 1024;
+  width = 768
 } else if (aspectRatio === "square") { // 1:1 aspect ratio
-  width = 1080;
-  height = 1080;
+  width = 1024;
+  height = 1024;
 }
 
 console.log(`Width: ${width}, Height: ${height}`);
@@ -533,7 +533,7 @@ const personValue = document.getElementById("personModel").value;
 const furnitureValue = document.getElementById("furnitureModel").value;
 
 // Determine if the person model or furniture model should be used
-let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+let modelId = "flux"; // Default to flux
 
 if (personValue !== "") {
   modelId = personValue;
