@@ -116,14 +116,17 @@ def flux_schnell_api():
         response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()
 
-        result = response.json()
+        # Parsing the response and logging it
+        try:
+            result = response.json()
+            print("Full response from Mystic API:", result)
+        except ValueError as ve:
+            print(f"JSON parsing error: {ve}")
+            return jsonify({"status": "error", "message": "Failed to parse JSON response from API"}), 500
 
-        # Debugging: Print the full response for troubleshooting
-        print("Full response from Mystic API:", result)
-
-        # Asegúrate de que la estructura del resultado tenga un 'value' con archivos dentro
-        if not result or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
-            return jsonify({"status": "error", "message": "No output found in response"}), 500
+        # Ensure that the response has the expected structure
+        if not result or not isinstance(result, list) or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
+            return jsonify({"status": "error", "message": "No output found in response or invalid response format"}), 500
 
         # Recoge las URLs de las imágenes generadas
         image_urls = [file['file']['url'] for file in result[0]['value'] if 'file' in file and 'url' in file['file']]
@@ -142,6 +145,7 @@ def flux_schnell_api():
     except Exception as e:
         print(f"General Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
     
     
