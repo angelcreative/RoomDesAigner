@@ -130,6 +130,7 @@ def flux_schnell_api():
                 image_urls.append(file_info['file']['url'])
             return jsonify({"status": "success", "image_url": image_urls})
         else:
+            print("No output found in response:", result_json)  # Agrega detalles del error
             return jsonify({"status": "error", "message": "No output found in response"}), 500
 
     except subprocess.CalledProcessError as e:
@@ -138,7 +139,6 @@ def flux_schnell_api():
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])

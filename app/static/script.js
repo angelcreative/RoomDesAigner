@@ -744,41 +744,35 @@ fetch("/generate-images", {
     
     
     // FLUX 
-function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img) {
-    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa";
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        height: 1024,
-        width: 1024,
-        num_inference_steps: 40,
-        num_images_per_prompt: 2,
-    };
-
-    fetch("/flux-schnell-api", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success" && Array.isArray(data.image_url)) {
-            showModal(data.image_url);  // Muestra las imágenes en el modal
-            hideGeneratingImagesDialog();
-        } else {
-            throw new Error('Image generation failed or unexpected status.');
-        }
-    })
-    .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);
-        }
-    });
-}
-
-
+fetch("/flux-schnell-api", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        return response.json().then(errorData => {
+            console.error('Error response:', errorData);
+            throw new Error(`HTTP error! Status: ${response.status} - ${errorData.message}`);
+        });
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === "success" && Array.isArray(data.image_url)) {
+        showModal(data.image_url);  // Muestra las imágenes en el modal
+        hideGeneratingImagesDialog();
+    } else {
+        throw new Error('Image generation failed or unexpected status.');
+    }
+})
+.catch(error => {
+    console.error('Error generating images:', error);
+    showError(error);
+});
+ 
 
     // END FLUX
     
