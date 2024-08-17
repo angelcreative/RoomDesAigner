@@ -701,6 +701,28 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
 
     
     
+function showError(error) {
+    console.error("Error generating images:", error);
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    processingMessageContainer.innerHTML = `<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>`;
+    processingMessageContainer.style.display = 'block';
+    hideOverlay(); // Ensure this function exists and hides any loading overlay.
+
+    // Add event listener for the dismiss button
+    const dismissButton = document.getElementById("dismissErrorButton");
+    if (dismissButton) {
+        dismissButton.addEventListener('click', hideErrorMessage);
+    }
+}
+
+function hideErrorMessage() {
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    if (processingMessageContainer) {
+        processingMessageContainer.style.display = 'none';
+    }
+}
+
+    
 //END GENIMAGES
 
 

@@ -92,53 +92,51 @@ def flux_schnell_api():
     try:
         data = request.json
 
-        # Construcción del comando curl
-        curl_command = [
-            'curl', '-X', 'POST', 'https://www.mystic.ai/v4/runs',
-            '--header', 'Authorization: Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
-            '--header', 'Content-Type: application/json',
-            '--data', json.dumps({
-                "pipeline": "black-forest-labs/flux1-schnell:v2",
-                "inputs": [
-                    {"type": "string", "value": data['prompt']},
-                    {"type": "dictionary", "value": {
-                        "height": data['height'],
-                        "max_sequence_length": 256,
-                        "num_images_per_prompt": data['num_images_per_prompt'],
-                        "num_inference_steps": data['num_inference_steps'],
-                        "seed": data.get('seed', None),
-                        "width": data['width']
-                    }}
-                ]
-            })
-        ]
+        # Configuración de la solicitud a Mystic API
+        url = 'https://www.mystic.ai/v4/runs'
+        headers = {
+            'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
+            'Content-Type': 'application/json'
+        }
+        payload = {
+            "pipeline": "black-forest-labs/flux1-schnell:v2",
+            "inputs": [
+                {"type": "string", "value": data['prompt']},
+                {"type": "dictionary", "value": {
+                    "height": data['height'],
+                    "max_sequence_length": 256,
+                    "num_images_per_prompt": data['num_images_per_prompt'],
+                    "num_inference_steps": data['num_inference_steps'],
+                    "seed": data.get('seed', None),
+                    "width": data['width']
+                }}
+            ]
+        }
 
-        # Ejecutar el comando curl
-        result = subprocess.run(curl_command, capture_output=True, text=True)
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()
 
-        # Debugging: Imprimir el resultado del comando curl
-        print("CURL Response:", result.stdout)
+        result = response.json()
 
-        # Parsear el resultado
-        result_json = json.loads(result.stdout)
-
-        # Verificación de la existencia de 'output' en la respuesta
-        if 'output' in result_json and isinstance(result_json['output'], list) and len(result_json['output']) > 0:
-            # Recoge las URLs de las imágenes generadas
-            image_urls = []
-            for file_info in result_json['output'][0]['value']:
-                image_urls.append(file_info['file']['url'])
-            return jsonify({"status": "success", "image_url": image_urls})
-        else:
-            print("No output found in response:", result_json)  # Agrega detalles del error
+        # Asegúrate de que la estructura del resultado tenga un 'value' con archivos dentro
+        if not result or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
             return jsonify({"status": "error", "message": "No output found in response"}), 500
 
-    except subprocess.CalledProcessError as e:
-        print(f"SubprocessError: {e}")
+        # Recoge las URLs de las imágenes generadas
+        image_urls = [file['file']['url'] for file in result[0]['value'] if 'file' in file and 'url' in file['file']]
+
+        if not image_urls:
+            return jsonify({"status": "error", "message": "No images were generated"}), 500
+
+        return jsonify({"status": "success", "image_url": image_urls})
+
+    except requests.exceptions.RequestException as e:
+        print(f"RequestException: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
