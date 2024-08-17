@@ -466,126 +466,191 @@ function clearColorImage() {
 }
 
 
-// END COLORS HEX
-    
-    
-// GEN IMAGES
-
+// END COLORSEX
+ 
 function generateImages(imageUrl, selectedValues, isImg2Img) {
-    showGeneratingImagesDialog();
+  showGeneratingImagesDialog();
 
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
-    const customText = document.getElementById("customText").value;
-    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame, hyperrealistic, highly detailed, stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph.`;
+  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+  const customText = document.getElementById("customText").value;
+  const pictureSelect = document.getElementById("imageDisplayUrl");
+  const selectedPicture = pictureSelect.value;
+    const promptInit = `Sharp focus, RAW, unedited, symmetrical balance, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), HDR, Unedited 8K photograph .` ;
+    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
+//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
+//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
+    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
 
-    let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
+  let plainText = Object.entries(selectedValues)
+    .filter(([key, value]) => value && key !== "imageUrl")
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ");
 
-    let promptEndy = `dense furnishings and decorations.`;
+let promptEndy = `dense furnishings and decorations.`;
 
-    if (extractedColors.length > 0) {
-        const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
-        const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
-        promptEndy += ` Colors used: ${colorsString}.`;
-    }
-
-    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-    const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
-
-    const personValue = document.getElementById("personModel").value;
-    const furnitureValue = document.getElementById("furnitureModel").value;
-
-    let modelId = "ae-sdxl-v1"; // Valor por defecto
-
-    if (personValue !== "") {
-        modelId = personValue;
-    } else if (furnitureValue !== "") {
-        modelId = furnitureValue;
-    }
-
-    // Determine the width and height based on aspect ratio selection
-    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-
-    let width, height;
-
-    if (aspectRatio === "landscape") { // 3:2 aspect ratio
-        width = 1080;
-        height = Math.round((2 / 3) * 1080);  
-    } else if (aspectRatio === "portrait") { // 2:3 aspect ratio
-        width = Math.round((2 / 3) * 1080);  
-        height = 1080;
-    } else if (aspectRatio === "square") { // 1:1 aspect ratio
-        width = 1080;
-        height = 1080;
-    }
-
-    console.log(`Width: ${width}, Height: ${height}`);
-
-    const seedSwitch = document.getElementById("seedSwitch");
-    const seedEnabled = seedSwitch.checked;
-    const seedValue = seedEnabled ? null : "19071975";
-
-    let lora = "clothingadjustloraap";
-    let lora_strength = 1;
-
-    if (modelId === personValue) {
-        lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
-    } else if (modelId === furnitureValue) {
-        lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
-    }
-
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 5,
-        steps: 41,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: modelId,
-        lora_model: lora,
-        lora_strength: lora_strength,
-        scheduler: "DPMSolverMultistepScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no"
-    };
-
-    if (isImg2Img && imageUrl) {
-        prompt.init_image = imageUrl;
-        const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value);
-    }
-
-    fetchWithRetry("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(data => {
-        if (data.status === "success" && data.image_url) {
-            showModal(data.image_url);  // Mostrar las imágenes
-            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
-        } else {
-            throw new Error('Image generation failed or unexpected status.');
-        }
-    })
-    .catch(error => {
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);  // Mostrar errores si no es un caso de generación en progreso
-        }
-    });
+if (extractedColors.length > 0) {
+    const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
+    const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
+    promptEndy += ` Colors used: ${colorsString}.`;
 }
+
+// Ejemplo del uso final de promptEndy
+console.log(promptEndy);
+
+  
+ 
+
+const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+
+let width, height;
+
+if (aspectRatio === "landscape") { // 3:2 aspect ratio
+  width = 1080;
+  height = Math.round((2 / 3) * 1080);  
+} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+  width = Math.round((2 / 3) * 1080);  
+  height = 1080;
+} else if (aspectRatio === "square") { // 1:1 aspect ratio
+  width = 1080;
+  height = 1080;
+}
+
+console.log(`Width: ${width}, Height: ${height}`);
+
+  const seedSwitch = document.getElementById("seedSwitch");
+  const seedEnabled = seedSwitch.checked;
+  const seedValue = seedEnabled ? null : "19071975";
+
+  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+
+// Determine the model_id based on the selection of the "person" field
+
+
+// Get selected models from the form
+const personValue = document.getElementById("personModel").value;
+const furnitureValue = document.getElementById("furnitureModel").value;
+
+// Determine if the person model or furniture model should be used
+let modelId = "ae-sdxl-v1"; // Default to ae-sdxl-v1
+
+if (personValue !== "") {
+  modelId = personValue;
+} else if (furnitureValue !== "") {
+  modelId = furnitureValue;
+}
+
+// Initialize variables for LoRA model and strength
+let lora = "clothingadjustloraap";
+let lora_strength = 1;
+
+// Conditionally set the LoRA model based on the selected model
+if (modelId === personValue) {
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+} else if (modelId === furnitureValue) {
+  lora = "clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+}  
+
+// Now build the JSON object with the updated values
+const prompt = {
+  key: apiKey,
+  prompt: promptText,
+  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+  width: width,
+  height: height,
+  samples: 4,
+  guidance_scale: 5,
+  steps: 41,
+  use_karras_sigmas: "yes",
+  tomesd: "yes",
+  seed: seedValue,
+  model_id: modelId,
+  lora_model: lora,
+  lora_strength: lora_strength,
+  scheduler: "DPMSolverMultistepScheduler",
+  webhook: null,
+  safety_checker: "no",
+  track_id: null,
+  enhance_prompt: "no",
+  //highres_fix: "yes"
+};
+    //xl_more_enhancer,
+    //real-skin-lora
+    //lora 
+    //perfect-eyes-xl,hand-detail-xl,
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
+
+//,epicrealismhelper
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
+    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
+    //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
+    //epicrealism-xl
+    //clothingadjustloraap
+ //architectureexterior
+    //yqmaterailenhancer
+    
+    
+if (isImg2Img && imageUrl) {
+    prompt.init_image = imageUrl;
+
+    // Get the strength value from the slider
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+  }
+    
+   /*   const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }*/
+
+
+      // Get the <span> element by its class name
+     // var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+    //  var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+     // var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+   //   spanElement.textContent = modifiedText;
+// Fetch request to generate images
 
 async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     for (let i = 0; i < retries; i++) {
@@ -609,6 +674,57 @@ async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     }
 }
 
+//FWR
+ 
+    // Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        if (response.status >= 500 && response.status < 600) {
+            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    }
+    return response.json();
+})
+.then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
+    } else {
+        throw new Error('Image generation failed or unexpected status.');
+    }
+})
+.catch(error => {
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Mostrar errores si no es un caso de generación en progreso
+    }
+});
+
+// Define la función checkImageStatus con mayor retraso y más reintentos
 function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
     fetch(fetchResultUrl, {
         method: 'POST',
@@ -644,31 +760,59 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
     });
 }
 
+
+
     
-    
+//end FWR
+
+
+function showError(error) {
+    console.error("Error generating images:", error);
+    alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
+    hideOverlay(); // Oculta la superposición y el mensaje de carga
+}
+
+function displayImages(images) {
+    // Function to display images or handle the successful completion of the task
+    console.log('Displaying images:', images);
+}
+
+
+    // Function to show error message with dismiss button
 function showError(error) {
     console.error("Error generating images:", error);
     const processingMessageContainer = document.getElementById("processingMessageContainer");
-    processingMessageContainer.innerHTML = `<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>`;
+    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
     processingMessageContainer.style.display = 'block';
-    hideOverlay(); // Ensure this function exists and hides any loading overlay.
+    hideOverlay(); // Hide the overlay and loading message
 
     // Add event listener for the dismiss button
     const dismissButton = document.getElementById("dismissErrorButton");
-    if (dismissButton) {
-        dismissButton.addEventListener('click', hideErrorMessage);
-    }
+    dismissButton.addEventListener('click', hideErrorMessage);
 }
 
+// Function to hide the error message
 function hideErrorMessage() {
     const processingMessageContainer = document.getElementById("processingMessageContainer");
-    if (processingMessageContainer) {
-        processingMessageContainer.style.display = 'none';
-    }
+    processingMessageContainer.style.display = 'none';
 }
+    // Function to display the error modal window
+   function displayErrorModal() {
+    const errorModal = document.getElementById("errorGenerating");
+    errorModal.style.display = "block";
 
-    
-//END GENIMAGES
+    const tryAgainButton = document.getElementById("errorButton");
+    tryAgainButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+        generateImages(imageUrl, selectedValues); // Relaunch the query
+    });
+
+    const closeButton = document.querySelector("#errorGenerating .closeError");
+    closeButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+    });
+}
+}
 
 
     
