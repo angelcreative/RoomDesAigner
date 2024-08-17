@@ -13,6 +13,7 @@ import io
 import base64
 import time
 import openai
+import subprocess
 
 
 app = Flask(__name__)
@@ -83,52 +84,60 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 
+
+#flux
+
 @app.route('/flux-schnell-api', methods=['POST'])
 def flux_schnell_api():
     try:
         data = request.json
 
-        # Configuración de la solicitud a Mystic API
-        url = 'https://www.mystic.ai/v4/runs'
-        headers = {
-            'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            "pipeline": "black-forest-labs/flux1-schnell:v2",
-            "inputs": [
-                {"type": "string", "value": data['prompt']},
-                {"type": "dictionary", "value": {
-                    "height": data['height'],
-                    "max_sequence_length": 256,
-                    "num_images_per_prompt": data['num_images_per_prompt'],
-                    "num_inference_steps": data['num_inference_steps'],
-                    "seed": data.get('seed', None),
-                    "width": data['width']
-                }}
-            ]
-        }
+        # Construcción del comando curl
+        curl_command = [
+            'curl', '-X', 'POST', 'https://www.mystic.ai/v4/runs',
+            '--header', 'Authorization: Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
+            '--header', 'Content-Type: application/json',
+            '--data', json.dumps({
+                "pipeline": "black-forest-labs/flux1-schnell:v2",
+                "inputs": [
+                    {"type": "string", "value": data['prompt']},
+                    {"type": "dictionary", "value": {
+                        "height": data['height'],
+                        "max_sequence_length": 256,
+                        "num_images_per_prompt": data['num_images_per_prompt'],
+                        "num_inference_steps": data['num_inference_steps'],
+                        "seed": data.get('seed', None),
+                        "width": data['width']
+                    }}
+                ]
+            })
+        ]
 
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()  # Lanza un HTTPError para códigos de estado 4xx/5xx
+        # Ejecutar el comando curl
+        result = subprocess.run(curl_command, capture_output=True, text=True)
 
-        result = response.json()
+        # Debugging: Imprimir el resultado del comando curl
+        print("CURL Response:", result.stdout)
+
+        # Parsear el resultado
+        result_json = json.loads(result.stdout)
 
         # Verificación de la existencia de 'output' en la respuesta
-        if 'output' in result and isinstance(result['output'], list) and len(result['output']) > 0:
+        if 'output' in result_json and isinstance(result_json['output'], list) and len(result_json['output']) > 0:
             # Recoge las URLs de las imágenes generadas
-            image_urls = [file['file']['url'] for file in result['output'][0]['value']]
+            image_urls = []
+            for file_info in result_json['output'][0]['value']:
+                image_urls.append(file_info['file']['url'])
             return jsonify({"status": "success", "image_url": image_urls})
         else:
             return jsonify({"status": "error", "message": "No output found in response"}), 500
 
-    except requests.exceptions.RequestException as e:
-        print(f"RequestException: {e}")
+    except subprocess.CalledProcessError as e:
+        print(f"SubprocessError: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 
 # Define your generate_images endpoint
