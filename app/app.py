@@ -118,6 +118,9 @@ def flux_schnell_api():
 
         result = response.json()
 
+        # Debugging: Print the full response for troubleshooting
+        print("Full response from Mystic API:", result)
+
         # Asegúrate de que la estructura del resultado tenga un 'value' con archivos dentro
         if not result or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
             return jsonify({"status": "error", "message": "No output found in response"}), 500
@@ -130,14 +133,18 @@ def flux_schnell_api():
 
         return jsonify({"status": "success", "image_url": image_urls})
 
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTPError: {e.response.text}")
+        return jsonify({"status": "error", "message": e.response.text}), 500
     except requests.exceptions.RequestException as e:
         print(f"RequestException: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
     except Exception as e:
-        print(f"Exception: {e}")
+        print(f"General Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
+    
+    
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
