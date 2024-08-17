@@ -87,7 +87,6 @@ def check_image_availability(url, timeout=60, interval=5):
 def flux_schnell_api():
     try:
         data = request.json
-        print("Datos recibidos:", data)  # Imprime los datos para depuración
 
         # Configuración de la solicitud a Mystic API
         url = 'https://www.mystic.ai/v4/runs'
@@ -111,14 +110,17 @@ def flux_schnell_api():
         }
 
         response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()  # Will raise an HTTPError if the HTTP request returned an unsuccessful status code
+        response.raise_for_status()  # Lanza un HTTPError para códigos de estado 4xx/5xx
 
         result = response.json()
 
-        # Recoge las URLs de las imágenes generadas
-        image_urls = [file['file']['url'] for file in result['output'][0]['value']]
-
-        return jsonify({"status": "success", "image_url": image_urls})
+        # Verificación de la existencia de 'output' en la respuesta
+        if 'output' in result and isinstance(result['output'], list) and len(result['output']) > 0:
+            # Recoge las URLs de las imágenes generadas
+            image_urls = [file['file']['url'] for file in result['output'][0]['value']]
+            return jsonify({"status": "success", "image_url": image_urls})
+        else:
+            return jsonify({"status": "error", "message": "No output found in response"}), 500
 
     except requests.exceptions.RequestException as e:
         print(f"RequestException: {e}")
@@ -126,6 +128,7 @@ def flux_schnell_api():
     except Exception as e:
         print(f"Exception: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 # Define your generate_images endpoint
