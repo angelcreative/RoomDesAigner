@@ -86,70 +86,6 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 #flux
-
-@app.route('/flux-schnell-api', methods=['POST'])
-def flux_schnell_api():
-    try:
-        data = request.json
-
-        # Configuración de la solicitud a Mystic API
-        url = 'https://www.mystic.ai/v4/runs'
-        headers = {
-            'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
-            'Content-Type': 'application/json'
-        }
-        payload = {
-            "pipeline": "black-forest-labs/flux1-schnell:v2",
-            "inputs": [
-                {"type": "string", "value": data['prompt']},
-                {"type": "dictionary", "value": {
-                    "height": data['height'],
-                    "max_sequence_length": 256,
-                    "num_images_per_prompt": data['num_images_per_prompt'],
-                    "num_inference_steps": data['num_inference_steps'],
-                    "seed": data.get('seed', None),
-                    "width": data['width']
-                }}
-            ]
-        }
-
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-
-        # Parsing the response and logging it
-        try:
-            result = response.json()
-            print("Full response from Mystic API:", result)
-        except ValueError as ve:
-            print(f"JSON parsing error: {ve}")
-            return jsonify({"status": "error", "message": "Failed to parse JSON response from API"}), 500
-
-        # Ensure that the response has the expected structure
-        if not result or not isinstance(result, list) or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
-            return jsonify({"status": "error", "message": "No output found in response or invalid response format"}), 500
-
-        # Recoge las URLs de las imágenes generadas
-        image_urls = [file['file']['url'] for file in result[0]['value'] if 'file' in file and 'url' in file['file']]
-
-        if not image_urls:
-            return jsonify({"status": "error", "message": "No images were generated"}), 500
-
-        return jsonify({"status": "success", "image_url": image_urls})
-
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTPError: {e.response.text}")
-        return jsonify({"status": "error", "message": e.response.text}), 500
-    except requests.exceptions.RequestException as e:
-        print(f"RequestException: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-    except Exception as e:
-        print(f"General Exception: {e}")
-        return jsonify({"status": "error", "message": str(e)}), 500
-
-
-    
-    
-# Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     try:
@@ -161,68 +97,105 @@ def generate_images():
         if user_data and user_data.get('credits', 0) >= 2:
             data = request.get_json()
 
-            # Extract the promptText from the incoming data
+            # Extract the promptText and model_id from the incoming data
             prompt_text = data.get('prompt')
+            model_id = data.get('model_id', 'modelslab')  # Default to 'modelslab' if no model_id is provided
 
             if not prompt_text:
                 return jsonify({"error": "Missing prompt text"}), 400
 
-            # Transform the prompt using OpenAI API (or any other transformation)
-            transformed_prompt = transform_prompt(prompt_text)
-
-            # Update the prompt in the data with the transformed prompt
-            data['prompt'] = transformed_prompt
-
-            # Choose the correct URL based on whether it's an img2img request
-            url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-            response = requests.post(url, json=data, timeout=180)  # Aumenta el tiempo de espera a 180 segundos
-
-            if response.status_code == 200:
-                result = response.json()
-                request_id = result.get('id')  # Get the request_id to fetch images later
-
-                if not request_id:
-                    return jsonify({"error": "No request_id returned by the server"}), 500
-
-                # Fetch the images using the request_id
-                fetch_url = 'https://modelslab.com/api/v6/images/fetch'
-                fetch_payload = {
-                    "key": data.get('key'),  # Assuming the API key is passed in the original request
-                    "request_id": request_id
+            # Check if we're using flux-schnell or modelslab
+            if model_id == "flux-schnell":
+                # Logic for flux-schnell
+                url = 'https://www.mystic.ai/v4/runs'
+                headers = {
+                    'Authorization': 'Bearer pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa',
+                    'Content-Type': 'application/json'
+                }
+                payload = {
+                    "pipeline": "black-forest-labs/flux1-schnell:v2",
+                    "inputs": [
+                        {"type": "string", "value": prompt_text},
+                        {"type": "dictionary", "value": {
+                            "height": 1024,
+                            "width": 1024,
+                            "num_images_per_prompt": 2,
+                            "num_inference_steps": 40
+                        }}
+                    ]
                 }
 
-                # Poll the fetch API to check if the images are ready
-                retries = 10
-                delay = 5  # Start with a 5-second delay
+                response = requests.post(url, headers=headers, json=payload, timeout=180)
+                if response.status_code == 200:
+                    result = response.json()
 
-                for i in range(retries):
-                    fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
-                    if fetch_response.status_code == 200:
-                        fetch_result = fetch_response.json()
-                        if fetch_result['status'] == "success":
-                            # Images are ready, return them to the user
-                            deduct_credits(username, 2)
-                            fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                            return jsonify(fetch_result)
-                    time.sleep(delay)  # Wait for the delay before retrying
-                    delay *= 2  # Exponential backoff: double the delay each time
+                    # Asegúrate de que la estructura del resultado tenga un 'value' con archivos dentro
+                    if not result or not isinstance(result, list) or 'value' not in result[0] or not isinstance(result[0]['value'], list) or not result[0]['value']:
+                        return jsonify({"error": "No output found in response or invalid response format"}), 500
 
-                return jsonify({"error": "Image generation timed out"}), 408
+                    # Recoge las URLs de las imágenes generadas
+                    image_urls = [file['file']['url'] for file in result[0]['value'] if 'file' in file and 'url' in file['file']]
+
+                    if not image_urls:
+                        return jsonify({"error": "No images were generated"}), 500
+
+                    # Deduce credits and return images
+                    deduct_credits(username, 2)
+                    return jsonify({"status": "success", "image_url": image_urls})
+                else:
+                    return jsonify({"error": "Image generation failed"}), response.status_code
+
             else:
-                return jsonify({"error": "Image generation failed"}), response.status_code
+                # Existing logic for modelslab
+                transformed_prompt = transform_prompt(prompt_text)
+                data['prompt'] = transformed_prompt
+
+                # Choose the correct URL based on whether it's an img2img request
+                url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
+                response = requests.post(url, json=data, timeout=180)
+
+                if response.status_code == 200:
+                    result = response.json()
+                    request_id = result.get('id')
+
+                    if not request_id:
+                        return jsonify({"error": "No request_id returned by the server"}), 500
+
+                    # Fetch the images using the request_id
+                    fetch_url = 'https://modelslab.com/api/v6/images/fetch'
+                    fetch_payload = {
+                        "key": data.get('key'),  # Assuming the API key is passed in the original request
+                        "request_id": request_id
+                    }
+
+                    retries = 10
+                    delay = 5
+
+                    for i in range(retries):
+                        fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
+                        if fetch_response.status_code == 200:
+                            fetch_result = fetch_response.json()
+                            if fetch_result['status'] == "success":
+                                deduct_credits(username, 2)
+                                fetch_result['transformed_prompt'] = transformed_prompt
+                                return jsonify(fetch_result)
+                        time.sleep(delay)
+                        delay *= 2
+
+                    return jsonify({"error": "Image generation timed out"}), 408
+                else:
+                    return jsonify({"error": "Image generation failed"}), response.status_code
         else:
             return jsonify({"error": "Insufficient credits"}), 403
 
     except requests.exceptions.Timeout:
-        return jsonify({"error": "The request timed out. Please try again."}), 504  # Gateway Timeout
+        return jsonify({"error": "The request timed out. Please try again."}), 504
     except requests.exceptions.RequestException as e:
-        # Catch all other requests exceptions and return an error
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     except Exception as e:
-        # Catch any other exceptions and return an error
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
-
+ 
     
     
     

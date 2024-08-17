@@ -506,13 +506,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelId = furnitureValue;
     }
 
-    // Check if "flux-schnell" model is selected
-    if (modelId === "flux-schnell") {
-        console.log("Flux Schnell model selected");
-        generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img, promptText);
-        return;
-    }
-
     // Determine the width and height based on aspect ratio selection
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 
@@ -580,14 +573,9 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         body: JSON.stringify(prompt)
     })
     .then(data => {
-        if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
-            showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+        if (data.status === "success" && data.image_url) {
+            showModal(data.image_url);  // Mostrar las imágenes
             hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
-        } else if (data.status === "processing" && data.fetch_result) {
-            checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
@@ -595,49 +583,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .catch(error => {
         if (!error.message.includes("Image generation in progress")) {
             showError(error);  // Mostrar errores si no es un caso de generación en progreso
-        }
-    });
-}
-
-function generateFluxSchnellImages(imageUrl, selectedValues, isImg2Img, promptText) {
-    const apiKey = "pipeline_sk_LB9qIMFERzoyl96eYe8OFufFt9bfxHwa";
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        height: 1024,
-        width: 1024,
-        num_inference_steps: 40,
-        num_images_per_prompt: 2,
-    };
-
-    fetch("/flux-schnell-api", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(errorData => {
-                console.error('Error response:', errorData);
-                throw new Error(`HTTP error! Status: ${response.status} - ${errorData.message}`);
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === "success" && Array.isArray(data.image_url)) {
-            showModal(data.image_url);  // Muestra las imágenes en el modal
-            hideGeneratingImagesDialog();
-        } else {
-            throw new Error('Image generation failed or unexpected status.');
-        }
-    })
-    .catch(error => {
-        console.error('Error generating images:', error);
-        if (!error.message.includes("Image generation in progress")) {
-            showError(error);
         }
     });
 }
