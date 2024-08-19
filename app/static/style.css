@@ -9,7 +9,7 @@ html, body, div, p, a, select, input, span, sub, sup, h1, h2, h3, b, strong {
 }
 
 div#mainUI, html {
-    background: #eee;
+    background: #273440;
 }
 
 body {
@@ -915,8 +915,8 @@ h2.loginTitle {
     margin: 0 auto;
     width: 100%;
     position: fixed;
-    background: #ffffffbf;
-    backdrop-filter: blur(2px);
+    background: #11192100;
+    /* backdrop-filter: blur(2px); */
     z-index: 1;
 }
 
@@ -994,7 +994,7 @@ button#dismissErrorButton {
 
 label.imageup {
     cursor: pointer;
-    background: #eeeeee;
+    background: #1e2732;
     padding: 20px;
     border-radius: 12px;
     color: #677580;
@@ -1797,7 +1797,7 @@ i {
 }
 
 .modal-content {
-    padding: 100px 0 ;
+    padding: 100px 0;
     position: relative;
     display: block;
     margin: 0 auto;
@@ -1808,7 +1808,7 @@ i {
     left: 0;
     overflow: scroll;
     text-align: center;
-    background: #eee;
+    background: #111921;
 }
 
 #clearImg,
@@ -2240,8 +2240,8 @@ textarea:focus, textarea:hover {
 button {
     margin: 1rem 0.5rem;
     border-radius: 8px;
-    border: none;
-    background: #eeeeee;
+    border: 1px solid #1e2732;
+    background: #111921;
     color: #4f5c66;
     padding: 0.8rem 1.2rem;
     cursor: pointer;
@@ -2400,13 +2400,14 @@ option[title]:hover:after {
 
 .toggle-content {
     display: none;
-    background: hsl(210 34% 5% / 1);
+    background: hsl(210deg 32% 9.8%);
     padding: 24px;
     border-radius: 16px;
-    color: hsl(210 34% 83% / 1);
+    color: hsl(206.4deg 10.82% 45.29%);
     font-size: 14px;
     line-height: 1.5;
-text-align: left;}
+    text-align: left;
+    }
 
 .hexDot {
     width: 5px;
@@ -2728,7 +2729,7 @@ tertiary:hover {
     flex-wrap: nowrap;
     align-items: flex-start;
     height: 160px;
-    background: #eeeeee;
+    background: #1e2732;
     padding: 4px 12px 12px;
     border-radius: 16px;
     margin: 12px 0;
@@ -2740,7 +2741,7 @@ tertiary:hover {
 }
 
 span#sliderValue {
-    background: #ffffff;
+    background: #111921;
     padding: 4px 8px;
     border-radius: 90px;
 }
@@ -2982,7 +2983,7 @@ loginModal > p {
 
 /*collapsible*/
 .collapsible {
-    background: #eeeeee;
+    background: #1e2732;
     cursor: pointer;
     padding: 8px;
     width: auto;
@@ -2990,7 +2991,7 @@ loginModal > p {
     text-align: left;
     outline: none;
     font-size: 15px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #1e2732;
     border-radius: 6px;
     display: flex;
     flex-direction: row;
@@ -3001,7 +3002,7 @@ loginModal > p {
 }
 
 .active, .collapsible:hover {
-  background-color: #eeeeee;
+  background-color: #111921;
 }
 
 .content {
@@ -3121,15 +3122,15 @@ loginModal > p {
 
 .dropdown-selected, textarea {
     padding: 8px 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #161e26;
     cursor: pointer;
-    background-color: #f4f2f1bf;
+    background-color: #1e2732;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-radius: 8px;
     box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
-    color: #677580;
+    color: #eee;
     font-family: courier, sans-serif;
     font-size: 14px;
     height: 30px;
@@ -3138,7 +3139,7 @@ loginModal > p {
 
 textarea { cursor: default; height: 80px;}
 .dropdown-selected:hover {
-    background:white
+    background: #111921;
 }
     .dropdown-selected .clear-selection {
     display: none;
