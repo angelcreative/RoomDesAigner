@@ -462,6 +462,7 @@ def update_user_credits(email, additional_credits):
 
 
 #clarity
+
 @app.route('/controlnet-upscale', methods=['POST'])
 def controlnet_upscale():
     try:
@@ -485,20 +486,25 @@ def controlnet_upscale():
             "lora_sharpness_strength": lora_sharpness_strength
         }
 
-        # Ejecutar el modelo de replicate y obtener solo la URL del resultado
-        output = replicate.run(
-            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+        # Usar replicate.predictions.create para manejar la predicción completa
+        prediction = replicate.predictions.create(
+            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
         
-        if isinstance(output, list) and len(output) > 0:
-            # Si la salida es una lista y tiene elementos, se asume que el primer elemento es la URL
-            output_url = output[0]
+        # Esperar a que la predicción se complete
+        prediction.reload()
+
+        # Reintentar hasta que el estado sea "succeeded", "failed", o "canceled"
+        while prediction.status not in {"succeeded", "failed", "canceled"}:
+            time.sleep(2)
+            prediction.reload()
+
+        if prediction.status == "succeeded":
+            # Devolver la URL de la imagen generada
+            return jsonify({'output': prediction.output}), 200
         else:
-            return jsonify({'error': 'Unexpected output format from model'}), 500
-        
-        # Devolver la URL de la imagen generada
-        return jsonify({'output': output_url}), 200
+            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
