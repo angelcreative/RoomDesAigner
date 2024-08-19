@@ -467,7 +467,7 @@ def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')  # Agrega un prompt predeterminado si no se proporciona uno
+        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')
         creativity = data.get('creativity', 0.4)
         negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
         lora_details_strength = data.get('lora_details_strength', -0.25)
@@ -485,14 +485,20 @@ def controlnet_upscale():
             "lora_sharpness_strength": lora_sharpness_strength
         }
 
-        # Ejecutar el modelo de replicate
+        # Ejecutar el modelo de replicate y obtener solo la URL del resultado
         output = replicate.run(
             "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
         
-        # Devolver la salida del modelo
-        return jsonify({'output': output}), 200
+        if isinstance(output, list) and len(output) > 0:
+            # Si la salida es una lista y tiene elementos, se asume que el primer elemento es la URL
+            output_url = output[0]
+        else:
+            return jsonify({'error': 'Unexpected output format from model'}), 500
+        
+        # Devolver la URL de la imagen generada
+        return jsonify({'output': output_url}), 200
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
