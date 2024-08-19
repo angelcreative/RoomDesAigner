@@ -5,6 +5,7 @@ import hashlib
 import requests
 import bcrypt
 import os
+import replicate
 import uuid
 import random
 import logging
@@ -29,11 +30,18 @@ CORS(app, resources={
 
 logging.basicConfig(level=logging.INFO)
 
+
+
 app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
 
 # MongoDB Data API configuration
 mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/endpoint/data/v1"
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
+
+
+#replicate token 
+REPLICATE_API_TOKEN = os.getenv('REPLICATE_API_TOKEN')
+
 
 # Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
@@ -452,6 +460,26 @@ def update_user_credits(email, additional_credits):
 
     return response
 
+
+#clarity
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale():
+    data = request.json
+    image_url = data.get('image_url')
+    
+    if not image_url:
+        return jsonify({'error': 'No se proporcionó URL de imagen'}), 400
+
+    try:
+        # Ejecutar el modelo en Replicate para escalar la imagen
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input={"image": image_url}
+        )
+        return jsonify({'output': output}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # A dictionary to store the comparison data
 comparisons = {}
 
@@ -482,32 +510,7 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
-# A dictionary to store the upscaled images data
-upscales = {}
 
-@app.route('/create-upscale-session', methods=['POST'])
-def create_upscale_session():
-    data = request.json
-    upscaled_image_url = data['upscaledImageUrl']
-
-    # Generate a unique slug
-    slug = str(uuid.uuid4())
-
-    # Store the upscale data
-    upscales[slug] = {
-        'upscaled_image_url': upscaled_image_url
-    }
-
-    return jsonify({'slug': slug})
-
-@app.route('/upscale/<slug>')
-def view_upscaled_image(slug):
-    if slug in upscales:
-        data = upscales[slug]
-        # Render a template that dynamically loads the upscaled image view
-        return render_template('upscale.html', data=data)
-    else:
-        return "Upscaled image not found", 404
 
 @app.route('/relight')
 def relight_page():

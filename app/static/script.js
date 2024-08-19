@@ -1280,23 +1280,31 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
+async function clarityUpscale(imageUrl) {
+    try {
+        const response = await fetch('/clarity-upscale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image_url: imageUrl })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const upscaledImageUrl = data.output[0];
+
+        // Abrir la imagen escalada en una nueva pestaña
+        window.open(upscaledImageUrl, '_blank');
+    } catch (error) {
+        console.error('Error durante el escalado de la imagen:', error);
+        alert('Hubo un error al intentar escalar la imagen. Por favor, inténtalo de nuevo.');
+    }
 }
 
- 
-
-// Helper function to create a button and attach an event listener
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
     
     
     // Function to toggle the visibility of the prompt details
@@ -1341,13 +1349,13 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const upscaleButton = createButton("Upscale", () => upscaleImage(imageUrl));
+        const clarityButton = createButton("CLARITY", () => clarityUpscale(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
 
 
-[downloadButton, copyButton, editButton, copyPromptButton, upscaleButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+[downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
         
       
 
@@ -1368,7 +1376,12 @@ function showModal(imageUrls, transformedPrompt) {
 }
 
     
- 
+ function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
