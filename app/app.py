@@ -467,16 +467,15 @@ def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt', '')  # Puedes ajustar los valores por defecto según necesites
+        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')  # Agrega un prompt predeterminado si no se proporciona uno
         creativity = data.get('creativity', 0.4)
         negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
         lora_details_strength = data.get('lora_details_strength', -0.25)
         lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
-        
+
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
-        
-        # Parámetros de entrada para el modelo de ControlNet Tile
+
         input_data = {
             "image": image_url,
             "prompt": prompt,
@@ -485,7 +484,7 @@ def controlnet_upscale():
             "lora_details_strength": lora_details_strength,
             "lora_sharpness_strength": lora_sharpness_strength
         }
-        
+
         # Ejecutar el modelo de replicate
         output = replicate.run(
             "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
@@ -497,7 +496,6 @@ def controlnet_upscale():
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 # A dictionary to store the comparison data
 comparisons = {}
