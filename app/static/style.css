@@ -1473,8 +1473,9 @@ h4 {
   display: block;
 }
 
-.colorPalette {column-gap: 1rem;
-    background: #eeeeee;
+.colorPalette {
+    column-gap: 1rem;
+    background: #273440;
     justify-content: space-around;
     border-radius: 16px;
     color: #6d7b87;
@@ -1502,18 +1503,7 @@ display: flex;
     cursor: pointer;
 }
 
-.colorPaletteA {
-display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 12px;
-    border: 1px solid #e6e6e6;
-    background: #f8f8f8;
-    padding: 8px 4px;
-    border-radius: 8px;
-    height: 100%;
-}
+.colorPaletteA {display: flex;flex-direction: column;align-items: center;justify-content: flex-start;margin-bottom: 12px;/* border: 1px solid #e6e6e6; */background: #1e2732;padding: 8px 4px;border-radius: 8px;height: 100%;}
 
 
 .colorName {
@@ -2018,7 +2008,7 @@ sub {
 
 .aspectRatioShot,
 .switchContainer {
-    background: #eeeeee;
+    background: #1e2732;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -2046,7 +2036,7 @@ sub {
 }
 
 .switchLabel input:checked + .slider {
-  background-color: #fafafa;
+  background-color: #111921;
 }
 
 .switchLabel input:focus + .slider {
@@ -2077,7 +2067,7 @@ sub {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #eee;
+    background-color: #111921;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -2088,7 +2078,7 @@ sub {
     width: 14px;
     left: 3px;
     bottom: 2px;
-    background-color: #273440;
+    background-color: #7ebcb9;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -3130,7 +3120,7 @@ loginModal > p {
     justify-content: space-between;
     border-radius: 8px;
     box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
-    color: #eee;
+    color: #677580;
     font-family: courier, sans-serif;
     font-size: 14px;
     height: 30px;
@@ -3159,7 +3149,7 @@ textarea { cursor: default; height: 80px;}
   .dropdown-options {
     display: none;
     position: relative;
-    background-color: #f9f9f9;
+    background-color: #1e2732;
     width: calc(100% - 20px);
     box-shadow: 0px 5px 4px 2px rgb(12 47 77 / 11%);
     z-index: 3;
@@ -3178,7 +3168,7 @@ textarea { cursor: default; height: 80px;}
 
     .dropdown-options .optgroup-label {
         padding: 8px 16px;
-        background-color: #eee;
+        background-color: #111921;
         cursor: default;
         font-weight: bold;
     }
@@ -3191,7 +3181,7 @@ textarea { cursor: default; height: 80px;}
     }
 
     .dropdown-options .option:hover {
-        background-color: #f1f1f1;
+        background-color: #1e2732;
     }
 
     .color-swatch {
