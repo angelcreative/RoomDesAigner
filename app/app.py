@@ -475,13 +475,15 @@ def clarity_upscale():
         logging.info(f"Procesando imagen desde URL: {image_url}")
 
         # Ejecutar el modelo en Replicate para escalar la imagen
-        output = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        model_version = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
+        prediction = replicate.predictions.create(
+            version=model_version,
             input={"image": image_url}
         )
 
-        logging.info(f"Imagen escalada correctamente: {output}")
-        return jsonify({'output': output}), 200
+        output_url = prediction['output'][0]
+        logging.info(f"Imagen escalada correctamente: {output_url}")
+        return jsonify({'output': [output_url]}), 200
 
     except Exception as e:
         logging.error(f"Error durante el escalado de la imagen: {str(e)}")
