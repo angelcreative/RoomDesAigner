@@ -481,13 +481,23 @@ def clarity_upscale():
             input={"image": image_url}
         )
 
-        output_url = prediction['output'][0]
-        logging.info(f"Imagen escalada correctamente: {output_url}")
-        return jsonify({'output': [output_url]}), 200
+        # Esperar hasta que la predicción esté completa
+        while prediction.status not in ["succeeded", "failed"]:
+            time.sleep(1)  # Esperar un segundo antes de verificar el estado nuevamente
+            prediction = replicate.predictions.get(prediction.id)
+
+        if prediction.status == "succeeded":
+            output_url = prediction.output[0]
+            logging.info(f"Imagen escalada correctamente: {output_url}")
+            return jsonify({'output': [output_url]}), 200
+        else:
+            logging.error(f"Error en la predicción: {prediction.error}")
+            return jsonify({'error': 'La predicción falló'}), 500
 
     except Exception as e:
         logging.error(f"Error durante el escalado de la imagen: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
 # A dictionary to store the comparison data
 comparisons = {}
