@@ -462,34 +462,42 @@ def update_user_credits(email, additional_credits):
 
 
 #clarity
-@app.route('/clarity-upscale', methods=['POST'])
-def clarity_upscale():
+@app.route('/controlnet-upscale', methods=['POST'])
+def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-
+        prompt = data.get('prompt', '')  # Puedes ajustar los valores por defecto según necesites
+        creativity = data.get('creativity', 0.4)
+        negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
+        lora_details_strength = data.get('lora_details_strength', -0.25)
+        lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
+        
         if not image_url:
-            logging.error("No se proporcionó URL de imagen")
-            return jsonify({'error': 'No se proporcionó URL de imagen'}), 400
-
-        logging.info(f"Procesando imagen desde URL: {image_url}")
-
-        # Preparar el input con la clave correcta
-        input_data = {"image": image_url}
-
-        # Ejecutar el modelo directamente utilizando replicate.run()
+            return jsonify({'error': 'No image URL provided'}), 400
+        
+        # Parámetros de entrada para el modelo de ControlNet Tile
+        input_data = {
+            "image": image_url,
+            "prompt": prompt,
+            "creativity": creativity,
+            "negative_prompt": negative_prompt,
+            "lora_details_strength": lora_details_strength,
+            "lora_sharpness_strength": lora_sharpness_strength
+        }
+        
+        # Ejecutar el modelo de replicate
         output = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
-
-        logging.info(f"Imagen escalada correctamente: {output}")
+        
+        # Devolver la salida del modelo
         return jsonify({'output': output}), 200
-
-    except Exception as e:
-        logging.error(f"Error durante el escalado de la imagen: {str(e)}")
-        return jsonify({'error': str(e)}), 500
     
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # A dictionary to store the comparison data
 comparisons = {}

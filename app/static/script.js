@@ -1280,29 +1280,29 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-async function clarityUpscale(imageUrl) {
-    try {
-        const response = await fetch('/clarity-upscale', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ image_url: imageUrl })
-        });
-
+function controlnetUpscale(imageUrl) {
+    fetch('/controlnet-upscale', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            image_url: imageUrl
+        })
+    })
+    .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        const data = await response.json();
-        const upscaledImageUrl = data.output[0];
-
-        // Abrir la imagen escalada en una nueva pestaña
-        window.open(upscaledImageUrl, '_blank');
-    } catch (error) {
+        return response.json();
+    })
+    .then(data => {
+        const outputImageUrl = data.output;
+        window.open(outputImageUrl, '_blank');
+    })
+    .catch(error => {
         console.error('Error durante el escalado de la imagen:', error);
-        alert('Hubo un error al intentar escalar la imagen. Por favor, inténtalo de nuevo.');
-    }
+    });
 }
 
     
@@ -1349,13 +1349,13 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const clarityButton = createButton("CLARITY", () => clarityUpscale(imageUrl));
+        const controlnetButton = createButton("ControlNet", () => controlnetUpscale(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
 
 
-[downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+[downloadButton, copyButton, editButton, copyPromptButton, controlnetButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
         
       
 
