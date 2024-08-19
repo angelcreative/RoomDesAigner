@@ -40,7 +40,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 
 
 #replicate token 
-REPLICATE_API_TOKEN = os.getenv('REPLICATE_API_TOKEN')
+REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
 # Fetch the API key from the environment
@@ -464,20 +464,27 @@ def update_user_credits(email, additional_credits):
 #clarity
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
-    data = request.json
-    image_url = data.get('image_url')
-    
-    if not image_url:
-        return jsonify({'error': 'No se proporcionó URL de imagen'}), 400
-
     try:
+        data = request.json
+        image_url = data.get('image_url')
+
+        if not image_url:
+            logging.error("No se proporcionó URL de imagen")
+            return jsonify({'error': 'No se proporcionó URL de imagen'}), 400
+
+        logging.info(f"Procesando imagen desde URL: {image_url}")
+
         # Ejecutar el modelo en Replicate para escalar la imagen
         output = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={"image": image_url}
         )
+
+        logging.info(f"Imagen escalada correctamente: {output}")
         return jsonify({'output': output}), 200
+
     except Exception as e:
+        logging.error(f"Error durante el escalado de la imagen: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 # A dictionary to store the comparison data
