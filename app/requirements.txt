@@ -12,6 +12,6 @@ greenlet==3.0.3
 protobuf==4.21.12
 grpcio-tools==1.53.0
 stability-sdk==0.8.1
-replicate==0.31.0
+replicate==0.7.0
 
 # add other dependencies 
