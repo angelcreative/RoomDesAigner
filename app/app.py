@@ -474,34 +474,22 @@ def clarity_upscale():
 
         logging.info(f"Procesando imagen desde URL: {image_url}")
 
-        # Ejecutar el modelo en Replicate para escalar la imagen
-        model_version = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
-        prediction = replicate.predictions.create(
-            version=model_version,
-            input={"image": image_url}
+        # Preparar el input con la clave correcta
+        input_data = {"image": image_url}
+
+        # Ejecutar el modelo directamente utilizando replicate.run()
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input_data
         )
 
-        # Verificar si prediction es realmente un objeto de predicción
-        if isinstance(prediction, dict) and 'id' in prediction:
-            # Esperar hasta que la predicción esté completa
-            while prediction['status'] not in ["succeeded", "failed"]:
-                time.sleep(1)  # Esperar un segundo antes de verificar el estado nuevamente
-                prediction = replicate.predictions.get(prediction['id'])
-
-            if prediction['status'] == "succeeded":
-                output_url = prediction['output'][0]
-                logging.info(f"Imagen escalada correctamente: {output_url}")
-                return jsonify({'output': [output_url]}), 200
-            else:
-                logging.error(f"Error en la predicción: {prediction.get('error', 'Unknown error')}")
-                return jsonify({'error': 'La predicción falló'}), 500
-        else:
-            logging.error("La respuesta de la API no es un objeto de predicción válido.")
-            return jsonify({'error': 'Invalid prediction object'}), 500
+        logging.info(f"Imagen escalada correctamente: {output}")
+        return jsonify({'output': output}), 200
 
     except Exception as e:
         logging.error(f"Error durante el escalado de la imagen: {str(e)}")
         return jsonify({'error': str(e)}), 500
+    
 
 # A dictionary to store the comparison data
 comparisons = {}
