@@ -5,7 +5,6 @@ bcrypt==4.1.2
 requests>=2.31.0
 openai==0.28.0
 Werkzeug>=2.2.3
-replicate==0.7.0
 urllib3>=1.26.18
 SQLAlchemy==2.0.30
 Flask-SQLAlchemy==3.0.5
@@ -13,7 +12,7 @@ greenlet==3.0.3
 protobuf==4.21.12
 grpcio-tools==1.53.0
 stability-sdk==0.8.1
-replicate
+replicate==0.5.0
 
 
 # add other dependencies 
