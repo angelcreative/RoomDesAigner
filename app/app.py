@@ -477,23 +477,21 @@ def controlnet_upscale():
             "prompt": prompt
         }
 
-        # Crear la predicción usando replicate.predictions.create
+        # Usar `replicate.predictions.create()` para crear una predicción
         prediction = replicate.predictions.create(
             version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
 
-        # Esperar a que la predicción se complete
-        while prediction.status not in ["succeeded", "failed", "canceled"]:
-            time.sleep(2)
+        # Verificar si la predicción se completó con éxito
+        while prediction.status not in ["succeeded", "failed"]:
             prediction.reload()
 
-        # Verificar si la predicción fue exitosa
         if prediction.status == "succeeded":
-            output_url = prediction.output  # `prediction.output` ya es la URL de la imagen procesada
-            return jsonify({'output': output_url}), 200
+            # Devolver la URL de salida directamente
+            return jsonify({'output': prediction.output}), 200
         else:
-            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
+            return jsonify({'error': 'Prediction failed'}), 500
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
