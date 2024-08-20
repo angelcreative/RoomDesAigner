@@ -490,14 +490,13 @@ def controlnet_upscale():
 
         # Verificar si la predicción fue exitosa
         if prediction.status == "succeeded":
-            output_url = prediction.output[0]  # Asumiendo que el output es una lista con la URL como primer elemento
+            output_url = prediction.output  # `prediction.output` ya es la URL de la imagen procesada
             return jsonify({'output': output_url}), 200
         else:
             return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 # A dictionary to store the comparison data
 comparisons = {}
