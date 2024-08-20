@@ -467,11 +467,11 @@ def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt')  # Default prompt
+        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')
+        creativity = data.get('creativity', 0.4)
         negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
         lora_details_strength = data.get('lora_details_strength', -0.25)
         lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
-        creativity = data.get('creativity', 0.4)  # Default creativity value
 
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
@@ -485,26 +485,18 @@ def controlnet_upscale():
             "lora_sharpness_strength": lora_sharpness_strength
         }
 
-        # Create a prediction using the ControlNet Tile model
-        prediction = replicate.predictions.create(
-            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+        # Ejecutar el modelo usando replicate.run()
+        output = replicate.run(
+            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
 
-        # Wait for the prediction to complete
-        while prediction.status not in {"succeeded", "failed", "canceled"}:
-            time.sleep(2)
-            prediction.reload()
-
-        # Check if prediction succeeded
-        if prediction.status == "succeeded":
-            return jsonify({'output': prediction.output}), 200
-        else:
-            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
-
+        # Devolver la URL de salida directamente
+        return jsonify({'output': output}), 200
+    
     except Exception as e:
-        # Catching and returning the error
         return jsonify({'error': str(e)}), 500
+
 
 
 # A dictionary to store the comparison data
