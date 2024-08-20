@@ -1223,11 +1223,7 @@ function controlnetUpscale(imageUrl) {
         },
         body: JSON.stringify({
             image_url: imageUrl,  // Aquí pasas la URL dinámica de la imagen
-            prompt: "a nordic livingroom, 4k interior photography, uhd",
-            creativity: 0.4,
-            negative_prompt: "Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant",
-            lora_details_strength: -0.25,
-            lora_sharpness_strength: 0.75
+            prompt: "a nordic livingroom, 4k interior photography, uhd"
         })
     })
     .then(response => {

@@ -477,21 +477,14 @@ def controlnet_upscale():
             "prompt": prompt
         }
 
-        # Usar `replicate.predictions.create()` para crear una predicción
-        prediction = replicate.predictions.create(
-            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+        # Ejecutar el modelo usando replicate.run()
+        output = replicate.run(
+            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
 
-        # Verificar si la predicción se completó con éxito
-        while prediction.status not in ["succeeded", "failed"]:
-            prediction.reload()
-
-        if prediction.status == "succeeded":
-            # Devolver la URL de salida directamente
-            return jsonify({'output': prediction.output}), 200
-        else:
-            return jsonify({'error': 'Prediction failed'}), 500
+        # Devolver la URL de salida directamente
+        return jsonify({'output': output}), 200
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
