@@ -467,10 +467,11 @@ def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt', 0.4)
+        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')  # Placeholder if no prompt is provided
         negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
         lora_details_strength = data.get('lora_details_strength', -0.25)
         lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
+        creativity = data.get('creativity', 0.4)  # Default creativity value
 
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
