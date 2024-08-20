@@ -467,7 +467,7 @@ def controlnet_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')  # Placeholder if no prompt is provided
+        prompt = data.get('prompt')  # Default prompt
         negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
         lora_details_strength = data.get('lora_details_strength', -0.25)
         lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
@@ -501,9 +501,11 @@ def controlnet_upscale():
             return jsonify({'output': prediction.output}), 200
         else:
             return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
-    
+
     except Exception as e:
+        # Catching and returning the error
         return jsonify({'error': str(e)}), 500
+
 
 # A dictionary to store the comparison data
 comparisons = {}
