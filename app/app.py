@@ -468,21 +468,13 @@ def controlnet_upscale():
         data = request.json
         image_url = data.get('image_url')
         prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')
-        creativity = data.get('creativity', 0.4)
-        negative_prompt = data.get('negative_prompt', 'Teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
-        lora_details_strength = data.get('lora_details_strength', -0.25)
-        lora_sharpness_strength = data.get('lora_sharpness_strength', 0.75)
 
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
         input_data = {
             "image": image_url,
-            "prompt": prompt,
-            "creativity": creativity,
-            "negative_prompt": negative_prompt,
-            "lora_details_strength": lora_details_strength,
-            "lora_sharpness_strength": lora_sharpness_strength
+            "prompt": prompt
         }
 
         # Ejecutar el modelo usando replicate.run()
