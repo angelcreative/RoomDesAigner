@@ -915,7 +915,7 @@ h2.loginTitle {
     margin: 0 auto;
     width: 100%;
     position: fixed;
-    background: #11192100;
+    background: #1e2732a6;
     /* backdrop-filter: blur(2px); */
     z-index: 1;
 }
@@ -1974,7 +1974,7 @@ sub {
     font-size: 12px;
     color: #66737fab;
     display: block;
-    margin: 0;
+    margin: 0 0 20px 0;
     padding: 4px 0 0 0;
 }
 
@@ -2146,6 +2146,7 @@ select:hover {
     box-shadow: inset 0px 0px 0px 3px #1fdab9 !important;
     border: none !important;
     background: #bcf8f154 !important;
+    color: red;
 }
 
 textarea {
@@ -2350,7 +2351,7 @@ option[title]:hover:after {
 }
 
 .gradient-background {
-    background: #fafafa;
+    background: #273440;
     /*
   background: linear-gradient(300deg, deepskyblue, darkviolet, blue);
   background-size: 180% 180%;
@@ -3127,7 +3128,7 @@ loginModal > p {
     transition: background 300ms ease-out
 }
 
-textarea { cursor: default; height: 80px;}
+textarea {cursor: default;height: 80px;font-family: system-ui;color: #677580;}
 .dropdown-selected:hover {
     background: #111921;
 }
@@ -3135,10 +3136,10 @@ textarea { cursor: default; height: 80px;}
     display: none;
     margin-left: 10px;
     cursor: pointer;
-    color: #629791;
+    color: #7ebcb9;
     font-weight: bold;
     font-size: 12px;
-    background: #bcf8f1;
+    background: #4a6266;
     padding: 4px 7px;
     border-radius: 100px;
 }
@@ -3184,6 +3185,10 @@ textarea { cursor: default; height: 80px;}
         background-color: #1e2732;
     }
 
+
+.selected .selected-text {
+    color: #bcf8f1;
+}
     .color-swatch {
         width: 20px;
         height: 20px;
@@ -3313,7 +3318,7 @@ button#extractColorsFromUrlButton {
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-      background: #eee;
+    background: #273440;
   }
   
 body {

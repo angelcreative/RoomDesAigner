@@ -462,7 +462,6 @@ def update_user_credits(email, additional_credits):
 
 
 #clarity
-
 @app.route('/controlnet-upscale', methods=['POST'])
 def controlnet_upscale():
     try:
