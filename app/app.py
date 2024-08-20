@@ -477,18 +477,26 @@ def controlnet_upscale():
             "prompt": prompt
         }
 
-        # Ejecutar el modelo usando replicate.run()
-        output = replicate.run(
-            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+        # Crear la predicción usando replicate.predictions.create
+        prediction = replicate.predictions.create(
+            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
 
-        # Devolver la URL de salida directamente
-        return jsonify({'output': output}), 200
+        # Esperar a que la predicción se complete
+        while prediction.status not in ["succeeded", "failed", "canceled"]:
+            time.sleep(2)
+            prediction.reload()
+
+        # Verificar si la predicción fue exitosa
+        if prediction.status == "succeeded":
+            output_url = prediction.output[0]  # Asumiendo que el output es una lista con la URL como primer elemento
+            return jsonify({'output': output_url}), 200
+        else:
+            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 
 # A dictionary to store the comparison data
