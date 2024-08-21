@@ -461,31 +461,60 @@ def controlnet_upscale():
         data = request.json
         image_url = data.get('image_url')
         prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')
+        resolution = data.get('resolution', 2560)
+        resemblance = data.get('resemblance', 0.85)
+        creativity = data.get('creativity', 0.35)
+        hdr = data.get('hdr', 0)
+        scheduler = data.get('scheduler', 'DDIM')
+        steps = data.get('steps', 8)
+        guidance_scale = data.get('guidance_scale', 0)
+        seed = data.get('seed')
+        negative_prompt = data.get('negative_prompt', 'teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
+        guess_mode = data.get('guess_mode', False)
+        lora_sharpness_strength = data.get('lora_sharpness_strength', 1.25)
+        lora_details_strength = data.get('lora_details_strength', 1)
+        output_format = data.get('format', 'jpg')
 
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
         input_data = {
             "image": image_url,
-            "prompt": prompt
+            "prompt": prompt,
+            "resolution": resolution,
+            "resemblance": resemblance,
+            "creativity": creativity,
+            "hdr": hdr,
+            "scheduler": scheduler,
+            "steps": steps,
+            "guidance_scale": guidance_scale,
+            "seed": seed,
+            "negative_prompt": negative_prompt,
+            "guess_mode": guess_mode,
+            "lora_sharpness_strength": lora_sharpness_strength,
+            "lora_details_strength": lora_details_strength,
+            "format": output_format
         }
 
-        # Ejecutar el modelo usando replicate.run()
-        output = replicate.run(
-            "batouresearch/high-resolution-controlnet-tile:8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+        # Ejecutar la predicción usando replicate.predictions.create
+        prediction = replicate.predictions.create(
+            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
             input=input_data
         )
 
-        # Imprimir el output para depuración
-        print("Output:", output)
+        # Esperar a que la predicción se complete
+        while prediction.status not in ["succeeded", "failed", "canceled"]:
+            time.sleep(2)
+            prediction.reload()
 
-        # Devolver la URL de salida directamente
-        return jsonify({'output': output}), 200
-    
+        if prediction.status == "succeeded":
+            return jsonify({'output': prediction.output}), 200
+        else:
+            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
+
     except Exception as e:
-        # Imprimir el error para depuración
-        print("Error:", str(e))
         return jsonify({'error': str(e)}), 500
+
 
 
     
