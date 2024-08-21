@@ -18,16 +18,9 @@ import openai
 app = Flask(__name__)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
-CORS(app, resources={
-    r"/*": {
-        "origins": [
-            "https://roomdesigner.onrender.com",
-            r"https:\/\/pub-[0-9a-f]{32}\.r2\.dev",
-            r"https:\/\/cdn2\.stablediffusionapi\.com"
-        ]
-    }
-})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
+    
 logging.basicConfig(level=logging.INFO)
 
 
@@ -483,12 +476,19 @@ def controlnet_upscale():
             input=input_data
         )
 
+        # Imprimir el output para depuración
+        print("Output:", output)
+
         # Devolver la URL de salida directamente
         return jsonify({'output': output}), 200
     
     except Exception as e:
+        # Imprimir el error para depuración
+        print("Error:", str(e))
         return jsonify({'error': str(e)}), 500
 
+
+    
 # A dictionary to store the comparison data
 comparisons = {}
 

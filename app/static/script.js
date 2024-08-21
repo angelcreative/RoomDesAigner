@@ -1214,7 +1214,6 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-    
 function controlnetUpscale(imageUrl) {
     fetch('/controlnet-upscale', {
         method: 'POST',
