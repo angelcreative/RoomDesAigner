@@ -453,44 +453,34 @@ def update_user_credits(email, additional_credits):
 
     return response
 
-
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
         data = request.json
+        if data is None:
+            return jsonify({'error': 'No JSON payload received'}), 400
+
         image_url = data.get('image_url')
-        prompt = data.get('prompt')  # This should be a structured object, depending on how it's sent from the front end.
+        prompt = data.get('prompt')
 
-        # Extract prompt components if it's an object with multiple fields
-        prompt_text = prompt.get('prompt', 'masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>')
-        negative_prompt = prompt.get('negative_prompt', 'default negative prompt here')
-        # Extract other relevant fields from the prompt as needed
-
-        dynamic = data.get('dynamic', 6)
-        handfix = data.get('handfix', 'disabled')
-        pattern = data.get('pattern', False)
-        sharpen = data.get('sharpen', 0)
-        scheduler = data.get('scheduler', 'DPM++ 3M SDE Karras')
-        creativity = data.get('creativity', 0.35)
-        sd_model = data.get('sd_model', 'juggernaut_reborn.safetensors [338b85bc4f]')
-        scale_factor = data.get('scale_factor', 2)
-        output_format = data.get('output_format', 'png')
-
-        if not image_url or not prompt_text:
+        if not image_url or not prompt:
             return jsonify({'error': 'Image URL and prompt are required'}), 400
 
+        # Here we expect the prompt to be a structured object with fields such as promptText, negative_prompt, etc.
         input_data = {
             "image": image_url,
-            "prompt": prompt_text,
-            "dynamic": dynamic,
-            "handfix": handfix,
-            "pattern": pattern,
-            "sharpen": sharpen,
-            "scheduler": scheduler,
-            "creativity": creativity,
-            "sd_model": sd_model,
-            "scale_factor": scale_factor,
-            "output_format": output_format,
+            "prompt": prompt.get('prompt', 'default prompt'),
+            "negative_prompt": prompt.get('negative_prompt', 'default negative prompt'),
+            "width": prompt.get('width', 512),
+            "height": prompt.get('height', 512),
+            "samples": prompt.get('samples', 1),
+            "guidance_scale": prompt.get('guidance_scale', 7.5),
+            "steps": prompt.get('steps', 50),
+            "use_karras_sigmas": prompt.get('use_karras_sigmas', 'yes'),
+            "scheduler": prompt.get('scheduler', 'DPM++ 3M SDE Karras'),
+            "seed": prompt.get('seed', None),
+            "sd_model": prompt.get('model_id', 'juggernaut_reborn.safetensors [338b85bc4f]'),
+            "output_format": prompt.get('output_format', 'png'),
             # Add more fields from the prompt object if necessary
         }
 
@@ -514,7 +504,6 @@ def clarity_upscale():
         # Log the error for debugging
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
 
     
 # A dictionary to store the comparison data

@@ -904,116 +904,40 @@ async function copyTextToClipboard(text) {
 
     
     
-//ENHANCE IMAGE
-
-/*
-
-const upscaleImage = async (imageUrl) => {
-    try {
-        const url = 'https://image-upscale-ai-resolution-x4.p.rapidapi.com/runsync';
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-RapidAPI-Key': '076e563ff0msh5fffe0c2d818c0dp1b32e3jsn62452f3f696d',
-                'X-RapidAPI-Host': 'image-upscale-ai-resolution-x4.p.rapidapi.com'
-            },
-            body: JSON.stringify({
-                input: {
-                    input_image_url: imageUrl
-                }
-            })
-        };
-
-        const response = await fetch(url, options);
-        const data = await response.json();  // Parse the response to JSON
-
+function clarityUpscale(imageUrl) {
+    // Assuming `prompt` is already constructed as in your generate-images request
+    fetch('/clarity-upscale', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            image_url: imageUrl,  // Pass the dynamic image URL
+            prompt: prompt       // Pass the entire prompt object
+        })
+    })
+    .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // Parsing the nested JSON string inside the 'body' property
-        if (data.output && data.output.body) {
-            const body = JSON.parse(data.output.body);
-            const upscaledImageUrl = body.output_image_url;
-
-            if (upscaledImageUrl) {
-                const newWindow = window.open('', '_blank');
-                newWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>Upscaled Image</title>
-                             <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
-                            <style>
-
-                                html {
-                                    background: #15202b;
-                                    }
-                                    
-                                body {
-                                    text-align: center;
-                                    color: #a9fff5;
-                                    font-family: arial, sans-serif;
-                                    font-size: 12px;
-                                    padding-top: 60px;
-                                    margin-top: 40px;
-                                    }
-                                 
-                                h1 {
-                                    margin: 20px 0;
-                                    }
-                                    
-                                img {
-                                    border-radius: 12px;
-                                    overflow: hidden;
-                                    max-width: 100%;
-                                    }
-                                
-                                img.logoRD {
-                                    margin: 20px auto 0 auto;
-                                    display: block;
-                                    height: 50px;
-                                    }
-                                    
-                            </style>
-                        </head>
-                        <body>
-                        <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_light.svg">
-                            <h1>Upscaled Image</h1>
-                            <img src="${upscaledImageUrl}" alt="Upscaled Image" style="max-width:80%; border-radius:12px; overflow:hidden;">
-                        </body>
-                    </html>
-                `);
-                newWindow.document.close();
-            } else {
-                console.error('No upscaled image URL found:', body);
-                alert('Failed to retrieve the upscaled image. Please check the console for more details.');
-            }
+        return response.json();
+    })
+    .then(data => {
+        const outputImageUrl = data.output;
+        if (outputImageUrl) {
+            window.open(outputImageUrl, '_blank');
         } else {
-            console.error('Invalid API response structure:', data);
-            alert('Failed to process the API response. Please check the console for more details.');
+            console.error('No URL received for the processed image.');
         }
-    } catch (error) {
-        console.error('Error upscaling image:', error);
-        alert(`Failed to upscale image: ${error.message}`);
-    }
-};
-
-*/
+    })
+    .catch(error => {
+        console.error('Error during image upscaling:', error);
+    });
+}
 
 
     
-// END ENHANCE
 
-    
-// UPSCALE
-    
-
-    
-// END UPSCALE
 
 
 //reverse
@@ -1219,35 +1143,6 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-function clarityUpscale(imageUrl, prompt) {
-    fetch('/clarity-upscale', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            image_url: imageUrl,  // Pass the dynamic image URL
-            prompt: prompt,       // Pass the entire prompt object
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        const outputImageUrl = data.output;
-        if (outputImageUrl) {
-            window.open(outputImageUrl, '_blank');
-        } else {
-            console.error('No URL received for the processed image.');
-        }
-    })
-    .catch(error => {
-        console.error('Error during image upscaling:', error);
-    });
-}
 
 
     
