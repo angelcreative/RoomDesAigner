@@ -277,6 +277,10 @@ function generateFractalText() {
   return "Architecture and furniture with fractal patterns and details. Highlight intricate, repeating patterns that exhibit fractal and self-similar qualities. Use modern, minimalist designs.";
     }
     
+function generateBlurredBackground () {
+    return "The background blurs intricately, adding to the scene's stunning beauty.";
+}
+    
     function showGeneratingImagesDialog() {
     document.getElementById('generatingImagesDialog').style.display = 'block';
     document.getElementById('dialogTitle').innerHTML = `
@@ -523,7 +527,8 @@ console.log(`Width: ${width}, Height: ${height}`);
 
   const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
   const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${promptEndy} ${optionalText}`;
+  const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";    
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
 
 // Determine the model_id based on the selection of the "person" field
 
