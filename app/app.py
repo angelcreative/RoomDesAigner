@@ -454,67 +454,57 @@ def update_user_credits(email, additional_credits):
     return response
 
 
-#clarity
-@app.route('/controlnet-upscale', methods=['POST'])
-def controlnet_upscale():
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale():
     try:
         data = request.json
         image_url = data.get('image_url')
-        prompt = data.get('prompt', 'a nordic livingroom, 4k interior photography, uhd')
-        resolution = data.get('resolution', 2560)
-        resemblance = data.get('resemblance', 0.85)
+        prompt = data.get('prompt')
+        dynamic = data.get('dynamic', 6)
+        handfix = data.get('handfix', 'disabled')
+        pattern = data.get('pattern', False)
+        sharpen = data.get('sharpen', 0)
+        scheduler = data.get('scheduler', 'DPM++ 3M SDE Karras')
         creativity = data.get('creativity', 0.35)
-        hdr = data.get('hdr', 0)
-        scheduler = data.get('scheduler', 'DDIM')
-        steps = data.get('steps', 8)
-        guidance_scale = data.get('guidance_scale', 0)
-        seed = data.get('seed')
-        negative_prompt = data.get('negative_prompt', 'teeth, tooth, open mouth, longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, mutant')
-        guess_mode = data.get('guess_mode', False)
-        lora_sharpness_strength = data.get('lora_sharpness_strength', 1.25)
-        lora_details_strength = data.get('lora_details_strength', 1)
-        output_format = data.get('format', 'jpg')
+        sd_model = data.get('sd_model', 'juggernaut_reborn.safetensors [338b85bc4f]')
+        scale_factor = data.get('scale_factor', 2)
+        output_format = data.get('output_format', 'png')
 
-        if not image_url:
-            return jsonify({'error': 'No image URL provided'}), 400
+        if not image_url or not prompt:
+            return jsonify({'error': 'Image URL and prompt are required'}), 400
 
         input_data = {
             "image": image_url,
             "prompt": prompt,
-            "resolution": resolution,
-            "resemblance": resemblance,
-            "creativity": creativity,
-            "hdr": hdr,
+            "dynamic": dynamic,
+            "handfix": handfix,
+            "pattern": pattern,
+            "sharpen": sharpen,
             "scheduler": scheduler,
-            "steps": steps,
-            "guidance_scale": guidance_scale,
-            "seed": seed,
-            "negative_prompt": negative_prompt,
-            "guess_mode": guess_mode,
-            "lora_sharpness_strength": lora_sharpness_strength,
-            "lora_details_strength": lora_details_strength,
-            "format": output_format
+            "creativity": creativity,
+            "sd_model": sd_model,
+            "scale_factor": scale_factor,
+            "output_format": output_format,
         }
 
-        # Ejecutar la predicción usando replicate.predictions.create
+        # Run the prediction using replicate.predictions.create
         prediction = replicate.predictions.create(
-            version="8e6a54d7b2848c48dc741a109d3fb0ea2a7f554eb4becd39a25cc532536ea975",
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",  # Clarity Upscaler version
             input=input_data
         )
 
-        # Esperar a que la predicción se complete
+        # Wait for the prediction to complete
         while prediction.status not in ["succeeded", "failed", "canceled"]:
             time.sleep(2)
             prediction.reload()
 
         if prediction.status == "succeeded":
-            return jsonify({'output': prediction.output}), 200
+            return jsonify({'output': prediction.output[0]}), 200  # Clarity Upscaler returns an array of URLs
         else:
             return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 
     
