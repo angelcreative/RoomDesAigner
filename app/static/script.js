@@ -911,25 +911,25 @@ function clarityUpscale(imageUrl) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            image_url: imageUrl  // Pass the dynamic image URL
+            image_url: imageUrl  // Pasar la URL dinámica de la imagen
         })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Error HTTP! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         const outputImageUrl = data.output;
         if (outputImageUrl) {
-            window.open(outputImageUrl, '_blank');  // Open the image URL in a new tab
+            window.open(outputImageUrl, '_blank');  // Abrir la URL de la imagen en una nueva pestaña
         } else {
-            console.error('No URL received for the processed image.');
+            console.error('No se recibió ninguna URL de salida para la imagen procesada.');
         }
     })
     .catch(error => {
-        console.error('Error during image upscaling:', error);
+        console.error('Error durante el escalado de la imagen:', error);
     });
 }
 

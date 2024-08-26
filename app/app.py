@@ -453,6 +453,7 @@ def update_user_credits(email, additional_credits):
 
     return response
 
+
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -460,26 +461,30 @@ def clarity_upscale():
         image_url = data.get('image_url')
 
         if not image_url:
-            return jsonify({'error': 'Image URL is required'}), 400
+            return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
-        # Define the input data
+        # Preparar los datos de entrada para el modelo de replicate
         input_data = {
             "image": image_url
         }
 
-        # Run the model and get the output URL directly
+        # Ejecutar el modelo usando replicate.run(), que devuelve una lista de URLs de salida
         output = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        # Return the first (and only) output URL
-        return jsonify({'output': output[0]}), 200
+        # Devolver la primera URL en la lista de salidas
+        if output:
+            return jsonify({'output': output[0]}), 200
+        else:
+            return jsonify({'error': 'No se recibió ninguna URL de salida'}), 500
 
     except Exception as e:
-        # Log the error for debugging
-        print(f"An error occurred: {str(e)}")
+        # Registrar el error para depuración
+        print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
     
 # A dictionary to store the comparison data
