@@ -923,7 +923,7 @@ function clarityUpscale(imageUrl) {
     .then(data => {
         const outputImageUrl = data.output;
         if (outputImageUrl) {
-            window.open(outputImageUrl, '_blank');
+            window.open(outputImageUrl, '_blank');  // Open the image URL in a new tab
         } else {
             console.error('No URL received for the processed image.');
         }

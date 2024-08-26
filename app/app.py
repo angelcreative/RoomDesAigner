@@ -462,23 +462,24 @@ def clarity_upscale():
         if not image_url:
             return jsonify({'error': 'Image URL is required'}), 400
 
+        # Define the input data
         input_data = {
             "image": image_url
-            # Add any other necessary parameters with default values if needed
         }
 
-        # Run the prediction using replicate.run
+        # Run the model and get the output URL directly
         output = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
+        # Return the first (and only) output URL
         return jsonify({'output': output[0]}), 200
 
     except Exception as e:
+        # Log the error for debugging
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
 
     
 # A dictionary to store the comparison data
