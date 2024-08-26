@@ -461,27 +461,32 @@ def clarity_upscale():
             return jsonify({'error': 'No JSON payload received'}), 400
 
         image_url = data.get('image_url')
-        prompt = data.get('prompt')
 
-        if not image_url or not prompt:
-            return jsonify({'error': 'Image URL and prompt are required'}), 400
+        if not image_url:
+            return jsonify({'error': 'Image URL is required'}), 400
 
-        # Here we expect the prompt to be a structured object with fields such as promptText, negative_prompt, etc.
+        # Define default values or leave them as they are
+        dynamic = data.get('dynamic', 6)
+        handfix = data.get('handfix', 'disabled')
+        pattern = data.get('pattern', False)
+        sharpen = data.get('sharpen', 0)
+        scheduler = data.get('scheduler', 'DPM++ 3M SDE Karras')
+        creativity = data.get('creativity', 0.35)
+        sd_model = data.get('sd_model', 'juggernaut_reborn.safetensors [338b85bc4f]')
+        scale_factor = data.get('scale_factor', 2)
+        output_format = data.get('output_format', 'png')
+
         input_data = {
             "image": image_url,
-            "prompt": prompt.get('prompt', 'default prompt'),
-            "negative_prompt": prompt.get('negative_prompt', 'default negative prompt'),
-            "width": prompt.get('width', 512),
-            "height": prompt.get('height', 512),
-            "samples": prompt.get('samples', 1),
-            "guidance_scale": prompt.get('guidance_scale', 7.5),
-            "steps": prompt.get('steps', 50),
-            "use_karras_sigmas": prompt.get('use_karras_sigmas', 'yes'),
-            "scheduler": prompt.get('scheduler', 'DPM++ 3M SDE Karras'),
-            "seed": prompt.get('seed', None),
-            "sd_model": prompt.get('model_id', 'juggernaut_reborn.safetensors [338b85bc4f]'),
-            "output_format": prompt.get('output_format', 'png'),
-            # Add more fields from the prompt object if necessary
+            "dynamic": dynamic,
+            "handfix": handfix,
+            "pattern": pattern,
+            "sharpen": sharpen,
+            "scheduler": scheduler,
+            "creativity": creativity,
+            "sd_model": sd_model,
+            "scale_factor": scale_factor,
+            "output_format": output_format,
         }
 
         # Run the prediction using replicate.predictions.create
@@ -504,6 +509,7 @@ def clarity_upscale():
         # Log the error for debugging
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
     
 # A dictionary to store the comparison data

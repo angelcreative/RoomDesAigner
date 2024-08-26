@@ -905,15 +905,13 @@ async function copyTextToClipboard(text) {
     
     
 function clarityUpscale(imageUrl) {
-    // Assuming `prompt` is already constructed as in your generate-images request
     fetch('/clarity-upscale', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            image_url: imageUrl,  // Pass the dynamic image URL
-            prompt: prompt       // Pass the entire prompt object
+            image_url: imageUrl  // Only pass the dynamic image URL
         })
     })
     .then(response => {
