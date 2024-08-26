@@ -180,7 +180,9 @@ function getSelectedValues() {
         "stone_material",
         "marble_material",
         "wood_material",
-        "decorative_elements"
+        "decorative_elements",
+        "type_select",
+        "hairstyle_select"
     ];
 
     const colorElements = [

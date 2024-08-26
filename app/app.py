@@ -454,6 +454,7 @@ def update_user_credits(email, additional_credits):
     return response
 
 
+
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
