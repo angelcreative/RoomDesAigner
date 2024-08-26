@@ -935,7 +935,6 @@ function clarityUpscale(imageUrl) {
     });
 }
 
-
     
 
 

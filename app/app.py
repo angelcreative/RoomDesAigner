@@ -469,7 +469,7 @@ def clarity_upscale():
             "image": image_url
         }
 
-        # Ejecutar el modelo usando replicate.run(), que devuelve una lista de URLs de salida
+        # Ejecutar el modelo usando replicate.run(), que devuelve directamente la lista de URLs de salida
         output = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
@@ -485,6 +485,7 @@ def clarity_upscale():
         # Registrar el error para depuración
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
 
     
