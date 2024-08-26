@@ -495,20 +495,25 @@ def clarity_upscale():
             input=input_data
         )
 
-        # Wait for the prediction to complete
-        while prediction.status not in ["succeeded", "failed", "canceled"]:
-            time.sleep(2)
-            prediction.reload()
+        # Ensure that the prediction is a dictionary and not a string
+        if isinstance(prediction, dict):
+            # Wait for the prediction to complete
+            while prediction['status'] not in ["succeeded", "failed", "canceled"]:
+                time.sleep(2)
+                prediction = replicate.predictions.get(prediction['id'])
 
-        if prediction.status == "succeeded":
-            return jsonify({'output': prediction.output[0]}), 200  # Clarity Upscaler returns an array of URLs
+            if prediction['status'] == "succeeded":
+                return jsonify({'output': prediction['output'][0]}), 200  # Clarity Upscaler returns an array of URLs
+            else:
+                return jsonify({'error': f'Prediction failed with status: {prediction["status"]}'}), 500
         else:
-            return jsonify({'error': f'Prediction failed with status: {prediction.status}'}), 500
+            return jsonify({'error': 'Unexpected prediction format returned from replicate API'}), 500
 
     except Exception as e:
         # Log the error for debugging
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
 
     
