@@ -911,7 +911,7 @@ function clarityUpscale(imageUrl) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            image_url: imageUrl  // Only pass the dynamic image URL
+            image_url: imageUrl  // Pass the dynamic image URL
         })
     })
     .then(response => {

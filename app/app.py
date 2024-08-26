@@ -457,63 +457,27 @@ def update_user_credits(email, additional_credits):
 def clarity_upscale():
     try:
         data = request.json
-        if data is None:
-            return jsonify({'error': 'No JSON payload received'}), 400
-
         image_url = data.get('image_url')
 
         if not image_url:
             return jsonify({'error': 'Image URL is required'}), 400
 
-        # Define default values or leave them as they are
-        dynamic = data.get('dynamic', 6)
-        handfix = data.get('handfix', 'disabled')
-        pattern = data.get('pattern', False)
-        sharpen = data.get('sharpen', 0)
-        scheduler = data.get('scheduler', 'DPM++ 3M SDE Karras')
-        creativity = data.get('creativity', 0.35)
-        sd_model = data.get('sd_model', 'juggernaut_reborn.safetensors [338b85bc4f]')
-        scale_factor = data.get('scale_factor', 2)
-        output_format = data.get('output_format', 'png')
-
         input_data = {
-            "image": image_url,
-            "dynamic": dynamic,
-            "handfix": handfix,
-            "pattern": pattern,
-            "sharpen": sharpen,
-            "scheduler": scheduler,
-            "creativity": creativity,
-            "sd_model": sd_model,
-            "scale_factor": scale_factor,
-            "output_format": output_format,
+            "image": image_url
+            # Add any other necessary parameters with default values if needed
         }
 
-        # Run the prediction using replicate.predictions.create
-        prediction = replicate.predictions.create(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",  # Clarity Upscaler version
+        # Run the prediction using replicate.run
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        # Ensure that the prediction is a dictionary and not a string
-        if isinstance(prediction, dict):
-            # Wait for the prediction to complete
-            while prediction['status'] not in ["succeeded", "failed", "canceled"]:
-                time.sleep(2)
-                prediction = replicate.predictions.get(prediction['id'])
-
-            if prediction['status'] == "succeeded":
-                return jsonify({'output': prediction['output'][0]}), 200  # Clarity Upscaler returns an array of URLs
-            else:
-                return jsonify({'error': f'Prediction failed with status: {prediction["status"]}'}), 500
-        else:
-            return jsonify({'error': 'Unexpected prediction format returned from replicate API'}), 500
+        return jsonify({'output': output[0]}), 200
 
     except Exception as e:
-        # Log the error for debugging
         print(f"An error occurred: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
 
 
     
