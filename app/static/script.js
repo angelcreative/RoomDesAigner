@@ -1214,7 +1214,7 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-function clarityUpscale(imageUrl, promptText) {
+function clarityUpscale(imageUrl, prompt) {
     fetch('/clarity-upscale', {
         method: 'POST',
         headers: {
@@ -1222,7 +1222,7 @@ function clarityUpscale(imageUrl, promptText) {
         },
         body: JSON.stringify({
             image_url: imageUrl,  // Pass the dynamic image URL
-            prompt: promptText  // Pass the prompt generated dynamically
+            prompt: prompt,       // Pass the entire prompt object
         })
     })
     .then(response => {
@@ -1289,7 +1289,7 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl, promptText));
+const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl, prompt));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
