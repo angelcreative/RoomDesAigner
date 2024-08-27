@@ -456,7 +456,6 @@ def update_user_credits(email, additional_credits):
 
 
 
-
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -476,13 +475,17 @@ def clarity_upscale():
             input=input_data
         )
 
+        print(f"Predicción creada: {prediction}")
+
         # Esperar a que la predicción se complete
         while prediction.status not in {"succeeded", "failed", "canceled"}:
-            time.sleep(10)  # Esperar 2 segundos antes de volver a consultar el estado
-            prediction.reload()  # Recargar el estado de la predicción
+            time.sleep(2)
+            prediction.reload()
+            print(f"Estado actual de la predicción: {prediction.status}")
 
         # Verificar el estado de la predicción
         if prediction.status == "succeeded":
+            # Devolver la URL de salida directamente
             return jsonify({'output': prediction.output[0]}), 200
         else:
             return jsonify({'error': f'La predicción falló con el estado: {prediction.status}'}), 500
@@ -490,6 +493,7 @@ def clarity_upscale():
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
 
 
     
