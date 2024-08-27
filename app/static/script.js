@@ -56,16 +56,20 @@ function mixAttributes(baseAttributes) {
     return mixedAttributes;
 }
 
-// Event listener for the "AI Design" button
-document.getElementById('aiDesignButton').addEventListener('click', function() {
-    const baseValues = getSelectedValues(); // Get current form values
-    const mixedValues = mixAttributes(baseValues);
-    console.log("Mixed Values for Generation:", mixedValues);
-    generateImages(null, mixedValues, false); // Assuming generateImages handles the image generation logic
+
+    
+    
+     document.getElementById('aiDesignButton').addEventListener('click', function() {
+   console.log("Button clicked, generating images");
+   const baseValues = getSelectedValues();
+   const mixedValues = mixAttributes(baseValues);
+   generateImages(null, mixedValues, false);
 });
+
+    
 //AIDESIGN
 
-  
+ 
  
 // Function to handle the form submission
 function handleSubmit(event) {
@@ -474,6 +478,9 @@ function clearColorImage() {
 
 
 // END COLORSEX
+    
+
+    
  
 function generateImages(imageUrl, selectedValues, isImg2Img) {
   showGeneratingImagesDialog();
@@ -924,11 +931,11 @@ function clarityUpscale(imageUrl) {
         return response.json();
     })
     .then(data => {
-        const outputImageUrl = data.output;
-        if (outputImageUrl) {
-            window.open(outputImageUrl, '_blank');
+        if (Array.isArray(data.output) && data.output.length > 0) {
+            // Abre la primera URL del array en una nueva pestaña
+            window.open(data.output[0], '_blank');
         } else {
-            console.error('No URL received for the processed image.');
+            console.error('No URLs received for the processed image.');
         }
     })
     .catch(error => {
