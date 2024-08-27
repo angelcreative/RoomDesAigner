@@ -471,27 +471,38 @@ def clarity_upscale():
         }
 
         # Ejecutar el modelo usando replicate.run()
-        output = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        prediction = replicate.predictions.create(
+            version="philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        print(f"Salida cruda de la API de Replicate: {output}")
+        print(f"Predicción inicial: {prediction}")
 
-        # Procesar la salida según su tipo
-        if isinstance(output, list) and len(output) > 0:
-            return jsonify({'output': output[0]}), 200
-        elif isinstance(output, dict):
-            if 'output' in output:
-                return jsonify({'output': output['output']}), 200
-            elif 'urls' in output and isinstance(output['urls'], list) and len(output['urls']) > 0:
-                return jsonify({'output': output['urls'][0]}), 200
-            else:
+        # Esperar a que la predicción se complete
+        while prediction.status != "succeeded" and prediction.status != "failed":
+            prediction.reload()
+            print(f"Estado actual: {prediction.status}")
+            time.sleep(1)
+
+        if prediction.status == "succeeded":
+            output = prediction.output
+            print(f"Salida final: {output}")
+
+            if isinstance(output, list) and len(output) > 0:
+                return jsonify({'output': output[0]}), 200
+            elif isinstance(output, dict):
+                if 'output' in output:
+                    return jsonify({'output': output['output']}), 200
+                elif 'urls' in output and isinstance(output['urls'], list) and len(output['urls']) > 0:
+                    return jsonify({'output': output['urls'][0]}), 200
+                else:
+                    return jsonify({'output': output}), 200
+            elif isinstance(output, str):
                 return jsonify({'output': output}), 200
-        elif isinstance(output, str):
-            return jsonify({'output': output}), 200
+            else:
+                return jsonify({'error': 'Formato de salida inesperado del modelo'}), 500
         else:
-            return jsonify({'error': 'Formato de salida inesperado del modelo'}), 500
+            return jsonify({'error': f'La predicción falló: {prediction.error}'}), 500
 
     except replicate.exceptions.ModelError as e:
         print(f"Error del modelo de Replicate: {str(e)}")
