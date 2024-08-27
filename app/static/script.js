@@ -182,6 +182,7 @@ function getSelectedValues() {
         "wood_material",
         "decorative_elements",
         "type_select",
+        "photo_location",
         "hairstyle_select"
     ];
 

@@ -465,8 +465,18 @@ def clarity_upscale():
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
-        # Prueba de conexión simple sin lógica adicional
-        return jsonify({'output': 'Solicitud recibida correctamente'}), 200
+        input_data = {
+            "image": image_url
+        }
+
+        # Ejecutar el modelo usando replicate.run()
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input_data
+        )
+
+        # Devolver la URL de salida directamente
+        return jsonify({'output': output[0]}), 200
 
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
