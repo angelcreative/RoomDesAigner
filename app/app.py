@@ -469,31 +469,26 @@ def clarity_upscale():
             "image": image_url
         }
 
-        # Crear la predicción usando replicate.predictions.create
-        prediction = replicate.predictions.create(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        # Ejecutar el modelo usando replicate.run()
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        print(f"Predicción creada: {prediction}")
+        print(f"Salida cruda de la API de Replicate: {output}")
 
-        # Esperar a que la predicción se complete
-        while prediction.status not in {"succeeded", "failed", "canceled"}:
-            time.sleep(2)
-            prediction.reload()
-            print(f"Estado actual de la predicción: {prediction.status}")
-
-        # Verificar el estado de la predicción
-        if prediction.status == "succeeded":
-            # Devolver la URL de salida directamente
-            return jsonify({'output': prediction.output[0]}), 200
+        # La salida de replicate.run() debería ser una lista con URLs de las imágenes generadas
+        if isinstance(output, list) and len(output) > 0:
+            return jsonify({'output': output[0]}), 200
         else:
-            return jsonify({'error': f'La predicción falló con el estado: {prediction.status}'}), 500
+            return jsonify({'error': 'No se recibió una salida válida del modelo'}), 500
 
+    except replicate.exceptions.ModelError as e:
+        print(f"Error del modelo de Replicate: {str(e)}")
+        return jsonify({'error': f'Error del modelo: {str(e)}'}), 500
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
+        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
 
 
     

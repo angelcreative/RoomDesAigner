@@ -907,7 +907,7 @@ async function copyTextToClipboard(text) {
 
     
     
- function clarityUpscale(imageUrl) {
+function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
         method: 'POST',
         headers: {
@@ -935,6 +935,7 @@ async function copyTextToClipboard(text) {
         console.error('Error during image upscaling:', error);
     });
 }
+
 
 
     
