@@ -471,16 +471,18 @@ def clarity_upscale():
             input={"image": image_url}
         )
 
-        # Devolver la URL de salida directamente
-        return jsonify({'output': output[0]}), 200
+        # Imprimir el output para verificar lo que retorna
+        print(f"Output from replicate.run: {output}")
+
+        # Verificar si el output es una lista
+        if isinstance(output, list) and len(output) > 0:
+            return jsonify({'output': output[0]}), 200
+        else:
+            return jsonify({'error': 'No se recibió una URL de salida válida'}), 500
 
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
-
-
-
 
 
     
