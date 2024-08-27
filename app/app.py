@@ -470,47 +470,26 @@ def clarity_upscale():
             "image": image_url
         }
 
-        # Ejecutar el modelo usando replicate.run()
+        # Crear la predicción usando replicate.predictions.create
         prediction = replicate.predictions.create(
-            version="philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        print(f"Predicción inicial: {prediction}")
-
         # Esperar a que la predicción se complete
-        while prediction.status != "succeeded" and prediction.status != "failed":
-            prediction.reload()
-            print(f"Estado actual: {prediction.status}")
-            time.sleep(1)
+        while prediction.status not in {"succeeded", "failed", "canceled"}:
+            time.sleep(10)  # Esperar 2 segundos antes de volver a consultar el estado
+            prediction.reload()  # Recargar el estado de la predicción
 
+        # Verificar el estado de la predicción
         if prediction.status == "succeeded":
-            output = prediction.output
-            print(f"Salida final: {output}")
-
-            if isinstance(output, list) and len(output) > 0:
-                return jsonify({'output': output[0]}), 200
-            elif isinstance(output, dict):
-                if 'output' in output:
-                    return jsonify({'output': output['output']}), 200
-                elif 'urls' in output and isinstance(output['urls'], list) and len(output['urls']) > 0:
-                    return jsonify({'output': output['urls'][0]}), 200
-                else:
-                    return jsonify({'output': output}), 200
-            elif isinstance(output, str):
-                return jsonify({'output': output}), 200
-            else:
-                return jsonify({'error': 'Formato de salida inesperado del modelo'}), 500
+            return jsonify({'output': prediction.output[0]}), 200
         else:
-            return jsonify({'error': f'La predicción falló: {prediction.error}'}), 500
+            return jsonify({'error': f'La predicción falló con el estado: {prediction.status}'}), 500
 
-    except replicate.exceptions.ModelError as e:
-        print(f"Error del modelo de Replicate: {str(e)}")
-        return jsonify({'error': f'Error del modelo: {str(e)}'}), 500
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
-        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
-
+        return jsonify({'error': str(e)}), 500
 
 
     
