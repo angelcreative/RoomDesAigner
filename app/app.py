@@ -456,6 +456,7 @@ def update_user_credits(email, additional_credits):
 
 
 
+
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -465,24 +466,40 @@ def clarity_upscale():
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
+        input_data = {
+            "image": image_url
+        }
+
         # Ejecutar el modelo usando replicate.run()
         output = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
+            input=input_data
         )
 
-        # Imprimir el output para verificar lo que retorna
-        print(f"Output from replicate.run: {output}")
+        print(f"Salida cruda de la API de Replicate: {output}")
 
-        # Verificar si el output es una lista
+        # Procesar la salida según su tipo
         if isinstance(output, list) and len(output) > 0:
             return jsonify({'output': output[0]}), 200
+        elif isinstance(output, dict):
+            if 'output' in output:
+                return jsonify({'output': output['output']}), 200
+            elif 'urls' in output and isinstance(output['urls'], list) and len(output['urls']) > 0:
+                return jsonify({'output': output['urls'][0]}), 200
+            else:
+                return jsonify({'output': output}), 200
+        elif isinstance(output, str):
+            return jsonify({'output': output}), 200
         else:
-            return jsonify({'error': 'No se recibió una URL de salida válida'}), 500
+            return jsonify({'error': 'Formato de salida inesperado del modelo'}), 500
 
+    except replicate.exceptions.ModelError as e:
+        print(f"Error del modelo de Replicate: {str(e)}")
+        return jsonify({'error': f'Error del modelo: {str(e)}'}), 500
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
+
 
 
     

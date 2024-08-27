@@ -907,34 +907,35 @@ async function copyTextToClipboard(text) {
 
     
     
-function clarityUpscale(imageUrl) {
+ function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            image_url: imageUrl  // Pasar la URL dinámica de la imagen
+            image_url: imageUrl  // Solo se envía la URL de la imagen
         })
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Error HTTP! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         return response.json();
     })
     .then(data => {
         const outputImageUrl = data.output;
         if (outputImageUrl) {
-            window.open(outputImageUrl, '_blank');  // Abrir la URL de la imagen en una nueva pestaña
+            window.open(outputImageUrl, '_blank');
         } else {
-            console.error('No se recibió ninguna URL de salida para la imagen procesada.');
+            console.error('No URL received for the processed image.');
         }
     })
     .catch(error => {
-        console.error('Error durante el escalado de la imagen:', error);
+        console.error('Error during image upscaling:', error);
     });
 }
+
 
     
 
@@ -1189,7 +1190,7 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl, prompt));
+const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
