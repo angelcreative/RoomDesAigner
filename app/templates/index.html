@@ -841,7 +841,11 @@ Image</h1>
             </div>      
                
             </div>
-                <div class="middleContainer col-6"></div>
+                <div class="middleContainer col-6 video-background">
+ <video autoplay muted style="background:black">
+        <!-- Las URLs de los videos se cargarán dinámicamente -->
+    </video>
+</div>
                 <div class="secondaryContainer col-3" >
 <!-- COLLAPSE -->                    
                
@@ -3139,6 +3143,51 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
+    
+<script>
+    
+       import { createClient } from "https://esm.sh/pexels";
+
+    const client = createClient('ol6Ck5mBAkKtOOnWrTQ4CyyIquNlS54c9EOv0L0MhLp7wNoe0vaHVKw7');
+
+    async function getVideos() {
+        const videoIds = [4065223, 6694013, 8580874, 5823707, 7749076, 7239168, 5644324, 4154236, 7235796 ]; // Lista de IDs de videos que quieres usar
+        let videoUrls = [];
+
+        for (const id of videoIds) {
+            const video = await client.videos.show({ id });
+            const hdVideo = video.video_files.find(file => file.quality === 'hd');
+            if (hdVideo) {
+                videoUrls.push(hdVideo.link);
+            }
+        }
+        return videoUrls;
+    }
+
+    getVideos().then(urls => {
+        const videoElement = document.querySelector('.video-background video');
+        let currentVideo = 0;
+
+        function changeVideo() {
+            videoElement.classList.add('fade-out');
+            setTimeout(() => {
+                currentVideo = (currentVideo + 1) % urls.length;
+                videoElement.src = urls[currentVideo];
+                videoElement.play();
+                videoElement.classList.remove('fade-out');
+            }, 1000);  // Espera 1 segundo para cambiar el video después del fade-out
+        }
+
+        videoElement.addEventListener('ended', () => {
+            changeVideo();
+        });
+
+        if (urls.length > 0) {
+            videoElement.src = urls[0];
+            videoElement.play();
+        }
+    });
+    </script>
 
 
 </body>

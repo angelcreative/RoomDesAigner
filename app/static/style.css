@@ -20,6 +20,32 @@ body {
   margin: 0;
 }
 
+
+ 
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+          background: #000
+        }
+
+        .video-background video {
+            width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1s ease-in-out;
+    opacity: 1;
+        }
+
+.video-background video.fade-out {
+    opacity: 0;
+}
+
 .logout img {
     filter: contrast(0.5);
 }
