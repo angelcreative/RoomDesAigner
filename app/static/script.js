@@ -123,10 +123,9 @@ function handleSubmit(event) {
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
 
-    //wheel
-
-   document.addEventListener('DOMContentLoaded', function() {
-    var colorWheelContainer = document.getElementById('colorWheelContainer');
+    
+//wheel
+      var colorWheelContainer = document.getElementById('wheelColor');
     var colorWheel = new iro.ColorPicker(colorWheelContainer, {
         width: 200,
         color: "#f00"
@@ -190,7 +189,7 @@ function handleSubmit(event) {
             const hue = chroma(color).get('hsl.h');
             const angleRadians = (hue * Math.PI / 180); // Convert hue to radians
             const indicatorX = centerX + wheelRadius * Math.cos(angleRadians);
-            const indicatorY = centerY - wheelRadius * Math.sin(angleRadians); // Correct the direction
+            const indicatorY = centerY - wheelRadius * Math.sin(angleRadians); // Note the subtraction here to correct the direction
 
             const indicator = document.createElement('div');
             indicator.classList.add('colorIndicator');
@@ -235,7 +234,6 @@ function handleSubmit(event) {
                 <p>HEX: ${hexColor}</p>
                 <p>HSL: ${hslColor[0]} ${hslColor[1]} ${hslColor[2]}</p>
             `;
-
             colorCardsContainer.appendChild(cardDiv);
         });
     }
@@ -253,178 +251,129 @@ function handleSubmit(event) {
     // Initialize the color wheel with the default color
     updateHarmonyColors(colorWheel.color.hexString);
 
-    // Capture values for color elements
-    const colorElements = [
-        { id: "dominant_color", switchId: "use_colors" },
-        { id: "secondary_color", switchId: "use_colors" },
-        { id: "accent_color", switchId: "use_colors" },
-        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-        { id: "furniture_color", switchId: "use_furniture_color" }
-    ];
-
-    colorElements.forEach(colorElement => {
-        const colorInput = document.getElementById(colorElement.id);
-        const colorSwitch = document.getElementById(colorElement.switchId);
-        const colorNameSpan = document.getElementById(colorElement.id + '_name');
-
-        if (colorInput && colorSwitch) {
-            const updateColor = () => {
-                const hexColor = colorInput.value;
-                const n_match = ntc.name(hexColor);
-                const colorName = n_match[1]; // Only the color name
-
-                if (colorSwitch.checked) {
-                    values[colorElement.id] = `${colorName} (${hexColor})`; // Save the color name and HEX
-                    colorNameSpan.textContent = colorName; // Display the color name under the picker
-                } else {
-                    values[colorElement.id] = ""; // Assign an empty value if the switch is off
-                    colorNameSpan.textContent = ""; // Clear the displayed color name
-                }
-            };
-
-            // Listen for changes in the color input and the checkbox
-            colorInput.addEventListener('input', updateColor);
-            colorSwitch.addEventListener('change', updateColor);
-
-            // Initialize the color name when the page loads
-            updateColor();
-        }
-    });
-    
-    // Añadir los colores seleccionados en la rueda de colores
-    const selectedColors = colorWheel.colors.map(c => c.hexString); // Obtén los colores seleccionados
-    values['selected_colors'] = selectedColors; // Añade los colores seleccionados al objeto values
-
-    return values;
-});
-
-
 //end wheel
-
-
-
-
-function getSelectedValues() {
-    const elementIds = [
-        "person",
-        "home_room",
-        "design_style",
-        "generated_artwork",
-        "point_of_view",
-        "color_scheme",
-        "camera_select",
-        "film_grain",
-        "action_select",
-        "person_descriptor",
-        "room_size",
-        "space_to_be_designed",
-        "children_room",
-        "pool",
-        "landscaping_options",
-        "garden",
-        "room_shape",
-        "inspired_by_this_interior_design_magazine",
-        "furniture_provided_by_this_vendor",
-        "furniture_pattern",
-        "seating_upholstery_pattern",
-        "designed_by_this_interior_designer",
-        "designed_by_this_architect",
-        "lens_used",
-        "photo_lighting_type",
-        "illumination",
-        "door",
-        "windows",
-        "ceiling_design",
-        "roof_material",
-        "roof_height",
-        "wall_type",
-        "wall_cladding",
-        "walls_pattern",
-        "exterior_finish",
-        "exterior_trim_molding",
-        "facade_pattern",
-        "floors",
-        "kitchen_layout",
-        "countertop_material",
-        "backsplash_design",
-        "cabinet_storage_design",
-        "appliance_style_finish",
-        "bathroom_fixture_style",
-        "bathroom_tile_design",
-        "bathroom_vanity_style",
-        "shower_bathtub_design",
-        "bathroom_lighting_fixtures",
-        "fireplace_design",
-        "balcony_design",
-        "material",
-        "ceramic_material",
-        "fabric",
-        "stone_material",
-        "marble_material",
-        "wood_material",
-        "decorative_elements",
-        "type_select",
-        "photo_location",
-        "hairstyle_select"
-    ];
-
-    const colorElements = [
-        { id: "dominant_color", switchId: "use_colors" },
-        { id: "secondary_color", switchId: "use_colors" },
-        { id: "accent_color", switchId: "use_colors" },
-        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
-        { id: "furniture_color", switchId: "use_furniture_color" }
-    ];
-
-    const values = {};
-
-    // Capture values for general elements
-    elementIds.forEach(elementId => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            values[elementId] = element.value;
-        }
-    });
-
-    // Capture values for color elements
-    colorElements.forEach(colorElement => {
-        const colorInput = document.getElementById(colorElement.id);
-        const colorSwitch = document.getElementById(colorElement.switchId);
-        const colorNameSpan = document.getElementById(${colorElement.id}_name);
-
-        if (colorInput && colorSwitch) {
-            const updateColor = () => {
-                const hexColor = colorInput.value;
-                const n_match = ntc.name(hexColor);
-                const colorName = n_match[1]; // Only the color name
-
-                if (colorSwitch.checked) {
-                    values[colorElement.id] = ${colorName} (${hexColor}); // Save the color name and HEX
-                    colorNameSpan.textContent = colorName; // Display the color name under the picker
-                } else {
-                    values[colorElement.id] = ""; // Assign an empty value if the switch is off
-                    colorNameSpan.textContent = ""; // Clear the displayed color name
-                }
-            };
-
-            // Listen for changes in the color input and the checkbox
-            colorInput.addEventListener('input', updateColor);
-            colorSwitch.addEventListener('change', updateColor);
-
-            // Initialize the color name when the page loads
-            updateColor();
-        }
-    });
     
     
-     // Añadir los colores seleccionados en la rueda de colores
-    const selectedColors = colorWheel.colors.map(c => c.hexString); // Obtén los colores seleccionados
-    values['selected_colors'] = selectedColors; // Añade los colores seleccionados al objeto values
 
-    return values;
-}
+ // Function to get selected values
+    function getSelectedValues() {
+        const elementIds = [
+            "person",
+            "home_room",
+            "design_style",
+            "generated_artwork",
+            "point_of_view",
+            "color_scheme",
+            "camera_select",
+            "film_grain",
+            "action_select",
+            "person_descriptor",
+            "room_size",
+            "space_to_be_designed",
+            "children_room",
+            "pool",
+            "landscaping_options",
+            "garden",
+            "room_shape",
+            "inspired_by_this_interior_design_magazine",
+            "furniture_provided_by_this_vendor",
+            "furniture_pattern",
+            "seating_upholstery_pattern",
+            "designed_by_this_interior_designer",
+            "designed_by_this_architect",
+            "lens_used",
+            "photo_lighting_type",
+            "illumination",
+            "door",
+            "windows",
+            "ceiling_design",
+            "roof_material",
+            "roof_height",
+            "wall_type",
+            "wall_cladding",
+            "walls_pattern",
+            "exterior_finish",
+            "exterior_trim_molding",
+            "facade_pattern",
+            "floors",
+            "kitchen_layout",
+            "countertop_material",
+            "backsplash_design",
+            "cabinet_storage_design",
+            "appliance_style_finish",
+            "bathroom_fixture_style",
+            "bathroom_tile_design",
+            "bathroom_vanity_style",
+            "shower_bathtub_design",
+            "bathroom_lighting_fixtures",
+            "fireplace_design",
+            "balcony_design",
+            "material",
+            "ceramic_material",
+            "fabric",
+            "stone_material",
+            "marble_material",
+            "wood_material",
+            "decorative_elements",
+            "type_select",
+            "photo_location",
+            "hairstyle_select"
+        ];
 
+        const colorElements = [
+            { id: "dominant_color", switchId: "use_colors" },
+            { id: "secondary_color", switchId: "use_colors" },
+            { id: "accent_color", switchId: "use_colors" },
+            { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+            { id: "furniture_color", switchId: "use_furniture_color" }
+        ];
 
+        const values = {};
+
+        // Capture values for general elements
+        elementIds.forEach(elementId => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                values[elementId] = element.value;
+            }
+        });
+
+        // Capture values for color elements
+        colorElements.forEach(colorElement => {
+            const colorInput = document.getElementById(colorElement.id);
+            const colorSwitch = document.getElementById(colorElement.switchId);
+            const colorNameSpan = document.getElementById(`${colorElement.id}_name`);
+
+            if (colorInput && colorSwitch) {
+                const updateColor = () => {
+                    const hexColor = colorInput.value;
+                    const n_match = ntc.name(hexColor);
+                    const colorName = n_match[1]; // Only the color name
+
+                    if (colorSwitch.checked) {
+                        values[colorElement.id] = `${colorName} (${hexColor})`; // Save the color name and HEX
+                        colorNameSpan.textContent = colorName; // Display the color name under the picker
+                    } else {
+                        values[colorElement.id] = ""; // Assign an empty value if the switch is off
+                        colorNameSpan.textContent = ""; // Clear the displayed color name
+                    }
+                };
+
+                // Listen for changes in the color input and the checkbox
+                colorInput.addEventListener('input', updateColor);
+                colorSwitch.addEventListener('change', updateColor);
+
+                // Initialize the color name when the page loads
+                updateColor();
+            }
+        });
+
+        // Add the selected colors from the color wheel to the values
+        const selectedColors = colorWheel.colors.map(c => c.hexString); // Get the selected colors from the color wheel
+        values['selected_colors'] = selectedColors; // Add the selected colors to the values object
+
+        return values;
+    }
 
 // Event listener for the color switches
 document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
@@ -745,7 +694,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl,perfect-hands-xl";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
 } else if (modelId === furnitureValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
