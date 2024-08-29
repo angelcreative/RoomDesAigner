@@ -123,8 +123,9 @@ function handleSubmit(event) {
   alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
 }
 
-    
+    //wheel
 
+   document.addEventListener('DOMContentLoaded', function() {
     var colorWheelContainer = document.getElementById('colorWheelContainer');
     var colorWheel = new iro.ColorPicker(colorWheelContainer, {
         width: 200,
@@ -189,84 +190,55 @@ function handleSubmit(event) {
             const hue = chroma(color).get('hsl.h');
             const angleRadians = (hue * Math.PI / 180); // Convert hue to radians
             const indicatorX = centerX + wheelRadius * Math.cos(angleRadians);
-            const indicatorY = centerY - wheelRadius * Math.sin(angleRadians); // Note the subtraction here to correct the direction
+            const indicatorY = centerY - wheelRadius * Math.sin(angleRadians); // Correct the direction
 
-           const indicator = document.createElement('div');
-indicator.classList.add('colorIndicator');
-indicator.style.position = 'absolute';
-indicator.style.left = `${indicatorX}px`;
-indicator.style.top = `${indicatorY}px`;
-indicator.style.transform = 'translate(-50%, -50%)'; // Center the indicator on the point
-indicator.style.backgroundColor = color;
+            const indicator = document.createElement('div');
+            indicator.classList.add('colorIndicator');
+            indicator.style.position = 'absolute';
+            indicator.style.left = `${indicatorX}px`;
+            indicator.style.top = `${indicatorY}px`;
+            indicator.style.transform = 'translate(-50%, -50%)'; // Center the indicator on the point
+            indicator.style.backgroundColor = color;
 
-colorWheelContainer.appendChild(indicator);
+            colorWheelContainer.appendChild(indicator);
         });
     }
 
-  
-  //forRD
-  /*  function displayColorCards(colors) {
+    function displayColorCards(colors) {
         const colorCardsContainer = document.getElementById('colorCards');
-        colorCardsContainer.innerHTML = '';  
+        colorCardsContainer.innerHTML = ''; // Clear previous cards
 
         colors.forEach(color => {
             const rgbColor = chroma(color).rgb();
             const [r, g, b] = rgbColor;
-            const colorName = ntc.name(color)[1];  
+            let colorName = ntc.name(color)[1]; // Get color name using ntc.js
+
+            // Remove the "Color RGB" part from the color name
+            colorName = colorName.replace(/ Color RGB.*/, '');
+
+            // Get HEX and HSL values
+            const hexColor = chroma(color).hex();
+            const hslColor = chroma(color).hsl().map(value => value.toFixed(2));
+
+            // Determine if text should be light or dark based on the color's luminance
+            const textColor = chroma(color).luminance() > 0.5 ? '#000000' : '#ffffff';
 
             // Create a new card for each color
             const cardDiv = document.createElement('div');
             cardDiv.classList.add('colorCard');
             cardDiv.style.backgroundColor = color;
-            cardDiv.innerHTML = 
+            cardDiv.style.color = textColor; // Set the text color dynamically
+            cardDiv.innerHTML = `
                 <div style="background-color:${color};width:50px;height:50px;margin-bottom:5px;"></div>
                 <p>${colorName}</p>
                 <p>RGB: ${r} ${g} ${b}</p>
-            ;
+                <p>HEX: ${hexColor}</p>
+                <p>HSL: ${hslColor[0]} ${hslColor[1]} ${hslColor[2]}</p>
+            `;
+
             colorCardsContainer.appendChild(cardDiv);
         });
     }
-  */
-  
-function displayColorCards(colors) {
-    const colorCardsContainer = document.getElementById('colorCards');
-    colorCardsContainer.innerHTML = ''; // Clear previous cards
-
-    colors.forEach(color => {
-        const rgbColor = chroma(color).rgb();
-        const [r, g, b] = rgbColor;
-        let colorName = ntc.name(color)[1]; // Get color name using ntc.js
-
-        // Remove the "Color RGB" part from the color name
-        colorName = colorName.replace(/ Color RGB.*/, '');
-
-        // Get HEX and HSL values
-        const hexColor = chroma(color).hex();
-        const hslColor = chroma(color).hsl().map(value => value.toFixed(2));
-
-        // Determine if text should be light or dark based on the color's luminance
-        const textColor = chroma(color).luminance() > 0.5 ? '#000000' : '#ffffff';
-
-        // Create a new card for each color
-        const cardDiv = document.createElement('div');
-        cardDiv.classList.add('colorCard');
-        cardDiv.style.backgroundColor = color;
-        cardDiv.style.color = textColor; // Set the text color dynamically
-        cardDiv.innerHTML = `
-    <div style="background-color:${color};width:50px;height:50px;margin-bottom:5px;"></div>
-    <p>${colorName}</p>
-    <p>RGB: ${r} ${g} ${b}</p>
-    <p>HEX: ${hexColor}</p>
-    <p>HSL: ${hslColor[0]} ${hslColor[1]} ${hslColor[2]}</p>
-`;
-
-        ;
-        colorCardsContainer.appendChild(cardDiv);
-    });
-}
-
-
-
 
     // Listen to color wheel changes
     colorWheel.on(['color:init', 'color:change'], function(color) {
@@ -280,6 +252,54 @@ function displayColorCards(colors) {
 
     // Initialize the color wheel with the default color
     updateHarmonyColors(colorWheel.color.hexString);
+
+    // Capture values for color elements
+    const colorElements = [
+        { id: "dominant_color", switchId: "use_colors" },
+        { id: "secondary_color", switchId: "use_colors" },
+        { id: "accent_color", switchId: "use_colors" },
+        { id: "walls_paint_color", switchId: "use_walls_paint_color" },
+        { id: "furniture_color", switchId: "use_furniture_color" }
+    ];
+
+    colorElements.forEach(colorElement => {
+        const colorInput = document.getElementById(colorElement.id);
+        const colorSwitch = document.getElementById(colorElement.switchId);
+        const colorNameSpan = document.getElementById(colorElement.id + '_name');
+
+        if (colorInput && colorSwitch) {
+            const updateColor = () => {
+                const hexColor = colorInput.value;
+                const n_match = ntc.name(hexColor);
+                const colorName = n_match[1]; // Only the color name
+
+                if (colorSwitch.checked) {
+                    values[colorElement.id] = `${colorName} (${hexColor})`; // Save the color name and HEX
+                    colorNameSpan.textContent = colorName; // Display the color name under the picker
+                } else {
+                    values[colorElement.id] = ""; // Assign an empty value if the switch is off
+                    colorNameSpan.textContent = ""; // Clear the displayed color name
+                }
+            };
+
+            // Listen for changes in the color input and the checkbox
+            colorInput.addEventListener('input', updateColor);
+            colorSwitch.addEventListener('change', updateColor);
+
+            // Initialize the color name when the page loads
+            updateColor();
+        }
+    });
+    
+    // Añadir los colores seleccionados en la rueda de colores
+    const selectedColors = colorWheel.colors.map(c => c.hexString); // Obtén los colores seleccionados
+    values['selected_colors'] = selectedColors; // Añade los colores seleccionados al objeto values
+
+    return values;
+});
+
+
+//end wheel
 
 
 
@@ -725,7 +745,7 @@ let lora_strength = 1;
 
 // Conditionally set the LoRA model based on the selected model
 if (modelId === personValue) {
-  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl,perfect-hands-xl";
 } else if (modelId === furnitureValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
