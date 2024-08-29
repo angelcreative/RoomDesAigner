@@ -252,12 +252,14 @@ function displayColorCards(colors) {
         cardDiv.classList.add('colorCard');
         cardDiv.style.backgroundColor = color;
         cardDiv.style.color = textColor; // Set the text color dynamically
-        cardDiv.innerHTML = 
-            <div style="background-color:${color};width:50px;height:50px;margin-bottom:5px;"></div>
-            <p>${colorName}</p>
-            <p>RGB: ${r} ${g} ${b}</p>
-            <p>HEX: ${hexColor}</p>
-            <p>HSL: ${hslColor[0]} ${hslColor[1]} ${hslColor[2]}</p>
+        cardDiv.innerHTML = `
+    <div style="background-color:${color};width:50px;height:50px;margin-bottom:5px;"></div>
+    <p>${colorName}</p>
+    <p>RGB: ${r} ${g} ${b}</p>
+    <p>HEX: ${hexColor}</p>
+    <p>HSL: ${hslColor[0]} ${hslColor[1]} ${hslColor[2]}</p>
+`;
+
         ;
         colorCardsContainer.appendChild(cardDiv);
     });
