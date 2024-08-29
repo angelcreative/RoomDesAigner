@@ -37,7 +37,7 @@ body {
     height: 100%;
     object-fit: cover;
     transition: opacity 1s ease-in-out;
-    opacity: .5;
+    opacity: .05;
         }
 
 .video-background video.fade-out {
@@ -2345,6 +2345,96 @@ border: 1px solid #ffffff42;
   }
 }
  
+
+/*wheel*/
+.colorIndicator {
+            position: absolute;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+
+        }
+#colorWheelContainer {
+    position: relative;
+    width: 200px;
+    height: 240px;
+    margin: 0 auto;
+}
+#harmonyColors {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  display:none;
+}
+        #harmonyColors div {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+          border-radius:900px;
+        }
+
+.colorIndicator {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.selectColores {
+  display: flex;
+  row-gap: 10px;
+  flex-direction: column;
+  width: auto
+}
+
+.coloresWheel {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    width: auto;
+    flex-wrap: wrap;
+    align-content: center;
+  font-family: system-ui
+}
+
+
+
+#colorCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; /* Esto permitirá que las tarjetas se ajusten en varias filas si hay demasiadas */
+  justify-content: flex-start; /* Alinea las tarjetas al principio del contenedor */
+  gap: 10px; /* Espacio entre las tarjetas */
+}
+
+.colorCard {
+  background-color: #fff ; /* Fondo oscuro */
+  color: gray; /* Texto claro */
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  width: 120px;
+  margin: 10px 0; /* Espaciado vertical entre las filas de tarjetas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border:1px solid rgba(0,0,0,.1)
+}
+
+.colorCard > div {
+  border-radius:50%
+}
+
+
+
 .credits {
     color: #303030;
         text-align: center;
