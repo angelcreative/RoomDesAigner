@@ -191,15 +191,15 @@ function handleSubmit(event) {
             const indicatorX = centerX + wheelRadius * Math.cos(angleRadians);
             const indicatorY = centerY - wheelRadius * Math.sin(angleRadians); // Note the subtraction here to correct the direction
 
-            const indicator = document.createElement('div');
-            indicator.classList.add('colorIndicator');
-            indicator.style.position = 'absolute';
-            indicator.style.left = ${indicatorX}px;
-            indicator.style.top = ${indicatorY}px;
-            indicator.style.transform = 'translate(-50%, -50%)'; // Center the indicator on the point
-            indicator.style.backgroundColor = color;
+           const indicator = document.createElement('div');
+indicator.classList.add('colorIndicator');
+indicator.style.position = 'absolute';
+indicator.style.left = `${indicatorX}px`;
+indicator.style.top = `${indicatorY}px`;
+indicator.style.transform = 'translate(-50%, -50%)'; // Center the indicator on the point
+indicator.style.backgroundColor = color;
 
-            colorWheelContainer.appendChild(indicator);
+colorWheelContainer.appendChild(indicator);
         });
     }
 
