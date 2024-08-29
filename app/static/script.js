@@ -125,8 +125,6 @@ function handleSubmit(event) {
 
     
 
-
-document.addEventListener('DOMContentLoaded', function() {
     var colorWheelContainer = document.getElementById('colorWheelContainer');
     var colorWheel = new iro.ColorPicker(colorWheelContainer, {
         width: 200,
@@ -280,10 +278,9 @@ function displayColorCards(colors) {
 
     // Initialize the color wheel with the default color
     updateHarmonyColors(colorWheel.color.hexString);
-});
 
 
-estaria ok?
+
 
 function getSelectedValues() {
     const elementIds = [
