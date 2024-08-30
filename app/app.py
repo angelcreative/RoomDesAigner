@@ -476,14 +476,15 @@ def clarity_upscale():
 
         # Devolver la URL de salida directamente
         if isinstance(output, list) and len(output) > 0:
-            return jsonify({'output': output[0]}), 200
+            response = jsonify({'output': output[0]})
+            response.headers['Content-Disposition'] = 'in-line; filename="upscaled_image.jpg"'
+            return response, 200
         else:
             return jsonify({'error': 'No se pudo generar la imagen'}), 500
 
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
-
 
 
     
