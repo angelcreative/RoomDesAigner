@@ -188,6 +188,8 @@ function getSelectedValues() {
         "decorative_elements",
         "type_select",
         "photo_location",
+        "movie_still_by_genre",
+        "movie_atmosphere",
         "hairstyle_select"
     ];
 
