@@ -455,6 +455,8 @@ def update_user_credits(email, additional_credits):
 
 
 
+#clarity
+
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -468,13 +470,20 @@ def clarity_upscale():
             "image": image_url
         }
 
-        # Ejecutar el modelo usando replicate.run()
-        output = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        # Create a prediction using replicate.predictions.create()
+        prediction = replicate.predictions.create(
+            version="philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data
         )
 
-        # Devolver la URL de salida directamente
+        # Wait for the prediction to complete
+        while prediction.status != 'succeeded':
+            prediction.reload()
+
+        # Get the output from the prediction
+        output = prediction.output
+
+        # Return the output
         if isinstance(output, list) and len(output) > 0:
             response = jsonify({'output': output[0]})
             response.headers['Content-Disposition'] = 'in-line; filename="upscaled_image.jpg"'
