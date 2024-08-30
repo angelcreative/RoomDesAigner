@@ -335,7 +335,7 @@ def signup():
             'email': email,  # Include email here
             'password': bcrypt.hashpw(request.form['password'].encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
             'avatar': default_avatar, 
-            'credits': 5
+            'credits': 100
         }
 
         # MongoDB Data API request
@@ -346,7 +346,7 @@ def signup():
         response = requests.post(insert_url, headers=headers, data=json.dumps(body))
 
         if response.status_code == 200 or 'insertedId' in response.text:
-            flash('Signup successful! You got 5 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
+            flash('Signup successful! You got 100 🟡 coins! This is trial period, after it, you can upgrade your account.', 'success')
             return redirect(url_for('login'))
         else:
             error_message = response.json().get('error', 'Unknown error occurred.')
