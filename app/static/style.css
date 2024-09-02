@@ -1427,8 +1427,8 @@ h4 {
 }
 
 .buttonsCont {
-    bottom: 20px;
-    width: 225px;
+   bottom: 0;
+    width: 21%;
     z-index: 1;
     position: absolute;
     background: linear-gradient(0deg, rgba(39, 52, 64, 0.9374343487394958) 25%, rgba(39, 52, 64, 0.5424763655462185) 74%, rgba(39, 52, 64, 0) 100%);
@@ -3347,15 +3347,14 @@ textarea {cursor: default;height: 80px;font-family: system-ui;color: #677580;}
       max-width: 25%;
 	 height:auto
     }
-
-    .col-6 {
-      flex: 0  60%;
+.col-6 {
+    flex: 0 60%;
     max-width: 60%;
     margin: 0 40px;
-    background: #4f5c671a;
+    background: #1e2732;
     border-radius: 16px;
-	    height:780px
-    }
+    border: 3px dashed #4f5c67;
+}
 
     .col-12 {
       flex: 0 0 100%;
