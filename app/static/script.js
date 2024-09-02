@@ -190,6 +190,7 @@ function getSelectedValues() {
         "photo_location",
         "movie_still_by_genre",
         "movie_atmosphere",
+      "image_style",
         "hairstyle_select"
     ];
 
