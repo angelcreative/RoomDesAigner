@@ -493,8 +493,11 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Sharp focus, RAW, unedited, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, professionally color graded, bright soft diffused light, Unedited 8K photograph .` ;
-   
+    const promptInit = `Sharp focus, RAW, unedited, in-frame,  hyperrealistic, highly detailed,  stunningly beautiful, intricate, (professionally color graded), ((bright soft diffused light)), Unedited 8K photograph .` ;
+    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
+//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
+//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
+    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
 
   let plainText = Object.entries(selectedValues)
     .filter(([key, value]) => value && key !== "imageUrl")
@@ -557,7 +560,7 @@ if (personValue !== "") {
   modelId = furnitureValue;
 }
 
-/*  
+  
 // Initialize variables for LoRA model and strength
 let lora = "clothingadjustloraap";
 let lora_strength = 1;
@@ -567,7 +570,7 @@ if (modelId === personValue) {
   lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
 } else if (modelId === furnitureValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
-}  */
+}  
  
   
 // Now build the JSON object with the updated values
@@ -584,8 +587,8 @@ const prompt = {
   tomesd: "yes",
   seed: seedValue,
   model_id: modelId,
-  // lora_model: lora,
- // lora_strength: lora_strength,
+   lora_model: lora,
+ lora_strength: lora_strength,
   scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
   safety_checker: "no",
