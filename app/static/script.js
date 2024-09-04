@@ -573,7 +573,8 @@ if (modelId === personValue) {
 }  
  */
   
-// Now build the JSON object with the updated values
+let selectedModelId = "flux"; // Valor por defecto
+
 const prompt = {
   key: apiKey,
   prompt: promptText,
@@ -586,41 +587,45 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id: "mystic",
-  // lora_model: lora,
- //lora_strength: lora_strength,
+  model_id: selectedModelId, // Usamos la variable aquí
   scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
   safety_checker: "no",
   track_id: null,
   enhance_prompt: "no",
-  //highres_fix: "yes"
 };
-    //xl_more_enhancer,
-    //real-skin-lora
-    //lora 
-    //perfect-eyes-xl,hand-detail-xl,
-//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
-//,epicrealismhelper
-//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
-    //lob-realvisxl-v20 takes some time but good
-    //cyberrealistic-41 almost perfect darked skin
-    //realistic-stock-photo-v2 is slow
-    //realistic-vision-v51  fast
-    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
-    // majicmix-realisticsafeten furniture, test
-    //juggernautxl-v9-rundiffus good for close up
-    //aria-v1 perfect lora
-    //skin-hands-malefemale-fro
-    //westmixappfactory curvy
-    //u58hvdfu4q good lora, bit manga
-    //add-more-details-lor furniture lora
-    //clothingadjustloraap   lora
-    //epicrealism-xl
-    //clothingadjustloraap
- //architectureexterior
-    //yqmaterailenhancer
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdown = document.querySelector('.custom-dropdown');
+  const options = dropdown.querySelectorAll('.option');
+  const selectedText = dropdown.querySelector('.selected-text');
+  const selectedValue = dropdown.querySelector('.selected-value');
+  const clearSelection = dropdown.querySelector('.clear-selection');
+  const hiddenInput = document.getElementById('architectureModel');
+
+  options.forEach(option => {
+    option.addEventListener('click', function() {
+      selectedModelId = this.getAttribute('value');
+      prompt.model_id = selectedModelId; // Actualizamos el valor en el objeto prompt
+      selectedText.textContent = this.textContent;
+      selectedValue.textContent = selectedModelId;
+      hiddenInput.value = selectedModelId;
+      dropdown.classList.add('selected');
+      console.log('Modelo seleccionado:', selectedModelId);
+    });
+  });
+
+  clearSelection.addEventListener('click', function(e) {
+    e.stopPropagation();
+    selectedModelId = "mystic"; // Restablecer al valor por defecto
+    prompt.model_id = selectedModelId; // Actualizamos el valor en el objeto prompt
+    selectedText.textContent = dropdown.getAttribute('data-placeholder');
+    selectedValue.textContent = '';
+    hiddenInput.value = '';
+    dropdown.classList.remove('selected');
+  });
+});
+
     
     
 if (isImg2Img && imageUrl) {
