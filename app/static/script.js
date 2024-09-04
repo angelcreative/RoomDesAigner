@@ -587,7 +587,7 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id: selectedModelId, // Usamos la variable aquí
+  model_id: selectedModelId,
   scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
   safety_checker: "no",
@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function() {
   options.forEach(option => {
     option.addEventListener('click', function() {
       selectedModelId = this.getAttribute('value');
-      prompt.model_id = selectedModelId; // Actualizamos el valor en el objeto prompt
+      prompt.model_id = selectedModelId;
       selectedText.textContent = this.textContent;
       selectedValue.textContent = selectedModelId;
       hiddenInput.value = selectedModelId;
@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
   clearSelection.addEventListener('click', function(e) {
     e.stopPropagation();
     selectedModelId = "mystic"; // Restablecer al valor por defecto
-    prompt.model_id = selectedModelId; // Actualizamos el valor en el objeto prompt
+    prompt.model_id = selectedModelId;
     selectedText.textContent = dropdown.getAttribute('data-placeholder');
     selectedValue.textContent = '';
     hiddenInput.value = '';
