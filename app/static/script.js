@@ -917,8 +917,7 @@ async function copyTextToClipboard(text) {
     generateMessageDiv("Failed to copy prompt to clipboard.");
   }
 }
-
-    
+//NEW CLARITY
     
 function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
@@ -937,17 +936,41 @@ function clarityUpscale(imageUrl) {
         return response.json();
     })
     .then(data => {
-        if (Array.isArray(data.output) && data.output.length > 0) {
-            // Abre la primera URL del array en una nueva pestaña
-            window.open(data.output[0], '_blank');
+        const predictionId = data.prediction_id;
+        if (predictionId) {
+            // Llamamos repetidamente al backend para obtener la imagen procesada
+            pollForUpscaledImage(predictionId);
         } else {
-            console.error('No URLs received for the processed image.');
+            console.error('No prediction ID received.');
         }
     })
     .catch(error => {
         console.error('Error during image upscaling:', error);
     });
 }
+
+function pollForUpscaledImage(predictionId) {
+    const pollInterval = setInterval(() => {
+        fetch(`/get-upscaled-image/${predictionId}`, {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.output) {
+                clearInterval(pollInterval);  // Detener el polling
+                window.open(data.output, '_blank');  // Abrir la imagen escalada en una nueva pestaña
+            } else if (data.status === 'failed') {
+                clearInterval(pollInterval);
+                console.error('Image processing failed.');
+            }
+        })
+        .catch(error => {
+            clearInterval(pollInterval);
+            console.error('Error fetching upscaled image:', error);
+        });
+    }, 5000);  // Reintentar cada 5 segundos
+}
+
 
 
 
