@@ -573,59 +573,49 @@ if (modelId === personValue) {
 }  
  */
   
-let selectedModelId = "flux"; // Valor por defecto
-
-const prompt = {
-  key: apiKey,
-  prompt: promptText,
-  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-  width: width,
-  height: height,
-  samples: 4,
-  guidance_scale: 5,
-  steps: 41,
-  use_karras_sigmas: "yes",
-  tomesd: "yes",
-  seed: seedValue,
-  model_id: selectedModelId,
-  scheduler: "DPMSolverMultistepScheduler",
-  webhook: null,
-  safety_checker: "no",
-  track_id: null,
-  enhance_prompt: "no",
-};
-
 document.addEventListener('DOMContentLoaded', function() {
-  const dropdown = document.querySelector('.custom-dropdown');
-  const options = dropdown.querySelectorAll('.option');
-  const selectedText = dropdown.querySelector('.selected-text');
-  const selectedValue = dropdown.querySelector('.selected-value');
-  const clearSelection = dropdown.querySelector('.clear-selection');
-  const hiddenInput = document.getElementById('architectureModel');
+    const architectureModelInput = document.getElementById('architectureModel');
+    const options = document.querySelectorAll('.custom-dropdown .option');
 
-  options.forEach(option => {
-    option.addEventListener('click', function() {
-      selectedModelId = this.getAttribute('value');
-      prompt.model_id = selectedModelId;
-      selectedText.textContent = this.textContent;
-      selectedValue.textContent = selectedModelId;
-      hiddenInput.value = selectedModelId;
-      dropdown.classList.add('selected');
-      console.log('Modelo seleccionado:', selectedModelId);
+    const prompt = {
+        key: apiKey,
+        prompt: promptText,
+        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+        width: width,
+        height: height,
+        samples: 4,
+        guidance_scale: 5,
+        steps: 41,
+        use_karras_sigmas: "yes",
+        tomesd: "yes",
+        seed: seedValue,
+        model_id: architectureModelInput.value || "mystic", // Valor inicial
+        scheduler: "DPMSolverMultistepScheduler",
+        webhook: null,
+        safety_checker: "no",
+        track_id: null,
+        enhance_prompt: "no",
+    };
+
+    options.forEach(option => {
+        option.addEventListener('click', function() {
+            const modelId = this.getAttribute('value');
+            prompt.model_id = modelId;
+            architectureModelInput.value = modelId;
+        });
     });
-  });
 
-  clearSelection.addEventListener('click', function(e) {
-    e.stopPropagation();
-    selectedModelId = "mystic"; // Restablecer al valor por defecto
-    prompt.model_id = selectedModelId;
-    selectedText.textContent = dropdown.getAttribute('data-placeholder');
-    selectedValue.textContent = '';
-    hiddenInput.value = '';
-    dropdown.classList.remove('selected');
-  });
+    // Observador para detectar cambios en el valor del input oculto
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === "attributes" && mutation.attributeName === "value") {
+                prompt.model_id = architectureModelInput.value || "mystic";
+            }
+        });
+    });
+
+    observer.observe(architectureModelInput, { attributes: true });
 });
-
     
     
 if (isImg2Img && imageUrl) {
