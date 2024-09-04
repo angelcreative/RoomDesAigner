@@ -573,49 +573,54 @@ if (modelId === personValue) {
 }  
  */
   
-document.addEventListener('DOMContentLoaded', function() {
-    const architectureModelInput = document.getElementById('architectureModel');
-    const options = document.querySelectorAll('.custom-dropdown .option');
+// Now build the JSON object with the updated values
+const prompt = {
+  key: apiKey,
+  prompt: promptText,
+  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+  width: width,
+  height: height,
+  samples: 4,
+  guidance_scale: 5,
+  steps: 41,
+  use_karras_sigmas: "yes",
+  tomesd: "yes",
+  seed: seedValue,
+  model_id: "mystic",
+  // lora_model: lora,
+ //lora_strength: lora_strength,
+  scheduler: "DPMSolverMultistepScheduler",
+  webhook: null,
+  safety_checker: "no",
+  track_id: null,
+  enhance_prompt: "no",
+  //highres_fix: "yes"
+};
+    //xl_more_enhancer,
+    //real-skin-lora
+    //lora 
+    //perfect-eyes-xl,hand-detail-xl,
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
 
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 5,
-        steps: 41,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: architectureModelInput.value || "mystic", // Valor inicial
-        scheduler: "DPMSolverMultistepScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no",
-    };
-
-    options.forEach(option => {
-        option.addEventListener('click', function() {
-            const modelId = this.getAttribute('value');
-            prompt.model_id = modelId;
-            architectureModelInput.value = modelId;
-        });
-    });
-
-    // Observador para detectar cambios en el valor del input oculto
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === "attributes" && mutation.attributeName === "value") {
-                prompt.model_id = architectureModelInput.value || "mystic";
-            }
-        });
-    });
-
-    observer.observe(architectureModelInput, { attributes: true });
-});
+//,epicrealismhelper
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
+    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
+    //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
+    //epicrealism-xl
+    //clothingadjustloraap
+ //architectureexterior
+    //yqmaterailenhancer
     
     
 if (isImg2Img && imageUrl) {
@@ -912,7 +917,8 @@ async function copyTextToClipboard(text) {
     generateMessageDiv("Failed to copy prompt to clipboard.");
   }
 }
-//NEW CLARITY
+
+    
     
 function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
@@ -931,41 +937,17 @@ function clarityUpscale(imageUrl) {
         return response.json();
     })
     .then(data => {
-        const predictionId = data.prediction_id;
-        if (predictionId) {
-            // Llamamos repetidamente al backend para obtener la imagen procesada
-            pollForUpscaledImage(predictionId);
+        if (Array.isArray(data.output) && data.output.length > 0) {
+            // Abre la primera URL del array en una nueva pestaña
+            window.open(data.output[0], '_blank');
         } else {
-            console.error('No prediction ID received.');
+            console.error('No URLs received for the processed image.');
         }
     })
     .catch(error => {
         console.error('Error during image upscaling:', error);
     });
 }
-
-function pollForUpscaledImage(predictionId) {
-    const pollInterval = setInterval(() => {
-        fetch(`/get-upscaled-image/${predictionId}`, {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.output) {
-                clearInterval(pollInterval);  // Detener el polling
-                window.open(data.output, '_blank');  // Abrir la imagen escalada en una nueva pestaña
-            } else if (data.status === 'failed') {
-                clearInterval(pollInterval);
-                console.error('Image processing failed.');
-            }
-        })
-        .catch(error => {
-            clearInterval(pollInterval);
-            console.error('Error fetching upscaled image:', error);
-        });
-    }, 5000);  // Reintentar cada 5 segundos
-}
-
 
 
 
