@@ -457,8 +457,10 @@ def update_user_credits(email, additional_credits):
 
 #clarity
 
+# Almacenamiento temporal de predicciones (solo para pruebas)
+predictions = {}
 
-
+# Ruta para iniciar el proceso de escalado
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -472,23 +474,54 @@ def clarity_upscale():
             "image": image_url
         }
 
-        # Ejecutar el modelo usando replicate.run()
-        output = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input=input_data
+        # Crear un ID único para la predicción
+        prediction_id = str(uuid.uuid4())
+        
+        # Crear la predicción en Replicate con webhook
+        replicate.predictions.create(
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input_data,
+            webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
+            webhook_events_filter=["completed"]
         )
 
-        # Devolver la URL de salida directamente
-        if isinstance(output, list) and len(output) > 0:
-            response = jsonify({'output': output[0]})
-            response.headers['Content-Disposition'] = 'in-line; filename="upscaled_image.jpg"'
-            return response, 200
-        else:
-            return jsonify({'error': 'No se pudo generar la imagen'}), 500
+        # Inicializamos la predicción en el diccionario
+        predictions[prediction_id] = {"status": "pending", "output": None}
+
+        return jsonify({'prediction_id': prediction_id}), 200
 
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
+
+# Ruta para recibir el webhook de Replicate
+@app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
+def replicate_webhook(prediction_id):
+    try:
+        prediction = request.json
+
+        # Verifica si la predicción fue exitosa
+        if prediction.get('status') == 'succeeded':
+            output_url = prediction.get('output', [None])[0]
+            predictions[prediction_id] = {"status": "succeeded", "output": output_url}
+        elif prediction.get('status') == 'failed':
+            predictions[prediction_id] = {"status": "failed", "output": None}
+
+        return jsonify({"ok": True}), 200
+
+    except Exception as e:
+        print(f"Error procesando el webhook: {str(e)}")
+        return jsonify({'error': f'Error procesando el webhook: {str(e)}'}), 500
+
+# Ruta para que el frontend consulte el resultado de la predicción
+@app.route('/get-upscaled-image/<prediction_id>', methods=['GET'])
+def get_upscaled_image(prediction_id):
+    result = predictions.get(prediction_id, None)
+
+    if not result:
+        return jsonify({'error': 'Predicción no encontrada'}), 404
+    
+    return jsonify(result), 200
 
     
 # A dictionary to store the comparison data
