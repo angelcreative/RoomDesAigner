@@ -455,7 +455,6 @@ def update_user_credits(email, additional_credits):
 
 
 
-#clarity
 
 # Almacenamiento temporal de predicciones (solo para pruebas)
 predictions = {}
@@ -477,17 +476,22 @@ def clarity_upscale():
         # Crear un ID único para la predicción
         prediction_id = str(uuid.uuid4())
         
-        # Crear la predicción en Replicate con webhook
-        replicate.predictions.create(
+        # Crear la predicción en Replicate con webhook y verificar la respuesta
+        prediction = replicate.predictions.create(
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data,
             webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
             webhook_events_filter=["completed"]
         )
 
-        # Inicializamos la predicción en el diccionario
+        # Verificamos si la respuesta contiene un ID de predicción
+        if not isinstance(prediction, dict) or 'id' not in prediction:
+            return jsonify({'error': 'La API de Replicate no devolvió un ID de predicción válido'}), 500
+
+        # Inicializamos la predicción en el diccionario con el estado 'pending'
         predictions[prediction_id] = {"status": "pending", "output": None}
 
+        # Devolvemos el ID de la predicción generada
         return jsonify({'prediction_id': prediction_id}), 200
 
     except Exception as e:
@@ -522,6 +526,7 @@ def get_upscaled_image(prediction_id):
         return jsonify({'error': 'Predicción no encontrada'}), 404
     
     return jsonify(result), 200
+
 
     
 # A dictionary to store the comparison data
