@@ -484,8 +484,12 @@ def clarity_upscale():
             webhook_events_filter=["completed"]
         )
 
-        # Verificamos si la respuesta contiene un ID de predicción
-        if not isinstance(prediction, dict) or 'id' not in prediction:
+        # Imprimir información de depuración
+        print(f"Tipo de prediction: {type(prediction)}")
+        print(f"Contenido de prediction: {prediction}")
+
+        # Verificamos si la predicción tiene un atributo 'id'
+        if not hasattr(prediction, 'id'):
             return jsonify({'error': 'La API de Replicate no devolvió un ID de predicción válido'}), 500
 
         # Inicializamos la predicción en el diccionario con el estado 'pending'
