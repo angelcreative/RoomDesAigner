@@ -546,7 +546,7 @@ console.log(`Width: ${width}, Height: ${height}`);
 
 // Determine the model_id based on the selection of the "person" field
 
- 
+/* 
 // Get selected models from the form
 const personValue = document.getElementById("personModel").value;
 const furnitureValue = document.getElementById("furnitureModel").value;
@@ -571,7 +571,7 @@ if (modelId === personValue) {
 } else if (modelId === furnitureValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
- 
+ */
   
 // Now build the JSON object with the updated values
 const prompt = {
@@ -586,9 +586,9 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id: modelId,
-   lora_model: lora,
- lora_strength: lora_strength,
+  model_id: "fluxschnell",
+  // lora_model: lora,
+ //lora_strength: lora_strength,
   scheduler: "DPMSolverMultistepScheduler",
   webhook: null,
   safety_checker: "no",
