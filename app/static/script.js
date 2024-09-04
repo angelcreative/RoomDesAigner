@@ -586,7 +586,7 @@ const prompt = {
   use_karras_sigmas: "yes",
   tomesd: "yes",
   seed: seedValue,
-  model_id: "fluxschnell",
+  model_id: "mystic",
   // lora_model: lora,
  //lora_strength: lora_strength,
   scheduler: "DPMSolverMultistepScheduler",
