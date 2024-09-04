@@ -456,6 +456,7 @@ def update_user_credits(email, additional_credits):
 
 
 
+
 # Almacenamiento temporal de predicciones (solo para pruebas)
 predictions = {}
 
@@ -477,7 +478,7 @@ def clarity_upscale():
         prediction_id = str(uuid.uuid4())
         
         # Crear la predicción en Replicate con webhook y verificar la respuesta
-        prediction = replicate.predictions.create(
+        prediction_response = replicate.predictions.create(
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data,
             webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
@@ -485,11 +486,20 @@ def clarity_upscale():
         )
 
         # Imprimir información de depuración
-        print(f"Tipo de prediction: {type(prediction)}")
-        print(f"Contenido de prediction: {prediction}")
+        print(f"Tipo de prediction_response: {type(prediction_response)}")
+        print(f"Contenido de prediction_response: {prediction_response}")
 
-        # Verificamos si la predicción tiene un atributo 'id'
-        if not hasattr(prediction, 'id'):
+        # Intentar parsear la respuesta si es una cadena
+        if isinstance(prediction_response, str):
+            try:
+                prediction = json.loads(prediction_response)
+            except json.JSONDecodeError:
+                return jsonify({'error': 'La respuesta de Replicate no es un JSON válido'}), 500
+        else:
+            prediction = prediction_response
+
+        # Verificamos si la predicción tiene un 'id'
+        if not isinstance(prediction, dict) or 'id' not in prediction:
             return jsonify({'error': 'La API de Replicate no devolvió un ID de predicción válido'}), 500
 
         # Inicializamos la predicción en el diccionario con el estado 'pending'
@@ -530,7 +540,6 @@ def get_upscaled_image(prediction_id):
         return jsonify({'error': 'Predicción no encontrada'}), 404
     
     return jsonify(result), 200
-
 
     
 # A dictionary to store the comparison data
