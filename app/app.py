@@ -456,7 +456,6 @@ def update_user_credits(email, additional_credits):
 
 
 
-
 # Almacenamiento temporal de predicciones (solo para pruebas)
 predictions = {}
 
@@ -477,8 +476,8 @@ def clarity_upscale():
         # Crear un ID único para la predicción
         prediction_id = str(uuid.uuid4())
         
-        # Crear la predicción en Replicate con webhook y verificar la respuesta
-        prediction_response = replicate.predictions.create(
+        # Crear la predicción en Replicate
+        prediction = replicate.predictions.create(
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data,
             webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
@@ -486,24 +485,15 @@ def clarity_upscale():
         )
 
         # Imprimir información de depuración
-        print(f"Tipo de prediction_response: {type(prediction_response)}")
-        print(f"Contenido de prediction_response: {prediction_response}")
+        print(f"Tipo de prediction: {type(prediction)}")
+        print(f"Contenido de prediction: {prediction}")
 
-        # Intentar parsear la respuesta si es una cadena
-        if isinstance(prediction_response, str):
-            try:
-                prediction = json.loads(prediction_response)
-            except json.JSONDecodeError:
-                return jsonify({'error': 'La respuesta de Replicate no es un JSON válido'}), 500
-        else:
-            prediction = prediction_response
+        # Verificar si la predicción tiene un ID
+        if not prediction or not prediction.id:
+            return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
 
-        # Verificamos si la predicción tiene un 'id'
-        if not isinstance(prediction, dict) or 'id' not in prediction:
-            return jsonify({'error': 'La API de Replicate no devolvió un ID de predicción válido'}), 500
-
-        # Inicializamos la predicción en el diccionario con el estado 'pending'
-        predictions[prediction_id] = {"status": "pending", "output": None}
+        # Inicializamos la predicción en el diccionario con el estado 'starting'
+        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
 
         # Devolvemos el ID de la predicción generada
         return jsonify({'prediction_id': prediction_id}), 200
@@ -516,13 +506,13 @@ def clarity_upscale():
 @app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
 def replicate_webhook(prediction_id):
     try:
-        prediction = request.json
+        webhook_data = request.json
 
         # Verifica si la predicción fue exitosa
-        if prediction.get('status') == 'succeeded':
-            output_url = prediction.get('output', [None])[0]
+        if webhook_data.get('status') == 'succeeded':
+            output_url = webhook_data.get('output', [None])[0]
             predictions[prediction_id] = {"status": "succeeded", "output": output_url}
-        elif prediction.get('status') == 'failed':
+        elif webhook_data.get('status') == 'failed':
             predictions[prediction_id] = {"status": "failed", "output": None}
 
         return jsonify({"ok": True}), 200
@@ -539,8 +529,17 @@ def get_upscaled_image(prediction_id):
     if not result:
         return jsonify({'error': 'Predicción no encontrada'}), 404
     
-    return jsonify(result), 200
+    if result['status'] == 'starting':
+        # Si la predicción aún está en proceso, consultamos su estado actual
+        replicate_id = result.get('replicate_id')
+        if replicate_id:
+            current_prediction = replicate.predictions.get(replicate_id)
+            result['status'] = current_prediction.status
+            if current_prediction.status == 'succeeded':
+                result['output'] = current_prediction.output[0] if current_prediction.output else None
+            predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
 
+    return jsonify(result), 200
     
 # A dictionary to store the comparison data
 comparisons = {}
