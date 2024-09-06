@@ -540,7 +540,86 @@ def get_upscaled_image(prediction_id):
             predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
 
     return jsonify(result), 200
-    
+
+
+
+#SREF
+@app.route('/save-values', methods=['POST'])
+def save_values():
+    if 'username' not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.json
+    name = data.get('name')
+    values = data.get('values')
+
+    if not name or not values:
+        return jsonify({'error': 'Missing name or values'}), 400
+
+    # Guardar los valores en MongoDB
+    save_payload = {
+        'dataSource': 'Cluster0',
+        'database': 'yourDatabase',
+        'collection': 'saved_values',
+        'document': {
+            'username': session['username'],
+            'name': name,
+            'values': values
+        }
+    }
+    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+    save_response = requests.post(f'{mongo_data_api_url}/action/insertOne', headers=headers, data=json.dumps(save_payload))
+
+    if save_response.status_code == 200:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'error': 'Error saving values'}), 500
+
+@app.route('/load-saved-values', methods=['GET'])
+def load_saved_values():
+    if 'username' not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    query_payload = {
+        'dataSource': 'Cluster0',
+        'database': 'yourDatabase',
+        'collection': 'saved_values',
+        'filter': {'username': session['username']},
+        'projection': {'_id': 1, 'name': 1}  # Solo devolvemos el id y el nombre de cada guardado
+    }
+    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+    response = requests.post(f'{mongo_data_api_url}/action/find', headers=headers, data=json.dumps(query_payload))
+
+    if response.status_code == 200:
+        saved_values = response.json().get('documents', [])
+        return jsonify({'savedValues': saved_values}), 200
+    else:
+        return jsonify({'error': 'Error loading saved values'}), 500
+
+
+@app.route('/get-saved-values/<saved_id>', methods=['GET'])
+def get_saved_values(saved_id):
+    if 'username' not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    query_payload = {
+        'dataSource': 'Cluster0',
+        'database': 'yourDatabase',
+        'collection': 'saved_values',
+        'filter': {'_id': {'$oid': saved_id}},
+        'projection': {'values': 1}  # Solo devolvemos los valores
+    }
+    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
+    response = requests.post(f'{mongo_data_api_url}/action/findOne', headers=headers, data=json.dumps(query_payload))
+
+    if response.status_code == 200:
+        saved_values = response.json().get('document', {})
+        return jsonify({'success': True, 'values': saved_values.get('values')}), 200
+    else:
+        return jsonify({'error': 'Error fetching saved values'}), 500
+
+
+
 # A dictionary to store the comparison data
 comparisons = {}
 
