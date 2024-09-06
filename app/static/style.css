@@ -231,6 +231,26 @@ h2.loginTitle {
 }
 
 
+/* SREF */
+
+#saveDialog {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    width: 300px;
+    margin-top: 10px;
+}
+
+#saveDialog input {
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+#savedValuesDropdown {
+    margin-top: 10px;
+}
+
+
 /* ref image */
 
    #uploadedImageContainer {
