@@ -438,9 +438,32 @@
 
         <img class="logoApp" src="static/img/logoApp.svg">
            
-             <div> <button onclick="toggleContent()">See prompt details</button>
-            <div id="chipsSV" class="toggle-content"></div></div>
-            <br>
+             <div class="serialButton"> 
+                    <button onclick="toggleContent()">See prompt details</button>
+<!-- VALUES -->   
+                     <!-- Botón para guardar valores -->
+        <button type="button" id="saveValuesButton">Guardar Valores</button>
+
+        <!-- Diálogo para ingresar el nombre del guardado -->
+        <div id="saveDialog" style="display:none;">
+            <label for="saveName">Nombre del guardado:</label>
+            <input type="text" id="saveName" placeholder="Nombre del guardado">
+            <button type="button" id="confirmSaveButton">Guardar</button>
+            <button type="button" id="cancelSaveButton">Cancelar</button>
+        </div>
+
+        <!-- Botón para cargar valores guardados -->
+        <button type="button" id="loadValuesButton">Cargar Valores Guardados</button>
+
+        <!-- Dropdown con los valores guardados -->
+        <select id="savedValuesDropdown" style="display:none;">
+            <!-- Las opciones se llenarán dinámicamente con los guardados -->
+        </select>
+<!-- END VALUES -->
+                 
+                    <div id="chipsSV" class="toggle-content"></div>
+             </div>
+       
             <div class="imageGrid" id="imageGrid">
                 <button>Upscale</button>
             </div>
