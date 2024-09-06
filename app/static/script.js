@@ -1440,6 +1440,82 @@ document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button =>
 
 
 
+//  SREF
+
+document.getElementById('saveValuesButton').addEventListener('click', function() {
+  document.getElementById('saveDialog').style.display = 'block';
+});
+
+document.getElementById('confirmSaveButton').addEventListener('click', function() {
+  const saveName = document.getElementById('saveName').value;
+  const selectedValues = getSelectedValues();
+
+  fetch('/save-values', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: saveName,
+      values: selectedValues,
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Valores guardados con éxito');
+      } else {
+        alert('Error al guardar los valores');
+      }
+    });
+
+  document.getElementById('saveDialog').style.display = 'none';
+});
+
+
+// MIDDLE SREF
+document.getElementById('loadValuesButton').addEventListener('click', function() {
+  fetch('/load-saved-values', {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(data => {
+      const dropdown = document.getElementById('savedValuesDropdown');
+      dropdown.innerHTML = ''; // Limpiar las opciones previas
+
+      data.savedValues.forEach(saved => {
+        const option = document.createElement('option');
+        option.value = saved._id;
+        option.textContent = saved.name;
+        dropdown.appendChild(option);
+      });
+
+      dropdown.style.display = 'block';
+    });
+});
+
+document.getElementById('savedValuesDropdown').addEventListener('change', function() {
+  const selectedId = this.value;
+
+  fetch(`/get-saved-values/${selectedId}`, {
+    method: 'GET',
+  })
+    .then(response => response.json())
+    .then(data => {
+      const savedValues = data.values;
+      Object.keys(savedValues).forEach(key => {
+        const inputElement = document.getElementById(key);
+        if (inputElement) {
+          inputElement.value = savedValues[key];
+        }
+      });
+    });
+});
+
+
+
+// END SREF
+
 
 window.addEventListener('load', function() {
   setTimeout(function() {
