@@ -191,7 +191,12 @@ function getSelectedValues() {
         "movie_still_by_genre",
         "movie_atmosphere",
       "image_style",
-        "hairstyle_select"
+        "hairstyle_select",
+"gender",
+        "age",
+        "outfit",
+        "shoes",
+        "accessories"
     ];
 
     const colorElements = [
