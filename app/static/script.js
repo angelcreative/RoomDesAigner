@@ -196,7 +196,8 @@ function getSelectedValues() {
         "age",
         "outfit",
         "shoes",
-        "accessories"
+        "accessories",
+         "photography_pose"
     ];
 
     const colorElements = [
