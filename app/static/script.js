@@ -624,7 +624,7 @@ const prompt = {
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 5,
+  guidance_scale: 15,
   steps: 15,
   use_karras_sigmas: "yes",
   tomesd: "yes",
