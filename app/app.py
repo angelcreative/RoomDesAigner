@@ -544,9 +544,14 @@ def get_upscaled_image(prediction_id):
 
 
 #SREF
+
+# Configurar el nivel de registro
+logging.basicConfig(level=logging.INFO)
+
 @app.route('/save-values', methods=['POST'])
 def save_values():
     if 'username' not in session:
+        logging.error("User not logged in.")
         return jsonify({"error": "Not logged in"}), 401
 
     data = request.json
@@ -554,12 +559,13 @@ def save_values():
     values = data.get('values')
 
     if not name or not values:
+        logging.error("Missing name or values.")
         return jsonify({'error': 'Missing name or values'}), 400
 
     # Guardar los valores en MongoDB
     save_payload = {
-        'dataSource': 'Cluster0',
-        'database': 'yourDatabase',
+        'dataSource': 'Cluster0',  # Asegúrate de que este sea el nombre correcto
+        'database': 'yourDatabase',  # Reemplaza con el nombre exacto de tu base de datos
         'collection': 'saved_values',
         'document': {
             'username': session['username'],
@@ -567,56 +573,68 @@ def save_values():
             'values': values
         }
     }
-    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
-    save_response = requests.post(f'{mongo_data_api_url}/action/insertOne', headers=headers, data=json.dumps(save_payload))
+    headers = {
+        'Content-Type': 'application/json',
+        'api-key': mongo_data_api_key
+    }
+    save_response = requests.post(
+        f'{mongo_data_api_url}/action/insertOne',
+        headers=headers,
+        data=json.dumps(save_payload)
+    )
 
-    if save_response.status_code == 200:
-        return jsonify({'success': True}), 200
+    # Agrega logs para depuración
+    logging.info(f"Request payload: {save_payload}")
+    logging.info(f"Response status code: {save_response.status_code}")
+    logging.info(f"Response text: {save_response.text}")
+
+    if save_response.status_code == 201 or save_response.status_code == 200:
+        response_data = save_response.json()
+        if 'insertedId' in response_data:
+            return jsonify({'success': True}), 200
+        else:
+            error_message = response_data.get('error', 'Unknown error occurred.')
+            logging.error(f"Error saving values: {error_message}")
+            return jsonify({'error': f"Error saving values: {error_message}"}), 500
     else:
-        return jsonify({'error': 'Error saving values'}), 500
+        error_message = save_response.json().get('error', 'Unknown error occurred.')
+        logging.error(f"Error saving values: {error_message}")
+        return jsonify({'error': f"Error saving values: {error_message}"}), 500
+
 
 @app.route('/load-saved-values', methods=['GET'])
 def load_saved_values():
     if 'username' not in session:
+        logging.error("User not logged in.")
         return jsonify({"error": "Not logged in"}), 401
 
     query_payload = {
         'dataSource': 'Cluster0',
-        'database': 'yourDatabase',
+        'database': 'yourDatabase',  # Reemplaza con tu nombre de base de datos
         'collection': 'saved_values',
         'filter': {'username': session['username']},
         'projection': {'_id': 1, 'name': 1}  # Solo devolvemos el id y el nombre de cada guardado
     }
-    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
-    response = requests.post(f'{mongo_data_api_url}/action/find', headers=headers, data=json.dumps(query_payload))
+    headers = {
+        'Content-Type': 'application/json',
+        'api-key': mongo_data_api_key
+    }
+    response = requests.post(
+        f'{mongo_data_api_url}/action/find',
+        headers=headers,
+        data=json.dumps(query_payload)
+    )
+
+    logging.info(f"Response status code: {response.status_code}")
+    logging.info(f"Response text: {response.text}")
 
     if response.status_code == 200:
         saved_values = response.json().get('documents', [])
         return jsonify({'savedValues': saved_values}), 200
     else:
-        return jsonify({'error': 'Error loading saved values'}), 500
-
-
-@app.route('/get-saved-values/<saved_id>', methods=['GET'])
-def get_saved_values(saved_id):
-    if 'username' not in session:
-        return jsonify({"error": "Not logged in"}), 401
-
-    query_payload = {
-        'dataSource': 'Cluster0',
-        'database': 'yourDatabase',
-        'collection': 'saved_values',
-        'filter': {'_id': {'$oid': saved_id}},
-        'projection': {'values': 1}  # Solo devolvemos los valores
-    }
-    headers = {'Content-Type': 'application/json', 'api-key': mongo_data_api_key}
-    response = requests.post(f'{mongo_data_api_url}/action/findOne', headers=headers, data=json.dumps(query_payload))
-
-    if response.status_code == 200:
-        saved_values = response.json().get('document', {})
-        return jsonify({'success': True, 'values': saved_values.get('values')}), 200
-    else:
-        return jsonify({'error': 'Error fetching saved values'}), 500
+        error_message = response.json().get('error', 'Unknown error occurred.')
+        logging.error(f"Error loading saved values: {error_message}")
+        return jsonify({'error': f"Error loading saved values: {error_message}"}), 500
 
 
 
