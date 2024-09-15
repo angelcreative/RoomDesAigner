@@ -340,7 +340,7 @@ function generateBlurredBackground () {
     document.getElementById('dialogTitle').innerHTML = `
         
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will be ready in less than 120 seconds.</p>
+        <p>Sit back and relax, your design will be ready soon.<br>It take some time to make it peerfect.</p>
          <p id="chronometer">00:00:00</p>
     `;
 
