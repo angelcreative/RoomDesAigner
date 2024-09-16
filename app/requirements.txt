@@ -13,5 +13,9 @@ protobuf==4.21.12
 grpcio-tools==1.53.0
 stability-sdk==0.8.1
 replicate==0.7.0
+fastapi==0.95.2
+pydantic==1.10.7
+aiohttp==3.8.5
+
 
 # add other dependencies 
