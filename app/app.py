@@ -34,6 +34,7 @@ headers = {
     "Authorization": auth_token,
 }
 
+# Definir el esquema de entrada sin usar 'unknown = EXCLUDE'
 class ImageProcessInputSchema(Schema):
     image_url = fields.Url(required=True, metadata={
         "type": "string",
@@ -62,7 +63,6 @@ class ImageProcessInputSchema(Schema):
     downscaling_resolution = fields.Int(required=False, missing=1024)
     mask = fields.Str(required=False, missing="")
 
-
 @app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
     json_data = request.get_json()
@@ -79,31 +79,69 @@ def clarity_upscale():
     # Mapear 'image_url' a 'image' antes de enviar la solicitud
     data['image'] = data.pop('image_url')
 
-    # Enviar la solicitud a la API de Replicate
-    response = requests.post(api_endpoint, headers=headers, json={
-        "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",  # Asegúrate de usar la versión correcta
-        "input": data
-    })
+    # Verificar que el token de API esté configurado
+    if not REPLICATE_API_TOKEN:
+        print("El token de Replicate no está configurado.")
+        return jsonify({"error": "Internal server error"}), 500
 
-    if response.status_code == 200:
-        response_json = response.json()
-        endpoint_url = response_json["urls"]["get"]
-    else:
+    # Asegurarse de que el ID de versión del modelo es correcto
+    model_version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
+    if not model_version_id:
+        print("El ID de versión del modelo no está configurado.")
+        return jsonify({"error": "Internal server error"}), 500
+
+    # Enviar la solicitud a la API de Replicate
+    try:
+        response = requests.post(api_endpoint, headers=headers, json={
+            "version": model_version_id,
+            "input": data
+        })
+    except requests.exceptions.RequestException as e:
+        print("Error al realizar la solicitud a la API de Replicate:", e)
+        return jsonify({"error": "Failed to initiate request"}), 500
+
+    # Depurar en caso de error
+    if response.status_code != 200:
+        print("Failed to initiate request")
+        print("Status code:", response.status_code)
+        print("Response content:", response.text)
+        return jsonify({"error": "Failed to initiate request"}), 500
+
+    # Procesar la respuesta de la API
+    response_json = response.json()
+    endpoint_url = response_json.get("urls", {}).get("get")
+    if not endpoint_url:
+        print("No se pudo obtener la URL de estado de la predicción.")
         return jsonify({"error": "Failed to initiate request"}), 500
 
     # Polling para verificar el estado de la predicción
     while True:
         time.sleep(3)
         status_response = requests.get(endpoint_url, headers=headers)
-        status_json = status_response.json()
+        if status_response.status_code != 200:
+            print("Error al obtener el estado de la predicción")
+            print("Status code:", status_response.status_code)
+            print("Response content:", status_response.text)
+            return jsonify({"error": "Error al obtener el estado de la predicción"}), 500
 
-        if status_json["status"] == "succeeded":
+        status_json = status_response.json()
+        status = status_json.get("status")
+
+        if status == "succeeded":
             output_image_url = status_json["output"]["image"]
             return jsonify({"output": [output_image_url]})
-        elif status_json["status"] == "failed":
+        elif status == "failed":
+            print("La predicción ha fallado")
+            print("Detalles:", status_json)
             return jsonify({"error": "Image processing failed"}), 500
+        elif status in ("starting", "processing"):
+            continue
+        else:
+            print("Estado inesperado de la predicción:", status)
+            return jsonify({"error": "Estado inesperado de la predicción"}), 500
 
     return jsonify({'error': 'Timeout o error inesperado'}), 500
+
 
 
 

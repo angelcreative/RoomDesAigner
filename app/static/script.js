@@ -660,15 +660,15 @@ const prompt = {
    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
-  samples: 4,
+  samples: 2,
   guidance_scale: 3.5,
   steps: 20,
   use_karras_sigmas: "yes",
    tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
-  lora_model: null,
-  lora_strength:null,
+  lora_model: "fluxschnelldev",
+  lora_strength:1,
   scheduler: "EulerDiscreteScheduler",
  webhook: null,
   safety_checker: "no",
@@ -680,9 +680,7 @@ const prompt = {
   instant_response: "no",
   ip_adapter_id: null,
         ip_adapter_scale: 0.6,
-        ip_adapter_image: null,
-      embeddings: "verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2"
-
+        ip_adapter_image: null
 };
     //xl_more_enhancer,
     //real-skin-lora
