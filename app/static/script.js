@@ -681,7 +681,7 @@ const prompt = {
   ip_adapter_id: null,
         ip_adapter_scale: 0.6,
         ip_adapter_image: null,
-      embeddings: "verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2,negativehand"
+      embeddings: "verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2"
 
 };
     //xl_more_enhancer,

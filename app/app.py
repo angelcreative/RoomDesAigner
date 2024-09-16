@@ -34,10 +34,13 @@ headers = {
     "Authorization": auth_token,
 }
 
-# Definir el esquema sin 'class Meta'
 class ImageProcessInputSchema(Schema):
-    seed = fields.Int(required=False, missing=0)
-    image = fields.Str(required=True)
+    image_url = fields.Url(required=True, metadata={
+        "type": "string",
+        "title": "Image",
+        "format": "uri",
+        "description": "input image"
+    })
     prompt = fields.Str(required=False, missing="")
     dynamic = fields.Float(required=False, missing=5.0)
     handfix = fields.Str(required=False, missing="")
@@ -59,22 +62,26 @@ class ImageProcessInputSchema(Schema):
     downscaling_resolution = fields.Int(required=False, missing=1024)
     mask = fields.Str(required=False, missing="")
 
+
 @app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
     json_data = request.get_json()
     if not json_data:
         return jsonify({'error': 'No se proporcionaron datos'}), 400
 
+    # Validar y cargar los datos
     schema = ImageProcessInputSchema()
     try:
         data = schema.load(json_data)
     except ValidationError as err:
-        # Retornar los errores de validación al cliente
         return jsonify({'errors': err.messages}), 400
 
-    # Configurar y enviar la solicitud a la API de Replicate
+    # Mapear 'image_url' a 'image' antes de enviar la solicitud
+    data['image'] = data.pop('image_url')
+
+    # Enviar la solicitud a la API de Replicate
     response = requests.post(api_endpoint, headers=headers, json={
-        "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",  # Asegúrate de usar la versión correcta
         "input": data
     })
 
@@ -97,6 +104,10 @@ def clarity_upscale():
             return jsonify({"error": "Image processing failed"}), 500
 
     return jsonify({'error': 'Timeout o error inesperado'}), 500
+
+
+
+#fin clarity
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 CORS(app, resources={r"/*": {"origins": "*"}})
