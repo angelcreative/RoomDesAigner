@@ -124,7 +124,7 @@ function handleSubmit(event) {
 }
 
     
-
+//==================================================================================================🔴 values
 
 function getSelectedValues() {
     const elementIds = [
@@ -196,7 +196,8 @@ function getSelectedValues() {
         "age",
         "outfit",
         "shoes",
-        "accessories"
+        "accessories",
+         "photography_pose"
     ];
 
     const colorElements = [
@@ -287,37 +288,72 @@ document.addEventListener('DOMContentLoaded', function() {
 // SREF 🔴
 
   
-    // Ahora ya puedes usar getSelectedValues()
-    document.getElementById('saveValuesButton').addEventListener('click', function() {
-        document.getElementById('saveDialog').style.display = 'block';
+ // Función para guardar los valores
+document.getElementById('confirmSaveButton').addEventListener('click', function() {
+    const saveName = document.getElementById('saveName').value;
+    const selectedValues = getSelectedValues();
+
+    fetch('/save-values', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'  // Asegúrate de que el backend devuelve JSON
+        },
+        credentials: 'include',  // Importante para enviar cookies de sesión
+        body: JSON.stringify({
+            name: saveName,
+            values: selectedValues,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.error || 'Error al guardar los valores');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Valores guardados con éxito');
+        // Opcionalmente, puedes actualizar la lista de valores guardados aquí
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
     });
 
-    document.getElementById('confirmSaveButton').addEventListener('click', function() {
-        const saveName = document.getElementById('saveName').value;
-        const selectedValues = getSelectedValues();
+    document.getElementById('saveDialog').style.display = 'none';
+});
 
-        fetch('/save-values', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: saveName,
-                values: selectedValues,
-            }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Valores guardados con éxito');
-            } else {
-                alert('Error al guardar los valores');
-            }
-        });
 
-        document.getElementById('saveDialog').style.display = 'none';
+
+// Función para cargar los valores guardados
+document.getElementById('loadValuesButton').addEventListener('click', function() {
+    fetch('/load-saved-values', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+        credentials: 'include'  // Importante para enviar cookies de sesión
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.error || 'Error al cargar los valores guardados');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Aquí puedes manejar la lista de valores guardados
+        const savedValues = data.savedValues;
+        // Mostrar la lista al usuario o llenar un menú desplegable
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
     });
+});
 
+  
 
   // end sred 🔴
 
@@ -340,7 +376,7 @@ function generateBlurredBackground () {
     document.getElementById('dialogTitle').innerHTML = `
         
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will be ready in less than 120 seconds.</p>
+        <p>Sit back and relax, your design will be ready soon.<br>It take some time to make it peerfect.</p>
          <p id="chronometer">00:00:00</p>
     `;
 
@@ -536,7 +572,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `RAW, unedited, in-frame,  hyperrealistic, masterpiece+. professional+, photorealistic++, highly detailed,  stunningly beautiful, intricate, professionally color graded, bright soft diffused light, Unedited 8K photograph .` ;
+    const promptInit = `Editorial photography of , ` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -547,7 +583,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
     .map(([key, value]) => `${key}: ${value}`)
     .join(", ");
 
-let promptEndy = `dense furnishings and decorations.`;
+let promptEndy = ` `;
 
 if (extractedColors.length > 0) {
     const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
@@ -615,29 +651,38 @@ if (modelId === personValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
  */
+//==================================================================================================🔴 payload
   
 // Now build the JSON object with the updated values
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+   negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 5,
-  steps: 21,
+  guidance_scale: 3.5,
+  steps: 20,
   use_karras_sigmas: "yes",
-  tomesd: "yes",
+   tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
-  lora_model: "fluxschnelldev",
- lora_strength: 0.7,
-  scheduler: /*"DPMSolverMultistepScheduler", */ "EulerAncestralDiscreteScheduler",
-  webhook: null,
+  lora_model: null,
+  lora_strength:null,
+  scheduler: "EulerDiscreteScheduler",
+ webhook: null,
   safety_checker: "no",
-  track_id: null,
-  enhance_prompt: "no",
-  //highres_fix: "yes"
+  panorama: "no",
+    self_attention: "no",
+ track_id: null,
+ enhance_prompt: "no",
+ highres_fix: "no",
+  instant_response: "no",
+  ip_adapter_id: null,
+        ip_adapter_scale: 0.6,
+        ip_adapter_image: null,
+      embeddings: "verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2,negativehand"
+
 };
     //xl_more_enhancer,
     //real-skin-lora

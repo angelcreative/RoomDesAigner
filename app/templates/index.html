@@ -379,7 +379,7 @@
                    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
   <div class="logout">
         <div class="rightOff">
-            <button class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
+            <button style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
 
 
             
@@ -468,9 +468,9 @@
                 <button>Upscale</button>
             </div>
          
-            <button class="buttonExt gradient-animation" id="rerollButton" style="display: block;
-    width: 220px;
-    margin: 40px auto; z-index:0;">Reroll</button>
+            <button class="buttonExt gradient-animation" id="rerollButton" style="visibility: hidden;
+    width: 1px;
+    margin: 1px auto; z-index:0;">Reroll</button>
             <div id="resultContainer"></div>
             <span class="close">&times;</span>
         </div>
@@ -818,9 +818,7 @@ Image</h1>
 
 </div>-->
  
-<br><br>
 
-<sub>Try the model that better fits your needs; this will work if no character is selected</sub> 
                      <h4>Write with your own touch</h4>
 <textarea placeholder="Write your own prompt here to refine your design" id="customText" rows="8s" cols="50"></textarea>      
 <br><br>
@@ -2769,140 +2767,243 @@ Add a character</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
   
                     
 <!-- Outfit Brands -->
-<div class="custom-dropdown" data-placeholder="Select an outfit brand">
+<div class="custom-dropdown" data-placeholder="Select an outfit type">
     <div class="dropdown-selected">
-        <span class="selected-text">Select an outfit brand</span>
+        <span class="selected-text">Select an outfit type</span>
         <span class="clear-selection">✕</span>
     </div>
     <div class="selected-value"></div>
 
     <div class="dropdown-options">
         <div class="optgroup">
-            <div class="optgroup-label">Outfit Brands</div>
-            <div class="option" value="gucci">Gucci</div>
-            <div class="option" value="prada">Prada</div>
-            <div class="option" value="versace">Versace</div>
-            <div class="option" value="dior">Dior</div>
-            <div class="option" value="chanel">Chanel</div>
-            <div class="option" value="balenciaga">Balenciaga</div>
-            <div class="option" value="burberry">Burberry</div>
-            <div class="option" value="valentino">Valentino</div>
-            <div class="option" value="hermes">Hermès</div>
-            <div class="option" value="saint_laurent">Saint Laurent</div>
-            <div class="option" value="loewe">Loewe</div>
-            <div class="option" value="fendi">Fendi</div>
-            <div class="option" value="givenchy">Givenchy</div>
-            <div class="option" value="tory_burch">Tory Burch</div>
-            <div class="option" value="ralph_lauren">Ralph Lauren</div>
-            <div class="option" value="tom_ford">Tom Ford</div>
-            <div class="option" value="michael_kors">Michael Kors</div>
-            <div class="option" value="bottega_veneta">Bottega Veneta</div>
-            <div class="option" value="alexander_mcqueen">Alexander McQueen</div>
-            <div class="option" value="off_white">Off-White</div>
-            <div class="option" value="celine">Celine</div>
-            <div class="option" value="kenzo">Kenzo</div>
-            <div class="option" value="isabel_marant">Isabel Marant</div>
-            <div class="option" value="balmain">Balmain</div>
-            <div class="option" value="moschino">Moschino</div>
-            <div class="option" value="philipp_plein">Philipp Plein</div>
-            <div class="option" value="dsquared2">Dsquared2</div>
-            <div class="option" value="moncler">Moncler</div>
+            <div class="optgroup-label">Casual Wear</div>
+            <div class="option" value="outfit_casual">Casual</div>
+            <div class="option" value="outfit_streetwear">Streetwear</div>
+            <div class="option" value="outfit_athleisure">Athleisure</div>
+            <div class="option" value="outfit_denim">Denim</div>
+             <div class="option" value="bra_thong_and_stockings">Lingerie</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Formal Wear</div>
+            <div class="option" value="outfit_business">Business</div>
+            <div class="option" value="outfit_elegant">Elegant</div>
+            <div class="option" value="outfit_black_tie">Black Tie</div>
+            <div class="option" value="outfit_evening_gown">Evening Gown</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Seasonal Wear</div>
+            <div class="option" value="outfit_summer">Summer</div>
+            <div class="option" value="outfit_winter">Winter</div>
+            <div class="option" value="outfit_spring">Spring</div>
+            <div class="option" value="outfit_autumn">Autumn</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Special Occasions</div>
+            <div class="option" value="outfit_party">Party</div>
+            <div class="option" value="outfit_festival">Festival</div>
+            <div class="option" value="outfit_wedding">Wedding</div>
+            <div class="option" value="outfit_prom">Prom</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Outdoor Activities</div>
+            <div class="option" value="outfit_gardening">Gardening</div>
+            <div class="option" value="outfit_hiking">Hiking</div>
+            <div class="option" value="outfit_beach">Beach</div>
+            <div class="option" value="outfit_camping">Camping</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Sportswear</div>
+            <div class="option" value="outfit_gym">Gym</div>
+            <div class="option" value="outfit_running">Running</div>
+            <div class="option" value="outfit_yoga">Yoga</div>
+            <div class="option" value="outfit_swimwear">Swimwear</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Cultural Attire</div>
+            <div class="option" value="outfit_traditional">Traditional</div>
+            <div class="option" value="outfit_bdsm">Bdsm</div>
+            <div class="option" value="outfit_vintage">Vintage</div>
+            <div class="option" value="outfit_bohemian">Bohemian</div>
+            <div class="option" value="outfit_hippie">Hippie</div>
         </div>
     </div>
 
     <input type="hidden" name="outfit" id="outfit" value="">
 </div>
 
+
                     
    <!-- Shoe Brands -->
-<div class="custom-dropdown" data-placeholder="Select a shoe brand">
+<div class="custom-dropdown" data-placeholder="Select a shoe type">
     <div class="dropdown-selected">
-        <span class="selected-text">Select a shoe brand</span>
+        <span class="selected-text">Select a shoe type</span>
         <span class="clear-selection">✕</span>
     </div>
     <div class="selected-value"></div>
 
     <div class="dropdown-options">
         <div class="optgroup">
-            <div class="optgroup-label">Shoe Brands</div>
-            <div class="option" value="nike">Nike</div>
-            <div class="option" value="adidas">Adidas</div>
-            <div class="option" value="jimmy_choo">Jimmy Choo</div>
-            <div class="option" value="louboutin">Christian Louboutin</div>
-            <div class="option" value="manolo_blahnik">Manolo Blahnik</div>
-            <div class="option" value="giuseppe_zanotti">Giuseppe Zanotti</div>
-            <div class="option" value="valentino">Valentino</div>
-            <div class="option" value="gucci">Gucci</div>
-            <div class="option" value="prada">Prada</div>
-            <div class="option" value="fendi">Fendi</div>
-            <div class="option" value="balenciaga">Balenciaga</div>
-            <div class="option" value="alexander_mcqueen">Alexander McQueen</div>
-            <div class="option" value="saint_laurent">Saint Laurent</div>
-            <div class="option" value="hermes">Hermès</div>
-            <div class="option" value="burberry">Burberry</div>
-            <div class="option" value="chanel">Chanel</div>
-            <div class="option" value="loeffler_randall">Loeffler Randall</div>
-            <div class="option" value="tod's">Tod's</div>
-            <div class="option" value="dr_martens">Dr. Martens</div>
-            <div class="option" value="ugg">UGG</div>
-            <div class="option" value="converse">Converse</div>
-            <div class="option" value="new_balance">New Balance</div>
-            <div class="option" value="vans">Vans</div>
-            <div class="option" value="reebok">Reebok</div>
-            <div class="option" value="puma">Puma</div>
-            <div class="option" value="skechers">Skechers</div>
-            <div class="option" value="asics">Asics</div>
-            <div class="option" value="salvatore_ferragamo">Salvatore Ferragamo</div>
+            <div class="optgroup-label">Casual Shoes</div>
+            <div class="option" value="shoe_sneakers">Sneakers</div>
+            <div class="option" value="shoe_slip_ons">Slip-Ons</div>
+            <div class="option" value="shoe_loafers">Loafers</div>
+            <div class="option" value="shoe_espadrilles">Espadrilles</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Formal Shoes</div>
+            <div class="option" value="shoe_oxfords">Oxfords</div>
+            <div class="option" value="shoe_derbies">Derbies</div>
+            <div class="option" value="shoe_brogues">Brogues</div>
+            <div class="option" value="shoe_monks">Monk Straps</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Boots</div>
+            <div class="option" value="shoe_ankle_boots">Ankle Boots</div>
+            <div class="option" value="shoe_chealsea_boots">Chelsea Boots</div>
+            <div class="option" value="shoe_chukka_boots">Chukka Boots</div>
+            <div class="option" value="shoe_combat_boots">Combat Boots</div>
+            <div class="option" value="shoe_work_boots">Work Boots</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Heels & Dress Shoes</div>
+            <div class="option" value="shoe_heels">Heels</div>
+            <div class="option" value="shoe_pumps">Pumps</div>
+            <div class="option" value="shoe_wedges">Wedges</div>
+            <div class="option" value="shoe_stilettos">Stilettos</div>
+            <div class="option" value="shoe_ballet_flats">Ballet Flats</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Sandals & Flip-Flops</div>
+            <div class="option" value="shoe_sandals">Sandals</div>
+            <div class="option" value="shoe_flip_flops">Flip-Flops</div>
+            <div class="option" value="shoe_gladiator_sandals">Gladiator Sandals</div>
+            <div class="option" value="shoe_slide_sandals">Slide Sandals</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Athletic Shoes</div>
+            <div class="option" value="shoe_running_shoes">Running Shoes</div>
+            <div class="option" value="shoe_training_shoes">Training Shoes</div>
+            <div class="option" value="shoe_basketball_shoes">Basketball Shoes</div>
+            <div class="option" value="shoe_hiking_boots">Hiking Boots</div>
+            <div class="option" value="shoe_cleats">Cleats</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Work & Specialty Shoes</div>
+            <div class="option" value="shoe_work_shoes">Work Shoes</div>
+            <div class="option" value="shoe_safety_shoes">Safety Shoes</div>
+            <div class="option" value="shoe_clogs">Clogs</div>
+            <div class="option" value="shoe_moccasins">Moccasins</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Others</div>
+            <div class="option" value="shoe_espadrilles">Espadrilles</div>
+            <div class="option" value="shoe_slippers">Slippers</div>
+            <div class="option" value="shoe_platforms">Platforms</div>
+            <div class="option" value="shoe_mary_janes">Mary Janes</div>
         </div>
     </div>
 
     <input type="hidden" name="shoes" id="shoes" value="">
 </div>
+
                  
   <!-- Accessories Brands -->
-<div class="custom-dropdown" data-placeholder="Select an accessories brand">
+<div class="custom-dropdown" data-placeholder="Select an accessory type">
     <div class="dropdown-selected">
-        <span class="selected-text">Select an accessories brand</span>
+        <span class="selected-text">Select an accessory type</span>
         <span class="clear-selection">✕</span>
     </div>
     <div class="selected-value"></div>
 
     <div class="dropdown-options">
+        <!-- Bags & Luggage -->
         <div class="optgroup">
-            <div class="optgroup-label">Accessories Brands</div>
-            <div class="option" value="hermes">Hermès</div>
-            <div class="option" value="louis_vuitton">Louis Vuitton</div>
-            <div class="option" value="tiffany_co">Tiffany & Co.</div>
-            <div class="option" value="cartier">Cartier</div>
-            <div class="option" value="gucci">Gucci</div>
-            <div class="option" value="chanel">Chanel</div>
-            <div class="option" value="balenciaga">Balenciaga</div>
-            <div class="option" value="fendi">Fendi</div>
-            <div class="option" value="dior">Dior</div>
-            <div class="option" value="prada">Prada</div>
-            <div class="option" value="versace">Versace</div>
-            <div class="option" value="saint_laurent">Saint Laurent</div>
-            <div class="option" value="bottega_veneta">Bottega Veneta</div>
-            <div class="option" value="rayban">Ray-Ban</div>
-            <div class="option" value="michael_kors">Michael Kors</div>
-            <div class="option" value="ralph_lauren">Ralph Lauren</div>
-            <div class="option" value="burberry">Burberry</div>
-            <div class="option" value="tory_burch">Tory Burch</div>
-            <div class="option" value="givenchy">Givenchy</div>
-            <div class="option" value="loewe">Loewe</div>
-            <div class="option" value="omega">Omega</div>
-            <div class="option" value="patek_philippe">Patek Philippe</div>
-            <div class="option" value="fossil">Fossil</div>
-            <div class="option" value="swatch">Swatch</div>
-            <div class="option" value="g_shock">G-Shock</div>
-            <div class="option" value="casio">Casio</div>
-            <div class="option" value="timex">Timex</div>
-            <div class="option" value="citizen">Citizen</div>
+            <div class="optgroup-label">Bags & Luggage</div>
+            <div class="option" value="accessory_handbag">Handbag</div>
+            <div class="option" value="accessory_tote_bag">Tote Bag</div>
+            <div class="option" value="accessory_backpack">Backpack</div>
+            <div class="option" value="accessory_shoulder_bag">Shoulder Bag</div>
+            <div class="option" value="accessory_crossbody_bag">Crossbody Bag</div>
+            <div class="option" value="accessory_messenger_bag">Messenger Bag</div>
+            <div class="option" value="accessory_duffel_bag">Duffel Bag</div>
+            <div class="option" value="accessory_weekender_bag">Weekender Bag</div>
+            <div class="option" value="accessory_briefcase">Briefcase</div>
+            <div class="option" value="accessory_luggage">Luggage</div>
+            <div class="option" value="accessory_suitcase">Suitcase</div>
+            <div class="option" value="accessory_gym_bag">Gym Bag</div>
+            <div class="option" value="accessory_camera_bag">Camera Bag</div>
+            <div class="option" value="accessory_laptop_bag">Laptop Bag</div>
+        </div>
+        <!-- Headwear -->
+        <div class="optgroup">
+            <div class="optgroup-label">Headwear</div>
+            <div class="option" value="accessory_hat">Hat</div>
+            <div class="option" value="accessory_cap">Cap</div>
+            <div class="option" value="accessory_beanie">Beanie</div>
+            <div class="option" value="accessory_fedora">Fedora</div>
+            <div class="option" value="accessory_panama_hat">Panama Hat</div>
+            <div class="option" value="accessory_sun_hat">Sun Hat</div>
+            <div class="option" value="accessory_bucket_hat">Bucket Hat</div>
+            <div class="option" value="accessory_cowboy_hat">Cowboy Hat</div>
+            <div class="option" value="accessory_beret">Beret</div>
+            <div class="option" value="accessory_visors">Visor</div>
+            <div class="option" value="accessory_turban">Turban</div>
+        </div>
+        <!-- Eyewear -->
+        <div class="optgroup">
+            <div class="optgroup-label">Eyewear</div>
+            <div class="option" value="accessory_sunglasses">Sunglasses</div>
+            <div class="option" value="accessory_goggles">Goggles</div>
+        </div>
+        <!-- Scarves & Wraps -->
+        <div class="optgroup">
+            <div class="optgroup-label">Scarves & Wraps</div>
+            <div class="option" value="accessory_scarf">Scarf</div>
+            <div class="option" value="accessory_shawl">Shawl</div>
+            <div class="option" value="accessory_wrap">Wrap</div>
+            <div class="option" value="accessory_poncho">Poncho</div>
+            <div class="option" value="accessory_pashmina">Pashmina</div>
+            <div class="option" value="accessory_cape">Cape</div>
+            <div class="option" value="accessory_stole">Stole</div>
+        </div>
+        <!-- Outerwear Accessories -->
+        <div class="optgroup">
+            <div class="optgroup-label">Outerwear Accessories</div>
+            <div class="option" value="accessory_umbrella">Umbrella</div>
+            <div class="option" value="accessory_parasol">Parasol</div>
+            <div class="option" value="accessory_raincoat">Raincoat</div>
+            <div class="option" value="accessory_poncho_rain">Rain Poncho</div>
+        </div>
+        <!-- Belts & Sashes -->
+        <div class="optgroup">
+            <div class="optgroup-label">Belts & Sashes</div>
+            <div class="option" value="accessory_belt">Belt</div>
+            <div class="option" value="accessory_sash">Sash</div>
+            <div class="option" value="accessory_waist_cincher">Waist Cincher</div>
+            <div class="option" value="accessory_cummerbund">Cummerbund</div>
+        </div>
+        <!-- Tech Accessories -->
+        <div class="optgroup">
+            <div class="optgroup-label">Tech Accessories</div>
+            <div class="option" value="accessory_smartwatch">Smartwatch</div>
+            <div class="option" value="accessory_fitness_tracker">Fitness Tracker</div>
+            <div class="option" value="accessory_headphones">Headphones</div>
+            <div class="option" value="accessory_vr_headset">VR Headset</div>
+        </div>
+        <!-- Other Large Accessories -->
+        <div class="optgroup">
+            <div class="optgroup-label">Other Large Accessories</div>
+            <div class="option" value="accessory_guitar_case">Instrument Case</div>
+            <div class="option" value="accessory_ski_poles">Ski Poles</div>
+            <div class="option" value="accessory_sports_bag">Sports Bag</div>
+            <div class="option" value="accessory_yoga_mat_bag">Yoga Mat Bag</div>
+            <div class="option" value="accessory_pet_carrier">Pet Carrier</div>
         </div>
     </div>
 
-    <input type="hidden" name="accessories" id="accessories" value="">
+    <input type="hidden" name="accessory" id="accessories" value="">
 </div>
+
                   
                     
                     
@@ -2945,47 +3046,74 @@ Add a character</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"></i>
 
                     
                 <!--hair-->
-                    <div class="custom-dropdown" data-placeholder="Choose a hairstyle">
+<div class="custom-dropdown" data-placeholder="Choose a hairstyle">
     <div class="dropdown-selected">
         <span class="selected-text">Select hairstyle</span>
         <span class="clear-selection">X</span>
     </div>
     <div class="selected-value"></div>
     <div class="dropdown-options">
-        <div class="option" value="auburn_half_up_style" title="auburn_half_up_style">Auburn Half-Up Style</div>
-        <div class="option" value="auburn_mid_length_hair" title="auburn_mid_length_hair">Auburn Mid-Length Hair</div>
-        <div class="option" value="blue_chin_length_cut" title="blue_chin_length_cut">Blue Chin-Length Cut</div>
-        <div class="option" value="blue_tight_braids" title="blue_tight_braids">Blue Tight Braids</div>
-        <div class="option" value="blonde_curly_locks" title="blonde_curly_locks">Blonde Curly Locks</div>
-        <div class="option" value="brunette_braided_style" title="brunette_braided_style">Brunette Braided Style</div>
-        <div class="option" value="brunette_old_school_waves" title="brunette_old_school_waves">Brunette Old-School Waves</div>
-        <div class="option" value="dark_brown_fishbone_braid" title="dark_brown_fishbone_braid">Dark Brown Fishbone Braid</div>
-        <div class="option" value="dark_brown_rolled_hair" title="dark_brown_rolled_hair">Dark Brown Rolled Hair</div>
-        <div class="option" value="grey_long_strands" title="grey_long_strands">Grey Long Strands</div>
-        <div class="option" value="grey_double_buns" title="grey_double_buns">Grey Double Buns</div>
-        <div class="option" value="honey_blonde_curly_fro" title="honey_blonde_curly_fro">Honey Blonde Curly Fro</div>
-        <div class="option" value="honey_blonde_spiked_strip" title="honey_blonde_spiked_strip">Honey Blonde Spiked Strip</div>
-        <div class="option" value="light_brown_locs" title="light_brown_locs">Light Brown Locs</div>
-        <div class="option" value="light_brown_classic_pomp" title="light_brown_classic_pomp">Light Brown Classic Pomp</div>
-        <div class="option" value="ombre_retro_mullet" title="ombre_retro_mullet">Ombre Retro Mullet</div>
-        <div class="option" value="pink_short_crop" title="pink_short_crop">Pink Short Crop</div>
-        <div class="option" value="pink_square_braids" title="pink_square_braids">Pink Square Braids</div>
-        <div class="option" value="platinum_blonde_curly_style" title="platinum_blonde_curly_style">Platinum Blonde Curly Style</div>
-        <div class="option" value="platinum_blonde_elevated_style" title="platinum_blonde_elevated_style">Platinum Blonde Elevated Style</div>
-        <div class="option" value="purple_buzzed_side" title="purple_buzzed_side">Purple Buzzed Side</div>
-        <div class="option" value="purple_hooked_braids" title="purple_hooked_braids">Purple Hooked Braids</div>
-        <div class="option" value="rainbow_messy_layers" title="rainbow_messy_layers">Rainbow Messy Layers</div>
-        <div class="option" value="red_elevated_style" title="red_elevated_style">Red Elevated Style</div>
-        <div class="option" value="red_short_strands" title="red_short_strands">Red Short Strands</div>
-        <div class="option" value="red_spiked_look" title="red_spiked_look">Red Spiked Look</div>
-        <div class="option" value="silver_short_style" title="silver_short_style">Silver Short Style</div>
-        <div class="option" value="silver_woven_braid" title="silver_woven_braid">Silver Woven Braid</div>
-        <div class="option" value="white_cropped_cut" title="white_cropped_cut">White Cropped Cut</div>
-        <div class="option" value="white_elegant_twist" title="white_elegant_twist">White Elegant Twist</div>
+        <div class="option" value="half_up_style" title="half_up_style">Half-Up Style</div>
+        <div class="option" value="mid_length_hair" title="mid_length_hair">Mid-Length Hair</div>
+        <div class="option" value="chin_length_cut" title="chin_length_cut">Chin-Length Cut</div>
+        <div class="option" value="tight_braids" title="tight_braids">Tight Braids</div>
+        <div class="option" value="curly_locks" title="curly_locks">Curly Locks</div>
+        <div class="option" value="braided_style" title="braided_style">Braided Style</div>
+        <div class="option" value="old_school_waves" title="old_school_waves">Old-School Waves</div>
+        <div class="option" value="fishbone_braid" title="fishbone_braid">Fishbone Braid</div>
+        <div class="option" value="rolled_hair" title="rolled_hair">Rolled Hair</div>
+        <div class="option" value="long_strands" title="long_strands">Long Strands</div>
+        <div class="option" value="double_buns" title="double_buns">Double Buns</div>
+        <div class="option" value="curly_fro" title="curly_fro">Curly Fro</div>
+        <div class="option" value="spiked_strip" title="spiked_strip">Spiked Strip</div>
+        <div class="option" value="classic_pompadour" title="classic_pompadour">Classic Pompadour</div>
+        <div class="option" value="retro_mullet" title="retro_mullet">Retro Mullet</div>
+        <div class="option" value="short_crop" title="short_crop">Short Crop</div>
+        <div class="option" value="square_braids" title="square_braids">Square Braids</div>
+        <div class="option" value="curly_style" title="curly_style">Curly Style</div>
+        <div class="option" value="elevated_style" title="elevated_style">Elevated Style</div>
+        <div class="option" value="buzzed_side" title="buzzed_side">Buzzed Side</div>
+        <div class="option" value="hooked_braids" title="hooked_braids">Hooked Braids</div>
+        <div class="option" value="messy_layers" title="messy_layers">Messy Layers</div>
+        <div class="option" value="spiked_look" title="spiked_look">Spiked Look</div>
+        <div class="option" value="short_strands" title="short_strands">Short Strands</div>
+        <div class="option" value="cropped_cut" title="cropped_cut">Cropped Cut</div>
+        <div class="option" value="elegant_twist" title="elegant_twist">Elegant Twist</div>
     </div>
     <input type="hidden" name="hairstyle_selection" id="hairstyle_select" value="">
 </div>
 
+<!-- pose-->
+<div class="custom-dropdown" data-placeholder="Photography pose">
+    <div class="dropdown-selected">
+        <span class="selected-text">Photography pose</span>
+        <span class="clear-selection">✕</span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Hand_on_hip_facing_forward">Hand on hip, facing forward</div>
+        <div class="option" value="Arms_crossed_serious_expression">Arms crossed, serious expression</div>
+        <div class="option" value="Hand_in_hair_looking_down">Hand in hair, looking down</div>
+        <div class="option" value="Profile_view_one_leg_forward">Profile view, one leg slightly forward</div>
+        <div class="option" value="Looking_over_shoulder_body_turned">Looking over shoulder, body slightly turned</div>
+        <div class="option" value="Hands_in_pockets_looking_forward">Hands in pockets, looking straight ahead</div>
+        <div class="option" value="One_arm_raised_above_head">One arm raised above the head, looking into the distance</div>
+        <div class="option" value="Sitting_one_leg_crossed_arms_on_knees">Sitting with one leg crossed, arms resting on knees</div>
+        <div class="option" value="Hand_on_chin_elbow_on_thigh">Hand on chin, with elbow resting on thigh</div>
+        <div class="option" value="Walking_naturally_looking_forward">Walking naturally, looking forward</div>
+        <div class="option" value="Leg_crossed_while_standing">Leg crossed while standing, looking down</div>
+        <div class="option" value="Back_turned_head_looking_over_shoulder">Back turned, head looking over the shoulder to the camera</div>
+        <div class="option" value="Both_hands_on_waist_standing_firm">Both hands on waist, standing firm</div>
+        <div class="option" value="Hands_behind_back_looking_forward">Hands behind back, soft look forward</div>
+        <div class="option" value="Looking_upward_with_slight_smile">Looking upward with a slight smile</div>
+        <div class="option" value="Crouching_hand_on_knee">Crouching, one hand resting on the knee</div>
+        <div class="option" value="Hand_on_cheek_thoughtful_expression">Hand on cheek, thoughtful expression</div>
+        <div class="option" value="Leaning_forward_hands_on_knees">Leaning forward, hands on knees</div>
+        <div class="option" value="Arm_extended_to_side_body_turned">Arm extended to the side, body slightly turned</div>
+        <div class="option" value="Sitting_on_ground_legs_stretched_out">Sitting on the ground, legs stretched out, leaning back on hands</div>
+    </div>
+    <input type="hidden" name="photography_pose" id="photography_pose" value="">
+</div>
                     
                 
                 <!-- action -->
@@ -3288,11 +3416,9 @@ Building Materials</h1><i class="fa fa-plus-circle closerI" aria-hidden="true"><
                     
                     <button class="buttonExt gradient-animation"  type="submit" id="magicButton">
 <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-                    <p>or</p>
-
-
+                  
 <!-- AI Design Button -->
-<button id="aiDesignButton"><i class="fa fa-random" aria-hidden="true"></i></button>
+<button style="display:none" id="aiDesignButton"><i class="fa fa-random" aria-hidden="true"></i></button>
 
                 </div>
             </div>  
