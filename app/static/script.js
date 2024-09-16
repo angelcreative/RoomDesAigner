@@ -660,7 +660,7 @@ const prompt = {
    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
-  samples: 4,
+  samples: 1,
   guidance_scale: 3.5,
   steps: 20,
   use_karras_sigmas: "yes",
