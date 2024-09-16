@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from aiohttp import ClientSession
-from PIL import 
+from PIL import Image
 from marshmallow import Schema, fields, ValidationError
 from flask_cors import CORS
 import hmac
