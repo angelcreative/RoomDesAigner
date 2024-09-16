@@ -1,4 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
+from aiohttp import ClientSession
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -7,6 +10,7 @@ import bcrypt
 import os
 import replicate
 import uuid
+import asyncio
 import random
 import logging
 import json
@@ -16,6 +20,20 @@ import time
 import openai
 
 app = Flask(__name__)
+REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
+
+
+#replicate token 
+app = FastAPI()
+api_endpoint = "https://api.replicate.com/v1/predictions"
+auth_token = "Token REPLICATE_API_TOKEN"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": auth_token,
+}
+
+
+
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -32,8 +50,6 @@ mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
 
-#replicate token 
-REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
 # Fetch the API key from the environment
@@ -457,90 +473,60 @@ def update_user_credits(email, additional_credits):
 
 
 # Almacenamiento temporal de predicciones (solo para pruebas)
-predictions = {}
-
-# Ruta para iniciar el proceso de escalado
-@app.route('/clarity-upscale', methods=['POST'])
-def clarity_upscale():
-    try:
-        data = request.json
-        image_url = data.get('image_url')
-
-        if not image_url:
-            return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
-
-        input_data = {
-            "image": image_url
-        }
-
-        # Crear un ID único para la predicción
-        prediction_id = str(uuid.uuid4())
-        
-        # Crear la predicción en Replicate
-        prediction = replicate.predictions.create(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input=input_data,
-            webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
-            webhook_events_filter=["completed"]
-        )
-
-        # Imprimir información de depuración
-        print(f"Tipo de prediction: {type(prediction)}")
-        print(f"Contenido de prediction: {prediction}")
-
-        # Verificar si la predicción tiene un ID
-        if not prediction or not prediction.id:
-            return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
-
-        # Inicializamos la predicción en el diccionario con el estado 'starting'
-        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
-
-        # Devolvemos el ID de la predicción generada
-        return jsonify({'prediction_id': prediction_id}), 200
-
-    except Exception as e:
-        print(f"Ocurrió un error: {str(e)}")
-        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
-
-# Ruta para recibir el webhook de Replicate
-@app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
-def replicate_webhook(prediction_id):
-    try:
-        webhook_data = request.json
-
-        # Verifica si la predicción fue exitosa
-        if webhook_data.get('status') == 'succeeded':
-            output_url = webhook_data.get('output', [None])[0]
-            predictions[prediction_id] = {"status": "succeeded", "output": output_url}
-        elif webhook_data.get('status') == 'failed':
-            predictions[prediction_id] = {"status": "failed", "output": None}
-
-        return jsonify({"ok": True}), 200
-
-    except Exception as e:
-        print(f"Error procesando el webhook: {str(e)}")
-        return jsonify({'error': f'Error procesando el webhook: {str(e)}'}), 500
-
-# Ruta para que el frontend consulte el resultado de la predicción
-@app.route('/get-upscaled-image/<prediction_id>', methods=['GET'])
-def get_upscaled_image(prediction_id):
-    result = predictions.get(prediction_id, None)
-
-    if not result:
-        return jsonify({'error': 'Predicción no encontrada'}), 404
-    
-    if result['status'] == 'starting':
-        # Si la predicción aún está en proceso, consultamos su estado actual
-        replicate_id = result.get('replicate_id')
-        if replicate_id:
-            current_prediction = replicate.predictions.get(replicate_id)
-            result['status'] = current_prediction.status
-            if current_prediction.status == 'succeeded':
-                result['output'] = current_prediction.output[0] if current_prediction.output else None
-            predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
-
-    return jsonify(result), 200
-
+# Input model to parse the request body
+class ImageProcessInput(BaseModel):
+    seed: int
+    image: str
+    prompt: str
+    dynamic: int
+    handfix: str
+    pattern: bool
+    sharpen: int
+    sd_model: str
+    scheduler: str
+    creativity: float
+    lora_links: str
+    downscaling: bool
+    resemblance: float
+    scale_factor: int
+    tiling_width: int
+    output_format: str
+    tiling_height: int
+    custom_sd_model: str
+    negative_prompt: str
+    num_inference_steps: int
+    downscaling_resolution: int
+ 
+# Route for clarity upscaling
+@app.post("/clarity-upscale")
+async def clarity_upscale(input_data: ImageProcessInput):
+    async with ClientSession() as cli:
+        # Sending a request to the Replicate API to start the prediction process
+        response = await cli.post(api_endpoint, headers=headers, data=json.dumps({
+            "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            "input": input_data.dict()
+        }))
+ 
+        # Extract the get URL to check prediction status
+        if response.status == 200:
+            response_json = await response.json()
+            endpoint_urls = response_json["urls"]["get"]
+        else:
+            return {"error": "Failed to initiate request"}
+ 
+        # Poll the status until the image is ready
+        while True:
+            await asyncio.sleep(3)
+ 
+            # Make a GET request to check the status
+            status_response = await cli.get(endpoint_urls, headers=headers)
+            status_json = await status_response.json()
+ 
+            if status_json["status"] == "succeeded":
+                output_image_url = status_json["output"]["image"]
+                return {"output": [output_image_url]}
+            elif status_json["status"] == "failed":
+                return {"error": "Image processing failed"}
 
 
 #SREF
