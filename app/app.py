@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
-from aiohttp import ClientSession
+#from aiohttp import ClientSession
 from PIL import Image
 from marshmallow import Schema, fields, ValidationError
 from flask_cors import CORS
@@ -10,7 +10,7 @@ import bcrypt
 import os
 import replicate
 import uuid
-import asyncio
+#import asyncio
 import random
 import logging
 import json
