@@ -14,6 +14,6 @@ greenlet==3.0.3
 #stability-sdk==0.8.1
 replicate==0.7.0
 #aiohttp==3.8.5
-marshmallow==3.20.1
+marshmallow==3.19.0
 
 # add other dependencies 
