@@ -124,7 +124,7 @@ function handleSubmit(event) {
 }
 
     
-
+//==================================================================================================🔴 values
 
 function getSelectedValues() {
     const elementIds = [
@@ -651,6 +651,7 @@ if (modelId === personValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
  */
+//==================================================================================================🔴 payload
   
 // Now build the JSON object with the updated values
 const prompt = {
@@ -666,8 +667,8 @@ const prompt = {
    tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
-  lora_model: "fluxschnelldev",
-  lora_strength: 0.7,
+  lora_model: null,
+  lora_strength:null,
   scheduler: "DPMSolverMultistepScheduler",
  webhook: null,
   safety_checker: "no",
