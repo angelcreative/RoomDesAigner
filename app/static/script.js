@@ -661,20 +661,28 @@ const prompt = {
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 7.5,
+  guidance_scale: 3.5,
   steps: 20,
-  use_karras_sigmas: "no",
+  use_karras_sigmas: "yes",
    tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
   lora_model: null,
   lora_strength:null,
-  scheduler: "DPMSolverMultistepScheduler",
+  scheduler: "EulerDiscreteScheduler",
  webhook: null,
   safety_checker: "no",
+  panorama: "no",
+    self_attention: "no",
  track_id: null,
  enhance_prompt: "no",
- highres_fix: "no"
+ highres_fix: "no",
+  instant_response: "no",
+  ip_adapter_id: null,
+        ip_adapter_scale: 0.6,
+        ip_adapter_image: null,
+      embeddings: "verybadimagenegativev13,ngdeepnegativev175tn,easynegativev2,negativehand"
+
 };
     //xl_more_enhancer,
     //real-skin-lora
