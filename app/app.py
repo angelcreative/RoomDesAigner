@@ -34,7 +34,7 @@ headers = {
     "Authorization": auth_token,
 }
 
-# Definir el esquema con valores por defecto
+# Definir el esquema sin 'class Meta'
 class ImageProcessInputSchema(Schema):
     seed = fields.Int(required=False, missing=0)
     image = fields.Str(required=True)
@@ -59,9 +59,6 @@ class ImageProcessInputSchema(Schema):
     downscaling_resolution = fields.Int(required=False, missing=1024)
     mask = fields.Str(required=False, missing="")
 
-    class Meta:
-        unknown = fields.EXCLUDE  # Ignora campos desconocidos
-
 @app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
     json_data = request.get_json()
@@ -72,10 +69,8 @@ def clarity_upscale():
     try:
         data = schema.load(json_data)
     except ValidationError as err:
+        # Retornar los errores de validación al cliente
         return jsonify({'errors': err.messages}), 400
-
-    # Puedes asignar o modificar valores después de la validación
-    # data['creativity'] = data.get('creativity', 0.8)
 
     # Configurar y enviar la solicitud a la API de Replicate
     response = requests.post(api_endpoint, headers=headers, json={
