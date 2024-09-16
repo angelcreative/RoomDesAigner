@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from aiohttp import ClientSession
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
+from PIL import 
+from marshmallow import Schema, fields, ValidationError
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -20,20 +20,82 @@ import time
 import openai
 
 app = Flask(__name__)
+
+
+# Configuración de la API de Replicate
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
+if not REPLICATE_API_TOKEN:
+    raise ValueError("El token de Replicate no está configurado en las variables de entorno.")
 
-
-#replicate token 
-app = FastAPI()
 api_endpoint = "https://api.replicate.com/v1/predictions"
-auth_token = "Token REPLICATE_API_TOKEN"
+auth_token = f"Token {REPLICATE_API_TOKEN}"
 headers = {
     "Content-Type": "application/json",
     "Authorization": auth_token,
 }
 
+# Definir el esquema con Marshmallow
+class ImageProcessInputSchema(Schema):
+    seed = fields.Int(required=True)
+    image = fields.Str(required=True)
+    prompt = fields.Str(required=True)
+    dynamic = fields.Int(required=True)
+    handfix = fields.Str(required=True)
+    pattern = fields.Bool(required=True)
+    sharpen = fields.Int(required=True)
+    sd_model = fields.Str(required=True)
+    scheduler = fields.Str(required=True)
+    creativity = fields.Float(required=True)
+    lora_links = fields.Str(required=True)
+    downscaling = fields.Bool(required=True)
+    resemblance = fields.Float(required=True)
+    scale_factor = fields.Int(required=True)
+    tiling_width = fields.Int(required=True)
+    output_format = fields.Str(required=True)
+    tiling_height = fields.Int(required=True)
+    custom_sd_model = fields.Str(required=True)
+    negative_prompt = fields.Str(required=True)
+    num_inference_steps = fields.Int(required=True)
+    downscaling_resolution = fields.Int(required=True)
 
+@app.route("/clarity-upscale", methods=["POST"])
+def clarity_upscale():
+    json_data = request.get_json()
+    if not json_data:
+        return jsonify({'error': 'No se proporcionaron datos'}), 400
 
+    schema = ImageProcessInputSchema()
+    try:
+        data = schema.load(json_data)
+    except ValidationError as err:
+        return jsonify({'errors': err.messages}), 400
+
+    # Configurar y enviar la solicitud a la API de Replicate
+    response = requests.post(api_endpoint, headers=headers, json={
+        "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        "input": data
+    })
+
+    if response.status_code == 200:
+        response_json = response.json()
+        endpoint_url = response_json["urls"]["get"]
+    else:
+        return jsonify({"error": "Failed to initiate request"}), 500
+
+    # Polling para verificar el estado de la predicción
+    while True:
+        time.sleep(3)
+        status_response = requests.get(endpoint_url, headers=headers)
+        status_json = status_response.json()
+
+        if status_json["status"] == "succeeded":
+            output_image_url = status_json["output"]["image"]
+            return jsonify({"output": [output_image_url]})
+        elif status_json["status"] == "failed":
+            return jsonify({"error": "Image processing failed"}), 500
+
+    # Manejo adicional en caso de timeout o errores inesperados
+    return jsonify({'error': 'Timeout o error inesperado'}), 500
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -411,7 +473,6 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
-import logging
 
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
@@ -472,64 +533,6 @@ def update_user_credits(email, additional_credits):
 
 
 
-# Almacenamiento temporal de predicciones (solo para pruebas)
-# Input model to parse the request body
-class ImageProcessInput(BaseModel):
-    seed: int
-    image: str
-    prompt: str
-    dynamic: int
-    handfix: str
-    pattern: bool
-    sharpen: int
-    sd_model: str
-    scheduler: str
-    creativity: float
-    lora_links: str
-    downscaling: bool
-    resemblance: float
-    scale_factor: int
-    tiling_width: int
-    output_format: str
-    tiling_height: int
-    custom_sd_model: str
-    negative_prompt: str
-    num_inference_steps: int
-    downscaling_resolution: int
- 
-# Route for clarity upscaling
-@app.post("/clarity-upscale")
-async def clarity_upscale(input_data: ImageProcessInput):
-    async with ClientSession() as cli:
-        # Sending a request to the Replicate API to start the prediction process
-        response = await cli.post(api_endpoint, headers=headers, data=json.dumps({
-            "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            "input": input_data.dict()
-        }))
- 
-        # Extract the get URL to check prediction status
-        if response.status == 200:
-            response_json = await response.json()
-            endpoint_urls = response_json["urls"]["get"]
-        else:
-            return {"error": "Failed to initiate request"}
- 
-        # Poll the status until the image is ready
-        while True:
-            await asyncio.sleep(3)
- 
-            # Make a GET request to check the status
-            status_response = await cli.get(endpoint_urls, headers=headers)
-            status_json = await status_response.json()
- 
-            if status_json["status"] == "succeeded":
-                output_image_url = status_json["output"]["image"]
-                return {"output": [output_image_url]}
-            elif status_json["status"] == "failed":
-                return {"error": "Image processing failed"}
-
-
-#SREF
 
 # Configurar el nivel de registro
 logging.basicConfig(level=logging.INFO)
