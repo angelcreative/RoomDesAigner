@@ -34,29 +34,33 @@ headers = {
     "Authorization": auth_token,
 }
 
-# Definir el esquema con Marshmallow
+# Definir el esquema con valores por defecto
 class ImageProcessInputSchema(Schema):
-    seed = fields.Int(required=True)
+    seed = fields.Int(required=False, missing=0)
     image = fields.Str(required=True)
-    prompt = fields.Str(required=True)
-    dynamic = fields.Int(required=True)
-    handfix = fields.Str(required=True)
-    pattern = fields.Bool(required=True)
-    sharpen = fields.Int(required=True)
-    sd_model = fields.Str(required=True)
-    scheduler = fields.Str(required=True)
-    creativity = fields.Float(required=True)
-    lora_links = fields.Str(required=True)
-    downscaling = fields.Bool(required=True)
-    resemblance = fields.Float(required=True)
-    scale_factor = fields.Int(required=True)
-    tiling_width = fields.Int(required=True)
-    output_format = fields.Str(required=True)
-    tiling_height = fields.Int(required=True)
-    custom_sd_model = fields.Str(required=True)
-    negative_prompt = fields.Str(required=True)
-    num_inference_steps = fields.Int(required=True)
-    downscaling_resolution = fields.Int(required=True)
+    prompt = fields.Str(required=False, missing="")
+    dynamic = fields.Float(required=False, missing=5.0)
+    handfix = fields.Str(required=False, missing="")
+    pattern = fields.Bool(required=False, missing=False)
+    sharpen = fields.Float(required=False, missing=0.0)
+    sd_model = fields.Str(required=False, missing="default_model")
+    scheduler = fields.Str(required=False, missing="default")
+    creativity = fields.Float(required=False, missing=0.7)
+    lora_links = fields.Str(required=False, missing="")
+    downscaling = fields.Bool(required=False, missing=False)
+    resemblance = fields.Float(required=False, missing=1.0)
+    scale_factor = fields.Float(required=False, missing=2.0)
+    tiling_width = fields.Int(required=False, missing=512)
+    output_format = fields.Str(required=False, missing="png")
+    tiling_height = fields.Int(required=False, missing=512)
+    custom_sd_model = fields.Str(required=False, missing="")
+    negative_prompt = fields.Str(required=False, missing="")
+    num_inference_steps = fields.Int(required=False, missing=50)
+    downscaling_resolution = fields.Int(required=False, missing=1024)
+    mask = fields.Str(required=False, missing="")
+
+    class Meta:
+        unknown = fields.EXCLUDE  # Ignora campos desconocidos
 
 @app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
@@ -69,6 +73,9 @@ def clarity_upscale():
         data = schema.load(json_data)
     except ValidationError as err:
         return jsonify({'errors': err.messages}), 400
+
+    # Puedes asignar o modificar valores después de la validación
+    # data['creativity'] = data.get('creativity', 0.8)
 
     # Configurar y enviar la solicitud a la API de Replicate
     response = requests.post(api_endpoint, headers=headers, json={
@@ -94,7 +101,6 @@ def clarity_upscale():
         elif status_json["status"] == "failed":
             return jsonify({"error": "Image processing failed"}), 500
 
-    # Manejo adicional en caso de timeout o errores inesperados
     return jsonify({'error': 'Timeout o error inesperado'}), 500
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
