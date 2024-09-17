@@ -752,8 +752,32 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 //// Llamada a generateImages
 // Llamada a generateImages
-// Llamada a generateImages
-fetch("/generate-images", {
+
+    async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return await response.json();  // Directly return the parsed JSON
+            } else if (response.status >= 500 && response.status < 600) {
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+            } else {
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error; // Only throw error after all retries are exhausted
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, delay));
+    }
+}
+
+    
+    
+    fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
