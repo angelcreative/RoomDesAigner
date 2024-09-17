@@ -63,66 +63,55 @@ class ImageProcessInputSchema(Schema):
     downscaling_resolution = fields.Int(required=False, missing=1024)
     mask = fields.Str(required=False, missing="")
 
-@app.route("/clarity-upscale", methods=["POST"])
+
+   
+ @app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
     json_data = request.get_json()
     if not json_data:
-        return jsonify({'error': 'No se proporcionaron datos'}), 400
+        return jsonify({'error': 'No data provided'}), 400
 
-    # Validar y cargar los datos
     schema = ImageProcessInputSchema()
     try:
         data = schema.load(json_data)
     except ValidationError as err:
         return jsonify({'errors': err.messages}), 400
 
-    # Mapear 'image_url' a 'image' antes de enviar la solicitud
     data['image'] = data.pop('image_url')
 
-    # Verificar que el token de API esté configurado
     if not REPLICATE_API_TOKEN:
-        print("El token de Replicate no está configurado.")
+        print("Replicate API Token missing")
         return jsonify({"error": "Internal server error"}), 500
 
-    # Asegurarse de que el ID de versión del modelo es correcto
     model_version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
-    if not model_version_id:
-        print("El ID de versión del modelo no está configurado.")
-        return jsonify({"error": "Internal server error"}), 500
 
-    # Enviar la solicitud a la API de Replicate
     try:
         response = requests.post(api_endpoint, headers=headers, json={
             "version": model_version_id,
             "input": data
         })
+        response_json = response.json()
+        print(f"Replicate API response: {response_json}")
     except requests.exceptions.RequestException as e:
-        print("Error al realizar la solicitud a la API de Replicate:", e)
+        print("Error while making request to Replicate API:", e)
         return jsonify({"error": "Failed to initiate request"}), 500
 
-    # Depurar en caso de error
     if response.status_code != 200:
-        print("Failed to initiate request")
-        print("Status code:", response.status_code)
-        print("Response content:", response.text)
+        print(f"Replicate API error: {response.status_code}")
         return jsonify({"error": "Failed to initiate request"}), 500
 
-    # Procesar la respuesta de la API
-    response_json = response.json()
+    # Polling
     endpoint_url = response_json.get("urls", {}).get("get")
     if not endpoint_url:
-        print("No se pudo obtener la URL de estado de la predicción.")
+        print("Prediction status URL not found")
         return jsonify({"error": "Failed to initiate request"}), 500
 
-    # Polling para verificar el estado de la predicción
     while True:
         time.sleep(3)
         status_response = requests.get(endpoint_url, headers=headers)
         if status_response.status_code != 200:
-            print("Error al obtener el estado de la predicción")
-            print("Status code:", status_response.status_code)
-            print("Response content:", status_response.text)
-            return jsonify({"error": "Error al obtener el estado de la predicción"}), 500
+            print("Error getting prediction status")
+            return jsonify({"error": "Error getting prediction status"}), 500
 
         status_json = status_response.json()
         status = status_json.get("status")
@@ -131,23 +120,24 @@ def clarity_upscale():
             output_image_url = status_json["output"]["image"]
             return jsonify({"output": [output_image_url]})
         elif status == "failed":
-            print("La predicción ha fallado")
-            print("Detalles:", status_json)
+            print("Prediction failed")
             return jsonify({"error": "Image processing failed"}), 500
         elif status in ("starting", "processing"):
             continue
         else:
-            print("Estado inesperado de la predicción:", status)
-            return jsonify({"error": "Estado inesperado de la predicción"}), 500
-
-    return jsonify({'error': 'Timeout o error inesperado'}), 500
-
-
+            print("Unexpected status:", status)
+            return jsonify({"error": "Unexpected prediction status"}), 500
 
 
 #fin clarity
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
+
+
+
+
+
+
 CORS(app, resources={r"/*": {"origins": "*"}})
 
     
