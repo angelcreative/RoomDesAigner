@@ -793,7 +793,7 @@ function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 50
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ request_id: requestId, key: "your_api_key_here" })
+        body: JSON.stringify({ request_id: requestId, key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw" })
     })
     .then(response => response.json())
     .then(data => {
