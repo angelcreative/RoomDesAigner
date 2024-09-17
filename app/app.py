@@ -64,8 +64,7 @@ class ImageProcessInputSchema(Schema):
     mask = fields.Str(required=False, missing="")
 
 
-   
- @app.route("/clarity-upscale", methods=["POST"])
+@app.route("/clarity-upscale", methods=["POST"])
 def clarity_upscale():
     json_data = request.get_json()
     if not json_data:
