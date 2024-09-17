@@ -751,6 +751,7 @@ if (isImg2Img && imageUrl) {
       // Update the text content of the <span> element
    //   spanElement.textContent = modifiedText;
 //// Llamada a generateImages
+// Llamada a generateImages
 fetch("/generate-images", {
     method: "POST",
     headers: {
@@ -765,40 +766,41 @@ fetch("/generate-images", {
     return response.json();
 })
 .then(data => {
+    // Check the response for the status and request_id
     if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
-        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+        showModal(imageUrls, data.transformed_prompt);  // Show the images
+        hideGeneratingImagesDialog();  // Hide the loading dialog
     } else if (data.status === "processing" && data.request_id) {
-        checkImageStatus(data.request_id, data.transformed_prompt);  // Usamos request_id
+        // Use the request_id to poll for the result
+        checkImageStatus(data.request_id, data.transformed_prompt);
     } else {
         throw new Error('Image generation failed or unexpected status.');
     }
 })
 .catch(error => {
     if (!error.message.includes("Image generation in progress")) {
-        showError(error);  // Mostrar errores si no es un caso de generación en progreso
+        showError(error);  // Show errors if it's not the image generation progress message
     }
 });
 
-
-   // Define la función checkImageStatus con mayor retraso y más reintentos
-function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 10000) {
+// Define la función checkImageStatus con mayor retraso y más reintentos
+function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 5000) {
     fetch("/fetch-images", {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ request_id: requestId, key: "your_api_key_here" })  // Ajusta con tu API key
+        body: JSON.stringify({ request_id: requestId, key: "your_api_key_here" })
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
             if (retries > 0) {
                 console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
-                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay * 2), delay);
+                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
             } else {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
@@ -806,8 +808,8 @@ function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 10
             const imageUrls = data.images.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
-            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+            showModal(imageUrls, transformedPrompt);  // Show the images
+            hideGeneratingImagesDialog();  // Hide the loading dialog
         } else if (data.status === "failed") {
             throw new Error('Image generation failed.');
         } else {
@@ -819,7 +821,7 @@ function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 10
         showError(error);
     });
 }
- 
+
 //end FWR
 
 
