@@ -84,6 +84,7 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
+
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
@@ -115,16 +116,34 @@ def generate_images():
             if response.status_code == 200:
                 result = response.json()
 
-                # Deduce credits after successful image generation
-                deduct_credits(username, 2)
+                # Check if the status is "processing", and provide the fetch URL
+                if result.get('status') == 'processing':
+                    fetch_url = result.get('fetch_result')
+                    if fetch_url:
+                        # Return the fetch URL to the user so they can poll it later
+                        return jsonify({
+                            "message": "Image generation is processing. You can fetch the result using the fetch API.",
+                            "fetch_url": fetch_url,
+                            "eta": result.get('eta'),  # Estimated time for completion
+                            "transformed_prompt": transformed_prompt
+                        }), 202  # HTTP 202 Accepted since the request is not yet complete
 
-                # Include the transformed prompt in the response
-                result['transformed_prompt'] = transformed_prompt
+                # If images are ready immediately, return them
+                if result.get('future_links'):
+                    # Deduce credits after successful image generation
+                    deduct_credits(username, 2)
 
-                # Return the result to the user
-                return jsonify(result)
+                    # Return the images and the transformed prompt to the user
+                    return jsonify({
+                        "images": result.get('future_links'),
+                        "transformed_prompt": transformed_prompt
+                    }), 200
+
+                return jsonify({"error": "Unexpected response from the image generation service"}), 500
+
             else:
                 return jsonify({"error": "Image generation failed"}), response.status_code
+
         else:
             return jsonify({"error": "Insufficient credits"}), 403
 
@@ -135,6 +154,50 @@ def generate_images():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     except Exception as e:
         # Catch any other exceptions and return an error
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+
+
+# Define the endpoint for checking image status using the fetch API
+@app.route('/fetch-images', methods=['POST'])
+def fetch_images():
+    try:
+        data = request.get_json()
+
+        # Make sure we have the fetch URL from the client
+        fetch_url = data.get('fetch_url')
+        if not fetch_url:
+            return jsonify({"error": "Missing fetch URL"}), 400
+
+        # Make a request to the fetch API
+        fetch_response = requests.get(fetch_url, timeout=60)
+
+        if fetch_response.status_code == 200:
+            result = fetch_response.json()
+
+            # Check if images are ready
+            if result.get('status') == 'success' and result.get('future_links'):
+                # Return the images to the client
+                return jsonify({
+                    "images": result.get('future_links'),
+                    "transformed_prompt": result.get('transformed_prompt', "")
+                }), 200
+
+            elif result.get('status') == 'processing':
+                return jsonify({
+                    "message": "Images are still processing, please try again later.",
+                    "eta": result.get('eta')
+                }), 202
+
+            else:
+                return jsonify({"error": "Unexpected status received from the server."}), 500
+
+        return jsonify({"error": "Failed to fetch image status"}), fetch_response.status_code
+
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "The request timed out. Please try again."}), 504
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    except Exception as e:
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
