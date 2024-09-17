@@ -750,33 +750,7 @@ if (isImg2Img && imageUrl) {
 
       // Update the text content of the <span> element
    //   spanElement.textContent = modifiedText;
-// Fetch request to generate images
-
-async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
-    for (let i = 0; i < retries; i++) {
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) {
-                return response.json();  // Directly return the parsed JSON
-            } else if (response.status >= 500 && response.status < 600) {
-                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
-            } else {
-                const errorResponse = await response.json();
-                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
-            }
-        } catch (error) {
-            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
-            if (i === retries - 1) {
-                throw error;
-            }
-        }
-        await new Promise(resolve => setTimeout(resolve, delay));
-    }
-}
-
-//FWR
- 
-    // Llamada a fetchWithRetry en generateImages
+//// Llamada a generateImages
 fetch("/generate-images", {
     method: "POST",
     headers: {
@@ -786,22 +760,7 @@ fetch("/generate-images", {
 })
 .then(response => {
     if (!response.ok) {
-        if (response.status >= 500 && response.status < 600) {
-            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
-            return response.json().then(data => {
-                if (data.fetch_result) {
-                    checkImageStatus(data.fetch_result, data.transformed_prompt);
-                    throw new Error(`Image generation in progress. Checking status...`);
-                } else {
-                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-            }).catch(() => {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            });
-        } else {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return response.json();
 })
@@ -812,8 +771,8 @@ fetch("/generate-images", {
         );
         showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
         hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
-    } else if (data.status === "processing" && data.fetch_result) {
-        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
+    } else if (data.status === "processing" && data.request_id) {
+        checkImageStatus(data.request_id, data.transformed_prompt);  // Usamos request_id
     } else {
         throw new Error('Image generation failed or unexpected status.');
     }
@@ -824,26 +783,27 @@ fetch("/generate-images", {
     }
 });
 
-// Define la función checkImageStatus con mayor retraso y más reintentos
-function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
-    fetch(fetchResultUrl, {
+
+   // Define la función checkImageStatus con mayor retraso y más reintentos
+function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 10000) {
+    fetch("/fetch-images", {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ prompt: transformedPrompt })
+        body: JSON.stringify({ request_id: requestId, key: "your_api_key_here" })  // Ajusta con tu API key
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
             if (retries > 0) {
                 console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
-                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
+                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay * 2), delay);
             } else {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
+        } else if (data.status === "success" && data.images) {
+            const imageUrls = data.images.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
@@ -859,10 +819,7 @@ function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay
         showError(error);
     });
 }
-
-
-
-    
+ 
 //end FWR
 
 
