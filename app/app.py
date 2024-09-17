@@ -114,35 +114,15 @@ def generate_images():
 
             if response.status_code == 200:
                 result = response.json()
-                request_id = result.get('id')  # Get the request_id to fetch images later
 
-                if not request_id:
-                    return jsonify({"error": "No request_id returned by the server"}), 500
+                # Deduce credits after successful image generation
+                deduct_credits(username, 2)
 
-                # Fetch the images using the request_id
-                fetch_url = 'https://modelslab.com/api/v6/images/fetch'
-                fetch_payload = {
-                    "key": data.get('key'),  # Assuming the API key is passed in the original request
-                    "request_id": 113648921
-                }
+                # Include the transformed prompt in the response
+                result['transformed_prompt'] = transformed_prompt
 
-                # Poll the fetch API to check if the images are ready
-                retries = 10
-                delay = 5  # Start with a 5-second delay
-
-                for i in range(retries):
-                    fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
-                    if fetch_response.status_code == 200:
-                        fetch_result = fetch_response.json()
-                        if fetch_result['status'] == "success":
-                            # Images are ready, return them to the user
-                            deduct_credits(username, 2)
-                            fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                            return jsonify(fetch_result)
-                    time.sleep(delay)  # Wait for the delay before retrying
-                    delay *= 2  # Exponential backoff: double the delay each time
-
-                return jsonify({"error": "Image generation timed out"}), 408
+                # Return the result to the user
+                return jsonify(result)
             else:
                 return jsonify({"error": "Image generation failed"}), response.status_code
         else:
