@@ -34,7 +34,7 @@ headers = {
     "Authorization": auth_token,
 }
 
-# Definir el esquema de entrada sin usar 'unknown = EXCLUDE'
+# Definir el esquema de entrada
 class ImageProcessInputSchema(Schema):
     image_url = fields.Url(required=True, metadata={
         "type": "string",
@@ -70,14 +70,17 @@ def clarity_upscale():
     if not json_data:
         return jsonify({'error': 'No data provided'}), 400
 
+    # Validate input data
     schema = ImageProcessInputSchema()
     try:
         data = schema.load(json_data)
     except ValidationError as err:
         return jsonify({'errors': err.messages}), 400
 
+    # Map 'image_url' to 'image' before sending request
     data['image'] = data.pop('image_url')
 
+    # Log token validation
     if not REPLICATE_API_TOKEN:
         print("Replicate API Token missing")
         return jsonify({"error": "Internal server error"}), 500
@@ -85,28 +88,35 @@ def clarity_upscale():
     model_version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
 
     try:
+        # Make the request to the Replicate API
         response = requests.post(api_endpoint, headers=headers, json={
             "version": model_version_id,
             "input": data
         })
+
+        # Log the full API response for debugging
         response_json = response.json()
         print(f"Replicate API response: {response_json}")
+
     except requests.exceptions.RequestException as e:
-        print("Error while making request to Replicate API:", e)
+        print(f"Error while making request to Replicate API: {e}")
         return jsonify({"error": "Failed to initiate request"}), 500
 
     if response.status_code != 200:
         print(f"Replicate API error: {response.status_code}")
+        print(f"Response Content: {response.text}")
         return jsonify({"error": "Failed to initiate request"}), 500
 
-    # Polling
+    # Polling the prediction result
     endpoint_url = response_json.get("urls", {}).get("get")
     if not endpoint_url:
         print("Prediction status URL not found")
         return jsonify({"error": "Failed to initiate request"}), 500
 
-    while True:
-        time.sleep(3)
+    retries = 0
+    max_retries = 20  # Define a reasonable number of retries
+    while retries < max_retries:
+        time.sleep(3)  # Sleep before polling
         status_response = requests.get(endpoint_url, headers=headers)
         if status_response.status_code != 200:
             print("Error getting prediction status")
@@ -122,10 +132,14 @@ def clarity_upscale():
             print("Prediction failed")
             return jsonify({"error": "Image processing failed"}), 500
         elif status in ("starting", "processing"):
+            retries += 1
             continue
         else:
-            print("Unexpected status:", status)
-            return jsonify({"error": "Unexpected prediction status"}), 500
+            print(f"Unexpected status: {status}")
+            return jsonify({"error": f"Unexpected prediction status: {status}"}), 500
+
+    # Timeout handling
+    return jsonify({'error': 'Prediction took too long or failed'}), 500
 
 
 #fin clarity
