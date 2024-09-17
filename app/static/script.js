@@ -674,13 +674,11 @@ const prompt = {
   safety_checker: "no",
   panorama: "no",
     self_attention: "no",
- track_id: null,
+
  enhance_prompt: "no",
  highres_fix: "no",
   instant_response: "no",
-  ip_adapter_id: null,
-        ip_adapter_scale: 0.6,
-        ip_adapter_image: null
+
 };
     //xl_more_enhancer,
     //real-skin-lora
