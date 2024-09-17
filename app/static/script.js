@@ -665,6 +665,7 @@ const prompt = {
   steps: 20,
   use_karras_sigmas: "yes",
    tomesd: "yes",
+ clip_skip: 1,
   seed: seedValue,
   model_id: "fluxdev",
   lora_model: "fluxschnelldev",
@@ -674,7 +675,6 @@ const prompt = {
   safety_checker: "no",
   panorama: "no",
     self_attention: "no",
-
  enhance_prompt: "no",
  highres_fix: "no",
   instant_response: "no",
