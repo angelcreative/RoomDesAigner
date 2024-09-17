@@ -116,19 +116,18 @@ def generate_images():
             if response.status_code == 200:
                 result = response.json()
 
-                # Check if the status is "processing", and provide the fetch URL
+                # Si las imágenes están en proceso, devuelve el request_id
                 if result.get('status') == 'processing':
-                    fetch_url = result.get('fetch_result')
-                    if fetch_url:
-                        # Return the fetch URL to the user so they can poll it later
+                    request_id = result.get('id')
+                    if request_id:
                         return jsonify({
-                            "message": "Image generation is processing. You can fetch the result using the fetch API.",
-                            "fetch_url": fetch_url,
-                            "eta": result.get('eta'),  # Estimated time for completion
+                            "message": "Image generation is processing. Use the fetch endpoint to retrieve images.",
+                            "request_id": request_id,
+                            "eta": result.get('eta'),  # Tiempo estimado para que se complete
                             "transformed_prompt": transformed_prompt
-                        }), 202  # HTTP 202 Accepted since the request is not yet complete
+                        }), 202  # HTTP 202 Accepted, la solicitud está en proceso
 
-                # If images are ready immediately, return them
+                # Si las imágenes están listas, devuélvelas de inmediato
                 if result.get('future_links'):
                     # Deduce credits after successful image generation
                     deduct_credits(username, 2)
@@ -157,39 +156,50 @@ def generate_images():
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
-# Define the endpoint for checking image status using the fetch API
+# Define the fetch_images endpoint
 @app.route('/fetch-images', methods=['POST'])
 def fetch_images():
     try:
         data = request.get_json()
 
-        # Make sure we have the fetch URL from the client
-        fetch_url = data.get('fetch_url')
-        if not fetch_url:
-            return jsonify({"error": "Missing fetch URL"}), 400
+        # Verificar que se haya proporcionado el request_id y el API key
+        request_id = data.get('request_id')
+        api_key = data.get('key')
 
-        # Make a request to the fetch API
-        fetch_response = requests.get(fetch_url, timeout=60)
+        if not request_id or not api_key:
+            return jsonify({"error": "Missing request_id or API key"}), 400
+
+        # Construir la carga útil para la solicitud de fetch
+        fetch_payload = json.dumps({
+            "key": api_key,
+            "request_id": request_id
+        })
+
+        fetch_url = "https://modelslab.com/api/v6/images/fetch"
+        headers = {'Content-Type': 'application/json'}
+
+        # Realizar la solicitud a la API de fetch
+        fetch_response = requests.post(fetch_url, headers=headers, data=fetch_payload, timeout=60)
 
         if fetch_response.status_code == 200:
             result = fetch_response.json()
 
-            # Check if images are ready
-            if result.get('status') == 'success' and result.get('future_links'):
-                # Return the images to the client
+            # Si las imágenes están listas, devuélvelas
+            if result.get('status') == 'success' and result.get('output'):
                 return jsonify({
-                    "images": result.get('future_links'),
-                    "transformed_prompt": result.get('transformed_prompt', "")
+                    "status": "success",
+                    "images": result.get('output')
                 }), 200
 
+            # Si aún están procesándose, devolver un estado de espera
             elif result.get('status') == 'processing':
                 return jsonify({
                     "message": "Images are still processing, please try again later.",
-                    "eta": result.get('eta')
+                    "status": "processing"
                 }), 202
 
             else:
-                return jsonify({"error": "Unexpected status received from the server."}), 500
+                return jsonify({"error": "Unexpected status received from the server"}), 500
 
         return jsonify({"error": "Failed to fetch image status"}), fetch_response.status_code
 
@@ -199,8 +209,6 @@ def fetch_images():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     except Exception as e:
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
-
-
     
     
     
