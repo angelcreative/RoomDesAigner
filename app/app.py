@@ -1,7 +1,4 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
-from aiohttp import ClientSession
-from PIL import Image
-from marshmallow import Schema, fields, ValidationError
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -10,7 +7,6 @@ import bcrypt
 import os
 import replicate
 import uuid
-import asyncio
 import random
 import logging
 import json
@@ -21,136 +17,7 @@ import openai
 
 app = Flask(__name__)
 
-
-# Configuración de la API de Replicate
-REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
-if not REPLICATE_API_TOKEN:
-    raise ValueError("El token de Replicate no está configurado en las variables de entorno.")
-
-api_endpoint = "https://api.replicate.com/v1/predictions"
-auth_token = f"Token {REPLICATE_API_TOKEN}"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": auth_token,
-}
-
-# Definir el esquema de entrada
-class ImageProcessInputSchema(Schema):
-    image_url = fields.Url(required=True, metadata={
-        "type": "string",
-        "title": "Image",
-        "format": "uri",
-        "description": "input image"
-    })
-    prompt = fields.Str(required=False, missing="")
-    dynamic = fields.Float(required=False, missing=5.0)
-    handfix = fields.Str(required=False, missing="")
-    pattern = fields.Bool(required=False, missing=False)
-    sharpen = fields.Float(required=False, missing=0.0)
-    sd_model = fields.Str(required=False, missing="default_model")
-    scheduler = fields.Str(required=False, missing="default")
-    creativity = fields.Float(required=False, missing=0.7)
-    lora_links = fields.Str(required=False, missing="")
-    downscaling = fields.Bool(required=False, missing=False)
-    resemblance = fields.Float(required=False, missing=1.0)
-    scale_factor = fields.Float(required=False, missing=2.0)
-    tiling_width = fields.Int(required=False, missing=512)
-    output_format = fields.Str(required=False, missing="png")
-    tiling_height = fields.Int(required=False, missing=512)
-    custom_sd_model = fields.Str(required=False, missing="")
-    negative_prompt = fields.Str(required=False, missing="")
-    num_inference_steps = fields.Int(required=False, missing=50)
-    downscaling_resolution = fields.Int(required=False, missing=1024)
-    mask = fields.Str(required=False, missing="")
-
-
-@app.route("/clarity-upscale", methods=["POST"])
-def clarity_upscale():
-    json_data = request.get_json()
-    if not json_data:
-        return jsonify({'error': 'No data provided'}), 400
-
-    # Validate input data
-    schema = ImageProcessInputSchema()
-    try:
-        data = schema.load(json_data)
-    except ValidationError as err:
-        return jsonify({'errors': err.messages}), 400
-
-    # Map 'image_url' to 'image' before sending request
-    data['image'] = data.pop('image_url')
-
-    # Log token validation
-    if not REPLICATE_API_TOKEN:
-        print("Replicate API Token missing")
-        return jsonify({"error": "Internal server error"}), 500
-
-    model_version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
-
-    try:
-        # Make the request to the Replicate API
-        response = requests.post(api_endpoint, headers=headers, json={
-            "version": model_version_id,
-            "input": data
-        })
-
-        # Log the full API response for debugging
-        response_json = response.json()
-        print(f"Replicate API response: {response_json}")
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error while making request to Replicate API: {e}")
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    if response.status_code != 200:
-        print(f"Replicate API error: {response.status_code}")
-        print(f"Response Content: {response.text}")
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    # Polling the prediction result
-    endpoint_url = response_json.get("urls", {}).get("get")
-    if not endpoint_url:
-        print("Prediction status URL not found")
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    retries = 0
-    max_retries = 20  # Define a reasonable number of retries
-    while retries < max_retries:
-        time.sleep(3)  # Sleep before polling
-        status_response = requests.get(endpoint_url, headers=headers)
-        if status_response.status_code != 200:
-            print("Error getting prediction status")
-            return jsonify({"error": "Error getting prediction status"}), 500
-
-        status_json = status_response.json()
-        status = status_json.get("status")
-
-        if status == "succeeded":
-            output_image_url = status_json["output"]["image"]
-            return jsonify({"output": [output_image_url]})
-        elif status == "failed":
-            print("Prediction failed")
-            return jsonify({"error": "Image processing failed"}), 500
-        elif status in ("starting", "processing"):
-            retries += 1
-            continue
-        else:
-            print(f"Unexpected status: {status}")
-            return jsonify({"error": f"Unexpected prediction status: {status}"}), 500
-
-    # Timeout handling
-    return jsonify({'error': 'Prediction took too long or failed'}), 500
-
-
-#fin clarity
-
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
-
-
-
-
-
-
 CORS(app, resources={r"/*": {"origins": "*"}})
 
     
@@ -165,6 +32,8 @@ mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
 
+#replicate token 
+REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
 # Fetch the API key from the environment
@@ -526,6 +395,7 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
+import logging
 
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
@@ -586,6 +456,94 @@ def update_user_credits(email, additional_credits):
 
 
 
+# Almacenamiento temporal de predicciones (solo para pruebas)
+predictions = {}
+
+# Ruta para iniciar el proceso de escalado
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale():
+    try:
+        data = request.json
+        image_url = data.get('image_url')
+
+        if not image_url:
+            return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
+
+        input_data = {
+            "image": image_url
+        }
+
+        # Crear un ID único para la predicción
+        prediction_id = str(uuid.uuid4())
+        
+        # Crear la predicción en Replicate
+        prediction = replicate.predictions.create(
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input_data,
+            webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
+            webhook_events_filter=["completed"]
+        )
+
+        # Imprimir información de depuración
+        print(f"Tipo de prediction: {type(prediction)}")
+        print(f"Contenido de prediction: {prediction}")
+
+        # Verificar si la predicción tiene un ID
+        if not prediction or not prediction.id:
+            return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
+
+        # Inicializamos la predicción en el diccionario con el estado 'starting'
+        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
+
+        # Devolvemos el ID de la predicción generada
+        return jsonify({'prediction_id': prediction_id}), 200
+
+    except Exception as e:
+        print(f"Ocurrió un error: {str(e)}")
+        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
+
+# Ruta para recibir el webhook de Replicate
+@app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
+def replicate_webhook(prediction_id):
+    try:
+        webhook_data = request.json
+
+        # Verifica si la predicción fue exitosa
+        if webhook_data.get('status') == 'succeeded':
+            output_url = webhook_data.get('output', [None])[0]
+            predictions[prediction_id] = {"status": "succeeded", "output": output_url}
+        elif webhook_data.get('status') == 'failed':
+            predictions[prediction_id] = {"status": "failed", "output": None}
+
+        return jsonify({"ok": True}), 200
+
+    except Exception as e:
+        print(f"Error procesando el webhook: {str(e)}")
+        return jsonify({'error': f'Error procesando el webhook: {str(e)}'}), 500
+
+# Ruta para que el frontend consulte el resultado de la predicción
+@app.route('/get-upscaled-image/<prediction_id>', methods=['GET'])
+def get_upscaled_image(prediction_id):
+    result = predictions.get(prediction_id, None)
+
+    if not result:
+        return jsonify({'error': 'Predicción no encontrada'}), 404
+    
+    if result['status'] == 'starting':
+        # Si la predicción aún está en proceso, consultamos su estado actual
+        replicate_id = result.get('replicate_id')
+        if replicate_id:
+            current_prediction = replicate.predictions.get(replicate_id)
+            result['status'] = current_prediction.status
+            if current_prediction.status == 'succeeded':
+                result['output'] = current_prediction.output[0] if current_prediction.output else None
+            predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
+
+    return jsonify(result), 200
+
+
+
+#SREF
 
 # Configurar el nivel de registro
 logging.basicConfig(level=logging.INFO)

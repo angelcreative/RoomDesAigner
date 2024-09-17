@@ -124,7 +124,7 @@ function handleSubmit(event) {
 }
 
     
-//==================================================================================================🔴 values
+
 
 function getSelectedValues() {
     const elementIds = [
@@ -376,7 +376,7 @@ function generateBlurredBackground () {
     document.getElementById('dialogTitle').innerHTML = `
         
         <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will be ready soon.<br>This would take 120 seconds approx.<br>Don't change this tab untill is done!</p>
+        <p>Sit back and relax, your design will be ready soon.<br>It take some time to make it peerfect.</p>
          <p id="chronometer">00:00:00</p>
     `;
 
@@ -651,34 +651,29 @@ if (modelId === personValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
  */
-//==================================================================================================🔴 payload
   
 // Now build the JSON object with the updated values
 const prompt = {
   key: apiKey,
   prompt: promptText,
-   negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 3.5,
-  steps: 20,
+  guidance_scale: 7.5,
+  steps: 15,
   use_karras_sigmas: "yes",
-   tomesd: "yes",
- clip_skip: 1,
+  tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
   lora_model: "fluxschnelldev",
-  lora_strength:1,
-  scheduler: "EulerDiscreteScheduler",
- webhook: null,
+ lora_strength: 0.7,
+  scheduler:  "DPMSolverMultistepScheduler",  
+  webhook: null,
   safety_checker: "no",
-  panorama: "no",
-    self_attention: "no",
- enhance_prompt: "no",
- highres_fix: "no",
-  instant_response: "no",
-
+  track_id: null,
+  enhance_prompt: "no",
+  //highres_fix: "yes"
 };
     //xl_more_enhancer,
     //real-skin-lora
