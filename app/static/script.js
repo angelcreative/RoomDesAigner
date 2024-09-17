@@ -572,7 +572,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Editorial photography of , ` ;
+    const promptInit = `Editorial photography of  ` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -752,6 +752,7 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 //// Llamada a generateImages
 // Llamada a generateImages
+// Llamada a generateImages
 fetch("/generate-images", {
     method: "POST",
     headers: {
@@ -766,34 +767,31 @@ fetch("/generate-images", {
     return response.json();
 })
 .then(data => {
-    // Check the response for the status and request_id
-    if (data.status === "success" && data.output) {
+    if (data.status === "processing" && data.request_id) {
+        // Use the request_id to poll for the result
+        checkImageStatus(data.request_id, data.transformed_prompt);
+    } else if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
         showModal(imageUrls, data.transformed_prompt);  // Show the images
         hideGeneratingImagesDialog();  // Hide the loading dialog
-    } else if (data.status === "processing" && data.request_id) {
-        // Use the request_id to poll for the result
-        checkImageStatus(data.request_id, data.transformed_prompt);
     } else {
         throw new Error('Image generation failed or unexpected status.');
     }
 })
 .catch(error => {
-    if (!error.message.includes("Image generation in progress")) {
-        showError(error);  // Show errors if it's not the image generation progress message
-    }
+    showError(error);  // Show errors if it's not the image generation progress message
 });
 
-// Define la función checkImageStatus con mayor retraso y más reintentos
+// Define la función checkImageStatus con polling
 function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 5000) {
     fetch("/fetch-images", {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ request_id: requestId, key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw" })
+        body: JSON.stringify({ request_id: requestId })
     })
     .then(response => response.json())
     .then(data => {
