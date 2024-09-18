@@ -564,31 +564,24 @@ function clearColorImage() {
     
 
 //🔶    start gen img
-  // Función genérica para hacer fetch con reintentos
-async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
-    for (let i = 0; i < retries; i++) {
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) {
-                return await response.json(); // Retorna el JSON si la respuesta es correcta
-            } else if (response.status >= 500 && response.status < 600) {
-                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
-            } else {
-                const errorResponse = await response.json();
-                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
-            }
-        } catch (error) {
-            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
-            if (i === retries - 1) {
-                throw error; // Lanza error solo cuando todos los reintentos fallan
-            }
-        }
-        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
+    
+    // Función para mostrar errores
+function showError(error) {
+    console.error("Error generating images:", error);
+    
+    // Puedes personalizar este código para que muestre el error en tu UI
+    const errorContainer = document.getElementById("errorContainer"); // Asume que tienes un contenedor para los errores en tu HTML
+    if (errorContainer) {
+        errorContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+        errorContainer.style.display = "block";  // Muestra el contenedor del error
+    } else {
+        alert("Error: " + error.message); // Si no tienes un contenedor, puedes usar alert como último recurso
     }
+    
+    hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
 }
-
-// Función para generar imágenes
-function generateImages(imageUrl, selectedValues, isImg2Img) {
+ // Función para generar imágenes
+async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw";  // Clave API
@@ -621,8 +614,6 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         width = 1024;
         height = 1024;
     }
-
-    console.log(`Width: ${width}, Height: ${height}`);
 
     // Configurar semilla si está activada la opción
     const seedSwitch = document.getElementById("seedSwitch");
@@ -669,61 +660,38 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    // Llamada a la API con reintentos
-    fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    }).then(data => {
-        if (data.status === "processing" && data.request_id) {
-            checkImageStatus(data.request_id);  // Iniciar polling
-        } else if (data.status === "success" && data.output) {
+    try {
+        const response = await fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
             showModal(imageUrls);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
+            // Caso donde ya hay imágenes generadas en future_links
+            const imageUrls = data.future_links.map(url =>
+                url.replace("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev", "https://modelslab.com")
+            );
+            showModal(imageUrls);  // Mostrar las imágenes generadas inmediatamente
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else if (data.status === "processing" && data.request_id) {
+            checkImageStatus(data.request_id);  // Iniciar polling
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
-    }).catch(error => {
-        showError(error);
-    });
-}
-
-// Polling para verificar el estado de la generación de imágenes
-async function checkImageStatus(requestId, retries = 40, delay = 10000) {
-    fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  // Tu clave API
-            request_id: requestId
-        })
-    }, retries, delay).then(data => {
-        if (data.status === 'processing') {
-            if (retries > 0) {
-                setTimeout(() => checkImageStatus(requestId, retries - 1, delay), delay);
-            } else {
-                throw new Error('Image generation is taking too long. Please try again later.');
-            }
-        } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://pub-8b49af329fae499aa563997f5d4068a4.r2.dev", "https://modelslab.com")
-            );
-            showModal(imageUrls);  // Mostrar las imágenes generadas
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else {
-            throw new Error('Unexpected status received from the server.');
-        }
-    }).catch(error => {
-        console.error('Error checking image status:', error);
-        showError(error);
-    });
+    } catch (error) {
+        showError(error);  // Manejo de errores
+    }
 }
 
     
