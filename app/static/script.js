@@ -564,8 +564,31 @@ function clearColorImage() {
     
 
 //🔶    start gen img
-    
-    function generateImages(imageUrl, selectedValues, isImg2Img) {
+  // Función genérica para hacer fetch con reintentos
+async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return await response.json(); // Retorna el JSON si la respuesta es correcta
+            } else if (response.status >= 500 && response.status < 600) {
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+            } else {
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error; // Lanza error solo cuando todos los reintentos fallan
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
+    }
+}
+
+// Función para generar imágenes
+function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw";  // Clave API
