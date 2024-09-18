@@ -752,13 +752,13 @@ if (isImg2Img && imageUrl) {
    //   spanElement.textContent = modifiedText;
 //// Llamada a generateImages
 // Llamada a generateImages
-
-    async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
+// Función genérica para hacer fetch con reintentos
+async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
             if (response.ok) {
-                return await response.json();  // Directly return the parsed JSON
+                return await response.json(); // Retorna el JSON si la respuesta es correcta
             } else if (response.status >= 500 && response.status < 600) {
                 console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
             } else {
@@ -768,48 +768,48 @@ if (isImg2Img && imageUrl) {
         } catch (error) {
             console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
             if (i === retries - 1) {
-                throw error; // Only throw error after all retries are exhausted
+                throw error; // Lanza error solo cuando todos los reintentos fallan
             }
         }
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
     }
 }
 
-    
-    
-    fetch("/generate-images", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(prompt)
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json();
-})
-.then(data => {
-    if (data.status === "processing" && data.request_id) {
-        // Use the request_id to poll for the result
-        checkImageStatus(data.request_id, data.transformed_prompt);
-    } else if (data.status === "success" && data.output) {
-        const imageUrls = data.output.map(url =>
-            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-        );
-        showModal(imageUrls, data.transformed_prompt);  // Show the images
-        hideGeneratingImagesDialog();  // Hide the loading dialog
-    } else {
-        throw new Error('Image generation failed or unexpected status.');
-    }
-})
-.catch(error => {
-    showError(error);  // Show errors if it's not the image generation progress message
-});
+// Función para generar imágenes
+async function generateImages() {
+    try {
+        const response = await fetch("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        });
 
-// Define la función checkImageStatus con polling
-async function checkImageStatus(requestId, transformedPrompt, retries = 20, delay = 5000) {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === "processing" && data.request_id) {
+            checkImageStatus(data.request_id, data.transformed_prompt);
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, data.transformed_prompt); // Muestra las imágenes
+            hideGeneratingImagesDialog(); // Oculta el diálogo de espera
+        } else {
+            throw new Error('Image generation failed or unexpected status.');
+        }
+    } catch (error) {
+        showError(error);
+    }
+}
+
+// Función para hacer polling del estado de la generación de imágenes
+async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
         const response = await fetch("/fetch-images", {
             method: 'POST',
@@ -818,6 +818,7 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 20, dela
             },
             body: JSON.stringify({ request_id: requestId })
         });
+
         const data = await response.json();
 
         if (data.status === 'processing') {
@@ -831,8 +832,8 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 20, dela
             const imageUrls = data.images.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, transformedPrompt);  // Show the images
-            hideGeneratingImagesDialog();  // Hide the loading dialog
+            showModal(imageUrls, transformedPrompt); // Muestra las imágenes
+            hideGeneratingImagesDialog(); // Oculta el diálogo de espera
         } else {
             throw new Error('Unexpected status received from the server.');
         }
@@ -842,19 +843,16 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 20, dela
     }
 }
 
-
-//end FWR
-
-
+// Función para mostrar errores
 function showError(error) {
     console.error("Error generating images:", error);
     alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
     hideOverlay(); // Oculta la superposición y el mensaje de carga
 }
 
+// Función para mostrar las imágenes
 function displayImages(images) {
-    // Function to display images or handle the successful completion of the task
-    console.log('Displaying images:', images);
+    console.log('Displaying images:', images); // Log para verificar qué imágenes se muestran
 }
 
 
