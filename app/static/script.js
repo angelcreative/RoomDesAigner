@@ -699,6 +699,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             body: JSON.stringify(prompt)
         });
 
+        // Mueve esta línea fuera del bloque if para que siempre se ejecute
         const data = await response.json();
         console.log('Respuesta del backend en generateImages:', data);
 
@@ -716,6 +717,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
                 throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
             }
         } else {
+            // Aquí, data estaba indefinida antes. Ahora, como hemos movido la definición de data, estará definida.
             throw new Error(data.error || 'Error en la solicitud al backend.');
         }
     } catch (error) {
