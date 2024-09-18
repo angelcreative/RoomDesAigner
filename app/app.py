@@ -1,7 +1,4 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
-from aiohttp import ClientSession
-from PIL import Image
-from marshmallow import Schema, fields, ValidationError
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -10,7 +7,6 @@ import bcrypt
 import os
 import replicate
 import uuid
-import asyncio
 import random
 import logging
 import json
@@ -20,132 +16,6 @@ import time
 import openai
 
 app = Flask(__name__)
-
-
-# Configuración de la API de Replicate
-REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
-if not REPLICATE_API_TOKEN:
-    raise ValueError("El token de Replicate no está configurado en las variables de entorno.")
-
-api_endpoint = "https://api.replicate.com/v1/predictions"
-auth_token = f"Token {REPLICATE_API_TOKEN}"
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": auth_token,
-}
-
-# Definir el esquema de entrada sin usar 'unknown = EXCLUDE'
-class ImageProcessInputSchema(Schema):
-    image_url = fields.Url(required=True, metadata={
-        "type": "string",
-        "title": "Image",
-        "format": "uri",
-        "description": "input image"
-    })
-    prompt = fields.Str(required=False, missing="")
-    dynamic = fields.Float(required=False, missing=5.0)
-    handfix = fields.Str(required=False, missing="")
-    pattern = fields.Bool(required=False, missing=False)
-    sharpen = fields.Float(required=False, missing=0.0)
-    sd_model = fields.Str(required=False, missing="default_model")
-    scheduler = fields.Str(required=False, missing="default")
-    creativity = fields.Float(required=False, missing=0.7)
-    lora_links = fields.Str(required=False, missing="")
-    downscaling = fields.Bool(required=False, missing=False)
-    resemblance = fields.Float(required=False, missing=1.0)
-    scale_factor = fields.Float(required=False, missing=2.0)
-    tiling_width = fields.Int(required=False, missing=512)
-    output_format = fields.Str(required=False, missing="png")
-    tiling_height = fields.Int(required=False, missing=512)
-    custom_sd_model = fields.Str(required=False, missing="")
-    negative_prompt = fields.Str(required=False, missing="")
-    num_inference_steps = fields.Int(required=False, missing=50)
-    downscaling_resolution = fields.Int(required=False, missing=1024)
-    mask = fields.Str(required=False, missing="")
-
-@app.route("/clarity-upscale", methods=["POST"])
-def clarity_upscale():
-    json_data = request.get_json()
-    if not json_data:
-        return jsonify({'error': 'No se proporcionaron datos'}), 400
-
-    # Validar y cargar los datos
-    schema = ImageProcessInputSchema()
-    try:
-        data = schema.load(json_data)
-    except ValidationError as err:
-        return jsonify({'errors': err.messages}), 400
-
-    # Mapear 'image_url' a 'image' antes de enviar la solicitud
-    data['image'] = data.pop('image_url')
-
-    # Verificar que el token de API esté configurado
-    if not REPLICATE_API_TOKEN:
-        print("El token de Replicate no está configurado.")
-        return jsonify({"error": "Internal server error"}), 500
-
-    # Asegurarse de que el ID de versión del modelo es correcto
-    model_version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"
-    if not model_version_id:
-        print("El ID de versión del modelo no está configurado.")
-        return jsonify({"error": "Internal server error"}), 500
-
-    # Enviar la solicitud a la API de Replicate
-    try:
-        response = requests.post(api_endpoint, headers=headers, json={
-            "version": model_version_id,
-            "input": data
-        })
-    except requests.exceptions.RequestException as e:
-        print("Error al realizar la solicitud a la API de Replicate:", e)
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    # Depurar en caso de error
-    if response.status_code != 200:
-        print("Failed to initiate request")
-        print("Status code:", response.status_code)
-        print("Response content:", response.text)
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    # Procesar la respuesta de la API
-    response_json = response.json()
-    endpoint_url = response_json.get("urls", {}).get("get")
-    if not endpoint_url:
-        print("No se pudo obtener la URL de estado de la predicción.")
-        return jsonify({"error": "Failed to initiate request"}), 500
-
-    # Polling para verificar el estado de la predicción
-    while True:
-        time.sleep(3)
-        status_response = requests.get(endpoint_url, headers=headers)
-        if status_response.status_code != 200:
-            print("Error al obtener el estado de la predicción")
-            print("Status code:", status_response.status_code)
-            print("Response content:", status_response.text)
-            return jsonify({"error": "Error al obtener el estado de la predicción"}), 500
-
-        status_json = status_response.json()
-        status = status_json.get("status")
-
-        if status == "succeeded":
-            output_image_url = status_json["output"]["image"]
-            return jsonify({"output": [output_image_url]})
-        elif status == "failed":
-            print("La predicción ha fallado")
-            print("Detalles:", status_json)
-            return jsonify({"error": "Image processing failed"}), 500
-        elif status in ("starting", "processing"):
-            continue
-        else:
-            print("Estado inesperado de la predicción:", status)
-            return jsonify({"error": "Estado inesperado de la predicción"}), 500
-
-    return jsonify({'error': 'Timeout o error inesperado'}), 500
-
-
-
-
-#fin clarity
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -162,6 +32,8 @@ mongo_data_api_url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-qekvb/
 mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd8QszqWulkdRnrdZBGewShkh75ZHRUHwVFdlruIwbGl4')
 
 
+#replicate token 
+REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
 # Fetch the API key from the environment
@@ -212,6 +84,7 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
+
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
@@ -242,37 +115,34 @@ def generate_images():
 
             if response.status_code == 200:
                 result = response.json()
-                request_id = result.get('id')  # Get the request_id to fetch images later
 
-                if not request_id:
-                    return jsonify({"error": "No request_id returned by the server"}), 500
+                # Si las imágenes están en proceso, devuelve el request_id
+                if result.get('status') == 'processing':
+                    request_id = result.get('id')
+                    if request_id:
+                        return jsonify({
+                            "message": "Image generation is processing. Use the fetch endpoint to retrieve images.",
+                            "request_id": request_id,
+                            "eta": result.get('eta'),  # Tiempo estimado para que se complete
+                            "transformed_prompt": transformed_prompt
+                        }), 202  # HTTP 202 Accepted, la solicitud está en proceso
 
-                # Fetch the images using the request_id
-                fetch_url = 'https://modelslab.com/api/v6/images/fetch'
-                fetch_payload = {
-                    "key": data.get('key'),  # Assuming the API key is passed in the original request
-                    "request_id": request_id
-                }
+                # Si las imágenes están listas, devuélvelas de inmediato
+                if result.get('future_links'):
+                    # Deduce credits after successful image generation
+                    deduct_credits(username, 2)
 
-                # Poll the fetch API to check if the images are ready
-                retries = 10
-                delay = 5  # Start with a 5-second delay
+                    # Return the images and the transformed prompt to the user
+                    return jsonify({
+                        "images": result.get('future_links'),
+                        "transformed_prompt": transformed_prompt
+                    }), 200
 
-                for i in range(retries):
-                    fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
-                    if fetch_response.status_code == 200:
-                        fetch_result = fetch_response.json()
-                        if fetch_result['status'] == "success":
-                            # Images are ready, return them to the user
-                            deduct_credits(username, 2)
-                            fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                            return jsonify(fetch_result)
-                    time.sleep(delay)  # Wait for the delay before retrying
-                    delay *= 2  # Exponential backoff: double the delay each time
+                return jsonify({"error": "Unexpected response from the image generation service"}), 500
 
-                return jsonify({"error": "Image generation timed out"}), 408
             else:
                 return jsonify({"error": "Image generation failed"}), response.status_code
+
         else:
             return jsonify({"error": "Insufficient credits"}), 403
 
@@ -286,6 +156,59 @@ def generate_images():
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
+# Define the fetch_images endpoint
+@app.route('/fetch-images', methods=['POST'])
+def fetch_images():
+    try:
+        data = request.get_json()
+
+        # Verificar que se haya proporcionado el request_id y el API key
+        request_id = data.get('request_id')
+        api_key = data.get('key')
+
+        if not request_id or not api_key:
+            return jsonify({"error": "Missing request_id or API key"}), 400
+
+        # Construir la carga útil para la solicitud de fetch
+        fetch_payload = json.dumps({
+            "key": api_key,
+            "request_id": request_id
+        })
+
+        fetch_url = "https://modelslab.com/api/v6/images/fetch"
+        headers = {'Content-Type': 'application/json'}
+
+        # Realizar la solicitud a la API de fetch
+        fetch_response = requests.post(fetch_url, headers=headers, data=fetch_payload, timeout=60)
+
+        if fetch_response.status_code == 200:
+            result = fetch_response.json()
+
+            # Si las imágenes están listas, devuélvelas
+            if result.get('status') == 'success' and result.get('output'):
+                return jsonify({
+                    "status": "success",
+                    "images": result.get('output')
+                }), 200
+
+            # Si aún están procesándose, devolver un estado de espera
+            elif result.get('status') == 'processing':
+                return jsonify({
+                    "message": "Images are still processing, please try again later.",
+                    "status": "processing"
+                }), 202
+
+            else:
+                return jsonify({"error": "Unexpected status received from the server"}), 500
+
+        return jsonify({"error": "Failed to fetch image status"}), fetch_response.status_code
+
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "The request timed out. Please try again."}), 504
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
     
     
     
@@ -523,6 +446,7 @@ def change_avatar():
     else:
         return 'User not logged in', 401
 
+import logging
 
 @app.route('/lemonsqueezy_webhook', methods=['POST'])
 def lemonsqueezy_webhook():
@@ -583,6 +507,94 @@ def update_user_credits(email, additional_credits):
 
 
 
+# Almacenamiento temporal de predicciones (solo para pruebas)
+predictions = {}
+
+# Ruta para iniciar el proceso de escalado
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale():
+    try:
+        data = request.json
+        image_url = data.get('image_url')
+
+        if not image_url:
+            return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
+
+        input_data = {
+            "image": image_url
+        }
+
+        # Crear un ID único para la predicción
+        prediction_id = str(uuid.uuid4())
+        
+        # Crear la predicción en Replicate
+        prediction = replicate.predictions.create(
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input=input_data,
+            webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
+            webhook_events_filter=["completed"]
+        )
+
+        # Imprimir información de depuración
+        print(f"Tipo de prediction: {type(prediction)}")
+        print(f"Contenido de prediction: {prediction}")
+
+        # Verificar si la predicción tiene un ID
+        if not prediction or not prediction.id:
+            return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
+
+        # Inicializamos la predicción en el diccionario con el estado 'starting'
+        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
+
+        # Devolvemos el ID de la predicción generada
+        return jsonify({'prediction_id': prediction_id}), 200
+
+    except Exception as e:
+        print(f"Ocurrió un error: {str(e)}")
+        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
+
+# Ruta para recibir el webhook de Replicate
+@app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
+def replicate_webhook(prediction_id):
+    try:
+        webhook_data = request.json
+
+        # Verifica si la predicción fue exitosa
+        if webhook_data.get('status') == 'succeeded':
+            output_url = webhook_data.get('output', [None])[0]
+            predictions[prediction_id] = {"status": "succeeded", "output": output_url}
+        elif webhook_data.get('status') == 'failed':
+            predictions[prediction_id] = {"status": "failed", "output": None}
+
+        return jsonify({"ok": True}), 200
+
+    except Exception as e:
+        print(f"Error procesando el webhook: {str(e)}")
+        return jsonify({'error': f'Error procesando el webhook: {str(e)}'}), 500
+
+# Ruta para que el frontend consulte el resultado de la predicción
+@app.route('/get-upscaled-image/<prediction_id>', methods=['GET'])
+def get_upscaled_image(prediction_id):
+    result = predictions.get(prediction_id, None)
+
+    if not result:
+        return jsonify({'error': 'Predicción no encontrada'}), 404
+    
+    if result['status'] == 'starting':
+        # Si la predicción aún está en proceso, consultamos su estado actual
+        replicate_id = result.get('replicate_id')
+        if replicate_id:
+            current_prediction = replicate.predictions.get(replicate_id)
+            result['status'] = current_prediction.status
+            if current_prediction.status == 'succeeded':
+                result['output'] = current_prediction.output[0] if current_prediction.output else None
+            predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
+
+    return jsonify(result), 200
+
+
+
+#SREF
 
 # Configurar el nivel de registro
 logging.basicConfig(level=logging.INFO)
