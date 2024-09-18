@@ -706,10 +706,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             // Mostrar las imágenes generadas
             showModal(data.output, promptText);  // Usa las URLs correctas directamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
-            // Caso donde ya hay imágenes generadas en future_links
-            showModal(data.future_links, promptText);  // Mostrar las imágenes generadas inmediatamente
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.request_id) {
             // Las imágenes aún están procesándose, iniciar polling
             await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
