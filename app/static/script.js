@@ -124,7 +124,7 @@ function handleSubmit(event) {
 }
 
     
-
+//==================================================================================================🔴 values
 
 function getSelectedValues() {
     const elementIds = [
@@ -572,7 +572,7 @@ function generateImages(imageUrl, selectedValues, isImg2Img) {
   const customText = document.getElementById("customText").value;
   const pictureSelect = document.getElementById("imageDisplayUrl");
   const selectedPicture = pictureSelect.value;
-    const promptInit = `Editorial photography of  ` ;
+    const promptInit = `Editorial photography of , ` ;
     //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
 //beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
 //    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
@@ -651,29 +651,36 @@ if (modelId === personValue) {
   lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
 }  
  */
+//==================================================================================================🔴 payload
   
 // Now build the JSON object with the updated values
 const prompt = {
   key: apiKey,
   prompt: promptText,
-  negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+   negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
   width: width,
   height: height,
   samples: 4,
-  guidance_scale: 7.5,
-  steps: 21,
+  guidance_scale: 3.5,
+  steps: 20,
   use_karras_sigmas: "yes",
-  tomesd: "yes",
+   tomesd: "yes",
   seed: seedValue,
   model_id: "fluxdev",
-  lora_model: null,
- lora_strength: null,
-  scheduler:  "DPMSolverMultistepScheduler",  
-  webhook: null,
+  lora_model: "fluxschnelldev",
+  lora_strength:1,
+  scheduler: "EulerDiscreteScheduler",
+ webhook: null,
   safety_checker: "no",
-  track_id: null,
-  enhance_prompt: "no",
-  //highres_fix: "yes"
+  panorama: "no",
+    self_attention: "no",
+ track_id: null,
+ enhance_prompt: "no",
+ highres_fix: "no",
+  instant_response: "no",
+  ip_adapter_id: null,
+        ip_adapter_scale: 0.6,
+        ip_adapter_image: null
 };
     //xl_more_enhancer,
     //real-skin-lora
@@ -750,15 +757,14 @@ if (isImg2Img && imageUrl) {
 
       // Update the text content of the <span> element
    //   spanElement.textContent = modifiedText;
-//// Llamada a generateImages
-// Llamada a generateImages
+// Fetch request to generate images
 
-    async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
             if (response.ok) {
-                return await response.json();  // Directly return the parsed JSON
+                return response.json();  // Directly return the parsed JSON
             } else if (response.status >= 500 && response.status < 600) {
                 console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
             } else {
@@ -768,16 +774,17 @@ if (isImg2Img && imageUrl) {
         } catch (error) {
             console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
             if (i === retries - 1) {
-                throw error; // Only throw error after all retries are exhausted
+                throw error;
             }
         }
         await new Promise(resolve => setTimeout(resolve, delay));
     }
 }
 
-    
-    
-    fetch("/generate-images", {
+//FWR
+ 
+    // Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
@@ -786,52 +793,68 @@ if (isImg2Img && imageUrl) {
 })
 .then(response => {
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status >= 500 && response.status < 600) {
+            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            });
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
     }
     return response.json();
 })
 .then(data => {
-    if (data.status === "processing" && data.request_id) {
-        // Use the request_id to poll for the result
-        checkImageStatus(data.request_id, data.transformed_prompt);
-    } else if (data.status === "success" && data.output) {
+    if (data.status === "success" && data.output) {
         const imageUrls = data.output.map(url =>
             url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
         );
-        showModal(imageUrls, data.transformed_prompt);  // Show the images
-        hideGeneratingImagesDialog();  // Hide the loading dialog
+        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
     } else {
         throw new Error('Image generation failed or unexpected status.');
     }
 })
 .catch(error => {
-    showError(error);  // Show errors if it's not the image generation progress message
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Mostrar errores si no es un caso de generación en progreso
+    }
 });
 
-// Define la función checkImageStatus con polling
-function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 5000) {
-    fetch("/fetch-images", {
+// Define la función checkImageStatus con mayor retraso y más reintentos
+function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
+    fetch(fetchResultUrl, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ request_id: requestId })
+        body: JSON.stringify({ prompt: transformedPrompt })
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === 'processing') {
             if (retries > 0) {
                 console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
-                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
             } else {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
-        } else if (data.status === "success" && data.images) {
-            const imageUrls = data.images.map(url =>
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
                 url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
             );
-            showModal(imageUrls, transformedPrompt);  // Show the images
-            hideGeneratingImagesDialog();  // Hide the loading dialog
+            showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
+            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
         } else if (data.status === "failed") {
             throw new Error('Image generation failed.');
         } else {
@@ -844,6 +867,9 @@ function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 50
     });
 }
 
+
+
+    
 //end FWR
 
 
