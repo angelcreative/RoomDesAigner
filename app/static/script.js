@@ -588,33 +588,35 @@ function hideGeneratingImagesDialog() {
 }
 
 // Función genérica para hacer fetch con reintentos
-async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
+// Función genérica para hacer fetch con reintentos
+async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
+            const data = await response.json();
+
             if (response.ok) {
-                return await response.json(); // Retorna el JSON si la respuesta es correcta
-            } else if (response.status >= 500 && response.status < 600) {
-                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+                return data;
             } else {
-                const errorResponse = await response.json();
-                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+                throw new Error(data.error || `HTTP error! status: ${response.status}`);
             }
         } catch (error) {
-            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            console.error(`Intento ${i + 1} fallido: ${error.message}`);
             if (i === retries - 1) {
-                throw error; // Lanza error solo cuando todos los reintentos fallan
+                throw error; // Lanza el error si se alcanzó el número máximo de reintentos
             }
+            await new Promise(resolve => setTimeout(resolve, delay));
         }
-        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
     }
 }
 
 // Función para generar imágenes
+// Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw";  // Clave API
+    // Eliminamos la clave API del frontend
+    // const apiKey = "TU_CLAVE_API";  // Ya no es necesaria en el frontend
     const customText = document.getElementById("customText").value;
 
     // Extraer valores seleccionados por el usuario
@@ -626,7 +628,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Crear el prompt base y añadir información sobre colores si corresponde
     let promptEndy = "";
     if (extractedColors.length > 0) {
-        const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
+        const colorNames = extractedColors.map(color => color.name);
         const colorsString = colorNames.join(', ');
         promptEndy += ` Colors used: ${colorsString}.`;
     }
@@ -660,7 +662,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
-        key: apiKey,
+        // Eliminamos 'key' del prompt
         prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
         width: width,
@@ -672,9 +674,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: null,  // Podrías ajustar aquí con el modelo correcto si es necesario
+        lora_model: null,
         lora_strength: null,
-        scheduler: "DPMSolverMultistepScheduler",  // Planificador del modelo
+        scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
         safety_checker: "no",
         track_id: null,
@@ -684,14 +686,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
-
-        // Obtener el valor de fuerza desde el slider
         const strengthSlider = document.getElementById("strengthSlider");
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
     try {
-        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
+        // Enviar solicitud al backend en lugar de a la API externa
+        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -699,57 +700,60 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             body: JSON.stringify(prompt)
         });
 
-        // Verificación detallada de posibles estados y log para depuración
-        console.log('Response data:', data);
+        console.log('Respuesta del backend en generateImages:', data);
 
-        if (data.status === "success" && data.output) {
-            // Mostrar las imágenes generadas
-            showModal(data.output, promptText);  // Usa las URLs correctas directamente
+        if (data.status === "success" && data.images) {
+            // Las imágenes están listas
+            showModal(data.images, promptText);  // Muestra las imágenes
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else if (data.status === "processing" && data.request_id) {
+        } else if (data.request_id) {
             // Las imágenes aún están procesándose, iniciar polling
-            await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
-        } else if (data.status === "queued") {
-            // Si la respuesta indica que está en cola, iniciar polling
-            await checkImageStatus(data.request_id, promptText); // Iniciar polling en caso de estar en cola
-        } 
+            await checkImageStatus(data.request_id, promptText);
+        } else {
+            throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+        }
     } catch (error) {
         showError(error);  // Manejo de errores
     }
 }
 
 // Polling para verificar el estado de la generación de imágenes
+// Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
-        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
+        // Enviar solicitud al backend en lugar de a la API externa
+        const data = await fetchWithRetry("/fetch-images", {  // Cambiamos la URL a la del backend
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  // Tu clave API
-                request_id: requestId
+                request_id: requestId  // Enviamos solo el request_id
             })
         });
 
+        console.log('Respuesta del backend en checkImageStatus:', data);
+
         if (data.status === 'processing') {
             if (retries > 0) {
-                console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
+                console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
                 setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
             } else {
-                throw new Error('Image generation is taking too long. Please try again later.');
+                throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
             }
-        } else if (data.status === "success" && data.output) {
-            showModal(data.output, transformedPrompt);  // Mostrar las imágenes generadas
+        } else if (data.status === "success" && data.images) {
+            // Las imágenes están listas
+            showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
-            throw new Error('Unexpected status received from the server.');
+            throw new Error(data.error || 'Estado inesperado recibido del servidor.');
         }
     } catch (error) {
-        console.error('Error checking image status:', error);
+        console.error('Error al verificar el estado de las imágenes:', error);
         showError(error);
     }
 }
+
 
 // Función para mostrar el diálogo de generación de imágenes
 function showGeneratingImagesDialog() {
