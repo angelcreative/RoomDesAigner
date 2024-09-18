@@ -550,7 +550,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
-
+ const pictureSelect = document.getElementById("imageDisplayUrl");
+  const selectedPicture = pictureSelect.value;
     // Extraer valores seleccionados por el usuario
     let plainText = Object.entries(selectedValues)
         .filter(([key, value]) => value && key !== "imageUrl")
