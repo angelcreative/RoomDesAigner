@@ -84,6 +84,7 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
+
 # Define your generate_images endpoint
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
@@ -114,37 +115,34 @@ def generate_images():
 
             if response.status_code == 200:
                 result = response.json()
-                request_id = result.get('id')  # Get the request_id to fetch images later
 
-                if not request_id:
-                    return jsonify({"error": "No request_id returned by the server"}), 500
+                # Si las imágenes están en proceso, devuelve el request_id
+                if result.get('status') == 'processing':
+                    request_id = result.get('id')
+                    if request_id:
+                        return jsonify({
+                            "message": "Image generation is processing. Use the fetch endpoint to retrieve images.",
+                            "request_id": request_id,
+                            "eta": result.get('eta'),  # Tiempo estimado para que se complete
+                            "transformed_prompt": transformed_prompt
+                        }), 202  # HTTP 202 Accepted, la solicitud está en proceso
 
-                # Fetch the images using the request_id
-                fetch_url = 'https://modelslab.com/api/v6/images/fetch'
-                fetch_payload = {
-                    "key": data.get('key'),  # Assuming the API key is passed in the original request
-                    "request_id": request_id
-                }
+                # Si las imágenes están listas, devuélvelas de inmediato
+                if result.get('future_links'):
+                    # Deduce credits after successful image generation
+                    deduct_credits(username, 2)
 
-                # Poll the fetch API to check if the images are ready
-                retries = 10
-                delay = 5  # Start with a 5-second delay
+                    # Return the images and the transformed prompt to the user
+                    return jsonify({
+                        "images": result.get('future_links'),
+                        "transformed_prompt": transformed_prompt
+                    }), 200
 
-                for i in range(retries):
-                    fetch_response = requests.post(fetch_url, json=fetch_payload, timeout=60)
-                    if fetch_response.status_code == 200:
-                        fetch_result = fetch_response.json()
-                        if fetch_result['status'] == "success":
-                            # Images are ready, return them to the user
-                            deduct_credits(username, 2)
-                            fetch_result['transformed_prompt'] = transformed_prompt  # Include the transformed prompt in the response
-                            return jsonify(fetch_result)
-                    time.sleep(delay)  # Wait for the delay before retrying
-                    delay *= 2  # Exponential backoff: double the delay each time
+                return jsonify({"error": "Unexpected response from the image generation service"}), 500
 
-                return jsonify({"error": "Image generation timed out"}), 408
             else:
                 return jsonify({"error": "Image generation failed"}), response.status_code
+
         else:
             return jsonify({"error": "Insufficient credits"}), 403
 
@@ -158,6 +156,59 @@ def generate_images():
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
+# Define the fetch_images endpoint
+@app.route('/fetch-images', methods=['POST'])
+def fetch_images():
+    try:
+        data = request.get_json()
+
+        # Verificar que se haya proporcionado el request_id y el API key
+        request_id = data.get('request_id')
+        api_key = data.get('key')
+
+        if not request_id or not api_key:
+            return jsonify({"error": "Missing request_id or API key"}), 400
+
+        # Construir la carga útil para la solicitud de fetch
+        fetch_payload = json.dumps({
+            "key": api_key,
+            "request_id": request_id
+        })
+
+        fetch_url = "https://modelslab.com/api/v6/images/fetch"
+        headers = {'Content-Type': 'application/json'}
+
+        # Realizar la solicitud a la API de fetch
+        fetch_response = requests.post(fetch_url, headers=headers, data=fetch_payload, timeout=60)
+
+        if fetch_response.status_code == 200:
+            result = fetch_response.json()
+
+            # Si las imágenes están listas, devuélvelas
+            if result.get('status') == 'success' and result.get('output'):
+                return jsonify({
+                    "status": "success",
+                    "images": result.get('output')
+                }), 200
+
+            # Si aún están procesándose, devolver un estado de espera
+            elif result.get('status') == 'processing':
+                return jsonify({
+                    "message": "Images are still processing, please try again later.",
+                    "status": "processing"
+                }), 202
+
+            else:
+                return jsonify({"error": "Unexpected status received from the server"}), 500
+
+        return jsonify({"error": "Failed to fetch image status"}), fetch_response.status_code
+
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "The request timed out. Please try again."}), 504
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    except Exception as e:
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
     
     
     
