@@ -169,7 +169,7 @@ def fetch_images():
 
         # Construir la carga útil para la solicitud de fetch
         fetch_payload = {
-            "key": 'TU_CLAVE_API',  # Usa tu clave API almacenada en el servidor
+            "key": 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Usa tu clave API almacenada en el servidor
             "request_id": request_id
         }
 
