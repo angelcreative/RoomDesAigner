@@ -564,8 +564,7 @@ function clearColorImage() {
     
 
 //🔶    start gen img
-    
-// Función para mostrar errores
+ Función para mostrar errores
 function showError(error) {
     console.error("Error generating images:", error);
     
@@ -577,7 +576,7 @@ function showError(error) {
         alert("Error: " + error.message); // Mensaje de alerta en caso de error
     }
 
-    hideGeneratingImagesDialog(); // Oculta el diálogo de espera en caso de error
+    hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
 }
 
 // Función para ocultar el diálogo de generación de imágenes
@@ -624,8 +623,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    
-    
     // Crear el prompt base y añadir información sobre colores si corresponde
     let promptEndy = "";
     if (extractedColors.length > 0) {
@@ -634,8 +631,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         promptEndy += ` Colors used: ${colorsString}.`;
     }
 
-    
-    
     // Definir proporciones de imagen basadas en la selección
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
@@ -650,7 +645,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         height = 1024;
     }
 
-    
     // Configurar semilla si está activada la opción
     const seedSwitch = document.getElementById("seedSwitch");
     const seedEnabled = seedSwitch.checked;
@@ -660,11 +654,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
-    
+
+    // Construir el texto del prompt final
+    const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
+
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
         key: apiKey,
-        prompt: `Editorial photography of ${plainText} ${customText}`,
+        prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
         width: width,
         height: height,
@@ -672,14 +669,25 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         guidance_scale: 7.5,
         steps: 21,
         use_karras_sigmas: "yes",
-        seed: null,
-        model_id: "fluxdev",
+        tomesd: "yes",
+        seed: seedValue,
+        model_id: "fluxdev",  // El modelo predeterminado
+        lora_model: null,  // Podrías ajustar aquí con el modelo correcto si es necesario
+        lora_strength: null,
+        scheduler: "DPMSolverMultistepScheduler",  // Planificador del modelo
+        webhook: null,
         safety_checker: "no",
+        track_id: null,
+        enhance_prompt: "no"
     };
 
+    // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
-        prompt.strength = parseFloat(document.getElementById("strengthSlider").value);
+
+        // Obtener el valor de fuerza desde el slider
+        const strengthSlider = document.getElementById("strengthSlider");
+        prompt.strength = parseFloat(strengthSlider.value);
     }
 
     try {
@@ -691,18 +699,29 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             body: JSON.stringify(prompt)
         });
 
-        if (data.status === "processing" && data.request_id) {
-            // Si las imágenes están procesándose, inicia el polling
-            await checkImageStatus(data.request_id, prompt.prompt);
-        } else if (data.status === "success" && data.output) {
-            showModal(data.output, prompt.prompt);  // Mostrar las imágenes generadas
+        // Verificación detallada de posibles estados y log para depuración
+        console.log('Response data:', data);
+
+        if (data.status === "success" && data.output) {
+            // Mostrar las imágenes generadas
+            showModal(data.output, promptText);  // Usa las URLs correctas directamente
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
+            // Caso donde ya hay imágenes generadas en future_links
+            showModal(data.future_links, promptText);  // Mostrar las imágenes generadas inmediatamente
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else if (data.status === "processing" && data.request_id) {
+            // Las imágenes aún están procesándose, iniciar polling
+            await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
+        } else if (data.status === "queued") {
+            // Si la respuesta indica que está en cola, iniciar polling
+            await checkImageStatus(data.request_id, promptText); // Iniciar polling en caso de estar en cola
         } else {
+            console.error('Unhandled status:', data.status); // Para depurar cualquier estado no manejado
             throw new Error('Image generation failed or unexpected status.');
         }
     } catch (error) {
         showError(error);  // Manejo de errores
-    } finally {
-        hideGeneratingImagesDialog();  // Asegurarse de ocultar el diálogo
     }
 }
 
@@ -729,10 +748,12 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
             }
         } else if (data.status === "success" && data.output) {
             showModal(data.output, transformedPrompt);  // Mostrar las imágenes generadas
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
             throw new Error('Unexpected status received from the server.');
         }
     } catch (error) {
+        console.error('Error checking image status:', error);
         showError(error);
     }
 }
