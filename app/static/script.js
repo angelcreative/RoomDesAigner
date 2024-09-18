@@ -565,7 +565,7 @@ function clearColorImage() {
 
 //🔶    start gen img
     
-    // Función para mostrar errores
+// Función para mostrar errores
 function showError(error) {
     console.error("Error generating images:", error);
     
@@ -577,10 +577,45 @@ function showError(error) {
     } else {
         alert("Error: " + error.message); // Si no tienes un contenedor, puedes usar alert como último recurso
     }
-    
+
     hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
 }
- // Función para generar imágenes
+
+// Función para ocultar el diálogo de generación de imágenes
+function hideGeneratingImagesDialog() {
+    const dialog = document.getElementById("generatingImagesDialog");
+    if (dialog) {
+        dialog.style.display = "none";
+    }
+}
+
+// Función para mostrar las imágenes en un modal
+
+
+// Función genérica para hacer fetch con reintentos
+async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url, options);
+            if (response.ok) {
+                return await response.json(); // Retorna el JSON si la respuesta es correcta
+            } else if (response.status >= 500 && response.status < 600) {
+                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
+            } else {
+                const errorResponse = await response.json();
+                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
+            }
+        } catch (error) {
+            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
+            if (i === retries - 1) {
+                throw error; // Lanza error solo cuando todos los reintentos fallan
+            }
+        }
+        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
+    }
+}
+
+// Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
@@ -661,15 +696,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 
     try {
-        const response = await fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
+        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(prompt)
         });
-
-        const data = await response.json();
 
         if (data.status === "success" && data.output) {
             const imageUrls = data.output.map(url =>
@@ -691,6 +724,49 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         }
     } catch (error) {
         showError(error);  // Manejo de errores
+    }
+}
+
+// Polling para verificar el estado de la generación de imágenes
+async function checkImageStatus(requestId, retries = 40, delay = 10000) {
+    try {
+        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  // Tu clave API
+                request_id: requestId
+            })
+        });
+
+        if (data.status === 'processing') {
+            if (retries > 0) {
+                setTimeout(() => checkImageStatus(requestId, retries - 1, delay), delay);
+            } else {
+                throw new Error('Image generation is taking too long. Please try again later.');
+            }
+        } else if (data.status === "success" && data.output) {
+            const imageUrls = data.output.map(url =>
+                url.replace("https://pub-8b49af329fae499aa563997f5d4068a4.r2.dev", "https://modelslab.com")
+            );
+            showModal(imageUrls);  // Mostrar las imágenes generadas
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else {
+            throw new Error('Unexpected status received from the server.');
+        }
+    } catch (error) {
+        console.error('Error checking image status:', error);
+        showError(error);
+    }
+}
+
+// Función para mostrar el diálogo de generación de imágenes
+function showGeneratingImagesDialog() {
+    const dialog = document.getElementById("generatingImagesDialog");
+    if (dialog) {
+        dialog.style.display = "block";
     }
 }
 
