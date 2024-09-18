@@ -1129,7 +1129,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, transformedPrompt, elapsedTime) {
+function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
