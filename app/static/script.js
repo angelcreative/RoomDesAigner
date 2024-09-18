@@ -371,72 +371,7 @@ function generateBlurredBackground () {
     return "The background blurs intricately, adding to the scene's stunning beauty.";
 }
     
-    function showGeneratingImagesDialog() {
-    document.getElementById('generatingImagesDialog').style.display = 'block';
-    document.getElementById('dialogTitle').innerHTML = `
-        
-        <h2 id="changingText">painting walls</h2>
-        <p>Sit back and relax, your design will be ready soon.<br>It take some time to make it peerfect.</p>
-         <p id="chronometer">00:00:00</p>
-    `;
-
-    const changingMessages = [
-       'painting walls', 'furnishing room', 'choosing decoration', 
-    'adding plants', 'hanging lamps', 'placing furniture', 
-    'adjusting lighting', 'selecting colors', 'arranging art', 
-    'organizing shelves', 'setting the table', 'tidying up', 
-    'adding textures', 'installing hardware', 'finishing touches', 
-    'polishing surfaces', 'applying finishes', 'arranging flowers', 
-    'laying carpets', 'curating books', 'mounting frames', 
-    'setting up tech', 'installing curtains', 'hanging mirrors',
-    'refinishing floors', 'installing lighting fixtures', 'choosing fabrics',
-    'updating hardware', 'placing rugs', 'installing shelves',
-    'mounting TVs', 'cleaning windows', 'arranging pillows', 
-    'painting trim', 'hanging blinds', 'decorating with candles',
-    'adding greenery', 'staging furniture', 'setting up appliances',
-    'installing art', 'organizing pantry', 'decorating walls', 
-    'designing layout', 'setting up workspace', 'choosing flooring',
-    'placing decor items', 'organizing closet', 'setting up entertainment system',
-    'arranging outdoor furniture'
-    ];
-
-    let chronometerInterval;
-    let textChangeInterval;
-
-    function resetChronometer() {
-        clearInterval(chronometerInterval);
-        const chronometer = document.getElementById('chronometer');
-        let milliseconds = 0;
-
-        chronometer.textContent = '00:00:00';
-
-        chronometerInterval = setInterval(() => {
-            milliseconds += 10;
-            const minutes = Math.floor((milliseconds / 1000) / 60);
-            const seconds = Math.floor((milliseconds / 1000) % 60);
-            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
-            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
-        }, 10);
-    }
-
-    function changeText() {
-        let index = 0;
-        const changingText = document.getElementById('changingText');
-        
-        changingText.textContent = changingMessages[index];
-
-        clearInterval(textChangeInterval);
-
-        textChangeInterval = setInterval(() => {
-            index = (index + 1) % changingMessages.length;
-            changingText.textContent = changingMessages[index];
-        }, 4000);
-    }
-
-    resetChronometer();
-    changeText();
-}
-
+  
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
     }
@@ -615,8 +550,10 @@ async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
-    // Eliminamos la clave API del frontend
-    // const apiKey = "TU_CLAVE_API";  // Ya no es necesaria en el frontend
+   
+    // Registrar el tiempo de inicio
+    const startTime = performance.now();
+    
     const customText = document.getElementById("customText").value;
 
     // Extraer valores seleccionados por el usuario
@@ -662,7 +599,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
-        // Eliminamos 'key' del prompt
         prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
         width: width,
@@ -703,6 +639,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         console.log('Respuesta del backend en generateImages:', data);
 
         if (data.status === "success" && data.images) {
+            
+             // Calcular el tiempo transcurrido
+            const endTime = performance.now();
+            const elapsedTime = ((endTime - startTime) / 1000).toFixed(2); // en segundos
             // Las imágenes están listas
             showModal(data.images, promptText);  // Muestra las imágenes
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
@@ -717,7 +657,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 }
 
-// Polling para verificar el estado de la generación de imágenes
 // Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
@@ -742,6 +681,10 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
                 throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
             }
         } else if (data.status === "success" && data.images) {
+            // Calcular el tiempo transcurrido
+            const endTime = performance.now();
+            const elapsedTime = ((endTime - startTime) / 1000).toFixed(2); // en segundos
+
             // Las imágenes están listas
             showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
@@ -755,13 +698,102 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
 }
 
 
-// Función para mostrar el diálogo de generación de imágenes
 function showGeneratingImagesDialog() {
-    const dialog = document.getElementById("generatingImagesDialog");
+    // Mostrar el diálogo
+    const dialog = document.getElementById('generatingImagesDialog');
     if (dialog) {
-        dialog.style.display = "block";
+        dialog.style.display = 'block';
+    } else {
+        console.error("No se encontró el elemento con id 'generatingImagesDialog'");
+        return;
     }
+
+    // Establecer el contenido inicial del diálogo
+    const dialogTitle = document.getElementById('dialogTitle');
+    if (dialogTitle) {
+        dialogTitle.innerHTML = `
+            <h2 id="changingText">painting walls</h2>
+            <p>Sit back and relax, your design will be ready soon.<br>It takes some time to make it perfect.</p>
+            <p id="chronometer">00:00:00</p>
+        `;
+    } else {
+        console.error("No se encontró el elemento con id 'dialogTitle'");
+    }
+
+    // Lista de mensajes que van cambiando
+    const changingMessages = [
+        'painting walls', 'furnishing room', 'choosing decoration', 
+        'adding plants', 'hanging lamps', 'placing furniture', 
+        'adjusting lighting', 'selecting colors', 'arranging art', 
+        'organizing shelves', 'setting the table', 'tidying up', 
+        'adding textures', 'installing hardware', 'finishing touches', 
+        'polishing surfaces', 'applying finishes', 'arranging flowers', 
+        'laying carpets', 'curating books', 'mounting frames', 
+        'setting up tech', 'installing curtains', 'hanging mirrors',
+        'refinishing floors', 'installing lighting fixtures', 'choosing fabrics',
+        'updating hardware', 'placing rugs', 'installing shelves',
+        'mounting TVs', 'cleaning windows', 'arranging pillows', 
+        'painting trim', 'hanging blinds', 'decorating with candles',
+        'adding greenery', 'staging furniture', 'setting up appliances',
+        'installing art', 'organizing pantry', 'decorating walls', 
+        'designing layout', 'setting up workspace', 'choosing flooring',
+        'placing decor items', 'organizing closet', 'setting up entertainment system',
+        'arranging outdoor furniture'
+    ];
+
+    let chronometerInterval;
+    let textChangeInterval;
+
+    function resetChronometer() {
+        clearInterval(chronometerInterval);
+        const chronometer = document.getElementById('chronometer');
+        if (!chronometer) {
+            console.error("No se encontró el elemento con id 'chronometer'");
+            return;
+        }
+        let milliseconds = 0;
+
+        chronometer.textContent = '00:00:00';
+
+        chronometerInterval = setInterval(() => {
+            milliseconds += 10;
+            const minutes = Math.floor((milliseconds / 1000) / 60);
+            const seconds = Math.floor((milliseconds / 1000) % 60);
+            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
+            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
+        }, 10);
+    }
+
+    function changeText() {
+        let index = 0;
+        const changingText = document.getElementById('changingText');
+        if (!changingText) {
+            console.error("No se encontró el elemento con id 'changingText'");
+            return;
+        }
+        
+        changingText.textContent = changingMessages[index];
+
+        clearInterval(textChangeInterval);
+
+        textChangeInterval = setInterval(() => {
+            index = (index + 1) % changingMessages.length;
+            changingText.textContent = changingMessages[index];
+        }, 4000);
+    }
+
+    resetChronometer();
+    changeText();
 }
+
+// Event listener para el botón de cerrar
+document.getElementById('closeDialogButton').addEventListener('click', function() {
+    const dialog = document.getElementById('generatingImagesDialog');
+    if (dialog) {
+        dialog.style.display = 'none';
+    }
+});
+
 
     
 //🔸    end genimg
@@ -1108,7 +1140,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, transformedPrompt) {
+function showModal(imageUrls, transformedPrompt, elapsedTime) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
@@ -1121,6 +1153,12 @@ function showModal(imageUrls, transformedPrompt) {
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
 
+    // Mostrar el tiempo transcurrido
+    const timeParagraph = document.createElement("p");
+    timeParagraph.textContent = `Tiempo de generación de imágenes: ${elapsedTime} segundos`;
+    timeParagraph.classList.add("elapsed-time"); // Opcional: agregar clase para estilos
+    imageGrid.appendChild(timeParagraph);
+    
     imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
         const image = document.createElement("img");
