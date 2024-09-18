@@ -546,11 +546,9 @@ async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
 }
 
 // Función para generar imágenes
-// Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
-   
     const customText = document.getElementById("customText").value;
 
     // Extraer valores seleccionados por el usuario
@@ -636,13 +634,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         console.log('Respuesta del backend en generateImages:', data);
 
         if (data.status === "success" && data.images) {
-            
-             // Calcular el tiempo transcurrido
-            const endTime = performance.now();
-            const elapsedTime = ((endTime - startTime) / 1000).toFixed(2); // en segundos
+                        const transformedPrompt = data.transformed_prompt;  // Aquí recuperas el transformed_prompt del backend
+
             // Las imágenes están listas
-            showModal(data.images, promptText);  // Muestra las imágenes
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+showModal(data.images, transformedPrompt);  // Mostrar las imágenes con el transformed_prompt            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.request_id) {
             // Las imágenes aún están procesándose, iniciar polling
             await checkImageStatus(data.request_id, promptText);
