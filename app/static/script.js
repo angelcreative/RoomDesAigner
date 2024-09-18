@@ -712,10 +712,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         } else if (data.status === "queued") {
             // Si la respuesta indica que está en cola, iniciar polling
             await checkImageStatus(data.request_id, promptText); // Iniciar polling en caso de estar en cola
-        } else {
-            console.error('Unhandled status:', data.status); // Para depurar cualquier estado no manejado
-            throw new Error('Image generation failed or unexpected status.');
-        }
+        } 
     } catch (error) {
         showError(error);  // Manejo de errores
     }
