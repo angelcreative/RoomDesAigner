@@ -689,9 +689,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    try {
+   try {
         // Realiza la solicitud a tu backend
-        const data = await fetchWithRetry("/generate-images", {
+        const response = await fetch("/generate-images", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -699,25 +699,37 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             body: JSON.stringify(prompt)
         });
 
-        // Manejo de la respuesta del backend
-        if (data.images && data.images.length > 0) {
-            showModal(data.images, promptText);
-            hideGeneratingImagesDialog();
-        } else if (data.request_id) {
-            // Iniciar polling para verificar el estado
-            await checkImageStatus(data.request_id, promptText);
+        const data = await response.json();
+        console.log('Respuesta del backend en generateImages:', data);
+
+        if (response.ok) {
+            if (data.images && data.images.length > 0) {
+                // Las imágenes están listas, muéstralas
+                console.log('Imágenes listas, llamando a showModal');
+                showModal(data.images, promptText);
+                hideGeneratingImagesDialog();
+            } else if (data.request_id) {
+                // Las imágenes están procesándose, inicia el polling
+                console.log('Las imágenes están procesándose, iniciando polling');
+                await checkImageStatus(data.request_id, promptText);
+            } else {
+                throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+            }
         } else {
-            throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+            throw new Error(data.error || 'Error en la solicitud al backend.');
         }
     } catch (error) {
         showError(error);
     }
+    
+    console.log('Respuesta del backend en generateImages:', data);
+
 }
 
 // Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
-        const data = await fetchWithRetry("/fetch-images", {
+        const response = await fetch("/fetch-images", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -727,24 +739,37 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
             })
         });
 
-        if (data.status === 'processing') {
-            if (retries > 0) {
-                console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
-                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+        const data = await response.json();
+        console.log('Respuesta del backend en checkImageStatus:', data);
+
+        if (response.ok) {
+            if (data.status === 'processing') {
+                if (retries > 0) {
+                    console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
+                    setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+                } else {
+                    throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
+                }
+            } else if (data.status === "success" && data.images && data.images.length > 0) {
+                // Las imágenes están listas, muéstralas
+                console.log('Imágenes listas en checkImageStatus, llamando a showModal');
+                showModal(data.images, transformedPrompt);
+                hideGeneratingImagesDialog();
             } else {
-                throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
+                throw new Error(data.error || 'Estado inesperado recibido del servidor.');
             }
-        } else if (data.status === "success" && data.images) {
-            showModal(data.images, transformedPrompt);
-            hideGeneratingImagesDialog();
         } else {
-            throw new Error(data.error || 'Estado inesperado recibido del servidor.');
+            throw new Error(data.error || 'Error en la solicitud al backend.');
         }
     } catch (error) {
         console.error('Error al verificar el estado de las imágenes:', error);
         showError(error);
     }
+    
+    console.log('Respuesta del backend en checkImageStatus:', data);
+
 }
+
 
 
 // Función para mostrar el diálogo de generación de imágenes
@@ -1101,6 +1126,11 @@ function toggleContent() {
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
+     if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
+        console.error('No hay imágenes para mostrar o imageUrls no es un array válido.');
+        return;
+    }
+    
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
@@ -1151,6 +1181,9 @@ const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(image
     
     modal.style.display = "block";
     showOverlay();
+    
+    console.log('Llamada a showModal con imageUrls:', imageUrls);
+
 }
 
     
