@@ -809,16 +809,17 @@ if (isImg2Img && imageUrl) {
 });
 
 // Define la función checkImageStatus con polling
-function checkImageStatus(requestId, transformedPrompt, retries = 20, delay = 5000) {
-    fetch("/fetch-images", {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ request_id: requestId })
-    })
-    .then(response => response.json())
-    .then(data => {
+async function checkImageStatus(requestId, transformedPrompt, retries = 20, delay = 5000) {
+    try {
+        const response = await fetch("/fetch-images", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ request_id: requestId })
+        });
+        const data = await response.json();
+
         if (data.status === 'processing') {
             if (retries > 0) {
                 console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
@@ -832,17 +833,15 @@ function checkImageStatus(requestId, transformedPrompt, retries = 20, delay = 50
             );
             showModal(imageUrls, transformedPrompt);  // Show the images
             hideGeneratingImagesDialog();  // Hide the loading dialog
-        } else if (data.status === "failed") {
-            throw new Error('Image generation failed.');
         } else {
             throw new Error('Unexpected status received from the server.');
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error checking image status:', error);
         showError(error);
-    });
+    }
 }
+
 
 //end FWR
 
