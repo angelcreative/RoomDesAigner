@@ -588,54 +588,6 @@ function hideGeneratingImagesDialog() {
     }
 }
 
-    
-// Función para mostrar un marcador de posición (spinner) mientras las imágenes están en procesamiento
-function showLoadingPlaceholders() {
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";  // Limpiar el grid anterior
-
-    for (let i = 0; i < 4; i++) { // Mostrar 4 marcadores de posición
-        const imgPlaceholder = document.createElement("div");
-        imgPlaceholder.className = "loading-spinner"; // Define esta clase en tu CSS para mostrar un spinner o imagen de carga
-        imageGrid.appendChild(imgPlaceholder);
-    }
-}    
-    
-    
-    // Función para verificar si las imágenes están listas
-async function fetchImageStatus(requestId, retries = 40, delay = 10000) {
-    try {
-        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  // Tu clave API
-                request_id: requestId
-            })
-        });
-
-        if (data.status === 'processing') {
-            if (retries > 0) {
-                console.log(`Image is still processing. Retrying in ${delay / 1000} seconds... Retries left: ${retries}`);
-                setTimeout(() => fetchImageStatus(requestId, retries - 1, delay), delay);
-            } else {
-                throw new Error('Image generation is taking too long. Please try again later.');
-            }
-        } else if (data.status === "success" && data.output) {
-            // Imagen lista, mostramos en el modal
-            showModal(data.output);
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else {
-            throw new Error('Unexpected status received from the server.');
-        }
-    } catch (error) {
-        console.error('Error checking image status:', error);
-        showError(error);
-    }
-}
-    
 // Función genérica para hacer fetch con reintentos
 async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
     for (let i = 0; i < retries; i++) {
@@ -662,7 +614,6 @@ async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
-    showLoadingPlaceholders();  // Mostrar marcadores de posición
 
     const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw";  // Clave API
     const customText = document.getElementById("customText").value;
@@ -672,8 +623,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .filter(([key, value]) => value && key !== "imageUrl")
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
-    
-     // Crear el prompt base y añadir información sobre colores si corresponde
+
+    // Crear el prompt base y añadir información sobre colores si corresponde
     let promptEndy = "";
     if (extractedColors.length > 0) {
         const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
@@ -708,8 +659,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Construir el texto del prompt final
     const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
 
+    // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
-         key: apiKey,
+        key: apiKey,
         prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
         width: width,
@@ -730,8 +682,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         enhance_prompt: "no"
     };
 
+    // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
+
+        // Obtener el valor de fuerza desde el slider
         const strengthSlider = document.getElementById("strengthSlider");
         prompt.strength = parseFloat(strengthSlider.value);
     }
@@ -746,10 +701,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         });
 
         if (data.status === "success" && data.output) {
-            showModal(data.output, promptText);  // Mostrar las imágenes generadas
+            // Mostrar las imágenes generadas
+            showModal(data.output, promptText);  // Usa las URLs correctas directamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.request_id) {
-            fetchImageStatus(data.request_id);  // Verificar si la imagen está lista
+            // Las imágenes aún están procesándose, iniciar polling
+            await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
@@ -759,7 +716,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 }
 
 // Polling para verificar el estado de la generación de imágenes
-async function checkImageStatus(requestId, retries = 40, delay = 10000) {
+async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
         const data = await fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
             method: 'POST',
@@ -774,12 +731,14 @@ async function checkImageStatus(requestId, retries = 40, delay = 10000) {
 
         if (data.status === 'processing') {
             if (retries > 0) {
-                setTimeout(() => checkImageStatus(requestId, retries - 1, delay), delay);
+                console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
+                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
             } else {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
         } else if (data.status === "success" && data.output) {
-            showModal(data.output);  // Mostrar las imágenes generadas
+            // Mostrar imágenes una vez listas
+            showModal(data.output, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
             throw new Error('Unexpected status received from the server.');
@@ -797,6 +756,7 @@ function showGeneratingImagesDialog() {
         dialog.style.display = "block";
     }
 }
+
 
     
 //🔸    end genimg
