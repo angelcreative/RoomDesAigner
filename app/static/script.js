@@ -753,7 +753,7 @@ if (isImg2Img && imageUrl) {
 //// Llamada a generateImages
 // Llamada a generateImages
 
-    async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
+    async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
@@ -809,7 +809,7 @@ if (isImg2Img && imageUrl) {
 });
 
 // Define la función checkImageStatus con polling
-function checkImageStatus(requestId, transformedPrompt, retries = 10, delay = 5000) {
+function checkImageStatus(requestId, transformedPrompt, retries = 20, delay = 5000) {
     fetch("/fetch-images", {
         method: 'POST',
         headers: {
