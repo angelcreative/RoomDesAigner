@@ -551,9 +551,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
    
-    // Registrar el tiempo de inicio
-    const startTime = performance.now();
-    
     const customText = document.getElementById("customText").value;
 
     // Extraer valores seleccionados por el usuario
@@ -681,10 +678,7 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
                 throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
             }
         } else if (data.status === "success" && data.images) {
-            // Calcular el tiempo transcurrido
-            const endTime = performance.now();
-            const elapsedTime = ((endTime - startTime) / 1000).toFixed(2); // en segundos
-
+             
             // Las imágenes están listas
             showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
@@ -1153,11 +1147,7 @@ function showModal(imageUrls, transformedPrompt, elapsedTime) {
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
 
-    // Mostrar el tiempo transcurrido
-    const timeParagraph = document.createElement("p");
-    timeParagraph.textContent = `Tiempo de generación de imágenes: ${elapsedTime} segundos`;
-    timeParagraph.classList.add("elapsed-time"); // Opcional: agregar clase para estilos
-    imageGrid.appendChild(timeParagraph);
+    
     
     imageUrls.forEach(imageUrl => {
         const imageContainer = document.createElement("div");
