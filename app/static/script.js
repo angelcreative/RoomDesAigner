@@ -566,6 +566,7 @@ function clearColorImage() {
 //🔶    start gen img
     
 // Función para mostrar errores
+// Función para mostrar errores
 function showError(error) {
     console.error("Error generating images:", error);
     
