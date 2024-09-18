@@ -563,37 +563,201 @@ function clearColorImage() {
 // END COLORSEX
     
 
-//🔶    start gen img
- //Función para mostrar errores
-function showError(error) {
-    console.error("Error generating images:", error);
     
-    const errorContainer = document.getElementById("errorContainer");
-    if (errorContainer) {
-        errorContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-        errorContainer.style.display = "block";
-    } else {
-        alert("Error: " + error.message); // Mensaje de alerta en caso de error
-    }
+ 
+function generateImages(imageUrl, selectedValues, isImg2Img) {
+  showGeneratingImagesDialog();
 
-    hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
+  const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"; // Reemplaza con tu clave API real
+  const customText = document.getElementById("customText").value;
+  const pictureSelect = document.getElementById("imageDisplayUrl");
+  const selectedPicture = pictureSelect.value;
+    const promptInit = `Editorial photography of , ` ;
+    //detailed skin texture, detailed clothing, 8K hyperrealistic, full body, detailed clothing, highly detailed, cinematic lighting, stunningly beautiful, intricate, sharp focus, f/1. 8, 85mm, (centered image composition), (professionally color graded), ((bright soft diffused light)), volumetric fog, trending on instagram, trending on tumblr, HDR 4K, 8K
+//beautiful bright eyes, highly detailed eyes, realistic skin, detailed clothing, ultra detailed skin texture,
+//    "prompt": "ultra realistic close up portrait ((beautiful pale cyberpunk female with heavy black eyeliner)), blue eyes, shaved side haircut, hyper detail, cinematic lighting, magic neon, dark red city, Canon EOS R3, nikon, f/1.4, ISO 200, 1/160s, 8K, RAW, unedited, symmetrical balance, in-frame, 8K",
+    //32K shot,  Kodak Ektar 100 filmgrain, rich details, clear shadows, and highlights
+
+  let plainText = Object.entries(selectedValues)
+    .filter(([key, value]) => value && key !== "imageUrl")
+    .map(([key, value]) => `${key}: ${value}`)
+    .join(", ");
+
+let promptEndy = ` `;
+
+if (extractedColors.length > 0) {
+    const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
+    const colorsString = colorNames.join(', '); // Convierte el array de nombres a una cadena
+    promptEndy += ` Colors used: ${colorsString}.`;
 }
 
-// Función para ocultar el diálogo de generación de imágenes
-function hideGeneratingImagesDialog() {
-    const dialog = document.getElementById("generatingImagesDialog");
-    if (dialog) {
-        dialog.style.display = "none";
-    }
+// Ejemplo del uso final de promptEndy
+console.log(promptEndy);
+
+  
+ 
+
+const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+
+let width, height;
+
+if (aspectRatio === "landscape") { // 3:2 aspect ratio
+  width = 1024;
+  height = 768;  
+} else if (aspectRatio === "portrait") { // 2:3 aspect ratio
+  height = 1024;
+  width = 768
+} else if (aspectRatio === "square") { // 1:1 aspect ratio
+  width = 1024;
+  height = 1024;
 }
 
-// Función genérica para hacer fetch con reintentos
-async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
+console.log(`Width: ${width}, Height: ${height}`);
+
+  const seedSwitch = document.getElementById("seedSwitch");
+  const seedEnabled = seedSwitch.checked;
+  const seedValue = seedEnabled ? null : "19071975";
+
+  const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
+  const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
+  const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";    
+  const promptText = `${promptInit} ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
+
+// Determine the model_id based on the selection of the "person" field
+
+/* 
+// Get selected models from the form
+const personValue = document.getElementById("personModel").value;
+const furnitureValue = document.getElementById("furnitureModel").value;
+
+// Determine if the person model or furniture model should be used
+let modelId = "flux"; // Default to flux
+
+if (personValue !== "") {
+  modelId = personValue;
+} else if (furnitureValue !== "") {
+  modelId = furnitureValue;
+}
+
+  
+// Initialize variables for LoRA model and strength
+let lora = "clothingadjustloraap";
+let lora_strength = 1;
+
+// Conditionally set the LoRA model based on the selected model
+if (modelId === personValue) {
+  lora = "clothingadjustloraap,open-lingerie-lora,perfect-round-ass-olaz,perfect-full-round-breast,xl_more_enhancer,detail-tweaker-xl";
+} else if (modelId === furnitureValue) {
+  lora = "u5-interior-design,clothingadjustloraap,xl_more_enhancer,detail-tweaker-xl";
+}  
+ */
+  
+// Now build the JSON object with the updated values
+const prompt = {
+  key: apiKey,
+  prompt: promptText,
+   negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+  width: width,
+  height: height,
+  samples: 4,
+  guidance_scale: 7.5,
+  steps: 20,
+  use_karras_sigmas: "no",
+   tomesd: "yes",
+  seed: seedValue,
+  model_id: "fluxdev",
+  lora_model: "fluxschnelldev",
+  lora_strength: 0.7,
+  scheduler: "DPMSolverMultistepScheduler",
+ webhook: null,
+  safety_checker: "no",
+ track_id: null,
+ enhance_prompt: "no",
+ highres_fix: "no"
+};
+    //xl_more_enhancer,
+    //real-skin-lora
+    //lora 
+    //perfect-eyes-xl,hand-detail-xl,
+//  lora_model:"clothingadjustloraap,add-details-lora,more_details,unreal-realism",
+
+//,epicrealismhelper
+//epicrealism-v4 almost perfect faces + open-lingerie-lora / perfect-round-ass-olaz
+    //lob-realvisxl-v20 takes some time but good
+    //cyberrealistic-41 almost perfect darked skin
+    //realistic-stock-photo-v2 is slow
+    //realistic-vision-v51  fast
+    //sdxlceshi  FOR ONLY FURNITURE takes time but is hd
+    // majicmix-realisticsafeten furniture, test
+    //juggernautxl-v9-rundiffus good for close up
+    //aria-v1 perfect lora
+    //skin-hands-malefemale-fro
+    //westmixappfactory curvy
+    //u58hvdfu4q good lora, bit manga
+    //add-more-details-lor furniture lora
+    //clothingadjustloraap   lora
+    //epicrealism-xl
+    //clothingadjustloraap
+ //architectureexterior
+    //yqmaterailenhancer
+    
+    
+if (isImg2Img && imageUrl) {
+    prompt.init_image = imageUrl;
+
+    // Get the strength value from the slider
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.strength = parseFloat(strengthSlider.value); // Use the slider value instead of a fixed value
+  }
+    
+   /*   const chipsSV = document.getElementById("chipsSV");
+        chipsSV.innerHTML = ""; // Clear the existing content
+
+        for (const [key, value] of Object.entries(selectedValues)) {
+          if (value) {
+            // Replace "_" with " " in the value
+            const formattedValue = value.replace(/_/g, " ");
+            
+            const chip = document.createElement("span");
+            chip.classList.add("chipSV");
+
+            // Check if the value is a valid hex color
+            const isHexColor = /^#[0-9A-Fa-f]{6}$/i.test(formattedValue);
+            if (isHexColor) {
+              chip.classList.add("hexDot"); // Add the "hexDot" class
+              chip.style.backgroundColor = formattedValue;
+            } else {
+              chip.textContent = formattedValue;
+            }
+
+            if (formattedValue.includes("_")) {
+              chip.style.visibility = "visible"; // Hide "_" character
+            }
+
+            chipsSV.appendChild(chip);
+          }
+        }*/
+
+
+      // Get the <span> element by its class name
+     // var spanElement = document.querySelector(".chipSV");
+
+      // Get the text content of the <span> element
+    //  var text = spanElement.textContent;
+
+      // Replace all underscore characters with non-breaking spaces
+     // var modifiedText = text.replace(/_/g, "&nbsp;");
+
+      // Update the text content of the <span> element
+   //   spanElement.textContent = modifiedText;
+// Fetch request to generate images
+
+async function fetchWithRetry(url, options, retries = 3, delay = 20000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
             if (response.ok) {
-                return await response.json(); // Retorna el JSON si la respuesta es correcta
+                return response.json();  // Directly return the parsed JSON
             } else if (response.status >= 500 && response.status < 600) {
                 console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
             } else {
@@ -603,172 +767,153 @@ async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
         } catch (error) {
             console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
             if (i === retries - 1) {
-                throw error; // Lanza error solo cuando todos los reintentos fallan
+                throw error;
             }
         }
-        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
+        await new Promise(resolve => setTimeout(resolve, delay));
     }
 }
 
-// Función para generar imágenes
-async function generateImages(imageUrl, selectedValues, isImg2Img) {
-    showGeneratingImagesDialog();  // Mostrar el diálogo de espera
-
-    const apiKey = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw";  // Clave API
-    const customText = document.getElementById("customText").value;
-
-    // Extraer valores seleccionados por el usuario
-    let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
-
-    // Crear el prompt base y añadir información sobre colores si corresponde
-    let promptEndy = "";
-    if (extractedColors.length > 0) {
-        const colorNames = extractedColors.map(color => color.name); // Accede solo al nombre de cada color
-        const colorsString = colorNames.join(', ');
-        promptEndy += ` Colors used: ${colorsString}.`;
-    }
-
-    // Definir proporciones de imagen basadas en la selección
-    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-    let width, height;
-    if (aspectRatio === "landscape") {
-        width = 1024;
-        height = 768;
-    } else if (aspectRatio === "portrait") {
-        width = 768;
-        height = 1024;
-    } else if (aspectRatio === "square") {
-        width = 1024;
-        height = 1024;
-    }
-
-    // Configurar semilla si está activada la opción
-    const seedSwitch = document.getElementById("seedSwitch");
-    const seedEnabled = seedSwitch.checked;
-    const seedValue = seedEnabled ? null : "19071975";  // Valor predeterminado si no se usa la semilla
-
-    // Generar textos opcionales si están habilitados
-    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-    const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
-
-    // Construir el texto del prompt final
-    const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
-
-    // Configuración del modelo (ajustable según la selección del usuario)
-    const prompt = {
-        key: apiKey,
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 21,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: null,  // Podrías ajustar aquí con el modelo correcto si es necesario
-        lora_strength: null,
-        scheduler: "DPMSolverMultistepScheduler",  // Planificador del modelo
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no"
-    };
-
-    // Si es una generación img2img, agregar la imagen inicial
-    if (isImg2Img && imageUrl) {
-        prompt.init_image = imageUrl;
-
-        // Obtener el valor de fuerza desde el slider
-        const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value);
-    }
-
-    try {
-        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/text2img", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
-        });
-
-        // Verificación detallada de posibles estados y log para depuración
-        console.log('Response data:', data);
-
-        if (data.status === "success" && data.output) {
-            // Mostrar las imágenes generadas
-            showModal(data.output, promptText);  // Usa las URLs correctas directamente
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
-            // Caso donde ya hay imágenes generadas en future_links
-            showModal(data.future_links, promptText);  // Mostrar las imágenes generadas inmediatamente
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-        } else if (data.status === "processing" && data.request_id) {
-            // Las imágenes aún están procesándose, iniciar polling
-            await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
-        } else if (data.status === "queued") {
-            // Si la respuesta indica que está en cola, iniciar polling
-            await checkImageStatus(data.request_id, promptText); // Iniciar polling en caso de estar en cola
+//FWR
+ 
+    // Llamada a fetchWithRetry en generateImages
+fetch("/generate-images", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(prompt)
+})
+.then(response => {
+    if (!response.ok) {
+        if (response.status >= 500 && response.status < 600) {
+            // Intentamos recuperar el fetch_result si existe, para seguir chequeando el estado
+            return response.json().then(data => {
+                if (data.fetch_result) {
+                    checkImageStatus(data.fetch_result, data.transformed_prompt);
+                    throw new Error(`Image generation in progress. Checking status...`);
+                } else {
+                    // Si no hay fetch_result, lanzamos el error para que pueda ser manejado
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+            }).catch(() => {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            });
         } else {
-            console.error('Unhandled status:', data.status); // Para depurar cualquier estado no manejado
-            throw new Error('Image generation failed or unexpected status.');
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    } catch (error) {
-        showError(error);  // Manejo de errores
     }
-}
+    return response.json();
+})
+.then(data => {
+    if (data.status === "success" && data.output) {
+        const imageUrls = data.output.map(url =>
+            url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+        );
+        showModal(imageUrls, data.transformed_prompt);  // Mostrar las imágenes
+        hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+    } else if (data.status === "processing" && data.fetch_result) {
+        checkImageStatus(data.fetch_result, data.transformed_prompt);  // Seguir revisando el estado si está en proceso
+    } else {
+        throw new Error('Image generation failed or unexpected status.');
+    }
+})
+.catch(error => {
+    if (!error.message.includes("Image generation in progress")) {
+        showError(error);  // Mostrar errores si no es un caso de generación en progreso
+    }
+});
 
-// Polling para verificar el estado de la generación de imágenes
-async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
-    try {
-        const data = await fetchWithRetry("https://modelslab.com/api/v6/images/fetch", {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  // Tu clave API
-                request_id: requestId
-            })
-        });
-
+// Define la función checkImageStatus con mayor retraso y más reintentos
+function checkImageStatus(fetchResultUrl, transformedPrompt, retries = 10, delay = 10000) {
+    fetch(fetchResultUrl, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: transformedPrompt })
+    })
+    .then(response => response.json())
+    .then(data => {
         if (data.status === 'processing') {
             if (retries > 0) {
                 console.log(`Processing... retrying in ${delay / 1000} seconds. Retries left: ${retries}`);
-                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+                setTimeout(() => checkImageStatus(fetchResultUrl, transformedPrompt, retries - 1, delay * 2), delay);
             } else {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
         } else if (data.status === "success" && data.output) {
-            showModal(data.output, transformedPrompt);  // Mostrar las imágenes generadas
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+            const imageUrls = data.output.map(url =>
+                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
+            );
+            showModal(imageUrls, transformedPrompt);  // Mostrar las imágenes
+            hideGeneratingImagesDialog();  // Ocultar cualquier diálogo de carga
+        } else if (data.status === "failed") {
+            throw new Error('Image generation failed.');
         } else {
             throw new Error('Unexpected status received from the server.');
         }
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error checking image status:', error);
         showError(error);
-    }
+    });
 }
 
-// Función para mostrar el diálogo de generación de imágenes
-function showGeneratingImagesDialog() {
-    const dialog = document.getElementById("generatingImagesDialog");
-    if (dialog) {
-        dialog.style.display = "block";
-    }
-}
+
 
     
-//🔸    end genimg
-    
+//end FWR
+
+
+function showError(error) {
+    console.error("Error generating images:", error);
+    alert("Error: " + error.message); // Muestra el mensaje de error en una alerta
+    hideOverlay(); // Oculta la superposición y el mensaje de carga
+}
+
+function displayImages(images) {
+    // Function to display images or handle the successful completion of the task
+    console.log('Displaying images:', images);
+}
+
+
+    // Function to show error message with dismiss button
+function showError(error) {
+    console.error("Error generating images:", error);
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    processingMessageContainer.innerHTML = '<p>😢 Something went wrong, try again in a moment.</p><i class="fa fa-plus-circle" id="dismissErrorButton" aria-hidden="true"></i>';
+    processingMessageContainer.style.display = 'block';
+    hideOverlay(); // Hide the overlay and loading message
+
+    // Add event listener for the dismiss button
+    const dismissButton = document.getElementById("dismissErrorButton");
+    dismissButton.addEventListener('click', hideErrorMessage);
+}
+
+// Function to hide the error message
+function hideErrorMessage() {
+    const processingMessageContainer = document.getElementById("processingMessageContainer");
+    processingMessageContainer.style.display = 'none';
+}
+    // Function to display the error modal window
+   function displayErrorModal() {
+    const errorModal = document.getElementById("errorGenerating");
+    errorModal.style.display = "block";
+
+    const tryAgainButton = document.getElementById("errorButton");
+    tryAgainButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+        generateImages(imageUrl, selectedValues); // Relaunch the query
+    });
+
+    const closeButton = document.querySelector("#errorGenerating .closeError");
+    closeButton.addEventListener("click", () => {
+        errorModal.style.display = "none";
+    });
+}
+}
+
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
