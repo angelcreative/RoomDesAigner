@@ -569,13 +569,12 @@ function clearColorImage() {
 function showError(error) {
     console.error("Error generating images:", error);
     
-    // Puedes personalizar este código para que muestre el error en tu UI
-    const errorContainer = document.getElementById("errorContainer"); // Asume que tienes un contenedor para los errores en tu HTML
+    const errorContainer = document.getElementById("errorContainer");
     if (errorContainer) {
         errorContainer.innerHTML = `<p>Error: ${error.message}</p>`;
-        errorContainer.style.display = "block";  // Muestra el contenedor del error
+        errorContainer.style.display = "block";
     } else {
-        alert("Error: " + error.message); // Si no tienes un contenedor, puedes usar alert como último recurso
+        alert("Error: " + error.message); // Mensaje de alerta en caso de error
     }
 
     hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
@@ -588,8 +587,6 @@ function hideGeneratingImagesDialog() {
         dialog.style.display = "none";
     }
 }
-
-// Función para mostrar las imágenes en un modal
 
 
 // Función genérica para hacer fetch con reintentos
@@ -705,16 +702,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         });
 
         if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://d1okzptojspljx.cloudfront.net", "https://modelslab.com")
-            );
+            const imageUrls = data.output.map(url => url);  // Usa las URLs correctas directamente
             showModal(imageUrls);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
             // Caso donde ya hay imágenes generadas en future_links
-            const imageUrls = data.future_links.map(url =>
-                url.replace("https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev", "https://modelslab.com")
-            );
+            const imageUrls = data.future_links;  // Usa directamente las URLs correctas de future_links
             showModal(imageUrls);  // Mostrar las imágenes generadas inmediatamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.request_id) {
@@ -748,9 +741,7 @@ async function checkImageStatus(requestId, retries = 40, delay = 10000) {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
         } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url =>
-                url.replace("https://pub-8b49af329fae499aa563997f5d4068a4.r2.dev", "https://modelslab.com")
-            );
+            const imageUrls = data.output;  // Usa directamente las URLs de output
             showModal(imageUrls);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
@@ -769,6 +760,7 @@ function showGeneratingImagesDialog() {
         dialog.style.display = "block";
     }
 }
+
 
     
 //🔸    end genimg
