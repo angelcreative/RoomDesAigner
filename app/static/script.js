@@ -566,6 +566,8 @@ function clearColorImage() {
 //🔶    start gen img
     
 // Función para mostrar errores
+// Función para generar imágenes
+
 function showError(error) {
     console.error("Error generating images:", error);
     
@@ -587,32 +589,6 @@ function hideGeneratingImagesDialog() {
         dialog.style.display = "none";
     }
 }
-
-
-// Función genérica para hacer fetch con reintentos
-async function fetchWithRetry(url, options, retries = 40, delay = 10000) {
-    for (let i = 0; i < retries; i++) {
-        try {
-            const response = await fetch(url, options);
-            if (response.ok) {
-                return await response.json(); // Retorna el JSON si la respuesta es correcta
-            } else if (response.status >= 500 && response.status < 600) {
-                console.warn(`Server error (status: ${response.status}). Retrying... (${i + 1}/${retries})`);
-            } else {
-                const errorResponse = await response.json();
-                throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorResponse.message}`);
-            }
-        } catch (error) {
-            console.error(`Fetch attempt ${i + 1} failed: ${error.message}`);
-            if (i === retries - 1) {
-                throw error; // Lanza error solo cuando todos los reintentos fallan
-            }
-        }
-        await new Promise(resolve => setTimeout(resolve, delay)); // Espera antes de reintentar
-    }
-}
-
-// Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
@@ -702,16 +678,16 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         });
 
         if (data.status === "success" && data.output) {
-            const imageUrls = data.output.map(url => url);  // Usa las URLs correctas directamente
-            showModal(imageUrls);  // Mostrar las imágenes generadas
+            // Mostrar las imágenes generadas
+            showModal(data.output, promptText);  // Usa las URLs correctas directamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
             // Caso donde ya hay imágenes generadas en future_links
-            const imageUrls = data.future_links;  // Usa directamente las URLs correctas de future_links
-            showModal(imageUrls);  // Mostrar las imágenes generadas inmediatamente
+            showModal(data.future_links, promptText);  // Mostrar las imágenes generadas inmediatamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.request_id) {
-            checkImageStatus(data.request_id);  // Iniciar polling
+            // Las imágenes aún están procesándose, iniciar polling
+            checkImageStatus(data.request_id);
         } else {
             throw new Error('Image generation failed or unexpected status.');
         }
@@ -741,8 +717,7 @@ async function checkImageStatus(requestId, retries = 40, delay = 10000) {
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
         } else if (data.status === "success" && data.output) {
-            const imageUrls = data.output;  // Usa directamente las URLs de output
-            showModal(imageUrls);  // Mostrar las imágenes generadas
+            showModal(data.output);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
             throw new Error('Unexpected status received from the server.');
@@ -760,6 +735,7 @@ function showGeneratingImagesDialog() {
         dialog.style.display = "block";
     }
 }
+
 
 
     
