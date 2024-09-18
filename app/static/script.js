@@ -700,14 +700,25 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             body: JSON.stringify(prompt)
         });
 
+        // Verificación detallada de posibles estados y log para depuración
+        console.log('Response data:', data);
+
         if (data.status === "success" && data.output) {
             // Mostrar las imágenes generadas
             showModal(data.output, promptText);  // Usa las URLs correctas directamente
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+        } else if (data.status === "processing" && data.future_links && data.future_links.length > 0) {
+            // Caso donde ya hay imágenes generadas en future_links
+            showModal(data.future_links, promptText);  // Mostrar las imágenes generadas inmediatamente
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.status === "processing" && data.request_id) {
             // Las imágenes aún están procesándose, iniciar polling
             await checkImageStatus(data.request_id, promptText); // Polling hasta que las imágenes estén listas
+        } else if (data.status === "queued") {
+            // Si la respuesta indica que está en cola, iniciar polling
+            await checkImageStatus(data.request_id, promptText); // Iniciar polling en caso de estar en cola
         } else {
+            console.error('Unhandled status:', data.status); // Para depurar cualquier estado no manejado
             throw new Error('Image generation failed or unexpected status.');
         }
     } catch (error) {
@@ -737,7 +748,6 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
                 throw new Error('Image generation is taking too long. Please try again later.');
             }
         } else if (data.status === "success" && data.output) {
-            // Mostrar imágenes una vez listas
             showModal(data.output, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else {
