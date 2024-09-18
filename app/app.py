@@ -85,131 +85,137 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
-# Define your generate_images endpoint
+# Endpoint /generate-images
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     try:
         if 'username' not in session:
-            return jsonify({"error": "Not logged in"}), 401
+            return jsonify({"error": "No has iniciado sesión"}), 401
 
         username = session['username']
         user_data = get_user_data(username)
         if user_data and user_data.get('credits', 0) >= 2:
             data = request.get_json()
 
-            # Extract the promptText from the incoming data
+            # Extraer el promptText de los datos entrantes
             prompt_text = data.get('prompt')
 
             if not prompt_text:
-                return jsonify({"error": "Missing prompt text"}), 400
+                return jsonify({"error": "Falta el texto del prompt"}), 400
 
-            # Transform the prompt using OpenAI API (or any other transformation)
+            # Transformar el prompt utilizando la función correspondiente
             transformed_prompt = transform_prompt(prompt_text)
 
-            # Update the prompt in the data with the transformed prompt
+            # Actualizar el prompt en los datos con el prompt transformado
             data['prompt'] = transformed_prompt
 
-            # Choose the correct URL based on whether it's an img2img request
+            # Agrega tu clave API aquí en el backend
+            api_key = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
+            data['key'] = api_key
+
+            # Elimina la clave API del prompt que viene del frontend si existe
+            if 'key' in data:
+                del data['key']
+
+            # URL de la API externa
             url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-            response = requests.post(url, json=data, timeout=180)  # Aumenta el tiempo de espera a 180 segundos
+            response = requests.post(url, json=data, timeout=180)
 
             if response.status_code == 200:
                 result = response.json()
 
-                # Si las imágenes están en proceso, devuelve el request_id
                 if result.get('status') == 'processing':
                     request_id = result.get('id')
                     if request_id:
                         return jsonify({
-                            "message": "Image generation is processing. Use the fetch endpoint to retrieve images.",
+                            "message": "La generación de imágenes está en proceso. Usa el endpoint /fetch-images para obtener las imágenes.",
                             "request_id": request_id,
-                            "eta": result.get('eta'),  # Tiempo estimado para que se complete
+                            "eta": result.get('eta'),
                             "transformed_prompt": transformed_prompt
-                        }), 202  # HTTP 202 Accepted, la solicitud está en proceso
+                        }), 202  # HTTP 202 Accepted
 
-                # Si las imágenes están listas, devuélvelas de inmediato
-                if result.get('future_links'):
-                    # Deduce credits after successful image generation
+                elif result.get('status') == 'success' and result.get('output'):
+                    # Deducir créditos después de la generación exitosa
                     deduct_credits(username, 2)
 
-                    # Return the images and the transformed prompt to the user
+                    # Retornar las imágenes y el prompt transformado al usuario
                     return jsonify({
-                        "images": result.get('future_links'),
+                        "images": result.get('output'),
                         "transformed_prompt": transformed_prompt
                     }), 200
 
-                return jsonify({"error": "Unexpected response from the image generation service"}), 500
+                else:
+                    return jsonify({"error": "Respuesta inesperada del servicio de generación de imágenes"}), 500
 
             else:
-                return jsonify({"error": "Image generation failed"}), response.status_code
+                return jsonify({"error": "La generación de imágenes falló"}), response.status_code
 
         else:
-            return jsonify({"error": "Insufficient credits"}), 403
+            return jsonify({"error": "Créditos insuficientes"}), 403
 
     except requests.exceptions.Timeout:
-        return jsonify({"error": "The request timed out. Please try again."}), 504  # Gateway Timeout
+        return jsonify({"error": "La solicitud agotó el tiempo de espera. Por favor, intenta de nuevo."}), 504
     except requests.exceptions.RequestException as e:
-        # Catch all other requests exceptions and return an error
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
     except Exception as e:
-        # Catch any other exceptions and return an error
-        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
+        return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
 
 
-# Define the fetch_images endpoint
+# Endpoint /fetch-images
 @app.route('/fetch-images', methods=['POST'])
 def fetch_images():
     try:
         data = request.get_json()
 
-        # Verificar que se haya proporcionado el request_id y el API key
+        # Verificar que se haya proporcionado el request_id
         request_id = data.get('request_id')
-        api_key = data.get('key')
 
-        if not request_id or not api_key:
-            return jsonify({"error": "Missing request_id or API key"}), 400
+        if not request_id:
+            return jsonify({"error": "Falta request_id"}), 400
+
+        # Agrega tu clave API aquí
+        api_key = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
 
         # Construir la carga útil para la solicitud de fetch
-        fetch_payload = json.dumps({
+        fetch_payload = {
             "key": api_key,
             "request_id": request_id
-        })
+        }
 
         fetch_url = "https://modelslab.com/api/v6/images/fetch"
         headers = {'Content-Type': 'application/json'}
 
         # Realizar la solicitud a la API de fetch
-        fetch_response = requests.post(fetch_url, headers=headers, data=fetch_payload, timeout=60)
+        fetch_response = requests.post(fetch_url, headers=headers, json=fetch_payload, timeout=60)
 
         if fetch_response.status_code == 200:
             result = fetch_response.json()
 
-            # Si las imágenes están listas, devuélvelas
             if result.get('status') == 'success' and result.get('output'):
+                # Opcionalmente, puedes deducir créditos aquí si no lo hiciste antes
                 return jsonify({
                     "status": "success",
                     "images": result.get('output')
                 }), 200
 
-            # Si aún están procesándose, devolver un estado de espera
             elif result.get('status') == 'processing':
                 return jsonify({
-                    "message": "Images are still processing, please try again later.",
+                    "message": "Las imágenes aún se están procesando, por favor intenta más tarde.",
                     "status": "processing"
                 }), 202
 
             else:
-                return jsonify({"error": "Unexpected status received from the server"}), 500
+                return jsonify({"error": "Estado inesperado recibido del servidor"}), 500
 
-        return jsonify({"error": "Failed to fetch image status"}), fetch_response.status_code
+        return jsonify({"error": "No se pudo obtener el estado de las imágenes"}), fetch_response.status_code
 
     except requests.exceptions.Timeout:
-        return jsonify({"error": "The request timed out. Please try again."}), 504
+        return jsonify({"error": "La solicitud agotó el tiempo de espera. Por favor, intenta de nuevo."}), 504
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
     except Exception as e:
-        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
-    
+        return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
+
     
     
 def get_user_data(username):
