@@ -2284,7 +2284,7 @@ fieldset {
 }
 
 .switchLabel input:checked + .slider {
-        background-color: var(--bunker-900);
+        background-color: var(--vulkan-100);
 }
 
 .switchLabel input:focus + .slider {
@@ -2314,7 +2314,7 @@ fieldset {
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: var(--bunker-900);
+        background-color: var(--vulkan-800);
         -webkit-transition: 0.4s;
         transition: 0.4s;
 }
@@ -2380,7 +2380,7 @@ input[type="range"]::-moz-range-thumb:hover {
 
 .slider.round {
         border-radius: 34px;
-        border: 1px solid var(--bunker-600);
+        border: 1px solid var(--vulkan-600);
 }
 
 .slider.round:before {
