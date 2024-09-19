@@ -1134,7 +1134,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
-function showModal(imageUrls, transformedPrompt) {
+ffunction showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
@@ -1147,10 +1147,14 @@ function showModal(imageUrls, transformedPrompt) {
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
 
-    
-    
-    imageUrls.forEach(imageUrl => {
+    // Crear estructura del carrusel
+    const carouselWrapper = document.createElement("div");
+    carouselWrapper.classList.add("carousel-wrapper");
+
+    imageUrls.forEach((imageUrl, index) => {
         const imageContainer = document.createElement("div");
+        imageContainer.classList.add("carousel-slide");
+        
         const image = document.createElement("img");
         image.src = imageUrl;
         image.alt = "Generated Image";
@@ -1163,20 +1167,33 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
+        const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
-
-
-[downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
-        
-      
+        [downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
-        imageGrid.appendChild(imageContainer);
+
+        carouselWrapper.appendChild(imageContainer);
     });
+
+    imageGrid.appendChild(carouselWrapper);
+
+    // Crear botones prev y next para controlar el carrusel
+    const prevButton = document.createElement("button");
+    prevButton.classList.add("prev");
+    prevButton.innerHTML = "&#10094;";
+    prevButton.addEventListener("click", () => moveSlide(-1));
+
+    const nextButton = document.createElement("button");
+    nextButton.classList.add("next");
+    nextButton.innerHTML = "&#10095;";
+    nextButton.addEventListener("click", () => moveSlide(1));
+
+    imageGrid.appendChild(prevButton);
+    imageGrid.appendChild(nextButton);
 
     const toggleContentDiv = document.querySelector(".toggle-content");
     if (toggleContentDiv) {
@@ -1184,10 +1201,26 @@ const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(image
     } else {
         console.error("Toggle content div not found.");
     }
-    
+
     modal.style.display = "block";
     showOverlay();
+
+    // Inicializar el índice del carrusel
+    let currentIndex = 0;
+
+    function moveSlide(direction) {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+
+        // Actualiza el índice actual
+        currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
+        
+        // Mueve el carrusel
+        const offset = -currentIndex * 100;
+        carouselWrapper.style.transform = `translateX(${offset}%)`;
+    }
 }
+
 
     
  function createButton(text, onClickHandler) {
