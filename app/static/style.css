@@ -3663,9 +3663,15 @@ button#extractColorsFromUrlButton {
                 background: var(--bunker-900);
         }
 
-        #imageGrid div {
-                width: 100%;
-        }
+        .carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+    
+    .prev{
+        left:0
+    }
 
         .mainContainer {
                 width: calc(95% - 30px);

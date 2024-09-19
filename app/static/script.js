@@ -289,20 +289,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   
  // Función para guardar los valores
-document.getElementById('confirmSaveButton').addEventListener('click', function() {
+ddocument.getElementById('confirmSaveButton').addEventListener('click', function() {
     const saveName = document.getElementById('saveName').value;
-    const selectedValues = getSelectedValues();
+    const selectedValues = getSelectedValues();  // Captura los valores
 
     fetch('/save-values', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'  // Asegúrate de que el backend devuelve JSON
+            'Accept': 'application/json'
         },
-        credentials: 'include',  // Importante para enviar cookies de sesión
+        credentials: 'include',  // Para mantener la sesión del usuario
         body: JSON.stringify({
-            name: saveName,
-            values: selectedValues,
+            name: saveName,  // Nombre con el que guardas este conjunto de valores
+            values: selectedValues,  // Enviamos los valores seleccionados
         }),
     })
     .then(response => {
@@ -315,7 +315,6 @@ document.getElementById('confirmSaveButton').addEventListener('click', function(
     })
     .then(data => {
         alert('Valores guardados con éxito');
-        // Opcionalmente, puedes actualizar la lista de valores guardados aquí
     })
     .catch(error => {
         alert('Error: ' + error.message);
@@ -326,14 +325,13 @@ document.getElementById('confirmSaveButton').addEventListener('click', function(
 
 
 
-// Función para cargar los valores guardados
 document.getElementById('loadValuesButton').addEventListener('click', function() {
     fetch('/load-saved-values', {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
         },
-        credentials: 'include'  // Importante para enviar cookies de sesión
+        credentials: 'include'  // Para mantener la sesión del usuario
     })
     .then(response => {
         if (!response.ok) {
@@ -344,9 +342,16 @@ document.getElementById('loadValuesButton').addEventListener('click', function()
         return response.json();
     })
     .then(data => {
-        // Aquí puedes manejar la lista de valores guardados
         const savedValues = data.savedValues;
-        // Mostrar la lista al usuario o llenar un menú desplegable
+
+        // Itera sobre los valores guardados y asigna a los elementos
+        savedValues.forEach(item => {
+            if (item.name && document.getElementById(item.name)) {
+                document.getElementById(item.name).value = item.values;
+            }
+        });
+
+        alert('Valores cargados con éxito');
     })
     .catch(error => {
         alert('Error: ' + error.message);
@@ -395,7 +400,7 @@ function generateBlurredBackground () {
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
 
-// COLORSEX
+// COLORSEX================== 🎨
 
     let extractedColors = [];
 
