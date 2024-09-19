@@ -3206,13 +3206,20 @@ loginModal > p {
 .collapsible h1 span {
 color: var(--bunker-400); }
 
+
 .collapsible span {
     color: var(--bunker-800);
+    transform: rotate(45deg);
 }
 
 .active,
 .collapsible:hover {
         background-color: var(--vulkan-800);
+}
+
+.active span {
+    transform: rotate(0deg);
+    color: var(--vulkan-600);
 }
 
 .content {
