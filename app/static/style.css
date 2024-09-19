@@ -1006,7 +1006,7 @@ h2.loginTitle {
         margin: 0 auto;
         width: 100%;
         position: fixed;
-        background: linear-gradient(180deg, rgb(69 102 135) 25%, rgb(69 102 135 / 43%) 74%, rgb(69 102 135 / 0%) 100%);
+        background: linear-gradient(180deg, rgb(35 51 67) 25%, rgb(35 51 67 / 50%) 74%, rgb(35 51 67 / 0%) 100%);
         backdrop-filter: blur(2px);
         z-index: 2;
 }
@@ -1477,7 +1477,7 @@ h4 {
         width: 21%;
         z-index: 1;
         position: absolute;
-        background: linear-gradient(180deg, rgb(69 102 135) 0%, rgb(69 102 135 / 43%) 74%, rgb(69 102 135 / 100%) 100%);
+        background: linear-gradient(180deg, rgb(35 51 67 / 0%) 0%, rgb(35 51 67 / 50%) 74%, rgb(35 51 67) 100%);
         backdrop-filter: blur(2px);
 }
 
@@ -3204,7 +3204,8 @@ loginModal > p {
 }
 
 .collapsible h1 span {
-color: var(--bunker-400); }
+color: var(--bunker-400); 
+transform: rotate(0);}
 
 
 .collapsible span {
@@ -3538,7 +3539,7 @@ button#extractColorsFromUrlButton {
                 display: flex;
                 flex-direction: column;
                 margin: 0 auto;
-                background: var(--bunker-600);
+                background: var(--bunker-800);
         }
 
         body {
