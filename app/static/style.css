@@ -171,7 +171,7 @@ body {
 }
 
 .closeAvatar {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 4px 10px 6px 10px;
         position: absolute;
@@ -321,12 +321,12 @@ h2.loginTitle {
 /* end ref */
 
 .modal-content span.close {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 0px 8px 4px 8px;
         position: absolute;
         cursor: pointer;
-        color: #ffffff75;
+        color: var(--bunker-50);
         top: 110px;
         right: 40px;
         transform: rotate(90deg);
@@ -1006,12 +1006,7 @@ h2.loginTitle {
         margin: 0 auto;
         width: 100%;
         position: fixed;
-        background: linear-gradient(
-                180deg,
-                rgba(39, 52, 64, 0.9374343487394958) 25%,
-                rgba(39, 52, 64, 0.5424763655462185) 74%,
-                rgba(39, 52, 64, 0) 100%
-        );
+        background: linear-gradient(180deg, rgb(69 102 135) 25%, rgb(69 102 135 / 43%) 74%, rgb(69 102 135 / 0%) 100%);
         backdrop-filter: blur(2px);
         z-index: 2;
 }
@@ -1252,7 +1247,7 @@ img#thumbnail {
 }
 
 .close-dialog-button {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 4px 10px 6px 10px;
         position: absolute;
@@ -1482,12 +1477,7 @@ h4 {
         width: 21%;
         z-index: 1;
         position: absolute;
-        background: linear-gradient(
-                0deg,
-                rgba(39, 52, 64, 0.9374343487394958) 25%,
-                rgba(39, 52, 64, 0.5424763655462185) 74%,
-                rgba(39, 52, 64, 0) 100%
-        );
+        background: linear-gradient(180deg, rgb(69 102 135) 0%, rgb(69 102 135 / 43%) 74%, rgb(69 102 135 / 100%) 100%);
         backdrop-filter: blur(2px);
 }
 
@@ -2018,7 +2008,7 @@ i {
 }
 
 span.close {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 4px 10px 6px 10px;
         position: absolute;
@@ -2372,13 +2362,19 @@ textarea:hover {
 }
 
 button {
-        margin: 1rem 0.5rem;
-        border-radius: 8px;
-        border: 1px solid var(--bunker-700);
-        background: var(--bunker-900);
-        color: #4f5c66;
-        padding: 0.8rem 1.2rem;
-        cursor: pointer;
+    margin: 1rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--vulkan-600);
+    background: transparent;
+    color: var(--vulkan-600);
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background: var(--vulkan-400);
+    color: var(--vulkan-700);
 }
 
 #clearAllButton,
@@ -3010,7 +3006,7 @@ span#sliderValue {
 }
 
 span.closeError {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 4px 10px 6px 10px;
         position: absolute;
@@ -3021,7 +3017,7 @@ span.closeError {
 }
 
 span.closeGen {
-        background: #181719;
+        background: var(--bunker-800);
         border-radius: 900rem;
         padding: 4px 10px 6px 10px;
         position: absolute;
@@ -3638,7 +3634,7 @@ button#extractColorsFromUrlButton {
                 height: 100vh;
                 overflow: scroll;
                 text-align: center;
-                background: #181719;
+                background: var(--bunker-900);
                 flex-wrap: nowrap;
                 align-items: center;
                 flex-direction: column;
