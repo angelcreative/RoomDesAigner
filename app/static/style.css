@@ -1822,6 +1822,8 @@ position: absolute;
     z-index: 1;
     top: 0;
     left: 30%;
+     width: -webkit-fill-available;
+          height: 100%;
     
 }
 
