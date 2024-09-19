@@ -626,32 +626,31 @@ def save_values():
         'Content-Type': 'application/json',
         'api-key': mongo_data_api_key
     }
-    try:
-        save_response = requests.post(
-            f'{mongo_data_api_url}/action/insertOne',
-            headers=headers,
-            data=json.dumps(save_payload)
-        )
-        save_response.raise_for_status()  # Esto genera una excepción si el status code no es 200 o 201
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Request failed: {e}")
-        return jsonify({'error': f"Request failed: {str(e)}"}), 500
+    save_response = requests.post(
+        f'{mongo_data_api_url}/action/insertOne',
+        headers=headers,
+        data=json.dumps(save_payload)
+    )
 
     # Agrega logs para depuración
     logging.info(f"Request payload: {save_payload}")
     logging.info(f"Response status code: {save_response.status_code}")
     logging.info(f"Response text: {save_response.text}")
 
-    response_data = save_response.json()
-    if 'insertedId' in response_data:
-        return jsonify({'success': True}), 200
+    if save_response.status_code == 201 or save_response.status_code == 200:
+        response_data = save_response.json()
+        if 'insertedId' in response_data:
+            return jsonify({'success': True}), 200
+        else:
+            error_message = response_data.get('error', 'Unknown error occurred.')
+            logging.error(f"Error saving values: {error_message}")
+            return jsonify({'error': f"Error saving values: {error_message}"}), 500
     else:
-        error_message = response_data.get('error', 'Unknown error occurred.')
+        error_message = save_response.json().get('error', 'Unknown error occurred.')
         logging.error(f"Error saving values: {error_message}")
         return jsonify({'error': f"Error saving values: {error_message}"}), 500
 
-    
-    
+
 @app.route('/load-saved-values', methods=['GET'])
 def load_saved_values():
     if 'username' not in session:
@@ -663,34 +662,32 @@ def load_saved_values():
         'database': 'yourDatabase',  # Reemplaza con tu nombre de base de datos
         'collection': 'saved_values',
         'filter': {'username': session['username']},
-        'projection': {'_id': 1, 'name': 1, 'values': 1}  # Incluimos 'values' en la proyección
+        'projection': {'_id': 1, 'name': 1}  # Solo devolvemos el id y el nombre de cada guardado
     }
     headers = {
         'Content-Type': 'application/json',
         'api-key': mongo_data_api_key
     }
-
-    try:
-        response = requests.post(
-            f'{mongo_data_api_url}/action/find',
-            headers=headers,
-            data=json.dumps(query_payload)
-        )
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Request failed: {e}")
-        return jsonify({'error': f"Request failed: {str(e)}"}), 500
+    response = requests.post(
+        f'{mongo_data_api_url}/action/find',
+        headers=headers,
+        data=json.dumps(query_payload)
+    )
 
     logging.info(f"Response status code: {response.status_code}")
     logging.info(f"Response text: {response.text}")
 
-    response_data = response.json()
-    saved_values = response_data.get('documents', [])
-    
-    return jsonify({'savedValues': saved_values}), 200
-    
-#end sref
+    if response.status_code == 200:
+        saved_values = response.json().get('documents', [])
+        return jsonify({'savedValues': saved_values}), 200
+    else:
+        error_message = response.json().get('error', 'Unknown error occurred.')
+        logging.error(f"Error loading saved values: {error_message}")
+        return jsonify({'error': f"Error loading saved values: {error_message}"}), 500
 
+
+
+# A dictionary to store the comparison data
 comparisons = {}
 
 @app.route('/create-comparison-session', methods=['POST'])

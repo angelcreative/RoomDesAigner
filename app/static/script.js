@@ -289,20 +289,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   
  // Función para guardar los valores
-ddocument.getElementById('confirmSaveButton').addEventListener('click', function() {
+document.getElementById('confirmSaveButton').addEventListener('click', function() {
     const saveName = document.getElementById('saveName').value;
-    const selectedValues = getSelectedValues();  // Captura los valores
+    const selectedValues = getSelectedValues();
 
     fetch('/save-values', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json'  // Asegúrate de que el backend devuelve JSON
         },
-        credentials: 'include',  // Para mantener la sesión del usuario
+        credentials: 'include',  // Importante para enviar cookies de sesión
         body: JSON.stringify({
-            name: saveName,  // Nombre con el que guardas este conjunto de valores
-            values: selectedValues,  // Enviamos los valores seleccionados
+            name: saveName,
+            values: selectedValues,
         }),
     })
     .then(response => {
@@ -315,6 +315,7 @@ ddocument.getElementById('confirmSaveButton').addEventListener('click', function
     })
     .then(data => {
         alert('Valores guardados con éxito');
+        // Opcionalmente, puedes actualizar la lista de valores guardados aquí
     })
     .catch(error => {
         alert('Error: ' + error.message);
@@ -325,13 +326,14 @@ ddocument.getElementById('confirmSaveButton').addEventListener('click', function
 
 
 
+// Función para cargar los valores guardados
 document.getElementById('loadValuesButton').addEventListener('click', function() {
     fetch('/load-saved-values', {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
         },
-        credentials: 'include'  // Para mantener la sesión del usuario
+        credentials: 'include'  // Importante para enviar cookies de sesión
     })
     .then(response => {
         if (!response.ok) {
@@ -342,16 +344,9 @@ document.getElementById('loadValuesButton').addEventListener('click', function()
         return response.json();
     })
     .then(data => {
+        // Aquí puedes manejar la lista de valores guardados
         const savedValues = data.savedValues;
-
-        // Itera sobre los valores guardados y asigna a los elementos
-        savedValues.forEach(item => {
-            if (item.name && document.getElementById(item.name)) {
-                document.getElementById(item.name).value = item.values;
-            }
-        });
-
-        alert('Valores cargados con éxito');
+        // Mostrar la lista al usuario o llenar un menú desplegable
     })
     .catch(error => {
         alert('Error: ' + error.message);
@@ -400,7 +395,7 @@ function generateBlurredBackground () {
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
 
-// COLORSEX================== 🎨
+// COLORSEX
 
     let extractedColors = [];
 
