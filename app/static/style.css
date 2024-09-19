@@ -55,8 +55,14 @@ h2,
 h3,
 b,
 strong {
-        font-family: system-ui !important;
-        font-weight: 400 !important;
+        font-family: system-ui;
+        font-weight: 400 ;
+}
+
+h1 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
 }
 
 div#mainUI,
@@ -337,7 +343,6 @@ h2.loginTitle {
         padding: 8px 16px;
         border-radius: 8px;
         color: #ffffff;
-        font-weight: bold;
         width: 100%;
         margin: 0;
         /* background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82); */
@@ -1040,7 +1045,6 @@ form.loginForm input {
         padding: 16px 36px;
         border-radius: 12px;
         color: #ffffff;
-        font-weight: bold;
         width: fit-content;
         margin: 20px auto;
         background-size: 300% 300%;
@@ -1071,7 +1075,6 @@ button#dismissErrorButton {
         text-align: center;
         background: none;
         color: #671818;
-        font-weight: bold;
 }
 
 /* Add more styles for your buttons and content as needed */
@@ -1094,19 +1097,20 @@ label.imageup {
 }
 
 .imageup:hover span {
-        background: #000000;
-        background: #000000;
-        color: white;
+        background: var(--bunker-900);
+        
+        color:var(--bunker-600);
 }
 
 .imageup span {
-        color: #fafafa;
-        background: var(--bunker-400);
-        padding: 10px 15px;
-        border-radius: 900px;
-        display: block;
-        margin: 9px auto;
-        transition: background ease-in 300ms, color ease-out 300ms;
+    color: var(--bunker-600);
+    background: var(--bunker-400);
+    padding: 12px 12px 1px;
+    border-radius: 900px;
+    display: block;
+    margin: 9px auto;
+    transition: background ease-in 300ms, color ease-out 300ms;
+    height: 36px;
 }
 img#thumbnail {
         zoom: 1;
@@ -1351,7 +1355,6 @@ b {
 .modalPlabel {
         color: #8c8c8c;
         font-size: 0.8rem;
-        font-weight: lighter;
 }
 
 .modalP input {
@@ -1453,13 +1456,11 @@ h4,
 h5 {
         color: var(--bunker-400);
         margin-top: 1rem;
-        font-weight: lighter;
 }
 .bigTitle {
         color: #1f1f1f;
         margin-top: 2rem;
         font-size: 24px;
-        font-weight: lighter;
 }
 
 h5 {
@@ -1534,7 +1535,6 @@ h4 {
 }
 
 .menuDropdown li.menuVoice {
-        font-weight: bold;
 }
 
 .menuDropdown li.active {
@@ -1565,6 +1565,10 @@ h4 {
         border-width: 0;
         border: none;
         background: none;
+}
+
+.colorPickersGroup {
+    background: var(--bunker-800);
 }
 
 .colorPickers {
@@ -1936,7 +1940,6 @@ i {
         border-radius: 0.5rem;
         color: #ffffff75;
         text-align: center;
-        font-weight: lighter;
         margin: 1rem auto 0 auto;
         display: block;
         max-width: 100%;
@@ -2041,7 +2044,6 @@ h1 {
 .modal-content h1 {
         color: #a9fff5;
         margin: 2rem 0;
-        font-weight: lighter;
         text-align: center;
 }
 
@@ -2373,7 +2375,6 @@ button {
         font-size: 13px;
         font-size: 18px;
         box-shadow: 0px 4px 20px 7px #1d82fd2b;
-        font-weight: bold;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
@@ -2468,7 +2469,6 @@ button {
         width: auto;
         flex-wrap: wrap;
         align-content: center;
-        font-family: system-ui;
 }
 
 #colorCards {
@@ -3002,7 +3002,6 @@ span.closeGen {
         color: #1f1f1f;
         font-size: 16px;
         text-align: left;
-        font-weight: bold;
         background: yellow;
         max-width: fit-content;
         margin: 0;
@@ -3143,6 +3142,13 @@ loginModal > p {
         margin-bottom: 8px;
 }
 
+.collapsible h1 span {
+color: var(--bunker-400); }
+
+.collapsible span {
+    color: var(--bunker-800);
+}
+
 .active,
 .collapsible:hover {
         background-color: var(--vulkan-800);
@@ -3212,7 +3218,6 @@ loginModal > p {
         color: #aaa;
         float: right;
         font-size: 28px;
-        font-weight: bold;
 }
 
 .closePreset:hover,
@@ -3253,7 +3258,7 @@ loginModal > p {
         position: inherit;
         display: inline-block;
         width: 100%;
-        font-family: Arial, sans-serif;
+       
 }
 
 .middleContainer {
@@ -3271,7 +3276,7 @@ textarea {
         border-radius: 8px;
         box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
         color: var(--bunker-200);
-        font-family: courier, sans-serif;
+        
         font-size: 14px;
         height: 30px;
         transition: background 300ms ease-out;
@@ -3280,7 +3285,7 @@ textarea {
 textarea {
         cursor: default;
         height: 80px;
-        font-family: system-ui;
+        
         color: var(--bunker-200);
 }
 .dropdown-selected:hover {
@@ -3291,7 +3296,6 @@ textarea {
         margin-left: 10px;
         cursor: pointer;
         color: var(--vulkan-400);
-        font-weight: bold;
         font-size: 12px;
         background: var(--vulkan-300);
         padding: 4px 7px;
@@ -3310,7 +3314,6 @@ textarea {
         z-index: 3;
         max-height: 200px;
         overflow-y: auto;
-        font-family: courier;
         font-size: 14px;
         color: var(--bunker-400);
         border-radius: 8px;
@@ -3325,7 +3328,6 @@ textarea {
         padding: 8px 16px;
         background-color: var(--bunker-900);
         cursor: default;
-        font-weight: bold;
 }
 
 .dropdown-options .option {
@@ -3357,7 +3359,6 @@ textarea {
         margin: 4px 0 8px 0;
         font-size: 14px;
         color: var(--bunker-200);
-        font-family: courier, sans-serif;
 }
 
 select {
@@ -3449,7 +3450,6 @@ input#imageUrlInput {
         border-radius: 8px;
         box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
         color: var(--bunker-200);
-        font-family: courier, sans-serif;
         font-size: 14px;
         height: 30px;
         transition: background 300ms ease-out;
@@ -3669,7 +3669,6 @@ button#extractColorsFromUrlButton {
                 border-radius: 8px;
                 box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
                 color: var(--bunker-200);
-                font-family: courier, sans-serif;
                 font-size: 14px;
                 height: 30px;
                 transition: background 300ms ease-out;
