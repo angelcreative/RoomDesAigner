@@ -117,6 +117,7 @@ body {
 #dialogTitle h2 {
         font-size: 16px;
         text-align: center;
+     color: var(--bunker-800);
 }
 
 #dialogTitle p {
@@ -2596,7 +2597,7 @@ option[title]:hover:after {
 }
 
 #imageGrid div {
-        width: 40%;
+        width: 33%;
 }
 
 .thumbnail {
