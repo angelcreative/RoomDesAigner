@@ -606,8 +606,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: null,
-        lora_strength: null,
+        lora_model: "realistic-skin-flux",
+        lora_strength: 0.7,
         scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
         safety_checker: "no",

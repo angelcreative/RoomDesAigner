@@ -1876,9 +1876,8 @@ i {
 .carousel-wrapper {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 100%;
+    width: 44%;
 }
-
 .carousel-slide {
     min-width: 100%;
     box-sizing: border-box;
@@ -2651,18 +2650,17 @@ option[title]:hover:after {
 
 .imageGrid {
         display: flex;
-        flex-wrap: wrap;
-        column-gap: 16px;
-        row-gap: 16px;
-        max-width: 100%;
-        justify-content: center;
-        margin: 0 auto;
-        align-items: center;
-        flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 16px;
+    row-gap: 16px;
+    justify-content: space-between;
+    margin: 0;
+    align-items: center;
+    flex-direction: row;
 }
 
 #imageGrid div {
-        width: 33%;
+     
 }
 
 .thumbnail {
