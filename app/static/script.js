@@ -622,6 +622,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
+    let transformedPrompt;  // Declara transformedPrompt fuera del try
+
+    
     try {
         // Enviar solicitud al backend en lugar de a la API externa
         const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
@@ -635,13 +638,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         console.log('Respuesta del backend en generateImages:', data);
 
         if (data.status === "success" && data.images) {
-                        const transformedPrompt = data.transformed_prompt;  // Aquí recuperas el transformed_prompt del backend
-
+            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
             // Las imágenes están listas
-showModal(data.images, transformedPrompt);  // Mostrar las imágenes con el transformed_prompt            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.request_id) {
-            // Las imágenes aún están procesándose, iniciar polling
-            await checkImageStatus(data.request_id, promptText);
+            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
+            // Las imágenes aún se están procesando, iniciar polling
+            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
         }

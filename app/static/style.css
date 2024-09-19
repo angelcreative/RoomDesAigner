@@ -1831,7 +1831,7 @@ position: absolute;
     display: block;
     margin: 0 auto;
     width: 100%;
-    height: auto;
+    height: 100vh;
     top: 0;
     left: 0;
     overflow: auto;
@@ -3533,7 +3533,7 @@ body {
           z-index: 9;
           top: 0;
           left: 0;
-          width: 100%;
+          width: -webkit-fill-available;
           height: 100%;
           scroll-behavior: smooth;
           overflow: scroll;
