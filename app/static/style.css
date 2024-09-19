@@ -110,6 +110,56 @@ body {
         font-size: 14px;
         color: var(--bunker-200);
 }
+
+
+.aspectRatioShot {
+    padding: 15px;
+   
+    border-radius: 8px;
+    background-color: var(--bunker-700);
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+
+.ar input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--vulkan-300);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    margin-right: 4px;
+    min-width: 20px;
+}
+
+.ar input[type="radio"]:checked {
+    background-color: var(--vulkan-200); /* Color cuando está seleccionado */
+    border-color: var(--vulkan-400);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.ar label {
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.ar input[type="radio"]:checked + label {
+    color: var(--vulkan-200); /* Cambia el color de la etiqueta cuando el radio está seleccionado */
+}
+
+.ar input[type="radio"]:hover {
+    border-color: var(--vulkan-200);; /* Cambia el color del borde al pasar el ratón */
+}
+
+.ar:last-child {
+    margin-bottom: 0; /* Elimina el margen inferior para el último radio */
+}
+
+
 #dialogTitle {
         font-size: 16px;
         text-align: center;
@@ -2156,6 +2206,69 @@ fieldset {
         margin-top: 20px;
         margin-bottom: 8px;
 }
+
+
+
+.switchContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    font-size: 14px;
+    color: var(--bunker-200);
+    margin-bottom: 10px;
+}
+
+.switchContainer input[type="checkbox"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--vulkan-300);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+    margin-right: 8px;
+    min-width: 20px;
+    position: relative;
+    background-color: var(--bunker-700);
+}
+
+.switchContainer input[type="checkbox"] + .material-symbols-outlined {
+    font-size: 20px;
+    color: transparent; /* Hide the checkmark icon by default */
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Prevent interaction with the icon */
+}
+
+.switchContainer input[type="checkbox"]:checked + .material-symbols-outlined {
+    color: var(--vulkan-200); /* Show the checkmark when checked */
+}
+
+.switchContainer input[type="checkbox"]:hover {
+    border-color: var(--vulkan-200);
+}
+
+.switchContainer label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  position:relative
+}
+
+.switchContainer input[type="checkbox"]:checked + .material-symbols-outlined {
+    color: var(--vulkan-200);
+    top: 3px;
+    left: 4px;
+    background: var(--vulkan-400);
+    border-radius: 4px;
+}
+
 
 .aspectRatio,
 .switchLabel {

@@ -841,16 +841,7 @@ Shot settings</h1><span class="material-symbols-outlined"> close </span>
                     <!-- ratio -->
                     <h4>Apect ratio</h4>
                     <div class="aspectRatioShot">
-                       <!-- <label class="aspectRatio"> Portrait 3:4 <label class="switch">
-                                <input type="radio" name="aspectRatio" value="landscape" checked>
-                                <span class="slider round"></span>
-                            </label>
-                        </label>
-                        <label class="aspectRatio"> Square 1:1 <label class="switch">
-                                <input type="radio" name="aspectRatio" value="portrait">
-                                <span class="slider round"></span>
-                            </label>
-                        </label>-->
+                     
                         <div class="ar">
                         <input type="radio" name="aspectRatio" value="landscape" id="landscape">
                         <label for="landscape">Landscape (1024 x 768)</label>
@@ -1700,14 +1691,21 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
     
 <!--// end img ref -->
      
+    
+     
+     
+     
      
      <div class="coloresWheel colorPalette">
     <!--start 603010-->
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
-            <label class="switchLabel">Activate 60 30 10 color rule</label>
-            <input type="checkbox" id="use_colors">
-        </div>
+    <label class="switchLabel">
+        <input type="checkbox" id="use_colors">
+        <span class="material-symbols-outlined">check_small</span>
+        Activate 60 30 10 color rule
+    </label>
+</div>
         <div class="colorPickers">
             <div class="colorPaletteA">
                 <input type="color" id="dominant_color" value="#ffffff" class="colorPicker">
@@ -1731,18 +1729,24 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
 
 <div class="colorOptions">
     <div class="switchContainer colorSC">
-        <label class="switchLabel">Use wall paint color</label>
+    <label class="switchLabel">
         <input type="checkbox" id="use_walls_paint_color">
-    </div>
+        <span class="material-symbols-outlined">check_small</span>
+       Use wall paint color
+    </label>
+</div>
     <div class="colorPaletteA">
         <input type="color" id="walls_paint_color" value="#cccccc" class="colorPicker">
         <span id="walls_paint_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
     </div>
 
     <div class="switchContainer colorSC">
-        <label class="switchLabel">Use furniture color</label>
+    <label class="switchLabel">
         <input type="checkbox" id="use_furniture_color">
-    </div>
+        <span class="material-symbols-outlined">check_small</span>
+        Use furniture color
+    </label>
+</div> 
     <div class="colorPaletteA">
         <input type="color" id="furniture_color" value="#999999" class="colorPicker">
         <span id="furniture_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
