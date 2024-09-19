@@ -61,7 +61,7 @@ strong {
 
 div#mainUI,
 html {
-        background: var(--bunker-600);
+        background: var(--bunker-800);
 }
 
 body {
@@ -1081,7 +1081,7 @@ input[type="file"] {
 
 label.imageup {
         cursor: pointer;
-        background: var(--bunker-700);
+        background: var(--bunker-900);
         padding: 20px;
         border-radius: 12px;
         color: var(--bunker-200);
@@ -2052,7 +2052,7 @@ h1 {
 
 sub {
         font-size: 12px;
-        color: #66737fab;
+        color: var(--bunker-600);
         display: block;
         margin: 0 0 20px 0;
         padding: 4px 0 0 0;
@@ -2220,9 +2220,9 @@ select:hover {
 }
 .selected {
         box-shadow: inset 0px 0px 0px 3px var(--vulkan-600) !important;
-        border: none !important;
-        background: var(--vulkan-200) 54 !important;
-        color: red;
+    border: none !important;
+    background: var(--vulkan-200) !important;
+    color: var(--vulkan-600) !important;
 }
 
 textarea {
@@ -2882,7 +2882,7 @@ tertiary:hover {
         flex-wrap: nowrap;
         align-items: flex-start;
         height: 160px;
-        background: var(--bunker-700);
+        background: var(--bunker-900);
         padding: 4px 12px 12px;
         border-radius: 16px;
         margin: 12px 0;
@@ -3133,7 +3133,6 @@ loginModal > p {
         text-align: left;
         outline: none;
         font-size: 15px;
-        border-bottom: 1px solid var(--bunker-700);
         border-radius: 6px;
         display: flex;
         flex-direction: row;
@@ -3145,7 +3144,7 @@ loginModal > p {
 
 .active,
 .collapsible:hover {
-        background-color: var(--bunker-900);
+        background-color: var(--vulkan-800);
 }
 
 .content {
@@ -3262,7 +3261,7 @@ loginModal > p {
 .dropdown-selected,
 textarea {
         padding: 8px 10px;
-        border: 1px solid var(--bunker-900);
+        border: 1px solid var(--bunker-800);
         cursor: pointer;
         background-color: var(--bunker-700);
         display: flex;
@@ -3290,10 +3289,10 @@ textarea {
         display: none;
         margin-left: 10px;
         cursor: pointer;
-        color: #7ebcb9;
+        color: var(--vulkan-400);
         font-weight: bold;
         font-size: 12px;
-        background: #4a6266;
+        background: var(--vulkan-300);
         padding: 4px 7px;
         border-radius: 100px;
 }
@@ -3335,12 +3334,17 @@ textarea {
         cursor: pointer;
 }
 
+::placeholder {
+    color: var(--bunker-600);
+}
+
 .dropdown-options .option:hover {
-        background-color: var(--bunker-700);
+         background-color: var(--vulkan-500);
+        color: var(--vulkan-200);
 }
 
 .selected .selected-text {
-        color: var(--vulkan-200);
+        color: var(--vulkan-600);
 }
 .color-swatch {
         width: 20px;
@@ -3392,12 +3396,12 @@ select {
         height: auto;
 }
 .col-6 {
-        flex: 0 60%;
-        max-width: 60%;
-        margin: 0 40px;
-        background: var(--bunker-700);
-        border-radius: 16px;
-        border: 3px dashed var(--bunker-400);
+      flex: 0 60%;
+    max-width: 60%;
+    margin: 0 40px;
+    background: var(--bunker-900);
+    border-radius: 16px;
+    border: 3px dashed var(--bunker-800);
 }
 
 .col-12 {
