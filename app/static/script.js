@@ -1134,7 +1134,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
-ffunction showModal(imageUrls, transformedPrompt) {
+function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
 
