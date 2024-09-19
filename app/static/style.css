@@ -2344,6 +2344,40 @@ input:checked + .slider:before {
         transform: translateX(26px);
 }
 
+/* Estilos para la "bolita" del slider (thumb) en navegadores WebKit (Chrome, Safari) */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--vulkan-200) !important;  /* Color de la bolita */
+    border: 2px solid var(--vulkan-400); /* Borde alrededor de la bolita */
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: var(--vulkan-300); /* Cambia el color al pasar el ratón */
+    border-color: var(--vulkan-200); /* Cambia el color del borde */
+}
+
+/* Estilos para la bolita en Firefox */
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--vulkan-200)  !important; /* Color de la bolita */
+    border: 2px solid var(--vulkan-400); /* Borde alrededor de la bolita */
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    background-color: var(--vulkan-300); /* Cambia el color al pasar el ratón */
+    border-color: var(--vulkan-200); /* Cambia el color del borde */
+}
+
 .slider.round {
         border-radius: 34px;
         border: 1px solid var(--bunker-600);
