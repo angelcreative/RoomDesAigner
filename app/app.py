@@ -717,7 +717,7 @@ def compare_images(slug):
     else:
         return "Comparison not found", 404
 
-
+#try
 
 @app.route('/relight')
 def relight_page():

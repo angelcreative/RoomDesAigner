@@ -2919,6 +2919,8 @@ tertiary:hover {
         border-radius: 40px;
 }
 
+/*try*/
+
 #strengthSlider::-webkit-slider-thumb {
         -webkit-appearance: none;
         appearance: none;
