@@ -3554,16 +3554,14 @@ textarea {
 .dropdown-selected:hover {
         background: var(--vulkan-600);
 }
+
+
 .dropdown-selected .clear-selection {
-        display: none;
-        margin-left: 10px;
-        cursor: pointer;
-        color: var(--vulkan-400);
-         
-        background: var(--vulkan-300);
-        padding: 4px 7px;
-        border-radius: 100px;
+    display: none;
+    cursor: pointer;
+    color: var(--vulkan-400);
 }
+
 .dropdown-selected.selected .clear-selection {
         display: inline;
 }
