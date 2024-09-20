@@ -12,26 +12,24 @@ function hideOverlay() {
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton"); 
 
-// modal P
-//document.getElementById('password-form').addEventListener('submit', function(event)  {
-//    event.preventDefault();
-//
-//    var passwordInput = document.getElementById('password');
-//    var errorMessage = document.getElementById('error-message');
-//
-//    if (passwordInput.value === '4yVd4nt3') {
-//        // Password is correct, close the modal or perform desired actions
-//        var modalP = document.querySelector('.modalP');
-//        modalP.style.display = 'none';
-//    } else {
-//        // Password is incorrect, display error message
-//        errorMessage.textContent = 'Invalid password. Schedule a call.';
-//    }
-//});
 
-//end modal 
 
 document.addEventListener("DOMContentLoaded", function() {
+    
+ // Asegúrate de que otros botones no generen imágenes
+  document.querySelectorAll('button').forEach(button => {
+    if (button.id !== 'magicButton') {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();  // Previene la acción de otros botones
+      });
+    }
+  });
+
+  // Este es el único botón que genera imágenes
+  document.getElementById('magicButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    handleSubmit(event);  // Aquí se genera la imagen
+  });
 
 
 //AIDESIGN
