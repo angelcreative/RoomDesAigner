@@ -535,7 +535,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: "realistic-skin-flux,surreal-photorealism,flux-fashion",
+        lora_model: "surreal-photorealism",
         lora_strength: 0.7,
         scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
