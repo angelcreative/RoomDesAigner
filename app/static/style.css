@@ -1068,18 +1068,20 @@ h2.loginTitle {
 }
 
 .official {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0;
+     
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
     top: 0;
-        margin: 0 auto;
-        width: 100%;
-        position: fixed;
-        background: linear-gradient(180deg, rgb(35 51 67) 25%, rgb(35 51 67 / 50%) 74%, rgb(35 51 67 / 0%) 100%);
-        backdrop-filter: blur(2px);
-        z-index: 2;
+    margin: 0 auto;
+    width: calc(100% - 40px);
+    position: fixed;
+    background: linear-gradient(180deg, rgb(35 51 67) 25%, rgb(35 51 67 / 50%) 74%, rgb(35 51 67 / 0%) 100%);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+ 
 }
 
 .avatar img {
