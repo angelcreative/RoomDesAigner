@@ -1119,15 +1119,17 @@ function showModal(imageUrls, transformedPrompt) {
     imageGrid.appendChild(carouselWrapper);
 
     // Crear botones prev y next para controlar el carrusel
-    const prevButton = document.createElement("button");
-    prevButton.classList.add("prev");
-    prevButton.innerHTML = "&#10094;";
-    prevButton.addEventListener("click", () => moveSlide(-1));
+const prevButton = document.createElement("button");
+prevButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
+prevButton.classList.add("prev");
+prevButton.innerHTML = "&#10094;";
+prevButton.addEventListener("click", () => moveSlide(-1));
 
-    const nextButton = document.createElement("button");
-    nextButton.classList.add("next");
-    nextButton.innerHTML = "&#10095;";
-    nextButton.addEventListener("click", () => moveSlide(1));
+const nextButton = document.createElement("button");
+nextButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
+nextButton.classList.add("next");
+nextButton.innerHTML = "&#10095;";
+nextButton.addEventListener("click", () => moveSlide(1));
 
     imageGrid.appendChild(prevButton);
     imageGrid.appendChild(nextButton);
