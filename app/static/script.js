@@ -1073,6 +1073,16 @@ function showModal(imageUrls, transformedPrompt) {
 
     const imageGrid = document.getElementById("imageGrid");
     imageGrid.innerHTML = "";
+    
+    
+    function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.type = "button";  // Agregar type="button"
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
+
 
     // Crear estructura del carrusel
     const carouselWrapper = document.createElement("div");
@@ -1150,12 +1160,7 @@ function showModal(imageUrls, transformedPrompt) {
 
 
     
- function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
+ 
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
@@ -1173,12 +1178,6 @@ function showOverlay() {
 
     
     
-function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
 
 
 
