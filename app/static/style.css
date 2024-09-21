@@ -308,6 +308,12 @@ input#secretKeyInput {
         color: #00bcd4;
 }
 
+
+.imageup a {
+    color: var(--vulkan-400);
+    font-size: var(--xs);
+}
+
 .placeholderImg {
         display: flex;
         align-items: center;
@@ -1935,6 +1941,7 @@ select#harmonyType {
 .buttonExt[disabled]:hover {
         background: lightgray;
         cursor: not-allowed;
+    color:gray;
 }
 
 /*.buttonExt[disabled]:hover::after {
