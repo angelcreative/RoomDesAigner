@@ -288,7 +288,7 @@ body {
         background: white;
         color: #444;
         width: 190px;
-        border-radius: 5px;
+        border-radius: var(--s);
         border: thin solid #888;
         box-shadow: 1px 1px 1px grey;
         white-space: nowrap;
@@ -297,10 +297,10 @@ body {
         cursor: pointer;
 }
 input#secretKeyInput {
-        padding: 12pxvar(--2xs);
+        padding: var(--2xs);
         background: #f7f7f7;
         width: 200px;
-        border-radius: 12px;
+        border-radius: var(--s);
         border: 1px solid #cacaca;
 }
 
@@ -344,7 +344,7 @@ input#secretKeyInput {
         max-width: 340px;
         background-size: 200px;
         text-align: center;
-        border-radius: 36px;
+        border-radius: var(--xl);
         color: #1f1f1f;
 }
 
@@ -391,16 +391,32 @@ h2.loginTitle {
 /* end ref */
 
 .modal-content span.close {
-        background: var(--bunker-800);
-        border-radius: 900rem;
-        padding: 0px 8px 4pxvar(--2xs);
+       
+       
+       
         position: absolute;
         cursor: pointer;
         color: var(--bunker-50);
-        top: 110px;
+        top: 16px;
         right: 40px;
         transform: rotate(90deg);
 }
+
+span.close {
+       
+        
+       
+        position: absolute;
+        cursor: pointer;
+        color: var(--bunker-50);
+        top: 16px;
+        right: 40px;
+}
+
+span.close:hover {
+        transform: scale(1.1);
+}
+
 
 .rightOff {
         margin-bottom:var(--2xs);
@@ -475,7 +491,7 @@ h2.loginTitle {
 
 .loginModal {
         background: #fff;
-        border-radius: var(--xs);
+        border-radius: var(--l);
         width: 340px;
         margin: 0 auto;
         text-align: center;
@@ -1100,9 +1116,9 @@ form.loginForm {
 }
 
 form.loginForm input {
-        padding: 12pxvar(--2xs);
+        padding: var(--2xs);
         margin: 0 0 10px 0;
-        border-radius: 12px;
+        border-radius: var(--2xs);
         border: 1px solid #979ca3;
         width: calc(100% - 16px);
         background: #dddedf57;
@@ -1111,7 +1127,7 @@ form.loginForm input {
 .loginForm button {
         border: none;
         padding: 16px 36px;
-        border-radius: 12px;
+        border-radius: var(--2xs);
         color: #ffffff;
         width: fit-content;
         margin: 20px auto;
@@ -1155,7 +1171,7 @@ label.imageup {
            cursor: pointer;
     background: var(--bunker-700);
     padding: var(--m);
-    border-radius: 12px;
+    border-radius: var(--2xs);
     color: var(--bunker-500);
     display: flex;
     flex-direction: column;
@@ -1266,8 +1282,8 @@ img#thumbnail {
 
 .thumbImg {
         text-align: center;
-        border-radius: 12px;
-        margin-top: 12px;
+        border-radius: var(--2xs);
+        margin-top: var(--2xs);
         position: relative;
 }
 
@@ -1426,7 +1442,7 @@ b {
 }
 
 .modalP input {
-        border-radius: 0.5rem;
+        border-radius: var(--2xs);
         padding: 0.5rem 0.5rem;
         border: 1px solid #000000;
         background: #0e0e0e;
@@ -1436,7 +1452,7 @@ b {
 
 .modalPbutton {
         background: #a9fff5;
-        border-radius: 0.5rem;
+        border-radius: var(--2xs);
         color: #1f1f1f;
         transition: animation ease-in-out 3ms;
         z-index: 2;
@@ -1481,7 +1497,7 @@ span#clearImg {
 }
 
 span.username {
-       
+    font-size: var(--xs);
 }
 
 .usernameCredits {
@@ -1497,7 +1513,7 @@ span.username {
         color: #fff;
         
         max-width: fit-content;
-        border-radius: 12px;
+        border-radius: var(--2xs);
         /* display: flex; */
         /* flex-direction: column; */
         /* align-items: flex-end; */
@@ -1509,6 +1525,7 @@ span.username {
         display: flex;
         flex-direction: row;
         align-items: center;
+    font-size:var(--xs)
 }
 /* END */
 
@@ -1557,9 +1574,7 @@ h4 {
 .logoWeb {
         margin: 20px auto;
         display: block;
-        height: 60px;
-        /* position: fixed; */
-        left: 50%;
+        height: 40px;
 }
 
 .logoApp {
@@ -2110,20 +2125,7 @@ i {
         width: 80%;
 }
 
-span.close {
-        background: var(--bunker-800);
-        border-radius: 900rem;
-        padding: 4px 10px 6px 10px;
-        position: absolute;
-        cursor: pointer;
-        color: #ffffff75;
-        top: var(--m);
-        right: 40px;
-}
 
-span.close:hover {
-        transform: scale(1.1);
-}
 
 pre {
         border-radius: var(--s);
@@ -3807,11 +3809,15 @@ button#extractColorsFromUrlButton {
 label.hamburger {
     cursor: pointer;
     position: absolute;
-    right: var(--2xs);
+    right: -4px;
     background: var(--bunker-900);
     line-height: 0;
     padding: var(--3xs);
     border-radius: var(--2xl);
+}
+
+label.hamburger:hover {
+    background: var(--bunker-700);
 }
 
 

@@ -115,7 +115,9 @@
 <div id="avatarLightbox" class="lightbox">
     <div class="lightbox-content">
         <h1>Choose your profile picture</h1><br>
-        <span class="closeAvatar">&times;</span>
+        <span class="closeAvatar"><span class="material-symbols-outlined">
+close
+</span></span>
         <form id="avatarForm">
             <div class="grid">
     <!-- Dynamically populate with avatar images -->
@@ -381,7 +383,9 @@
 
             
             <a href="{{ url_for('logout') }}">
-            <img src="/static/img/icon-logout.svg">&nbsp;Logout
+            <span class="material-symbols-outlined">
+logout
+</span>&nbsp;Logout
         </a></div>
        
       
@@ -430,7 +434,9 @@
                 <button id="errorButton" class="modalPbutton">Try again now</button>
             </div>
         </div>
-        <span class="closeError">×</span>
+        <span class="closeError"><span class="material-symbols-outlined">
+close
+</span></span>
     </div>
 
     <div id="overlay"></div>
