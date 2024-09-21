@@ -1566,6 +1566,14 @@ h4 {
         display: none;
 }
 
+.menu {
+    position: sticky;
+    top: 10px;
+    backdrop-filter: blur(2px);
+    z-index: 9;
+    height: 40px;
+}
+
 .menuButton {
         position: relative;
         display: inline-block;
@@ -1923,6 +1931,10 @@ top:-50px;
         display: none; /* Hide the content initially */
 }
 
+.mainControls {
+    position: relative;
+}
+
 .mainContainer select {
         margin-left: 0px;
 }
@@ -1993,7 +2005,7 @@ i {
 .prev, .next {
     cursor: pointer;
     position: absolute;
-    top: 50%;
+   
     width: auto;
     padding: 16px;
     margin-top: -22px;
@@ -3795,8 +3807,11 @@ button#extractColorsFromUrlButton {
 label.hamburger {
     cursor: pointer;
     position: absolute;
-    left: 330px;
-    top: 106px;
+    right: var(--2xs);
+    background: var(--bunker-900);
+    line-height: 0;
+    padding: var(--3xs);
+    border-radius: var(--2xl);
 }
 
 
@@ -3816,282 +3831,12 @@ label.hamburger {
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
         /* CSS styles for screens up to 600px */
-        #imageGenerationForm {
-                display: flex;
-                flex-direction: column;
-                margin: 0 auto;
-                background: var(--bunker-800);
-        }
-
-        body {
-                background-image: none;
-        }
-        .formContainer {
-                display: flex;
-                flex-direction: column;
-                width: auto;
-                padding: 0;
-                align-items: center;
-        }
-
-        .secondaryContainer {
-                padding-bottom: 140px;
-                width: 90%;
-        }
-
-        .upgradeForm {
-                padding: 0;
-                max-width: 400px;
-        }
-
-        .buttonExt {
-                width: auto;
-                margin: 0;
-        }
-
-        #loadingMessage {
-                width: 64%;
-        }
-        .logoWeb {
-                display: none;
-        }
-        .logoApp {
-                display: block;
-                margin: 20px auto;
-                width: 40px;
-                height: auto;
-        }
-
-        #splash img {
-                width: calc(60% - 80px);
-        }
-        .group {
-                margin: 30px auto;
-        }
-
-        .grid {
-                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-        }
-
-        .centerCoffee {
-                text-align: center;
-        }
-
-        .groupContainer {
-                display: flex;
-                flex-direction: row;
-                overflow: hidden;
-                border-radius: var(--s);
-                width: auto;
-                flex-wrap: wrap;
-                justify-content: flex-start;
-                background: var(--bunker-700);
-                column-gap: var(--s);
-                padding: 0 1rem 2rem var(--s);
-        }
-
-        .buddy {
-                width: 150px;
-                height: auto;
-                margin: 0 auto;
-                display: none;
-        }
-
-        #modal {
-                position: fixed;
-                z-index: 9;
-                top: 0;
-                left: 0;
-                width: -webkit-fill-available;
-                height: 100%;
-                scroll-behavior: smooth;
-                overflow: scroll;
-        }
-
-        .elapsed-time {
-                 : 14px;
-                color: #666;
-                margin-bottom: 10px;
-        }
-
-        .modal-content {
-                padding: 100px 0 160px 0;
-                position: relative;
-                display: flex;
-                margin: 0 auto;
-                width: 100%;
-                height: 100vh;
-                overflow: scroll;
-                text-align: center;
-                background: var(--bunker-900);
-                flex-wrap: nowrap;
-                align-items: center;
-                flex-direction: column;
-                justify-content: flex-start;
-        }
-
-        .modal-content > svg {
-                position: absolute;
-                left: 0.8rem;
-                top: 0.4rem;
-                width: 100px;
-                height: auto;
-        }
-
-        .imageGrid {
-                display: flex;
-                flex-wrap: wrap;
-                column-gap: 16px;
-                row-gap: 16px;
-                flex-direction: row;
-                max-width: 80%;
-                justify-content: space-between;
-                margin: 0 auto;
-                background: var(--bunker-900);
-        }
-
-        .carousel-wrapper {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    width: 100%;
-}
-    
-    .prev{
-        left:0
+    .carousel-wrapper {
+        width:100%;
     }
-
-        .mainContainer {
-                width: calc(95% - 30px);
-                padding: 0 0 130px 0;
-        }
-        .col-3 {
-                max-width: 100%;
-                flex: 100%;
-        }
-
-        .col-6 {
-                flex: 100%;
-                max-width: 50%;
-                display: none;
-        }
-        .thumbnail {
-                width: 100%;
-                height: auto;
-                border-radius: 0.6rem;
-                cursor: pointer;
-                opacity: 1;
-                transition: opacity ease-out 30ms, transform 300ms ease-in;
-                box-shadow: 0px 12px 20px 2px rgb(15 15 27 / 76%);
-                border: 1px solid #ffffff47;
-                border-top: none;
-        }
-
-        /*color*/
-
-        img#colorThumbnail {
-                max-width: 180px;
-                margin: 0 auto;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-        }
-
-        i#clearColorImg {
-                position: absolute;
-                top: 0;
-                right: 0;
-                transform: rotate(45deg);
-        }
-
-        .colorThumbImg {
-                position: relative;
-        }
-        div#urlImageSection {
-                 : 14px;
-                color: var(--bunker-200);
-        }
-
-        input#imageUrlInput {
-                width: 90%;
-                margin: 10px 0 0 0;
-                padding:var(--2xs);
-                padding: 8px 10px;
-                border: 1px solid #ccc;
-                cursor: pointer;
-                background-color: #f4f2f1bf;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                border-radius:var(--2xs);
-                box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
-                color: var(--bunker-200);
-                 : 14px;
-                height: 30px;
-                transition: background 300ms ease-out;
-        }
-
-        button#extractColorsFromUrlButton {
-                background: var(--bunker-400);
-                color: #eeeeee;
-                margin: 8px 0;
-        }
-        .buttonsCont {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                margin: -100px 0;
-                position: fixed;
-                top: 100%;
-                height: 100px;
-                left: 0;
-                align-items: center;
-        }
-        .buttonsL {
-                display: flex;
-                flex-direction: row;
-        }
-
-        .buttonsR {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                margin: 0 auto;
-                flex-wrap: nowrap;
-                align-items: center;
-                justify-content: center;
-                color: var(--bunker-400);
-                row-gap: var(--m);
-                bottom: 0;
-                column-gap: var(--m);
-        }
-
-        select {
-                width: 100%;
-        }
-
-        .boxExpert {
-                display: flex;
-                flex-direction: column;
-                row-gap: 36px;
-                padding: 40px 0;
-                width: 90%;
-                margin: 0 auto;
-                align-items: center;
-        }
 }
 
 /*  small devices (phones, 1024px and down) */
 @media only screen and (max-width: 1024px) {
-        /* CSS styles for screens up to 1024 */
-
-        .imageGrid {
-                display: flex;
-                flex-wrap: wrap;
-                column-gap: 16px;
-                row-gap: 16px;
-                flex-direction: row;
-                max-width: 90%;
-                justify-content: center;
-                margin: 0 auto;
-        }
+       
 }
