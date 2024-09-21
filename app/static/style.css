@@ -213,10 +213,10 @@ body {
         margin:var(--2xs);
 }
 .loginForm small {
-        margin-bottom: var(--m);
-        color: #1f1f1f78;
-        line-height: 1.2;
-        display: block;
+       margin-bottom: var(--m);
+    color: var(--bunker-300);
+    line-height: 1;
+    display: block;
 }
 .lightbox {
         display: none;
@@ -351,7 +351,7 @@ input#secretKeyInput {
 h2.loginTitle {
         margin: 0 auto var(--m);
      
-        color: #6f7680;
+        color: var(--bunker-500);
 }
 
 /* SREF */
@@ -476,17 +476,17 @@ span.close:hover {
 }
 
 .loginBox p {
-        color: #6f7680;
-        margin: 16px auto;
+    color: var(--bunker-600);
+    margin: 16px auto;
 }
 
 .loginModal p {
-        color: #1f1f1f;
+        color: var(--bunker-600);
         line-height: 1.6;
 }
 
 .loginBox p a {
-        color: var(--vulkan-600);
+        color: var(--vulkan-400);
 }
 
 .loginModal {
@@ -1116,27 +1116,26 @@ form.loginForm {
 }
 
 form.loginForm input {
-        padding: var(--2xs);
-        margin: 0 0 10px 0;
-        border-radius: var(--2xs);
-        border: 1px solid #979ca3;
-        width: calc(100% - 16px);
-        background: #dddedf57;
+       padding: var(--2xs);
+    margin: 0 0 10px 0;
+    border-radius: var(--2xs);
+    border: 1px solid var(--vulkan-500);
+    width: calc(100% - 16px);
+    background: var(--bunker-50);
+    color: var(--vulkan-500);
 }
 
 .loginForm button {
-        border: none;
-        padding: 16px 36px;
-        border-radius: var(--2xs);
-        color: #ffffff;
-        width: fit-content;
-        margin: 20px auto;
-        background-size: 300% 300%;
-       
-        box-shadow: 0px 4px 20px 7px #1d82fd47;
+    padding: 16px 36px;
+    border-radius: var(--2xs);
+    color: var(--vulkan-500);
+    width: 100%;
+    margin: 20px auto;
+    font-size: var(--s);
 }
 .loginForm label {
         margin-bottom: 4px;
+    color: var(--bunker-600);
 }
 
 #processingMessageContainer {
@@ -1582,11 +1581,23 @@ h4 {
 }
 
 .menu {
-    position: sticky;
-    top: -16px;
+position: sticky;
+    top: -10px;
     backdrop-filter: blur(2px);
     z-index: 9;
     height: 40px;
+    background: var(--vulkan-600);
+    border-radius: var(--2xl);
+    padding: 4px 16px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto 8px auto;
+    box-shadow: 0px 2px 4px 2px #11192263;
+}
+
+.menu h1 {
+    margin:0;
+    color: var(--vulkan-300);
 }
 
 .menuButton {
@@ -2617,12 +2628,6 @@ button:hover {
         right: 11px;
 }
 
-.buttonExt,
-.accent {
-        border-radius: 0.5rem;
-        color: #1f1f1f;
-        z-index: 2;
-}
 
 .buttonExt {
         border-radius: 0.5rem;
@@ -2630,7 +2635,6 @@ button:hover {
         transition: background ease-in-out 300ms;
         z-index: 2;
         position: relative;
- 
         box-shadow: 0px 4px 20px 7px #1d82fd2b;
         display: flex;
         flex-direction: row;
@@ -2638,24 +2642,40 @@ button:hover {
         align-items: center;
         justify-content: center;
         width: auto;
+        background: var(--vulkan-600);
+        font-size: var(--s);
+        position:relative;
 }
+
+.buttonExt span {
+        position:relative;
+        visibility:hidden;
+       width:1px;
+        margin-left:0px;
+        transition:margin-left ease-in 300ms;
+}
+
+
+.buttonExt:hover span{
+        with:100%;
+        visibility:visible;
+        width:auto;
+        margin-left:12px
+}
+
+
+.buttonExt,
+.accent {
+        border-radius: 0.5rem;
+        color: #1f1f1f;
+        z-index: 2;
+}
+
+
 
 .buttonExt:hover,
 .accent:hover {
-        background: linear-gradient(
-                138deg,
-                #f79533,
-                #f37055,
-                #ef4e7b,
-                #a166ab,
-                #5073b8,
-                #1098ad,
-                #07b39b,
-                #6fba82
-        );
-
-        animation: animatedgradient 6s ease infinite alternate;
-        background-size: 300% 300%;
+        
 }
 
 @keyframes gradient-animation {
@@ -3806,31 +3826,27 @@ button#extractColorsFromUrlButton {
     /* z-index: 999; Asegúrate de que el contenido también esté correctamente posicionado */
 }
 
-
 label.hamburger {
     cursor: pointer;
     position: absolute;
-    right: -4px;
-    background: var(--bunker-900);
+    right: 6px;
+    background: var(--vulkan-800);
     line-height: 0;
     padding: var(--3xs);
     border-radius: var(--2xl);
 }
 
 label.hamburger:hover {
-    background: var(--bunker-700);
+    background: var(--vulkan-300);
 }
-
 
 .hamburger .material-symbols-outlined {
-    color: var(--aztec-500);
-    transition:color cubic-bezier(0.4, 0, 1, 1) 300ms
+    color: var(--vulkan-50);
+    transition: color cubic-bezier(0.4, 0, 1, 1) 300ms;
 }
 
-
-
 .hamburger:hover .material-symbols-outlined {
-    color: var(--aztec-300);
+    color: var(--vulkan-600);
 }
 
 /* Estilos generales para el scrollbar */
