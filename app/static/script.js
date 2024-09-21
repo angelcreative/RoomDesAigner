@@ -298,6 +298,10 @@ function generateBlurredBackground () {
     return "The background blurs intricately, adding to the scene's stunning beauty.";
 }
     
+    function generateBokehBackground() {
+    return "The background transforms with a beautiful bokeh effect, enhancing the visual appeal of the scene.";
+}
+
   
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
@@ -516,9 +520,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
+    const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
+
 
     // Construir el texto del prompt final
-    const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${promptEndy} ${optionalText}`;
+    const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
