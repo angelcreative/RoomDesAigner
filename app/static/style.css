@@ -1998,6 +1998,7 @@ i {
 #modal {
        height: 100%;
     margin-left: 30px;
+    background: var(--bunker-800);
 }
 
 .carousel-wrapper {
