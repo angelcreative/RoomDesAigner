@@ -1583,7 +1583,7 @@ h4 {
 
 .menu {
     position: sticky;
-    top: 10px;
+    top: -16px;
     backdrop-filter: blur(2px);
     z-index: 9;
     height: 40px;
@@ -3632,9 +3632,9 @@ textarea {
 }
 
 .selected-value {
-        margin: 4px 0 8px 0;
-         : 14px;
-        color: var(--bunker-200);
+       margin: 4px 0 8px 0;
+    color: var(--bunker-400);
+    font-size: var(--xs);
 }
 
 select {
@@ -3708,7 +3708,7 @@ i#clearColorImg {
         position: relative;
 }
 div#urlImageSection {
-         : 14px;
+       font-size: var(--s);
         color: var(--bunker-200);
 }
 
