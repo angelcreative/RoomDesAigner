@@ -2583,8 +2583,8 @@ button {
 
 
 button:hover {
-    background: var(--vulkan-400);
-    color: var(--vulkan-700);
+    background: var(--vulkan-50);
+    color: var(--vulkan-600);
 }
 
 #clearAllButton,
@@ -2630,21 +2630,17 @@ button:hover {
 
 
 .buttonExt {
-        border-radius: 0.5rem;
-        color: #ffffff;
-        transition: background ease-in-out 300ms;
-        z-index: 2;
-        position: relative;
-        box-shadow: 0px 4px 20px 7px #1d82fd2b;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: center;
-        width: auto;
-        background: var(--vulkan-600);
-        font-size: var(--s);
-        position:relative;
+       transition: background ease-in-out 300ms;
+    box-shadow: 0px 4px 20px 7px #1d82fd2b;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    font-size: var(--s);
+    position: relative;
+    background: var(--vulkan-50);
 }
 
 .buttonExt span {
@@ -2673,10 +2669,16 @@ button:hover {
 
 
 
-.buttonExt:hover,
-.accent:hover {
-        
+.buttonExt:hover {
+        background: var(--vulkan-900);
+    color: var(--vulkan-50);
 }
+
+
+.buttonExt[disabled] span {
+    display: none;
+}
+
 
 @keyframes gradient-animation {
         0% {
@@ -3662,9 +3664,7 @@ select {
 }
 
 #magicButton {
-        border-radius: 900px;
-        height: 60px;
-        width: 60px;
+      
 }
 
 #magicButton .fa.fa-arrow-right {
