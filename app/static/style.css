@@ -3610,6 +3610,7 @@ textarea {
         display: flex;
         align-items: center;
         cursor: pointer;
+    transition: background-color ease-in 300ms;
 }
 
 ::placeholder {
@@ -3830,6 +3831,29 @@ label.hamburger:hover {
 
 .hamburger:hover .material-symbols-outlined {
     color: var(--aztec-300);
+}
+
+/* Estilos generales para el scrollbar */
+::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Fondo de la barra */
+::-webkit-scrollbar-track {
+    background: var(--bunker-800); /* Color del fondo de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* Color de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+    background-color: var(--bunker-700); /* Color de la barra */
+    border-radius: 10px; /* Bordes redondeados */
+     /* Espacio entre la barra y el track */
+}
+
+/* Color de la barra al pasar el cursor */
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--vulkan-400); /* Color cuando está en hover */
 }
 
 /*=========================   MEDIA QUERIES ===================*/
