@@ -2653,7 +2653,7 @@ button:hover {
 
 
 .buttonExt:hover span{
-        with:100%;
+        width:100%;
         visibility:visible;
         width:auto;
         margin-left:12px
@@ -2663,15 +2663,15 @@ button:hover {
 .buttonExt,
 .accent {
         border-radius: 0.5rem;
-        color: #1f1f1f;
+       color:var(--vulkan-500);
         z-index: 2;
 }
 
 
 
 .buttonExt:hover {
-        background: var(--vulkan-900);
-    color: var(--vulkan-50);
+    background: var(--vulkan-50);
+    color: var(--vulkan-500);
 }
 
 
