@@ -3472,8 +3472,7 @@ color: var(--vulkan-400);
         margin-top: 140px;
 }
 
-.middleContainer {
-}
+
 
 .secondaryContainer {
         display: flex;
@@ -3560,8 +3559,7 @@ color: var(--vulkan-400);
        
 }
 
-.middleContainer {
-}
+
 
 .dropdown-selected,
 textarea {
@@ -3819,6 +3817,15 @@ button#extractColorsFromUrlButton {
 .middleContainer {
     margin-left: 0;
     transition: margin-left 0.3s ease;
+    
+    
+}
+
+.middleContainer {
+    width: 100%;
+    background: url(https://i.postimg.cc/fTj1XwmZ/bg-skeleton.png) center center no-repeat;
+    height: calc(100vh - 160px);
+    display: block;
 }
 
 #menuToggle:checked ~ .middleContainer {
