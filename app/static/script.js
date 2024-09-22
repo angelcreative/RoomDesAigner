@@ -500,25 +500,27 @@ if (extractedColors.length > 0) {
 
 // Function to append the content from the uploaded file to promptEndy
 function appendToPromptEndy(text) {
-    promptEndy += ` ${text}`; // Append the text from the file to the existing promptEndy
+    // Add the content from the file to the existing promptEndy
+    promptEndy += ` ${text}`;
     console.log("Updated promptEndy: ", promptEndy);
 }
 
-// Event listener for file input
+// Event listener for text file input
 document.getElementById("textFileInput").addEventListener("change", function(event) {
     const file = event.target.files[0];
-    
+
     if (file) {
         const reader = new FileReader();
         
         reader.onload = function(e) {
             const fileContent = e.target.result;
-            appendToPromptEndy(fileContent); // Call the function to append the file content
+            appendToPromptEndy(fileContent); // Append the file content to promptEndy
         };
         
         reader.readAsText(file);
     }
 });
+
 
     // Definir proporciones de imagen basadas en la selección
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
