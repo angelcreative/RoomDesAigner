@@ -489,7 +489,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-   // Crear el prompt base y añadir información sobre colores si corresponde
+
+// Crear el prompt base y añadir información sobre colores si corresponde
 let promptEndy = "";
 
 if (extractedColors.length > 0) {
@@ -502,7 +503,7 @@ if (extractedColors.length > 0) {
 function appendToPromptEndy(text) {
     // Add the content from the file to the existing promptEndy
     promptEndy += ` ${text}`;
-    console.log("Updated promptEndy: ", promptEndy);
+    console.log("Updated promptEndy: ", promptEndy); // Log to verify content
 }
 
 // Event listener for text file input
@@ -510,14 +511,23 @@ document.getElementById("textFileInput").addEventListener("change", function(eve
     const file = event.target.files[0];
 
     if (file) {
+        console.log("File selected: ", file.name); // Debugging log
+
         const reader = new FileReader();
         
         reader.onload = function(e) {
             const fileContent = e.target.result;
+            console.log("File content loaded: ", fileContent); // Debugging log
             appendToPromptEndy(fileContent); // Append the file content to promptEndy
         };
         
-        reader.readAsText(file);
+        reader.onerror = function() {
+            console.error("Error reading file"); // Log error if reading fails
+        };
+
+        reader.readAsText(file); // Ensure we read the file as text
+    } else {
+        console.log("No file selected"); // If no file is selected
     }
 });
 
