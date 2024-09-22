@@ -489,16 +489,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-
-// Crear el prompt base y añadir información sobre colores si corresponde
+    // Crear el prompt base y añadir información sobre colores si corresponde
     let promptEndy = "";
     if (extractedColors.length > 0) {
         const colorNames = extractedColors.map(color => color.name);
         const colorsString = colorNames.join(', ');
-        promptEndy +=  Colors used: ${colorsString}.;
+        promptEndy += ` Colors used: ${colorsString}.`;
     }
-
-
 
     // Definir proporciones de imagen basadas en la selección
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
