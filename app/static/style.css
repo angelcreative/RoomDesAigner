@@ -1122,22 +1122,24 @@ form.loginForm {
 }
 
 form.loginForm input {
-       padding: var(--2xs);
+   padding: var(--s);
     margin: 0 0 10px 0;
     border-radius: var(--2xs);
     border: 1px solid var(--vulkan-500);
-    width: calc(100% - 16px);
+    width: calc(100% - 40px);
     background: var(--bunker-50);
-    color: var(--vulkan-500);
+    color: var(--vulkan-500) !important;
 }
 
 .loginForm button {
-    padding: 16px 36px;
+   padding: 16px 36px;
     border-radius: var(--2xs);
-    color: var(--vulkan-500);
+    color: var(--vulkan-100);
     width: 100%;
     margin: 20px auto;
     font-size: var(--s);
+    background: var(--vulkan-500);
+    transition: background ease-in-out 300ms;
 }
 .loginForm label {
         margin-bottom: 4px;

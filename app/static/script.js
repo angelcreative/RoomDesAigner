@@ -122,6 +122,26 @@ function handleSubmit(event) {
 }
 
     
+    
+    // Obtener los elementos necesarios
+const textArea = document.getElementById("customText");
+const magicButton = document.getElementById("magicButton");
+
+// Función para habilitar o deshabilitar el botón según la longitud del texto
+function toggleMagicButton() {
+  if (textArea.value.length >= 5) {
+    magicButton.disabled = false; // Habilitar el botón si hay al menos 5 caracteres
+  } else {
+    magicButton.disabled = true; // Deshabilitar si hay menos de 5 caracteres
+  }
+}
+
+// Escuchar el evento de entrada en el área de texto
+textArea.addEventListener("input", toggleMagicButton);
+
+// Verificar el estado inicial por si ya hay texto en el área
+toggleMagicButton();
+    
 
 
 function getSelectedValues() {
@@ -195,7 +215,8 @@ function getSelectedValues() {
         "outfit",
         "shoes",
         "accessories",
-         "photography_pose"
+         "photography_pose",
+        "style_image"
     ];
 
     const colorElements = [
@@ -524,7 +545,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 
     // Construir el texto del prompt final
-    const promptText = `Editorial photography of ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
