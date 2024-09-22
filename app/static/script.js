@@ -489,13 +489,36 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ");
 
-    // Crear el prompt base y añadir información sobre colores si corresponde
-    let promptEndy = "";
-    if (extractedColors.length > 0) {
-        const colorNames = extractedColors.map(color => color.name);
-        const colorsString = colorNames.join(', ');
-        promptEndy += ` Colors used: ${colorsString}.`;
+   // Crear el prompt base y añadir información sobre colores si corresponde
+let promptEndy = "";
+
+if (extractedColors.length > 0) {
+    const colorNames = extractedColors.map(color => color.name);
+    const colorsString = colorNames.join(', ');
+    promptEndy += ` Colors used: ${colorsString}.`;
+}
+
+// Function to append the content from the uploaded file to promptEndy
+function appendToPromptEndy(text) {
+    promptEndy += ` ${text}`; // Append the text from the file to the existing promptEndy
+    console.log("Updated promptEndy: ", promptEndy);
+}
+
+// Event listener for file input
+document.getElementById("textFileInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const fileContent = e.target.result;
+            appendToPromptEndy(fileContent); // Call the function to append the file content
+        };
+        
+        reader.readAsText(file);
     }
+});
 
     // Definir proporciones de imagen basadas en la selección
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
@@ -539,7 +562,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: "surreal-photorealism",
+        lora_model: "flux-fashion,surreal-photorealism,Photorealism-flux,realistic-skin-flux",
         lora_strength: 0.7,
         scheduler: "DPMSolverMultistepScheduler",
         webhook: null,
