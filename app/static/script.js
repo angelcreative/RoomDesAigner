@@ -491,45 +491,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 
 // Crear el prompt base y añadir información sobre colores si corresponde
-let promptEndy = "";
-
-if (extractedColors.length > 0) {
-    const colorNames = extractedColors.map(color => color.name);
-    const colorsString = colorNames.join(', ');
-    promptEndy += ` Colors used: ${colorsString}.`;
-}
-
-// Function to append the content from the uploaded file to promptEndy
-function appendToPromptEndy(text) {
-    // Add the content from the file to the existing promptEndy
-    promptEndy += ` ${text}`;
-    console.log("Updated promptEndy: ", promptEndy); // Log to verify content
-}
-
-// Event listener for text file input
-document.getElementById("textFileInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-
-    if (file) {
-        console.log("File selected: ", file.name); // Debugging log
-
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const fileContent = e.target.result;
-            console.log("File content loaded: ", fileContent); // Debugging log
-            appendToPromptEndy(fileContent); // Append the file content to promptEndy
-        };
-        
-        reader.onerror = function() {
-            console.error("Error reading file"); // Log error if reading fails
-        };
-
-        reader.readAsText(file); // Ensure we read the file as text
-    } else {
-        console.log("No file selected"); // If no file is selected
+    let promptEndy = "";
+    if (extractedColors.length > 0) {
+        const colorNames = extractedColors.map(color => color.name);
+        const colorsString = colorNames.join(', ');
+        promptEndy +=  Colors used: ${colorsString}.;
     }
-});
+
 
 
     // Definir proporciones de imagen basadas en la selección
