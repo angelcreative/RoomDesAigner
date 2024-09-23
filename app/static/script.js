@@ -328,11 +328,11 @@ function generateBlurredBackground () {
 }
     
     
-       function generateUxui() {
-    return "imagine designing a sleek, modern mobile app interface. the user friendly UI should feature intuitive icons and option. focus on speed and convenience in the design to enhance user experience. UI design, UX/UI design, Product Design, App design";
+       function generateUxui(customText) {
+    return ` imagine designing a sleek, modern mobile app interface for a ${customText} App. this user friendly user interface, must show a well distributed dashboard and ui cards. should feature intuitive UI icons, UI buttons and text options to enhance the user experience. the design approach combines this project involves UI design, UX/UI design, Product Design, App design.`;
 }
 
-
+   
   
     function hideGeneratingImagesDialog() {
         document.getElementById('generatingImagesDialog').style.display = 'none';
