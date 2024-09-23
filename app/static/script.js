@@ -552,7 +552,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
-    const sheet = document.getElementById("sheethCheckbox").checked ? generateSheet() : "";
+    const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
 
 
