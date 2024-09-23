@@ -50,11 +50,11 @@ def transform_prompt(prompt_text):
     messages = [
        {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into natural language descriptions. Give priority to person, then  design style, then home room or area, then the rest of values. When find color values names, place them in order primary color as dominant, secondary color as complementary, and tertiary color as accent. Add the RGB color value to the prompt too. colors are mandatory"
+            "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. Follow this order: Subject (main focus), Room Area or Location (e.g., living room, forest), Style (design approach), Composition (layout or arrangement), Lighting (type and quality), Color Palette (primary, secondary, tertiary with RGB values), Mood/Atmosphere (emotional tone), and Technical Details (camera settings, perspective). Always mention colors with RGB values."
         },
         {
             "role": "user",
-            "content": f"Transform the following list of values into a detailed and professional natural language prompt in less than 700 characters:\n\n{prompt_text}"
+            "content": f"Transform the following list of values into a detailed, professional natural language prompt, with a clear structure, in less than 700 characters:\n\n{prompt_text}"
         }
     ]
 
