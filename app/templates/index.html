@@ -456,439 +456,11 @@ close
                     
                     <div class="menu"><label for="menuToggle" class="hamburger"><span class="material-symbols-outlined">menu</span></label><h1>Design options</h1></div>
                     
-                                       <!-- COLLAPSE IMG -->
                     
-                      <section type="button" class="collapsible">  <h1><span class="material-symbols-outlined">
-add_a_photo
-</span>Image to image</h1><span class="material-symbols-outlined"> close </span></section> 
-                    <div class="content">
-                     <!--upload image-->
-                    <div id="myimage">
-  <label class="imageup" for="imageDisplayUrl">
-    Upload your image here <span class="material-symbols-outlined">
-arrow_upward
-</span>
-      <p>It will generate one image at a time.</p>
-    <small>Use a good resolution image<br>less than 500Kb and 1024x1204 / 1024x768 / 768x1024 size. </small>
-    <input type="file" id="imageDisplayUrl" accept="image/*">
-  </label>
-  <div class="thumbImg" style="display: none;">
-    <i class="fa fa-plus-circle" id="clearImg" aria-hidden="true"></i>
-    <img id="thumbnail" src="" alt="Thumbnail">
-  </div>
-</div>
-                    
-            
-                    
-                    
-                    <!-- slider strenght -->
-                    <div class="strenght">
-<label for="strengthSlider">Original image strenght</label>
-<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.1">
-<span id="sliderValue">0.1</span>
-                    <small>0 will produce an image nearly identical to the original.<br>
-1 will produce an image that greatly differs from the original. Try .80 to .90<br>
-                        </small>
-                    </div>
-                    
-                    </div>
-                    
-                    <!--// COLLAPSE -->
-                    
-                   
-                    <!-- home area -->
-             <div class="custom-dropdown" data-placeholder="Select Home Area">
-    <div class="dropdown-selected">
-        <span class="selected-text">Home Area</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="optgroup">
-            <div class="optgroup-label">Outdoor Spaces</div>
-            <div class="option" value="Balcony_Relaxing_outdoor_space_attached_to_room">Balcony</div>
-            <div class="option" value="Courtyard_Enclosed_outdoor_space_within_building">Courtyard</div>
-            <div class="option" value="Deck_Raised_platform_extending_from_house">Deck</div>
-            <div class="option" value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio</div>
-            <div class="option" value="Porch_Covered_area_at_entrance_for_sitting_enjoying_outdoors">Porch</div>
-            <div class="option" value="Terrace_Outdoor_platform_elevated_views_outdoor_seating">Terrace</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Common Areas</div>
-            <div class="option" value="Bar_Area_Entertaining_and_serving_beverages">Bar Area</div>
-            <div class="option" value="Dining_Room_Formal_space_for_enjoying_meals">Dining Room</div>
-            <div class="option" value="Family_Room_Casual_living_space_for_quality_time">Family Room</div>
-            <div class="option" value="Living_Room_Gathering_space_for_relaxation_entertainment">Living Room</div>
-            <div class="option" value="Living_Room_with_a_Fireplace_Cozy_living_area_with_fireplace">Living Room with a Fireplace</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Functional Spaces</div>
-            <div class="option" value="Breakfast_Nook_Cozy_area_for_casual_meals">Breakfast Nook</div>
-            <div class="option" value="Game_Room_Space_equipped_with_games_entertainment">Game Room</div>
-            <div class="option" value="Garage_Storage_parking_area_for_vehicles">Garage</div>
-            <div class="option" value="Home_Gym_Dedicated_area_for_exercising">Home Gym</div>
-            <div class="option" value="Home_Office_Workspace_for_remote_work">Home Office</div>
-            <div class="option" value="Home_Theater_Room_equipped_for_cinematic_experiences">Home Theater</div>
-            <div class="option" value="Kitchen_Heart_of_home_where_meals_are_prepared">Kitchen</div>
-            <div class="option" value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room</div>
-            <div class="option" value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom</div>
-            <div class="option" value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry</div>
-            <div class="option" value="Wine_Cellar_Controlled_environment_storing_aging_wine_collections">Wine Cellar</div>
-            <div class="option" value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Personal Spaces</div>
-            <div class="option" value="Guest_Bathroom_Restroom_for_visitors">Guest Bathroom</div>
-            <div class="option" value="Guest_Bedroom_Comfortable_space_for_hosting_visitors">Guest Bedroom</div>
-            <div class="option" value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom</div>
-            <div class="option" value="Master_Bedroom_Main_bedroom">Master Bedroom</div>
-            <div class="option" value="Walk_in_Closet_Spacious_closet_for_clothing_accessories">Walk-in Closet</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Special Features</div>
-            <div class="option" value="Entryway_First_area_guests_see_when_entering">Entryway</div>
-            <div class="option" value="Foyer_Entrance_hall_or_lobby_welcoming_guests">Foyer</div>
-            <div class="option" value="Indoor_Pool_Swimming_pool_within_building">Indoor Pool</div>
-            <div class="option" value="Library_Room_filled_with_books_quiet_space_for_reading">Library</div>
-            <div class="option" value="Landing_Small_platform_between_flights_of_stairs">Landing</div>
-            <div class="option" value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath</div>
-            <div class="option" value="Sauna_Room_with_high_temperatures_for_relaxation_health_benefits">Sauna</div>
-            <div class="option" value="Spa_Relaxation_Room_Space_for_relaxation_self-care_activities">Spa/Relaxation Room</div>
-            <div class="option" value="Staircase_Structure_connecting_different_levels_of_home">Staircase</div>
-            <div class="option" value="Study_Quiet_area_for_reading_working_focusing_on_intellectual_pursuits">Study</div>
-        </div>
-    </div>
-    <input type="hidden" name="home_room" id="home_room" value="">
-</div>
-
-                    
-                    <!-- kid room -->
-                    
-                    <div class="custom-dropdown" data-placeholder="Children room type">
-    <div class="dropdown-selected">
-        <span class="selected-text">Children room type</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="option" value="Nursery_Nurturing_space_for_infants">Nursery</div>
-        <div class="option" value="Babys_Room_Room_for_caring_for_babies">Baby's Room</div>
-        <div class="option" value="Toddlers_Room_Environment_for_toddlers_to_explore_play">Toddler's Room</div>
-        <div class="option" value="Preschoolers_Room_Space_for_preschool-aged_children">Preschooler's Room</div>
-        <div class="option" value="Elementary_Schoolers_Room_Room_for_elementary_school_children">Elementary Schooler's Room</div>
-        <div class="option" value="Preteens_Room_Personal_space_for_preteens">Preteen's Room</div>
-        <div class="option" value="Teenagers_Room_Haven_for_teenagers_to_express_identity">Teenager's Room</div>
-        <div class="option" value="Playroom_Creative_space_for_play_imaginative_activities">Playroom</div>
-        <div class="option" value="Study_Room_Study_focused_area_for_learning">Study Room</div>
-        <div class="option" value="Homework_Room_Dedicated_area_for_completing_homework">Homework Room</div>
-        <div class="option" value="Creative_Studio_Space_for_unleashing_creativity">Creative Studio</div>
-        <div class="option" value="Game_Room_Area_for_playing_board_video_games">Game Room</div>
-        <div class="option" value="Music_Room_Room_for_playing_musical_instruments">Music Room</div>
-        <div class="option" value="Sports_Room_Space_for_physical_activity_sports">Sports Room</div>
-        <div class="option" value="Reading_Nook_Cozy_corner_for_reading_books">Reading Nook</div>
-        <div class="option" value="Craft_Room_Room_for_crafting_and_artistic_projects">Craft Room</div>
-        <div class="option" value="Dressing_Room_Area_for_getting_dressed_styling">Dressing Room</div>
-        <div class="option" value="Sleepover_Room_Space_for_sleepovers_with_friends">Sleepover Room</div>
-        <div class="option" value="Siblings_Room_Room_shared_by_siblings">Sibling's Room</div>
-        <div class="option" value="Shared_Room_Room_shared_by_multiple_children">Shared Room</div>
-    </div>
-    <input type="hidden" name="children_room" id="children_room" value="">
-</div>
-
-                    
-                    <!-- design styles --> 
-                   <div class="custom-dropdown" data-placeholder="Select Design Style">
-    <div class="dropdown-selected">
-        <span class="selected-text">Design Style</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="optgroup">
-            <div class="optgroup-label">Cultural and Regional</div>
-            <div class="option" value="African_Style_defined_by_rich_colors_tribal_patterns_natural_materials_cultural_motifs">African Style</div>
-            <div class="option" value="Andalusian_Style_defined_by_intricate_tilework_vibrant_colors_Moorish_influences_courtyards">Andalusian Style</div>
-            <div class="option" value="Asian_Zen_Style_defined_by_peace_harmony_balance_with_a_minimalist_approach">Asian Zen Style</div>
-            <div class="option" value="Chinese_Modern_Style_defined_by_traditional_Chinese_elements_blended_with_modern_designs">Chinese Modern Style</div>
-            <div class="option" value="English_Country_Style_defined_by_floral_patterns_traditional_furnishings_countryside_charm">English Country Style</div>
-            <div class="option" value="French_Country_Style_defined_by_elegance_with_rustic_elements_inspired_by_rural_France">French Country Style</div>
-            <div class="option" value="Greek_Revival_Style_defined_by_inspired_by_ancient_Greek_architecture_symmetrical_designs_grand_columns">Greek Revival Style</div>
-            <div class="option" value="Ibicenco_Style_defined_by_white_washed_walls_natural_materials_rustic_elegance_indoor_outdoor_living">Ibicenco Style</div>
-            <div class="option" value="Japanese_Style_defined_by_simplicity_minimalism_harmony_with_nature_clean_lines_tranquility">Japanese Style</div>
-            <div class="option" value="Mediterranean_Style_defined_by_warm_colors_natural_textures_rustic_elements_relaxed_ambiance">Mediterranean Style</div>
-            <div class="option" value="Moroccan_Style_defined_by_vibrant_rich_colors_intricate_patterns_exotic_atmosphere">Moroccan Style</div>
-            <div class="option" value="Spanish_Mediterranean_Style_defined_by_Spanish_and_Mediterranean_influences_warm_tones_arched_doorways_tilework_wrought_iron_details">Spanish Mediterranean Style</div>
-            <div class="option" value="Tuscan_Style_defined_by_Italian_Tuscany_inspiration_warm_earth_tones_textured_walls_rustic_elements">Tuscan Style</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Historical and Artistic</div>
-            <div class="option" value="Art_Brut_Style_defined_by_unconventional_raw_artistic_expressions">Art Brut Style</div>
-            <div class="option" value="Art_Deco_Style_defined_by_1920s_30s_style_geometric_patterns_luxury_materials">Art Deco</div>
-            <div class="option" value="Art_Nouveau_Style_defined_by_late_19th_century_organic_forms_inspired_by_nature">Art Nouveau</div>
-            <div class="option" value="Gothic_Style_defined_by_dark_dramatic_medieval_architecture_inspiration_pointed_arches_mystery">Gothic Style</div>
-            <div class="option" value="Renaissance_Style_defined_by_opulent_grandeur_classical_elements_inspired_by_the_Renaissance_period">Renaissance Style</div>
-            <div class="option" value="Rococo_Style_defined_by_18th_century_origin_elaborate_ornamentation_soft_colors_whimsy">Rococo Style</div>
-            <div class="option" value="Victorian_Style_defined_by_Victorian_era_inspiration_ornate_details_rich_colors_opulent">Victorian Style</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Modern and Contemporary</div>
-            <div class="option" value="Artistic_Style_defined_by_creativity_self_expression_experimentation">Artistic Style</div>
-            <div class="option" value="Contemporary_Style_defined_by_latest_trends_clean_lines_balance_and_harmony">Contemporary Style</div>
-            <div class="option" value="Futuristic_Style_defined_by_innovative_designs_sleek_shapes_forward_thinking">Futuristic Style</div>
-            <div class="option" value="Industrial_Style_defined_by_functional_raw_and_utilitarian_exposed_brick_metal_concrete">Industrial Style</div>
-            <div class="option" value="Mid_Century_Modern_Style_defined_by_clean_lines_organic_forms_functionality_mix_of_natural_and_modern">Mid-Century Modern Style</div>
-            <div class="option" value="Minimalist_Style_defined_by_simplicity_functionality_clean_lines_uncluttered_spaces_serene">Minimalist Style</div>
-            <div class="option" value="Modern_Style_defined_by_simplicity_functionality_neutral_colors_open_spaces_modern_elements">Modern Style</div>
-            <div class="option" value="Modern_Farmhouse_Style_defined_by_rustic_charm_modern_elements_neutral_colors_natural_textures">Modern Farmhouse Style</div>
-            <div class="option" value="Scandinavian_Style_defined_by_simplicity_functionality_clean_lines_muted_tones_warm_and_inviting">Scandinavian Style</div>
-            <div class="option" value="Transitional_Style_defined_by_combining_traditional_and_contemporary_clean_lines_neutral_colors">Transitional Style</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Lifestyle and Conceptual</div>
-            <div class="option" value="Bohemian_Style_defined_by_eclectic_vibrant_colors_global_influences">Bohemian Style</div>
-            <div class="option" value="Coastal_Style_defined_by_light_colors_natural_materials_nautical_vibe">Coastal Style</div>
-            <div class="option" value="Eclectic_Style_defined_by_mix_of_styles_for_a_unique_personalized_space">Eclectic Style</div>
-            <div class="option" value="Farmhouse_Style_defined_by_warmth_and_simplicity_of_rural_farmhouses">Farmhouse Style</div>
-            <div class="option" value="Hygge_Style_defined_by_cozy_Danish_concept_warmth_comfort_soft_lighting_neutral_palette">Hygge Style</div>
-            <div class="option" value="Industrial_Chic_Style_defined_by_stylish_edgy_raw_materials_rustic_and_urban_blend_salvaged_wood">Industrial Chic Style</div>
-            <div class="option" value="Wabi_Sabi_Style_defined_by_Japanese_aesthetics_imperfection_natural_materials_rustic_and_unpretentious">Wabi-Sabi Style</div>
-            <div class="option" value="Zen_Style_defined_by_Japanese_inspired_serenity_minimalist_neutral_colors_tranquility">Zen Style</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Decorative and Thematic</div>
-            <div class="option" value="Chinoiserie_Style_defined_by_East_Asian_art_decorative_patterns_whimsy">Chinoiserie Style</div>
-            <div class="option" value="Cottage_Style_defined_by_cozy_soft_colors_vintage_furnishings">Cottage Style</div>
-            <div class="option" value="Glam_Style_defined_by_luxurious_sparkle_metallic_accents_plush_textures_opulence">Glam Style</div>
-            <div class="option" value="Global_Fusion_Style_defined_by_multicultural_ambiance_blending_elements_colors_patterns_from_around_the_world">Global Fusion</div>
-            <div class="option" value="Nautical_Style_defined_by_blue_and_white_coastal_inspiration_and_maritime_ambiance">Nautical Style</div>
-            <div class="option" value="Rustic_Style_defined_by_embracing_natural_elements_ruggedness_raw_materials_earthy_colors">Rustic Style</div>
-            <div class="option" value="Shabby_Chic_Style_defined_by_vintage_and_feminine_blend_distressed_furniture_pastel_colors_romantic_ambiance">Shabby Chic Style</div>
-            <div class="option" value="Steampunk_Style_defined_by_Victorian_elegance_industrial_elements_vintage_machinery_adventurous">Steampunk Style</div>
-            <div class="option" value="Tribal_Style_defined_by_inspiration_from_indigenous_cultures_bold_patterns_earthy_tones_natural_materials">Tribal Style</div>
-            <div class="option" value="Tropical_Style_defined_by_vibrant_colors_botanical_prints_natural_materials_lively_and_exotic">Tropical Style</div>
-            <div class="option" value="Vintage_Style_defined_by_nostalgic_design_antique_or_vintage_inspired_elements_retro_patterns">Vintage Style</div>
-            <div class="option" value="Retro_and_Technological_Elements_with_Dieter_Rams_influence_focused_on_less_but_better_organization_and_functionality">Less is more</div>
-        </div>
-    </div>
-    <input type="hidden" name="design_style" id="design_style" value="">
-</div>
-
-                     <!-- decoration -->                
-                    <div class="custom-dropdown" data-placeholder="Choose decoration">
-    <div class="dropdown-selected">
-        <span class="selected-text">Choose decoration</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="optgroup">
-            <div class="optgroup-label">Contemporary Trends</div>
-            <div class="option" value="Sleek_Minimalism_decoration">Sleek Minimalism</div>
-            <div class="option" value="Urban_Industrial_decoration">Urban Industrial</div>
-            <div class="option" value="Abstract_Expressions_decoration">Abstract Expressions</div>
-            <div class="option" value="Tech_integrated_and_smart_home">Technological</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Timeless Elegance</div>
-            <div class="option" value="Classic_Ornamentation_decoration">Classic Ornamentation</div>
-            <div class="option" value="Retro_Charm_decoration">Retro Charm</div>
-            <div class="option" value="Opulent_Luxury_decoration">Opulent Luxury</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Inspired by Nature</div>
-            <div class="option" value="Earthy_Themes_decoration">Earthy Themes</div>
-            <div class="option" value="Floral_Paradise_decoration">Floral Paradise</div>
-            <div class="option" value="Seaside_Escape_decoration">Seaside Escape</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Worldly Flavors</div>
-            <div class="option" value="Cultural_Fusion_decoration">Cultural Fusion</div>
-            <div class="option" value="Artisan_Craftsmanship_decoration">Artisan Craftsmanship</div>
-            <div class="option" value="Playful_Fantasy_decoration">Playful Fantasy</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Modern Innovations</div>
-            <div class="option" value="Biophilic_Design_decoration">Biophilic Design</div>
-            <div class="option" value="Smart_Home_Technology_decoration">Smart Home Technology</div>
-            <div class="option" value="Sustainable_Eco_friendly_decoration">Sustainable/Eco-friendly</div>
-            <div class="option" value="Minimalist_Maximalist_Hybrid_decoration">Minimalist-Maximalist Hybrid</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Cultural Inspirations</div>
-            <div class="option" value="Scandinavian_Hygge_decoration">Scandinavian Hygge</div>
-            <div class="option" value="Japanese_Wabi_Sabi_decoration">Japanese Wabi-Sabi</div>
-            <div class="option" value="Mediterranean_Riviera_decoration">Mediterranean Riviera</div>
-            <div class="option" value="Moroccan_decoration">Moroccan</div>
-            <div class="option" value="African_Tribal_decoration">African Tribal</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Mediterranean Influences</div>
-            <div class="option" value="Ibicenco_decoration">Ibicenco</div>
-            <div class="option" value="Tuscan_decoration">Tuscan</div>
-            <div class="option" value="Greek_Island_decoration">Greek Island</div>
-            <div class="option" value="Provencal_decoration">Provencal</div>
-            <div class="option" value="Spanish_Revival_decoration">Spanish Revival</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Vintage Revivals</div>
-            <div class="option" value="Mid_Century_Modern_Retro_decoration">Mid-Century Modern Retro</div>
-            <div class="option" value="Victorian_Elegance_decoration">Victorian Elegance</div>
-            <div class="option" value="Art_Deco_Revival_decoration">Art Deco Revival</div>
-            <div class="option" value="Rustic_Farmhouse_decoration">Rustic Farmhouse</div>
-            <div class="option" value="Vintage_Technology_items_inspired_by_Mid_Century_Modern_Retro_decoration_Braun_design_style_Dieter_Rams_design">Vintage technology</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Futuristic Concepts</div>
-            <div class="option" value="Space_Age_Modern_decoration">Space Age Modern</div>
-            <div class="option" value="Digital_Art_Installations_decoration">Digital Art Installations</div>
-            <div class="option" value="Virtual_Reality_Environments_decoration">Virtual Reality Environments</div>
-            <div class="option" value="Holographic_Elements_decoration">Holographic Elements</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Nature and Outdoors</div>
-            <div class="option" value="Botanical_Garden_decoration">Botanical Garden</div>
-            <div class="option" value="Beachfront_Oasis_decoration">Beachfront Oasis</div>
-            <div class="option" value="Mountain_Lodge_decoration">Mountain Lodge</div>
-            <div class="option" value="Desert_Chic_decoration">Desert Chic</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Creative and Artistic</div>
-            <div class="option" value="Bohemian_Creative_decoration">Bohemian Creative</div>
-            <div class="option" value="Pop_Art_decoration">Pop Art</div>
-            <div class="option" value="Industrial_Artist_Studio_decoration">Industrial Artist Studio</div>
-            <div class="option" value="Gallery_Style_decoration">Gallery Style</div>
-        </div>
-    </div>
-    <input type="hidden" name="decorative_elements" id="decorative_elements" value="">
-</div>
-
-                    <!--color scheme-->
-                 
-
-                     
-                    <!--indoor / outdoor -->
-                    <div class="custom-dropdown" data-placeholder="Space to design">
-    <div class="dropdown-selected">
-        <span class="selected-text">Space to design</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="option" value="[Indoor_design_showcasing_the_interior_layout:_furniture_and_decor_with_a_focus_on_style_and_functionality:2]">Indoor design</div>
-        <div class="option" value="[Outdoor_design_showcasing_the_exterior_space:_including_garden_landscaping_and_architectural_details_of_the_house:2]">Outdoor design</div>
-        <div class="option" value="[Front_of_the_house_facade:_view_showing_detailed_architectural_features_and_landscaping_elements:2]">Facade design</div>
-        <div class="option" value="[Full_house_view_including_the_entire_exterior:_front_yard,_and_landscaping._The_house_should_be_shown_in_its_entirety_with_all_architectural_details_and_surrounding_garden_visible:2]">Complete House View</div>
-    </div>
-    <input type="hidden" name="space_to_be_designed" id="space_to_be_designed" value="">
-</div>
-
-                     
-                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub> 
-    <!-- <div class="custom-dropdown" data-placeholder="Pick an architecture generation model">
-    <div class="dropdown-selected">
-        <span class="selected-text">Pick an architecture generation model</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-         <div class="optgroup-label">Flux models</div>
-         <div class="option" value="flux">Flux - basic model </div>
-         <div class="option" value="fluxschnell">Flux Schnell - hyperrealistic ⭐️</div>
-    </div>
-     <input type="hidden" name="funitureModel" id="funitureModel" value="furnitureModel">
-       <div class="option" value="ae-sdxl-v1">Realistic Dream Studio AE SDXL</div>
-         <div class="option" value="epicrealism-xl">Epic Realism XL</div>
-        
-        <div class="option" value="sdxlceshi">SDXL Creative</div>
-       
-        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
-              <div class="option" value="midjourney-v61">Midjourney</div>
-
-</div>-->
- 
-
-                     <h4>Write or paste your own prompt</h4>
+                      <h4>Write or paste your own prompt</h4>
 <textarea placeholder="Write your own prompt here to refine your design" id="customText" rows="8s" cols="50"></textarea>      
 <br><br>
-                  <div class="custom-dropdown" data-placeholder="Style Image">
-    <div class="dropdown-selected">
-        <span class="selected-text">Style Image</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-
-    <div class="dropdown-options show">
-        <!-- Advertising Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Advertising Styles</div>
-            <div class="option" value="ads-advertising">Ads Advertising</div>
-            <div class="option" value="ads-automotive">Ads Automotive</div>
-            <div class="option" value="ads-corporate">Ads Corporate</div>
-            <div class="option" value="ads-fashion-editorial">Ads Fashion Editorial</div>
-            <div class="option" value="ads-luxury">Ads Luxury</div>
-            <div class="option" value="ads-real-estate">Ads Real Estate</div>
-            <div class="option" value="ads-retail">Ads Retail</div>
-        </div>
-
-        <!-- Futuristic & Cybernetic Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Futuristic & Cybernetic Styles</div>
-            <div class="option" value="futuristic-biomechanical">Futuristic Biomechanical</div>
-            <div class="option" value="futuristic-biomechanical-cyberpunk">Futuristic Biomechanical Cyberpunk</div>
-            <div class="option" value="futuristic-cybernetic">Futuristic Cybernetic</div>
-            <div class="option" value="futuristic-cybernetic-robot">Futuristic Cybernetic Robot</div>
-            <div class="option" value="futuristic-cyberpunk-cityscape">Futuristic Cyberpunk Cityscape</div>
-            <div class="option" value="futuristic-futuristic">Futuristic</div>
-            <div class="option" value="futuristic-retro-cyberpunk">Futuristic Retro Cyberpunk</div>
-            <div class="option" value="futuristic-retro">Futuristic Retro</div>
-            <div class="option" value="futuristic-sci-fi">Futuristic Sci-Fi</div>
-            <div class="option" value="futuristic-vaporwave">Futuristic Vaporwave</div>
-        </div>
-
-        <!-- Video Game Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Video Game Styles</div>
-            <div class="option" value="game-bubble">Game Bubble</div>
-            <div class="option" value="game-cyberpunk">Game Cyberpunk</div>
-            <div class="option" value="game-fighting">Game Fighting</div>
-            <div class="option" value="game-fortnite">Game Fortnite</div>
-            <div class="option" value="game-gta">Game GTA</div>
-            <div class="option" value="game-mario">Game Mario</div>
-            <div class="option" value="game-minecraft">Game Minecraft</div>
-            <div class="option" value="game-pokemon">Game Pokemon</div>
-            <div class="option" value="game-retro-arcade">Game Retro Arcade</div>
-            <div class="option" value="game-retro">Game Retro</div>
-            <div class="option" value="game-rpg-fantasy">Game RPG Fantasy</div>
-            <div class="option" value="game-strategy">Game Strategy</div>
-            <div class="option" value="game-streetfighter">Game Streetfighter</div>
-            <div class="option" value="game-zelda">Game Zelda</div>
-        </div>
-
-        <!-- Nature & Tranquility Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Nature & Tranquility Styles</div>
-            <div class="option" value="idyllic">Idyllic</div>
-            <div class="option" value="tranquil-relaxing-atmosphere">Tranquil Relaxing Atmosphere</div>
-            <div class="option" value="whimsical-and-playful">Whimsical and Playful</div>
-            <div class="option" value="terragen">Terragen</div>
-            <div class="option" value="mandola-art">Mandola Art</div>
-        </div>
-
-        <!-- Figurative & Character Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Figurative & Character Styles</div>
-            <div class="option" value="action-figure">Action Figure</div>
-            <div class="option" value="adorable-3d-character">Adorable 3D Character</div>
-            <div class="option" value="adorable-kawaii">Adorable Kawaii</div>
-            <div class="option" value="character-design-sheet">Character Design Sheet</div>
-        </div>
-    </div>
-
-    <input type="hidden" name="style_image" id="style_image" value="">
-</div>
-
-
-
+                    
             <!-- pro tokens -->
             <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
 settings_photo_camera
@@ -1418,6 +990,642 @@ Shot settings</h1><span class="material-symbols-outlined"> close </span>
                 <!-- end pro tokens -->
 <!-- //COLLAPSE --> 
                     
+                    
+                     <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
+palette
+</span>
+
+Color schemes</h1><span class="material-symbols-outlined"> close </span></section>     
+ <div class="content">
+     
+     
+   
+
+
+   
+  
+     
+     
+     <!-- img ref -->
+<div id="colorExtractionImage">
+  <label class="imageup">
+    Extract up to 5 colors from an image <span class="material-symbols-outlined">
+arrow_upward
+</span>
+    <small>Use extracted colors as a palette. <br> SVG are allowed. <br> Go <a href="https://www.colortoken.site/" target="_blank">Color Token</a> to generate color palettes, export as SVG and upload it here</small>
+    <input type="file" accept="image/*" id="colorExtractionInput">
+  </label>
+  <div class="thumbImg" style="display: none;">
+    <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
+   
+    <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;">
+    <br> <div class="thumbExt"></div>
+  </div>
+</div>
+    
+<!--// end img ref -->
+     
+    
+     
+     
+     
+     
+     <div class="coloresWheel colorPalette">
+    <!--start 603010-->
+    <div class="colorPickersGroup">
+        <div class="switchContainer colorSC">
+    <label class="switchLabel">
+        <input type="checkbox" id="use_colors">
+        <span class="material-symbols-outlined">check_small</span>
+        Activate 60 30 10 color rule
+    </label>
+</div>
+        <div class="colorPickers">
+            <div class="colorPaletteA">
+                <input type="color" id="dominant_color" value="#ffffff" class="colorPicker">
+                <span id="dominant_color_name" class="colorName">White</span> <!-- Span para mostrar el nombre -->
+            </div>
+            <div class="colorPaletteA">
+                <input type="color" id="secondary_color" value="#dddddd" class="colorPicker">
+                <span id="secondary_color_name" class="colorName">Light Gray</span> <!-- Span para mostrar el nombre -->
+            </div>
+            <div class="colorPaletteA">
+                <input type="color" id="accent_color" value="#1f1f1f" class="colorPicker">
+                <span id="accent_color_name" class="colorName">Dark Gray</span> <!-- Span para mostrar el nombre -->
+            </div>
+        </div>
+        <small>This decorating rule suggests that you should cover your room with 60% of a dominant color, 30% of a secondary color, and 10% of an accent shade</small>
+    </div>
+    <!--//end start 603010 -->
+</div>
+     
+     
+
+<div class="colorOptions">
+    <div class="switchContainer colorSC">
+    <label class="switchLabel">
+        <input type="checkbox" id="use_walls_paint_color">
+        <span class="material-symbols-outlined">check_small</span>
+       Use wall paint color
+    </label>
+</div>
+    <div class="colorPaletteA">
+        <input type="color" id="walls_paint_color" value="#cccccc" class="colorPicker">
+        <span id="walls_paint_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
+    </div>
+
+    <div class="switchContainer colorSC">
+    <label class="switchLabel">
+        <input type="checkbox" id="use_furniture_color">
+        <span class="material-symbols-outlined">check_small</span>
+        Use furniture color
+    </label>
+</div> 
+    <div class="colorPaletteA">
+        <input type="color" id="furniture_color" value="#999999" class="colorPicker">
+        <span id="furniture_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
+    </div>
+</div>
+
+
+      
+     
+
+
+
+     
+     
+<div class="custom-dropdown" data-placeholder="Select Color Scheme or Dominant Color">
+    <div class="dropdown-selected">
+        <span class="selected-text">Color Scheme or Dominant Color</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Converts_image_to_black_and_white_eliminating_color">Black and White Colors</div>
+        <div class="option" value="Boosts_color_saturation_to_make_colors_more_vivid">Hyper Saturated Colors</div>
+        <div class="option" value="Reduces_color_saturation_for_a_more_subdued_look">Low Saturated Colors</div>
+        <div class="option" value="Introduces_a_green_hue_to_the_image_for_a_monochromatic_effect">Greenish Colored</div>
+        <div class="option" value="Applies_a_sepia_filter_for_a_classic_vintage_look">Sepia Colored</div>
+        <div class="option" value="Introduces_a_red_hue_to_the_image_for_a_vibrant_red_effect">Red Colored</div>
+        <div class="option" value="Introduces_an_orange_hue_to_the_image_for_a_vibrant_orange_effect">Orange Colored</div>
+        <div class="option" value="Introduces_a_yellow_hue_to_the_image_for_a_vibrant_yellow_effect">Yellow Colored</div>
+        <div class="option" value="Introduces_a_green_hue_to_the_image_for_a_vibrant_green_effect">Green Colored</div>
+        <div class="option" value="Introduces_a_blue_hue_to_the_image_for_a_vibrant_blue_effect">Blue Colored</div>
+        <div class="option" value="Introduces_an_indigo_hue_to_the_image_for_a_vibrant_indigo_effect">Indigo Colored</div>
+        <div class="option" value="Introduces_a_violet_hue_to_the_image_for_a_vibrant_violet_effect">Violet Colored</div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Basic</div>
+            <div class="option" value="Black_and_White_Timeless_contrast_of_black_and_white_for_a_striking_look">Black and White</div>
+            <div class="option" value="White_Variations_Variations_of_white_including_Off-White_Silk-White_Cream-White_Antique-White_Chalk-White">White Variations</div>
+            <div class="option" value="Duotone_Two-tone_color_schemes_for_a_minimalist_yet_bold_statement">Duotone</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Warm Tones</div>
+            <div class="option" value="Warm_Inviting_tones_of_reds_oranges_yellows">Warm</div>
+            <div class="option" value="Desert_Warm_sandy_and_terracotta_tones_reminiscent_of_the_desert_landscape">Desert</div>
+            <div class="option" value="Rustic_Farmhouse_Warm_earthy_tones_for_a_cozy_rustic_look">Rustic Farmhouse</div>
+            <div class="option" value="Mediterranean_Sun-kissed_earth_tones_inspired_by_Mediterranean_landscapes">Mediterranean</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Cool Tones</div>
+            <div class="option" value="Cool_Refreshing_blues_greens_purples_for_a_serene_ambiance">Cool</div>
+            <div class="option" value="Nordic_White_Crisp_clean_white_palette_inspired_by_Scandinavian_simplicity">Nordic White</div>
+            <div class="option" value="Scandinavian_Minimalist_palette_with_light_airy_tones_for_a_modern_look">Scandinavian</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Natural and Earthy</div>
+            <div class="option" value="Earthy_and_Natural_Grounded_in_nature_with_warm_earth_tones_and_textures">Earthy and Natural</div>
+            <div class="option" value="Bohemian_Eclectic_vibrant_mix_of_global_influences_and_textures">Bohemian</div>
+            <div class="option" value="Urban_Jungle_Lush_greens_and_natural_wood_tones_for_an_indoor_oasis">Urban Jungle</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Vibrant and Energetic</div>
+            <div class="option" value="Bold_and_Vibrant_Dynamic_bright_and_energetic_colors_for_lively_spaces">Bold and Vibrant</div>
+            <div class="option" value="Electric_High-voltage_electric_hues_for_strikingly_modern_interiors">Electric</div>
+            <div class="option" value="Tropical_Bright_vibrant_tropical_colors_for_a_lively_exotic_touch">Tropical</div>
+            <div class="option" value="Pop_Art_Pop_Art-inspired_vibrant_primary_colors_for_a_fun_retro_vibe">Pop Art</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Patterns and Themes</div>
+            <div class="option" value="Art_Deco_Luxurious_tones_with_geometric_patterns_for_a_glamorous_look">Art Deco</div>
+            <div class="option" value="Beachy_Relaxed_beach-inspired_shades_for_a_casual_airy_feel">Beachy</div>
+            <div class="option" value="Cottagecore_Pastel_colors_with_floral_patterns_for_a_quaint_charming_vibe">Cottagecore</div>
+            <div class="option" value="French_Country_Soft_pastels_mixed_with_rustic_elements_for_a_chic_countryside_feel">French Country</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Luxurious and Glamorous</div>
+            <div class="option" value="Jewel_Rich_saturated_jewel_tones_for_opulent_luxurious_interiors">Jewel</div>
+            <div class="option" value="Metallic_Shimmering_metallic_hues_for_a_touch_of_glamour">Metallic</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Specialty Color Schemes</div>
+            <div class="option" value="Gradient_Smooth_transitions_between_colors_for_a_modern_dynamic_look">Gradient</div>
+            <div class="option" value="High_Contrast_Dramatic_high_contrast_colors_for_bold_impactful_designs">High Contrast</div>
+            <div class="option" value="Muted_Soft_desaturated_colors_for_a_subtle_sophisticated_ambiance">Muted</div>
+            <div class="option" value="Saturated_Deep_intense_colors_for_a_rich_visual_experience">Saturated</div>
+            <div class="option" value="Moody_Deep_rich_hues_for_an_intimate_atmospheric_setting">Moody</div>
+        </div>
+        
+        <div class="optgroup">
+            <div class="optgroup-label">Color Harmony</div>
+            <div class="option" value="Monochromatic_Different_shades_and_tints_of_a_single_color">Monochromatic</div>
+            <div class="option" value="Analogous_Harmonious_adjacent_colors_for_a_cohesive_balanced_look">Analogous</div>
+            <div class="option" value="Complementary_Colors_opposite_each_other_on_the_color_wheel">Complementary</div>
+            <div class="option" value="Split-Complementary_A_base_color_and_two_adjacent_tertiary_colors">Split-Complementary</div>
+            <div class="option" value="Triadic_Three_evenly_spaced_colors_on_the_color_wheel_for_vibrant_harmony">Triadic</div>
+            <div class="option" value="Tetradic_Four-color_schemes_for_complex_rich_palettes">Tetradic</div>
+            <div class="option" value="Square_Four_colors_spaced_evenly_around_the_color_wheel">Square</div>
+        </div>
+    </div>
+    <input type="hidden" name="color_scheme" id="color_scheme" value="">
+</div>
+
+  
+                       
+                   </div>
+  <!-- //COLLAPSE --> 
+                    
+                                       <!-- COLLAPSE IMG -->
+                    
+                      <section type="button" class="collapsible">  <h1><span class="material-symbols-outlined">
+add_a_photo
+</span>Image to image</h1><span class="material-symbols-outlined"> close </span></section> 
+                    <div class="content">
+                     <!--upload image-->
+                    <div id="myimage">
+  <label class="imageup" for="imageDisplayUrl">
+    Upload your image here <span class="material-symbols-outlined">
+arrow_upward
+</span>
+      <p>It will generate one image at a time.</p>
+    <small>Use a good resolution image<br>less than 500Kb and 1024x1204 / 1024x768 / 768x1024 size. </small>
+    <input type="file" id="imageDisplayUrl" accept="image/*">
+  </label>
+  <div class="thumbImg" style="display: none;">
+    <i class="fa fa-plus-circle" id="clearImg" aria-hidden="true"></i>
+    <img id="thumbnail" src="" alt="Thumbnail">
+  </div>
+</div>
+                    
+            
+                    
+                    
+                    <!-- slider strenght -->
+                    <div class="strenght">
+<label for="strengthSlider">Original image strenght</label>
+<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.1">
+<span id="sliderValue">0.1</span>
+                    <small>0 will produce an image nearly identical to the original.<br>
+1 will produce an image that greatly differs from the original. Try .80 to .90<br>
+                        </small>
+                    </div>
+                    
+                    </div>
+                    
+                    <!--// COLLAPSE -->
+                    
+                   
+                    <!-- home area -->
+             <div class="custom-dropdown" data-placeholder="Select Home Area">
+    <div class="dropdown-selected">
+        <span class="selected-text">Home Area</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="optgroup">
+            <div class="optgroup-label">Outdoor Spaces</div>
+            <div class="option" value="Balcony_Relaxing_outdoor_space_attached_to_room">Balcony</div>
+            <div class="option" value="Courtyard_Enclosed_outdoor_space_within_building">Courtyard</div>
+            <div class="option" value="Deck_Raised_platform_extending_from_house">Deck</div>
+            <div class="option" value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio</div>
+            <div class="option" value="Porch_Covered_area_at_entrance_for_sitting_enjoying_outdoors">Porch</div>
+            <div class="option" value="Terrace_Outdoor_platform_elevated_views_outdoor_seating">Terrace</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Common Areas</div>
+            <div class="option" value="Bar_Area_Entertaining_and_serving_beverages">Bar Area</div>
+            <div class="option" value="Dining_Room_Formal_space_for_enjoying_meals">Dining Room</div>
+            <div class="option" value="Family_Room_Casual_living_space_for_quality_time">Family Room</div>
+            <div class="option" value="Living_Room_Gathering_space_for_relaxation_entertainment">Living Room</div>
+            <div class="option" value="Living_Room_with_a_Fireplace_Cozy_living_area_with_fireplace">Living Room with a Fireplace</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Functional Spaces</div>
+            <div class="option" value="Breakfast_Nook_Cozy_area_for_casual_meals">Breakfast Nook</div>
+            <div class="option" value="Game_Room_Space_equipped_with_games_entertainment">Game Room</div>
+            <div class="option" value="Garage_Storage_parking_area_for_vehicles">Garage</div>
+            <div class="option" value="Home_Gym_Dedicated_area_for_exercising">Home Gym</div>
+            <div class="option" value="Home_Office_Workspace_for_remote_work">Home Office</div>
+            <div class="option" value="Home_Theater_Room_equipped_for_cinematic_experiences">Home Theater</div>
+            <div class="option" value="Kitchen_Heart_of_home_where_meals_are_prepared">Kitchen</div>
+            <div class="option" value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room</div>
+            <div class="option" value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom</div>
+            <div class="option" value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry</div>
+            <div class="option" value="Wine_Cellar_Controlled_environment_storing_aging_wine_collections">Wine Cellar</div>
+            <div class="option" value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Personal Spaces</div>
+            <div class="option" value="Guest_Bathroom_Restroom_for_visitors">Guest Bathroom</div>
+            <div class="option" value="Guest_Bedroom_Comfortable_space_for_hosting_visitors">Guest Bedroom</div>
+            <div class="option" value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom</div>
+            <div class="option" value="Master_Bedroom_Main_bedroom">Master Bedroom</div>
+            <div class="option" value="Walk_in_Closet_Spacious_closet_for_clothing_accessories">Walk-in Closet</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Special Features</div>
+            <div class="option" value="Entryway_First_area_guests_see_when_entering">Entryway</div>
+            <div class="option" value="Foyer_Entrance_hall_or_lobby_welcoming_guests">Foyer</div>
+            <div class="option" value="Indoor_Pool_Swimming_pool_within_building">Indoor Pool</div>
+            <div class="option" value="Library_Room_filled_with_books_quiet_space_for_reading">Library</div>
+            <div class="option" value="Landing_Small_platform_between_flights_of_stairs">Landing</div>
+            <div class="option" value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath</div>
+            <div class="option" value="Sauna_Room_with_high_temperatures_for_relaxation_health_benefits">Sauna</div>
+            <div class="option" value="Spa_Relaxation_Room_Space_for_relaxation_self-care_activities">Spa/Relaxation Room</div>
+            <div class="option" value="Staircase_Structure_connecting_different_levels_of_home">Staircase</div>
+            <div class="option" value="Study_Quiet_area_for_reading_working_focusing_on_intellectual_pursuits">Study</div>
+        </div>
+    </div>
+    <input type="hidden" name="home_room" id="home_room" value="">
+</div>
+
+                    
+                    <!-- kid room -->
+                    
+                    <div class="custom-dropdown" data-placeholder="Children room type">
+    <div class="dropdown-selected">
+        <span class="selected-text">Children room type</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Nursery_Nurturing_space_for_infants">Nursery</div>
+        <div class="option" value="Babys_Room_Room_for_caring_for_babies">Baby's Room</div>
+        <div class="option" value="Toddlers_Room_Environment_for_toddlers_to_explore_play">Toddler's Room</div>
+        <div class="option" value="Preschoolers_Room_Space_for_preschool-aged_children">Preschooler's Room</div>
+        <div class="option" value="Elementary_Schoolers_Room_Room_for_elementary_school_children">Elementary Schooler's Room</div>
+        <div class="option" value="Preteens_Room_Personal_space_for_preteens">Preteen's Room</div>
+        <div class="option" value="Teenagers_Room_Haven_for_teenagers_to_express_identity">Teenager's Room</div>
+        <div class="option" value="Playroom_Creative_space_for_play_imaginative_activities">Playroom</div>
+        <div class="option" value="Study_Room_Study_focused_area_for_learning">Study Room</div>
+        <div class="option" value="Homework_Room_Dedicated_area_for_completing_homework">Homework Room</div>
+        <div class="option" value="Creative_Studio_Space_for_unleashing_creativity">Creative Studio</div>
+        <div class="option" value="Game_Room_Area_for_playing_board_video_games">Game Room</div>
+        <div class="option" value="Music_Room_Room_for_playing_musical_instruments">Music Room</div>
+        <div class="option" value="Sports_Room_Space_for_physical_activity_sports">Sports Room</div>
+        <div class="option" value="Reading_Nook_Cozy_corner_for_reading_books">Reading Nook</div>
+        <div class="option" value="Craft_Room_Room_for_crafting_and_artistic_projects">Craft Room</div>
+        <div class="option" value="Dressing_Room_Area_for_getting_dressed_styling">Dressing Room</div>
+        <div class="option" value="Sleepover_Room_Space_for_sleepovers_with_friends">Sleepover Room</div>
+        <div class="option" value="Siblings_Room_Room_shared_by_siblings">Sibling's Room</div>
+        <div class="option" value="Shared_Room_Room_shared_by_multiple_children">Shared Room</div>
+    </div>
+    <input type="hidden" name="children_room" id="children_room" value="">
+</div>
+
+                    
+                    <!-- design styles --> 
+                   <div class="custom-dropdown" data-placeholder="Select Design Style">
+    <div class="dropdown-selected">
+        <span class="selected-text">Design Style</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="optgroup">
+            <div class="optgroup-label">Cultural and Regional</div>
+            <div class="option" value="African_Style_defined_by_rich_colors_tribal_patterns_natural_materials_cultural_motifs">African Style</div>
+            <div class="option" value="Andalusian_Style_defined_by_intricate_tilework_vibrant_colors_Moorish_influences_courtyards">Andalusian Style</div>
+            <div class="option" value="Asian_Zen_Style_defined_by_peace_harmony_balance_with_a_minimalist_approach">Asian Zen Style</div>
+            <div class="option" value="Chinese_Modern_Style_defined_by_traditional_Chinese_elements_blended_with_modern_designs">Chinese Modern Style</div>
+            <div class="option" value="English_Country_Style_defined_by_floral_patterns_traditional_furnishings_countryside_charm">English Country Style</div>
+            <div class="option" value="French_Country_Style_defined_by_elegance_with_rustic_elements_inspired_by_rural_France">French Country Style</div>
+            <div class="option" value="Greek_Revival_Style_defined_by_inspired_by_ancient_Greek_architecture_symmetrical_designs_grand_columns">Greek Revival Style</div>
+            <div class="option" value="Ibicenco_Style_defined_by_white_washed_walls_natural_materials_rustic_elegance_indoor_outdoor_living">Ibicenco Style</div>
+            <div class="option" value="Japanese_Style_defined_by_simplicity_minimalism_harmony_with_nature_clean_lines_tranquility">Japanese Style</div>
+            <div class="option" value="Mediterranean_Style_defined_by_warm_colors_natural_textures_rustic_elements_relaxed_ambiance">Mediterranean Style</div>
+            <div class="option" value="Moroccan_Style_defined_by_vibrant_rich_colors_intricate_patterns_exotic_atmosphere">Moroccan Style</div>
+            <div class="option" value="Spanish_Mediterranean_Style_defined_by_Spanish_and_Mediterranean_influences_warm_tones_arched_doorways_tilework_wrought_iron_details">Spanish Mediterranean Style</div>
+            <div class="option" value="Tuscan_Style_defined_by_Italian_Tuscany_inspiration_warm_earth_tones_textured_walls_rustic_elements">Tuscan Style</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Historical and Artistic</div>
+            <div class="option" value="Art_Brut_Style_defined_by_unconventional_raw_artistic_expressions">Art Brut Style</div>
+            <div class="option" value="Art_Deco_Style_defined_by_1920s_30s_style_geometric_patterns_luxury_materials">Art Deco</div>
+            <div class="option" value="Art_Nouveau_Style_defined_by_late_19th_century_organic_forms_inspired_by_nature">Art Nouveau</div>
+            <div class="option" value="Gothic_Style_defined_by_dark_dramatic_medieval_architecture_inspiration_pointed_arches_mystery">Gothic Style</div>
+            <div class="option" value="Renaissance_Style_defined_by_opulent_grandeur_classical_elements_inspired_by_the_Renaissance_period">Renaissance Style</div>
+            <div class="option" value="Rococo_Style_defined_by_18th_century_origin_elaborate_ornamentation_soft_colors_whimsy">Rococo Style</div>
+            <div class="option" value="Victorian_Style_defined_by_Victorian_era_inspiration_ornate_details_rich_colors_opulent">Victorian Style</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Modern and Contemporary</div>
+            <div class="option" value="Artistic_Style_defined_by_creativity_self_expression_experimentation">Artistic Style</div>
+            <div class="option" value="Contemporary_Style_defined_by_latest_trends_clean_lines_balance_and_harmony">Contemporary Style</div>
+            <div class="option" value="Futuristic_Style_defined_by_innovative_designs_sleek_shapes_forward_thinking">Futuristic Style</div>
+            <div class="option" value="Industrial_Style_defined_by_functional_raw_and_utilitarian_exposed_brick_metal_concrete">Industrial Style</div>
+            <div class="option" value="Mid_Century_Modern_Style_defined_by_clean_lines_organic_forms_functionality_mix_of_natural_and_modern">Mid-Century Modern Style</div>
+            <div class="option" value="Minimalist_Style_defined_by_simplicity_functionality_clean_lines_uncluttered_spaces_serene">Minimalist Style</div>
+            <div class="option" value="Modern_Style_defined_by_simplicity_functionality_neutral_colors_open_spaces_modern_elements">Modern Style</div>
+            <div class="option" value="Modern_Farmhouse_Style_defined_by_rustic_charm_modern_elements_neutral_colors_natural_textures">Modern Farmhouse Style</div>
+            <div class="option" value="Scandinavian_Style_defined_by_simplicity_functionality_clean_lines_muted_tones_warm_and_inviting">Scandinavian Style</div>
+            <div class="option" value="Transitional_Style_defined_by_combining_traditional_and_contemporary_clean_lines_neutral_colors">Transitional Style</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Lifestyle and Conceptual</div>
+            <div class="option" value="Bohemian_Style_defined_by_eclectic_vibrant_colors_global_influences">Bohemian Style</div>
+            <div class="option" value="Coastal_Style_defined_by_light_colors_natural_materials_nautical_vibe">Coastal Style</div>
+            <div class="option" value="Eclectic_Style_defined_by_mix_of_styles_for_a_unique_personalized_space">Eclectic Style</div>
+            <div class="option" value="Farmhouse_Style_defined_by_warmth_and_simplicity_of_rural_farmhouses">Farmhouse Style</div>
+            <div class="option" value="Hygge_Style_defined_by_cozy_Danish_concept_warmth_comfort_soft_lighting_neutral_palette">Hygge Style</div>
+            <div class="option" value="Industrial_Chic_Style_defined_by_stylish_edgy_raw_materials_rustic_and_urban_blend_salvaged_wood">Industrial Chic Style</div>
+            <div class="option" value="Wabi_Sabi_Style_defined_by_Japanese_aesthetics_imperfection_natural_materials_rustic_and_unpretentious">Wabi-Sabi Style</div>
+            <div class="option" value="Zen_Style_defined_by_Japanese_inspired_serenity_minimalist_neutral_colors_tranquility">Zen Style</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Decorative and Thematic</div>
+            <div class="option" value="Chinoiserie_Style_defined_by_East_Asian_art_decorative_patterns_whimsy">Chinoiserie Style</div>
+            <div class="option" value="Cottage_Style_defined_by_cozy_soft_colors_vintage_furnishings">Cottage Style</div>
+            <div class="option" value="Glam_Style_defined_by_luxurious_sparkle_metallic_accents_plush_textures_opulence">Glam Style</div>
+            <div class="option" value="Global_Fusion_Style_defined_by_multicultural_ambiance_blending_elements_colors_patterns_from_around_the_world">Global Fusion</div>
+            <div class="option" value="Nautical_Style_defined_by_blue_and_white_coastal_inspiration_and_maritime_ambiance">Nautical Style</div>
+            <div class="option" value="Rustic_Style_defined_by_embracing_natural_elements_ruggedness_raw_materials_earthy_colors">Rustic Style</div>
+            <div class="option" value="Shabby_Chic_Style_defined_by_vintage_and_feminine_blend_distressed_furniture_pastel_colors_romantic_ambiance">Shabby Chic Style</div>
+            <div class="option" value="Steampunk_Style_defined_by_Victorian_elegance_industrial_elements_vintage_machinery_adventurous">Steampunk Style</div>
+            <div class="option" value="Tribal_Style_defined_by_inspiration_from_indigenous_cultures_bold_patterns_earthy_tones_natural_materials">Tribal Style</div>
+            <div class="option" value="Tropical_Style_defined_by_vibrant_colors_botanical_prints_natural_materials_lively_and_exotic">Tropical Style</div>
+            <div class="option" value="Vintage_Style_defined_by_nostalgic_design_antique_or_vintage_inspired_elements_retro_patterns">Vintage Style</div>
+            <div class="option" value="Retro_and_Technological_Elements_with_Dieter_Rams_influence_focused_on_less_but_better_organization_and_functionality">Less is more</div>
+        </div>
+    </div>
+    <input type="hidden" name="design_style" id="design_style" value="">
+</div>
+
+                     <!-- decoration -->                
+                    <div class="custom-dropdown" data-placeholder="Choose decoration">
+    <div class="dropdown-selected">
+        <span class="selected-text">Choose decoration</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="optgroup">
+            <div class="optgroup-label">Contemporary Trends</div>
+            <div class="option" value="Sleek_Minimalism_decoration">Sleek Minimalism</div>
+            <div class="option" value="Urban_Industrial_decoration">Urban Industrial</div>
+            <div class="option" value="Abstract_Expressions_decoration">Abstract Expressions</div>
+            <div class="option" value="Tech_integrated_and_smart_home">Technological</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Timeless Elegance</div>
+            <div class="option" value="Classic_Ornamentation_decoration">Classic Ornamentation</div>
+            <div class="option" value="Retro_Charm_decoration">Retro Charm</div>
+            <div class="option" value="Opulent_Luxury_decoration">Opulent Luxury</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Inspired by Nature</div>
+            <div class="option" value="Earthy_Themes_decoration">Earthy Themes</div>
+            <div class="option" value="Floral_Paradise_decoration">Floral Paradise</div>
+            <div class="option" value="Seaside_Escape_decoration">Seaside Escape</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Worldly Flavors</div>
+            <div class="option" value="Cultural_Fusion_decoration">Cultural Fusion</div>
+            <div class="option" value="Artisan_Craftsmanship_decoration">Artisan Craftsmanship</div>
+            <div class="option" value="Playful_Fantasy_decoration">Playful Fantasy</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Modern Innovations</div>
+            <div class="option" value="Biophilic_Design_decoration">Biophilic Design</div>
+            <div class="option" value="Smart_Home_Technology_decoration">Smart Home Technology</div>
+            <div class="option" value="Sustainable_Eco_friendly_decoration">Sustainable/Eco-friendly</div>
+            <div class="option" value="Minimalist_Maximalist_Hybrid_decoration">Minimalist-Maximalist Hybrid</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Cultural Inspirations</div>
+            <div class="option" value="Scandinavian_Hygge_decoration">Scandinavian Hygge</div>
+            <div class="option" value="Japanese_Wabi_Sabi_decoration">Japanese Wabi-Sabi</div>
+            <div class="option" value="Mediterranean_Riviera_decoration">Mediterranean Riviera</div>
+            <div class="option" value="Moroccan_decoration">Moroccan</div>
+            <div class="option" value="African_Tribal_decoration">African Tribal</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Mediterranean Influences</div>
+            <div class="option" value="Ibicenco_decoration">Ibicenco</div>
+            <div class="option" value="Tuscan_decoration">Tuscan</div>
+            <div class="option" value="Greek_Island_decoration">Greek Island</div>
+            <div class="option" value="Provencal_decoration">Provencal</div>
+            <div class="option" value="Spanish_Revival_decoration">Spanish Revival</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Vintage Revivals</div>
+            <div class="option" value="Mid_Century_Modern_Retro_decoration">Mid-Century Modern Retro</div>
+            <div class="option" value="Victorian_Elegance_decoration">Victorian Elegance</div>
+            <div class="option" value="Art_Deco_Revival_decoration">Art Deco Revival</div>
+            <div class="option" value="Rustic_Farmhouse_decoration">Rustic Farmhouse</div>
+            <div class="option" value="Vintage_Technology_items_inspired_by_Mid_Century_Modern_Retro_decoration_Braun_design_style_Dieter_Rams_design">Vintage technology</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Futuristic Concepts</div>
+            <div class="option" value="Space_Age_Modern_decoration">Space Age Modern</div>
+            <div class="option" value="Digital_Art_Installations_decoration">Digital Art Installations</div>
+            <div class="option" value="Virtual_Reality_Environments_decoration">Virtual Reality Environments</div>
+            <div class="option" value="Holographic_Elements_decoration">Holographic Elements</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Nature and Outdoors</div>
+            <div class="option" value="Botanical_Garden_decoration">Botanical Garden</div>
+            <div class="option" value="Beachfront_Oasis_decoration">Beachfront Oasis</div>
+            <div class="option" value="Mountain_Lodge_decoration">Mountain Lodge</div>
+            <div class="option" value="Desert_Chic_decoration">Desert Chic</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Creative and Artistic</div>
+            <div class="option" value="Bohemian_Creative_decoration">Bohemian Creative</div>
+            <div class="option" value="Pop_Art_decoration">Pop Art</div>
+            <div class="option" value="Industrial_Artist_Studio_decoration">Industrial Artist Studio</div>
+            <div class="option" value="Gallery_Style_decoration">Gallery Style</div>
+        </div>
+    </div>
+    <input type="hidden" name="decorative_elements" id="decorative_elements" value="">
+</div>
+
+                    <!--color scheme-->
+                 
+
+                     
+                    <!--indoor / outdoor -->
+                    <div class="custom-dropdown" data-placeholder="Space to design">
+    <div class="dropdown-selected">
+        <span class="selected-text">Space to design</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="[Indoor_design_showcasing_the_interior_layout:_furniture_and_decor_with_a_focus_on_style_and_functionality:2]">Indoor design</div>
+        <div class="option" value="[Outdoor_design_showcasing_the_exterior_space:_including_garden_landscaping_and_architectural_details_of_the_house:2]">Outdoor design</div>
+        <div class="option" value="[Front_of_the_house_facade:_view_showing_detailed_architectural_features_and_landscaping_elements:2]">Facade design</div>
+        <div class="option" value="[Full_house_view_including_the_entire_exterior:_front_yard,_and_landscaping._The_house_should_be_shown_in_its_entirety_with_all_architectural_details_and_surrounding_garden_visible:2]">Complete House View</div>
+    </div>
+    <input type="hidden" name="space_to_be_designed" id="space_to_be_designed" value="">
+</div>
+
+                     
+                    <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub> 
+    <!-- <div class="custom-dropdown" data-placeholder="Pick an architecture generation model">
+    <div class="dropdown-selected">
+        <span class="selected-text">Pick an architecture generation model</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+         <div class="optgroup-label">Flux models</div>
+         <div class="option" value="flux">Flux - basic model </div>
+         <div class="option" value="fluxschnell">Flux Schnell - hyperrealistic ⭐️</div>
+    </div>
+     <input type="hidden" name="funitureModel" id="funitureModel" value="furnitureModel">
+       <div class="option" value="ae-sdxl-v1">Realistic Dream Studio AE SDXL</div>
+         <div class="option" value="epicrealism-xl">Epic Realism XL</div>
+        
+        <div class="option" value="sdxlceshi">SDXL Creative</div>
+       
+        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
+              <div class="option" value="midjourney-v61">Midjourney</div>
+
+</div>-->
+ 
+
+                   
+                  <div class="custom-dropdown" data-placeholder="Style Image">
+    <div class="dropdown-selected">
+        <span class="selected-text">Style Image</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+
+    <div class="dropdown-options show">
+        <!-- Advertising Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Advertising Styles</div>
+            <div class="option" value="ads-advertising">Ads Advertising</div>
+            <div class="option" value="ads-automotive">Ads Automotive</div>
+            <div class="option" value="ads-corporate">Ads Corporate</div>
+            <div class="option" value="ads-fashion-editorial">Ads Fashion Editorial</div>
+            <div class="option" value="ads-luxury">Ads Luxury</div>
+            <div class="option" value="ads-real-estate">Ads Real Estate</div>
+            <div class="option" value="ads-retail">Ads Retail</div>
+        </div>
+
+        <!-- Futuristic & Cybernetic Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Futuristic & Cybernetic Styles</div>
+            <div class="option" value="futuristic-biomechanical">Futuristic Biomechanical</div>
+            <div class="option" value="futuristic-biomechanical-cyberpunk">Futuristic Biomechanical Cyberpunk</div>
+            <div class="option" value="futuristic-cybernetic">Futuristic Cybernetic</div>
+            <div class="option" value="futuristic-cybernetic-robot">Futuristic Cybernetic Robot</div>
+            <div class="option" value="futuristic-cyberpunk-cityscape">Futuristic Cyberpunk Cityscape</div>
+            <div class="option" value="futuristic-futuristic">Futuristic</div>
+            <div class="option" value="futuristic-retro-cyberpunk">Futuristic Retro Cyberpunk</div>
+            <div class="option" value="futuristic-retro">Futuristic Retro</div>
+            <div class="option" value="futuristic-sci-fi">Futuristic Sci-Fi</div>
+            <div class="option" value="futuristic-vaporwave">Futuristic Vaporwave</div>
+        </div>
+
+        <!-- Video Game Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Video Game Styles</div>
+            <div class="option" value="game-bubble">Game Bubble</div>
+            <div class="option" value="game-cyberpunk">Game Cyberpunk</div>
+            <div class="option" value="game-fighting">Game Fighting</div>
+            <div class="option" value="game-fortnite">Game Fortnite</div>
+            <div class="option" value="game-gta">Game GTA</div>
+            <div class="option" value="game-mario">Game Mario</div>
+            <div class="option" value="game-minecraft">Game Minecraft</div>
+            <div class="option" value="game-pokemon">Game Pokemon</div>
+            <div class="option" value="game-retro-arcade">Game Retro Arcade</div>
+            <div class="option" value="game-retro">Game Retro</div>
+            <div class="option" value="game-rpg-fantasy">Game RPG Fantasy</div>
+            <div class="option" value="game-strategy">Game Strategy</div>
+            <div class="option" value="game-streetfighter">Game Streetfighter</div>
+            <div class="option" value="game-zelda">Game Zelda</div>
+        </div>
+
+        <!-- Nature & Tranquility Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Nature & Tranquility Styles</div>
+            <div class="option" value="idyllic">Idyllic</div>
+            <div class="option" value="tranquil-relaxing-atmosphere">Tranquil Relaxing Atmosphere</div>
+            <div class="option" value="whimsical-and-playful">Whimsical and Playful</div>
+            <div class="option" value="terragen">Terragen</div>
+            <div class="option" value="mandola-art">Mandola Art</div>
+        </div>
+
+        <!-- Figurative & Character Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Figurative & Character Styles</div>
+            <div class="option" value="action-figure">Action Figure</div>
+            <div class="option" value="adorable-3d-character">Adorable 3D Character</div>
+            <div class="option" value="adorable-kawaii">Adorable Kawaii</div>
+            <div class="option" value="character-design-sheet">Character Design Sheet</div>
+        </div>
+    </div>
+
+    <input type="hidden" name="style_image" id="style_image" value="">
+</div>
+
+
+
+                    
 <!-- COLLAPSE -->                  
               <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
 design_services
@@ -1731,208 +1939,7 @@ Design</h1><span class="material-symbols-outlined"> close </span></section>
 
                 </div>    
                     
-                 <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
-palette
-</span>
-
-Color schemes</h1><span class="material-symbols-outlined"> close </span></section>     
- <div class="content">
-     
-     
-   
-
-
-   
-  
-     
-     
-     <!-- img ref -->
-<div id="colorExtractionImage">
-  <label class="imageup">
-    Extract up to 5 colors from an image <span class="material-symbols-outlined">
-arrow_upward
-</span>
-    <small>Use extracted colors as a palette. <br> SVG are allowed. <br> Go <a href="https://www.colortoken.site/" target="_blank">Color Token</a> to generate color palettes, export as SVG and upload it here</small>
-    <input type="file" accept="image/*" id="colorExtractionInput">
-  </label>
-  <div class="thumbImg" style="display: none;">
-    <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
-   
-    <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;">
-    <br> <div class="thumbExt"></div>
-  </div>
-</div>
-    
-<!--// end img ref -->
-     
-    
-     
-     
-     
-     
-     <div class="coloresWheel colorPalette">
-    <!--start 603010-->
-    <div class="colorPickersGroup">
-        <div class="switchContainer colorSC">
-    <label class="switchLabel">
-        <input type="checkbox" id="use_colors">
-        <span class="material-symbols-outlined">check_small</span>
-        Activate 60 30 10 color rule
-    </label>
-</div>
-        <div class="colorPickers">
-            <div class="colorPaletteA">
-                <input type="color" id="dominant_color" value="#ffffff" class="colorPicker">
-                <span id="dominant_color_name" class="colorName">White</span> <!-- Span para mostrar el nombre -->
-            </div>
-            <div class="colorPaletteA">
-                <input type="color" id="secondary_color" value="#dddddd" class="colorPicker">
-                <span id="secondary_color_name" class="colorName">Light Gray</span> <!-- Span para mostrar el nombre -->
-            </div>
-            <div class="colorPaletteA">
-                <input type="color" id="accent_color" value="#1f1f1f" class="colorPicker">
-                <span id="accent_color_name" class="colorName">Dark Gray</span> <!-- Span para mostrar el nombre -->
-            </div>
-        </div>
-        <small>This decorating rule suggests that you should cover your room with 60% of a dominant color, 30% of a secondary color, and 10% of an accent shade</small>
-    </div>
-    <!--//end start 603010 -->
-</div>
-     
-     
-
-<div class="colorOptions">
-    <div class="switchContainer colorSC">
-    <label class="switchLabel">
-        <input type="checkbox" id="use_walls_paint_color">
-        <span class="material-symbols-outlined">check_small</span>
-       Use wall paint color
-    </label>
-</div>
-    <div class="colorPaletteA">
-        <input type="color" id="walls_paint_color" value="#cccccc" class="colorPicker">
-        <span id="walls_paint_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
-    </div>
-
-    <div class="switchContainer colorSC">
-    <label class="switchLabel">
-        <input type="checkbox" id="use_furniture_color">
-        <span class="material-symbols-outlined">check_small</span>
-        Use furniture color
-    </label>
-</div> 
-    <div class="colorPaletteA">
-        <input type="color" id="furniture_color" value="#999999" class="colorPicker">
-        <span id="furniture_color_name" class="colorName">Gray</span> <!-- Span para mostrar el nombre -->
-    </div>
-</div>
-
-
-      
-     
-
-
-
-     
-     
-<div class="custom-dropdown" data-placeholder="Select Color Scheme or Dominant Color">
-    <div class="dropdown-selected">
-        <span class="selected-text">Color Scheme or Dominant Color</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="option" value="Converts_image_to_black_and_white_eliminating_color">Black and White Colors</div>
-        <div class="option" value="Boosts_color_saturation_to_make_colors_more_vivid">Hyper Saturated Colors</div>
-        <div class="option" value="Reduces_color_saturation_for_a_more_subdued_look">Low Saturated Colors</div>
-        <div class="option" value="Introduces_a_green_hue_to_the_image_for_a_monochromatic_effect">Greenish Colored</div>
-        <div class="option" value="Applies_a_sepia_filter_for_a_classic_vintage_look">Sepia Colored</div>
-        <div class="option" value="Introduces_a_red_hue_to_the_image_for_a_vibrant_red_effect">Red Colored</div>
-        <div class="option" value="Introduces_an_orange_hue_to_the_image_for_a_vibrant_orange_effect">Orange Colored</div>
-        <div class="option" value="Introduces_a_yellow_hue_to_the_image_for_a_vibrant_yellow_effect">Yellow Colored</div>
-        <div class="option" value="Introduces_a_green_hue_to_the_image_for_a_vibrant_green_effect">Green Colored</div>
-        <div class="option" value="Introduces_a_blue_hue_to_the_image_for_a_vibrant_blue_effect">Blue Colored</div>
-        <div class="option" value="Introduces_an_indigo_hue_to_the_image_for_a_vibrant_indigo_effect">Indigo Colored</div>
-        <div class="option" value="Introduces_a_violet_hue_to_the_image_for_a_vibrant_violet_effect">Violet Colored</div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Basic</div>
-            <div class="option" value="Black_and_White_Timeless_contrast_of_black_and_white_for_a_striking_look">Black and White</div>
-            <div class="option" value="White_Variations_Variations_of_white_including_Off-White_Silk-White_Cream-White_Antique-White_Chalk-White">White Variations</div>
-            <div class="option" value="Duotone_Two-tone_color_schemes_for_a_minimalist_yet_bold_statement">Duotone</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Warm Tones</div>
-            <div class="option" value="Warm_Inviting_tones_of_reds_oranges_yellows">Warm</div>
-            <div class="option" value="Desert_Warm_sandy_and_terracotta_tones_reminiscent_of_the_desert_landscape">Desert</div>
-            <div class="option" value="Rustic_Farmhouse_Warm_earthy_tones_for_a_cozy_rustic_look">Rustic Farmhouse</div>
-            <div class="option" value="Mediterranean_Sun-kissed_earth_tones_inspired_by_Mediterranean_landscapes">Mediterranean</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Cool Tones</div>
-            <div class="option" value="Cool_Refreshing_blues_greens_purples_for_a_serene_ambiance">Cool</div>
-            <div class="option" value="Nordic_White_Crisp_clean_white_palette_inspired_by_Scandinavian_simplicity">Nordic White</div>
-            <div class="option" value="Scandinavian_Minimalist_palette_with_light_airy_tones_for_a_modern_look">Scandinavian</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Natural and Earthy</div>
-            <div class="option" value="Earthy_and_Natural_Grounded_in_nature_with_warm_earth_tones_and_textures">Earthy and Natural</div>
-            <div class="option" value="Bohemian_Eclectic_vibrant_mix_of_global_influences_and_textures">Bohemian</div>
-            <div class="option" value="Urban_Jungle_Lush_greens_and_natural_wood_tones_for_an_indoor_oasis">Urban Jungle</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Vibrant and Energetic</div>
-            <div class="option" value="Bold_and_Vibrant_Dynamic_bright_and_energetic_colors_for_lively_spaces">Bold and Vibrant</div>
-            <div class="option" value="Electric_High-voltage_electric_hues_for_strikingly_modern_interiors">Electric</div>
-            <div class="option" value="Tropical_Bright_vibrant_tropical_colors_for_a_lively_exotic_touch">Tropical</div>
-            <div class="option" value="Pop_Art_Pop_Art-inspired_vibrant_primary_colors_for_a_fun_retro_vibe">Pop Art</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Patterns and Themes</div>
-            <div class="option" value="Art_Deco_Luxurious_tones_with_geometric_patterns_for_a_glamorous_look">Art Deco</div>
-            <div class="option" value="Beachy_Relaxed_beach-inspired_shades_for_a_casual_airy_feel">Beachy</div>
-            <div class="option" value="Cottagecore_Pastel_colors_with_floral_patterns_for_a_quaint_charming_vibe">Cottagecore</div>
-            <div class="option" value="French_Country_Soft_pastels_mixed_with_rustic_elements_for_a_chic_countryside_feel">French Country</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Luxurious and Glamorous</div>
-            <div class="option" value="Jewel_Rich_saturated_jewel_tones_for_opulent_luxurious_interiors">Jewel</div>
-            <div class="option" value="Metallic_Shimmering_metallic_hues_for_a_touch_of_glamour">Metallic</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Specialty Color Schemes</div>
-            <div class="option" value="Gradient_Smooth_transitions_between_colors_for_a_modern_dynamic_look">Gradient</div>
-            <div class="option" value="High_Contrast_Dramatic_high_contrast_colors_for_bold_impactful_designs">High Contrast</div>
-            <div class="option" value="Muted_Soft_desaturated_colors_for_a_subtle_sophisticated_ambiance">Muted</div>
-            <div class="option" value="Saturated_Deep_intense_colors_for_a_rich_visual_experience">Saturated</div>
-            <div class="option" value="Moody_Deep_rich_hues_for_an_intimate_atmospheric_setting">Moody</div>
-        </div>
-        
-        <div class="optgroup">
-            <div class="optgroup-label">Color Harmony</div>
-            <div class="option" value="Monochromatic_Different_shades_and_tints_of_a_single_color">Monochromatic</div>
-            <div class="option" value="Analogous_Harmonious_adjacent_colors_for_a_cohesive_balanced_look">Analogous</div>
-            <div class="option" value="Complementary_Colors_opposite_each_other_on_the_color_wheel">Complementary</div>
-            <div class="option" value="Split-Complementary_A_base_color_and_two_adjacent_tertiary_colors">Split-Complementary</div>
-            <div class="option" value="Triadic_Three_evenly_spaced_colors_on_the_color_wheel_for_vibrant_harmony">Triadic</div>
-            <div class="option" value="Tetradic_Four-color_schemes_for_complex_rich_palettes">Tetradic</div>
-            <div class="option" value="Square_Four_colors_spaced_evenly_around_the_color_wheel">Square</div>
-        </div>
-    </div>
-    <input type="hidden" name="color_scheme" id="color_scheme" value="">
-</div>
-
-  
-                       
-                   </div>
-  <!-- //COLLAPSE -->                   
+                                  
 <!-- COLLAPSE -->                    
                  <section type="button" class="collapsible"> <h1><span class="material-symbols-outlined">
 home
