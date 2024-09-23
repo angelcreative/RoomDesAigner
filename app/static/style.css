@@ -3805,7 +3805,7 @@ button#extractColorsFromUrlButton {
 
 #sidebar {
     position: fixed;
-    left: -320px;
+    left: 0; /* El sidebar está visible por defecto */
     top: 0;
     width: 340px;
     height: -webkit-fill-available;
@@ -3818,34 +3818,32 @@ button#extractColorsFromUrlButton {
     transition: none; /* Desactiva la transición porque usamos animación */
 }
 
-/* Cuando está abierto, se anima con bounceIn */
-#menuToggle:checked + #sidebar {
-    animation: bounceIn 0.8s ease forwards;
-}
-
-/* Cuando está cerrado, se anima con bounceOut */
+/* Cuando el menú NO está seleccionado, el sidebar está visible (bounceIn) */
 #menuToggle:not(:checked) + #sidebar {
+    animation: bounceIn 0.8s ease forwards;
+    left: 0; /* Sidebar visible */
+}
+
+/* Cuando el menú está seleccionado, el sidebar se oculta (bounceOut) */
+#menuToggle:checked + #sidebar {
     animation: bounceOut 0.8s ease forwards;
+    left: -320px; /* Sidebar oculto */
 }
 
 .middleContainer {
-    margin-left: 0;
+    margin-left: 340px; /* Espacio para el sidebar abierto por defecto */
     transition: margin-left 0.3s ease;
-    
-    
-}
-
-.middleContainer {
     width: 100%;
     background: url(https://i.postimg.cc/fTj1XwmZ/bg-skeleton.png) center center no-repeat;
     height: calc(100vh - 160px);
     display: block;
 }
 
+/* Cuando el menú está seleccionado (sidebar oculto), ajustamos el margen de la middleContainer */
 #menuToggle:checked ~ .middleContainer {
-    margin-left: 340px;
-    /* z-index: 999; Asegúrate de que el contenido también esté correctamente posicionado */
+    margin-left: 0; /* Sin margen cuando el sidebar está cerrado */
 }
+
 
 label.hamburger {
     cursor: pointer;
