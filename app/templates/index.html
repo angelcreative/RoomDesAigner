@@ -459,7 +459,84 @@ close
                     
                       <h4>Write or paste your own prompt</h4>
 <textarea placeholder="Write your own prompt here to refine your design" id="customText" rows="8s" cols="50"></textarea>      
-<br><br>
+<br>  
+                  <div class="custom-dropdown" data-placeholder="Style Image">
+    <div class="dropdown-selected">
+        <span class="selected-text">Style Image</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+
+    <div class="dropdown-options show">
+        <!-- Advertising Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Advertising Styles</div>
+            <div class="option" value="ads-advertising">Ads Advertising</div>
+            <div class="option" value="ads-automotive">Ads Automotive</div>
+            <div class="option" value="ads-corporate">Ads Corporate</div>
+            <div class="option" value="ads-fashion-editorial">Ads Fashion Editorial</div>
+            <div class="option" value="ads-luxury">Ads Luxury</div>
+            <div class="option" value="ads-real-estate">Ads Real Estate</div>
+            <div class="option" value="ads-retail">Ads Retail</div>
+        </div>
+
+        <!-- Futuristic & Cybernetic Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Futuristic & Cybernetic Styles</div>
+            <div class="option" value="futuristic-biomechanical">Futuristic Biomechanical</div>
+            <div class="option" value="futuristic-biomechanical-cyberpunk">Futuristic Biomechanical Cyberpunk</div>
+            <div class="option" value="futuristic-cybernetic">Futuristic Cybernetic</div>
+            <div class="option" value="futuristic-cybernetic-robot">Futuristic Cybernetic Robot</div>
+            <div class="option" value="futuristic-cyberpunk-cityscape">Futuristic Cyberpunk Cityscape</div>
+            <div class="option" value="futuristic-futuristic">Futuristic</div>
+            <div class="option" value="futuristic-retro-cyberpunk">Futuristic Retro Cyberpunk</div>
+            <div class="option" value="futuristic-retro">Futuristic Retro</div>
+            <div class="option" value="futuristic-sci-fi">Futuristic Sci-Fi</div>
+            <div class="option" value="futuristic-vaporwave">Futuristic Vaporwave</div>
+        </div>
+
+        <!-- Video Game Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Video Game Styles</div>
+            <div class="option" value="game-bubble">Game Bubble</div>
+            <div class="option" value="game-cyberpunk">Game Cyberpunk</div>
+            <div class="option" value="game-fighting">Game Fighting</div>
+            <div class="option" value="game-fortnite">Game Fortnite</div>
+            <div class="option" value="game-gta">Game GTA</div>
+            <div class="option" value="game-mario">Game Mario</div>
+            <div class="option" value="game-minecraft">Game Minecraft</div>
+            <div class="option" value="game-pokemon">Game Pokemon</div>
+            <div class="option" value="game-retro-arcade">Game Retro Arcade</div>
+            <div class="option" value="game-retro">Game Retro</div>
+            <div class="option" value="game-rpg-fantasy">Game RPG Fantasy</div>
+            <div class="option" value="game-strategy">Game Strategy</div>
+            <div class="option" value="game-streetfighter">Game Streetfighter</div>
+            <div class="option" value="game-zelda">Game Zelda</div>
+        </div>
+
+        <!-- Nature & Tranquility Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Nature & Tranquility Styles</div>
+            <div class="option" value="idyllic">Idyllic</div>
+            <div class="option" value="tranquil-relaxing-atmosphere">Tranquil Relaxing Atmosphere</div>
+            <div class="option" value="whimsical-and-playful">Whimsical and Playful</div>
+            <div class="option" value="terragen">Terragen</div>
+            <div class="option" value="mandola-art">Mandola Art</div>
+        </div>
+
+        <!-- Figurative & Character Styles -->
+        <div class="optgroup">
+            <div class="optgroup-label">Figurative & Character Styles</div>
+            <div class="option" value="action-figure">Action Figure</div>
+            <div class="option" value="adorable-3d-character">Adorable 3D Character</div>
+            <div class="option" value="adorable-kawaii">Adorable Kawaii</div>
+            <div class="option" value="character-design-sheet">Character Design Sheet</div>
+        </div>
+    </div>
+
+    <input type="hidden" name="style_image" id="style_image" value="">
+</div>
+
                     
             <!-- pro tokens -->
             <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
@@ -1234,106 +1311,43 @@ arrow_upward
                     <!--// COLLAPSE -->
                     
                    
-                    <!-- home area -->
-             <div class="custom-dropdown" data-placeholder="Select Home Area">
+            
+    <!-- <div class="custom-dropdown" data-placeholder="Pick an architecture generation model">
     <div class="dropdown-selected">
-        <span class="selected-text">Home Area</span>
+        <span class="selected-text">Pick an architecture generation model</span>
         <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
     </div>
     <div class="selected-value"></div>
     <div class="dropdown-options">
-        <div class="optgroup">
-            <div class="optgroup-label">Outdoor Spaces</div>
-            <div class="option" value="Balcony_Relaxing_outdoor_space_attached_to_room">Balcony</div>
-            <div class="option" value="Courtyard_Enclosed_outdoor_space_within_building">Courtyard</div>
-            <div class="option" value="Deck_Raised_platform_extending_from_house">Deck</div>
-            <div class="option" value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio</div>
-            <div class="option" value="Porch_Covered_area_at_entrance_for_sitting_enjoying_outdoors">Porch</div>
-            <div class="option" value="Terrace_Outdoor_platform_elevated_views_outdoor_seating">Terrace</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Common Areas</div>
-            <div class="option" value="Bar_Area_Entertaining_and_serving_beverages">Bar Area</div>
-            <div class="option" value="Dining_Room_Formal_space_for_enjoying_meals">Dining Room</div>
-            <div class="option" value="Family_Room_Casual_living_space_for_quality_time">Family Room</div>
-            <div class="option" value="Living_Room_Gathering_space_for_relaxation_entertainment">Living Room</div>
-            <div class="option" value="Living_Room_with_a_Fireplace_Cozy_living_area_with_fireplace">Living Room with a Fireplace</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Functional Spaces</div>
-            <div class="option" value="Breakfast_Nook_Cozy_area_for_casual_meals">Breakfast Nook</div>
-            <div class="option" value="Game_Room_Space_equipped_with_games_entertainment">Game Room</div>
-            <div class="option" value="Garage_Storage_parking_area_for_vehicles">Garage</div>
-            <div class="option" value="Home_Gym_Dedicated_area_for_exercising">Home Gym</div>
-            <div class="option" value="Home_Office_Workspace_for_remote_work">Home Office</div>
-            <div class="option" value="Home_Theater_Room_equipped_for_cinematic_experiences">Home Theater</div>
-            <div class="option" value="Kitchen_Heart_of_home_where_meals_are_prepared">Kitchen</div>
-            <div class="option" value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room</div>
-            <div class="option" value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom</div>
-            <div class="option" value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry</div>
-            <div class="option" value="Wine_Cellar_Controlled_environment_storing_aging_wine_collections">Wine Cellar</div>
-            <div class="option" value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Personal Spaces</div>
-            <div class="option" value="Guest_Bathroom_Restroom_for_visitors">Guest Bathroom</div>
-            <div class="option" value="Guest_Bedroom_Comfortable_space_for_hosting_visitors">Guest Bedroom</div>
-            <div class="option" value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom</div>
-            <div class="option" value="Master_Bedroom_Main_bedroom">Master Bedroom</div>
-            <div class="option" value="Walk_in_Closet_Spacious_closet_for_clothing_accessories">Walk-in Closet</div>
-        </div>
-        <div class="optgroup">
-            <div class="optgroup-label">Special Features</div>
-            <div class="option" value="Entryway_First_area_guests_see_when_entering">Entryway</div>
-            <div class="option" value="Foyer_Entrance_hall_or_lobby_welcoming_guests">Foyer</div>
-            <div class="option" value="Indoor_Pool_Swimming_pool_within_building">Indoor Pool</div>
-            <div class="option" value="Library_Room_filled_with_books_quiet_space_for_reading">Library</div>
-            <div class="option" value="Landing_Small_platform_between_flights_of_stairs">Landing</div>
-            <div class="option" value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath</div>
-            <div class="option" value="Sauna_Room_with_high_temperatures_for_relaxation_health_benefits">Sauna</div>
-            <div class="option" value="Spa_Relaxation_Room_Space_for_relaxation_self-care_activities">Spa/Relaxation Room</div>
-            <div class="option" value="Staircase_Structure_connecting_different_levels_of_home">Staircase</div>
-            <div class="option" value="Study_Quiet_area_for_reading_working_focusing_on_intellectual_pursuits">Study</div>
-        </div>
+         <div class="optgroup-label">Flux models</div>
+         <div class="option" value="flux">Flux - basic model </div>
+         <div class="option" value="fluxschnell">Flux Schnell - hyperrealistic ⭐️</div>
     </div>
-    <input type="hidden" name="home_room" id="home_room" value="">
-</div>
+     <input type="hidden" name="funitureModel" id="funitureModel" value="furnitureModel">
+       <div class="option" value="ae-sdxl-v1">Realistic Dream Studio AE SDXL</div>
+         <div class="option" value="epicrealism-xl">Epic Realism XL</div>
+        
+        <div class="option" value="sdxlceshi">SDXL Creative</div>
+       
+        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
+              <div class="option" value="midjourney-v61">Midjourney</div>
+
+</div>-->
+ 
+
+                 
+
 
                     
-                    <!-- kid room -->
-                    
-                    <div class="custom-dropdown" data-placeholder="Children room type">
-    <div class="dropdown-selected">
-        <span class="selected-text">Children room type</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-        <div class="option" value="Nursery_Nurturing_space_for_infants">Nursery</div>
-        <div class="option" value="Babys_Room_Room_for_caring_for_babies">Baby's Room</div>
-        <div class="option" value="Toddlers_Room_Environment_for_toddlers_to_explore_play">Toddler's Room</div>
-        <div class="option" value="Preschoolers_Room_Space_for_preschool-aged_children">Preschooler's Room</div>
-        <div class="option" value="Elementary_Schoolers_Room_Room_for_elementary_school_children">Elementary Schooler's Room</div>
-        <div class="option" value="Preteens_Room_Personal_space_for_preteens">Preteen's Room</div>
-        <div class="option" value="Teenagers_Room_Haven_for_teenagers_to_express_identity">Teenager's Room</div>
-        <div class="option" value="Playroom_Creative_space_for_play_imaginative_activities">Playroom</div>
-        <div class="option" value="Study_Room_Study_focused_area_for_learning">Study Room</div>
-        <div class="option" value="Homework_Room_Dedicated_area_for_completing_homework">Homework Room</div>
-        <div class="option" value="Creative_Studio_Space_for_unleashing_creativity">Creative Studio</div>
-        <div class="option" value="Game_Room_Area_for_playing_board_video_games">Game Room</div>
-        <div class="option" value="Music_Room_Room_for_playing_musical_instruments">Music Room</div>
-        <div class="option" value="Sports_Room_Space_for_physical_activity_sports">Sports Room</div>
-        <div class="option" value="Reading_Nook_Cozy_corner_for_reading_books">Reading Nook</div>
-        <div class="option" value="Craft_Room_Room_for_crafting_and_artistic_projects">Craft Room</div>
-        <div class="option" value="Dressing_Room_Area_for_getting_dressed_styling">Dressing Room</div>
-        <div class="option" value="Sleepover_Room_Space_for_sleepovers_with_friends">Sleepover Room</div>
-        <div class="option" value="Siblings_Room_Room_shared_by_siblings">Sibling's Room</div>
-        <div class="option" value="Shared_Room_Room_shared_by_multiple_children">Shared Room</div>
-    </div>
-    <input type="hidden" name="children_room" id="children_room" value="">
-</div>
-
-                    
+<!-- COLLAPSE -->                  
+              <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
+design_services
+</span>
+Design</h1><span class="material-symbols-outlined"> close </span></section>   
+                <!-- DESIGN TOKENS -->
+                 <div class="content">
+                     
+                     
                     <!-- design styles --> 
                    <div class="custom-dropdown" data-placeholder="Select Design Style">
     <div class="dropdown-selected">
@@ -1522,117 +1536,6 @@ arrow_upward
 
                      
                     <sub>Select interior design for indoor designs if you want to design an outdoor pool or garden, select the outdoor design option.</sub> 
-    <!-- <div class="custom-dropdown" data-placeholder="Pick an architecture generation model">
-    <div class="dropdown-selected">
-        <span class="selected-text">Pick an architecture generation model</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-         <div class="optgroup-label">Flux models</div>
-         <div class="option" value="flux">Flux - basic model </div>
-         <div class="option" value="fluxschnell">Flux Schnell - hyperrealistic ⭐️</div>
-    </div>
-     <input type="hidden" name="funitureModel" id="funitureModel" value="furnitureModel">
-       <div class="option" value="ae-sdxl-v1">Realistic Dream Studio AE SDXL</div>
-         <div class="option" value="epicrealism-xl">Epic Realism XL</div>
-        
-        <div class="option" value="sdxlceshi">SDXL Creative</div>
-       
-        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
-              <div class="option" value="midjourney-v61">Midjourney</div>
-
-</div>-->
- 
-
-                   
-                  <div class="custom-dropdown" data-placeholder="Style Image">
-    <div class="dropdown-selected">
-        <span class="selected-text">Style Image</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-
-    <div class="dropdown-options show">
-        <!-- Advertising Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Advertising Styles</div>
-            <div class="option" value="ads-advertising">Ads Advertising</div>
-            <div class="option" value="ads-automotive">Ads Automotive</div>
-            <div class="option" value="ads-corporate">Ads Corporate</div>
-            <div class="option" value="ads-fashion-editorial">Ads Fashion Editorial</div>
-            <div class="option" value="ads-luxury">Ads Luxury</div>
-            <div class="option" value="ads-real-estate">Ads Real Estate</div>
-            <div class="option" value="ads-retail">Ads Retail</div>
-        </div>
-
-        <!-- Futuristic & Cybernetic Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Futuristic & Cybernetic Styles</div>
-            <div class="option" value="futuristic-biomechanical">Futuristic Biomechanical</div>
-            <div class="option" value="futuristic-biomechanical-cyberpunk">Futuristic Biomechanical Cyberpunk</div>
-            <div class="option" value="futuristic-cybernetic">Futuristic Cybernetic</div>
-            <div class="option" value="futuristic-cybernetic-robot">Futuristic Cybernetic Robot</div>
-            <div class="option" value="futuristic-cyberpunk-cityscape">Futuristic Cyberpunk Cityscape</div>
-            <div class="option" value="futuristic-futuristic">Futuristic</div>
-            <div class="option" value="futuristic-retro-cyberpunk">Futuristic Retro Cyberpunk</div>
-            <div class="option" value="futuristic-retro">Futuristic Retro</div>
-            <div class="option" value="futuristic-sci-fi">Futuristic Sci-Fi</div>
-            <div class="option" value="futuristic-vaporwave">Futuristic Vaporwave</div>
-        </div>
-
-        <!-- Video Game Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Video Game Styles</div>
-            <div class="option" value="game-bubble">Game Bubble</div>
-            <div class="option" value="game-cyberpunk">Game Cyberpunk</div>
-            <div class="option" value="game-fighting">Game Fighting</div>
-            <div class="option" value="game-fortnite">Game Fortnite</div>
-            <div class="option" value="game-gta">Game GTA</div>
-            <div class="option" value="game-mario">Game Mario</div>
-            <div class="option" value="game-minecraft">Game Minecraft</div>
-            <div class="option" value="game-pokemon">Game Pokemon</div>
-            <div class="option" value="game-retro-arcade">Game Retro Arcade</div>
-            <div class="option" value="game-retro">Game Retro</div>
-            <div class="option" value="game-rpg-fantasy">Game RPG Fantasy</div>
-            <div class="option" value="game-strategy">Game Strategy</div>
-            <div class="option" value="game-streetfighter">Game Streetfighter</div>
-            <div class="option" value="game-zelda">Game Zelda</div>
-        </div>
-
-        <!-- Nature & Tranquility Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Nature & Tranquility Styles</div>
-            <div class="option" value="idyllic">Idyllic</div>
-            <div class="option" value="tranquil-relaxing-atmosphere">Tranquil Relaxing Atmosphere</div>
-            <div class="option" value="whimsical-and-playful">Whimsical and Playful</div>
-            <div class="option" value="terragen">Terragen</div>
-            <div class="option" value="mandola-art">Mandola Art</div>
-        </div>
-
-        <!-- Figurative & Character Styles -->
-        <div class="optgroup">
-            <div class="optgroup-label">Figurative & Character Styles</div>
-            <div class="option" value="action-figure">Action Figure</div>
-            <div class="option" value="adorable-3d-character">Adorable 3D Character</div>
-            <div class="option" value="adorable-kawaii">Adorable Kawaii</div>
-            <div class="option" value="character-design-sheet">Character Design Sheet</div>
-        </div>
-    </div>
-
-    <input type="hidden" name="style_image" id="style_image" value="">
-</div>
-
-
-
-                    
-<!-- COLLAPSE -->                  
-              <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
-design_services
-</span>
-Design</h1><span class="material-symbols-outlined"> close </span></section>   
-                <!-- DESIGN TOKENS -->
-                 <div class="content">
                 
                     <h4>Design magazine</h4>
                      <!-- magazine -->
@@ -1948,6 +1851,106 @@ Indoor</h1><span class="material-symbols-outlined"> close </span></section>
                      <div class="content">
                          <!-- shape -->
                    <h4>Room Shape</h4>
+                                 <!-- home area -->
+             <div class="custom-dropdown" data-placeholder="Select Home Area">
+    <div class="dropdown-selected">
+        <span class="selected-text">Home Area</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="optgroup">
+            <div class="optgroup-label">Outdoor Spaces</div>
+            <div class="option" value="Balcony_Relaxing_outdoor_space_attached_to_room">Balcony</div>
+            <div class="option" value="Courtyard_Enclosed_outdoor_space_within_building">Courtyard</div>
+            <div class="option" value="Deck_Raised_platform_extending_from_house">Deck</div>
+            <div class="option" value="Patio_Outdoor_space_adjacent_to_house_relaxation_entertainment">Patio</div>
+            <div class="option" value="Porch_Covered_area_at_entrance_for_sitting_enjoying_outdoors">Porch</div>
+            <div class="option" value="Terrace_Outdoor_platform_elevated_views_outdoor_seating">Terrace</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Common Areas</div>
+            <div class="option" value="Bar_Area_Entertaining_and_serving_beverages">Bar Area</div>
+            <div class="option" value="Dining_Room_Formal_space_for_enjoying_meals">Dining Room</div>
+            <div class="option" value="Family_Room_Casual_living_space_for_quality_time">Family Room</div>
+            <div class="option" value="Living_Room_Gathering_space_for_relaxation_entertainment">Living Room</div>
+            <div class="option" value="Living_Room_with_a_Fireplace_Cozy_living_area_with_fireplace">Living Room with a Fireplace</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Functional Spaces</div>
+            <div class="option" value="Breakfast_Nook_Cozy_area_for_casual_meals">Breakfast Nook</div>
+            <div class="option" value="Game_Room_Space_equipped_with_games_entertainment">Game Room</div>
+            <div class="option" value="Garage_Storage_parking_area_for_vehicles">Garage</div>
+            <div class="option" value="Home_Gym_Dedicated_area_for_exercising">Home Gym</div>
+            <div class="option" value="Home_Office_Workspace_for_remote_work">Home Office</div>
+            <div class="option" value="Home_Theater_Room_equipped_for_cinematic_experiences">Home Theater</div>
+            <div class="option" value="Kitchen_Heart_of_home_where_meals_are_prepared">Kitchen</div>
+            <div class="option" value="Laundry_Room_Functional_space_for_washing_drying_clothes">Laundry Room</div>
+            <div class="option" value="Mudroom_Entryway_for_removing_outdoor_clothing_shoes">Mudroom</div>
+            <div class="option" value="Pantry_Storage_space_for_food_kitchen_essentials">Pantry</div>
+            <div class="option" value="Wine_Cellar_Controlled_environment_storing_aging_wine_collections">Wine Cellar</div>
+            <div class="option" value="Workshop_Workspace_equipped_for_crafting_DIY_projects">Workshop</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Personal Spaces</div>
+            <div class="option" value="Guest_Bathroom_Restroom_for_visitors">Guest Bathroom</div>
+            <div class="option" value="Guest_Bedroom_Comfortable_space_for_hosting_visitors">Guest Bedroom</div>
+            <div class="option" value="Master_Bathroom_Primary_bathroom_attached_to_master_bedroom">Master Bathroom</div>
+            <div class="option" value="Master_Bedroom_Main_bedroom">Master Bedroom</div>
+            <div class="option" value="Walk_in_Closet_Spacious_closet_for_clothing_accessories">Walk-in Closet</div>
+        </div>
+        <div class="optgroup">
+            <div class="optgroup-label">Special Features</div>
+            <div class="option" value="Entryway_First_area_guests_see_when_entering">Entryway</div>
+            <div class="option" value="Foyer_Entrance_hall_or_lobby_welcoming_guests">Foyer</div>
+            <div class="option" value="Indoor_Pool_Swimming_pool_within_building">Indoor Pool</div>
+            <div class="option" value="Library_Room_filled_with_books_quiet_space_for_reading">Library</div>
+            <div class="option" value="Landing_Small_platform_between_flights_of_stairs">Landing</div>
+            <div class="option" value="Powder_Room_Small_restroom_for_guests_sink_toilet">Powder Room/Half Bath</div>
+            <div class="option" value="Sauna_Room_with_high_temperatures_for_relaxation_health_benefits">Sauna</div>
+            <div class="option" value="Spa_Relaxation_Room_Space_for_relaxation_self-care_activities">Spa/Relaxation Room</div>
+            <div class="option" value="Staircase_Structure_connecting_different_levels_of_home">Staircase</div>
+            <div class="option" value="Study_Quiet_area_for_reading_working_focusing_on_intellectual_pursuits">Study</div>
+        </div>
+    </div>
+    <input type="hidden" name="home_room" id="home_room" value="">
+</div>
+
+                    
+                    <!-- kid room -->
+                    
+                    <div class="custom-dropdown" data-placeholder="Children room type">
+    <div class="dropdown-selected">
+        <span class="selected-text">Children room type</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="Nursery_Nurturing_space_for_infants">Nursery</div>
+        <div class="option" value="Babys_Room_Room_for_caring_for_babies">Baby's Room</div>
+        <div class="option" value="Toddlers_Room_Environment_for_toddlers_to_explore_play">Toddler's Room</div>
+        <div class="option" value="Preschoolers_Room_Space_for_preschool-aged_children">Preschooler's Room</div>
+        <div class="option" value="Elementary_Schoolers_Room_Room_for_elementary_school_children">Elementary Schooler's Room</div>
+        <div class="option" value="Preteens_Room_Personal_space_for_preteens">Preteen's Room</div>
+        <div class="option" value="Teenagers_Room_Haven_for_teenagers_to_express_identity">Teenager's Room</div>
+        <div class="option" value="Playroom_Creative_space_for_play_imaginative_activities">Playroom</div>
+        <div class="option" value="Study_Room_Study_focused_area_for_learning">Study Room</div>
+        <div class="option" value="Homework_Room_Dedicated_area_for_completing_homework">Homework Room</div>
+        <div class="option" value="Creative_Studio_Space_for_unleashing_creativity">Creative Studio</div>
+        <div class="option" value="Game_Room_Area_for_playing_board_video_games">Game Room</div>
+        <div class="option" value="Music_Room_Room_for_playing_musical_instruments">Music Room</div>
+        <div class="option" value="Sports_Room_Space_for_physical_activity_sports">Sports Room</div>
+        <div class="option" value="Reading_Nook_Cozy_corner_for_reading_books">Reading Nook</div>
+        <div class="option" value="Craft_Room_Room_for_crafting_and_artistic_projects">Craft Room</div>
+        <div class="option" value="Dressing_Room_Area_for_getting_dressed_styling">Dressing Room</div>
+        <div class="option" value="Sleepover_Room_Space_for_sleepovers_with_friends">Sleepover Room</div>
+        <div class="option" value="Siblings_Room_Room_shared_by_siblings">Sibling's Room</div>
+        <div class="option" value="Shared_Room_Room_shared_by_multiple_children">Shared Room</div>
+    </div>
+    <input type="hidden" name="children_room" id="children_room" value="">
+</div>
+
+                    
 <div class="custom-dropdown" data-placeholder="Room shape">
     <div class="dropdown-selected">
         <span class="selected-text">Room shape</span>
