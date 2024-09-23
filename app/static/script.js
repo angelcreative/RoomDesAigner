@@ -332,6 +332,15 @@ function generateBlurredBackground () {
     return ` imagine designing a sleek, modern mobile app interface for a ${customText} App. this user friendly user interface, must show a well distributed dashboard and ui cards. should feature intuitive UI icons, UI buttons and text options to enhance the user experience. the design approach combines this project involves UI design, UX/UI design, Product Design, App design.`;
 }
 
+    
+    
+   function generateUxuiWeb(customText) {
+    return `Imagine designing a sleek, modern hero section for a landing page dedicated to ${customText}. This hero section should focus on capturing the user's attention with a clean and appealing design, highlighting key elements such as a bold headline, clear subtitles, and a conversion-focused call to action (CTA). The design should integrate high-quality images or graphics, all optimized for a smooth and effective user experience. This project covers UI design, UX/UI design, product design, and web design.`;
+}
+
+
+    
+    
    
   
     function hideGeneratingImagesDialog() {
@@ -554,10 +563,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
-
+ const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui}  ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui} ${uxuiWeb}  ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
