@@ -329,7 +329,7 @@ function generateBlurredBackground () {
     
     
        function generateUxui() {
-    return "Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides.  The details of the clothing, including visible accessories should be clearly visible from each angle.";
+    return "imagine designing a sleek, modern mobile app interface. the user friendly UI should feature intuitive icons and option. focus on speed and convenience in the design to enhance user experience. UI design, UX/UI design, Product Design, App design";
 }
 
 
@@ -561,25 +561,26 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 41,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: "flux-fashion,surreal-photorealism,Photorealism-flux,realistic-skin-flux",
-        lora_strength: 0.7,
-        scheduler: "DPMSolverMultistepScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no"
-    };
+    promptText: promptText, // Your main prompt text
+    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+    width: width, // Image width
+    height: height, // Image height
+    samples: 4, // Number of samples (images) to generate
+    guidance_scale: 7.5, // How much the image should adhere to the prompt
+    steps: 41, // Number of steps for generation
+    use_karras_sigmas: "yes", // Whether to use karras sigmas for better image quality
+    tomesd: "yes", // Toggle for using ToMe for efficient inference
+    seed: seedValue, // Seed for reproducibility
+    model_id: "fluxdev", // The default model to be used
+    lora_model: "flux-fashion,surreal-photorealism,Photorealism-flux,realistic-skin-flux", // LoRA models as a comma-separated string
+    lora_strength: "0.5,1,0.7,0.8", // LoRA strengths as a comma-separated string corresponding to the models
+    scheduler: "DPMSolverMultistepScheduler", // The scheduler being used
+    webhook: null, // Webhook, if any
+    safety_checker: "no", // Disable safety checker
+    track_id: null, // Tracking ID, if any
+    enhance_prompt: "no" // Whether to enhance the prompt automatically
+};
+
 
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
