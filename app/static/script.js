@@ -322,6 +322,16 @@ function generateBlurredBackground () {
     function generateBokehBackground() {
     return "The background transforms with a beautiful bokeh effect, enhancing the visual appeal of the scene.";
 }
+    
+      function generateSheet() {
+    return "Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides.  The details of the clothing, including visible accessories should be clearly visible from each angle.";
+}
+    
+    
+       function generateUXui() {
+    return "Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides.  The details of the clothing, including visible accessories should be clearly visible from each angle.";
+}
+
 
   
     function hideGeneratingImagesDialog() {
@@ -542,10 +552,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
     const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
+    const sheet = document.getElementById("sheethCheckbox").checked ? generateSheet() : "";
+    const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
 
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui}  ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
