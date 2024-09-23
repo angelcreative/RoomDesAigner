@@ -328,7 +328,7 @@ function generateBlurredBackground () {
 }
     
     
-       function generateUXui() {
+       function generateUxui() {
     return "Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides.  The details of the clothing, including visible accessories should be clearly visible from each angle.";
 }
 
