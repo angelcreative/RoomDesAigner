@@ -364,7 +364,7 @@ function generateEvo() {
 }
 
     function generateViewRendering(customText) {
-    return ` Envision a product design for a ${customText}. The task is to create a full-product turnaround of the ${customText}, illustrating the product from five distinct angles: front, three-quarters front left, side left, three-quarters back left, and back. In each depiction, the ${customText} must look highly detailed. Ensure that the details of the ${customText} product details are clearly discernible from each perspective.`;
+    return ` Envision a product design for a ${customText}. The task is to create a full-product turnaround of the ${customText}, showing the product from five distinct angles: front, three-quarters front left, side left, three-quarters back left, and back. In each depiction, the ${customText} must look highly detailed. Ensure that the details of the ${customText} product details are clearly discernible from each perspective.`;
 }
 
     
