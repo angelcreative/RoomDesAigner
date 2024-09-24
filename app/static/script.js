@@ -364,21 +364,15 @@ function generateEvo() {
 }
 
     function generateViewRendering(customText) {
-    return `Imagine a sleek, modern product like *${customText}*, displayed in a 360-degree view with four distinct angles. The product should  be positioned at front, back, left, and right perspectives, providing a comprehensive view of the item's design, structure, and details. The focus is on showcasing the product’s features   to highlight its aesthetics and functionality. Detailed visual exploration. 3D render. `;
+    return ` Envision a product design for a ${customText}. The task is to create a full-product turnaround of the ${customText}, illustrating the product from five distinct angles: front, three-quarters front left, side left, three-quarters back left, and back. In each depiction, the ${customText} must look highly detailed. Ensure that the details of the ${customText} product details are clearly discernible from each perspective.`;
 }
 
     
-    function generateViewRendering(customText) {
-    return `Imagine a sleek, modern product like *${customText}*, displayed in a 360-degree view with four distinct angles. The product should  be positioned at front, back, left, and right perspectives, providing a comprehensive view of the item's design, structure, and details. The focus is on showcasing the product’s features   to highlight its aesthetics and functionality. Detailed visual exploration. 3D render. `;
-}
-    
+  
 function generateProductView(customText, photo_location) {
     return `Imagine a centered product photo for ${customText}, located at ${photo_location}. The image should focus on highlighting the key features of the product, ensuring it stands out clearly in a well-lit and balanced frame. The product should be centered with a neutral background, emphasizing its design and craftsmanship. The photo should reflect professional product photography standards, capturing every detail in a sharp and attractive manner.`;
 }
 
-    
-
-    
     
    
   
