@@ -328,13 +328,25 @@ function generateBlurredBackground () {
 }
     
     
-    function generateEvolutionCycle(customText) {
-    return `Illustrate the evolution cycle of ${customText} in a single, continuous image. Divide the canvas into four seamlessly blending sections, each representing a stage of the subject's evolution.
+   function generateEvolutionCycleEvo(customText, evolutionType) {
+    return `Illustrate the ${evolutionType} of ${customText} in a single, continuous image. Divide the canvas into four seamlessly blending sections, each representing a stage of the subject's ${evolutionType}.
 
-    Start on the left by showing evolution level 0, depicting the earliest form or stage of ${customText}. As we move to the right, show evolution level 1, highlighting significant changes or growth. In the third section, depict evolution level 2, capturing the subject in an advanced stage of its transformation.
+    Start on the left by showing the initial stage, depicting the earliest form or level of ${customText}. As we move to the right, show the next level, highlighting significant advancements or changes in ${evolutionType}, whether biological, technological, or equipment-based. In the third section, depict a further evolution stage, capturing ${customText} in a more advanced form or configuration.
 
-    Finally, on the right side, show evolution level 3, presenting the fully evolved form of ${customText}. The design should seamlessly transition from one stage to the next, using a natural color palette that complements the evolution of the subject. The background should subtly shift to reflect the progression, changing in lighting or scenery to indicate the passage of time.`;
+    Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.`;
 }
+
+function generateEvo() {
+    // Obtener el texto personalizado
+    const customText = document.getElementById('customText').value || "a generic subject";
+    
+    // Obtener el tipo de evolución seleccionado
+    const evolutionType = document.querySelector('input[name="evolutionType"]:checked').value;
+    
+    // Generar el prompt usando la función
+    return generateEvolutionCycleEvo(customText, evolutionType);
+}
+
 
     
     
@@ -591,8 +603,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
      const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
 
      const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
-    const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvolutionCycle() : "";
+    
+  
 
+// Modificar la línea que crea evolutionCycle
+const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
 
 
     // Construir el texto del prompt final
