@@ -338,6 +338,19 @@ function generateBlurredBackground () {
     return `Imagine designing a sleek, modern hero section for a landing page dedicated to ${customText}. This hero section should focus on capturing the user's attention with a clean and appealing design, highlighting key elements such as a bold headline, clear subtitles, and a conversion-focused call to action (CTA). The design should integrate high-quality images or graphics, all optimized for a smooth and effective user experience. This project covers UI design, UX/UI design, product design, and web design.`;
 }
 
+    function generateViewRendering(customText) {
+    return `Imagine a sleek, modern product like *${customText}*, displayed in a 360-degree view with four distinct angles. The product should  be positioned at front, back, left, and right perspectives, providing a comprehensive view of the item's design, structure, and details. The focus is on showcasing the product’s features   to highlight its aesthetics and functionality. Detailed visual exploration. 3D render. `;
+}
+
+    
+    function generateViewRendering(customText) {
+    return `Imagine a sleek, modern product like *${customText}*, displayed in a 360-degree view with four distinct angles. The product should  be positioned at front, back, left, and right perspectives, providing a comprehensive view of the item's design, structure, and details. The focus is on showcasing the product’s features   to highlight its aesthetics and functionality. Detailed visual exploration. 3D render. `;
+}
+    
+function generateProductView(customText, photo_location) {
+    return `Imagine a centered product photo for ${customText}, located at ${photo_location}. The image should focus on highlighting the key features of the product, ensuring it stands out clearly in a well-lit and balanced frame. The product should be centered with a neutral background, emphasizing its design and craftsmanship. The photo should reflect professional product photography standards, capturing every detail in a sharp and attractive manner.`;
+}
+
 
     
     
@@ -564,9 +577,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
  const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
+     const viewRendering = document.getElementById("uviewRenderingCheckbox").checked ? generateViewRendering() : "";
+
+     const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
+
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui} ${uxuiWeb}  ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
