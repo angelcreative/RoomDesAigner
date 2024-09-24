@@ -335,6 +335,15 @@ function generateBlurredBackground () {
 
     Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.`;
 }
+    
+    
+    
+
+    
+    
+
+    
+    
 
 function generateEvo() {
     // Obtener el texto personalizado
