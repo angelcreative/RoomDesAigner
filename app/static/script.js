@@ -631,9 +631,7 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         model_id: "fluxdev",  // El modelo predeterminado
         lora_model: "flux-fashion,surreal-photorealism,Photorealism-flux,realistic-skin-flux",
         lora_strength: "0.5,1,0.7,0.8", 
-        clip_skip: 2,
-        algorithm_type: "dpmsolver+++",
-        scheduler: "DPMSolverMultistepScheduler",
+        scheduler: "DDIMScheduler",
         webhook: null,
         safety_checker: "no",
         track_id: null,
