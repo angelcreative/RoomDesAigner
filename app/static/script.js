@@ -577,7 +577,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
  const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
-     const viewRendering = document.getElementById("uviewRenderingCheckbox").checked ? generateViewRendering() : "";
+     const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
 
      const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
 
