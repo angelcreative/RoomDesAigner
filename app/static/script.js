@@ -337,13 +337,7 @@ function generateBlurredBackground () {
 }
     
     
-    
-
-    
-    
-
-    
-    
+    //for evo only
 
 function generateEvo() {
     // Obtener el texto personalizado
