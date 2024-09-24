@@ -328,6 +328,16 @@ function generateBlurredBackground () {
 }
     
     
+    function generateEvolutionCycle(customText) {
+    return `Illustrate the evolution cycle of ${customText} in a single, continuous image. Divide the canvas into four seamlessly blending sections, each representing a stage of the subject's evolution.
+
+    Start on the left by showing evolution level 0, depicting the earliest form or stage of ${customText}. As we move to the right, show evolution level 1, highlighting significant changes or growth. In the third section, depict evolution level 2, capturing the subject in an advanced stage of its transformation.
+
+    Finally, on the right side, show evolution level 3, presenting the fully evolved form of ${customText}. The design should seamlessly transition from one stage to the next, using a natural color palette that complements the evolution of the subject. The background should subtly shift to reflect the progression, changing in lighting or scenery to indicate the passage of time.`;
+}
+
+    
+    
        function generateUxui(customText) {
     return ` imagine designing a sleek, modern mobile app interface for a ${customText} App. this user friendly user interface, must show a well distributed dashboard and ui cards. should feature intuitive UI icons, UI buttons and text options to enhance the user experience. the design approach combines this project involves UI design, UX/UI design, Product Design, App design.`;
 }
@@ -351,6 +361,7 @@ function generateProductView(customText, photo_location) {
     return `Imagine a centered product photo for ${customText}, located at ${photo_location}. The image should focus on highlighting the key features of the product, ensuring it stands out clearly in a well-lit and balanced frame. The product should be centered with a neutral background, emphasizing its design and craftsmanship. The photo should reflect professional product photography standards, capturing every detail in a sharp and attractive manner.`;
 }
 
+    
 
     
     
@@ -580,10 +591,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
      const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
 
      const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
+    const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvolutionCycle() : "";
+
 
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Configuración del modelo (ajustable según la selección del usuario)
     const prompt = {
