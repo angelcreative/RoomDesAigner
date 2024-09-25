@@ -413,7 +413,7 @@ h2.loginTitle {
     color: var(--dragon-500);
     top: 16px;
     right: 40px;
-    padding: 12px;
+    padding: 12px 16px;
     border: 1px solid var(--dragon-500);
     border-radius: 900px;
     transform: rotate(0);

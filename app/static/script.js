@@ -1151,7 +1151,6 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
-// Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -1278,10 +1277,19 @@ function showModal(imageUrls, transformedPrompt) {
         // Mueve el carrusel
         const offset = -currentIndex * 100;
         carouselWrapper.style.transform = `translateX(${offset}%)`;
+
+        // Deshabilitar o esconder el botón "prev" cuando estemos en la primera diapositiva
+        const prevButton = document.querySelector('.prev');
+        if (currentIndex === 0) {
+            prevButton.disabled = true;  // Deshabilitar el botón "prev"
+            prevButton.style.display = 'none';  // Alternativamente, esconder el botón
+        } else {
+            prevButton.disabled = false;  // Habilitar el botón "prev"
+            prevButton.style.display = 'block';  // Mostrar el botón
+        }
     }
 }
 
- 
 
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
