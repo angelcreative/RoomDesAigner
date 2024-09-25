@@ -1247,8 +1247,7 @@ img#thumbnail {
         width: max-content;
         background: var(--vulkan-600);
         padding: 4px 12px;
-      
-        color: #1f1f1f;
+      color: var(--vulkan-200);
         top: 40px;
         left: -10px;
         border-radius: 90px;
@@ -2026,13 +2025,17 @@ i {
 }
 
 .serialButton{
-    display: flex;
-    justify-content: space-between;
+   display: flex;
+    justify-content: flex-start;
+        margin-bottom: var(--2xl);
 }
 
 .serialButton button {
     background: var(--vulkan-50);
     font-size: var(--s);
+        max-height: 52px;
+    margin: 0 var(--s);
+    min-width: 130px;
 }
 
 .serialButton button:hover {
@@ -2109,7 +2112,7 @@ i {
     margin-top: -22px;
     color: white;
     font-weight: bold;
-     : 18px;
+   
     background-color: rgba(0, 0, 0, 0.5);
     border: none;
     border-radius: 0 3px 3px 0;
@@ -2135,9 +2138,9 @@ i {
     height: 100vh;
     top: 0;
     left: 0;
-    overflow: auto;
+    
     text-align: center;
-    scroll-behavior: smooth;
+    
 }
 
 #clearImg,
@@ -2149,7 +2152,7 @@ i {
         right: 0;
         top: 0;
         color: var(--bunker-400);
-         : 24px;
+        
         cursor: pointer;
        
 }
@@ -2894,10 +2897,11 @@ option[title]:hover:after {
 }
 
 #chipsSV {
-        margin: 10px auto;
-        text-align: left;
-        display: flex;
-        max-width: 1000px;
+       margin: 0 0 var(--2xl) 0;
+    text-align: left;
+    width: calc(100% - 130px);
+    position: relative;
+    z-index: 9;
 }
 
 .chipSV {
