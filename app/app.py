@@ -529,7 +529,7 @@ def clarity_upscale():
         return jsonify({"scaled_image_url": output[0]["file"]}), 200
 
     except Exception as e:
-        return jsonify({'error': f'Error en el servidor: {str(e)}')}), 500
+        return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
     
     
 @app.route('/load-saved-values', methods=['GET'])
