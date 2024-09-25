@@ -34,7 +34,18 @@
         --aztec-700: #346565;
         --aztec-800: #234343;
         --aztec-900: #112222;
-        /* Agrega más variables de color o estilos aquí según lo necesites */
+        /* System */
+        /*destruction*/
+        --dragon-50: #FFEAE5;
+        --dragon-100: #FFD6CC;
+        --dragon-200: #FFAC99;
+        --dragon-300: #FF8366;
+        --dragon-400: #FF5933;
+        --dragon-500: #FF3000;
+        --dragon-600: #CC2600;
+        --dragon-700: #991D00;
+        --dragon-800: #661300;
+        --dragon-900: #330A00;
     
    /*size*/ 
     --4xs: 2px;
@@ -397,15 +408,14 @@ h2.loginTitle {
 /* end ref */
 
 .modal-content span.close {
-       
-       
-       
-        position: absolute;
-        cursor: pointer;
-        color: var(--bunker-50);
-        top: 16px;
-        right: 40px;
-        transform: rotate(90deg);
+    position: absolute;
+    cursor: pointer;
+    color: var(--dragon-500);
+    top: 16px;
+    right: 40px;
+    padding: 12px;
+    border: 1px solid var(--dragon-500);
+    border-radius: 4px;
 }
 
 span.close {
@@ -420,7 +430,8 @@ span.close {
 }
 
 span.close:hover {
-        transform: scale(1.1);
+    background: var(--dragon-500);
+    color: var(--dragon-100);
 }
 
 
@@ -2009,10 +2020,66 @@ i {
     width: 44%;
 }
 .carousel-slide {
-    min-width: 100%;
+    min-width: 80%;
     box-sizing: border-box;
+    margin-right: var(--2xs);
 }
 
+.serialButton{
+    display: flex;
+    justify-content: space-between;
+}
+
+.serialButton button {
+    background: var(--vulkan-50);
+    font-size: var(--s);
+}
+
+.serialButton button:hover {
+    background: var(--vulkan-500);
+    color: var(--vulkan-200);
+}
+
+.add-image-card {
+    border-radius: var(--l);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+        background: var(--bunker-900);
+}
+
+.add-more-button {
+    color: var(--bunker-500);
+    padding: 40px;
+    border-radius: 100px;
+    background: var(--bunker-800);
+    line-height: 0;
+    box-shadow: 0px 0px 0px 20px rgb(95 138 182 / 0%);
+    border: none;
+    background: var(--bunker-700);
+    border-radius: var(--l);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    margin: 0;
+    transition: background ease-in 100ms
+}
+
+
+.add-more-button .material-symbols-outlined {
+
+    font-size: 84px;
+    color: var(--bunker-800);
+}
+
+
+.add-more-button:hover, .add-more-button:hover p, .add-more-button:hover span {
+    background: transparent;
+    color: var(--bunker-600);
+}
 
 .image-buttons {
     display: flex;
@@ -2077,14 +2144,14 @@ i {
 #closeDialogButton,
 #dismissErrorButton,
 .close {
-        transform: rotate(45deg);
+       
         position: absolute;
         right: 0;
         top: 0;
         color: var(--bunker-400);
          : 24px;
         cursor: pointer;
-        transition: color 300ms ease-out;
+       
 }
 
 #clearImg:hover,
@@ -2586,7 +2653,7 @@ button {
     border: 1px solid var(--vulkan-600);
     background: transparent;
     color: var(--vulkan-600);
-    padding: 0.8rem 1.2rem;
+    padding: var(--s) var(--m);
     cursor: pointer;
 }
 
@@ -2625,7 +2692,7 @@ button:hover {
 .fakeBttn {
         background: #151414;
         color: #333;
-        padding: 0.8rem 1.2rem;
+        padding: var(--s) var(--m);
         cursor: not-allowed;
         border-radius: 0.5rem;
         z-index: 1;
