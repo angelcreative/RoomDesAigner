@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
+from pydantic import BaseModel, Field
+from typing import Optional
 from flask_cors import CORS
 import hmac
 import hashlib
