@@ -1152,85 +1152,104 @@ function toggleContent() {
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
-    const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";  // Limpiar cualquier contenido previo
+    const modal = document.getElementById("modal");
+    const closeButton = modal.querySelector(".close");
 
-    // Crear contenedor del cubo
-    const cubeContainer = document.createElement("div");
-    cubeContainer.classList.add("cube-container");
-
-    const cube = document.createElement("div");
-    cube.classList.add("cube");
-
-    // Crear cada cara del cubo con las imágenes generadas
-    const faces = ['front', 'back', 'left', 'right'];
+    closeButton.removeEventListener("click", closeModalHandler);
+    closeButton.addEventListener("click", closeModalHandler);
     
+    const thumbnailImage = document.getElementById("thumbnail");
+    const userImageBase64 = thumbnailImage.src;
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+    
+    
+    function createButton(text, onClickHandler) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.type = "button";  // Agregar type="button"
+    button.addEventListener("click", onClickHandler);
+    return button;
+}
+
+
+    // Crear estructura del carrusel
+    const carouselWrapper = document.createElement("div");
+    carouselWrapper.classList.add("carousel-wrapper");
+
     imageUrls.forEach((imageUrl, index) => {
-        if (index < 4) { // Solo queremos 4 imágenes para las 4 caras
-            const face = document.createElement("div");
-            face.classList.add("face", faces[index]);
+        const imageContainer = document.createElement("div");
+        imageContainer.classList.add("carousel-slide");
+        
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = "Generated Image";
+        image.classList.add("thumbnail");
 
-            const image = document.createElement("img");
-            image.src = imageUrl;
-            image.alt = `Generated Image ${index + 1}`;
-            image.classList.add("thumbnail");
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.classList.add("image-buttons");
 
-            const buttonsContainer = document.createElement("div");
-            buttonsContainer.classList.add("image-buttons");
+        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+        const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
+        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+        const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
-            // Crear botones de acción para cada imagen
-            const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-            const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-            const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-            const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-            const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
-            const compareButton = createButton("Compare", () => openComparisonWindow(imageUrl));
-            const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+        [downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
-            // Añadir todos los botones al contenedor
-            [downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton]
-                .forEach(button => buttonsContainer.appendChild(button));
+        imageContainer.appendChild(image);
+        imageContainer.appendChild(buttonsContainer);
 
-            // Añadir la imagen y los botones a la cara del cubo
-            face.appendChild(image);
-            face.appendChild(buttonsContainer);
-
-            cube.appendChild(face);
-        }
+        carouselWrapper.appendChild(imageContainer);
     });
 
-    // Añadir el cubo al contenedor
-    cubeContainer.appendChild(cube);
-    imageGrid.appendChild(cubeContainer);
+    imageGrid.appendChild(carouselWrapper);
 
-    // Crear botones para avanzar y retroceder
-    const prevButton = document.createElement("button");
-    prevButton.innerHTML = "&#10094; Retroceder";
-    prevButton.addEventListener("click", () => moveSlide(-1));
+    // Crear botones prev y next para controlar el carrusel
+const prevButton = document.createElement("button");
+prevButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
+prevButton.classList.add("prev");
+prevButton.innerHTML = "&#10094;";
+prevButton.addEventListener("click", () => moveSlide(-1));
 
-    const nextButton = document.createElement("button");
-    nextButton.innerHTML = "Avanzar &#10095;";
-    nextButton.addEventListener("click", () => moveSlide(1));
+const nextButton = document.createElement("button");
+nextButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
+nextButton.classList.add("next");
+nextButton.innerHTML = "&#10095;";
+nextButton.addEventListener("click", () => moveSlide(1));
 
     imageGrid.appendChild(prevButton);
     imageGrid.appendChild(nextButton);
 
-    // Inicializar el índice del cubo
-    let currentAngle = 0;
+    const toggleContentDiv = document.querySelector(".toggle-content");
+    if (toggleContentDiv) {
+        toggleContentDiv.innerHTML = transformedPrompt;
+    } else {
+        console.error("Toggle content div not found.");
+    }
+
+    modal.style.display = "block";
+    showOverlay();
+
+    // Inicializar el índice del carrusel
+    let currentIndex = 0;
 
     function moveSlide(direction) {
-        currentAngle += direction * 90;
-        cube.style.transform = `rotateY(${currentAngle}deg)`;
-    }
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
 
-    function createButton(text, onClickHandler) {
-        const button = document.createElement("button");
-        button.textContent = text;
-        button.type = "button"; // Agregar type="button"
-        button.addEventListener("click", onClickHandler);
-        return button;
+        // Actualiza el índice actual
+        currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
+        
+        // Mueve el carrusel
+        const offset = -currentIndex * 100;
+        carouselWrapper.style.transform = `translateX(${offset}%)`;
     }
 }
+
 
     
  
