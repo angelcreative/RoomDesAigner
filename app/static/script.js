@@ -841,6 +841,39 @@ rerollButton.addEventListener("click", rerollImages);
     
    
 
+// Función para enviar la imagen al backend y obtener la versión escalada
+function clarityUpscale(imageUrl) {
+    // Preparar los datos de entrada para enviar al backend
+    const input_data = {
+        "image_url": imageUrl  // Enviar la URL de la imagen original generada
+    };
+
+    // Enviar la URL de la imagen al backend para escalarla
+    fetch('/clarity-upscale', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(input_data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.scaled_image_url) {
+            // Abrir la URL de la imagen escalada en una nueva pestaña
+            window.open(data.scaled_image_url, '_blank');
+        } else {
+            console.error('No se recibió una URL de imagen escalada válida.');
+        }
+    })
+    .catch(error => {
+        console.error('Error durante el escalado de la imagen:', error);
+    });
+}
 
     
     
@@ -893,53 +926,7 @@ async function copyTextToClipboard(text) {
 }
 
     
-    
-// Función para iniciar el escalado de claridad y manejar el polling
-function clarityUpscale(imageUrl) {
-    fetch('/clarity-upscale', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            image_url: imageUrl  // Enviar la URL de la imagen
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.prediction_id) {
-            // Iniciar el polling para obtener el estado de la predicción
-            checkImageStatus(data.prediction_id);
-        } else {
-            console.error('No se recibió un ID de predicción válido.');
-        }
-    })
-    .catch(error => {
-        console.error('Error durante el escalado de la imagen:', error);
-    });
-}
-
-// Función para hacer polling y verificar el estado de la imagen
-async function checkImageStatus(predictionId) {
-    const response = await fetch(`/check-prediction/${predictionId}`);
-    const data = await response.json();
-
-    if (data.status === 'succeeded') {
-        // Abre la URL de la imagen escalada en una nueva pestaña
-        window.open(data.output, '_blank');
-    } else if (data.status === 'starting' || data.status === 'processing') {
-        // Reintenta cada 5 segundos hasta que se complete
-        setTimeout(() => checkImageStatus(predictionId), 5000);
-    } else {
-        console.error('Error: Estado de predicción inesperado.', data);
-    }
-}
-
+ 
 
 
 

@@ -503,11 +503,7 @@ def update_user_credits(email, additional_credits):
     return response
 
 
-
-# Diccionario para almacenar las predicciones
-predictions = {}
-
-# Ruta para enviar una imagen a Replicate y crear una predicción
+# Ruta para enviar la imagen a Replicate y escalarla
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -517,120 +513,25 @@ def clarity_upscale():
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
+        # Parámetros de entrada para el modelo
         input_data = {
-            "image": image_url
+            "jpeg": "40",  # Ajustable según tus necesidades
+            "image": image_url,  # La URL de la imagen original
+            "noise": "15"  # Ajustable según tus necesidades
         }
 
-        # Crear un ID único para la predicción
-        prediction_id = str(uuid.uuid4())
-
-        # Crear la predicción en Replicate
-        prediction = replicate.predictions.create(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input=input_data,
-            webhook=f"https://yourdomain.com/webhooks/replicate/{prediction_id}",
-            webhook_events_filter=["completed"]
+        # Ejecutar el modelo de Replicate para escalar la imagen
+        output = replicate.run(
+            "jingyunliang/swinir:660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",
+            input=input_data
         )
 
-        # Verificar si la respuesta es una cadena o un objeto
-        if isinstance(prediction, str):
-            prediction_id = prediction  # Si es una cadena, úsala como el ID de la predicción
-        else:
-            prediction_id = prediction.id  # Si es un objeto, usa el atributo 'id'
-
-        # Almacenar la predicción con estado 'starting'
-        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction_id}
-
-        return jsonify({'prediction_id': prediction_id}), 200
+        # Devolver la URL de la imagen escalada
+        return jsonify({"scaled_image_url": output[0]["file"]}), 200
 
     except Exception as e:
-        print(f"Ocurrió un error: {str(e)}")
-        return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
+        return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
 
-
-# Ruta para recibir el webhook de Replicate cuando la predicción esté lista
-@app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
-def replicate_webhook(prediction_id):
-    try:
-        webhook_data = request.json
-
-        # Verifica si la predicción fue exitosa
-        if webhook_data.get('status') == 'succeeded':
-            output_url = webhook_data.get('output', [None])[0]
-            predictions[prediction_id] = {"status": "succeeded", "output": output_url}
-            print(f"Predicción completada con éxito. URL de salida: {output_url}")
-
-        return jsonify({'status': 'ok'}), 200
-
-    except Exception as e:
-        print(f"Error en el webhook: {str(e)}")
-        return jsonify({'error': f'Error en el webhook: {str(e)}'}), 500
-
-
-# Ruta para consultar el estado de la predicción
-@app.route('/check-prediction/<prediction_id>', methods=['GET'])
-def check_prediction_status(prediction_id):
-    print(f"Consultando estado para prediction_id: {prediction_id}")
-    prediction = predictions.get(prediction_id)
-    if not prediction:
-        print(f"Predicción no encontrada para prediction_id: {prediction_id}")
-        return jsonify({'error': 'Predicción no encontrada'}), 404
-    
-    print(f"Estado de la predicción: {prediction}")
-    return jsonify(prediction)
-
-@app.route('/save-values', methods=['POST'])
-def save_values():
-    if 'username' not in session:
-        logging.error("User not logged in.")
-        return jsonify({"error": "Not logged in"}), 401
-
-    data = request.json
-    name = data.get('name')
-    values = data.get('values')
-
-    if not name or not values:
-        logging.error("Missing name or values.")
-        return jsonify({'error': 'Missing name or values'}), 400
-
-    # Guardar los valores en MongoDB
-    save_payload = {
-        'dataSource': 'Cluster0',  # Asegúrate de que este sea el nombre correcto
-        'database': 'yourDatabase',  # Reemplaza con el nombre exacto de tu base de datos
-        'collection': 'saved_values',
-        'document': {
-            'username': session['username'],
-            'name': name,
-            'values': values
-        }
-    }
-    headers = {
-        'Content-Type': 'application/json',
-        'api-key': mongo_data_api_key
-    }
-    save_response = requests.post(
-        f'{mongo_data_api_url}/action/insertOne',
-        headers=headers,
-        data=json.dumps(save_payload)
-    )
-
-    # Agrega logs para depuración
-    logging.info(f"Request payload: {save_payload}")
-    logging.info(f"Response status code: {save_response.status_code}")
-    logging.info(f"Response text: {save_response.text}")
-
-    if save_response.status_code == 201 or save_response.status_code == 200:
-        response_data = save_response.json()
-        if 'insertedId' in response_data:
-            return jsonify({'success': True}), 200
-        else:
-            error_message = response_data.get('error', 'Unknown error occurred.')
-            logging.error(f"Error saving values: {error_message}")
-            return jsonify({'error': f"Error saving values: {error_message}"}), 500
-    else:
-        error_message = save_response.json().get('error', 'Unknown error occurred.')
-        logging.error(f"Error saving values: {error_message}")
-        return jsonify({'error': f"Error saving values: {error_message}"}), 500
 
 
 @app.route('/load-saved-values', methods=['GET'])
