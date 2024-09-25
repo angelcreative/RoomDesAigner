@@ -894,6 +894,7 @@ async function copyTextToClipboard(text) {
 
     
     
+// Función para iniciar el escalado de claridad y manejar el polling
 function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
         method: 'POST',
@@ -901,7 +902,7 @@ function clarityUpscale(imageUrl) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            image_url: imageUrl  // Solo se envía la URL de la imagen
+            image_url: imageUrl  // Enviar la URL de la imagen
         })
     })
     .then(response => {
@@ -911,17 +912,34 @@ function clarityUpscale(imageUrl) {
         return response.json();
     })
     .then(data => {
-        if (Array.isArray(data.output) && data.output.length > 0) {
-            // Abre la primera URL del array en una nueva pestaña
-            window.open(data.output[0], '_blank');
+        if (data.prediction_id) {
+            // Iniciar el polling para obtener el estado de la predicción
+            checkImageStatus(data.prediction_id);
         } else {
-            console.error('No URLs received for the processed image.');
+            console.error('No se recibió un ID de predicción válido.');
         }
     })
     .catch(error => {
-        console.error('Error during image upscaling:', error);
+        console.error('Error durante el escalado de la imagen:', error);
     });
 }
+
+// Función para hacer polling y verificar el estado de la imagen
+async function checkImageStatus(predictionId) {
+    const response = await fetch(`/check-prediction/${predictionId}`);
+    const data = await response.json();
+
+    if (data.status === 'succeeded') {
+        // Abre la URL de la imagen escalada en una nueva pestaña
+        window.open(data.output, '_blank');
+    } else if (data.status === 'starting' || data.status === 'processing') {
+        // Reintenta cada 5 segundos hasta que se complete
+        setTimeout(() => checkImageStatus(predictionId), 5000);
+    } else {
+        console.error('Error: Estado de predicción inesperado.', data);
+    }
+}
+
 
 
 

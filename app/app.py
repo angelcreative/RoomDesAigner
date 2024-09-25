@@ -504,11 +504,10 @@ def update_user_credits(email, additional_credits):
 
 
 
-
-# Almacenamiento temporal de predicciones (solo para pruebas)
+# Diccionario para almacenar las predicciones
 predictions = {}
 
-# Ruta para iniciar el proceso de escalado
+# Ruta para enviar una imagen a Replicate y crear una predicción
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -524,34 +523,30 @@ def clarity_upscale():
 
         # Crear un ID único para la predicción
         prediction_id = str(uuid.uuid4())
-        
+
         # Crear la predicción en Replicate
         prediction = replicate.predictions.create(
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data,
-            webhook=f"https://roomdesaigner.com/webhooks/replicate/{prediction_id}",
+            webhook=f"https://www.roomdesaigner.com/webhooks/replicate/{prediction_id}",
             webhook_events_filter=["completed"]
         )
 
-        # Imprimir información de depuración
-        print(f"Tipo de prediction: {type(prediction)}")
-        print(f"Contenido de prediction: {prediction}")
-
-        # Verificar si la predicción tiene un ID
+        # Verificar si la predicción tiene un ID válido
         if not prediction or not prediction.id:
             return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
 
-        # Inicializamos la predicción en el diccionario con el estado 'starting'
+        # Almacenar la predicción con estado 'starting'
         predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
 
-        # Devolvemos el ID de la predicción generada
         return jsonify({'prediction_id': prediction_id}), 200
 
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return jsonify({'error': f'Error interno del servidor: {str(e)}'}), 500
 
-# Ruta para recibir el webhook de Replicate
+
+# Ruta para recibir el webhook de Replicate cuando la predicción esté lista
 @app.route('/webhooks/replicate/<prediction_id>', methods=['POST'])
 def replicate_webhook(prediction_id):
     try:
@@ -561,41 +556,23 @@ def replicate_webhook(prediction_id):
         if webhook_data.get('status') == 'succeeded':
             output_url = webhook_data.get('output', [None])[0]
             predictions[prediction_id] = {"status": "succeeded", "output": output_url}
-        elif webhook_data.get('status') == 'failed':
-            predictions[prediction_id] = {"status": "failed", "output": None}
+            print(f"Predicción completada con éxito. URL de salida: {output_url}")
 
-        return jsonify({"ok": True}), 200
+        return jsonify({'status': 'ok'}), 200
 
     except Exception as e:
-        print(f"Error procesando el webhook: {str(e)}")
-        return jsonify({'error': f'Error procesando el webhook: {str(e)}'}), 500
+        print(f"Error en el webhook: {str(e)}")
+        return jsonify({'error': f'Error en el webhook: {str(e)}'}), 500
 
-# Ruta para que el frontend consulte el resultado de la predicción
-@app.route('/get-upscaled-image/<prediction_id>', methods=['GET'])
-def get_upscaled_image(prediction_id):
-    result = predictions.get(prediction_id, None)
 
-    if not result:
+# Ruta para consultar el estado de la predicción
+@app.route('/check-prediction/<prediction_id>', methods=['GET'])
+def check_prediction_status(prediction_id):
+    prediction = predictions.get(prediction_id)
+    if not prediction:
         return jsonify({'error': 'Predicción no encontrada'}), 404
     
-    if result['status'] == 'starting':
-        # Si la predicción aún está en proceso, consultamos su estado actual
-        replicate_id = result.get('replicate_id')
-        if replicate_id:
-            current_prediction = replicate.predictions.get(replicate_id)
-            result['status'] = current_prediction.status
-            if current_prediction.status == 'succeeded':
-                result['output'] = current_prediction.output[0] if current_prediction.output else None
-            predictions[prediction_id] = result  # Actualizamos el estado en nuestro almacenamiento local
-
-    return jsonify(result), 200
-
-
-
-#SREF
-
-# Configurar el nivel de registro
-logging.basicConfig(level=logging.INFO)
+    return jsonify(prediction)
 
 @app.route('/save-values', methods=['POST'])
 def save_values():
