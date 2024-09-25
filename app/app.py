@@ -503,20 +503,25 @@ def update_user_credits(email, additional_credits):
     return response
 
 
+
+# Ruta para enviar la imagen a Replicate y escalarla
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
-        data = request.json
+        # Verificar que el contenido de la solicitud es JSON
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'El cuerpo de la solicitud está vacío o malformado'}), 400
+        
         image_url = data.get('image_url')
-
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
-        # Parámetros de entrada para el modelo, ajustados para png
+        # Parámetros de entrada para el modelo
         input_data = {
-            "jpeg": 40,  # El parámetro sigue siendo necesario para el modelo, pero puedes ajustarlo.
-            "image": image_url,  # La URL de la imagen original (en formato PNG)
-            "noise": 15  # El valor sigue siendo un entero
+            "jpeg": 40,  # Ajustar según lo que necesites
+            "image": image_url,  # La URL de la imagen original
+            "noise": 15  # Ajustar según lo que necesites
         }
 
         # Ejecutar el modelo de Replicate para escalar la imagen
@@ -525,10 +530,15 @@ def clarity_upscale():
             input=input_data
         )
 
+        # Depuración: imprimir los datos recibidos de Replicate
+        print(f"Respuesta de Replicate: {output}")
+
         # Devolver la URL de la imagen escalada
-        return jsonify({"scaled_image_url": output[0]["file"]}), 200
+        return jsonify({"scaled_image_url": output}), 200
 
     except Exception as e:
+        # Depurar el error exacto
+        print(f"Error en el servidor: {str(e)}")
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
     
     

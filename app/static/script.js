@@ -852,9 +852,9 @@ function clarityUpscale(imageUrl) {
     fetch('/clarity-upscale', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json'  // Asegurar que se envía como JSON
         },
-        body: JSON.stringify(input_data)
+        body: JSON.stringify(input_data)  // Convertir a JSON correctamente
     })
     .then(response => {
         if (!response.ok) {
