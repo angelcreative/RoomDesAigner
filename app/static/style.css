@@ -3891,6 +3891,69 @@ label.hamburger:hover {
     background-color: var(--vulkan-400); /* Color cuando está en hover */
 }
 
+
+
+
+.imageGrid {
+  perspective: 1000px;
+}
+
+.cube-container {
+  width: 300px;  /* Ajusta el tamaño según sea necesario */
+  height: 300px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+.face {
+  position: absolute;
+  width: 300px;  /* Tamaño de las caras del cubo */
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #ccc;
+}
+
+.face img {
+  object-fit: contain;
+  width: 100%;
+  height: 80%; /* Ajusta la imagen para dejar espacio para los botones */
+}
+
+.image-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.image-buttons button {
+  margin: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.front  { transform: rotateY(  0deg) translateZ(150px); }
+.back   { transform: rotateY(180deg) translateZ(150px); }
+.left   { transform: rotateY(-90deg) translateZ(150px); }
+.right  { transform: rotateY( 90deg) translateZ(150px); }
+
+
+
+
+
 /*=========================   MEDIA QUERIES ===================*/
 
 /* Extra small devices (phones, 600px and down) */
