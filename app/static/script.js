@@ -1151,6 +1151,7 @@ function toggleContent() {
 }
 
 // Displays modal with generated images and associated action buttons
+// Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
     const closeButton = modal.querySelector(".close");
@@ -1183,6 +1184,12 @@ function showModal(imageUrls, transformedPrompt) {
         imageGrid.appendChild(carouselWrapper);
     }
 
+    // Eliminar la card de "+ Add More" si existe para que siempre esté al final
+    let addImageCard = document.querySelector(".add-image-card");
+    if (addImageCard) {
+        addImageCard.remove();
+    }
+
     // Añadir las nuevas imágenes generadas al final
     imageUrls.forEach((imageUrl) => {
         const imageContainer = document.createElement("div");
@@ -1213,24 +1220,21 @@ function showModal(imageUrls, transformedPrompt) {
         carouselWrapper.appendChild(imageContainer);
     });
 
-    // Si no existe ya, añadir la card para añadir más imágenes
-    let addImageCard = document.querySelector(".add-image-card");
-    if (!addImageCard) {
-        addImageCard = document.createElement("div");
-        addImageCard.classList.add("carousel-slide", "add-image-card");
+    // Siempre añadir la card para añadir más imágenes al final
+    addImageCard = document.createElement("div");
+    addImageCard.classList.add("carousel-slide", "add-image-card");
 
-        const addImageButton = document.createElement("button");
-        addImageButton.textContent = "+ Add More";
-        addImageButton.classList.add("add-more-button");
-        addImageButton.addEventListener("click", () => {
-            // Lógica para agregar más imágenes
-            console.log("Add more images triggered.");
-            // Aquí puedes poner el trigger para generar más imágenes
-        });
+    const addImageButton = document.createElement("button");
+    addImageButton.textContent = "+ Add More";
+    addImageButton.classList.add("add-more-button");
+    addImageButton.addEventListener("click", () => {
+        // Lógica para agregar más imágenes
+        console.log("Add more images triggered.");
+        // Aquí puedes poner el trigger para generar más imágenes
+    });
 
-        addImageCard.appendChild(addImageButton);
-        carouselWrapper.appendChild(addImageCard);
-    }
+    addImageCard.appendChild(addImageButton);
+    carouselWrapper.appendChild(addImageCard); // Siempre al final
 
     // Crear botones prev y next para controlar el carrusel si no existen
     if (!document.querySelector(".prev")) {
@@ -1277,7 +1281,6 @@ function showModal(imageUrls, transformedPrompt) {
     }
 }
 
-    
  
 
 // Function to handle the "Close" action of modal

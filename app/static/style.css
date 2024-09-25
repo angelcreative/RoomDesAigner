@@ -2013,11 +2013,6 @@ i {
     box-sizing: border-box;
 }
 
-.thumbnail {
-    width: 100%;
-    height: auto;
-    border-radius:var(--2xs);
-}
 
 .image-buttons {
     display: flex;
@@ -2892,30 +2887,27 @@ option[title]:hover:after {
 }
 
 .thumbnail {
-        width: 100%;
-        height: auto;
-        border-radius: 3px;
-        cursor: pointer;
-        opacity: 1;
-        transition: opacity ease-out 30ms, transform 300ms ease-in;
-        /* box-shadow: 0px 12px 20px 2px rgb(15 15 27 / 76%); */
-        border: 1px solid #ffffff47;
-        border-top: none;
+    width: 100%;
+    height: auto;
+    border-radius: var(--xl) var(--xl) 0 0;
+    opacity: 1;
+    transition: opacity ease-out 30ms, transform 300ms ease-in;
+    border-top: none;
+    margin: 0;
 }
 .thumbnail:hover {
-        transform: scale(1.05);
 }
 
 .image-buttons {
         display: flex;
-        justify-content: space-evenly;
-        width: 100% !important;
-        flex-wrap: wrap;
-        flex-direction: row;
-        background: var(--bunker-900);
-        border-radius: 0 0 3px 3px;
-        margin: -16px 0 0 0;
-        padding: 24px 0 12px 0;
+    justify-content: center;
+    width: 100% !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    background: var(--bunker-900);
+    border-radius: 0 0 var(--xl) var(--xl);
+    margin: -2px 0 0 0;
+    padding: 12px 0 12px 0;
 }
 
 .image-buttons button {
@@ -3931,12 +3923,6 @@ label.hamburger:hover {
   height: 80%; /* Ajusta la imagen para dejar espacio para los botones */
 }
 
-.image-buttons {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
 
 .image-buttons button {
   margin: 5px;
