@@ -1159,26 +1159,32 @@ function showModal(imageUrls, transformedPrompt) {
     closeButton.addEventListener("click", closeModalHandler);
     
     const thumbnailImage = document.getElementById("thumbnail");
-    const userImageBase64 = thumbnailImage.src;
+    const userImageBase64 = thumbnailImage ? thumbnailImage.src : "";
 
     const imageGrid = document.getElementById("imageGrid");
-    imageGrid.innerHTML = "";
-    
-    
+
+    // No vaciar imageGrid, simplemente añadir nuevas imágenes
+
     function createButton(text, onClickHandler) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.type = "button";  // Agregar type="button"
-    button.addEventListener("click", onClickHandler);
-    return button;
-}
+        const button = document.createElement("button");
+        button.textContent = text;
+        button.type = "button";  // Asegurar type="button"
+        button.addEventListener("click", onClickHandler);
+        return button;
+    }
 
+    // Crear o buscar la estructura del carrusel
+    let carouselWrapper = document.querySelector(".carousel-wrapper");
 
-    // Crear estructura del carrusel
-    const carouselWrapper = document.createElement("div");
-    carouselWrapper.classList.add("carousel-wrapper");
+    // Si no existe el contenedor del carrusel, crearlo
+    if (!carouselWrapper) {
+        carouselWrapper = document.createElement("div");
+        carouselWrapper.classList.add("carousel-wrapper");
+        imageGrid.appendChild(carouselWrapper);
+    }
 
-    imageUrls.forEach((imageUrl, index) => {
+    // Añadir las nuevas imágenes generadas al final
+    imageUrls.forEach((imageUrl) => {
         const imageContainer = document.createElement("div");
         imageContainer.classList.add("carousel-slide");
         
@@ -1190,6 +1196,7 @@ function showModal(imageUrls, transformedPrompt) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.classList.add("image-buttons");
 
+        // Botones de acción
         const downloadButton = createButton("Download", () => downloadImage(imageUrl));
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
@@ -1198,31 +1205,51 @@ function showModal(imageUrls, transformedPrompt) {
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
+        // Añadir los botones a su contenedor
         [downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
-
         carouselWrapper.appendChild(imageContainer);
     });
 
-    imageGrid.appendChild(carouselWrapper);
+    // Si no existe ya, añadir la card para añadir más imágenes
+    let addImageCard = document.querySelector(".add-image-card");
+    if (!addImageCard) {
+        addImageCard = document.createElement("div");
+        addImageCard.classList.add("carousel-slide", "add-image-card");
 
-    // Crear botones prev y next para controlar el carrusel
-const prevButton = document.createElement("button");
-prevButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
-prevButton.classList.add("prev");
-prevButton.innerHTML = "&#10094;";
-prevButton.addEventListener("click", () => moveSlide(-1));
+        const addImageButton = document.createElement("button");
+        addImageButton.textContent = "+ Add More";
+        addImageButton.classList.add("add-more-button");
+        addImageButton.addEventListener("click", () => {
+            // Lógica para agregar más imágenes
+            console.log("Add more images triggered.");
+            // Aquí puedes poner el trigger para generar más imágenes
+        });
 
-const nextButton = document.createElement("button");
-nextButton.type = "button";  // Agregar type="button" para evitar que actúe como submit
-nextButton.classList.add("next");
-nextButton.innerHTML = "&#10095;";
-nextButton.addEventListener("click", () => moveSlide(1));
+        addImageCard.appendChild(addImageButton);
+        carouselWrapper.appendChild(addImageCard);
+    }
 
-    imageGrid.appendChild(prevButton);
-    imageGrid.appendChild(nextButton);
+    // Crear botones prev y next para controlar el carrusel si no existen
+    if (!document.querySelector(".prev")) {
+        const prevButton = document.createElement("button");
+        prevButton.type = "button";  // Asegurar que no es un submit
+        prevButton.classList.add("prev");
+        prevButton.innerHTML = "&#10094;";
+        prevButton.addEventListener("click", () => moveSlide(-1));
+        imageGrid.appendChild(prevButton);
+    }
+
+    if (!document.querySelector(".next")) {
+        const nextButton = document.createElement("button");
+        nextButton.type = "button";  // Asegurar que no es un submit
+        nextButton.classList.add("next");
+        nextButton.innerHTML = "&#10095;";
+        nextButton.addEventListener("click", () => moveSlide(1));
+        imageGrid.appendChild(nextButton);
+    }
 
     const toggleContentDiv = document.querySelector(".toggle-content");
     if (toggleContentDiv) {
@@ -1249,7 +1276,6 @@ nextButton.addEventListener("click", () => moveSlide(1));
         carouselWrapper.style.transform = `translateX(${offset}%)`;
     }
 }
-
 
     
  
