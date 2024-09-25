@@ -528,16 +528,18 @@ def clarity_upscale():
         prediction = replicate.predictions.create(
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input=input_data,
-            webhook=f"https://www.roomdesaigner.com/webhooks/replicate/{prediction_id}",
+            webhook=f"https://yourdomain.com/webhooks/replicate/{prediction_id}",
             webhook_events_filter=["completed"]
         )
 
-        # Verificar si la predicción tiene un ID válido
-        if not prediction or not prediction.id:
-            return jsonify({'error': 'La API de Replicate no devolvió una predicción válida'}), 500
+        # Verificar si la respuesta es una cadena o un objeto
+        if isinstance(prediction, str):
+            prediction_id = prediction  # Si es una cadena, úsala como el ID de la predicción
+        else:
+            prediction_id = prediction.id  # Si es un objeto, usa el atributo 'id'
 
         # Almacenar la predicción con estado 'starting'
-        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction.id}
+        predictions[prediction_id] = {"status": "starting", "output": None, "replicate_id": prediction_id}
 
         return jsonify({'prediction_id': prediction_id}), 200
 
@@ -568,10 +570,13 @@ def replicate_webhook(prediction_id):
 # Ruta para consultar el estado de la predicción
 @app.route('/check-prediction/<prediction_id>', methods=['GET'])
 def check_prediction_status(prediction_id):
+    print(f"Consultando estado para prediction_id: {prediction_id}")
     prediction = predictions.get(prediction_id)
     if not prediction:
+        print(f"Predicción no encontrada para prediction_id: {prediction_id}")
         return jsonify({'error': 'Predicción no encontrada'}), 404
     
+    print(f"Estado de la predicción: {prediction}")
     return jsonify(prediction)
 
 @app.route('/save-values', methods=['POST'])
