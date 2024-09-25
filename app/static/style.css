@@ -3657,7 +3657,8 @@ textarea {
 }
 textarea {
     cursor: default;
-    height: 80px;
+    height: 220px;
+        width: 310px;
     color: var(--bunker-700);
     font-family: system-ui;
     background: var(--bunker-400);
