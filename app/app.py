@@ -507,12 +507,15 @@ def update_user_credits(email, additional_credits):
 
 
 
-# Definir un modelo Pydantic más flexible
+
+
+# Definir un modelo Pydantic que ignore los campos no presentes
 class PredictionOutput(BaseModel):
     id: str
-    output: Optional[str] = Field(None, description="URL de la imagen escalada")
-    started_at: Optional[str] = Field(None, description="Campo opcional")
-    completed_at: Optional[str] = Field(None, description="Campo opcional")
+    output: Optional[str] = None
+
+    class Config:
+        extra = "ignore"  # Ignorar cualquier campo no especificado
 
 # Ejemplo de uso en el backend
 @app.route('/clarity-upscale', methods=['POST'])
@@ -529,10 +532,10 @@ def clarity_upscale():
 
         # Parámetros de entrada para el modelo
         input_data = {
-            "jpeg": 40,  # Ajustar según lo que necesites
+            "jpeg": 40,  # Valor por defecto según el esquema
             "image": image_url,  # La URL de la imagen original
-            "noise": 15,  # Ajustar según lo que necesites
-            "task_type": "Real-World Image Super-Resolution-Large"  # Campo requerido en el esquema
+            "noise": 15,  # Valor por defecto, ajustable si es necesario
+            "task_type": "Real-World Image Super-Resolution-Large"  # Tarea por defecto según el esquema
         }
 
         # Ejecutar el modelo de Replicate para escalar la imagen
@@ -554,6 +557,7 @@ def clarity_upscale():
         # Depurar el error exacto
         print(f"Error en el servidor: {str(e)}")
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
+
     
     
     
