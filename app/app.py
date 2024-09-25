@@ -530,11 +530,12 @@ def clarity_upscale():
             input=input_data
         )
 
-        # Depuración: imprimir los datos recibidos de Replicate
-        print(f"Respuesta de Replicate: {output}")
+        # Comprobamos si "output" está presente
+        if 'output' not in output:
+            return jsonify({'error': 'La respuesta de Replicate no contiene el campo "output".'}), 500
 
         # Devolver la URL de la imagen escalada
-        return jsonify({"scaled_image_url": output}), 200
+        return jsonify({"scaled_image_url": output['output']}), 200
 
     except Exception as e:
         # Depurar el error exacto
