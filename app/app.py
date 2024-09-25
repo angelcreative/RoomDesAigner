@@ -530,12 +530,15 @@ def clarity_upscale():
             input=input_data
         )
 
-        # Comprobamos si "output" está presente
-        if 'output' not in output:
-            return jsonify({'error': 'La respuesta de Replicate no contiene el campo "output".'}), 500
-
-        # Devolver la URL de la imagen escalada
-        return jsonify({"scaled_image_url": output['output']}), 200
+        # Verificar si output es una URL directa o un diccionario
+        if isinstance(output, str):
+            # Si el output es una URL directamente
+            return jsonify({"scaled_image_url": output}), 200
+        elif isinstance(output, dict) and 'file' in output:
+            # Si el output es un diccionario y contiene 'file'
+            return jsonify({"scaled_image_url": output['file']}), 200
+        else:
+            return jsonify({'error': 'La respuesta de Replicate no contiene una URL de imagen escalada válida.'}), 500
 
     except Exception as e:
         # Depurar el error exacto
