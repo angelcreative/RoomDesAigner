@@ -323,6 +323,12 @@ function generateBlurredBackground () {
     return "The background transforms with a beautiful bokeh effect, enhancing the visual appeal of the scene.";
 }
     
+     function generateTilt() {
+    return "This scene is designed with a tilt-shift effect, which creates an illusion of a tiny model-like scene.";
+}
+    
+    
+    
       function generateSheet() {
     return "Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides.  The details of the clothing, including visible accessories should be clearly visible from each angle.";
 }
