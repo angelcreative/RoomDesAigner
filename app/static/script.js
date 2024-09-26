@@ -658,27 +658,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         return prompt;
     }
 
-    // Llamar a la función para generar el prompt
-    const prompt = generatePrompt();
-
-    try {
-        // Aquí deberías poner el código que requiere await
-        const data = await fetch("/api/generate", {
-            method: "POST",
-            body: JSON.stringify(prompt),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        const result = await data.json();
-        console.log(result);
-    } catch (error) {
-        console.error("Error al generar imágenes:", error);
-    }
-}
-  
-    // Si es una generación img2img, agregar la imagen inicial
+   // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
         const strengthSlider = document.getElementById("strengthSlider");
@@ -715,6 +695,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);  // Manejo de errores
     }
 }
+  
+    
+
 
 // Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
