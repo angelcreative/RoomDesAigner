@@ -525,25 +525,55 @@ def clarity_upscale():
         input_data = {
             "jpeg": 40,
             "image": image_url,
-            "noise": 15
+            "noise": 15,
+            "task_type": "Real-World Image Super-Resolution-Large"
         }
 
-        # Ejecutar el modelo de Replicate para crear una predicción
-        prediction = replicate.run(
-            "jingyunliang/swinir:660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",
+        # Crear la predicción con Replicate
+        prediction = replicate.predictions.create(
+            version="660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",  # Versión del modelo
             input=input_data
         )
 
         # Verificar la estructura de la respuesta
         print(f"Respuesta completa de Replicate: {prediction}")
 
-        # Si la respuesta es un objeto con ID de predicción
-        if isinstance(prediction, dict) and 'id' in prediction:
-            return jsonify({"prediction_id": prediction['id']}), 200
-        elif isinstance(prediction, str):  # Si la respuesta es una URL directamente
-            return jsonify({"scaled_image_url": prediction}), 200
+        # Devolver el ID de la predicción para su seguimiento
+        return jsonify({
+            "prediction_id": prediction['id'],
+            "started_at": prediction.get('started_at', None),
+            "completed_at": prediction.get('completed_at', None)
+        }), 200
+
+    except Exception as e:
+        # Depurar el error exacto y mostrarlo en los logs
+        print(f"Error en el servidor: {str(e)}")
+        return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
+
+
+# Ruta para consultar el estado de la predicción
+@app.route('/check-prediction/<prediction_id>', methods=['GET'])
+def check_prediction(prediction_id):
+    try:
+        # Obtener el estado de la predicción usando predictions.get
+        prediction = replicate.predictions.get(prediction_id)
+
+        # Verificar si la predicción ha sido completada
+        if prediction['status'] == "succeeded":
+            output_image_url = prediction['output']  # La URL de la imagen escalada
+            return jsonify({
+                "scaled_image_url": output_image_url,
+                "started_at": prediction.get('started_at'),
+                "completed_at": prediction.get('completed_at')
+            }), 200
+
+        # Si la predicción aún está en progreso
+        elif prediction['status'] == "processing":
+            return jsonify({"status": "processing", "started_at": prediction.get('started_at')}), 202
+
+        # Si la predicción falló
         else:
-            return jsonify({'error': 'Respuesta inesperada de Replicate.'}), 500
+            return jsonify({"status": "failed", "error": prediction.get('error')}), 400
 
     except Exception as e:
         # Depurar el error exacto y mostrarlo en los logs
