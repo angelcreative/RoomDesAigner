@@ -535,15 +535,17 @@ def clarity_upscale():
             input=input_data
         )
 
-        # Verificar la estructura de la respuesta
-        print(f"Respuesta completa de Replicate: {prediction}")
-
-        # Devolver el ID de la predicción para su seguimiento
-        return jsonify({
-            "prediction_id": prediction['id'],
-            "started_at": prediction.get('started_at', None),
-            "completed_at": prediction.get('completed_at', None)
-        }), 200
+        # Verificar si la respuesta es un objeto con un 'id' o directamente una URL
+        if isinstance(prediction, dict) and 'id' in prediction:
+            return jsonify({
+                "prediction_id": prediction['id'],
+                "started_at": prediction.get('started_at', None),
+                "completed_at": prediction.get('completed_at', None)
+            }), 200
+        elif isinstance(prediction, str):  # Si la respuesta es una URL directa
+            return jsonify({"scaled_image_url": prediction}), 200
+        else:
+            return jsonify({'error': 'Respuesta inesperada de Replicate.'}), 500
 
     except Exception as e:
         # Depurar el error exacto y mostrarlo en los logs
