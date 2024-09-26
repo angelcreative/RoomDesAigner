@@ -619,7 +619,7 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 
         // Almacenar el valor seleccionado en el input oculto
         const selectedValue = this.getAttribute('value');
-        document.getElementById('spped').value = selectedValue;
+        document.getElementById('speed').value = selectedValue;
 
         // Cambiar la configuración del modelo dependiendo de la selección
         let model_id;
