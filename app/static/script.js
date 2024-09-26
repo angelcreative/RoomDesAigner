@@ -677,7 +677,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         console.error("Error al generar imágenes:", error);
     }
 }
-
+  
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
