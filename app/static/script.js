@@ -613,8 +613,31 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
 // Variables globales para almacenar las selecciones del usuario
 let speed = "flux"; // Valor predeterminado para 'Fast'
-let loram = null;   // Valor predeterminado para 'Fast'
-let loras = null;   // Valor predeterminado para 'Fast'
+let loram = [];     // Inicialmente vacío para 'Fast'
+let loraStrength = [];  // Inicialmente vacío para 'Fast'
+
+// Configuración del modelo (base) fuera del evento
+let prompt = {
+    key: apiKey,
+    prompt: promptText,
+    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+    width: width,
+    height: height,
+    samples: 4,
+    guidance_scale: 7.5,
+    steps: 21,
+    use_karras_sigmas: "yes",
+    tomesd: "yes",
+    seed: seedValue,
+    model_id: speed,    // Valor predeterminado
+    lora_models: loram, // Valor predeterminado (vacío para 'Fast')
+    lora_strength: loraStrength, // Valor predeterminado (vacío para 'Fast')
+    scheduler: "DDIMScheduler",
+    webhook: null,
+    safety_checker: "no",
+    track_id: null,
+    enhance_prompt: "no"
+};
 
 // Evento para seleccionar opción de dropdown personalizado
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
@@ -629,36 +652,18 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 
         // Cambiar la configuración del modelo dependiendo de la selección
         if (selectedValue === "Quality_speed") {
-            speed = "fluxdev";
-            loram = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
-            loras = "0.5,0.7,1";
+            prompt.model_id = "fluxdev";
+            prompt.lora_models = [
+                { model: "flux-fashion", strength: "0.5" },
+                { model: "uncensored-flux-lora", strength: "0.7" },
+                { model: "realistic-skin-flux", strength: "1" }
+            ];
+            prompt.lora_strength = ["0.5", "0.7", "1"]; // Añade las fuerzas de LoRA
         } else if (selectedValue === "Fast_speed") {
-            speed = "flux";
-            loram = null;
-            loras = null;
+            prompt.model_id = "flux";
+            prompt.lora_models = [];  // No LoRA models for 'Fast'
+            prompt.lora_strength = [];  // No LoRA strength for 'Fast'
         }
-
-        // Aquí creamos el objeto 'prompt' con los nuevos valores después de cada selección
-        let prompt = {
-            prompt: promptText,
-            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-            width: width,
-            height: height,
-            samples: 4,
-            guidance_scale: 7.5,
-            steps: 21,
-            use_karras_sigmas: "yes",
-            tomesd: "yes",
-            seed: seedValue,
-            model_id: speed,  // Usa la variable 'speed' actualizada
-            lora_model: loram,   // Usa la variable 'loram' actualizada
-            lora_strength: loras, // Usa la variable 'loras' actualizada
-            scheduler: "DDIMScheduler",
-            webhook: null,
-            safety_checker: "no",
-            track_id: null,
-            enhance_prompt: "no"
-        };
 
         // Mostrar el prompt actualizado para depuración
         console.log(prompt);
