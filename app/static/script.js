@@ -638,6 +638,7 @@ let prompt = {
     track_id: null,
     enhance_prompt: "no"
 };
+    
 
 // Evento para seleccionar opción de dropdown personalizado
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
