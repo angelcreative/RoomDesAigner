@@ -540,8 +540,8 @@ def clarity_upscale():
         print(f"Error en el servidor: {str(e)}")
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
     
-    
-    @app.route('/check-prediction/<prediction_id>', methods=['GET'])
+
+@app.route('/check-prediction/<prediction_id>', methods=['GET'])
 def check_prediction(prediction_id):
     try:
         # Obtener el estado de la predicción
