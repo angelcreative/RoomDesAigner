@@ -619,18 +619,18 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 
         // Almacenar el valor seleccionado en el input oculto
         const selectedValue = this.getAttribute('value');
-        document.getElementById('style_image').value = selectedValue;
+        document.getElementById('spped').value = selectedValue;
 
         // Cambiar la configuración del modelo dependiendo de la selección
         let model_id;
         let lora_model = null;
         let lora_strength = null;
 
-        if (selectedValue === "advanced") {
+        if (selectedValue === "Quality_speed") {
             model_id = "fluxdev";
             lora_model = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
             lora_strength = "0.5,0.7,1";
-        } else if (selectedValue === "fast") {
+        } else if (selectedValue === "Fast_speed") {
             model_id = "flux";
             lora_model = null;
             lora_strength = null;

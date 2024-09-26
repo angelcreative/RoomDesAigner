@@ -3710,6 +3710,8 @@ textarea {
         align-items: center;
         cursor: pointer;
     transition: background-color ease-in 300ms;
+        justify-content: space-between;
+
 }
 
 ::placeholder {
