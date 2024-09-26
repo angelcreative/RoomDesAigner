@@ -610,10 +610,35 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
-// Evento para seleccionar opción de dropdown personalizado
+
+    
+    // Configuración del modelo (base)
+let prompt = {
+    prompt: promptText,
+    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+    width: width,
+    height: height,
+    samples: 4,
+    guidance_scale: 7.5,
+    steps: 21,
+    use_karras_sigmas: "yes",
+    tomesd: "yes",
+    seed: seedValue,
+    model_id: "flux",  // Valor predeterminado
+    lora_model: null,   // Valor predeterminado para "Fast"
+    lora_strength: null, // Valor predeterminado para "Fast"
+    scheduler: "DDIMScheduler",
+    webhook: null,
+    safety_checker: "no",
+    track_id: null,
+    enhance_prompt: "no"
+};
+
+    
+    // Evento para seleccionar opción de dropdown personalizado
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
     option.addEventListener('click', function () {
-        // Actualizar el texto seleccionado
+        // Actualizar el texto seleccionado en el dropdown
         const selectedText = document.querySelector('.dropdown-selected .selected-text');
         selectedText.innerText = this.innerText;
 
@@ -622,46 +647,23 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
         document.getElementById('speed').value = selectedValue;
 
         // Cambiar la configuración del modelo dependiendo de la selección
-        let model_id;
-        let lora_model = null;
-        let lora_strength = null;
-
         if (selectedValue === "Quality_speed") {
-            model_id = "fluxdev";
-            lora_model = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
-            lora_strength = "0.5,0.7,1";
+            prompt.model_id = "fluxdev";
+            prompt.lora_model = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
+            prompt.lora_strength = "0.5,0.7,1";
         } else if (selectedValue === "Fast_speed") {
-            model_id = "flux";
-            lora_model = null;
-            lora_strength = null;
+            prompt.model_id = "flux";
+            prompt.lora_model = null;
+            prompt.lora_strength = null;
         }
 
-        // Configuración del modelo (ajustable según la selección del usuario)
-        const prompt = {
-            prompt: promptText,
-            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-            width: width,
-            height: height,
-            samples: 4,
-            guidance_scale: 7.5,
-            steps: 21,
-            use_karras_sigmas: "yes",
-            tomesd: "yes",
-            seed: seedValue,
-            model_id: model_id,  // El modelo según la selección
-            lora_model: lora_model,
-            lora_strength: lora_strength,
-            scheduler: "DDIMScheduler",
-            webhook: null,
-            safety_checker: "no",
-            track_id: null,
-            enhance_prompt: "no"
-        };
-
-        // Aquí puedes hacer lo que necesites con la configuración del prompt
+        // Mostrar el prompt actualizado para depuración
         console.log(prompt);
     });
 });
+
+    
+    
 
 
     // Si es una generación img2img, agregar la imagen inicial
@@ -1293,6 +1295,86 @@ function showModal(imageUrls, transformedPrompt) {
 }
 
 
+// Función para descargar imágenes en un archivo ZIP
+function downloadImagesAsZip() {
+    // Crear un nuevo objeto JSZip
+    const zip = new JSZip();
+    const folder = zip.folder("Room_DesAigner_Images"); // Crear la carpeta dentro del zip
+
+    // Obtener todas las imágenes dentro del imageGrid
+    const images = document.querySelectorAll("#imageGrid img");
+    
+    // Iterar sobre las imágenes y agregarlas al zip
+    images.forEach((image, index) => {
+        // Generar un nombre único para cada imagen
+        const uniqueName = `room_desaigner_generation_${Math.random().toString(36).substring(2, 8)}.jpg`;
+
+        // Obtener la URL de la imagen
+        const imageUrl = image.src;
+
+        // Convertir la imagen a formato Blob
+        fetch(imageUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                // Convertir el Blob a base64 y agregarlo al ZIP
+                const reader = new FileReader();
+                reader.onload = function () {
+                    folder.file(uniqueName, reader.result.split(',')[1], { base64: true });
+
+                    // Descargar el ZIP cuando todas las imágenes estén agregadas
+                    if (index === images.length - 1) {
+                        zip.generateAsync({ type: "blob" }).then(function (content) {
+                            // Descargar el archivo ZIP
+                            const link = document.createElement("a");
+                            link.href = URL.createObjectURL(content);
+                            link.download = "Room_DesAigner_Images.zip";
+                            link.click();
+                        });
+                    }
+                };
+                reader.readAsDataURL(blob);
+            });
+    });
+}
+
+// Función para añadir el botón de descarga al modal (puedes ajustar la ubicación según tu diseño)
+function addDownloadZipButton() {
+    // Crear el botón
+    const downloadZipButton = document.createElement("button");
+    downloadZipButton.textContent = "Download All Images as ZIP";
+    downloadZipButton.style.marginTop = "10px";  // Añadir algo de margen superior para separación
+    downloadZipButton.addEventListener("click", downloadImagesAsZip);
+
+    // Añadir el botón al modal (fuera del contenedor de imágenes)
+    const modal = document.querySelector("#modal");
+    
+    // Solo añadir el botón si no existe ya
+    if (!modal.querySelector(".download-zip-button")) {
+        downloadZipButton.classList.add("download-zip-button");  // Añadir una clase para control futuro
+        modal.appendChild(downloadZipButton); 
+    }
+}
+
+// Llamar a la función para añadir el botón cuando el modal esté abierto
+document.addEventListener("DOMContentLoaded", function() {
+    // Cada vez que se abra el modal, añadimos el botón
+    const modalObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.target.style.display === "block") {
+                addDownloadZipButton();  // Añadir el botón cuando se muestre el modal
+            }
+        });
+    });
+
+    // Observar cambios en el modal para detectar cuándo se abre
+    const modal = document.querySelector("#modal");
+    if (modal) {
+        modalObserver.observe(modal, { attributes: true, attributeFilter: ['style'] });
+    }
+});
+    
+    
+    
 // Function to handle the "Close" action of modal
 function closeModalHandler() {
     const modal = document.getElementById("modal");
