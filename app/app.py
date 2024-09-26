@@ -507,7 +507,6 @@ def update_user_credits(email, additional_credits):
 
 
 
-
 # Ruta para enviar la imagen a Replicate y crear una predicción
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
@@ -535,18 +534,26 @@ def clarity_upscale():
             input=input_data
         )
 
-        # Imprimir la respuesta completa para depuración
+        # Imprimir la respuesta para depuración
         print(f"Respuesta de Replicate: {prediction}")
 
-        # Verificar si la respuesta es un objeto con un 'id' o directamente una URL
+        # Si la respuesta es un diccionario y contiene un 'id'
         if isinstance(prediction, dict) and 'id' in prediction:
             return jsonify({
                 "prediction_id": prediction['id'],
                 "started_at": prediction.get('started_at', None),
                 "completed_at": prediction.get('completed_at', None)
             }), 200
-        elif isinstance(prediction, str):  # Si la respuesta es una URL directa
+
+        # Si la respuesta es una cadena y también contiene un 'id'
+        elif isinstance(prediction, str) and 'id' in prediction:
             return jsonify({"scaled_image_url": prediction}), 200
+
+        # Si la respuesta es solo una cadena (por ejemplo, una URL)
+        elif isinstance(prediction, str):
+            return jsonify({"scaled_image_url": prediction}), 200
+
+        # Si la respuesta no es ni un diccionario con 'id' ni una cadena válida
         else:
             return jsonify({'error': 'Respuesta inesperada de Replicate.'}), 500
 

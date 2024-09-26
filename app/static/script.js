@@ -623,8 +623,8 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         tomesd: "yes",
         seed: seedValue,
         model_id: "flux",  // El modelo predeterminado
-        //lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
-        //lora_strength: "0.5,0.7,1", 
+        lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
+        lora_strength: "0.5,0.7,1", 
         scheduler: "DDIMScheduler",
         webhook: null,
         safety_checker: "no",
