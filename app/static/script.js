@@ -610,27 +610,59 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
-    // Configuración del modelo (ajustable según la selección del usuario)
-    const prompt = {
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 21,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: "flux",  // El modelo predeterminado
-        lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
-        lora_strength: "0.5,0.7,1", 
-        scheduler: "DDIMScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no"
-    };
+// Evento para seleccionar opción de dropdown personalizado
+document.querySelectorAll('.custom-dropdown .option').forEach(option => {
+    option.addEventListener('click', function () {
+        // Actualizar el texto seleccionado
+        const selectedText = document.querySelector('.dropdown-selected .selected-text');
+        selectedText.innerText = this.innerText;
+
+        // Almacenar el valor seleccionado en el input oculto
+        const selectedValue = this.getAttribute('value');
+        document.getElementById('style_image').value = selectedValue;
+
+        // Cambiar la configuración del modelo dependiendo de la selección
+        let model_id;
+        let lora_model = null;
+        let lora_strength = null;
+
+        if (selectedValue === "advanced") {
+            model_id = "fluxdev";
+            lora_model = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
+            lora_strength = "0.5,0.7,1";
+        } else if (selectedValue === "fast") {
+            model_id = "flux";
+            lora_model = null;
+            lora_strength = null;
+        }
+
+        // Configuración del modelo (ajustable según la selección del usuario)
+        const prompt = {
+            prompt: promptText,
+            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+            width: width,
+            height: height,
+            samples: 4,
+            guidance_scale: 7.5,
+            steps: 21,
+            use_karras_sigmas: "yes",
+            tomesd: "yes",
+            seed: seedValue,
+            model_id: model_id,  // El modelo según la selección
+            lora_model: lora_model,
+            lora_strength: lora_strength,
+            scheduler: "DDIMScheduler",
+            webhook: null,
+            safety_checker: "no",
+            track_id: null,
+            enhance_prompt: "no"
+        };
+
+        // Aquí puedes hacer lo que necesites con la configuración del prompt
+        console.log(prompt);
+    });
+});
+
 
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
@@ -841,41 +873,7 @@ rerollButton.addEventListener("click", rerollImages);
     
    
 
-// Función para enviar la imagen al backend y obtener la versión escalada
-function clarityUpscale(imageUrl) {
-    // Preparar los datos de entrada para enviar al backend
-    const input_data = {
-        "image_url": imageUrl  // Enviar la URL de la imagen original generada
-    };
 
-    // Enviar la URL de la imagen al backend para escalarla
-    fetch('/clarity-upscale', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'  // Asegurar que se envía como JSON
-        },
-        body: JSON.stringify(input_data)  // Convertir a JSON correctamente
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.scaled_image_url) {
-            // Abrir la URL de la imagen escalada en una nueva pestaña
-            window.open(data.scaled_image_url, '_blank');
-        } else {
-            console.error('No se recibió una URL de imagen escalada válida.');
-        }
-    })
-    .catch(error => {
-        console.error('Error durante el escalado de la imagen:', error);
-    });
-}
-
-    
     
     
     
@@ -1212,12 +1210,11 @@ function showModal(imageUrls, transformedPrompt) {
         const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
         const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
         const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const clarityButton = createButton("Clarity Upscale", () => clarityUpscale(imageUrl));
         const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
         const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
         // Añadir los botones a su contenedor
-        [downloadButton, copyButton, editButton, copyPromptButton, clarityButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+        [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
