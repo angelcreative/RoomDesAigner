@@ -612,7 +612,12 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
 
     
-    // Configuración del modelo (base)
+// Variables globales para almacenar las selecciones del usuario
+let speed = "flux"; // Valor predeterminado para 'Fast'
+let loram = null;   // Valor predeterminado para 'Fast'
+let loras = null;   // Valor predeterminado para 'Fast'
+
+// Configuración del modelo (base)
 let prompt = {
     prompt: promptText,
     negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
@@ -624,9 +629,9 @@ let prompt = {
     use_karras_sigmas: "yes",
     tomesd: "yes",
     seed: seedValue,
-    model_id: "flux",  // Valor predeterminado
-    lora_model: null,   // Valor predeterminado para "Fast"
-    lora_strength: null, // Valor predeterminado para "Fast"
+    model_id: speed,  // Usa la variable 'speed'
+    lora_model: loram,   // Usa la variable 'loram'
+    lora_strength: loras, // Usa la variable 'loras'
     scheduler: "DDIMScheduler",
     webhook: null,
     safety_checker: "no",
@@ -634,8 +639,7 @@ let prompt = {
     enhance_prompt: "no"
 };
 
-    
-    // Evento para seleccionar opción de dropdown personalizado
+// Evento para seleccionar opción de dropdown personalizado
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
     option.addEventListener('click', function () {
         // Actualizar el texto seleccionado en el dropdown
@@ -648,19 +652,25 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 
         // Cambiar la configuración del modelo dependiendo de la selección
         if (selectedValue === "Quality_speed") {
-            prompt.model_id = "fluxdev";
-            prompt.lora_model = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
-            prompt.lora_strength = "0.5,0.7,1";
+            speed = "fluxdev";
+            loram = "flux-fashion,uncensored-flux-lora,realistic-skin-flux";
+            loras = "0.5,0.7,1";
         } else if (selectedValue === "Fast_speed") {
-            prompt.model_id = "flux";
-            prompt.lora_model = null;
-            prompt.lora_strength = null;
+            speed = "flux";
+            loram = null;
+            loras = null;
         }
+
+        // Actualizar el objeto 'prompt' con los nuevos valores
+        prompt.model_id = speed;
+        prompt.lora_model = loram;
+        prompt.lora_strength = loras;
 
         // Mostrar el prompt actualizado para depuración
         console.log(prompt);
     });
 });
+
 
     
     
