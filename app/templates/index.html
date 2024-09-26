@@ -464,24 +464,24 @@ close
                       <h4>Write or paste your own prompt</h4>
 <textarea placeholder="Write your own prompt here to refine your design" id="customText" rows="8s" cols="50"></textarea>      
 <br>  
-                   <div class="custom-dropdown" data-placeholder="Speed generation mode">
-    <div class="dropdown-selected">
-        <span class="selected-text">Speed generation mode</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+                 
+          
+                     <!-- speed -->
+                <h4>Speed</h4>
+<div class="aspectRatioShot">
+    <div class="ar">
+        <input type="radio" name="modelType" value="flux" checked>
+        <label for="speed">Speed</label>
     </div>
-    <div class="selected-value"></div>
-
-    <div class="dropdown-options">
-        <!-- Modes -->
-        <div class="optgroup">
-            <div class="optgroup-label">Speed</div>
-            <div class="option" value="Fast_speed">Fast <small>20 secs x 4 images</small> </div>
-            <div class="option" value="Quality_speed">Quality <small>2mins approx x 4 images</small> </div>
-        </div>
+    <div class="ar">
+        <input type="radio" name="modelType" value="fluxdev">
+        <label for="quality">Quality</label>
     </div>
-
-    <input type="hidden" name="style_image" id="speed" value="">
 </div>
+
+            
+                    
+                    
 
 
                     <br><br>
