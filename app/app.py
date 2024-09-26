@@ -508,16 +508,7 @@ def update_user_credits(email, additional_credits):
 
 
 
-
-# Definir un modelo Pydantic que ignore los campos no presentes
-class PredictionOutput(BaseModel):
-    id: str
-    output: Optional[str] = None
-
-    class Config:
-        extra = "ignore"  # Ignorar cualquier campo no especificado
-
-# Ejemplo de uso en el backend
+# Función para procesar la respuesta y manejar mejor los errores
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -530,26 +521,28 @@ def clarity_upscale():
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
-        # Parámetros de entrada para el modelo
+        # Parámetros de entrada para el modelo, usando los valores por defecto del esquema
         input_data = {
-            "jpeg": 40,  # Valor por defecto según el esquema
-            "image": image_url,  # La URL de la imagen original
-            "noise": 15,  # Valor por defecto, ajustable si es necesario
-            "task_type": "Real-World Image Super-Resolution-Large"  # Tarea por defecto según el esquema
+            "jpeg": 40,
+            "image": image_url,
+            "noise": 15,
+            "task_type": "Real-World Image Super-Resolution-Large"
         }
 
-        # Ejecutar el modelo de Replicate para escalar la imagen
+        # Ejecutar el modelo de Replicate
         output = replicate.run(
             "jingyunliang/swinir:660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",
             input=input_data
         )
 
-        # Validar los datos con el modelo flexible
-        prediction = PredictionOutput.parse_obj(output)
+        # Depurar la respuesta completa de Replicate
+        print(f"Respuesta completa de Replicate: {output}")
 
-        # Devolver la URL de la imagen escalada
-        if prediction.output:
-            return jsonify({"scaled_image_url": prediction.output}), 200
+        # Verificar si el campo 'output' está presente directamente
+        if isinstance(output, dict) and 'output' in output:
+            return jsonify({"scaled_image_url": output['output']}), 200
+        elif isinstance(output, str):  # Si la respuesta es directamente una URL en cadena
+            return jsonify({"scaled_image_url": output}), 200
         else:
             return jsonify({'error': 'La respuesta de Replicate no contiene una URL de imagen escalada válida.'}), 500
 
@@ -557,7 +550,6 @@ def clarity_upscale():
         # Depurar el error exacto
         print(f"Error en el servidor: {str(e)}")
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
-
     
     
     
