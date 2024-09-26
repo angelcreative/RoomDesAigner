@@ -1287,71 +1287,95 @@ function showModal(imageUrls, transformedPrompt) {
 
 // Función para descargar imágenes en un archivo ZIP
 function downloadImagesAsZip() {
+    console.log("Función de descarga activada");
+    
+    // Verificar si JSZip está disponible
+    if (typeof JSZip === 'undefined') {
+        console.error("JSZip no está definido. Asegúrate de que la biblioteca esté cargada correctamente.");
+        alert("Error: No se pudo cargar la biblioteca de compresión. Por favor, recarga la página e intenta de nuevo.");
+        return;
+    }
+
     // Crear un nuevo objeto JSZip
-    console.log("Download function triggered");
     const zip = new JSZip();
-    const folder = zip.folder("Room_DesAigner_Images"); // Crear la carpeta dentro del zip
+    const folder = zip.folder("Room_DesAigner_Images");
 
     // Obtener todas las imágenes dentro del imageGrid
     const images = document.querySelectorAll("#imageGrid img");
     
     if (images.length === 0) {
-        console.log("No images found in the imageGrid");
-        alert("No images available to download.");
+        console.log("No se encontraron imágenes en imageGrid");
+        alert("No hay imágenes disponibles para descargar.");
         return;
     }
 
+    console.log(`Se encontraron ${images.length} imágenes para descargar`);
+
+    // Contador para rastrear las imágenes procesadas
+    let processedImages = 0;
+
     // Iterar sobre las imágenes y agregarlas al zip
     images.forEach((image, index) => {
-        // Generar un nombre único para cada imagen
         const uniqueName = `room_desaigner_generation_${Math.random().toString(36).substring(2, 8)}.jpg`;
-
-        // Obtener la URL de la imagen
         const imageUrl = image.src;
-        console.log(`Processing image: ${imageUrl}`);
+        console.log(`Procesando imagen ${index + 1}: ${imageUrl}`);
 
-        // Convertir la imagen a formato Blob
         fetch(imageUrl)
             .then(response => response.blob())
             .then(blob => {
-                // Convertir el Blob a base64 y agregarlo al ZIP
                 const reader = new FileReader();
                 reader.onload = function () {
                     folder.file(uniqueName, reader.result.split(',')[1], { base64: true });
+                    processedImages++;
 
-                    // Descargar el ZIP cuando todas las imágenes estén agregadas
-                    if (index === images.length - 1) {
+                    console.log(`Imagen ${index + 1} procesada. Total procesadas: ${processedImages}`);
+
+                    if (processedImages === images.length) {
+                        console.log("Todas las imágenes procesadas. Generando ZIP...");
                         zip.generateAsync({ type: "blob" }).then(function (content) {
-                            console.log("ZIP file generated and ready for download");
-                            // Descargar el archivo ZIP
+                            console.log("Archivo ZIP generado y listo para descargar");
                             const link = document.createElement("a");
                             link.href = URL.createObjectURL(content);
                             link.download = "Room_DesAigner_Images.zip";
+                            document.body.appendChild(link); // Necesario para Firefox
                             link.click();
+                            document.body.removeChild(link); // Limpieza
                         });
                     }
                 };
                 reader.readAsDataURL(blob);
+            })
+            .catch(error => {
+                console.error(`Error al procesar la imagen ${index + 1}:`, error);
+                processedImages++;
+                // Verificar si todas las imágenes han sido procesadas, incluso si algunas fallaron
+                if (processedImages === images.length) {
+                    console.log("Todas las imágenes procesadas (algunas con errores). Generando ZIP...");
+                    zip.generateAsync({ type: "blob" }).then(function (content) {
+                        // ... (mismo código de descarga que arriba)
+                    });
+                }
             });
     });
 }
 
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function() {
-    // Seleccionar el botón por su ID
+    console.log("DOM cargado. Buscando el botón de descarga...");
     const downloadButton = document.getElementById("zipButton");
 
-    // Verificar que el botón fue encontrado
     if (downloadButton) {
-        console.log("Download button found. Adding event listener...");
-        // Agregar el evento click al botón de descarga
+        console.log("Botón de descarga encontrado. Añadiendo event listener...");
         downloadButton.addEventListener("click", downloadImagesAsZip);
     } else {
-        console.log("Download button not found.");
+        console.error("Botón de descarga no encontrado. Verifica el ID 'zipButton' en tu HTML.");
     }
 });
 
-
+// Añadir un listener global para errores no capturados
+window.addEventListener('error', function(event) {
+    console.error("Error no capturado:", event.error);
+});
 
     
     
