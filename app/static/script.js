@@ -606,66 +606,69 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     
     
-    // Evento para detectar el cambio en los botones de radio
+   // Función para obtener el valor seleccionado y procesar el prompt
+function generatePrompt() {
+    const modelType = document.querySelector('input[name="modelType"]:checked').value;
+    console.log("Modelo seleccionado:", modelType);  // Verificar el valor seleccionado
+
+    // Configuración del modelo según la selección del usuario
+    let prompt;
+    if (modelType === "fluxdev") {
+        // Si se selecciona "Quality"
+        prompt = {
+            prompt: promptText,
+            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+            width: width,
+            height: height,
+            samples: 4,
+            guidance_scale: 7.5,
+            steps: 21,
+            use_karras_sigmas: "yes",
+            tomesd: "yes",
+            seed: seedValue,
+            model_id: "fluxdev",  
+            lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
+            lora_strength: "0.5,0.7,1", 
+            scheduler: "DDIMScheduler",
+            webhook: null,
+            safety_checker: "no",
+            track_id: null,
+            enhance_prompt: "no"
+        };
+    } else {
+        // Si se selecciona "Speed"
+        prompt = {
+            prompt: promptText,
+            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+            width: width,
+            height: height,
+            samples: 4,
+            guidance_scale: 7.5,
+            steps: 21,
+            use_karras_sigmas: "yes",
+            tomesd: "yes",
+            seed: seedValue,
+            model_id: "flux",  // El modelo predeterminado
+            scheduler: "DDIMScheduler",
+            webhook: null,
+            safety_checker: "no",
+            track_id: null,
+            enhance_prompt: "no"
+        };
+    }
+
+    // Aquí puedes enviar o procesar el 'prompt' como sea necesario
+    console.log(prompt);  // Mostrar el prompt para depuración
+}
+
+// Llamar a la función para generar el prompt al cargar la página (si es necesario)
+generatePrompt();
+
+// Evento para detectar el cambio en los botones de radio
 document.querySelectorAll('input[name="modelType"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        // Obtener la opción seleccionada en el momento del cambio
-        const modelType = document.querySelector('input[name="modelType"]:checked').value;
-        console.log("Modelo seleccionado:", modelType);  // Para verificar si selecciona correctamente
-
-        // Configuración del modelo según la selección del usuario
-        let prompt;
-        if (modelType === "fluxdev") {
-            // Si se selecciona "Quality"
-            prompt = {
-                prompt: promptText,
-                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-                width: width,
-                height: height,
-                samples: 4,
-                guidance_scale: 7.5,
-                steps: 21,
-                use_karras_sigmas: "yes",
-                tomesd: "yes",
-                seed: seedValue,
-                model_id: "fluxdev",  
-                lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
-                lora_strength: "0.5,0.7,1", 
-                scheduler: "DDIMScheduler",
-                webhook: null,
-                safety_checker: "no",
-                track_id: null,
-                enhance_prompt: "no"
-            };
-        } else {
-            // Si se selecciona "Speed"
-            prompt = {
-                prompt: promptText,
-                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-                width: width,
-                height: height,
-                samples: 4,
-                guidance_scale: 7.5,
-                steps: 21,
-                use_karras_sigmas: "yes",
-                tomesd: "yes",
-                seed: seedValue,
-                model_id: "flux",  // El modelo predeterminado
-                scheduler: "DDIMScheduler",
-                webhook: null,
-                safety_checker: "no",
-                track_id: null,
-                enhance_prompt: "no"
-            };
-        }
-
-        // Aquí puedes enviar o procesar el 'prompt' como sea necesario
-        console.log(prompt);  // Mostrar el prompt para depuración
-    });
+    radio.addEventListener('change', generatePrompt);  // Llamar a generatePrompt al cambiar
 });
 
-    
-    
     }
 
     // Si es una generación img2img, agregar la imagen inicial
