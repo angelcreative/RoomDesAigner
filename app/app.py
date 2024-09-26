@@ -535,6 +535,9 @@ def clarity_upscale():
             input=input_data
         )
 
+        # Imprimir la respuesta completa para depuración
+        print(f"Respuesta de Replicate: {prediction}")
+
         # Verificar si la respuesta es un objeto con un 'id' o directamente una URL
         if isinstance(prediction, dict) and 'id' in prediction:
             return jsonify({
