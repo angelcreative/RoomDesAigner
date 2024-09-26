@@ -601,6 +601,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
+        const tilt = document.getElementById("tiltCheckbox").checked ? generateTilt() : "";
+
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
  const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
      const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
@@ -614,7 +616,7 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
 // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
@@ -1322,7 +1324,7 @@ function downloadImagesAsZip() {
 
     // Iterar sobre las imágenes y agregarlas al zip
     images.forEach((image, index) => {
-        const uniqueName = `room_desaigner_generation_${Math.random().toString(36).substring(2, 8)}.jpg`;
+        const uniqueName = `room_desaigner_generation_${Math.random().toString(36).substring(2, 8)}.png`;
         const imageUrl = image.src;
         console.log(`Procesando imagen ${index + 1}: ${imageUrl}`);
 
