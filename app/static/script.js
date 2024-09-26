@@ -1337,42 +1337,17 @@ function downloadImagesAsZip() {
     });
 }
 
-// Función para añadir el botón de descarga al modal (puedes ajustar la ubicación según tu diseño)
-function addDownloadZipButton() {
-    // Crear el botón
-    const downloadZipButton = document.createElement("button");
-    downloadZipButton.textContent = "Download All Images as ZIP";
-    downloadZipButton.style.marginTop = "10px";  // Añadir algo de margen superior para separación
-    downloadZipButton.addEventListener("click", downloadImagesAsZip);
-
-    // Añadir el botón al modal (fuera del contenedor de imágenes)
-    const modal = document.querySelector("#modal");
-    
-    // Solo añadir el botón si no existe ya
-    if (!modal.querySelector(".download-zip-button")) {
-        downloadZipButton.classList.add("download-zip-button");  // Añadir una clase para control futuro
-        modal.appendChild(downloadZipButton); 
-    }
-}
-
-// Llamar a la función para añadir el botón cuando el modal esté abierto
+// Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function() {
-    // Cada vez que se abra el modal, añadimos el botón
-    const modalObserver = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.target.style.display === "block") {
-                addDownloadZipButton();  // Añadir el botón cuando se muestre el modal
-            }
-        });
-    });
+    // Seleccionar el botón dentro del div serialButton
+    const downloadButton = document.querySelector(".serialButton button:nth-child(2)");
 
-    // Observar cambios en el modal para detectar cuándo se abre
-    const modal = document.querySelector("#modal");
-    if (modal) {
-        modalObserver.observe(modal, { attributes: true, attributeFilter: ['style'] });
+    // Agregar el evento click al botón de descarga
+    if (downloadButton) {
+        downloadButton.addEventListener("click", downloadImagesAsZip);
     }
 });
-    
+
     
     
 // Function to handle the "Close" action of modal

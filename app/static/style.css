@@ -1871,13 +1871,13 @@ select#harmonyType {
 }
 
 .image-buttons button:nth-child(5) {
-        background: url("/static/img/ico_grid/ico_upscale.svg") center center
+        background: url("/static/img/ico_grid/ico_compare.svg") center center
                 no-repeat;
         background-size: 36px;
 }
 
 .image-buttons button:nth-child(6) {
-        background: url("/static/img/ico_grid/ico_compare.svg") center center
+        background: url("/static/img/ico_grid/ico_reverse_search.svg") center center
                 no-repeat;
         background-size: 36px;
 }
