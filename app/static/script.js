@@ -554,9 +554,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
-    const pictureSelect = document.getElementById("imageDisplayUrl");
-    const selectedPicture = pictureSelect.value;
-
+ const pictureSelect = document.getElementById("imageDisplayUrl");
+  const selectedPicture = pictureSelect.value;
     // Extraer valores seleccionados por el usuario
     let plainText = Object.entries(selectedValues)
         .filter(([key, value]) => value && key !== "imageUrl")
@@ -597,68 +596,64 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
-    const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
-    const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
-    const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
-    const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
+ const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
+     const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
+
+     const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
+    
+  
+
+// Modificar la línea que crea evolutionCycle
+const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
+
 
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
-    // Función interna para generar el prompt según la selección de modelo
-    function generatePrompt() {
-        const modelType = document.querySelector('input[name="modelType"]:checked').value;
-        console.log("Modelo seleccionado:", modelType);  // Verificar el valor seleccionado
+// Obtener el modelo seleccionado
+    const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
-        let prompt;
-        if (modelType === "fluxdev") {
-            // Si se selecciona "Quality"
-            prompt = {
-                prompt: promptText,
-                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-                width: width,
-                height: height,
-                samples: 4,
-                guidance_scale: 7.5,
-                steps: 21,
-                use_karras_sigmas: "yes",
-                tomesd: "yes",
-                seed: seedValue,
-                model_id: "fluxdev",  
-                lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
-                lora_strength: "0.5,0.7,1", 
-                scheduler: "DDIMScheduler",
-                webhook: null,
-                safety_checker: "no",
-                track_id: null,
-                enhance_prompt: "no"
-            };
-        } else {
-            // Si se selecciona "Speed"
-            prompt = {
-                prompt: promptText,
-                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-                width: width,
-                height: height,
-                samples: 4,
-                guidance_scale: 7.5,
-                steps: 21,
-                use_karras_sigmas: "yes",
-                tomesd: "yes",
-                seed: seedValue,
-                model_id: "flux",  // El modelo predeterminado
-                scheduler: "DDIMScheduler",
-                webhook: null,
-                safety_checker: "no",
-                track_id: null,
-                enhance_prompt: "no"
-            };
-        }
-
-        return prompt;
+    
+    // Configuración del modelo basada en la selección del usuario
+    let modelConfig;
+    if (selectedModel === "flux") {
+        modelConfig = {
+            model_id: "flux",
+            lora_model: null,
+            lora_strength: null
+        };
+    } else if (selectedModel === "fluxdev") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
+            lora_strength: "0.5,0.7,1"
+        };
     }
+    
+// Configuración del modelo (ajustable según la selección del usuario)
+    const prompt = {
+        prompt: promptText,
+        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+        width: width,
+        height: height,
+        samples: 4,
+        guidance_scale: 7.5,
+        steps: 21,
+        use_karras_sigmas: "yes",
+        tomesd: "yes",
+        seed: seedValue,
+       model_id: modelConfig.model_id,
+        lora_model: modelConfig.lora_model,
+        lora_strength: modelConfig.lora_strength,
+        scheduler: "DDIMScheduler",
+        webhook: null,
+        safety_checker: "no",
+        track_id: null,
+        enhance_prompt: "no"
+    };
 
-   // Si es una generación img2img, agregar la imagen inicial
+
+    // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
         prompt.init_image = imageUrl;
         const strengthSlider = document.getElementById("strengthSlider");
@@ -667,8 +662,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
+    
     try {
-        // Enviar solicitud al backend
+        // Enviar solicitud al backend en lugar de a la API externa
         const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
             method: "POST",
             headers: {
@@ -695,7 +691,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         showError(error);  // Manejo de errores
     }
 }
-  
+
     
 
 
