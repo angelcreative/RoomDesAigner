@@ -611,34 +611,10 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
 
-    
 // Variables globales para almacenar las selecciones del usuario
 let speed = "flux"; // Valor predeterminado para 'Fast'
 let loram = null;   // Valor predeterminado para 'Fast'
 let loras = null;   // Valor predeterminado para 'Fast'
-
-// Configuración del modelo (base)
-let prompt = {
-    prompt: promptText,
-    negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-    width: width,
-    height: height,
-    samples: 4,
-    guidance_scale: 7.5,
-    steps: 21,
-    use_karras_sigmas: "yes",
-    tomesd: "yes",
-    seed: seedValue,
-    model_id: speed,  // Usa la variable 'speed'
-    lora_model: loram,   // Usa la variable 'loram'
-    lora_strength: loras, // Usa la variable 'loras'
-    scheduler: "DDIMScheduler",
-    webhook: null,
-    safety_checker: "no",
-    track_id: null,
-    enhance_prompt: "no"
-};
-    
 
 // Evento para seleccionar opción de dropdown personalizado
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
@@ -662,10 +638,27 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
             loras = null;
         }
 
-        // Actualizar el objeto 'prompt' con los nuevos valores
-        prompt.model_id = speed;
-        prompt.lora_model = loram;
-        prompt.lora_strength = loras;
+        // Aquí creamos el objeto 'prompt' con los nuevos valores después de cada selección
+        let prompt = {
+            prompt: promptText,
+            negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+            width: width,
+            height: height,
+            samples: 4,
+            guidance_scale: 7.5,
+            steps: 21,
+            use_karras_sigmas: "yes",
+            tomesd: "yes",
+            seed: seedValue,
+            model_id: speed,  // Usa la variable 'speed' actualizada
+            lora_model: loram,   // Usa la variable 'loram' actualizada
+            lora_strength: loras, // Usa la variable 'loras' actualizada
+            scheduler: "DDIMScheduler",
+            webhook: null,
+            safety_checker: "no",
+            track_id: null,
+            enhance_prompt: "no"
+        };
 
         // Mostrar el prompt actualizado para depuración
         console.log(prompt);
@@ -1309,12 +1302,19 @@ function showModal(imageUrls, transformedPrompt) {
 // Función para descargar imágenes en un archivo ZIP
 function downloadImagesAsZip() {
     // Crear un nuevo objeto JSZip
+    console.log("Download function triggered");
     const zip = new JSZip();
     const folder = zip.folder("Room_DesAigner_Images"); // Crear la carpeta dentro del zip
 
     // Obtener todas las imágenes dentro del imageGrid
     const images = document.querySelectorAll("#imageGrid img");
     
+    if (images.length === 0) {
+        console.log("No images found in the imageGrid");
+        alert("No images available to download.");
+        return;
+    }
+
     // Iterar sobre las imágenes y agregarlas al zip
     images.forEach((image, index) => {
         // Generar un nombre único para cada imagen
@@ -1322,6 +1322,7 @@ function downloadImagesAsZip() {
 
         // Obtener la URL de la imagen
         const imageUrl = image.src;
+        console.log(`Processing image: ${imageUrl}`);
 
         // Convertir la imagen a formato Blob
         fetch(imageUrl)
@@ -1335,6 +1336,7 @@ function downloadImagesAsZip() {
                     // Descargar el ZIP cuando todas las imágenes estén agregadas
                     if (index === images.length - 1) {
                         zip.generateAsync({ type: "blob" }).then(function (content) {
+                            console.log("ZIP file generated and ready for download");
                             // Descargar el archivo ZIP
                             const link = document.createElement("a");
                             link.href = URL.createObjectURL(content);
@@ -1350,14 +1352,19 @@ function downloadImagesAsZip() {
 
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener("DOMContentLoaded", function() {
-    // Seleccionar el botón dentro del div serialButton
-    const downloadButton = document.querySelector(".serialButton button:nth-child(2)");
+    // Seleccionar el botón por su ID
+    const downloadButton = document.getElementById("zipButton");
 
-    // Agregar el evento click al botón de descarga
+    // Verificar que el botón fue encontrado
     if (downloadButton) {
+        console.log("Download button found. Adding event listener...");
+        // Agregar el evento click al botón de descarga
         downloadButton.addEventListener("click", downloadImagesAsZip);
+    } else {
+        console.log("Download button not found.");
     }
 });
+
 
     
     
