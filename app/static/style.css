@@ -2032,13 +2032,16 @@ i {
 }
 
 .serialButton button {
-    background: var(--vulkan-50);
+   background: var(--vulkan-50);
     font-size: var(--s);
-        max-height: 52px;
+    max-height: 52px;
     margin: 0 var(--s);
-    min-width: 130px;
+    min-width: 161px;
 }
 
+button#zipButton {
+    min-width: fit-content;
+}
 .serialButton button:hover {
     background: var(--vulkan-500);
     color: var(--vulkan-200);
@@ -2652,13 +2655,17 @@ textarea:hover {
 }
 
 button {
-    margin: 1rem 0.5rem;
-    border-radius:var(--2xs);
+  margin: 1rem 0.5rem;
+    border-radius: var(--2xs);
     border: 1px solid var(--vulkan-600);
     background: transparent;
     color: var(--vulkan-600);
     padding: var(--s) var(--m);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
 }
 
 
