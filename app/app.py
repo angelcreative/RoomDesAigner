@@ -507,8 +507,7 @@ def update_user_credits(email, additional_credits):
 
 
 
-
-# Función para procesar la respuesta y manejar mejor los errores
+# Ruta para enviar la imagen a Replicate y crear una predicción
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
     try:
@@ -516,41 +515,54 @@ def clarity_upscale():
         data = request.get_json()
         if not data:
             return jsonify({'error': 'El cuerpo de la solicitud está vacío o malformado'}), 400
-        
+
         image_url = data.get('image_url')
         if not image_url:
             return jsonify({'error': 'Se requiere la URL de la imagen'}), 400
 
-        # Parámetros de entrada para el modelo, usando los valores por defecto del esquema
+        # Parámetros de entrada para el modelo
         input_data = {
             "jpeg": 40,
             "image": image_url,
-            "noise": 15,
-            "task_type": "Real-World Image Super-Resolution-Large"
+            "noise": 15
         }
 
-        # Ejecutar el modelo de Replicate
-        output = replicate.run(
-            "jingyunliang/swinir:660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",
+        # Crear una predicción usando predictions.create
+        prediction = replicate.predictions.create(
+            version="660d922d33153019e8c263a3bba265de882e7f4f70396546b6c9c8f9d47a021a",
             input=input_data
         )
 
-        # Depurar la respuesta completa de Replicate
-        print(f"Respuesta completa de Replicate: {output}")
-
-        # Verificar si el campo 'output' está presente directamente
-        if isinstance(output, dict) and 'output' in output:
-            return jsonify({"scaled_image_url": output['output']}), 200
-        elif isinstance(output, str):  # Si la respuesta es directamente una URL en cadena
-            return jsonify({"scaled_image_url": output}), 200
-        else:
-            return jsonify({'error': 'La respuesta de Replicate no contiene una URL de imagen escalada válida.'}), 500
+        # Devolver el ID de la predicción para su seguimiento
+        return jsonify({"prediction_id": prediction['id']}), 200
 
     except Exception as e:
-        # Depurar el error exacto
         print(f"Error en el servidor: {str(e)}")
         return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
     
+    
+    @app.route('/check-prediction/<prediction_id>', methods=['GET'])
+def check_prediction(prediction_id):
+    try:
+        # Obtener el estado de la predicción
+        prediction = replicate.predictions.get(prediction_id)
+
+        # Si la predicción ha sido completada
+        if prediction['status'] == "succeeded":
+            return jsonify({"scaled_image_url": prediction['output']}), 200
+
+        # Si la predicción aún está en progreso
+        elif prediction['status'] == "processing":
+            return jsonify({"status": "processing"}), 202
+
+        # Si la predicción falló
+        else:
+            return jsonify({"status": "failed", "error": prediction.get('error')}), 400
+
+    except Exception as e:
+        print(f"Error en el servidor: {str(e)}")
+        return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
+
     
     
 @app.route('/load-saved-values', methods=['GET'])
