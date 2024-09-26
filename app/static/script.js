@@ -554,8 +554,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
- const pictureSelect = document.getElementById("imageDisplayUrl");
-  const selectedPicture = pictureSelect.value;
+    const pictureSelect = document.getElementById("imageDisplayUrl");
+    const selectedPicture = pictureSelect.value;
     // Extraer valores seleccionados por el usuario
     let plainText = Object.entries(selectedValues)
         .filter(([key, value]) => value && key !== "imageUrl")
@@ -596,43 +596,77 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
     const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
- const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
-     const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
-
-     const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
-    
-  
-
-// Modificar la línea que crea evolutionCycle
-const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
-
+    const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
+    const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
+    const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
+    const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
 
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet} ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
+    
+    
+    // Evento para detectar el cambio en los botones de radio
+document.querySelectorAll('input[name="modelType"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        // Obtener la opción seleccionada en el momento del cambio
+        const modelType = document.querySelector('input[name="modelType"]:checked').value;
+        console.log("Modelo seleccionado:", modelType);  // Para verificar si selecciona correctamente
 
-// Configuración del modelo (ajustable según la selección del usuario)
-    const prompt = {
-        prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 21,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: "fluxdev",  // El modelo predeterminado
-        lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
-        lora_strength: "0.5,0.7,1", 
-        scheduler: "DDIMScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no"
-    };
+        // Configuración del modelo según la selección del usuario
+        let prompt;
+        if (modelType === "fluxdev") {
+            // Si se selecciona "Quality"
+            prompt = {
+                prompt: promptText,
+                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+                width: width,
+                height: height,
+                samples: 4,
+                guidance_scale: 7.5,
+                steps: 21,
+                use_karras_sigmas: "yes",
+                tomesd: "yes",
+                seed: seedValue,
+                model_id: "fluxdev",  
+                lora_model: "flux-fashion,uncensored-flux-lora,realistic-skin-flux",
+                lora_strength: "0.5,0.7,1", 
+                scheduler: "DDIMScheduler",
+                webhook: null,
+                safety_checker: "no",
+                track_id: null,
+                enhance_prompt: "no"
+            };
+        } else {
+            // Si se selecciona "Speed"
+            prompt = {
+                prompt: promptText,
+                negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
+                width: width,
+                height: height,
+                samples: 4,
+                guidance_scale: 7.5,
+                steps: 21,
+                use_karras_sigmas: "yes",
+                tomesd: "yes",
+                seed: seedValue,
+                model_id: "flux",  // El modelo predeterminado
+                scheduler: "DDIMScheduler",
+                webhook: null,
+                safety_checker: "no",
+                track_id: null,
+                enhance_prompt: "no"
+            };
+        }
 
+        // Aquí puedes enviar o procesar el 'prompt' como sea necesario
+        console.log(prompt);  // Mostrar el prompt para depuración
+    });
+});
+
+    
+    
+    }
 
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
@@ -643,9 +677,8 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-    
     try {
-        // Enviar solicitud al backend en lugar de a la API externa
+        // Enviar solicitud al backend
         const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
             method: "POST",
             headers: {
