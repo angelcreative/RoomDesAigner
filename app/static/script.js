@@ -479,6 +479,15 @@ function clearColorImage() {
 }
 
 
+    
+    
+// For img2img
+document.getElementById('img2imgThumbnail').src = imageUrl;
+
+// For color extraction
+document.getElementById('colorThumbnail').src = e.target.result;
+    
+    
 // END COLORSEX
     
 //🔶    start gen img
