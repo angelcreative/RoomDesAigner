@@ -640,7 +640,7 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
-    const img2imgThumbnail = document.getElementById('thumbnail'); // Asegúrate de que sea el contenedor correcto
+    const img2imgThumbnail = document.getElementById('img2imgThumbnail'); // Asegúrate de que sea el contenedor correcto
     img2imgThumbnail.src = imageUrl; // Asigna la URL de la imagen subida al contenedor de img2img
     const strengthSlider = document.getElementById("strengthSlider");
     prompt.init_image = imageUrl;
