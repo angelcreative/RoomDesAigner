@@ -1500,6 +1500,22 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+        img2imgThumbnail.src = e.target.result;
+        document.querySelector(".thumbImg").style.display = 'block';
+    };
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+// Add the event listener
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
