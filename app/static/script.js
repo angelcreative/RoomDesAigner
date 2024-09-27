@@ -1,5 +1,4 @@
-// Function to hide the waiting overlay and loading message 
-// Function to show the overlay
+ // Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
   overlay.style.display = "block";
@@ -11,25 +10,9 @@ function hideOverlay() {
 }
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton"); 
-
-
+ 
 
 document.addEventListener("DOMContentLoaded", function() {
-    
- // Asegúrate de que otros botones no generen imágenes
-  document.querySelectorAll('button').forEach(button => {
-    if (button.id !== 'magicButton') {
-      button.addEventListener('click', function(event) {
-        event.preventDefault();  // Previene la acción de otros botones
-      });
-    }
-  });
-
-  // Este es el único botón que genera imágenes
-  document.getElementById('magicButton').addEventListener('click', function(event) {
-    event.preventDefault();
-    handleSubmit(event);  // Aquí se genera la imagen
-  });
 
 
 //AIDESIGN
@@ -122,8 +105,7 @@ function handleSubmit(event) {
 }
 
     
-    
-    // Obtener los elementos necesarios
+        // Obtener los elementos necesarios
 const textArea = document.getElementById("customText");
 const magicButton = document.getElementById("magicButton");
 
@@ -142,6 +124,7 @@ textArea.addEventListener("input", toggleMagicButton);
 // Verificar el estado inicial por si ya hay texto en el área
 toggleMagicButton();
     
+    
 
 
 function getSelectedValues() {
@@ -149,8 +132,7 @@ function getSelectedValues() {
         "person",
         "home_room",
         "design_style",
-        //"generated_artwork",
-        "photography_style",
+        "generated_artwork",
         "point_of_view",
         "color_scheme",
         "camera_select",
@@ -206,11 +188,8 @@ function getSelectedValues() {
         "decorative_elements",
         "type_select",
         "photo_location",
-        "movie_still_by_genre",
-        "movie_atmosphere",
-      "image_style",
         "hairstyle_select",
-"gender",
+        "gender",
         "age",
         "outfit",
         "shoes",
@@ -303,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedValues = getSelectedValues();
     console.log(selectedValues);
 
-
+ 
 
   
     // Function to generate the optional text
@@ -404,7 +383,6 @@ function generateProductView(customText, photo_location) {
         document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
-
 // COLORSEX
 
     let extractedColors = [];
@@ -485,7 +463,13 @@ colorCircle.style.alignItems = 'center';
     });
 }
 
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    clearColorImage();
+    extractedColors = []; // Limpiar colores extraídos
+    console.log("Extracted Color Names and HEX cleared:", extractedColors);
 
+    document.getElementById('colorExtractionInput').value = '';
+});
 
 function clearColorImage() {
     const colorThumbnail = document.getElementById('colorThumbnail');
@@ -501,7 +485,6 @@ function clearColorImage() {
 
 // END COLORSEX
     
-
 //🔶    start gen img
  //Función para mostrar errores
 function showError(error) {
@@ -525,8 +508,8 @@ function hideGeneratingImagesDialog() {
         dialog.style.display = "none";
     }
 }
-
-// Función genérica para hacer fetch con reintentos
+   
+    
 // Función genérica para hacer fetch con reintentos
 async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
     for (let i = 0; i < retries; i++) {
@@ -697,10 +680,7 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
     }
 }
 
-    
-
-
-// Polling para verificar el estado de la generación de imágenes
+ // Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
         // Enviar solicitud al backend en lugar de a la API externa
@@ -825,7 +805,7 @@ function showGeneratingImagesDialog() {
     resetChronometer();
     changeText();
 }
-
+   
 // Event listener para el botón de cerrar
 document.getElementById('closeDialogButton').addEventListener('click', function() {
     const dialog = document.getElementById('generatingImagesDialog');
@@ -833,11 +813,6 @@ document.getElementById('closeDialogButton').addEventListener('click', function(
         dialog.style.display = 'none';
     }
 });
-
-
-    
-//🔸    end genimg
-    
 
     
 // Asegúrate de que las funciones adicionales como showGeneratingImagesDialog, hideOverlay, etc., estén definidas y funcionen correctamente.
@@ -874,6 +849,7 @@ rerollButton.addEventListener("click", rerollImages);
     
     
     
+    
     // Function to generate message
  function generateMessageDiv(message) {
       var messageDiv = document.createElement('div');
@@ -895,19 +871,6 @@ rerollButton.addEventListener("click", rerollImages);
       }
     }
     
-
-    /*Function to copy text to clipboard
-    function copyTextToClipboard(text) {
-      const tempInput = document.createElement("textarea");
-      tempInput.value = text;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      
-      generateMessageDiv("Prompt copied to clipboard!");
-    }
-    */
     
     // Function to copy text to clipboard
 async function copyTextToClipboard(text) {
@@ -920,14 +883,7 @@ async function copyTextToClipboard(text) {
   }
 }
 
-    
- 
-
-
-
-    
-
-
+        
 
 //reverse
     
@@ -1150,6 +1106,7 @@ function toggleContent() {
   }
 }
 
+
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
     const modal = document.getElementById("modal");
@@ -1290,8 +1247,6 @@ function showModal(imageUrls, transformedPrompt) {
 }
 
 
-
-
 // Añadir un listener global para errores no capturados
 window.addEventListener('error', function(event) {
     console.error("Error no capturado:", event.error);
@@ -1310,19 +1265,11 @@ function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
 }
+ 
     
  
 
-    
-    
 
-
-
-
-function closeModalHandler() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none";
-}
     
     
   // Function to open the image in a new tab
@@ -1494,6 +1441,7 @@ document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button =>
 });
 
 
+
 //try
 
 window.addEventListener('load', function() {
@@ -1551,7 +1499,7 @@ function clearThumbnail() {
     thumbDiv.style.display = 'none';
 }
 
-//document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
 
