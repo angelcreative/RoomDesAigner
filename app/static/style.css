@@ -1271,10 +1271,10 @@ img#thumbnail {
         content: "Copy Ai prompt";
 }
 .image-buttons button:nth-child(5):hover::after {
-        content: "Upscale image";
+        content: "See before / after";
 }
 .image-buttons button:nth-child(6):hover::after {
-        content: "See before / after";
+        content: "Search related images";
 }
 .image-buttons button:nth-child(7):hover::after {
         content: "Search products";
