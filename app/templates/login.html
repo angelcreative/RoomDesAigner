@@ -20,17 +20,17 @@
 <body> 
     
     <div class="loginBox">
-    <div class="loginLogo">
-                   <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner" style="position:static">
- 
-                        <img class="logoApp" src="static/img/logoApp.svg">
-
-        </div>
+   
 
             <h2 class="loginTitle" style="display: none">Access Room DesAigner</h2>
 
    <div class="loginModal">
-            <img src="{{ url_for('static', filename='img/modal_img/login.svg') }}">
+             <div class="loginLogo">
+                   <img class="logoWeb" src="/static/img/logo_web_dark.svg" alt="logo Room DesAigner" style="position:static">
+ 
+                        <img class="logoApp" src="static/img/logoApp.svg">
+
+        </div>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}

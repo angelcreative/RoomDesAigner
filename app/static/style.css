@@ -482,15 +482,16 @@ span.close:hover {
 }
 
 .loginBox {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        /* height: 510px; */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .loginLogo {
-        margin: 40px auto 0;
+        margin: 0 auto;
+    width: 150px;
 }
 
 .loginBox p {
@@ -511,7 +512,7 @@ span.close:hover {
         background: #fff;
         border-radius: var(--l);
         width: 340px;
-        margin: 0 auto;
+        margin: 60px auto 20px;
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -3717,12 +3718,15 @@ textarea {
 }
 
 .dropdown-options .option {
-        padding: 8px 16px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    transition: background-color ease-in 300ms;
-        justify-content: space-between;
+       padding: var(--2xs) var(--s);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color ease-in 100ms;
+    justify-content: space-between;
+    margin: var(--2xs);
+    border-radius: var(--2xl);
+    width: fit-content;
 
 }
 
@@ -3731,8 +3735,10 @@ textarea {
 }
 
 .dropdown-options .option:hover {
-         background-color: var(--vulkan-500);
-        color: var(--vulkan-200);
+        background-color: var(--vulkan-500);
+    color: var(--vulkan-200);
+    border-radius: var(--2xl);
+    margin: var(--2xs);
 }
 
 .selected .selected-text {
