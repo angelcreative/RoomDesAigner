@@ -1115,7 +1115,7 @@ function showModal(imageUrls, transformedPrompt) {
     closeButton.removeEventListener("click", closeModalHandler);
     closeButton.addEventListener("click", closeModalHandler);
     
-    const thumbnailImage = document.getElementById("thumbnail");
+    const thumbnailImage = document.getElementById("img2imgThumbnail");
     const userImageBase64 = thumbnailImage ? thumbnailImage.src : "";
 
     const imageGrid = document.getElementById("imageGrid");
