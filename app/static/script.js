@@ -485,13 +485,7 @@ colorCircle.style.alignItems = 'center';
     });
 }
 
-document.getElementById('clearColorImg').addEventListener('click', function() {
-    clearColorImage();
-    extractedColors = []; // Limpiar colores extraídos
-    console.log("Extracted Color Names and HEX cleared:", extractedColors);
 
-    document.getElementById('colorExtractionInput').value = '';
-});
 
 function clearColorImage() {
     const colorThumbnail = document.getElementById('colorThumbnail');
@@ -663,10 +657,13 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
     // Si es una generación img2img, agregar la imagen inicial
     if (isImg2Img && imageUrl) {
-        prompt.init_image = imageUrl;
-        const strengthSlider = document.getElementById("strengthSlider");
-        prompt.strength = parseFloat(strengthSlider.value);
-    }
+    const img2imgThumbnail = document.getElementById('thumbnail'); // Asegúrate de que sea el contenedor correcto
+    img2imgThumbnail.src = imageUrl; // Asigna la URL de la imagen subida al contenedor de img2img
+    const strengthSlider = document.getElementById("strengthSlider");
+    prompt.init_image = imageUrl;
+    prompt.strength = parseFloat(strengthSlider.value);
+}
+
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
@@ -1515,11 +1512,17 @@ window.addEventListener('load', function() {
 });
 
 document.getElementById('clearImg').addEventListener('click', function() {
-    clearImage();
-
-    // Reset the file input
-    document.getElementById('imageDisplayUrl').value = '';
+    const img2imgThumbnail = document.getElementById('thumbnail');
+    img2imgThumbnail.src = '';
+    document.getElementById('imageDisplayUrl').value = ''; // Limpiar el input del archivo
 });
+
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    const colorThumbnail = document.getElementById('colorThumbnail');
+    colorThumbnail.src = '';
+    document.getElementById('colorExtractionInput').value = ''; // Limpiar el input del archivo
+});
+
 
 function clearImage() {
     // Reset the src attribute of the thumbnail image
