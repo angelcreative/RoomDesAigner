@@ -55,18 +55,13 @@ function mixAttributes(baseAttributes) {
 // Function to handle the form submission
 function handleSubmit(event) {
   event.preventDefault();
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  showOverlay();
-
   const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
+  const file = fileInput.files[0];
   const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
+  const isImg2Img = Boolean(file);
 
   if (file) {
-    // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
+    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
     const uploadUrl = "https://api.imgbb.com/1/upload";
     const formData = new FormData();
     formData.append("key", apiKey);
@@ -79,19 +74,20 @@ function handleSubmit(event) {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
-        // Si la imagen se subió con éxito, obtén la URL y procede con img2img
         const imageUrl = data.data.url;
+        // Asignar la URL de la imagen al contenedor de img2img
+        const img2imgThumbnail = document.getElementById('thumbnail');
+        img2imgThumbnail.src = imageUrl;
         generateImages(imageUrl, selectedValues, isImg2Img);
       } else {
-        throw new Error("Image upload failed: " + data.error.message);
+        throw new Error("Error en la subida de imagen: " + data.error.message);
       }
     })
     .catch(error => {
-      // Manejo de errores en caso de falla en la subida de la imagen
-      handleError(error.message);
+      console.error("Error en la subida de la imagen:", error.message);
     });
   } else {
-    // Procesa txt2img si no se seleccionó ningún archivo
+    // Manejar caso sin img2img
     generateImages(null, selectedValues, isImg2Img);
   }
 }
@@ -1462,14 +1458,15 @@ window.addEventListener('load', function() {
 document.getElementById('clearImg').addEventListener('click', function() {
     const img2imgThumbnail = document.getElementById('thumbnail');
     img2imgThumbnail.src = '';
-    document.getElementById('imageDisplayUrl').value = ''; // Limpiar el input del archivo
+    document.getElementById('imageDisplayUrl').value = ''; // Limpiar input de img2img
 });
 
 document.getElementById('clearColorImg').addEventListener('click', function() {
     const colorThumbnail = document.getElementById('colorThumbnail');
     colorThumbnail.src = '';
-    document.getElementById('colorExtractionInput').value = ''; // Limpiar el input del archivo
+    document.getElementById('colorExtractionInput').value = ''; // Limpiar input de extracción de colores
 });
+
 
 
 function clearImage() {

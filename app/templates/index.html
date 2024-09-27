@@ -1231,19 +1231,17 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
      <!-- img ref -->
 <div id="colorExtractionImage">
   <label class="imageup">
-    Extract up to 5 colors from an image <span class="material-symbols-outlined">
-arrow_upward
-</span>
+    Extract up to 5 colors from an image <span class="material-symbols-outlined">arrow_upward</span>
     <small>Use extracted colors as a palette. <br> SVG are allowed. <br> Go <a href="https://www.colortoken.site/" target="_blank">Color Token</a> to generate color palettes, export as SVG and upload it here</small>
     <input type="file" accept="image/*" id="colorExtractionInput">
   </label>
   <div class="thumbImg" style="display: none;">
     <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
-   
-    <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;">
+    <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;"> <!-- This id stays the same -->
     <br> <div class="thumbExt"></div>
   </div>
 </div>
+
     
 <!--// end img ref -->
      
@@ -1422,20 +1420,21 @@ arrow_upward
 add_a_photo
 </span>Image to image</h1><span class="material-symbols-outlined"> close </span></section> 
                     <div class="content">
-                     <!--upload image-->
-                    <div id="myimage">
+    
+<!--upload image-->
+
+<div id="myimage">
   <label class="imageup" for="imageDisplayUrl">
-    Upload your image here <span class="material-symbols-outlined">
-arrow_upward
-</span>
-    <small>It will return on image at a time. Use a good resolution image<br>less than 500Kb and 1024x1204 / 1024x768 / 768x1024 size. </small>
+    Upload your image here <span class="material-symbols-outlined">arrow_upward</span>
+    <small>It will return one image at a time. Use a good resolution image less than 500Kb and 1024x1024 / 1024x768 / 768x1024 size.</small>
     <input type="file" id="imageDisplayUrl" accept="image/*">
   </label>
   <div class="thumbImg" style="display: none;">
     <i class="fa fa-plus-circle" id="clearImg" aria-hidden="true"></i>
-    <img id="thumbnail" src="" alt="Thumbnail">
+    <img id="img2imgThumbnail" src="" alt="Thumbnail"> <!-- Changed id here -->
   </div>
 </div>
+
                     
             
                     
