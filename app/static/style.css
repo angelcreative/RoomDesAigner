@@ -1144,7 +1144,7 @@ form.loginForm input {
 }
 
 .loginForm button {
-   padding: 16px 36px;
+padding: 16px 36px;
     border-radius: var(--2xs);
     color: var(--vulkan-100);
     width: 100%;
@@ -1152,6 +1152,9 @@ form.loginForm input {
     font-size: var(--s);
     background: var(--vulkan-500);
     transition: background ease-in-out 300ms;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 .loginForm label {
         margin-bottom: 4px;

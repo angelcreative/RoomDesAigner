@@ -1371,7 +1371,7 @@ function downloadImage(imageUrl) {
 document.addEventListener("DOMContentLoaded", function() {
   const fileInput = document.getElementById("imageDisplayUrl");
   const thumbnailContainer = document.querySelector(".thumbImg");
-  const thumbnailImage = document.getElementById("thumbnail");
+  const thumbnailImage = document.getElementById("img2imgThumbnail");
 
   fileInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
