@@ -3173,20 +3173,24 @@ select#materials {
 
 .message-close-btn,
 .secondary {
-        margin-top: var(--m);
-        padding: 8px 16px;
-        background-color: transparent;
-        color: #1f1f1f;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        box-shadow: inset #1f1f1f 0px 0px 0px 1px;
-        transition: box-shadow ease-in-out 0.3ms;
+ margin: var(--m) auto;
+    border-radius: var(--2xs);
+    border: 1px solid var(--vulkan-600);
+    background: transparent;
+    color: var(--vulkan-600);
+    padding: var(--s) var(--m);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    font-size: var(--s);
 }
 
 .message-close-btn:hover,
 .secondary:hover {
-        box-shadow: inset #1f1f1f 0px 0px 0px 2px;
+       background: var(--vulkan-500);
+    color: var(--vulkan-50);
 }
 
 .tertiary {
@@ -4041,6 +4045,12 @@ label.hamburger:hover {
     .carousel-wrapper {
         width:100%;
     }
+    
+    
+    .carousel-slide {
+    min-width: 33%;
+  
+}
 }
 
 /*  small devices (phones, 1024px and down) */

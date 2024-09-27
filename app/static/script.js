@@ -1171,6 +1171,60 @@ function showModal(imageUrls, transformedPrompt) {
         // Añadir los botones a su contenedor
         [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
+        // Aquí añadimos el slider
+        const noiseSlider = document.createElement("input");
+        noiseSlider.type = "range";
+        noiseSlider.min = "0";
+        noiseSlider.max = "50";
+        noiseSlider.value = "0";
+        noiseSlider.classList.add("noise-slider");
+
+        const noiseValueText = document.createElement("span");
+        noiseValueText.textContent = "0";
+
+        // Añadir el slider y su valor debajo de los botones
+        buttonsContainer.appendChild(noiseSlider);
+        buttonsContainer.appendChild(noiseValueText);
+
+        // Función para aplicar ruido a la imagen correspondiente
+        function applyNoiseToImage(noiseAmount) {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            const img = new Image();
+            img.src = imageUrl;
+            img.crossOrigin = 'Anonymous';
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+
+                // Añadir ruido a la imagen
+                for (let i = 0; i < data.length; i += 4) {
+                    let noise = Math.random() * noiseAmount - (noiseAmount / 2);
+                    data[i] += noise;     // Rojo
+                    data[i + 1] += noise; // Verde
+                    data[i + 2] += noise; // Azul
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+
+                // Actualizar el src de la imagen con el canvas modificado
+                image.src = canvas.toDataURL();
+            };
+        }
+
+        // Evento para actualizar el ruido cuando se mueve el slider
+        noiseSlider.addEventListener('input', function () {
+            const noiseAmount = parseInt(noiseSlider.value);
+            noiseValueText.textContent = noiseAmount;
+            applyNoiseToImage(noiseAmount);
+        });
+
+        // Añadir la imagen y los botones al contenedor de la imagen
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
         carouselWrapper.appendChild(imageContainer);
@@ -1184,9 +1238,7 @@ function showModal(imageUrls, transformedPrompt) {
     addImageButton.textContent = "+ Add More";
     addImageButton.classList.add("add-more-button");
     addImageButton.addEventListener("click", () => {
-        // Lógica para agregar más imágenes
         console.log("Add more images triggered.");
-        // Aquí puedes poner el trigger para generar más imágenes
     });
 
     addImageCard.appendChild(addImageButton);
@@ -1195,7 +1247,7 @@ function showModal(imageUrls, transformedPrompt) {
     // Crear botones prev y next para controlar el carrusel si no existen
     if (!document.querySelector(".prev")) {
         const prevButton = document.createElement("button");
-        prevButton.type = "button";  // Asegurar que no es un submit
+        prevButton.type = "button";
         prevButton.classList.add("prev");
         prevButton.innerHTML = "&#10094;";
         prevButton.addEventListener("click", () => moveSlide(-1));
@@ -1204,7 +1256,7 @@ function showModal(imageUrls, transformedPrompt) {
 
     if (!document.querySelector(".next")) {
         const nextButton = document.createElement("button");
-        nextButton.type = "button";  // Asegurar que no es un submit
+        nextButton.type = "button";
         nextButton.classList.add("next");
         nextButton.innerHTML = "&#10095;";
         nextButton.addEventListener("click", () => moveSlide(1));
@@ -1238,11 +1290,11 @@ function showModal(imageUrls, transformedPrompt) {
         // Deshabilitar o esconder el botón "prev" cuando estemos en la primera diapositiva
         const prevButton = document.querySelector('.prev');
         if (currentIndex === 0) {
-            prevButton.disabled = true;  // Deshabilitar el botón "prev"
-            prevButton.style.display = 'none';  // Alternativamente, esconder el botón
+            prevButton.disabled = true;
+            prevButton.style.display = 'none';
         } else {
-            prevButton.disabled = false;  // Habilitar el botón "prev"
-            prevButton.style.display = 'block';  // Mostrar el botón
+            prevButton.disabled = false;
+            prevButton.style.display = 'block';
         }
     }
 }
