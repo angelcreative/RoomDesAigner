@@ -1140,7 +1140,6 @@ function showModal(imageUrls, transformedPrompt) {
         carouselWrapper.classList.add("carousel-wrapper");
         imageGrid.appendChild(carouselWrapper);
     }
-
     // Eliminar la card de "+ Add More" si existe para que siempre esté al final
     let addImageCard = document.querySelector(".add-image-card");
     if (addImageCard) {
@@ -1170,24 +1169,49 @@ function showModal(imageUrls, transformedPrompt) {
 
         // Añadir los botones a su contenedor
         [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+        // Aquí añadimos el botón "Filters"
+        const filterButton = createButton("Filters", toggleFilterMenu);
+        buttonsContainer.appendChild(filterButton);
 
-        // Aquí añadimos el slider
-        const noiseSlider = document.createElement("input");
-        noiseSlider.type = "range";
-        noiseSlider.min = "0";
-        noiseSlider.max = "50";
-        noiseSlider.value = "0";
-        noiseSlider.classList.add("noise-slider");
+        // Crear el menú de filtros y añadir sliders
+        const filterMenu = document.createElement("div");
+        filterMenu.classList.add("filter-menu");
+        filterMenu.style.display = "none"; // Oculto por defecto
 
-        const noiseValueText = document.createElement("span");
-        noiseValueText.textContent = "0";
+        // Slider para el grano
+        const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
+        filterMenu.appendChild(grainSlider.slider);
+        filterMenu.appendChild(grainSlider.valueDisplay);
 
-        // Añadir el slider y su valor debajo de los botones
-        buttonsContainer.appendChild(noiseSlider);
-        buttonsContainer.appendChild(noiseValueText);
+        // Slider para el contraste
+        const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
+        filterMenu.appendChild(contrastSlider.slider);
+        filterMenu.appendChild(contrastSlider.valueDisplay);
 
-        // Función para aplicar ruido a la imagen correspondiente
-        function applyNoiseToImage(noiseAmount) {
+        // Slider para el brillo
+        const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
+        filterMenu.appendChild(brightnessSlider.slider);
+        filterMenu.appendChild(brightnessSlider.valueDisplay);
+
+        // Slider para el tinte (hue rotation)
+        const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
+        filterMenu.appendChild(hueSlider.slider);
+        filterMenu.appendChild(hueSlider.valueDisplay);
+
+        // Añadir el menú de filtros debajo del botón "Filters"
+        buttonsContainer.appendChild(filterMenu);
+        // Función para alternar la visibilidad del menú de filtros
+        function toggleFilterMenu() {
+            filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+        }
+
+        // Función para aplicar los filtros combinados
+        function applyFilters() {
+            const grainAmount = parseInt(grainSlider.slider.value);
+            const contrast = parseInt(contrastSlider.slider.value);
+            const brightness = parseInt(brightnessSlider.slider.value);
+            const hueRotation = parseInt(hueSlider.slider.value);
+
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
 
@@ -1197,17 +1221,18 @@ function showModal(imageUrls, transformedPrompt) {
             img.onload = function () {
                 canvas.width = img.width;
                 canvas.height = img.height;
+                ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
                 ctx.drawImage(img, 0, 0);
 
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imageData.data;
 
-                // Añadir ruido a la imagen
+                // Añadir grano a la imagen
                 for (let i = 0; i < data.length; i += 4) {
-                    let noise = Math.random() * noiseAmount - (noiseAmount / 2);
-                    data[i] += noise;     // Rojo
-                    data[i + 1] += noise; // Verde
-                    data[i + 2] += noise; // Azul
+                    let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+                    data[i] += grain;     // Rojo
+                    data[i+1] += grain;   // Verde
+                    data[i+2] += grain;   // Azul
                 }
 
                 ctx.putImageData(imageData, 0, 0);
@@ -1217,19 +1242,11 @@ function showModal(imageUrls, transformedPrompt) {
             };
         }
 
-        // Evento para actualizar el ruido cuando se mueve el slider
-        noiseSlider.addEventListener('input', function () {
-            const noiseAmount = parseInt(noiseSlider.value);
-            noiseValueText.textContent = noiseAmount;
-            applyNoiseToImage(noiseAmount);
-        });
-
         // Añadir la imagen y los botones al contenedor de la imagen
         imageContainer.appendChild(image);
         imageContainer.appendChild(buttonsContainer);
         carouselWrapper.appendChild(imageContainer);
     });
-
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
     addImageCard.classList.add("carousel-slide", "add-image-card");
@@ -1272,7 +1289,6 @@ function showModal(imageUrls, transformedPrompt) {
 
     modal.style.display = "block";
     showOverlay();
-
     // Inicializar el índice del carrusel
     let currentIndex = 0;
 
@@ -1299,6 +1315,35 @@ function showModal(imageUrls, transformedPrompt) {
     }
 }
 
+// Función auxiliar para crear un slider con etiqueta de valor
+function createSlider(label, min, max, defaultValue, onChange) {
+    const container = document.createElement("div");
+    const labelElement = document.createElement("label");
+    labelElement.textContent = label;
+
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = min;
+    slider.max = max;
+    slider.value = defaultValue;
+    
+    const valueDisplay = document.createElement("span");
+    valueDisplay.textContent = defaultValue;
+
+    slider.addEventListener('input', function () {
+        valueDisplay.textContent = slider.value;
+        onChange(); // Aplicar el filtro al cambiar el valor
+    });
+
+    container.appendChild(labelElement);
+    container.appendChild(slider);
+    container.appendChild(valueDisplay);
+
+    return {
+        slider,
+        valueDisplay
+    };
+}
 
 // Añadir un listener global para errores no capturados
 window.addEventListener('error', function(event) {
