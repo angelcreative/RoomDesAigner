@@ -1301,11 +1301,13 @@ img#thumbnail {
         
 }
 
-.thumbImg {
-        text-align: center;
-        border-radius: var(--2xs);
-        margin-top: var(--2xs);
-        position: relative;
+.thumbImg, #img2imgThumbnail {
+     text-align: center;
+    border-radius: var(--2xs);
+    margin-top: var(--3xs);
+    position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
 .thumbExt {
@@ -2111,16 +2113,14 @@ button#zipButton {
 }
 
 .prev, .next {
-    cursor: pointer;
+   cursor: pointer;
     position: absolute;
-   
     width: auto;
     padding: 16px;
     margin-top: -22px;
-    color: white;
+    color: var(--aztec-800);
     font-weight: bold;
-   
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--aztec-600);
     border: none;
     border-radius: 0 3px 3px 0;
     user-select: none;
@@ -2132,7 +2132,8 @@ button#zipButton {
 }
 
 .prev:hover, .next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--aztec-100);
+    color: var(--aztec-600);
 }
 
 
@@ -2157,7 +2158,7 @@ button#zipButton {
        
         position: absolute;
         right: 0;
-        top: 0;
+        top: var(--2xs);
         color: var(--bunker-400);
         transform: rotate(45deg);
         cursor: pointer;

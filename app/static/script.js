@@ -126,6 +126,7 @@ toggleMagicButton();
 function getSelectedValues() {
     const elementIds = [
         "person",
+        "shot_angle",
         "home_room",
         "design_style",
         "generated_artwork",
@@ -1475,7 +1476,7 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
 
 function clearImage() {
     // Reset the src attribute of the thumbnail image
-    var thumbnail = document.getElementById('thumbnail');
+    var thumbnail = document.getElementById('img2imgThumbnail');
     thumbnail.src = '';
 
     // Hide the thumbnail container
@@ -1487,14 +1488,14 @@ function clearImage() {
 
 
 function displayThumbnail(imageSrc) {
-    var thumbnail = document.getElementById('thumbnail');
+    var thumbnail = document.getElementById('img2imgThumbnail');
     var thumbDiv = document.querySelector('.thumbImg');
     thumbnail.src = imageSrc;
     thumbDiv.style.display = 'block';
 }
 
 function clearThumbnail() {
-    var thumbnail = document.getElementById('thumbnail');
+    var thumbnail = document.getElementById('img2imgThumbnail');
     var thumbDiv = document.querySelector('.thumbImg');
     thumbnail.src = '';
     thumbDiv.style.display = 'none';

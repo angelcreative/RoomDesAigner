@@ -380,7 +380,7 @@ close
                    <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
   <div class="logout">
         <div class="rightOff">
-            <button style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
+            <button  type="button"  style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
 
 
             
@@ -433,7 +433,7 @@ logout
             <h1>Something was wrong from our side, try it again</h1>
             <p>Sometimes technology doesn't work as intended.</p>
             <div class="errorButtons" style="height:1px; width:1px; position:fixed; top:0;left:0; overflow:hidden;">
-                <button id="errorButton" class="modalPbutton">Try again now</button>
+                <button  type="button" id="errorButton" class="modalPbutton">Try again now</button>
             </div>
         </div>
         <span class="closeError"><span class="material-symbols-outlined">
@@ -589,7 +589,35 @@ Shot settings</h1><span class="material-symbols-outlined"> close </span>
                          </div>
                     </div>
                     
-                    
+                    <!-- level shot -->
+<h4>Shot Angle</h4>
+<div class="custom-dropdown" data-placeholder="Level shot">
+    <div class="dropdown-selected">
+        <span class="selected-text">Photo level shot</span>
+        <span class="clear-selection"> <span class="material-symbols-outlined">close</span> </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="medium_shot_capturing_subject_or_scene" title="capturing_subject_or_scene">Medium Shot of Subject/Scene</div>
+        <div class="option" value="close_up_focus_on_details_or_subject" title="focus_on_details_or_subject">Close-up Shot of Details/Subject</div>
+        <div class="option" value="wide_shot_showing_entire_scene" title="showing_entire_scene">Wide Shot of Scene</div>
+        <div class="option" value="extreme_wide_shot_broad_view_of_landscape" title="broad_view_of_landscape">Extreme Wide Landscape Shot</div>
+        <div class="option" value="low_angle_shot_emphasizing_subject_from_below" title="emphasizing_subject_from_below">Low Angle Shot from Below</div>
+        <div class="option" value="high_angle_shot_overview_of_scene" title="overview_of_scene">High Angle Shot Overview</div>
+        <div class="option" value="dutch_angle_creative_perspective_of_scene" title="creative_perspective_of_scene">Dutch Angle Creative Shot</div>
+        <div class="option" value="rule_of_thirds_balancing_elements_in_photo" title="balancing_elements_in_photo">Rule of Thirds Balanced Shot</div>
+        <div class="option" value="bird_eye_view_overhead_view_of_scene" title="overhead_view_of_scene">Bird's Eye View of Scene</div>
+        <div class="option" value="drone_shot_aerial_view_of_landscape_or_scene" title="aerial_view_of_landscape_or_scene">Drone Aerial Shot</div>
+        <div class="option" value="establishing_shot_showing_context_or_location" title="showing_context_or_location">Establishing Shot of Context</div>
+        <div class="option" value="point_of_view_shot_as_seen_by_subject" title="as_seen_by_subject">Point of View Shot</div>
+        <div class="option" value="closeup_shot_showing_detailed_subject_or_element" title="showing_detailed_subject_or_element">Close-up of Detail</div>
+        <div class="option" value="extreme_closeup_shot_intense_focus_on_detail" title="intense_focus_on_detail">Extreme Close-up on Detail</div>
+        <div class="option" value="cowboy_shot_showing_subject_and_surroundings" title="showing_subject_and_surroundings">Cowboy Shot of Subject</div>
+        <div class="option" value="reflection_shot_using_mirror_or_water" title="using_mirror_or_water">Reflection Shot</div>
+    </div>
+    <input type="hidden" name="shot_angle" id="shot_angle" value="">
+</div>
+
                    <!--photo-->
                 <div class="custom-dropdown" data-placeholder="Photography Style">
     <div class="dropdown-selected">
@@ -764,51 +792,7 @@ Shot settings</h1><span class="material-symbols-outlined"> close </span>
 </div>
 
                     
-                    <!-- level shot -->
-                    <h4>Point of view</h4>
-                  <div class="custom-dropdown" data-placeholder="Level shot">
-    <div class="dropdown-selected">
-        <span class="selected-text">Photo level shot</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-         <div class="option" value="medium_shot_capturing_room_or_area" title="capturing_room_or_area">Medium Room Shot</div>
-
-<div class="option" value="extreme_close_up_focus_on_textures_or_materials" title="focus_on_textures_or_materials">Extreme Close-up of Textures</div>
-
-<div class="option" value="wide_shot_showing_entire_room_or_exterior" title="showing_entire_room_or_exterior">Wide Room/Exterior Shot</div>
-
-<div class="option" value="extreme_wide_shot_showing_broad_view_of_space" title="showing_broad_view_of_space">Extreme Wide Space Shot</div>
-
-<div class="option" value="low_angle_shot_emphasizing_ceiling_or_architecture" title="emphasizing_ceiling_or_architecture">Low Angle Architectural Shot</div>
-
-<div class="option" value="high_angle_shot_highlighting_floor_or_layout" title="highlighting_floor_or_layout">High Angle Layout Shot</div>
-
-<div class="option" value="dutch_angle_shot_creative_perspective_of_design" title="creative_perspective_of_design">Dutch Angle Design Shot</div>
-
-<div class="option" value="rule_of_thirds_shot_balancing_elements_in_design" title="balancing_elements_in_design">Rule of Thirds Design Shot</div>
-
-<div class="option" value="bird_eye_view_overhead_view_of_room_or_area" title="overhead_view_of_room_or_area">Bird's Eye View of Space</div>
-
-<div class="option" value="drone_camera_aerial_shot_of_exterior_landscape" title="aerial_shot_of_exterior_landscape">Drone Shot of Exterior</div>
-
-<div class="option" value="establishing_shot_showing_context_of_interior_or_exterior" title="showing_context_of_interior_or_exterior">Establishing Shot of Space</div>
-
-<div class="option" value="point_of_view_shot_as_seen_by_person_in_room" title="as_seen_by_person_in_room">Point of View Room Shot</div>
-
-<div class="option" value="closeup_photo_detailed_view_of_decor_or_furniture" title="detailed_view_of_decor_or_furniture">Close-up of Decor/Furniture</div>
-
-<div class="option" value="extreme_closeup_photo_intense_focus_on_design_detail" title="intense_focus_on_design_detail">Extreme Close-up of Design Detail</div>
-
-<div class="option" value="cowboy_shot_interior_view_with_furniture_focus" title="interior_view_with_furniture_focus">Cowboy Shot of Interior</div>
-
-<div class="option" value="reflection_shot_highlighting_mirror_or_glass_features" title="highlighting_mirror_or_glass_features">Reflection Shot in Design</div>
-
-    </div>
-    <input type="hidden" name="point_of_view" id="point_of_view" value="">
-</div>
-
+                 
 
                 
               
@@ -2131,7 +2115,13 @@ Indoor</h1><span class="material-symbols-outlined"> close </span></section>
                 </div>
                 
                 
- <!-- //COLLAPSE -->                       
+ <!-- //COLLAPSE -->  
+                    
+                    
+                    
+                    
+                    
+                    
  <!-- COLLAPSE -->                 
                     <section type="button" class="collapsible"> <h1><span class="material-symbols-outlined">
 nature_people
@@ -2139,7 +2129,51 @@ nature_people
 Outdoor </h1><span class="material-symbols-outlined"> close </span></section>             
                
                 <div class="content">
-                   
+                      <!-- level shot -->
+                    <h4>Point of view</h4>
+                  <div class="custom-dropdown" data-placeholder="Level shot">
+    <div class="dropdown-selected">
+        <span class="selected-text">Photo level shot</span>
+        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+         <div class="option" value="medium_shot_capturing_room_or_area" title="capturing_room_or_area">Medium Room Shot</div>
+
+<div class="option" value="extreme_close_up_focus_on_textures_or_materials" title="focus_on_textures_or_materials">Extreme Close-up of Textures</div>
+
+<div class="option" value="wide_shot_showing_entire_room_or_exterior" title="showing_entire_room_or_exterior">Wide Room/Exterior Shot</div>
+
+<div class="option" value="extreme_wide_shot_showing_broad_view_of_space" title="showing_broad_view_of_space">Extreme Wide Space Shot</div>
+
+<div class="option" value="low_angle_shot_emphasizing_ceiling_or_architecture" title="emphasizing_ceiling_or_architecture">Low Angle Architectural Shot</div>
+
+<div class="option" value="high_angle_shot_highlighting_floor_or_layout" title="highlighting_floor_or_layout">High Angle Layout Shot</div>
+
+<div class="option" value="dutch_angle_shot_creative_perspective_of_design" title="creative_perspective_of_design">Dutch Angle Design Shot</div>
+
+<div class="option" value="rule_of_thirds_shot_balancing_elements_in_design" title="balancing_elements_in_design">Rule of Thirds Design Shot</div>
+
+<div class="option" value="bird_eye_view_overhead_view_of_room_or_area" title="overhead_view_of_room_or_area">Bird's Eye View of Space</div>
+
+<div class="option" value="drone_camera_aerial_shot_of_exterior_landscape" title="aerial_shot_of_exterior_landscape">Drone Shot of Exterior</div>
+
+<div class="option" value="establishing_shot_showing_context_of_interior_or_exterior" title="showing_context_of_interior_or_exterior">Establishing Shot of Space</div>
+
+<div class="option" value="point_of_view_shot_as_seen_by_person_in_room" title="as_seen_by_person_in_room">Point of View Room Shot</div>
+
+<div class="option" value="closeup_photo_detailed_view_of_decor_or_furniture" title="detailed_view_of_decor_or_furniture">Close-up of Decor/Furniture</div>
+
+<div class="option" value="extreme_closeup_photo_intense_focus_on_design_detail" title="intense_focus_on_design_detail">Extreme Close-up of Design Detail</div>
+
+<div class="option" value="cowboy_shot_interior_view_with_furniture_focus" title="interior_view_with_furniture_focus">Cowboy Shot of Interior</div>
+
+<div class="option" value="reflection_shot_highlighting_mirror_or_glass_features" title="highlighting_mirror_or_glass_features">Reflection Shot in Design</div>
+
+    </div>
+    <input type="hidden" name="point_of_view" id="point_of_view" value="">
+</div>
+
                 <!-- outdoor room -->
                    <h4>Outdoor Spaces</h4>
 <div class="custom-dropdown" data-placeholder="Pool style">
@@ -3618,7 +3652,7 @@ Building Materials</h1><span class="material-symbols-outlined"> close </span></s
 
                      <div class="buttonsCont">
                 <div class="buttonsL">
-                    <button id="clearAllButton">Clear All</button>
+                    <button type="button"  id="clearAllButton">Clear All</button>
                     <!--<button id="downloadJsonButton" title="TIP Ask chatGPT to 'Create a text to image prompt from this JSON, be concise, precise, non poetic, descriptive'">Download JSON 📄</button>-->
                    
                 
@@ -3633,7 +3667,7 @@ arrow_forward
 </span></button>
                   
 <!-- AI Design Button -->
-<button style="display:none" id="aiDesignButton"><i class="fa fa-random" aria-hidden="true"></i></button>
+<button type="button"  style="display:none" id="aiDesignButton"><i class="fa fa-random" aria-hidden="true"></i></button>
 
                 </div>
             </div>  
@@ -3664,7 +3698,7 @@ arrow_forward
         <img class="logoApp" src="static/img/logoApp.svg">
            
              <div class="serialButton"> 
-                    <button onclick="toggleContent()">See prompt <span class="material-symbols-outlined">
+                    <button type="button" onclick="toggleContent()">See prompt <span class="material-symbols-outlined">
 visibility
 </span></button>
 
@@ -3672,10 +3706,10 @@ visibility
              </div>
        
             <div class="imageGrid" id="imageGrid">
-                <button style="visibility: hidden; height:1px;width: 1ps; position:absolute;right:0; top:0">Upscale</button>
+                <button  type="button" style="visibility: hidden; height:1px;width: 1ps; position:absolute;right:0; top:0">Upscale</button>
             </div>
          
-            <button class="buttonExt gradient-animation" id="rerollButton" style="visibility: hidden;
+            <button  type="button" class="buttonExt gradient-animation" id="rerollButton" style="visibility: hidden;
     width: 1px;
     margin: 1px auto; z-index:0;">Reroll</button>
             <div id="resultContainer"></div>
