@@ -1147,106 +1147,127 @@ function showModal(imageUrls, transformedPrompt) {
     }
 
     // Añadir las nuevas imágenes generadas al final
-    imageUrls.forEach((imageUrl) => {
-        const imageContainer = document.createElement("div");
-        imageContainer.classList.add("carousel-slide");
-        
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
+imageUrls.forEach((imageUrl) => {
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("carousel-slide");
 
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.classList.add("thumbnail");
 
-        // Botones de acción
-        const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-        const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-        const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-        const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-        const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-        const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
 
-        // Añadir los botones a su contenedor
-        [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
-        // Aquí añadimos el botón "Filters"
-        const filterButton = createButton("Filters", toggleFilterMenu);
-        buttonsContainer.appendChild(filterButton);
+    // Botones de acción
+    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+    const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
 
-        // Crear el menú de filtros y añadir sliders
-        const filterMenu = document.createElement("div");
-        filterMenu.classList.add("filter-menu");
-        filterMenu.style.display = "none"; // Oculto por defecto
+    // Añadir los botones a su contenedor
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
-        // Slider para el grano
-        const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
-        filterMenu.appendChild(grainSlider.slider);
-        filterMenu.appendChild(grainSlider.valueDisplay);
+    // Aquí añadimos el botón "Filters"
+    const filterButton = createButton("Filters", toggleFilterMenu);
+    buttonsContainer.appendChild(filterButton);
 
-        // Slider para el contraste
-        const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
-        filterMenu.appendChild(contrastSlider.slider);
-        filterMenu.appendChild(contrastSlider.valueDisplay);
+    // Crear el menú de filtros y añadir sliders
+    const filterMenu = document.createElement("div");
+    filterMenu.classList.add("filter-menu");
+    filterMenu.style.display = "none"; // Oculto por defecto
 
-        // Slider para el brillo
-        const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
-        filterMenu.appendChild(brightnessSlider.slider);
-        filterMenu.appendChild(brightnessSlider.valueDisplay);
+    // Slider para el grano con label
+    const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
+    const grainLabel = document.createElement("label");
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    grainLabel.setAttribute("for", grainSlider.slider.id);  // Asociar el label con el slider
+    filterMenu.appendChild(grainLabel);
+    filterMenu.appendChild(grainSlider.slider);
 
-        // Slider para el tinte (hue rotation)
-        const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
-        filterMenu.appendChild(hueSlider.slider);
-        filterMenu.appendChild(hueSlider.valueDisplay);
+    // Slider para el contraste con label
+    const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
+    const contrastLabel = document.createElement("label");
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    contrastLabel.setAttribute("for", contrastSlider.slider.id);
+    filterMenu.appendChild(contrastLabel);
+    filterMenu.appendChild(contrastSlider.slider);
 
-        // Añadir el menú de filtros debajo del botón "Filters"
-        buttonsContainer.appendChild(filterMenu);
-        // Función para alternar la visibilidad del menú de filtros
-        function toggleFilterMenu() {
-            filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
-        }
+    // Slider para el brillo con label
+    const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
+    const brightnessLabel = document.createElement("label");
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+    brightnessLabel.setAttribute("for", brightnessSlider.slider.id);
+    filterMenu.appendChild(brightnessLabel);
+    filterMenu.appendChild(brightnessSlider.slider);
 
-        // Función para aplicar los filtros combinados
-        function applyFilters() {
-            const grainAmount = parseInt(grainSlider.slider.value);
-            const contrast = parseInt(contrastSlider.slider.value);
-            const brightness = parseInt(brightnessSlider.slider.value);
-            const hueRotation = parseInt(hueSlider.slider.value);
+    // Slider para el tinte (hue rotation) con label
+    const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
+    const hueLabel = document.createElement("label");
+    hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    hueLabel.setAttribute("for", hueSlider.slider.id);
+    filterMenu.appendChild(hueLabel);
+    filterMenu.appendChild(hueSlider.slider);
 
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
+    // Añadir el menú de filtros debajo del botón "Filters"
+    buttonsContainer.appendChild(filterMenu);
 
-            const img = new Image();
-            img.src = imageUrl;
-            img.crossOrigin = 'Anonymous';
-            img.onload = function () {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
-                ctx.drawImage(img, 0, 0);
+    // Función para alternar la visibilidad del menú de filtros
+    function toggleFilterMenu() {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    }
 
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
+    // Función para aplicar los filtros combinados
+    function applyFilters() {
+        const grainAmount = parseInt(grainSlider.slider.value);
+        const contrast = parseInt(contrastSlider.slider.value);
+        const brightness = parseInt(brightnessSlider.slider.value);
+        const hueRotation = parseInt(hueSlider.slider.value);
 
-                // Añadir grano a la imagen
-                for (let i = 0; i < data.length; i += 4) {
-                    let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
-                    data[i] += grain;     // Rojo
-                    data[i+1] += grain;   // Verde
-                    data[i+2] += grain;   // Azul
-                }
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-                ctx.putImageData(imageData, 0, 0);
+        const img = new Image();
+        img.src = imageUrl;
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
+            ctx.drawImage(img, 0, 0);
 
-                // Actualizar el src de la imagen con el canvas modificado
-                image.src = canvas.toDataURL();
-            };
-        }
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
 
-        // Añadir la imagen y los botones al contenedor de la imagen
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        carouselWrapper.appendChild(imageContainer);
-    });
+            // Añadir grano a la imagen
+            for (let i = 0; i < data.length; i += 4) {
+                let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+                data[i] += grain;     // Rojo
+                data[i+1] += grain;   // Verde
+                data[i+2] += grain;   // Azul
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            // Actualizar el src de la imagen con el canvas modificado
+            image.src = canvas.toDataURL();
+        };
+
+        // Actualizar el valor de los labels en tiempo real
+        grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+        contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+        brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+        hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    }
+
+    // Añadir la imagen y los botones al contenedor de la imagen
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(buttonsContainer);
+    carouselWrapper.appendChild(imageContainer);
+});
+
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
     addImageCard.classList.add("carousel-slide", "add-image-card");

@@ -1277,7 +1277,7 @@ img#thumbnail {
         content: "Search related images";
 }
 .image-buttons button:nth-child(7):hover::after {
-        content: "Search products";
+        content: "Use filters";
 }
 .image-buttons button:nth-child(8):hover::after {
         content: "Clarity enhance";
@@ -1889,7 +1889,7 @@ select#harmonyType {
 }
 
 .image-buttons button:nth-child(7) {
-        background: url("/static/img/ico_grid/ico_reverse_search.svg") center
+        background: url("/static/img/ico_grid/ico_enhance.svg") center
                 center no-repeat;
         background-size: 36px;
 }
@@ -2993,6 +2993,7 @@ option[title]:hover:after {
     border-radius: 0 0 var(--xl) var(--xl);
     margin: -2px 0 0 0;
     padding: 12px 0 12px 0;
+    position: relative;
 }
 
 .image-buttons button {
@@ -4033,6 +4034,61 @@ label.hamburger:hover {
 .left   { transform: rotateY(-90deg) translateZ(150px); }
 .right  { transform: rotateY( 90deg) translateZ(150px); }
 
+
+
+
+.filter-menu input {
+    -webkit-appearance: none;
+    width: 100%;
+    height: var(--3xs);
+    background: var(--bunker-600);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+    border-radius: 40px;
+    margin: 0;
+}
+
+.filter-menu {
+    width: 120px;
+    padding: var(--xs);
+    border-radius: var(--m) 0 0;
+    position: absolute;
+    background: var(--bunker-900);
+    top: -190px;
+    right: 0;
+}
+
+.filter-menu span {
+  color: var(--bunker-400);
+    background: var(--bunker-800);
+    padding: var(--3xs) var(--2xs);
+    border-radius: 90px;
+    font-size: var(--2xs);
+    margin: var(--3xs) 0;
+    display: block;
+    width: fit-content;
+}
+
+
+.filter-menu input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 10px;
+        height: 10px;
+        background: #a7fcf2;
+        cursor: pointer;
+        border-radius: 90px;
+}
+
+.filter-menu::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #a7fcf2;
+        cursor: pointer;
+        border-radius: 90px;
+}
 
 
 
