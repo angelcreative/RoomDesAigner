@@ -76,7 +76,7 @@ function handleSubmit(event) {
       if (data.success) {
         const imageUrl = data.data.url;
         // Asignar la URL de la imagen al contenedor de img2img
-        const img2imgThumbnail = document.getElementById('thumbnail');
+        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
         img2imgThumbnail.src = imageUrl;
         generateImages(imageUrl, selectedValues, isImg2Img);
       } else {
