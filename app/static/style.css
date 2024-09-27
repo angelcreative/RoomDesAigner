@@ -2162,6 +2162,7 @@ button#zipButton {
         color: var(--bunker-400);
         transform: rotate(45deg);
         cursor: pointer;
+    z-index: 1;
        
 }
 

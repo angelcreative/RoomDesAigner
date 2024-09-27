@@ -1460,11 +1460,22 @@ window.addEventListener('load', function() {
   }, 4000); // 4 seconds (4000 milliseconds)
 });
 
+
+
 document.getElementById('clearImg').addEventListener('click', function() {
     const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+    
+    // Limpiar el src de la miniatura
     img2imgThumbnail.src = '';
-    document.getElementById('imageDisplayUrl').value = ''; // Limpiar input de img2img
+    
+    // Opcional: También puedes ocultar la imagen para evitar mostrar la miniatura rota
+    img2imgThumbnail.style.display = 'none'; 
+    
+    // Limpiar el input de URL o carga de imagen
+    document.getElementById('imageDisplayUrl').value = ''; 
 });
+
+
 
 document.getElementById('clearColorImg').addEventListener('click', function() {
     const colorThumbnail = document.getElementById('colorThumbnail');
@@ -1476,8 +1487,8 @@ document.getElementById('clearColorImg').addEventListener('click', function() {
 
 function clearImage() {
     // Reset the src attribute of the thumbnail image
-    var thumbnail = document.getElementById('img2imgThumbnail');
-    thumbnail.src = '';
+    var img2imgThumbnail = document.getElementById('img2imgThumbnail');
+    img2imgThumbnail.src = '';
 
     // Hide the thumbnail container
     var thumbContainer = document.querySelector('.thumbImg');
