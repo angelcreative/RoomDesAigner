@@ -1213,6 +1213,39 @@ Layer 3 (Foreground): Your product, the words for a logo or a known logo</sub>
 <!-- //COLLAPSE --> 
                     
                     
+ <!-- COLLAPSE IMG -->
+                    
+<section type="button" class="collapsible">  <h1><span class="material-symbols-outlined">
+add_a_photo
+</span>Image to image</h1><span class="material-symbols-outlined"> close </span></section> 
+ <div class="content">
+    
+<!--upload image-->
+
+<div id="myimage">
+  <label class="imageup" for="imageDisplayUrl">
+    Upload your image here <span class="material-symbols-outlined">arrow_upward</span>
+    <small>It will return one image at a time. Use a good resolution image less than 500Kb and 1024x1024 / 1024x768 / 768x1024 size.</small>
+<input type="file" id="imageDisplayUrl" accept="image/*" onchange="handleImageUpload(event)">
+  </label>
+  <div class="thumbImg" style="display: none;">
+    <i class="fa fa-plus-circle" id="clearImg" aria-hidden="true"></i>
+    <img id="img2imgThumbnail" src="" alt="Thumbnail"> <!-- Changed id here -->
+  </div>
+</div>
+
+ <div class="strenght">
+<label for="strengthSlider">Original image strenght</label>
+<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.1">
+<span id="sliderValue">0.1</span>
+                    <small>0 will produce an image nearly identical to the original.<br>
+1 will produce an image that greatly differs from the original. Try .80 to .90<br>
+                        </small>
+                    </div>
+                    
+                    </div>                    
+                    
+                    
                      <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
 palette
 </span>
@@ -1221,14 +1254,8 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
  <div class="content">
      
      
-   
-
-
-   
-  
      
-     
-     <!-- img ref -->
+ <!-- img ref -->
 <div id="colorExtractionImage">
   <label class="imageup">
     Extract up to 5 colors from an image <span class="material-symbols-outlined">arrow_upward</span>
@@ -1236,7 +1263,7 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
     <input type="file" accept="image/*" id="colorExtractionInput">
   </label>
   <div class="thumbImg" style="display: none;">
-    <i class="fa fa-plus-circle" id="clearColorImg" aria-hidden="true"></i>
+    <i class="fa fa-plus-circle" id="clearColoneorImg" aria-hidden="true"></i>
     <img id="colorThumbnail" src="" alt="Thumbnail" style="margin-top: 10px;"> <!-- This id stays the same -->
     <br> <div class="thumbExt"></div>
   </div>
@@ -1250,7 +1277,7 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
      
      
      
-     <div class="coloresWheel colorPalette">
+ <div class="coloresWheel colorPalette">
     <!--start 603010-->
     <div class="colorPickersGroup">
         <div class="switchContainer colorSC">
@@ -1307,13 +1334,7 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
     </div>
 </div>
 
-
-      
-     
-
-
-
-     
+   
      
 <div class="custom-dropdown" data-placeholder="Select Color Scheme or Dominant Color">
     <div class="dropdown-selected">
@@ -1409,78 +1430,12 @@ Color schemes</h1><span class="material-symbols-outlined"> close </span></sectio
     <input type="hidden" name="color_scheme" id="color_scheme" value="">
 </div>
 
-  
-                       
-                   </div>
+ </div>
   <!-- //COLLAPSE --> 
                     
-                                       <!-- COLLAPSE IMG -->
-                    
-                      <section type="button" class="collapsible">  <h1><span class="material-symbols-outlined">
-add_a_photo
-</span>Image to image</h1><span class="material-symbols-outlined"> close </span></section> 
-                    <div class="content">
-    
-<!--upload image-->
 
-<div id="myimage">
-  <label class="imageup" for="imageDisplayUrl">
-    Upload your image here <span class="material-symbols-outlined">arrow_upward</span>
-    <small>It will return one image at a time. Use a good resolution image less than 500Kb and 1024x1024 / 1024x768 / 768x1024 size.</small>
-<input type="file" id="imageDisplayUrl" accept="image/*" onchange="handleImageUpload(event)">
-  </label>
-  <div class="thumbImg" style="display: none;">
-    <i class="fa fa-plus-circle" id="clearImg" aria-hidden="true"></i>
-    <img id="img2imgThumbnail" src="" alt="Thumbnail"> <!-- Changed id here -->
-  </div>
-</div>
-
-
-                    
-            
-                    
-                    
-                    <!-- slider strenght -->
-                    <div class="strenght">
-<label for="strengthSlider">Original image strenght</label>
-<input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.1">
-<span id="sliderValue">0.1</span>
-                    <small>0 will produce an image nearly identical to the original.<br>
-1 will produce an image that greatly differs from the original. Try .80 to .90<br>
-                        </small>
-                    </div>
-                    
-                    </div>
-                    
-                    <!--// COLLAPSE -->
                     
                    
-            
-    <!-- <div class="custom-dropdown" data-placeholder="Pick an architecture generation model">
-    <div class="dropdown-selected">
-        <span class="selected-text">Pick an architecture generation model</span>
-        <span class="clear-selection">  <span class="material-symbols-outlined"> close </span>  </span>
-    </div>
-    <div class="selected-value"></div>
-    <div class="dropdown-options">
-         <div class="optgroup-label">Flux models</div>
-         <div class="option" value="flux">Flux - basic model </div>
-         <div class="option" value="fluxschnell">Flux Schnell - hyperrealistic ⭐️</div>
-    </div>
-     <input type="hidden" name="funitureModel" id="funitureModel" value="furnitureModel">
-       <div class="option" value="ae-sdxl-v1">Realistic Dream Studio AE SDXL</div>
-         <div class="option" value="epicrealism-xl">Epic Realism XL</div>
-        
-        <div class="option" value="sdxlceshi">SDXL Creative</div>
-       
-        <div class="option" value="juggernaut-xl-v8">Juggernaut XL V8</div>
-              <div class="option" value="midjourney-v61">Midjourney</div>
-
-</div>-->
- 
-
-                 
-
 
                     
 <!-- COLLAPSE -->                  

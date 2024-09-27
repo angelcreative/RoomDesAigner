@@ -1460,7 +1460,7 @@ window.addEventListener('load', function() {
 });
 
 document.getElementById('clearImg').addEventListener('click', function() {
-    const img2imgThumbnail = document.getElementById('thumbnail');
+    const img2imgThumbnail = document.getElementById('img2imgThumbnail');
     img2imgThumbnail.src = '';
     document.getElementById('imageDisplayUrl').value = ''; // Limpiar input de img2img
 });
