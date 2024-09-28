@@ -1267,6 +1267,7 @@ imageUrls.forEach((imageUrl) => {
     //ig
     
 // Generar dinámicamente las miniaturas con filtros
+// Generar dinámicamente las miniaturas con filtros
 function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
@@ -1367,6 +1368,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const clearFilterLabel = document.createElement('label');
     const clearButton = document.createElement('button');
     clearButton.textContent = 'Clear Filter';
+    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
 
     // Evento para limpiar el filtro y restablecer la imagen original
     clearButton.addEventListener('click', () => {
@@ -1384,18 +1386,19 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     buttonsContainer.appendChild(filDiv);
 }
 
+
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
     if (!mainImageElement) {
         console.error('mainImageElement is not defined or passed correctly');
-        return;  // Prevenir que se ejecute el resto de la función si mainImageElement no está definido
+        return;
     }
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
     const img = new Image();
-    img.src = imageUrl;  // Usar la variable 'imageUrl' que se genera automáticamente
+    img.src = imageUrl;
     img.crossOrigin = 'Anonymous';
     img.onload = function () {
         canvas.width = img.width;
@@ -1440,7 +1443,7 @@ function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
                 ctx.filter = 'grayscale(1) contrast(1.1)';
                 break;
             default:
-                ctx.filter = 'none';  // Sin filtro si no hay coincidencia
+                ctx.filter = 'none';
         }
 
         // Dibujar la imagen con el filtro aplicado en el canvas
@@ -1450,13 +1453,12 @@ function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
         mainImageElement.src = canvas.toDataURL();
     };
 }
-
-
     
     ///ig
     
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
-    generateFilterGrid(buttonsContainer, imageUrl);
+    generateFilterGrid(buttonsContainer, imageUrl, document.querySelector('.thumbnail'));
+
 
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
