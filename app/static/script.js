@@ -1386,6 +1386,11 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
+    if (!mainImageElement) {
+        console.error('mainImageElement is not defined or passed correctly');
+        return;  // Prevenir que se ejecute el resto de la función si mainImageElement no está definido
+    }
+
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -1445,6 +1450,7 @@ function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
         mainImageElement.src = canvas.toDataURL();
     };
 }
+
 
     
     ///ig
