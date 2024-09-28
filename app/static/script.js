@@ -1382,16 +1382,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     buttonsContainer.appendChild(filDiv);
 }
 
-// Función para obtener los valores actuales de los sliders
-function getSliderValues() {
-    return {
-        grainAmount: parseInt(document.getElementById('grainSlider').value || 0),
-        contrast: parseInt(document.getElementById('contrastSlider').value || 100),
-        brightness: parseInt(document.getElementById('brightnessSlider').value || 100),
-        hueRotation: parseInt(document.getElementById('hueSlider').value || 0)
-    };
-}
-    
+
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, image) {
     if (!image) {
@@ -1409,8 +1400,6 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // Aplicar filtros de Instagram
-        let instagramFilter = '';
         // Aplicar filtros según el tipo seleccionado
         switch (filterType) {
             case '1977':
@@ -1452,47 +1441,13 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
             default:
                 ctx.filter = 'none';
         }
- 
-        // Obtener los valores de los sliders específicos de esta imagen
-        const sliderContainer = image.closest('.carousel-slide').querySelector('.filter-menu');
-        const grainAmount = parseInt(sliderContainer.querySelector('#grainSlider').value || 0);
-        const contrast = parseInt(sliderContainer.querySelector('#contrastSlider').value || 100);
-        const brightness = parseInt(sliderContainer.querySelector('#brightnessSlider').value || 100);
-        const hueRotation = parseInt(sliderContainer.querySelector('#hueSlider').value || 0);
-        
-        // Combinar filtros de Instagram con ajustes de sliders
-        ctx.filter += ` contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
-        
+
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
-        
-        
-        // Aplicar grano después de los otros filtros
-        if (grainAmount > 0) {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            for (let i = 0; i < data.length; i += 4) {
-                let grain = (Math.random() * 2 - 1) * grainAmount;
-                data[i] += grain;     // Rojo
-                data[i+1] += grain;   // Verde
-                data[i+2] += grain;   // Azul
-            }
-            ctx.putImageData(imageData, 0, 0);
-        }
 
         // Actualizar el src de la imagen con el canvas modificado
         image.src = canvas.toDataURL();
     };
-}
-    
-    
-
-// Modificar la función que maneja el cambio de filtros de Instagram
-function handleInstagramFilterChange(event) {
-    const filterType = event.target.value;
-    const imageUrl = event.target.closest('.carousel-slide').querySelector('img').src;
-    const mainImage = event.target.closest('.carousel-slide').querySelector('img');
-    applyFilterToMainImage(filterType, imageUrl, mainImage);
 }
     
     ///ig
