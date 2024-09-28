@@ -1408,7 +1408,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
     carouselWrapper.appendChild(imageContainer);
-}
+
 
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
@@ -1452,6 +1452,10 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
     modal.style.display = "block";
     showOverlay();
+    
+    
+}
+                          
     // Inicializar el índice del carrusel
     let currentIndex = 0;
 
@@ -1476,7 +1480,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
             prevButton.style.display = 'block';
         }
     }
-}
+
 
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {
