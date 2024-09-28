@@ -1453,20 +1453,21 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
                 ctx.filter = 'none';
         }
  
-        // Obtener los valores actuales de los sliders
-        const sliderValues = getSliderValues();
+        // Obtener los valores de los sliders específicos de esta imagen
+        const sliderContainer = image.closest('.carousel-slide').querySelector('.filter-menu');
+        const grainAmount = parseInt(sliderContainer.querySelector('#grainSlider').value || 0);
+        const contrast = parseInt(sliderContainer.querySelector('#contrastSlider').value || 100);
+        const brightness = parseInt(sliderContainer.querySelector('#brightnessSlider').value || 100);
+        const hueRotation = parseInt(sliderContainer.querySelector('#hueSlider').value || 0);
         
-         // Combinar filtros de Instagram con ajustes de sliders
-        const { grainAmount, contrast, brightness, hueRotation } = sliderValues;
-        const combinedFilter = `${instagramFilter} contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
-        
-        ctx.filter = combinedFilter;
+        // Combinar filtros de Instagram con ajustes de sliders
+        ctx.filter += ` contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
         
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
         
         
-         // Aplicar grano después de los otros filtros
+        // Aplicar grano después de los otros filtros
         if (grainAmount > 0) {
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
@@ -1491,7 +1492,7 @@ function handleInstagramFilterChange(event) {
     const filterType = event.target.value;
     const imageUrl = event.target.closest('.carousel-slide').querySelector('img').src;
     const mainImage = event.target.closest('.carousel-slide').querySelector('img');
-    applyFilterToMainImage(filterType, imageUrl, mainImage, sliderValues);
+    applyFilterToMainImage(filterType, imageUrl, mainImage);
 }
     
     ///ig
