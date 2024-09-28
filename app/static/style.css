@@ -4122,11 +4122,11 @@ label.hamburger:hover {
     width: 100%;
     display: flex;
     gap: 12px;
-    /* background: red; */
     flex-direction: row;
     flex-wrap: wrap;
     padding: var(--xs);
     justify-content: center;
+    position: relative;
 }
 
 .ig div {
@@ -4144,6 +4144,27 @@ label.hamburger:hover {
 .ig label {
     display: block;
     width: 70px;
+}
+
+
+.ig label:first-child {
+    position: absolute;
+    top: -48px;
+    right: 14px;
+}
+
+.ig label:first-child button {
+    border: 1px solid var(--dragon-500);
+    background: none;
+    color: var(--dragon-500);
+    padding: var(--4xs);
+}
+
+
+.ig label:first-child button:first-child:hover::after {
+    content: "Clear filter";
+    background:var(--dragon-500);
+    color:var(--dragon-50);
 }
 
 .ig input[type="radio"] {

@@ -21,8 +21,13 @@ app = Flask(__name__)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 #CORS(app, resources={r"/*": {"origins": "*"}})
- 
-CORS(app)    
+@app.route('/image-proxy')
+def image_proxy():
+    image_url = request.args.get('url')
+    response = requests.get(image_url)
+    return Response(response.content, mimetype=response.headers['Content-Type'])
+
+CORS(app)  
     
 logging.basicConfig(level=logging.INFO)
 
