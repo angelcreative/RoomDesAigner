@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 CORS(app, resources={r"/*": {"origins": "*"}})
-
+Access-Control-Allow-Origin: *
     
 logging.basicConfig(level=logging.INFO)
 

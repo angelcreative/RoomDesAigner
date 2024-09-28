@@ -1268,7 +1268,7 @@ imageUrls.forEach((imageUrl) => {
     
 // Generar dinámicamente las miniaturas con filtros
 // Generar dinámicamente las miniaturas con filtros
-function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+function generateFilterGrid(buttonsContainer, imageUrl, image) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
@@ -1285,7 +1285,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
         const radio = document.createElement('input');
         radio.type = 'radio';
-        radio.name = 'filter';
+        radio.name = `filter-${imageUrl}`; // Make unique for each image
         radio.value = filter;
 
         // Crear la miniatura con filtro aplicado
@@ -1359,7 +1359,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
             // Evento 'change' para aplicar el filtro al cambiar de opción
             radio.addEventListener('change', (event) => {
-                applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
+                applyFilterToMainImage(event.target.value, imageUrl, image); // Use the specific image
             });
         };
     });
@@ -1372,7 +1372,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
     // Evento para limpiar el filtro y restablecer la imagen original
     clearButton.addEventListener('click', () => {
-        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+        image.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
     });
 
     // Añadir el botón de limpiar al contenedor
@@ -1388,9 +1388,9 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
 
 // Función para aplicar el filtro a la imagen principal
-function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
-    if (!mainImageElement) {
-        console.error('mainImageElement is not defined or passed correctly');
+function applyFilterToMainImage(filterType, imageUrl, image) {
+    if (!image) {
+        console.error('Image is not defined or passed correctly');
         return;
     }
 
@@ -1449,15 +1449,15 @@ function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
 
-        // Actualizar el src de la imagen principal con el canvas modificado
-        mainImageElement.src = canvas.toDataURL();
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
     };
 }
     
     ///ig
     
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
-    generateFilterGrid(buttonsContainer, imageUrl, document.querySelector('.thumbnail'));
+    generateFilterGrid(buttonsContainer, imageUrl, image);
 
 
     // Añadir la imagen y los botones al contenedor de la imagen
