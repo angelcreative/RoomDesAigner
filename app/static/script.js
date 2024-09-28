@@ -1159,7 +1159,7 @@ let filterSettings = {
     instagramFilter: ''
 };
 
-// Función para aplicar todos los filtros combinados a la imagen
+// Modificar la función applyCombinedFilters
 function applyCombinedFilters(imageUrl, imageElement) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
@@ -1171,34 +1171,32 @@ function applyCombinedFilters(imageUrl, imageElement) {
         canvas.width = img.width;
         canvas.height = img.height;
 
-        // Aplicar los filtros de los sliders (contraste, brillo, matiz)
+        // Aplicar los filtros de los sliders y el filtro de Instagram
         let filters = `contrast(${filterSettings.contrast}%) brightness(${filterSettings.brightness}%) hue-rotate(${filterSettings.hue}deg)`;
-
-        // Añadir el filtro de Instagram si está seleccionado
         if (filterSettings.instagramFilter) {
             filters += getInstagramFilter(filterSettings.instagramFilter);
         }
 
-        // Aplicar todos los filtros combinados
         ctx.filter = filters;
         ctx.drawImage(img, 0, 0);
 
         // Aplicar el efecto de film grain
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for (let i = 0; i < data.length; i += 4) {
-            let grain = (Math.random() * 2 - 1) * filterSettings.grainAmount;
-            data[i] += grain;     // Rojo
-            data[i + 1] += grain; // Verde
-            data[i + 2] += grain; // Azul
+        if (filterSettings.grainAmount > 0) {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                let grain = (Math.random() * 2 - 1) * filterSettings.grainAmount;
+                data[i] += grain;     // Rojo
+                data[i + 1] += grain; // Verde
+                data[i + 2] += grain; // Azul
+            }
+            ctx.putImageData(imageData, 0, 0);
         }
-        ctx.putImageData(imageData, 0, 0);
 
         // Actualizar el src de la imagen principal con el canvas modificado
         imageElement.src = canvas.toDataURL();
     };
 }
-
 // Función para obtener el filtro de Instagram
 function getInstagramFilter(filter) {
     const filters = {
@@ -1230,8 +1228,12 @@ function onInstagramFilterChange(filter) {
     applyCombinedFilters(currentImageUrl, currentImageElement);
 }
 
-// Función para generar los sliders
+// Modificar la función createSlider
 function createSlider(name, min, max, value) {
+    const container = document.createElement("div");
+    const labelElement = document.createElement("label");
+    labelElement.textContent = name;
+
     const slider = document.createElement("input");
     slider.type = "range";
     slider.min = min;
@@ -1239,11 +1241,20 @@ function createSlider(name, min, max, value) {
     slider.value = value;
     slider.id = `${name.toLowerCase()}Slider`;
 
+    const valueDisplay = document.createElement("span");
+    valueDisplay.textContent = value;
+
     slider.addEventListener("input", function () {
-        onSliderChange(name.toLowerCase(), this.value);
+        valueDisplay.textContent = this.value;
+        filterSettings[name.toLowerCase()] = parseFloat(this.value);
+        applyCombinedFilters(currentImageUrl, currentImageElement);
     });
 
-    return { slider };
+    container.appendChild(labelElement);
+    container.appendChild(slider);
+    container.appendChild(valueDisplay);
+
+    return container;
 }
 
 // Modificación de la función para añadir las imágenes y los filtros
@@ -1275,33 +1286,124 @@ imageUrls.forEach((imageUrl) => {
     // Añadir los botones al contenedor
     [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
 
-        // Sliders
+   // Sliders
     const filterMenu = document.createElement("div");
     filterMenu.classList.add("filter-menu");
     filterMenu.style.display = "none"; // Oculto por defecto
 
     const grainSlider = createSlider("Grain", 0, 50, 0);
-    const contrastSlider = createSlider("Contrast", 100, 300, 100);
-    const brightnessSlider = createSlider("Brightness", 50, 200, 100);
+    const contrastSlider = createSlider("Contrast", 0, 200, 100);
+    const brightnessSlider = createSlider("Brightness", 0, 200, 100);
     const hueSlider = createSlider("Hue", 0, 360, 0);
 
     // Añadir sliders al menú de filtros
-    filterMenu.appendChild(grainSlider.slider);
-    filterMenu.appendChild(contrastSlider.slider);
-    filterMenu.appendChild(brightnessSlider.slider);
-    filterMenu.appendChild(hueSlider.slider);
-
+    filterMenu.appendChild(grainSlider);
+    filterMenu.appendChild(contrastSlider);
+    filterMenu.appendChild(brightnessSlider);
+    filterMenu.appendChild(hueSlider);
+    
     // Botón para mostrar los filtros
     const filterButton = createButton("Filters", () => {
         filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
     });
     buttonsContainer.appendChild(filterButton);
     buttonsContainer.appendChild(filterMenu);
+    
+    // Generar grid de filtros de Instagram
+    generateFilterGrid(buttonsContainer, imageUrl, image);
+
+    // Añadir la imagen y los botones al contenedor de la imagen
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(buttonsContainer);
+    carouselWrapper.appendChild(imageContainer);
+
+    // Establecer la imagen actual para los filtros
+    currentImageUrl = imageUrl;
+    currentImageElement = image;
+});
 
     
         // Generar grid de filtros de Instagram
-    generateFilterGrid(buttonsContainer, imageUrl, image);
+// Función para generar el grid de filtros de Instagram
+function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+    const filDiv = document.createElement('div');
+    filDiv.classList.add('fil');
 
+    const igDiv = document.createElement('div');
+    igDiv.classList.add('ig');
+
+    const filters = [
+        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+    ];
+
+    filters.forEach((filter, index) => {
+        const label = document.createElement('label');
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'filter';
+        radio.value = filter;
+
+        const img = document.createElement('img');
+        img.alt = filter;
+
+        // Delay para evitar saturar la red o el servidor con múltiples solicitudes simultáneas
+        setTimeout(() => {
+            const imgElement = new Image();
+            imgElement.src = imageUrl;
+            imgElement.crossOrigin = 'Anonymous';
+            imgElement.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                canvas.width = imgElement.width;
+                canvas.height = imgElement.height;
+
+                // Aplicar filtro dinámicamente
+                ctx.filter = getInstagramFilter(filter);
+                ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+                img.src = canvas.toDataURL();
+            };
+
+            // Añadir el input y la imagen al label
+            label.appendChild(radio);
+            label.appendChild(img);
+
+            // Añadir el label al contenedor de miniaturas
+            igDiv.appendChild(label);
+
+            // Evento 'change' para aplicar el filtro al cambiar de opción
+        radio.addEventListener('change', (event) => {
+            filterSettings.instagramFilter = event.target.value;
+            applyCombinedFilters(imageUrl, mainImageElement);
+        });
+
+        }, index * 200);  // 200ms delay para cada miniatura
+    });
+
+    // Añadir botón para limpiar el filtro
+    const clearFilterLabel = document.createElement('label');
+    const clearButton = document.createElement('button');
+    clearButton.textContent = '✕';
+    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
+
+    // Evento para limpiar el filtro y restablecer la imagen original
+    clearButton.addEventListener('click', () => {
+        filterSettings.instagramFilter = '';
+        applyCombinedFilters(imageUrl, mainImageElement);
+    });
+
+    // Añadir el botón de limpiar al contenedor
+    clearFilterLabel.appendChild(clearButton);
+    igDiv.appendChild(clearFilterLabel);
+
+    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
+    filDiv.appendChild(igDiv);
+
+    // Añadir el contenedor de miniaturas al contenedor de botones
+    buttonsContainer.appendChild(filDiv);
+}
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
