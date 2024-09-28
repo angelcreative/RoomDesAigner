@@ -1146,326 +1146,17 @@ function showModal(imageUrls, transformedPrompt) {
         addImageCard.remove();
     }
 
-    // Añadir las nuevas imágenes generadas al final
-imageUrls.forEach((imageUrl) => {
-    const imageContainer = document.createElement("div");
-    imageContainer.classList.add("carousel-slide");
+// Variables globales para la imagen actual
+let currentImageUrl;
+let currentImageElement;
 
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = "Generated Image";
-    image.classList.add("thumbnail");
-
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("image-buttons");
-
-    // Botones de acción
-    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-    const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-
-    // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
-
-    // Aquí añadimos el botón "Filters"
-    const filterButton = createButton("Filters", toggleFilterMenu);
-    buttonsContainer.appendChild(filterButton);
-
-    // Crear el menú de filtros y añadir sliders
-    const filterMenu = document.createElement("div");
-    filterMenu.classList.add("filter-menu");
-    filterMenu.style.display = "none"; // Oculto por defecto
-
-    // Slider para el grano con label
-    const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
-    const grainLabel = document.createElement("label");
-    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
-    grainLabel.setAttribute("for", grainSlider.slider.id);  // Asociar el label con el slider
-    filterMenu.appendChild(grainLabel);
-    filterMenu.appendChild(grainSlider.slider);
-
-    // Slider para el contraste con label
-    const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
-    const contrastLabel = document.createElement("label");
-    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
-    contrastLabel.setAttribute("for", contrastSlider.slider.id);
-    filterMenu.appendChild(contrastLabel);
-    filterMenu.appendChild(contrastSlider.slider);
-
-    // Slider para el brillo con label
-    const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
-    const brightnessLabel = document.createElement("label");
-    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
-    brightnessLabel.setAttribute("for", brightnessSlider.slider.id);
-    filterMenu.appendChild(brightnessLabel);
-    filterMenu.appendChild(brightnessSlider.slider);
-
-    // Slider para el tinte (hue rotation) con label
-    const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
-    const hueLabel = document.createElement("label");
-    hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
-    hueLabel.setAttribute("for", hueSlider.slider.id);
-    filterMenu.appendChild(hueLabel);
-    filterMenu.appendChild(hueSlider.slider);
-
-    // Añadir el menú de filtros debajo del botón "Filters"
-    buttonsContainer.appendChild(filterMenu);
-
-    // Función para alternar la visibilidad del menú de filtros
-    function toggleFilterMenu() {
-        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
-    }
-
-    // Función para aplicar los filtros combinados
-    function applyFilters() {
-        const grainAmount = parseInt(grainSlider.slider.value);
-        const contrast = parseInt(contrastSlider.slider.value);
-        const brightness = parseInt(brightnessSlider.slider.value);
-        const hueRotation = parseInt(hueSlider.slider.value);
-
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-
-        const img = new Image();
-        img.src = imageUrl;
-        img.crossOrigin = 'Anonymous';
-        img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
-            ctx.drawImage(img, 0, 0);
-
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-
-            // Añadir grano a la imagen
-            for (let i = 0; i < data.length; i += 4) {
-                let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
-                data[i] += grain;     // Rojo
-                data[i+1] += grain;   // Verde
-                data[i+2] += grain;   // Azul
-            }
-
-            ctx.putImageData(imageData, 0, 0);
-
-            // Actualizar el src de la imagen con el canvas modificado
-            image.src = canvas.toDataURL();
-        };
-
-        // Actualizar el valor de los labels en tiempo real
-        grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
-        contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
-        brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
-        hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
-    }
-    
-    
-    
-    //ig
-    
-// Generar dinámicamente las miniaturas con filtros
-function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
-    const filDiv = document.createElement('div');
-    filDiv.classList.add('fil');
-
-    const igDiv = document.createElement('div');
-    igDiv.classList.add('ig');
-
-    const filters = [
-        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
-        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
-    ];
-
-    filters.forEach((filter, index) => {
-        const label = document.createElement('label');
-
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'filter';
-        radio.value = filter;
-
-        const img = document.createElement('img');
-        img.alt = filter;
-
-        // Delay para evitar saturar la red o el servidor con múltiples solicitudes simultáneas
-        setTimeout(() => {
-            const imgElement = new Image();
-            imgElement.src = imageUrl;
-            imgElement.crossOrigin = 'Anonymous';
-            imgElement.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-
-                canvas.width = imgElement.width;
-                canvas.height = imgElement.height;
-
-                // Aplicar filtro dinámicamente
-                switch (filter) {
-                    case '1977':
-                        ctx.filter = 'sepia(0.5) contrast(1.1)';
-                        break;
-                    case 'aden':
-                        ctx.filter = 'contrast(0.9) saturate(0.85)';
-                        break;
-                    case 'brannan':
-                        ctx.filter = 'contrast(1.4) sepia(0.5)';
-                        break;
-                    case 'brooklyn':
-                        ctx.filter = 'contrast(0.9) brightness(1.1)';
-                        break;
-                    case 'clarendon':
-                        ctx.filter = 'contrast(1.2) saturate(1.35)';
-                        break;
-                    case 'earlybird':
-                        ctx.filter = 'sepia(0.4) saturate(1.6)';
-                        break;
-                    case 'gingham':
-                        ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
-                        break;
-                    case 'hudson':
-                        ctx.filter = 'brightness(1.2) contrast(0.9)';
-                        break;
-                    case 'inkwell':
-                        ctx.filter = 'grayscale(1) contrast(1.2)';
-                        break;
-                    case 'kelvin':
-                        ctx.filter = 'brightness(1.5) contrast(1.2)';
-                        break;
-                    case 'lofi':
-                        ctx.filter = 'contrast(1.5) saturate(1.2)';
-                        break;
-                    case 'moon':
-                        ctx.filter = 'grayscale(1) contrast(1.1)';
-                        break;
-                }
-
-                ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
-                img.src = canvas.toDataURL();
-            };
-
-            // Añadir el input y la imagen al label
-            label.appendChild(radio);
-            label.appendChild(img);
-
-            // Añadir el label al contenedor de miniaturas
-            igDiv.appendChild(label);
-
-            // Evento 'change' para aplicar el filtro al cambiar de opción
-            radio.addEventListener('change', (event) => {
-                applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
-            });
-        }, index * 200);  // 200ms delay para cada miniatura
-    });
-
-    // Añadir botón para limpiar el filtro
-    const clearFilterLabel = document.createElement('label');
-    const clearButton = document.createElement('button');
-    clearButton.textContent = '✕';
-    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
-
-    // Evento para limpiar el filtro y restablecer la imagen original
-    clearButton.addEventListener('click', () => {
-        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
-    });
-
-    // Añadir el botón de limpiar al contenedor
-    clearFilterLabel.appendChild(clearButton);
-    igDiv.appendChild(clearFilterLabel);
-
-    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
-    filDiv.appendChild(igDiv);
-
-    // Añadir el contenedor de miniaturas al contenedor de botones
-    buttonsContainer.appendChild(filDiv);
-}
-
-
-// Función para aplicar el filtro a la imagen principal
-function applyFilterToMainImage(filterType, imageUrl, image) {
-    if (!image) {
-        console.error('Image is not defined or passed correctly');
-        return;
-    }
-
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    const img = new Image();
-    img.src = imageUrl;
-    img.crossOrigin = 'Anonymous';
-    img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        // Aplicar filtros según el tipo seleccionado
-        switch (filterType) {
-            case '1977':
-                ctx.filter = 'sepia(0.5) contrast(1.1)';
-                break;
-            case 'aden':
-                ctx.filter = 'contrast(0.9) saturate(0.85)';
-                break;
-            case 'brannan':
-                ctx.filter = 'contrast(1.4) sepia(0.5)';
-                break;
-            case 'brooklyn':
-                ctx.filter = 'contrast(0.9) brightness(1.1)';
-                break;
-            case 'clarendon':
-                ctx.filter = 'contrast(1.2) saturate(1.35)';
-                break;
-            case 'earlybird':
-                ctx.filter = 'sepia(0.4) saturate(1.6)';
-                break;
-            case 'gingham':
-                ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
-                break;
-            case 'hudson':
-                ctx.filter = 'brightness(1.2) contrast(0.9)';
-                break;
-            case 'inkwell':
-                ctx.filter = 'grayscale(1) contrast(1.2)';
-                break;
-            case 'kelvin':
-                ctx.filter = 'brightness(1.5) contrast(1.2)';
-                break;
-            case 'lofi':
-                ctx.filter = 'contrast(1.5) saturate(1.2)';
-                break;
-            case 'moon':
-                ctx.filter = 'grayscale(1) contrast(1.1)';
-                break;
-            default:
-                ctx.filter = 'none';
-        }
-
-        // Dibujar la imagen con el filtro aplicado en el canvas
-        ctx.drawImage(img, 0, 0);
-
-        // Actualizar el src de la imagen con el canvas modificado
-        image.src = canvas.toDataURL();
-    };
-}
-    
-    ///ig
-    
-    // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
-    generateFilterGrid(buttonsContainer, imageUrl, image);
-
-
-    
-    
-    
-// Objeto global para almacenar los valores actuales de los filtros
+// Objeto para almacenar los valores actuales de los filtros
 let filterSettings = {
     contrast: 100,
     brightness: 100,
     hue: 0,
     grainAmount: 0,
-    instagramFilter: '' // Aquí guardaremos el filtro de Instagram seleccionado
+    instagramFilter: ''
 };
 
 // Función para aplicar todos los filtros combinados a la imagen
@@ -1484,48 +1175,11 @@ function applyCombinedFilters(imageUrl, imageElement) {
         let filters = `contrast(${filterSettings.contrast}%) brightness(${filterSettings.brightness}%) hue-rotate(${filterSettings.hue}deg)`;
 
         // Añadir el filtro de Instagram si está seleccionado
-        if (filterSettings.instagramFilter !== '') {
-            switch (filterSettings.instagramFilter) {
-                case '1977':
-                    filters += ' sepia(0.5) contrast(1.1)';
-                    break;
-                case 'aden':
-                    filters += ' contrast(0.9) saturate(0.85)';
-                    break;
-                case 'brannan':
-                    filters += ' contrast(1.4) sepia(0.5)';
-                    break;
-                case 'brooklyn':
-                    filters += ' contrast(0.9) brightness(1.1)';
-                    break;
-                case 'clarendon':
-                    filters += ' contrast(1.2) saturate(1.35)';
-                    break;
-                case 'earlybird':
-                    filters += ' sepia(0.4) saturate(1.6)';
-                    break;
-                case 'gingham':
-                    filters += ' brightness(1.05) hue-rotate(340deg)';
-                    break;
-                case 'hudson':
-                    filters += ' brightness(1.2) contrast(0.9)';
-                    break;
-                case 'inkwell':
-                    filters += ' grayscale(1) contrast(1.2)';
-                    break;
-                case 'kelvin':
-                    filters += ' brightness(1.5) contrast(1.2)';
-                    break;
-                case 'lofi':
-                    filters += ' contrast(1.5) saturate(1.2)';
-                    break;
-                case 'moon':
-                    filters += ' grayscale(1) contrast(1.1)';
-                    break;
-            }
+        if (filterSettings.instagramFilter) {
+            filters += getInstagramFilter(filterSettings.instagramFilter);
         }
 
-        // Aplicar todos los filtros combinados al contexto del canvas
+        // Aplicar todos los filtros combinados
         ctx.filter = filters;
         ctx.drawImage(img, 0, 0);
 
@@ -1535,8 +1189,8 @@ function applyCombinedFilters(imageUrl, imageElement) {
         for (let i = 0; i < data.length; i += 4) {
             let grain = (Math.random() * 2 - 1) * filterSettings.grainAmount;
             data[i] += grain;     // Rojo
-            data[i+1] += grain;   // Verde
-            data[i+2] += grain;   // Azul
+            data[i + 1] += grain; // Verde
+            data[i + 2] += grain; // Azul
         }
         ctx.putImageData(imageData, 0, 0);
 
@@ -1545,26 +1199,115 @@ function applyCombinedFilters(imageUrl, imageElement) {
     };
 }
 
+// Función para obtener el filtro de Instagram
+function getInstagramFilter(filter) {
+    const filters = {
+        '1977': ' sepia(0.5) contrast(1.1)',
+        'aden': ' contrast(0.9) saturate(0.85)',
+        'brannan': ' contrast(1.4) sepia(0.5)',
+        'brooklyn': ' contrast(0.9) brightness(1.1)',
+        'clarendon': ' contrast(1.2) saturate(1.35)',
+        'earlybird': ' sepia(0.4) saturate(1.6)',
+        'gingham': ' brightness(1.05) hue-rotate(340deg)',
+        'hudson': ' brightness(1.2) contrast(0.9)',
+        'inkwell': ' grayscale(1) contrast(1.2)',
+        'kelvin': ' brightness(1.5) contrast(1.2)',
+        'lofi': ' contrast(1.5) saturate(1.2)',
+        'moon': ' grayscale(1) contrast(1.1)'
+    };
+    return filters[filter] || '';
+}
+
 // Funciones para manejar los cambios en los sliders
 function onSliderChange(type, value) {
     filterSettings[type] = value;
-    applyCombinedFilters(currentImageUrl, currentImageElement); // Actualiza la imagen
+    applyCombinedFilters(currentImageUrl, currentImageElement);
 }
 
 // Función para manejar los cambios en el filtro de Instagram
 function onInstagramFilterChange(filter) {
     filterSettings.instagramFilter = filter;
-    applyCombinedFilters(currentImageUrl, currentImageElement); // Actualiza la imagen
+    applyCombinedFilters(currentImageUrl, currentImageElement);
 }
 
+// Función para generar los sliders
+function createSlider(name, min, max, value) {
+    const slider = document.createElement("input");
+    slider.type = "range";
+    slider.min = min;
+    slider.max = max;
+    slider.value = value;
+    slider.id = `${name.toLowerCase()}Slider`;
+
+    slider.addEventListener("input", function () {
+        onSliderChange(name.toLowerCase(), this.value);
+    });
+
+    return { slider };
+}
+
+// Modificación de la función para añadir las imágenes y los filtros
+imageUrls.forEach((imageUrl) => {
+    // Guardar la URL de la imagen actual
+    currentImageUrl = imageUrl;
+
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("carousel-slide");
+
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.classList.add("thumbnail");
+
+    currentImageElement = image; // Guardar la referencia de la imagen actual
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
+
+    // Botones de acción
+    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
+    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
+    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
+    const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+
+    // Añadir los botones al contenedor
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+
+        // Sliders
+    const filterMenu = document.createElement("div");
+    filterMenu.classList.add("filter-menu");
+    filterMenu.style.display = "none"; // Oculto por defecto
+
+    const grainSlider = createSlider("Grain", 0, 50, 0);
+    const contrastSlider = createSlider("Contrast", 100, 300, 100);
+    const brightnessSlider = createSlider("Brightness", 50, 200, 100);
+    const hueSlider = createSlider("Hue", 0, 360, 0);
+
+    // Añadir sliders al menú de filtros
+    filterMenu.appendChild(grainSlider.slider);
+    filterMenu.appendChild(contrastSlider.slider);
+    filterMenu.appendChild(brightnessSlider.slider);
+    filterMenu.appendChild(hueSlider.slider);
+
+    // Botón para mostrar los filtros
+    const filterButton = createButton("Filters", () => {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    });
+    buttonsContainer.appendChild(filterButton);
+    buttonsContainer.appendChild(filterMenu);
+
     
-    
-    
+        // Generar grid de filtros de Instagram
+    generateFilterGrid(buttonsContainer, imageUrl, image);
+
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
     carouselWrapper.appendChild(imageContainer);
 });
+
 
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
