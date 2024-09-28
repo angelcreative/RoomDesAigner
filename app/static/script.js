@@ -1261,6 +1261,132 @@ imageUrls.forEach((imageUrl) => {
         brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
         hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
     }
+    
+    
+    
+    //ig
+    
+    
+    function generateFilterGrid(buttonsContainer, imageUrl) {
+    // Crear el div principal 'fil' que contendrá el grid
+    const filDiv = document.createElement('div');
+    filDiv.classList.add('fil');
+
+    // Crear el div 'ig' que contendrá las miniaturas
+    const igDiv = document.createElement('div');
+    igDiv.classList.add('ig');
+
+    // Lista de filtros
+    const filters = [
+        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+    ];
+
+    // Crear los filtros dinámicamente
+    filters.forEach((filter, index) => {
+        const label = document.createElement('label');
+
+        // Crear el input radio
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'filter';
+        radio.value = filter;
+        if (index === 0) {
+            radio.checked = true;  // El primer filtro será el seleccionado por defecto
+        }
+
+        // Crear la imagen con el filtro aplicado
+        const img = document.createElement('img');
+        img.src = imageUrl;  // Usar la variable 'imageUrl' para la imagen
+        img.classList.add(`filter-${filter}`);
+        img.alt = filter;
+
+        // Añadir el input y la imagen al label
+        label.appendChild(radio);
+        label.appendChild(img);
+
+        // Añadir el label al div 'ig'
+        igDiv.appendChild(label);
+
+        // Añadir un evento 'change' al radio para aplicar el filtro a la imagen principal
+        radio.addEventListener('change', (event) => {
+            applyFilterToMainImage(event.target.value);
+        });
+    });
+
+    // Añadir el div 'ig' dentro del 'fil'
+    filDiv.appendChild(igDiv);
+
+    // Añadir el 'fil' al contenedor de botones
+    buttonsContainer.appendChild(filDiv);
+}
+
+
+function applyFilterToMainImage(filterType) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;  // Usar la variable imageUrl en tu contexto
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        switch (filterType) {
+            case '1977':
+                ctx.filter = 'sepia(0.5) contrast(1.1)';
+                break;
+            case 'aden':
+                ctx.filter = 'contrast(0.9) saturate(0.85)';
+                break;
+            case 'brannan':
+                ctx.filter = 'contrast(1.4) sepia(0.5)';
+                break;
+            case 'brooklyn':
+                ctx.filter = 'contrast(0.9) brightness(1.1)';
+                break;
+            case 'clarendon':
+                ctx.filter = 'contrast(1.2) saturate(1.35)';
+                break;
+            case 'earlybird':
+                ctx.filter = 'sepia(0.4) saturate(1.6)';
+                break;
+            case 'gingham':
+                ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
+                break;
+            case 'hudson':
+                ctx.filter = 'brightness(1.2) contrast(0.9)';
+                break;
+            case 'inkwell':
+                ctx.filter = 'grayscale(1) contrast(1.2)';
+                break;
+            case 'kelvin':
+                ctx.filter = 'brightness(1.5) contrast(1.2)';
+                break;
+            case 'lofi':
+                ctx.filter = 'contrast(1.5) saturate(1.2)';
+                break;
+            case 'moon':
+                ctx.filter = 'grayscale(1) contrast(1.1)';
+                break;
+        }
+
+        ctx.drawImage(img, 0, 0);
+
+        // Actualizar el src de la imagen principal con el canvas modificado
+        const mainImage = document.getElementById('main-image');
+        mainImage.src = canvas.toDataURL();
+    };
+}
+
+
+
+    
+    ///ig
+    
+    // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
+    generateFilterGrid(buttonsContainer, imageUrl);
 
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
