@@ -1456,6 +1456,110 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     generateFilterGrid(buttonsContainer, imageUrl, image);
 
 
+    
+    
+    
+    // Objeto global para almacenar los valores actuales de los filtros
+let filterSettings = {
+    contrast: 100,
+    brightness: 100,
+    hue: 0,
+    grainAmount: 0,
+    instagramFilter: '' // Aquí guardaremos el filtro de Instagram seleccionado
+};
+
+// Función para aplicar todos los filtros combinados a la imagen
+function applyCombinedFilters(imageUrl, imageElement) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Aplicar los filtros de los sliders (contraste, brillo, matiz)
+        let filters = `contrast(${filterSettings.contrast}%) brightness(${filterSettings.brightness}%) hue-rotate(${filterSettings.hue}deg)`;
+
+        // Añadir el filtro de Instagram si está seleccionado
+        if (filterSettings.instagramFilter !== '') {
+            switch (filterSettings.instagramFilter) {
+                case '1977':
+                    filters += ' sepia(0.5) contrast(1.1)';
+                    break;
+                case 'aden':
+                    filters += ' contrast(0.9) saturate(0.85)';
+                    break;
+                case 'brannan':
+                    filters += ' contrast(1.4) sepia(0.5)';
+                    break;
+                case 'brooklyn':
+                    filters += ' contrast(0.9) brightness(1.1)';
+                    break;
+                case 'clarendon':
+                    filters += ' contrast(1.2) saturate(1.35)';
+                    break;
+                case 'earlybird':
+                    filters += ' sepia(0.4) saturate(1.6)';
+                    break;
+                case 'gingham':
+                    filters += ' brightness(1.05) hue-rotate(340deg)';
+                    break;
+                case 'hudson':
+                    filters += ' brightness(1.2) contrast(0.9)';
+                    break;
+                case 'inkwell':
+                    filters += ' grayscale(1) contrast(1.2)';
+                    break;
+                case 'kelvin':
+                    filters += ' brightness(1.5) contrast(1.2)';
+                    break;
+                case 'lofi':
+                    filters += ' contrast(1.5) saturate(1.2)';
+                    break;
+                case 'moon':
+                    filters += ' grayscale(1) contrast(1.1)';
+                    break;
+            }
+        }
+
+        // Aplicar todos los filtros combinados al contexto del canvas
+        ctx.filter = filters;
+        ctx.drawImage(img, 0, 0);
+
+        // Aplicar el efecto de film grain
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+            let grain = (Math.random() * 2 - 1) * filterSettings.grainAmount;
+            data[i] += grain;     // Rojo
+            data[i+1] += grain;   // Verde
+            data[i+2] += grain;   // Azul
+        }
+        ctx.putImageData(imageData, 0, 0);
+
+        // Actualizar el src de la imagen principal con el canvas modificado
+        imageElement.src = canvas.toDataURL();
+    };
+}
+
+// Funciones para manejar los cambios en los sliders
+function onSliderChange(type, value) {
+    filterSettings[type] = value;
+    applyCombinedFilters(currentImageUrl, currentImageElement); // Actualiza la imagen
+}
+
+// Función para manejar los cambios en el filtro de Instagram
+function onInstagramFilterChange(filter) {
+    filterSettings.instagramFilter = filter;
+    applyCombinedFilters(currentImageUrl, currentImageElement); // Actualiza la imagen
+}
+    
+    
+    
+    
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
