@@ -4060,6 +4060,16 @@ label.hamburger:hover {
     right: 0;
 }
 
+
+.filter-menu label {
+    color: var(--bunker-600);
+    font-size: var(--xs);
+    text-align: left;
+    width: 100%;
+    display: block;
+    margin: var(--xs) 0 0 0;
+}
+
 .filter-menu span {
   color: var(--bunker-400);
     background: var(--bunker-800);
