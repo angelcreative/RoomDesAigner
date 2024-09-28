@@ -1408,8 +1408,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
     carouselWrapper.appendChild(imageContainer);
-});
-
+}
 
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
