@@ -1442,8 +1442,27 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
                 ctx.filter = 'none';
         }
 
+        
+         // Combinar filtros de Instagram con ajustes de sliders
+        const { grainAmount, contrast, brightness, hueRotation } = sliderValues;
+        const combinedFilter = `${instagramFilter} contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
+        
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
+        
+        
+         // Aplicar grano después de los otros filtros
+        if (grainAmount > 0) {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                let grain = (Math.random() * 2 - 1) * grainAmount;
+                data[i] += grain;     // Rojo
+                data[i+1] += grain;   // Verde
+                data[i+2] += grain;   // Azul
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
 
         // Actualizar el src de la imagen con el canvas modificado
         image.src = canvas.toDataURL();
