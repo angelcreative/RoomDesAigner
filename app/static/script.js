@@ -1363,7 +1363,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     // Añadir botón para limpiar el filtro
     const clearFilterLabel = document.createElement('label');
     const clearButton = document.createElement('button');
-    clearButton.textContent = 'Clear Filter';
+    clearButton.textContent = '✕';
     clearButton.type = 'button';  // Asegurar que el botón es de tipo button
 
     // Evento para limpiar el filtro y restablecer la imagen original
