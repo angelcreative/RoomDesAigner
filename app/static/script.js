@@ -1400,6 +1400,8 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         canvas.width = img.width;
         canvas.height = img.height;
 
+        // Aplicar filtros de Instagram
+        let instagramFilter = '';
         // Aplicar filtros según el tipo seleccionado
         switch (filterType) {
             case '1977':
@@ -1447,6 +1449,8 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         const { grainAmount, contrast, brightness, hueRotation } = sliderValues;
         const combinedFilter = `${instagramFilter} contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
         
+        ctx.filter = combinedFilter;
+        
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
         
@@ -1467,6 +1471,26 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         // Actualizar el src de la imagen con el canvas modificado
         image.src = canvas.toDataURL();
     };
+}
+    
+    
+    // Función para obtener los valores actuales de los sliders
+function getSliderValues() {
+    return {
+        grainAmount: parseInt(document.getElementById('grainSlider').value || 0),
+        contrast: parseInt(document.getElementById('contrastSlider').value || 100),
+        brightness: parseInt(document.getElementById('brightnessSlider').value || 100),
+        hueRotation: parseInt(document.getElementById('hueSlider').value || 0)
+    };
+}
+
+// Modificar la función que maneja el cambio de filtros de Instagram
+function handleInstagramFilterChange(event) {
+    const filterType = event.target.value;
+    const imageUrl = event.target.closest('.carousel-slide').querySelector('img').src;
+    const mainImage = event.target.closest('.carousel-slide').querySelector('img');
+    const sliderValues = getSliderValues();
+    applyFilterToMainImage(filterType, imageUrl, mainImage, sliderValues);
 }
     
     ///ig
