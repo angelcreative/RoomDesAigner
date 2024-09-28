@@ -4102,6 +4102,55 @@ label.hamburger:hover {
 
 
 
+.filter-menu label {
+    color: var(--bunker-600);
+    font-size: var(--xs);
+    text-align: left;
+    width: 100%;
+    display: block;
+    margin: var(--xs) 0 0 0; 0 0 0;
+}
+
+.fil {
+    width: 100%;
+    background: #111922d6;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.ig {
+    width: 100%;
+    display: flex;
+    gap: 12px;
+    /* background: red; */
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: var(--xs);
+    justify-content: center;
+}
+
+.ig div {
+    height: auto;
+    width: 90px;
+    background: red;
+    border-radius: var(--2xs);
+}
+
+.ig img {
+    width: 100%;
+    /* display: contents; */
+}
+
+.ig label {
+    display: block;
+    width: 70px;
+}
+
+.ig input[type="radio"] {
+    visibility: hidden;
+}
+
 
 /*=========================   MEDIA QUERIES ===================*/
 
