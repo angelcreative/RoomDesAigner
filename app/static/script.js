@@ -1382,7 +1382,16 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     buttonsContainer.appendChild(filDiv);
 }
 
-
+// Función para obtener los valores actuales de los sliders
+function getSliderValues() {
+    return {
+        grainAmount: parseInt(document.getElementById('grainSlider').value || 0),
+        contrast: parseInt(document.getElementById('contrastSlider').value || 100),
+        brightness: parseInt(document.getElementById('brightnessSlider').value || 100),
+        hueRotation: parseInt(document.getElementById('hueSlider').value || 0)
+    };
+}
+    
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, image) {
     if (!image) {
@@ -1443,7 +1452,9 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
             default:
                 ctx.filter = 'none';
         }
-
+ 
+        // Obtener los valores actuales de los sliders
+        const sliderValues = getSliderValues();
         
          // Combinar filtros de Instagram con ajustes de sliders
         const { grainAmount, contrast, brightness, hueRotation } = sliderValues;
@@ -1474,22 +1485,12 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 }
     
     
-    // Función para obtener los valores actuales de los sliders
-function getSliderValues() {
-    return {
-        grainAmount: parseInt(document.getElementById('grainSlider').value || 0),
-        contrast: parseInt(document.getElementById('contrastSlider').value || 100),
-        brightness: parseInt(document.getElementById('brightnessSlider').value || 100),
-        hueRotation: parseInt(document.getElementById('hueSlider').value || 0)
-    };
-}
 
 // Modificar la función que maneja el cambio de filtros de Instagram
 function handleInstagramFilterChange(event) {
     const filterType = event.target.value;
     const imageUrl = event.target.closest('.carousel-slide').querySelector('img').src;
     const mainImage = event.target.closest('.carousel-slide').querySelector('img');
-    const sliderValues = getSliderValues();
     applyFilterToMainImage(filterType, imageUrl, mainImage, sliderValues);
 }
     
