@@ -1459,7 +1459,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     
     
-    // Objeto global para almacenar los valores actuales de los filtros
+// Objeto global para almacenar los valores actuales de los filtros
 let filterSettings = {
     contrast: 100,
     brightness: 100,
@@ -1556,7 +1556,7 @@ function onInstagramFilterChange(filter) {
     filterSettings.instagramFilter = filter;
     applyCombinedFilters(currentImageUrl, currentImageElement); // Actualiza la imagen
 }
-    
+
     
     
     
