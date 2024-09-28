@@ -4113,7 +4113,6 @@ label.hamburger:hover {
 
 .fil {
     width: 100%;
-    background: #111922d6;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -4139,7 +4138,7 @@ label.hamburger:hover {
 
 .ig img {
     width: 100%;
-    /* display: contents; */
+   border-radius:  var(--2xs)
 }
 
 .ig label {
@@ -4148,7 +4147,7 @@ label.hamburger:hover {
 }
 
 .ig input[type="radio"] {
-    visibility: hidden;
+    display: none;
 }
 
 

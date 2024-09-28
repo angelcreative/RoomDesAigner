@@ -1267,7 +1267,7 @@ imageUrls.forEach((imageUrl) => {
     //ig
     
 // Generar dinámicamente las miniaturas con filtros
-function generateFilterGrid(buttonsContainer, imageUrl) {
+function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
@@ -1358,21 +1358,34 @@ function generateFilterGrid(buttonsContainer, imageUrl) {
 
             // Evento 'change' para aplicar el filtro al cambiar de opción
             radio.addEventListener('change', (event) => {
-                applyFilterToMainImage(event.target.value, imageUrl);
+                applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
             });
         };
     });
 
-    // Añadir las miniaturas al contenedor principal 'fil'
+    // Añadir botón para limpiar el filtro
+    const clearFilterLabel = document.createElement('label');
+    const clearButton = document.createElement('button');
+    clearButton.textContent = 'Clear Filter';
+
+    // Evento para limpiar el filtro y restablecer la imagen original
+    clearButton.addEventListener('click', () => {
+        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+    });
+
+    // Añadir el botón de limpiar al contenedor
+    clearFilterLabel.appendChild(clearButton);
+    igDiv.appendChild(clearFilterLabel);
+
+    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
     filDiv.appendChild(igDiv);
 
     // Añadir el contenedor de miniaturas al contenedor de botones
     buttonsContainer.appendChild(filDiv);
 }
 
-
 // Función para aplicar el filtro a la imagen principal
-function applyFilterToMainImage(filterType, imageUrl) {
+function applyFilterToMainImage(filterType, imageUrl, mainImageElement) {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -1421,14 +1434,15 @@ function applyFilterToMainImage(filterType, imageUrl) {
             case 'moon':
                 ctx.filter = 'grayscale(1) contrast(1.1)';
                 break;
+            default:
+                ctx.filter = 'none';  // Sin filtro si no hay coincidencia
         }
 
         // Dibujar la imagen con el filtro aplicado en el canvas
         ctx.drawImage(img, 0, 0);
 
         // Actualizar el src de la imagen principal con el canvas modificado
-        const mainImage = document.querySelector('.thumbnail');
-        mainImage.src = canvas.toDataURL();
+        mainImageElement.src = canvas.toDataURL();
     };
 }
 
