@@ -1235,7 +1235,7 @@ img#thumbnail {
 .image-buttons button:nth-child(7),
 .image-buttons button:nth-child(8) {
         position: relative;
-         : 1px;
+        z-index: 2;
 }
 
 .image-buttons button:first-child:hover::after,

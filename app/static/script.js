@@ -1267,8 +1267,7 @@ imageUrls.forEach((imageUrl) => {
     //ig
     
 // Generar dinámicamente las miniaturas con filtros
-// Generar dinámicamente las miniaturas con filtros
-function generateFilterGrid(buttonsContainer, imageUrl, image) {
+function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
@@ -1280,75 +1279,72 @@ function generateFilterGrid(buttonsContainer, imageUrl, image) {
         'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
     ];
 
-    filters.forEach((filter) => {
+    filters.forEach((filter, index) => {
         const label = document.createElement('label');
 
         const radio = document.createElement('input');
         radio.type = 'radio';
-        radio.name = `filter-${imageUrl}`; // Make unique for each image
+        radio.name = 'filter';
         radio.value = filter;
 
-        // Crear la miniatura con filtro aplicado
         const img = document.createElement('img');
-        img.src = imageUrl;  // Usar la variable 'imageUrl' para las miniaturas
         img.alt = filter;
 
-        // Crear un canvas para generar la miniatura con filtro
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        // Delay para evitar saturar la red o el servidor con múltiples solicitudes simultáneas
+        setTimeout(() => {
+            const imgElement = new Image();
+            imgElement.src = imageUrl;
+            imgElement.crossOrigin = 'Anonymous';
+            imgElement.onload = function () {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
 
-        const imgElement = new Image();
-        imgElement.src = imageUrl;
-        imgElement.crossOrigin = 'Anonymous';
-        imgElement.onload = function () {
-            canvas.width = imgElement.width;
-            canvas.height = imgElement.height;
+                canvas.width = imgElement.width;
+                canvas.height = imgElement.height;
 
-            // Aplicar filtro dinámicamente
-            switch (filter) {
-                case '1977':
-                    ctx.filter = 'sepia(0.5) contrast(1.1)';
-                    break;
-                case 'aden':
-                    ctx.filter = 'contrast(0.9) saturate(0.85)';
-                    break;
-                case 'brannan':
-                    ctx.filter = 'contrast(1.4) sepia(0.5)';
-                    break;
-                case 'brooklyn':
-                    ctx.filter = 'contrast(0.9) brightness(1.1)';
-                    break;
-                case 'clarendon':
-                    ctx.filter = 'contrast(1.2) saturate(1.35)';
-                    break;
-                case 'earlybird':
-                    ctx.filter = 'sepia(0.4) saturate(1.6)';
-                    break;
-                case 'gingham':
-                    ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
-                    break;
-                case 'hudson':
-                    ctx.filter = 'brightness(1.2) contrast(0.9)';
-                    break;
-                case 'inkwell':
-                    ctx.filter = 'grayscale(1) contrast(1.2)';
-                    break;
-                case 'kelvin':
-                    ctx.filter = 'brightness(1.5) contrast(1.2)';
-                    break;
-                case 'lofi':
-                    ctx.filter = 'contrast(1.5) saturate(1.2)';
-                    break;
-                case 'moon':
-                    ctx.filter = 'grayscale(1) contrast(1.1)';
-                    break;
-            }
+                // Aplicar filtro dinámicamente
+                switch (filter) {
+                    case '1977':
+                        ctx.filter = 'sepia(0.5) contrast(1.1)';
+                        break;
+                    case 'aden':
+                        ctx.filter = 'contrast(0.9) saturate(0.85)';
+                        break;
+                    case 'brannan':
+                        ctx.filter = 'contrast(1.4) sepia(0.5)';
+                        break;
+                    case 'brooklyn':
+                        ctx.filter = 'contrast(0.9) brightness(1.1)';
+                        break;
+                    case 'clarendon':
+                        ctx.filter = 'contrast(1.2) saturate(1.35)';
+                        break;
+                    case 'earlybird':
+                        ctx.filter = 'sepia(0.4) saturate(1.6)';
+                        break;
+                    case 'gingham':
+                        ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
+                        break;
+                    case 'hudson':
+                        ctx.filter = 'brightness(1.2) contrast(0.9)';
+                        break;
+                    case 'inkwell':
+                        ctx.filter = 'grayscale(1) contrast(1.2)';
+                        break;
+                    case 'kelvin':
+                        ctx.filter = 'brightness(1.5) contrast(1.2)';
+                        break;
+                    case 'lofi':
+                        ctx.filter = 'contrast(1.5) saturate(1.2)';
+                        break;
+                    case 'moon':
+                        ctx.filter = 'grayscale(1) contrast(1.1)';
+                        break;
+                }
 
-            // Dibujar la imagen con el filtro en el canvas
-            ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
-
-            // Convertir el canvas a una imagen y asignarlo como src de la miniatura
-            img.src = canvas.toDataURL();
+                ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
+                img.src = canvas.toDataURL();
+            };
 
             // Añadir el input y la imagen al label
             label.appendChild(radio);
@@ -1359,20 +1355,20 @@ function generateFilterGrid(buttonsContainer, imageUrl, image) {
 
             // Evento 'change' para aplicar el filtro al cambiar de opción
             radio.addEventListener('change', (event) => {
-                applyFilterToMainImage(event.target.value, imageUrl, image); // Use the specific image
+                applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
             });
-        };
+        }, index * 200);  // 200ms delay para cada miniatura
     });
 
     // Añadir botón para limpiar el filtro
     const clearFilterLabel = document.createElement('label');
     const clearButton = document.createElement('button');
-    clearButton.textContent = '×';
+    clearButton.textContent = 'Clear Filter';
     clearButton.type = 'button';  // Asegurar que el botón es de tipo button
 
     // Evento para limpiar el filtro y restablecer la imagen original
     clearButton.addEventListener('click', () => {
-        image.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
     });
 
     // Añadir el botón de limpiar al contenedor
