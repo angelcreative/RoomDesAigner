@@ -49,22 +49,55 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
+if not REPLICATE_API_TOKEN:
+    raise ValueError("REPLICATE_API_TOKEN no está configurado en las variables de entorno.")
+
+# Configurar el cliente de Replicate con el token
+replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
+
 @app.route('/upscale-image', methods=['POST'])
 def upscale_image():
     data = request.json
     image_url = data.get('image_url')
     
     if not image_url:
-        return jsonify({"error": "No image URL provided"}), 400
+        return jsonify({"error": "No se proporcionó URL de imagen"}), 400
 
     try:
-        output = replicate.run(
+        # Usar el cliente configurado para ejecutar el modelo
+        output = replicate_client.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
+            input={
+                "image": image_url,
+                "scale_factor": 2,
+                "prompt": "masterpiece, best quality, highres",
+                "negative_prompt": "(worst quality, low quality, normal quality:2)",
+                "dynamic": 6,
+                "creativity": 0.35,
+                "resemblance": 0.6
+            }
         )
-        return jsonify({"upscaled_url": output[0] if output else None})
+        
+        if isinstance(output, list) and len(output) > 0:
+            return jsonify({"upscaled_url": output[0]})
+        else:
+            return jsonify({"error": "No se recibió salida de Replicate"}), 500
+    except replicate.exceptions.ModelError as e:
+        return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
+    except replicate.exceptions.ReplicateError as e:
+        return jsonify({"error": f"Error de Replicate: {str(e)}"}), 500
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
+
+# Asegúrate de que esta ruta esté definida en tu aplicación Flask
+@app.route('/test-replicate', methods=['GET'])
+def test_replicate():
+    try:
+        # Intenta obtener la lista de modelos (una operación simple)
+        models = replicate_client.models.list()
+        return jsonify({"status": "success", "message": "Conexión con Replicate exitosa"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": f"Error al conectar con Replicate: {str(e)}"}), 500
 
 
 

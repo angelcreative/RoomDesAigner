@@ -1546,21 +1546,22 @@ async function upscaleImage(imageUrl) {
             body: JSON.stringify({ image_url: imageUrl }),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(data.error || 'Error desconocido');
         }
 
-        const data = await response.json();
         if (data.upscaled_url) {
-            alert(`Image upscaled successfully. New URL: ${data.upscaled_url}`);
+            alert(`Imagen mejorada con éxito. Nueva URL: ${data.upscaled_url}`);
         } else {
-            alert('Error: No upscaled image URL received.');
+            alert('Error: No se recibió URL de imagen mejorada.');
         }
     } catch (error) {
-        console.error('Error upscaling image:', error);
-        alert('Error upscaling image. Please try again.');
+        console.error('Error al mejorar la imagen:', error);
+        alert(`Error al mejorar la imagen: ${error.message}`);
     }
-}    
+}
     
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {
