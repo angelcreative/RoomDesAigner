@@ -56,6 +56,9 @@ if not REPLICATE_API_TOKEN:
 # Configurar el cliente de Replicate con el token
 replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
 
+# Configurar el cliente de Replicate con el token
+replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
+
 @app.route('/upscale-image', methods=['POST'])
 def upscale_image():
     data = request.json
@@ -66,8 +69,8 @@ def upscale_image():
 
     try:
         # Iniciar la predicción
-        prediction = replicate_client.predictions.create(
-            version="philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        prediction = replicate_client.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={"image": image_url}
         )
 
@@ -80,26 +83,17 @@ def upscale_image():
             try:
                 prediction_data = json.loads(prediction)
                 print(f"Prediction parseado como JSON: {json.dumps(prediction_data, indent=2)}")
-                if isinstance(prediction_data, dict) and 'output' in prediction_data:
-                    return jsonify({"upscaled_url": prediction_data['output'][0] if isinstance(prediction_data['output'], list) else prediction_data['output']})
+                return jsonify({"upscaled_url": prediction_data})
             except json.JSONDecodeError:
                 print("No se pudo parsear prediction como JSON")
+                return jsonify({"upscaled_url": prediction})
 
-        # Si no es una cadena, continuamos con el flujo normal
-        if hasattr(prediction, 'status'):
-            while prediction.status not in ["succeeded", "failed", "canceled"]:
-                time.sleep(1)
-                prediction.reload()
+        # Si es una lista (como se espera normalmente), tomamos el primer elemento
+        if isinstance(prediction, list) and len(prediction) > 0:
+            return jsonify({"upscaled_url": prediction[0]})
 
-            if prediction.status == "succeeded":
-                if isinstance(prediction.output, list) and len(prediction.output) > 0:
-                    return jsonify({"upscaled_url": prediction.output[0]})
-                else:
-                    return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
-            else:
-                return jsonify({"error": f"La predicción falló con el estado: {prediction.status}"}), 500
-        else:
-            return jsonify({"error": f"Respuesta inesperada de Replicate: {prediction}"}), 500
+        # Si no es ni string ni lista, devolvemos lo que sea que obtuvimos
+        return jsonify({"error": f"Respuesta inesperada de Replicate: {prediction}"}), 500
 
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
@@ -108,19 +102,8 @@ def upscale_image():
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
 
-# Asegúrate de que esta ruta esté definida en tu aplicación Flask
-@app.route('/test-replicate', methods=['GET'])
-def test_replicate():
-    try:
-        # Intenta obtener la lista de modelos (una operación simple)
-        models = replicate_client.models.list()
-        return jsonify({"status": "success", "message": "Conexión con Replicate exitosa"})
-    except Exception as e:
-        return jsonify({"status": "error", "message": f"Error al conectar con Replicate: {str(e)}"}), 500
 
 
-
-# Fetch the API key from the environment
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
     logging.debug("OpenAI API Key is set.")
