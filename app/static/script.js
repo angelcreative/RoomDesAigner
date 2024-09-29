@@ -1216,6 +1216,60 @@ imageUrls.forEach((imageUrl) => {
     hueLabel.setAttribute("for", hueSlider.slider.id);
     filterMenu.appendChild(hueLabel);
     filterMenu.appendChild(hueSlider.slider);
+    
+    // Slider para la saturación con label
+const saturateSlider = createSlider("Saturate", 100, 300, 100, applyFilters);
+const saturateLabel = document.createElement("label");
+saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+saturateLabel.setAttribute("for", saturateSlider.slider.id);
+filterMenu.appendChild(saturateLabel);
+filterMenu.appendChild(saturateSlider.slider);
+
+// Slider para el sepia con label
+const sepiaSlider = createSlider("Sepia", 0, 1, 0, applyFilters);
+sepiaSlider.slider.step = 0.01; // Ajustar el paso del slider para valores pequeños
+const sepiaLabel = document.createElement("label");
+sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+sepiaLabel.setAttribute("for", sepiaSlider.slider.id);
+filterMenu.appendChild(sepiaLabel);
+filterMenu.appendChild(sepiaSlider.slider);
+
+// Slider para la escala de grises con label
+const grayscaleSlider = createSlider("Grayscale", 0, 1, 0, applyFilters);
+grayscaleSlider.slider.step = 0.01;
+const grayscaleLabel = document.createElement("label");
+grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+grayscaleLabel.setAttribute("for", grayscaleSlider.slider.id);
+filterMenu.appendChild(grayscaleLabel);
+filterMenu.appendChild(grayscaleSlider.slider);
+
+// Slider para invertir colores con label
+const invertSlider = createSlider("Invert", 0, 1, 0, applyFilters);
+invertSlider.slider.step = 0.01;
+const invertLabel = document.createElement("label");
+invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+invertLabel.setAttribute("for", invertSlider.slider.id);
+filterMenu.appendChild(invertLabel);
+filterMenu.appendChild(invertSlider.slider);
+
+// Slider para el desenfoque con label
+const blurSlider = createSlider("Blur", 0, 10, 0, applyFilters);
+blurSlider.slider.step = 0.1;
+const blurLabel = document.createElement("label");
+blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+blurLabel.setAttribute("for", blurSlider.slider.id);
+filterMenu.appendChild(blurLabel);
+filterMenu.appendChild(blurSlider.slider);
+
+// Slider para la opacidad con label
+const opacitySlider = createSlider("Opacity", 0, 1, 1, applyFilters);
+opacitySlider.slider.step = 0.01;
+const opacityLabel = document.createElement("label");
+opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+opacityLabel.setAttribute("for", opacitySlider.slider.id);
+filterMenu.appendChild(opacityLabel);
+filterMenu.appendChild(opacitySlider.slider);
+
 
     // Añadir el menú de filtros debajo del botón "Filters"
     buttonsContainer.appendChild(filterMenu);
@@ -1225,49 +1279,75 @@ imageUrls.forEach((imageUrl) => {
         filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
     }
 
-    // Función para aplicar los filtros combinados
-    function applyFilters() {
-        const grainAmount = parseInt(grainSlider.slider.value);
-        const contrast = parseInt(contrastSlider.slider.value);
-        const brightness = parseInt(brightnessSlider.slider.value);
-        const hueRotation = parseInt(hueSlider.slider.value);
+   // Función para aplicar los filtros combinados
+function applyFilters() {
+    const grainAmount = parseInt(grainSlider.slider.value);
+    const contrast = parseInt(contrastSlider.slider.value);
+    const brightness = parseInt(brightnessSlider.slider.value);
+    const hueRotation = parseInt(hueSlider.slider.value);
+    const saturation = parseInt(saturateSlider.slider.value);
+    const sepia = parseFloat(sepiaSlider.slider.value);
+    const grayscale = parseFloat(grayscaleSlider.slider.value);
+    const invert = parseFloat(invertSlider.slider.value);
+    const blur = parseFloat(blurSlider.slider.value);
+    const opacity = parseFloat(opacitySlider.slider.value);
 
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-        const img = new Image();
-        img.src = imageUrl;
-        img.crossOrigin = 'Anonymous';
-        img.onload = function () {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.filter = `contrast(${contrast}%) brightness(${brightness}%) hue-rotate(${hueRotation}deg)`;
-            ctx.drawImage(img, 0, 0);
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
 
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
+        // Aplicar los filtros combinados de CSS
+        ctx.filter = `
+            contrast(${contrast}%) 
+            brightness(${brightness}%) 
+            hue-rotate(${hueRotation}deg)
+            saturate(${saturation}%) 
+            sepia(${sepia}) 
+            grayscale(${grayscale}) 
+            invert(${invert}) 
+            blur(${blur}px) 
+            opacity(${opacity})
+        `;
+        
+        ctx.drawImage(img, 0, 0);
 
-            // Añadir grano a la imagen
-            for (let i = 0; i < data.length; i += 4) {
-                let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
-                data[i] += grain;     // Rojo
-                data[i+1] += grain;   // Verde
-                data[i+2] += grain;   // Azul
-            }
+        // Obtener los datos de la imagen para aplicar el grano
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
 
-            ctx.putImageData(imageData, 0, 0);
+        // Añadir grano a la imagen
+        for (let i = 0; i < data.length; i += 4) {
+            let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+            data[i] += grain;     // Rojo
+            data[i+1] += grain;   // Verde
+            data[i+2] += grain;   // Azul
+        }
 
-            // Actualizar el src de la imagen con el canvas modificado
-            image.src = canvas.toDataURL();
-        };
+        ctx.putImageData(imageData, 0, 0);
 
-        // Actualizar el valor de los labels en tiempo real
-        grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
-        contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
-        brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
-        hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
-    }
-    
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
+    };
+
+    // Actualizar el valor de los labels en tiempo real
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+    hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+    sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+    grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+    invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+    blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+    opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+}
+
     
     
     //ig
