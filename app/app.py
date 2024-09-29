@@ -71,19 +71,29 @@ def upscale_image():
             input={"image": image_url}
         )
 
-        # Esperar a que la predicción se complete
-        while prediction.status not in ["succeeded", "failed", "canceled"]:
-            time.sleep(1)
-            prediction.reload()
+        # Imprimir información de depuración
+        print(f"Tipo de prediction: {type(prediction)}")
+        print(f"Contenido de prediction: {json.dumps(prediction, default=str, indent=2)}")
 
-        if prediction.status == "succeeded":
-            # La salida es una lista con la URL de la imagen mejorada
-            if isinstance(prediction.output, list) and len(prediction.output) > 0:
+        # Esperar a que la predicción se complete
+        while True:
+            try:
+                prediction.reload()
+                if prediction.status in ["succeeded", "failed", "canceled"]:
+                    break
+                time.sleep(1)
+            except Exception as e:
+                print(f"Error al recargar la predicción: {str(e)}")
+                break
+
+        if hasattr(prediction, 'status') and prediction.status == "succeeded":
+            if hasattr(prediction, 'output') and isinstance(prediction.output, list) and len(prediction.output) > 0:
                 return jsonify({"upscaled_url": prediction.output[0]})
             else:
                 return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
         else:
-            return jsonify({"error": f"La predicción falló con el estado: {prediction.status}"}), 500
+            error_message = f"La predicción falló o no se completó correctamente. Estado: {getattr(prediction, 'status', 'desconocido')}"
+            return jsonify({"error": error_message}), 500
 
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500

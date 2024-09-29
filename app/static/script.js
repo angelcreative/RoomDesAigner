@@ -1538,6 +1538,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 
 async function upscaleImage(imageUrl) {
     try {
+        console.log('Iniciando solicitud de mejora de imagen');
         const response = await fetch('/upscale-image', {
             method: 'POST',
             headers: {
@@ -1546,16 +1547,20 @@ async function upscaleImage(imageUrl) {
             body: JSON.stringify({ image_url: imageUrl }),
         });
 
+        console.log('Respuesta recibida del servidor');
         const data = await response.json();
+        console.log('Datos de respuesta:', data);
 
         if (!response.ok) {
             throw new Error(data.error || 'Error desconocido');
         }
 
         if (data.upscaled_url) {
+            console.log('URL de imagen mejorada recibida:', data.upscaled_url);
             alert(`Imagen mejorada con éxito. Nueva URL: ${data.upscaled_url}`);
             // Aquí puedes hacer algo con la URL de la imagen mejorada, como mostrarla en la interfaz
         } else {
+            console.error('No se recibió URL de imagen mejorada');
             alert('Error: No se recibió URL de imagen mejorada.');
         }
     } catch (error) {
