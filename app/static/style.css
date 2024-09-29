@@ -2023,7 +2023,7 @@ i {
 .carousel-wrapper {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 44%;
+    width: 100%;
 }
 .carousel-slide {
     width: 600px;
