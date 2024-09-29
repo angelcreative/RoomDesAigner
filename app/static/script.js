@@ -558,14 +558,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
     if (aspectRatio === "landscape") {
-        width = 1024;
-        height = 760;
+        width = 1080;
+        height = 800;
     } else if (aspectRatio === "portrait") {
-        width = 760;
-        height = 1024;
+        width = 800;
+        height = 1080;
     } else if (aspectRatio === "square") {
-        width = 1024;
-        height = 1024;
+        width = 1080;
+        height = 1080;
     }
 
     // Configurar semilla si está activada la opción
