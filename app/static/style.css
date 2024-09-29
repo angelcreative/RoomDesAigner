@@ -3057,6 +3057,10 @@ select#materials {
         backdrop-filter: blur(10px);
 }
 
+
+.image-buttons button:nth-child(7) {
+    display: none;
+}
 /* Loading message styles */
 #loadingMessage,
 .containerUpscale {
@@ -3904,6 +3908,7 @@ button#extractColorsFromUrlButton {
     animation: bounceIn 0.8s ease forwards;
     left: 0; /* Sidebar visible */
 }
+
 
 /* Cuando el menú está seleccionado, el sidebar se oculta (bounceOut) */
 #menuToggle:checked + #sidebar {
