@@ -559,13 +559,16 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     let width, height;
     if (aspectRatio === "landscape") {
         width = 1024;
-        height = 768;
+        height = 760;
     } else if (aspectRatio === "portrait") {
-        width = 768;
+        width = 760;
         height = 1024;
         } else if (aspectRatio === "widescreen") {
-        width = 488;
-        height = 1080;
+        width = 1024;
+        height = 456;
+      } else if (aspectRatio === "mobile") {
+        width = 456;
+        height = 1024;
     } else if (aspectRatio === "square") {
         width = 1024;
         height = 1024;
