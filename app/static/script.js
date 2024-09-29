@@ -1443,7 +1443,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
             radio.addEventListener('change', (event) => {
                 applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
             });
-        }, index * 200);  // 200ms delay para cada miniatura
+        }, index * 400);  // 200ms delay para cada miniatura
     });
 
     // Añadir botón para limpiar el filtro
