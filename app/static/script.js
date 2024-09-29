@@ -1554,6 +1554,7 @@ async function upscaleImage(imageUrl) {
 
         if (data.upscaled_url) {
             alert(`Imagen mejorada con éxito. Nueva URL: ${data.upscaled_url}`);
+            // Aquí puedes hacer algo con la URL de la imagen mejorada, como mostrarla en la interfaz
         } else {
             alert('Error: No se recibió URL de imagen mejorada.');
         }

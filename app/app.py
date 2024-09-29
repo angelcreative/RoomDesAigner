@@ -67,21 +67,14 @@ def upscale_image():
         # Usar el cliente configurado para ejecutar el modelo
         output = replicate_client.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={
-                "image": image_url,
-                "scale_factor": 2,
-                "prompt": "masterpiece, best quality, highres",
-                "negative_prompt": "(worst quality, low quality, normal quality:2)",
-                "dynamic": 6,
-                "creativity": 0.35,
-                "resemblance": 0.6
-            }
+            input={"image": image_url}
         )
         
+        # La respuesta es una lista con la URL de la imagen mejorada
         if isinstance(output, list) and len(output) > 0:
             return jsonify({"upscaled_url": output[0]})
         else:
-            return jsonify({"error": "No se recibió salida de Replicate"}), 500
+            return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
     except replicate.exceptions.ReplicateError as e:
