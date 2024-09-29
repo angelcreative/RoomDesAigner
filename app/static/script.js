@@ -1535,7 +1535,6 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         }
     }
 }
-
 async function upscaleImage(imageUrl) {
     try {
         console.log('Iniciando solicitud de mejora de imagen');

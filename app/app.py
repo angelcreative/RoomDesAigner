@@ -73,27 +73,33 @@ def upscale_image():
 
         # Imprimir información de depuración
         print(f"Tipo de prediction: {type(prediction)}")
-        print(f"Contenido de prediction: {json.dumps(prediction, default=str, indent=2)}")
+        print(f"Contenido de prediction: {prediction}")
 
-        # Esperar a que la predicción se complete
-        while True:
+        # Si prediction es una cadena, intentamos parsearlo como JSON
+        if isinstance(prediction, str):
             try:
-                prediction.reload()
-                if prediction.status in ["succeeded", "failed", "canceled"]:
-                    break
-                time.sleep(1)
-            except Exception as e:
-                print(f"Error al recargar la predicción: {str(e)}")
-                break
+                prediction_data = json.loads(prediction)
+                print(f"Prediction parseado como JSON: {json.dumps(prediction_data, indent=2)}")
+                if isinstance(prediction_data, dict) and 'output' in prediction_data:
+                    return jsonify({"upscaled_url": prediction_data['output'][0] if isinstance(prediction_data['output'], list) else prediction_data['output']})
+            except json.JSONDecodeError:
+                print("No se pudo parsear prediction como JSON")
 
-        if hasattr(prediction, 'status') and prediction.status == "succeeded":
-            if hasattr(prediction, 'output') and isinstance(prediction.output, list) and len(prediction.output) > 0:
-                return jsonify({"upscaled_url": prediction.output[0]})
+        # Si no es una cadena, continuamos con el flujo normal
+        if hasattr(prediction, 'status'):
+            while prediction.status not in ["succeeded", "failed", "canceled"]:
+                time.sleep(1)
+                prediction.reload()
+
+            if prediction.status == "succeeded":
+                if isinstance(prediction.output, list) and len(prediction.output) > 0:
+                    return jsonify({"upscaled_url": prediction.output[0]})
+                else:
+                    return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
             else:
-                return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
+                return jsonify({"error": f"La predicción falló con el estado: {prediction.status}"}), 500
         else:
-            error_message = f"La predicción falló o no se completó correctamente. Estado: {getattr(prediction, 'status', 'desconocido')}"
-            return jsonify({"error": error_message}), 500
+            return jsonify({"error": f"Respuesta inesperada de Replicate: {prediction}"}), 500
 
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
