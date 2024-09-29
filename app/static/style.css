@@ -4043,6 +4043,7 @@ label.hamburger:hover {
     transition: opacity 0.2s;
     border-radius: 40px;
     margin: 0;
+    cursor: grab
 }
 
 .filter-menu {
@@ -4083,7 +4084,7 @@ label.hamburger:hover {
         width: 10px;
         height: 10px;
         background: #a7fcf2;
-        cursor: pointer;
+        cursor: grabbing;
         border-radius: 90px;
 }
 
@@ -4091,7 +4092,7 @@ label.hamburger:hover {
         width: 25px;
         height: 25px;
         background: #a7fcf2;
-        cursor: pointer;
+          cursor: grabbing;
         border-radius: 90px;
 }
 
@@ -4252,7 +4253,7 @@ label.hamburger:hover {
 /* Large screens */
 @media only screen and (min-width: 1440px) {
     .carousel-slide {
-        flex: 0 0 24%; /* Ajuste opcional para pantallas más grandes */
+        flex: 0 0 48%; /* Ajuste opcional para pantallas más grandes */
     }
 }
 
