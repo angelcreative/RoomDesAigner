@@ -1569,6 +1569,7 @@ async function upscaleImage(imageUrl) {
     }
 }
     
+    
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {
     const container = document.createElement("div");

@@ -3914,7 +3914,7 @@ button#extractColorsFromUrlButton {
 .middleContainer {
     margin-left: 340px; /* Espacio para el sidebar abierto por defecto */
     transition: margin-left 0.3s ease;
-    width: auto;
+    width: 100%;
     background: url(https://i.postimg.cc/fTj1XwmZ/bg-skeleton.png) center center no-repeat;
     height: calc(100vh - 160px);
     display: block;

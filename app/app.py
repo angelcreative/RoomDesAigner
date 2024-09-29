@@ -56,9 +56,6 @@ if not REPLICATE_API_TOKEN:
 # Configurar el cliente de Replicate con el token
 replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
 
-# Configurar el cliente de Replicate con el token
-replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
-
 @app.route('/upscale-image', methods=['POST'])
 def upscale_image():
     data = request.json
@@ -68,32 +65,17 @@ def upscale_image():
         return jsonify({"error": "No se proporcionó URL de imagen"}), 400
 
     try:
-        # Iniciar la predicción
-        prediction = replicate_client.run(
+        # Ejecutar la predicción usando run
+        output = replicate_client.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={"image": image_url}
         )
 
-        # Imprimir información de depuración
-        print(f"Tipo de prediction: {type(prediction)}")
-        print(f"Contenido de prediction: {prediction}")
-
-        # Si prediction es una cadena, intentamos parsearlo como JSON
-        if isinstance(prediction, str):
-            try:
-                prediction_data = json.loads(prediction)
-                print(f"Prediction parseado como JSON: {json.dumps(prediction_data, indent=2)}")
-                return jsonify({"upscaled_url": prediction_data})
-            except json.JSONDecodeError:
-                print("No se pudo parsear prediction como JSON")
-                return jsonify({"upscaled_url": prediction})
-
-        # Si es una lista (como se espera normalmente), tomamos el primer elemento
-        if isinstance(prediction, list) and len(prediction) > 0:
-            return jsonify({"upscaled_url": prediction[0]})
-
-        # Si no es ni string ni lista, devolvemos lo que sea que obtuvimos
-        return jsonify({"error": f"Respuesta inesperada de Replicate: {prediction}"}), 500
+        # Verificar si el output es una lista y extraer la URL
+        if isinstance(output, list) and len(output) > 0:
+            return jsonify({"upscaled_url": output[0]})
+        else:
+            return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
 
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
@@ -101,9 +83,10 @@ def upscale_image():
         return jsonify({"error": f"Error de Replicate: {str(e)}"}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
-
-
-
+    
+    
+    
+    
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
     logging.debug("OpenAI API Key is set.")
