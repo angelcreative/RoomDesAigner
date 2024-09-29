@@ -2015,26 +2015,30 @@ i {
 }
 
 #modal {
-       height: 100%;
-    margin-left: 30px;
-    background: var(--bunker-800);
+       background: var(--bunker-800);
 }
 
 .carousel-wrapper {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: var(--xs) var(--2xs);
 }
 .carousel-slide {
-    width: 600px;
+    width: 24%;
     box-sizing: border-box;
     margin-right: var(--2xs);
+    height: auto;
 }
 
 .serialButton{
    display: flex;
-    justify-content: flex-start;
-        margin-bottom: var(--2xl);
+   justify-content: flex-start;
+   margin-bottom: var(--2xl);
+   padding-left: 60px;
 }
 
 .serialButton button {
@@ -2058,7 +2062,8 @@ button#zipButton {
     display: flex;
     justify-content: center;
     align-items: center;
-        background: var(--bunker-900);
+    background: var(--bunker-900);
+    width: 100%;
 }
 
 .add-more-button {
@@ -2115,16 +2120,17 @@ button#zipButton {
 
 .prev, .next {
    cursor: pointer;
-    position: absolute;
-    width: auto;
-    padding: 16px;
-    margin-top: -22px;
-    color: var(--aztec-800);
-    font-weight: bold;
-    background-color: var(--aztec-600);
-    border: none;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
+   position: absolute;
+   width: auto;
+   padding: 16px;
+   margin-top: -22px;
+   color: var(--aztec-800);
+   font-weight: bold;
+   background-color: var(--aztec-600);
+   border: none;
+   border-radius: 0 3px 3px 0;
+   user-select: none;
+   visibility: hidden;
 }
 
 .next {
@@ -2142,14 +2148,8 @@ button#zipButton {
     padding: 0;
     position: relative;
     display: block;
-    margin: 0 auto;
-    width: 100%;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    
+    margin: 0;
     text-align: center;
-    
 }
 
 #clearImg,
@@ -2956,16 +2956,7 @@ option[title]:hover:after {
         background-size: 300px;
 }
 
-.imageGrid {
-        display: flex;
-    flex-wrap: wrap;
-    column-gap: 16px;
-    row-gap: 16px;
-    justify-content: space-between;
-    margin: 0;
-    align-items: center;
-    flex-direction: row;
-}
+.imageGrid {padding-left: 80px;}
 
 #imageGrid div {
      
@@ -3889,7 +3880,7 @@ button#extractColorsFromUrlButton {
         left: 1px; /* Se mueve un poco hacia la derecha */
     }
     100% {
-        left: -320px; /* Se mueve fuera de la pantalla */
+        left: -290px; /* Se mueve fuera de la pantalla */
     }
 }
 
@@ -3917,13 +3908,13 @@ button#extractColorsFromUrlButton {
 /* Cuando el menú está seleccionado, el sidebar se oculta (bounceOut) */
 #menuToggle:checked + #sidebar {
     animation: bounceOut 0.8s ease forwards;
-    left: -320px; /* Sidebar oculto */
+    left: -290px; /* Sidebar oculto */
 }
 
 .middleContainer {
     margin-left: 340px; /* Espacio para el sidebar abierto por defecto */
     transition: margin-left 0.3s ease;
-    width: 100%;
+    width: auto;
     background: url(https://i.postimg.cc/fTj1XwmZ/bg-skeleton.png) center center no-repeat;
     height: calc(100vh - 160px);
     display: block;
@@ -3985,7 +3976,6 @@ label.hamburger:hover {
 
 
 .imageGrid {
-  perspective: 1000px;
 }
 
 .cube-container {
@@ -4121,12 +4111,13 @@ label.hamburger:hover {
 .ig {
     width: 100%;
     display: flex;
-    gap: 12px;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: var(--xs);
     justify-content: center;
     position: relative;
+    align-items: flex-start;
+    height: 100%;
+    row-gap: 0;
 }
 
 .ig div {
@@ -4138,19 +4129,20 @@ label.hamburger:hover {
 
 .ig img {
     width: 100%;
-   border-radius:  var(--2xs)
+    border-radius:  var(--2xs);
+    border: 3px solid #121922;
 }
 
 .ig label {
-    display: block;
-    width: 70px;
+    flex-basis: calc(100% / 6);
+    margin-bottom: -6px;
 }
 
 
 .ig label:first-child {
     position: absolute;
-    top: -48px;
-    right: 14px;
+    top: -36px;
+    right: -16px;
 }
 
 .ig label:first-child button {
@@ -4158,6 +4150,8 @@ label.hamburger:hover {
     background: none;
     color: var(--dragon-500);
     padding: var(--4xs);
+    width: 20px;
+    height: 20px;
 }
 
 
@@ -4174,21 +4168,86 @@ label.hamburger:hover {
 
 /*=========================   MEDIA QUERIES ===================*/
 
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-        /* CSS styles for screens up to 600px */
-    .carousel-wrapper {
-        width:100%;
+    
+
+
+/* Smartphones (portrait and landscape) */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+    .carousel-slide {
+        width: 100%;
+        flex: 0 0 100%; /* 1 slide por vista */
+    }
+          .ig {
+        display: none
     }
     
-    
     .carousel-slide {
-   width: 300px;
-  
-}
+        width: 100%;}
+    
+    .image-buttons button {
+    margin: 0px;
+        padding: 0px 0px;}
+    
+    .modal-content span.close {
+   top: -50px;
+    right: 8px;}
+    
+    .serialButton button {
+        display: none;}
+    }
 }
 
-/*  small devices (phones, 1024px and down) */
-@media only screen and (max-width: 1024px) {
-       
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (min-device-width: 481px) and (max-device-width: 600px) {
+
+        /* CSS styles for screens up to 600px */
+    .ig {
+        display: none
+    }
+    
+    .carousel-slide {
+        width: 100%;}
+    
+    .image-buttons button {
+    margin: 0px;
+        padding: 0px 0px;}
+    
+    .modal-content span.close {
+   top: -50px;
+    right: 8px;}
+    
+    .serialButton button {
+        display: none;}
+    }
+    
+
+
+
+/* iPads (portrait and landscape) */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .carousel-slide {
+        flex: 0 0 47%; /* 2 slides por vista */
+    }
 }
+
+/* Desktops and laptops */
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1224px) {
+
+
+    .carousel-slide {
+        flex: 0 0 45%; /* 4 slides por vista */
+    }
+}
+
+
+
+
+
+
+/* Large screens */
+@media only screen and (min-width: 1440px) {
+    .carousel-slide {
+        flex: 0 0 24%; /* Ajuste opcional para pantallas más grandes */
+    }
+}
+
