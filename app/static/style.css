@@ -2026,7 +2026,7 @@ i {
     width: 44%;
 }
 .carousel-slide {
-    min-width: 80%;
+    width: 600px;
     box-sizing: border-box;
     margin-right: var(--2xs);
 }
@@ -4183,7 +4183,7 @@ label.hamburger:hover {
     
     
     .carousel-slide {
-    min-width: 33%;
+   width: 300px;
   
 }
 }
