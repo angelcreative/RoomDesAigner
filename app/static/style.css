@@ -4047,12 +4047,12 @@ label.hamburger:hover {
 }
 
 .filter-menu {
-    width: 120px;
+   width: 50%;
     padding: var(--xs);
     border-radius: var(--m) 0 0;
     position: absolute;
-    background: var(--bunker-900);
-    top: -190px;
+    background: #111922e8;
+    top: -476px;
     right: 0;
 }
 

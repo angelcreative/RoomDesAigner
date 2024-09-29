@@ -563,12 +563,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (aspectRatio === "portrait") {
         width = 760;
         height = 1024;
-        } else if (aspectRatio === "widescreen") {
-        width = 1024;
-        height = 456;
-      } else if (aspectRatio === "mobile") {
-        width = 456;
-        height = 1024;
     } else if (aspectRatio === "square") {
         width = 1024;
         height = 1024;
