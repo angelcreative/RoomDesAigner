@@ -68,7 +68,15 @@ def upscale_image():
         # Ejecutar la predicción usando run
         output = replicate_client.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
+            input={
+                "image": image_url,
+                "scale_factor": 2,  # Ajusta según sea necesario
+                "prompt": "masterpiece, best quality, highres",  # Ajusta según sea necesario
+                "negative_prompt": "(worst quality, low quality, normal quality:2)",  # Ajusta según sea necesario
+                "dynamic": 6,  # Ajusta según sea necesario
+                "creativity": 0.35,  # Ajusta según sea necesario
+                "resemblance": 0.6  # Ajusta según sea necesario
+            }
         )
 
         # Verificar si el output es una lista y extraer la URL
