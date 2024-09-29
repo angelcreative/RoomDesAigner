@@ -49,6 +49,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
+
 if not REPLICATE_API_TOKEN:
     raise ValueError("REPLICATE_API_TOKEN no está configurado en las variables de entorno.")
 
@@ -64,17 +65,26 @@ def upscale_image():
         return jsonify({"error": "No se proporcionó URL de imagen"}), 400
 
     try:
-        # Usar el cliente configurado para ejecutar el modelo
-        output = replicate_client.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        # Iniciar la predicción
+        prediction = replicate_client.predictions.create(
+            version="philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={"image": image_url}
         )
-        
-        # La respuesta es una lista con la URL de la imagen mejorada
-        if isinstance(output, list) and len(output) > 0:
-            return jsonify({"upscaled_url": output[0]})
+
+        # Esperar a que la predicción se complete
+        while prediction.status not in ["succeeded", "failed", "canceled"]:
+            time.sleep(1)
+            prediction.reload()
+
+        if prediction.status == "succeeded":
+            # La salida es una lista con la URL de la imagen mejorada
+            if isinstance(prediction.output, list) and len(prediction.output) > 0:
+                return jsonify({"upscaled_url": prediction.output[0]})
+            else:
+                return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
         else:
-            return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
+            return jsonify({"error": f"La predicción falló con el estado: {prediction.status}"}), 500
+
     except replicate.exceptions.ModelError as e:
         return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
     except replicate.exceptions.ReplicateError as e:
