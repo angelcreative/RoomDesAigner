@@ -1166,9 +1166,15 @@ imageUrls.forEach((imageUrl) => {
     const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
     const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+    const enhanceButton = createButton("Enhance", () => upscaleImage(imageUrl));
+
+    
+
+    
+    
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
 
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
@@ -1530,6 +1536,32 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     }
 }
 
+async function upscaleImage(imageUrl) {
+    try {
+        const response = await fetch('/upscale-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image_url: imageUrl }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        if (data.upscaled_url) {
+            alert(`Image upscaled successfully. New URL: ${data.upscaled_url}`);
+        } else {
+            alert('Error: No upscaled image URL received.');
+        }
+    } catch (error) {
+        console.error('Error upscaling image:', error);
+        alert('Error upscaling image. Please try again.');
+    }
+}    
+    
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {
     const container = document.createElement("div");

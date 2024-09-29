@@ -6,8 +6,8 @@ import hmac
 import hashlib
 import requests
 import bcrypt
-import os
 import replicate
+import os
 import uuid
 import random
 import logging
@@ -48,6 +48,24 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
+
+@app.route('/upscale-image', methods=['POST'])
+def upscale_image():
+    data = request.json
+    image_url = data.get('image_url')
+    
+    if not image_url:
+        return jsonify({"error": "No image URL provided"}), 400
+
+    try:
+        output = replicate.run(
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input={"image": image_url}
+        )
+        return jsonify({"upscaled_url": output[0] if output else None})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 
 # Fetch the API key from the environment
