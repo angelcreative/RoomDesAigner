@@ -487,16 +487,19 @@ span.close:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    width: 100%;
 }
 
 .loginLogo {
         margin: 0 auto;
-    width: 150px;
+    
 }
 
 .loginBox p {
     color: var(--bunker-600);
     margin: 16px auto;
+    padding-bottom: 80px;
 }
 
 .loginModal p {
@@ -510,19 +513,20 @@ span.close:hover {
 
 .loginModal {
         background: #fff;
-        border-radius: var(--l);
-        width: 340px;
-        margin: 60px auto 20px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0 0 40px 0;
+    border-radius: var(--l);
+    width: 860px;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    padding: 40px;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .loginModal img {
-        width: 100%;
-        height: 150px;
+      width: 260px;
+    height: auto;
 }
 
 .testim {
@@ -1125,13 +1129,13 @@ span.close:hover {
         cursor: pointer;
 }
 form.loginForm {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: left;
-        margin: 0px auto;
-        width: 260px;
-        color: #6f7680;
+       display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    margin: 0;
+    width: 50%;
+    color: var(--bunker-800);
 }
 
 form.loginForm input {

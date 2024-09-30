@@ -35,17 +35,17 @@
 </head>
 <body>
     
-    <div class="loginBox">
-    <div class="loginLogo">                   <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
-
-                        <img class="logoApp" src="static/img/logoApp.svg">
+    <div class="loginBox signupBox">
+    <div class="loginLogo">                   
 
         </div>
 
-            <h2 class="loginTitle">Sign Up to  Room DesAigner</h2>
+           
 
-          <div class="loginModal">
-            <img src="{{ url_for('static', filename='img/modal_img/signup.svg') }}">
+          <div class="loginModal  signupModal">
+           <img class="logoWeb" src="/static/img/logo_web_light.svg" alt="logo Room DesAigner">
+
+                        <img class="logoApp" src="static/img/logoApp.svg">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}

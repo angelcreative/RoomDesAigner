@@ -1424,14 +1424,16 @@ function applyFilters() {
     
     
     //ig
-    
-// Generar dinámicamente las miniaturas con filtros
+    // Generar dinámicamente las miniaturas con filtros
 function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
     const igDiv = document.createElement('div');
     igDiv.classList.add('ig');
+
+    // Inicialmente ocultar las miniaturas
+    igDiv.style.display = 'none';
 
     const filters = [
         '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
@@ -1536,6 +1538,25 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
     // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
     filDiv.appendChild(igDiv);
+
+    // Crear el botón de "Show/Hide"
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'Show Filters';
+    toggleButton.type = 'button';
+    
+    // Evento para hacer toggle del contenedor 'ig'
+    toggleButton.addEventListener('click', () => {
+        if (igDiv.style.display === 'none') {
+            igDiv.style.display = 'block';
+            toggleButton.textContent = 'Hide Filters';
+        } else {
+            igDiv.style.display = 'none';
+            toggleButton.textContent = 'Show Filters';
+        }
+    });
+
+    // Añadir el botón de toggle al contenedor principal 'fil'
+    filDiv.insertBefore(toggleButton, igDiv);
 
     // Añadir el contenedor de miniaturas al contenedor de botones
     buttonsContainer.appendChild(filDiv);
