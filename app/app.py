@@ -142,7 +142,6 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 
-
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     try:
@@ -151,7 +150,9 @@ def generate_images():
 
         username = session['username']
         user_data = get_user_data(username)
-        if user_data and user_data.get('credits', 0) >= 2:
+        
+        # Cambiar a 4 créditos
+        if user_data and user_data.get('credits', 0) >= 4:  
             data = request.get_json()
 
             # Extraer el promptText del dato entrante
@@ -182,7 +183,9 @@ def generate_images():
 
                 if result.get('status') == 'success' and result.get('output'):
                     # Las imágenes están listas, deducir créditos y devolverlas
-                    deduct_credits(username, 2)
+                    deduct_credits(username, 4)  # Cambiar a 4 créditos
+                    # Actualizar la sesión con los nuevos créditos
+                    session['credits'] -= 4  # Actualiza la sesión
                     return jsonify({
                         "images": result.get('output'),
                         "transformed_prompt": transformed_prompt
@@ -212,7 +215,14 @@ def generate_images():
         return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
     except Exception as e:
         return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
-
+    
+    
+    
+    
+    
+    
+    
+    
     
 @app.route('/fetch-images', methods=['POST'])
 def fetch_images():

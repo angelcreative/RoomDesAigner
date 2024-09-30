@@ -653,8 +653,8 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
 
     
     try {
-        // Enviar solicitud al backend en lugar de a la API externa
-        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
+        // Enviar solicitud al backend
+        const data = await fetchWithRetry("/generate-images", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -665,13 +665,13 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         console.log('Respuesta del backend en generateImages:', data);
 
         if (data.status === "success" && data.images) {
+            // Llama a la función para manejar la respuesta y descontar créditos
+            handleImageGenerationResponse(data); // Descontar créditos
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            // Las imágenes están listas
-            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+            showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
         } else if (data.request_id) {
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            // Las imágenes aún se están procesando, iniciar polling
             await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
@@ -680,6 +680,17 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         showError(error);  // Manejo de errores
     }
 }
+    
+    
+// Función para manejar la respuesta de generación de imágenes y descontar créditos
+function handleImageGenerationResponse(response) {
+    if (response.success) {
+        // Actualiza el valor de créditos en el DOM
+        const creditDisplay = document.getElementById('creditDisplay');
+        const newCredits = parseInt(creditDisplay.textContent) - 4; // Descontar 4 créditos
+        creditDisplay.textContent = newCredits; // Actualiza el texto en el DOM
+    }
+}    
 
  // Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
