@@ -655,7 +655,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-   try {
+     try {
         // Enviar solicitud al backend
         const data = await fetchWithRetry("/generate-images", {
             method: "POST",
@@ -668,12 +668,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         if (data.status === "success" && data.images) {
             handleImageGenerationResponse(data);  // Descontar créditos
             transformedPrompt = data.transformed_prompt;
+            // Ocultar el diálogo justo antes de mostrar las imágenes
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
             showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas
         } else if (data.request_id) {
             transformedPrompt = data.transformed_prompt;
             await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera después de verificar el estado
+            // Aquí puedes decidir si ocultar el diálogo o no, dependiendo de tu lógica
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
         }
