@@ -265,7 +265,7 @@ def fetch_images():
         fetch_response = requests.post(fetch_url, headers=headers, json=fetch_payload, timeout=60)
 
         if fetch_response.status_code == 200:
-        result = fetch_response.json()
+            result = fetch_response.json()
 
         # Si las imágenes están listas, devuélvelas
         if result.get('status') == 'success' and result.get('output'):
