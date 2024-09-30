@@ -1547,7 +1547,7 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     // Evento para hacer toggle del contenedor 'ig'
     toggleButton.addEventListener('click', () => {
         if (igDiv.style.display === 'none') {
-            igDiv.style.display = 'block';
+            igDiv.style.display = 'flex';
             toggleButton.textContent = 'Hide Filters';
         } else {
             igDiv.style.display = 'none';
