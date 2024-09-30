@@ -4116,6 +4116,24 @@ label.hamburger:hover {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+            height: fit-content;
+}
+
+
+
+.fil button, .fil button:first-child {
+    font-size: var(--xs);
+    background: var(--vulkan-50);
+    width: auto;
+    color: var(--vulkan-500);
+    border-radius: var(--3xs);
+    margin: 0 0 var(--3xs);
+    padding: var(--2xs) var(--s);
+}
+
+
+.fil button:first-child:hover::after {
+    content: "Show predefined filters";
 }
 
 .ig {
