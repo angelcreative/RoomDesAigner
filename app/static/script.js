@@ -358,9 +358,7 @@ function generateProductView(customText, photo_location) {
     
    
   
-    function hideGeneratingImagesDialog() {
-        document.getElementById('generatingImagesDialog').style.display = 'none';
-    }
+  
 
     function showErrorInDialog() {
         document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
@@ -504,12 +502,14 @@ function showError(error) {
 
 // Función para ocultar el diálogo de generación de imágenes
 function hideGeneratingImagesDialog() {
-    const dialog = document.getElementById("generatingImagesDialog");
+    const dialog = document.getElementById('generatingImagesDialog');
     if (dialog) {
-        dialog.style.display = "none";
+        dialog.style.display = 'none';
+    } else {
+        console.error("No se encontró el elemento con id 'generatingImagesDialog'");
     }
 }
-   
+
     
 // Función genérica para hacer fetch con reintentos
 async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
@@ -655,33 +655,34 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-     try {
-        // Enviar solicitud al backend
-        const data = await fetchWithRetry("/generate-images", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(prompt)
-        });
+    try {
+    // Enviar solicitud al backend
+    const data = await fetchWithRetry("/generate-images", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(prompt)
+    });
 
-        if (data.status === "success" && data.images) {
-            handleImageGenerationResponse(data);  // Descontar créditos
-            transformedPrompt = data.transformed_prompt;
-            // Ocultar el diálogo justo antes de mostrar las imágenes
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-            showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas
-        } else if (data.request_id) {
-            transformedPrompt = data.transformed_prompt;
-            await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
-            // Aquí puedes decidir si ocultar el diálogo o no, dependiendo de tu lógica
-        } else {
-            throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
-        }
-    } catch (error) {
-        showError(error);  // Manejo de errores
-        hideGeneratingImagesDialog();  // Asegúrate de ocultar el diálogo en caso de error
+    console.log("Respuesta de la API:", data);  // Imprimir la respuesta para depuración
+
+    if (data.status === "success" && data.images) {
+        hideGeneratingImagesDialog();  // Ocultar el diálogo de espera antes de mostrar las imágenes
+    handleImageGenerationResponse(data);  // Descontar créditos
+    transformedPrompt = data.transformed_prompt;
+    showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas else if (data.request_id) {
+        transformedPrompt = data.transformed_prompt;
+        await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
+        // Aquí puedes decidir si ocultar el diálogo o no, dependiendo de tu lógica
+    } else {
+        throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
     }
+} catch (error) {
+    console.error("Error en la generación de imágenes:", error);  // Imprimir el error
+    showError(error);  // Manejo de errores
+    hideGeneratingImagesDialog();  // Asegúrate de ocultar el diálogo en caso de error
+}
 }
 
 // Función para manejar la respuesta de generación de imágenes y descontar créditos
@@ -716,6 +717,8 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
                 throw new Error('La generación de imágenes está tomando demasiado tiempo.');
             }
         } else if (data.status === "success" && data.images) {
+                hideGeneratingImagesDialog();  // Ocultar el diálogo cuando el proceso haya terminado
+
             showModal(data.images, transformedPrompt);
         } else {
             throw new Error(data.error || 'Estado inesperado recibido.');
