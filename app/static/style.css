@@ -112,7 +112,7 @@ sub, sup {font-size:var(--xs)}
 
 div#mainUI,
 html {
-        background: var(--bunker-800);
+        background: var(--bunker-900);
 }
 
 body {
@@ -1119,20 +1119,18 @@ span.close:hover {
 }
 
 .official {
-     
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    top: 0;
-    margin: 0 auto;
-    width: calc(100% - 40px);
-    position: fixed;
-    background: linear-gradient(180deg, rgb(35 51 67) 25%, rgb(35 51 67 / 50%) 74%, rgb(35 51 67 / 0%) 100%);
-    backdrop-filter: blur(2px);
-    z-index: 2;
- 
+     display: flex;
+     flex-direction: row;
+     justify-content: space-between;
+     align-items: center;
+     padding: 0 20px;
+     top: 0;
+     margin: 0 auto;
+     width: calc(100% - 40px);
+     position: fixed;
+     background: linear-gradient(180deg, rgb(17 25 34) 25%, rgb(17 25 34 / 52%) 74%, rgb(17 25 34 / 0%) 100%);
+     backdrop-filter: blur(2px);
+     z-index: 2;
 }
 
 .avatar img {
@@ -2894,7 +2892,7 @@ option[title]:hover:after {
 }
 
 .gradient-background {
-        background: var(--bunker-600);
+        background: var(--bunker-900);
         /*
   background: linear-gradient(300deg, deepskyblue, darkviolet, blue);
   background-size: 180% 180%;
@@ -3902,7 +3900,7 @@ button#extractColorsFromUrlButton {
     z-index: 1;
     overflow: auto;
     background: var(--bunker-800);
-    box-shadow: -4px -20px 10px 10px rgb(30 45 60);
+    /* box-shadow: -4px -20px 10px 10px rgb(30 45 60); */
     transition: none; /* Desactiva la transición porque usamos animación */
 }
 
