@@ -710,19 +710,19 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
             })
         });
 
-        if (data.status === 'processing') {
-            if (retries > 0) {
-                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
-            } else {
-                throw new Error('La generación de imágenes está tomando demasiado tiempo.');
-            }
-        } else if (data.status === "success" && data.images) {
-                hideGeneratingImagesDialog();  // Ocultar el diálogo cuando el proceso haya terminado
-
-            showModal(data.images, transformedPrompt);
-        } else {
-            throw new Error(data.error || 'Estado inesperado recibido.');
-        }
+        if (data.status === "success" && data.images) {
+    hideGeneratingImagesDialog();  // Ocultar el diálogo cuando el proceso haya terminado
+    showModal(data.images, transformedPrompt);
+} else if (data.status === 'processing') {
+    // Aquí no oculta el diálogo porque sigue en proceso
+    if (retries > 0) {
+        setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+    } else {
+        throw new Error('La generación de imágenes está tomando demasiado tiempo.');
+    }
+} else {
+    throw new Error(data.error || 'Estado inesperado recibido.');
+}
     } catch (error) {
         showError(error);
     }
