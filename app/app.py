@@ -198,7 +198,8 @@ def generate_images():
                     # Devuelve las imágenes generadas y el prompt transformado
                     return jsonify({
                         "images": result.get('output'),
-                        "transformed_prompt": transformed_prompt
+                        "transformed_prompt": transformed_prompt,
+                        "credits": session['credits']  # Devuelve los créditos restantes
                     }), 200
 
                 # Si las imágenes están en proceso, devuelve un mensaje indicando que están procesándose
