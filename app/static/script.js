@@ -655,33 +655,32 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-  try {
-    // Enviar solicitud al backend
-    const data = await fetchWithRetry("/generate-images", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(prompt)
-    });
+   try {
+        // Enviar solicitud al backend
+        const data = await fetchWithRetry("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        });
 
-    if (data.status === "success" && data.images) {
-        handleImageGenerationResponse(data);  // Descontar créditos
-        transformedPrompt = data.transformed_prompt;
-        showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas
-        // Mover la ocultación del diálogo aquí
-        hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-    } else if (data.request_id) {
-        transformedPrompt = data.transformed_prompt;
-        await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
-        hideGeneratingImagesDialog();  // Ocultar el diálogo de espera después de verificar el estado
-    } else {
-        throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+        if (data.status === "success" && data.images) {
+            handleImageGenerationResponse(data);  // Descontar créditos
+            transformedPrompt = data.transformed_prompt;
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+            showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas
+        } else if (data.request_id) {
+            transformedPrompt = data.transformed_prompt;
+            await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera después de verificar el estado
+        } else {
+            throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+        }
+    } catch (error) {
+        showError(error);  // Manejo de errores
+        hideGeneratingImagesDialog();  // Asegúrate de ocultar el diálogo en caso de error
     }
-} catch (error) {
-    showError(error);  // Manejo de errores
-    hideGeneratingImagesDialog();  // Asegúrate de ocultar el diálogo en caso de error
-}
 }
 
 // Función para manejar la respuesta de generación de imágenes y descontar créditos
