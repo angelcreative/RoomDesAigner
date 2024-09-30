@@ -23,6 +23,18 @@
         --vulkan-700: #343465;
         --vulkan-800: #232343;
         --vulkan-900: #111122;
+    /*java*/
+--java-50: #E9FCF8;
+--java-100: #D2F9F2;
+--java-200: #A6F2E5;
+--java-300: #79ECD8;
+--java-400: #4CE6CB;
+--java-500: #20DFBD;
+--java-600: #19B398;
+--java-700: #138672;
+--java-800: #0D594C;
+--java-900: #062D26;
+
         /*aztec*/
         --aztec-50: #eef6f6;
         --aztec-100: #ddeeee;
@@ -1609,24 +1621,11 @@ h4 {
         display: none;
 }
 
-.menu {
-position: sticky;
-    top: -10px;
-    backdrop-filter: blur(2px);
-    z-index: 9;
-    height: 40px;
-    background: var(--vulkan-600);
-    border-radius: var(--2xl);
-    padding: 4px 16px;
-    display: flex;
-    align-items: center;
-    margin: 0 auto 8px auto;
-    box-shadow: 0px 2px 4px 2px #11192263;
-}
+.menu {position: sticky;top: -10px;backdrop-filter: blur(2px);z-index: 9;height: 40px;background: var(--java-600);border-radius: var(--2xl);padding: 4px 16px;display: flex;align-items: center;margin: 0 auto 8px auto;box-shadow: 0px 2px 4px 2px #11192263;}
 
 .menu h1 {
     margin:0;
-    color: var(--vulkan-300);
+    color: var(--java-100);
 }
 
 .menuButton {
@@ -2019,7 +2018,7 @@ i {
 }
 
 #modal {
-       background: var(--bunker-800);
+       background: var(--bunker-900);
 }
 
 .carousel-wrapper {
@@ -3939,23 +3938,23 @@ label.hamburger {
     cursor: pointer;
     position: absolute;
     right: 6px;
-    background: var(--vulkan-800);
+    background: var(--java-700);
     line-height: 0;
     padding: var(--3xs);
     border-radius: var(--2xl);
 }
 
 label.hamburger:hover {
-    background: var(--vulkan-300);
+    background: var(--java-300);
 }
 
 .hamburger .material-symbols-outlined {
-    color: var(--vulkan-50);
+    color: var(--java-200);
     transition: color cubic-bezier(0.4, 0, 1, 1) 300ms;
 }
 
 .hamburger:hover .material-symbols-outlined {
-    color: var(--vulkan-600);
+    color: var(--java-600);
 }
 
 /* Estilos generales para el scrollbar */
@@ -4124,12 +4123,13 @@ label.hamburger:hover {
 
 .fil button, .fil button:first-child {
     font-size: var(--xs);
-    background: var(--vulkan-50);
+    background: transparent;
     width: auto;
-    color: var(--vulkan-500);
+    color: var(--java-500);
     border-radius: var(--3xs);
     margin: 0 0 var(--3xs);
     padding: var(--2xs) var(--s);
+    border: 1px solid var(--java-500);
 }
 
 
