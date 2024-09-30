@@ -4112,11 +4112,12 @@ label.hamburger:hover {
 }
 
 .fil {
-    width: 90%;
+   width: 90%;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-            height: fit-content;
+    height: fit-content;
+    margin-top: -40px;
 }
 
 
@@ -4205,7 +4206,7 @@ label.hamburger:hover {
         width: 100%;
         flex: 0 0 100%; /* 1 slide por vista */
     }
-          .ig {
+        .fil, .ig {
         display: none
     }
     
@@ -4229,7 +4230,7 @@ label.hamburger:hover {
 @media only screen and (min-device-width: 481px) and (max-device-width: 600px) {
 
         /* CSS styles for screens up to 600px */
-    .ig {
+   .fil, .ig {
         display: none
     }
     
