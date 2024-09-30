@@ -533,13 +533,23 @@ async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
     }
 }
 
+    
+function updateCreditsDisplay(remainingCredits) {
+    // Obtiene el elemento HTML donde se muestran los créditos
+    const creditDisplay = document.getElementById("creditDisplay");
+
+    // Actualiza el texto del elemento con la cantidad de créditos restantes
+    creditDisplay.textContent = remainingCredits;  
+}
+   
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
- const pictureSelect = document.getElementById("imageDisplayUrl");
-  const selectedPicture = pictureSelect.value;
+    const pictureSelect = document.getElementById("imageDisplayUrl");
+    const selectedPicture = pictureSelect ? pictureSelect.value : null;
+
     // Extraer valores seleccionados por el usuario
     let plainText = Object.entries(selectedValues)
         .filter(([key, value]) => value && key !== "imageUrl")
@@ -570,36 +580,30 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Configurar semilla si está activada la opción
     const seedSwitch = document.getElementById("seedSwitch");
-    const seedEnabled = seedSwitch.checked;
+    const seedEnabled = seedSwitch && seedSwitch.checked;
     const seedValue = seedEnabled ? null : "19071975";  // Valor predeterminado si no se usa la semilla
 
     // Generar textos opcionales si están habilitados
-    const optionalText = document.getElementById("optionalTextCheckbox").checked ? generateOptionalText() : "";
-    const fractalText = document.getElementById("fractalTextCheckbox").checked ? generateFractalText() : "";
-    const blurredBackground = document.getElementById("blurredTextCheckbox").checked ? generateBlurredBackground() : "";
-    const bokehBackground = document.getElementById("bokehCheckbox").checked ? generateBokehBackground() : "";
-    const sheet = document.getElementById("sheetCheckbox").checked ? generateSheet() : "";
-        const tilt = document.getElementById("tiltCheckbox").checked ? generateTilt() : "";
+    const optionalText = document.getElementById("optionalTextCheckbox")?.checked ? generateOptionalText() : "";
+    const fractalText = document.getElementById("fractalTextCheckbox")?.checked ? generateFractalText() : "";
+    const blurredBackground = document.getElementById("blurredTextCheckbox")?.checked ? generateBlurredBackground() : "";
+    const bokehBackground = document.getElementById("bokehCheckbox")?.checked ? generateBokehBackground() : "";
+    const sheet = document.getElementById("sheetCheckbox")?.checked ? generateSheet() : "";
+    const tilt = document.getElementById("tiltCheckbox")?.checked ? generateTilt() : "";
 
-    const uxui = document.getElementById("uxuiCheckbox").checked ? generateUxui() : "";
- const uxuiWeb = document.getElementById("uxuiWebCheckbox").checked ? generateUxuiWeb() : "";
-     const viewRendering = document.getElementById("viewRenderingCheckbox").checked ? generateViewRendering() : "";
+    const uxui = document.getElementById("uxuiCheckbox")?.checked ? generateUxui() : "";
+    const uxuiWeb = document.getElementById("uxuiWebCheckbox")?.checked ? generateUxuiWeb() : "";
+    const viewRendering = document.getElementById("viewRenderingCheckbox")?.checked ? generateViewRendering() : "";
+    const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
-     const productView = document.getElementById("productViewCheckbox").checked ? generateProductView() : "";
-    
-  
-
-// Modificar la línea que crea evolutionCycle
-const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked ? generateEvo() : "";
-
+    const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
 
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
-// Obtener el modelo seleccionado
+    // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
-    
     // Configuración del modelo basada en la selección del usuario
     let modelConfig;
     if (selectedModel === "flux") {
@@ -615,8 +619,8 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
             lora_strength: null
         };
     }
-    
-// Configuración del modelo (ajustable según la selección del usuario)
+
+    // Configuración del prompt
     const prompt = {
         prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
@@ -628,7 +632,7 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
-       model_id: modelConfig.model_id,
+        model_id: modelConfig.model_id,
         lora_model: modelConfig.lora_model,
         lora_strength: modelConfig.lora_strength,
         scheduler: "DDIMScheduler",
@@ -638,20 +642,19 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
         enhance_prompt: "no"
     };
 
-
-    // Si es una generación img2img, agregar la imagen inicial
+    // Si es img2img, añade la imagen inicial
     if (isImg2Img && imageUrl) {
-    const img2imgThumbnail = document.getElementById('img2imgThumbnail'); // Asegúrate de que sea el contenedor correcto
-    img2imgThumbnail.src = imageUrl; // Asigna la URL de la imagen subida al contenedor de img2img
-    const strengthSlider = document.getElementById("strengthSlider");
-    prompt.init_image = imageUrl;
-    prompt.strength = parseFloat(strengthSlider.value);
-}
-
+        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+        if (img2imgThumbnail) {
+            img2imgThumbnail.src = imageUrl;  // Asigna la URL de la imagen al contenedor
+        }
+        const strengthSlider = document.getElementById("strengthSlider");
+        prompt.init_image = imageUrl;
+        prompt.strength = parseFloat(strengthSlider.value);
+    }
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-    
     try {
         // Enviar solicitud al backend
         const data = await fetchWithRetry("/generate-images", {
@@ -662,72 +665,63 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
             body: JSON.stringify(prompt)
         });
 
-        console.log('Respuesta del backend en generateImages:', data);
-
         if (data.status === "success" && data.images) {
-            // Llama a la función para manejar la respuesta y descontar créditos
-            handleImageGenerationResponse(data); // Descontar créditos
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+            handleImageGenerationResponse(data);  // Descontar créditos
+            transformedPrompt = data.transformed_prompt;
+            showModal(data.images, transformedPrompt);  // Mostrar imágenes generadas
         } else if (data.request_id) {
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
+            transformedPrompt = data.transformed_prompt;
+            await checkImageStatus(data.request_id, transformedPrompt);  // Comprobar estado de la generación
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
         }
     } catch (error) {
         showError(error);  // Manejo de errores
+    } finally {
+        hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
     }
 }
-    
-    
+
 // Función para manejar la respuesta de generación de imágenes y descontar créditos
 function handleImageGenerationResponse(response) {
     if (response.success) {
         // Actualiza el valor de créditos en el DOM
         const creditDisplay = document.getElementById('creditDisplay');
-        const newCredits = parseInt(creditDisplay.textContent) - 4; // Descontar 4 créditos
-        creditDisplay.textContent = newCredits; // Actualiza el texto en el DOM
+        const newCredits = parseInt(creditDisplay.textContent) - 4;  // Descontar 4 créditos
+        creditDisplay.textContent = newCredits;  // Actualiza el DOM
     }
-}    
+}
 
- // Polling para verificar el estado de la generación de imágenes
+// Polling para verificar el estado de la generación de imágenes
 async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
     try {
-        // Enviar solicitud al backend en lugar de a la API externa
-        const data = await fetchWithRetry("/fetch-images", {  // Cambiamos la URL a la del backend
+        // Enviar solicitud para verificar estado
+        const data = await fetchWithRetry("/fetch-images", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                request_id: requestId  // Enviamos solo el request_id
+                request_id: requestId
             })
         });
 
-        console.log('Respuesta del backend en checkImageStatus:', data);
-
         if (data.status === 'processing') {
             if (retries > 0) {
-                console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
                 setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
             } else {
-                throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
+                throw new Error('La generación de imágenes está tomando demasiado tiempo.');
             }
         } else if (data.status === "success" && data.images) {
-             
-            // Las imágenes están listas
-            showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+            showModal(data.images, transformedPrompt);
         } else {
-            throw new Error(data.error || 'Estado inesperado recibido del servidor.');
+            throw new Error(data.error || 'Estado inesperado recibido.');
         }
     } catch (error) {
-        console.error('Error al verificar el estado de las imágenes:', error);
         showError(error);
     }
 }
+
 
 
 function showGeneratingImagesDialog() {
