@@ -50,49 +50,26 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
-if not REPLICATE_API_TOKEN:
-    raise ValueError("REPLICATE_API_TOKEN no está configurado en las variables de entorno.")
-
-# Configurar el cliente de Replicate con el token
-replicate_client = replicate.Client(api_token=REPLICATE_API_TOKEN)
-
-@app.route('/upscale-image', methods=['POST'])
-def upscale_image():
-    data = request.json
-    image_url = data.get('image_url')
-    
-    if not image_url:
-        return jsonify({"error": "No se proporcionó URL de imagen"}), 400
-
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale():
     try:
-        # Ejecutar la predicción usando run
-        output = replicate_client.run(
+        data = request.get_json()
+        image_url = data.get('image_url')
+        if not image_url:
+            return jsonify({"error": "Missing image URL"}), 400
+
+        # Ejecuta el modelo Clarity para superresolución
+        model = replicate.run(
             "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={
-                "image": image_url,
-                "scale_factor": 2,  # Ajusta según sea necesario
-                "prompt": "masterpiece, best quality, highres",  # Ajusta según sea necesario
-                "negative_prompt": "(worst quality, low quality, normal quality:2)",  # Ajusta según sea necesario
-                "dynamic": 6,  # Ajusta según sea necesario
-                "creativity": 0.35,  # Ajusta según sea necesario
-                "resemblance": 0.6  # Ajusta según sea necesario
-            }
+            input={"image": image_url}
         )
 
-        # Verificar si el output es una lista y extraer la URL
-        if isinstance(output, list) and len(output) > 0:
-            return jsonify({"upscaled_url": output[0]})
-        else:
-            return jsonify({"error": "No se recibió URL de imagen mejorada"}), 500
-
-    except replicate.exceptions.ModelError as e:
-        return jsonify({"error": f"Error del modelo: {str(e)}"}), 500
-    except replicate.exceptions.ReplicateError as e:
-        return jsonify({"error": f"Error de Replicate: {str(e)}"}), 500
+        upscaled_image_url = model[0]  # Toma la URL de la imagen escalada
+        
+        return jsonify({"upscaled_url": upscaled_image_url}), 200
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {str(e)}"}), 500
-    
-    
+        return jsonify({"error": str(e)}), 500
+ 
     
     
 openai_api_key = os.environ.get('OPENAI_API_KEY')

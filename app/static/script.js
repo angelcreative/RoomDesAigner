@@ -1179,6 +1179,30 @@ function toggleContent() {
     console.error("Toggle content div not found.");
   }
 }
+    
+    
+async function clarityUpscale(imageUrl) {
+    try {
+        const response = await fetch('/clarity-upscale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image_url: imageUrl }),
+        });
+
+        const data = await response.json();
+
+        if (data.upscaled_url) {
+            window.open(data.upscaled_url, "_blank");
+        } else {
+            console.error("Error: No se recibió URL de imagen escalada.");
+        }
+    } catch (error) {
+        console.error('Error al mejorar la imagen con Clarity:', error);
+    }
+}
+
 
 
 // Displays modal with generated images and associated action buttons
@@ -1240,6 +1264,8 @@ imageUrls.forEach((imageUrl) => {
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
     const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
     const enhanceButton = createButton("Enhance", () => upscaleImage(imageUrl));
+const clarityButton = createButton("Clarity", () => clarityUpscale(imageUrl));
+buttonsContainer.appendChild(clarityButton);
 
     
 
@@ -1247,7 +1273,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton,clarityButton].forEach(button => buttonsContainer.appendChild(button));
 
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
@@ -1710,40 +1736,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     }
 }
     
-async function upscaleImage(imageUrl) {
-    try {
-        console.log('Iniciando solicitud de mejora de imagen');
-        const response = await fetch('/upscale-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ image_url: imageUrl }),
-        });
 
-        console.log('Respuesta recibida del servidor');
-        const data = await response.json();
-        console.log('Datos de respuesta:', data);
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Error desconocido');
-        }
-
-        if (data.upscaled_url) {
-            console.log('URL de imagen mejorada recibida:', data.upscaled_url);
-            alert(`Imagen mejorada con éxito. Nueva URL: ${data.upscaled_url}`);
-            // Aquí puedes hacer algo con la URL de la imagen mejorada, como mostrarla en la interfaz
-        } else {
-            console.error('No se recibió URL de imagen mejorada');
-            alert('Error: No se recibió URL de imagen mejorada.');
-        }
-    } catch (error) {
-        console.error('Error al mejorar la imagen:', error);
-        alert(`Error al mejorar la imagen: ${error.message}`);
-    }
-}
-    
-    
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {
     const container = document.createElement("div");
