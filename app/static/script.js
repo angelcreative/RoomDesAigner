@@ -684,10 +684,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 // Función para manejar la respuesta de generación de imágenes y descontar créditos
 function handleImageGenerationResponse(response) {
-    if (response.success) {
+     if (response.success) {
         // Actualiza el valor de créditos en el DOM usando la función updateCreditsDisplay
         const newCredits = response.credits;  // Obtiene los créditos restantes de la respuesta
         updateCreditsDisplay(newCredits);  // Llama a la función para actualizar el DOM
+    } else {
+        console.error("Error en la generación de imágenes:", response.error); // Manejo de errores
     }
 }
 
