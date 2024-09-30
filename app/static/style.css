@@ -4228,6 +4228,26 @@ label.hamburger:hover {
     
     .serialButton button {
         display: none;}
+    
+    
+    
+    form.loginForm {
+        width: 100%
+    }
+    
+    
+    .loginModal {
+    
+    width: calc(100% - 100px);
+    margin: auto;
+    
+    flex-direction: column;
+    padding: 40px;
+    align-items: center;
+    justify-content: space-around;
+}
+    
+    
     }
     
 
