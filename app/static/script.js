@@ -611,8 +611,8 @@ const evolutionCycle = document.getElementById("evolutionCycleCheckbox").checked
     } else if (selectedModel === "fluxdev") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "fluxschnelldev",
-            lora_strength: 0.7
+            lora_model: null,
+            lora_strength: null
         };
     }
     
