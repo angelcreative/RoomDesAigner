@@ -264,30 +264,30 @@ def fetch_images():
         # Realizar la solicitud a la API de fetch
         fetch_response = requests.post(fetch_url, headers=headers, json=fetch_payload, timeout=60)
 
-if fetch_response.status_code == 200:
-    result = fetch_response.json()
+        if fetch_response.status_code == 200:
+        result = fetch_response.json()
 
-    # Si las imágenes están listas, devuélvelas
-    if result.get('status') == 'success' and result.get('output'):
-        # Deduce 2 créditos del usuario
-        username = session['username']  # Asegúrate de que el usuario esté en la sesión
-        deduct_credits(username, 2)  # Deduce 2 créditos
-        return jsonify({
-            "status": "success",
-            "images": result.get('output')
-        }), 200
+        # Si las imágenes están listas, devuélvelas
+        if result.get('status') == 'success' and result.get('output'):
+            # Deduce 2 créditos del usuario
+            username = session['username']  # Asegúrate de que el usuario esté en la sesión
+            deduct_credits(username, 2)  # Deduce 2 créditos
+            return jsonify({
+                "status": "success",
+                "images": result.get('output')
+            }), 200
 
-    # Si aún están procesándose, devolver un estado de espera
-    elif result.get('status') == 'processing':
-        return jsonify({
-            "message": "Las imágenes aún se están procesando, por favor intenta más tarde.",
-            "status": "processing"
-        }), 202
+        # Si aún están procesándose, devolver un estado de espera
+        elif result.get('status') == 'processing':
+            return jsonify({
+                "message": "Las imágenes aún se están procesando, por favor intenta más tarde.",
+                "status": "processing"
+            }), 202
 
-    else:
-        return jsonify({"error": "Estado inesperado recibido del servidor", "details": result}), 500
+        else:
+            return jsonify({"error": "Estado inesperado recibido del servidor", "details": result}), 500
 
-return jsonify({"error": "No se pudo obtener el estado de las imágenes", "details": fetch_response.text}), fetch_response.status_code
+    return jsonify({"error": "No se pudo obtener el estado de las imágenes", "details": fetch_response.text}), fetch_response.status_code
 
     except requests.exceptions.Timeout:
         return jsonify({"error": "La solicitud agotó el tiempo de espera. Por favor, intenta de nuevo."}), 504
