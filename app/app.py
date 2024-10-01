@@ -68,7 +68,8 @@ def clarity_upscale():
         payload = {
             "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             "input": {"image": image_url},
-            "webhook": "https://www.roomdesaigner.com/webhook"  # Cambia esto a tu URL de webhook
+            "webhook": "https://www.roomdesaigner.com/webhook",  # Cambia esto a tu URL de webhook
+            "webhook_events_filter": ["completed"]  # Solo recibir notificaciones cuando se complete
         }
 
         # Hacemos la solicitud POST a la API de Replicate
@@ -83,33 +84,6 @@ def clarity_upscale():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/prediction-status/<prediction_id>', methods=['GET'])
-def prediction_status(prediction_id):
-    try:
-        headers = {
-            "Authorization": f"Token {REPLICATE_API_TOKEN}",
-            "Content-Type": "application/json"
-        }
-        response = requests.get(f"https://api.replicate.com/v1/predictions/{prediction_id}", headers=headers)
-
-        # Verificamos el estado de la respuesta
-        if response.status_code != 200:
-            return jsonify({"error": "Failed to fetch prediction status", "details": response.json()}), response.status_code
-
-        prediction = response.json()
-
-        # Si la predicción se ha completado, devolver la URL de la imagen
-        if prediction.get("status") == "succeeded":
-            output_urls = prediction.get("output", [])
-            if output_urls:
-                return jsonify({"output": output_urls}), 200  # Devolver todas las URLs
-            else:
-                return jsonify({"error": "No output found"}), 500
-        else:
-            return jsonify({"status": prediction.get("status")}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.json
@@ -121,10 +95,17 @@ def webhook():
 
     if status == 'succeeded':
         output_urls = data.get('output', [])
-        # Aquí puedes guardar la URL en la base de datos o enviar una notificación al cliente
-        logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
+        if output_urls:
+            # Aquí puedes guardar la URL en la base de datos o enviar una notificación al cliente
+            logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
+        else:
+            logging.error(f"Predicción {prediction_id} completada, pero no se encontraron URLs.")
     
-    return jsonify({"status": "received"}), 200 
+    return jsonify({"status": "received"}), 200
+ 
+    
+    
+    
     
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:

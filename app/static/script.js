@@ -340,6 +340,9 @@ function generateEvo() {
 }
 
     
+   function generateMiniature(customText) {
+    return `  picture a miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText}weapons, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
+    
     
    function generateUxuiWeb(customText) {
     return `Imagine designing a sleek, modern hero section for a landing page dedicated to ${customText}. This hero section should focus on capturing the user's attention with a clean and appealing design, highlighting key elements such as a bold headline, clear subtitles, and a conversion-focused call to action (CTA). The design should integrate high-quality images or graphics, all optimized for a smooth and effective user experience. This project covers UI design, UX/UI design, product design, and web design.`;
@@ -601,9 +604,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
+    
+    const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${miniature}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
@@ -1179,35 +1184,8 @@ async function clarityUpscale(imageUrl) {
         const prediction = await createResponse.json();
 
         if (prediction.id) {
-            const predictionUrl = `/prediction-status/${prediction.id}`;
-            let status = "starting";
-            let upscaledImageUrls = [];  
-
-            while (status === "starting" || status === "processing") {
-                const statusResponse = await fetch(predictionUrl);
-                const statusData = await statusResponse.json();
-                console.log("Estado de la predicción:", statusData);  // Verifica la respuesta completa
-
-                status = statusData.status;
-
-                if (status === "succeeded") {
-                    if (Array.isArray(statusData.output) && statusData.output.length > 0) {
-                        upscaledImageUrls = statusData.output;
-                    } else {
-                        console.error("Error: 'output' no es un array o está vacío.");
-                    }
-                    break;
-                }
-
-                await new Promise(resolve => setTimeout(resolve, 60000));  // Esperar más tiempo
-            }
-
-            if (upscaledImageUrls.length > 0) {
-                console.log("URL escaladas recibidas:", upscaledImageUrls);
-                upscaledImageUrls.forEach(url => window.open(url, "_blank"));
-            } else {
-                console.error("Error: No se recibió la URL de la imagen escalada.");
-            }
+            console.log('Predicción iniciada con ID:', prediction.id);
+            // No es necesario seguir consultando el estado, el webhook se encargará de manejar la respuesta.
         } else {
             console.error('Error al iniciar la predicción:', prediction.error);
         }
@@ -1215,9 +1193,6 @@ async function clarityUpscale(imageUrl) {
         console.error('Error al mejorar la imagen con Clarity:', error);
     }
 }
-
-
-
 
     
     
