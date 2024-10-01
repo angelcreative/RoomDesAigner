@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from pydantic import BaseModel, Field
 from typing import Optional
-from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -19,7 +18,6 @@ import time
 import openai
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 #CORS(app, resources={r"/*": {"origins": "*"}})
@@ -52,56 +50,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 
-@app.route('/clarity-upscale', methods=['POST'])
-def clarity_upscale():
-    try:
-        data = request.get_json()
-        image_url = data.get('image_url')
 
-        if not image_url:
-            return jsonify({"error": "Image URL is required"}), 400
-
-        url = "https://api.replicate.com/v1/predictions"
-        headers = {
-            "Authorization": f"Token {REPLICATE_API_TOKEN}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            "input": {"image": image_url},
-            "webhook": "https://your-server-url/webhook",  # Change to your actual URL
-            "webhook_events_filter": ["completed"]
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-
-        if response.status_code == 201:
-            prediction = response.json()
-            return jsonify({"id": prediction["id"]}), 200
-        else:
-            return jsonify({"error": "Failed to start prediction", "details": response.json()}), response.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    data = request.json
-    prediction_id = data.get('id')
-    status = data.get('status')
-    
-    if not prediction_id or not status:
-        return jsonify({"error": "Invalid data received"}), 400
-
-    if status == 'succeeded':
-        output_urls = data.get('output', [])
-        if output_urls:
-            # Emit the result to the frontend using WebSocket
-            socketio.emit('image_ready', {'url': output_urls[0]})
-            logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
-        else:
-            logging.error(f"Predicción {prediction_id} completada, pero no se encontraron URLs.")
-    
-    return jsonify({"status": "received"}), 200
  
     
     

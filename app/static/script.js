@@ -1172,37 +1172,8 @@ function openPhotopeaWithImage(imageUrl) {
 
     
 
-       
- async function clarityUpscale(imageUrl) {
-    try {
-        const createResponse = await fetch('/clarity-upscale', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ image_url: imageUrl }),
-        });
-
-        const prediction = await createResponse.json();
-
-        if (prediction.id) {
-            console.log('Predicción iniciada con ID:', prediction.id);
-            // Ya no necesitas consultar constantemente, solo abre la URL del webhook
-        } else {
-            console.error('Error al iniciar la predicción:', prediction.error);
-        }
-    } catch (error) {
-        console.error('Error al mejorar la imagen con Clarity:', error);
-    }
-}
-
-// Simulación de recibir la URL desde el webhook
-function displayAlertWithImageUrl(imageUrl) {
-    alert('La imagen escalada está disponible en: ' + imageUrl);
-}
 
        
-
     
     
     // Function to toggle the visibility of the prompt details
@@ -1281,8 +1252,7 @@ imageUrls.forEach((imageUrl) => {
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
     buttonsContainer.appendChild(filterButton);
-const clarityButton = createButton("Clarity", () => clarityUpscale(imageUrl));
-buttonsContainer.appendChild(clarityButton);
+
 
     
 
@@ -1290,7 +1260,7 @@ buttonsContainer.appendChild(clarityButton);
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, ].forEach(button => buttonsContainer.appendChild(button));
 
    
 
