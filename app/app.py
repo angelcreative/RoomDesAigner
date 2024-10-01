@@ -55,13 +55,14 @@ def clarity_upscale():
     try:
         data = request.get_json()
         image_url = data.get('image_url')
-        
-        # Obtén el modelo y crea la predicción
+
+        # Obtén el modelo y su versión
         model = replicate.models.get("philz1337x/clarity-upscaler")
-        prediction = model.predict(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
-        )
+        version = model.versions.get("dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e")
+        
+        # Realiza la predicción utilizando la versión
+        prediction = version.predict(input={"image": image_url})
+        
         return jsonify({"id": prediction.id}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -73,6 +74,7 @@ def prediction_status(prediction_id):
         return jsonify(prediction), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
     
     
