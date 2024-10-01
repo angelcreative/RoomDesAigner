@@ -1311,7 +1311,7 @@ buttonsContainer.appendChild(clarityButton);
     // Crear el menú de filtros y añadir sliders
     const filterMenu = document.createElement("div");
     filterMenu.classList.add("filter-menu");
-    filterMenu.style.display = "none"; // Oculto por defecto
+    filterMenu.style.display = "block"; // Oculto por defecto
 
     // Slider para el grano con label
     const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);

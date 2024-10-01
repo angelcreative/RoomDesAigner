@@ -1896,7 +1896,7 @@ select#harmonyType {
 }
 
 .image-buttons button:nth-child(8) {
-        background: url("/static/img/ico_grid/ico_enhance.svg") center center
+        background: url("/static/img/ico_grid/ico_upscale.svg") center center
                 no-repeat;
         background-size: 36px;
 }
