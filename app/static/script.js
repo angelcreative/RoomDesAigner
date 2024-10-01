@@ -1167,10 +1167,8 @@ function openPhotopeaWithImage(imageUrl) {
 
     
     
-    //Upscale
 async function clarityUpscale(imageUrl) {
     try {
-        // Inicia la predicción
         const response = await fetch('/clarity-upscale', {
             method: 'POST',
             headers: {
@@ -1182,13 +1180,11 @@ async function clarityUpscale(imageUrl) {
         const prediction = await response.json();
 
         if (prediction.id) {
-            // Sigue verificando el estado de la predicción
             const predictionUrl = `/prediction-status/${prediction.id}`;
             let status = "starting";
             let upscaledImageUrl = null;
 
             while (status === "starting" || status === "processing") {
-                // Consulta el estado de la predicción
                 const statusResponse = await fetch(predictionUrl);
                 const statusData = await statusResponse.json();
                 status = statusData.status;
@@ -1198,7 +1194,6 @@ async function clarityUpscale(imageUrl) {
                     break;
                 }
 
-                // Espera un poco antes de la siguiente consulta
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
 

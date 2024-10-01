@@ -59,18 +59,15 @@ def clarity_upscale():
         if not image_url:
             return jsonify({"error": "Image URL is required"}), 400
 
-        # Obtén el modelo y su versión
-        model = replicate.models.get("philz1337x/clarity-upscaler")
-        version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"  # ID de la versión directamente
-        
         # Inicia la predicción asincrónica
-        prediction = replicate.predictions.create(version=version_id, input={"image": image_url})
+        prediction = replicate.predictions.create(
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input={"image": image_url}
+        )
         
         return jsonify({"id": prediction.id}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
 
 
 @app.route('/prediction-status/<prediction_id>', methods=['GET'])
