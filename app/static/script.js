@@ -572,10 +572,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
     if (aspectRatio === "landscape") {
-        width = 1600;
-        height = 900;
+        width = 1200;
+        height = 800;
     } else if (aspectRatio === "portrait") {
-        width = 900;
+        width = 800;
         height = 1200;
     } else if (aspectRatio === "square") {
         width = 1200;
@@ -1255,7 +1255,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, ].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
 
    
 
