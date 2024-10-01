@@ -52,23 +52,20 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
-    try:
-        data = request.get_json()
-        image_url = data.get('image_url')
-        if not image_url:
-            return jsonify({"error": "Missing image URL"}), 400
+    data = request.get_json()
+    image_url = data.get('image_url')
+    prediction = replicate.predictions.create(
+        version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+        input={"image": image_url}
+    )
+    return jsonify({"id": prediction.id})
 
-        # Ejecuta el modelo Clarity para superresolución
-        model = replicate.run(
-            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
-        )
+@app.route('/prediction-status/<prediction_id>', methods=['GET'])
+def prediction_status(prediction_id):
+    prediction = replicate.predictions.get(prediction_id)
+    return jsonify(prediction)
 
-        upscaled_image_url = model[0]  # Toma la URL de la imagen escalada
-        
-        return jsonify({"upscaled_url": upscaled_image_url}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
  
     
     

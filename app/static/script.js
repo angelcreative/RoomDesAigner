@@ -957,9 +957,12 @@ async function copyTextToClipboard(text) {
   }
 }
 
-        
+    
 
 //reverse
+    
+    
+    
     
 // Function to search an image on RapidAPI and display results in a new tab
 async function searchImageOnRapidAPI(imageUrl) {
@@ -1162,6 +1165,56 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
+    
+    
+    //Upscale
+async function clarityUpscale(imageUrl) {
+    try {
+        // Inicia la predicción
+        const response = await fetch('/clarity-upscale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ image_url: imageUrl }),
+        });
+        
+        const prediction = await response.json();
+
+        if (prediction.id) {
+            // Sigue verificando el estado de la predicción
+            const predictionUrl = `/prediction-status/${prediction.id}`;
+            let status = "starting";
+            let upscaledImageUrl = null;
+
+            while (status === "starting" || status === "processing") {
+                // Consulta el estado de la predicción
+                const statusResponse = await fetch(predictionUrl);
+                const statusData = await statusResponse.json();
+                status = statusData.status;
+
+                if (status === "succeeded") {
+                    upscaledImageUrl = statusData.output[0];
+                    break;
+                }
+
+                // Espera un poco antes de la siguiente consulta
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+
+            if (upscaledImageUrl) {
+                window.open(upscaledImageUrl, "_blank");
+            } else {
+                console.error("Error: No se recibió la URL de la imagen escalada.");
+            }
+        } else {
+            console.error('Error al iniciar la predicción:', prediction.error);
+        }
+    } catch (error) {
+        console.error('Error al mejorar la imagen con Clarity:', error);
+    }
+}
+
 
 
     
@@ -1240,6 +1293,8 @@ imageUrls.forEach((imageUrl) => {
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
     const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
     const enhanceButton = createButton("Enhance", () => upscaleImage(imageUrl));
+const clarityButton = createButton("Clarity", () => clarityUpscale(imageUrl));
+buttonsContainer.appendChild(clarityButton);
 
     
 
@@ -1247,7 +1302,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
 
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
