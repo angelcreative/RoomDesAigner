@@ -1201,18 +1201,16 @@ async function clarityUpscale(imageUrl) {
 }
                 }
 
-                await new Promise(resolve => setTimeout(resolve, 9000));
+                await new Promise(resolve => setTimeout(resolve, 30000));
             }
 
             if (upscaledImageUrls.length > 0) {
-                // Abre todas las URLs en nuevas pestañas
-                upscaledImageUrls.forEach(url => window.open(url, "_blank"));
-            } else {
-                console.error("Error: No se recibió la URL de la imagen escalada.");
-            }
-        } else {
-            console.error('Error al iniciar la predicción:', prediction.error);
-        }
+    console.log("URL escaladas recibidas:", upscaledImageUrls);  // Verifica el contenido del array
+    upscaledImageUrls.forEach(url => window.open(url, "_blank"));
+} else {
+    console.error("Error: No se recibió la URL de la imagen escalada. Array:", upscaledImageUrls);
+}
+
     } catch (error) {
         console.error('Error al mejorar la imagen con Clarity:', error);
     }
