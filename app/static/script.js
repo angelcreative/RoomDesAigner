@@ -1190,7 +1190,8 @@ async function clarityUpscale(imageUrl) {
                 status = statusData.status;
 
                 if (status === "succeeded") {
-                    upscaledImageUrl = statusData.output[0];
+                            
+                    upscaledImageUrl = statusData.output;
                     break;
                 }
 
