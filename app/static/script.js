@@ -1173,7 +1173,7 @@ function openPhotopeaWithImage(imageUrl) {
     
 
        
-   async function clarityUpscale(imageUrl) {
+ async function clarityUpscale(imageUrl) {
     try {
         const createResponse = await fetch('/clarity-upscale', {
             method: 'POST',
@@ -1182,12 +1182,12 @@ function openPhotopeaWithImage(imageUrl) {
             },
             body: JSON.stringify({ image_url: imageUrl }),
         });
-        
+
         const prediction = await createResponse.json();
 
         if (prediction.id) {
             console.log('Predicción iniciada con ID:', prediction.id);
-            // No es necesario seguir consultando el estado, el webhook se encargará de manejar la respuesta.
+            // Ya no necesitas consultar constantemente, solo abre la URL del webhook
         } else {
             console.error('Error al iniciar la predicción:', prediction.error);
         }
@@ -1195,6 +1195,12 @@ function openPhotopeaWithImage(imageUrl) {
         console.error('Error al mejorar la imagen con Clarity:', error);
     }
 }
+
+// Simulación de recibir la URL desde el webhook
+function displayAlertWithImageUrl(imageUrl) {
+    alert('La imagen escalada está disponible en: ' + imageUrl);
+}
+
        
 
     
