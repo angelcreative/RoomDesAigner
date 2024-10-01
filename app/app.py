@@ -78,7 +78,7 @@ def clarity_upscale():
             prediction = response.json()
             return jsonify({"id": prediction["id"]}), 200
         else:
-            return jsonify({"error": "Failed to start prediction"}), response.status_code
+            return jsonify({"error": "Failed to start prediction", "details": response.json()}), response.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -90,21 +90,24 @@ def prediction_status(prediction_id):
             "Content-Type": "application/json"
         }
         response = requests.get(f"https://api.replicate.com/v1/predictions/{prediction_id}", headers=headers)
+
+        # Verificamos el estado de la respuesta
+        if response.status_code != 200:
+            return jsonify({"error": "Failed to fetch prediction status", "details": response.json()}), response.status_code
+
         prediction = response.json()
 
         # Si la predicción se ha completado, devolver la URL de la imagen
         if prediction.get("status") == "succeeded":
             output_urls = prediction.get("output", [])
             if output_urls:
-                return jsonify({"output": output_urls[0]}), 200
+                return jsonify({"output": output_urls}), 200  # Devolver todas las URLs
             else:
                 return jsonify({"error": "No output found"}), 500
         else:
             return jsonify({"status": prediction.get("status")}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
     
 
 

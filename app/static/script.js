@@ -1169,7 +1169,8 @@ function openPhotopeaWithImage(imageUrl) {
     
 async function clarityUpscale(imageUrl) {
     try {
-        const response = await fetch('/clarity-upscale', {
+        // Crear la predicción
+        const createResponse = await fetch('/clarity-upscale', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1177,7 +1178,7 @@ async function clarityUpscale(imageUrl) {
             body: JSON.stringify({ image_url: imageUrl }),
         });
         
-        const prediction = await response.json();
+        const prediction = await createResponse.json();
 
         if (prediction.id) {
             const predictionUrl = `/prediction-status/${prediction.id}`;
