@@ -340,9 +340,6 @@ function generateEvo() {
 }
 
     
-   function generateMiniature(customText) {
-    return `  picture a miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText}weapons, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
-    
     
    function generateUxuiWeb(customText) {
     return `Imagine designing a sleek, modern hero section for a landing page dedicated to ${customText}. This hero section should focus on capturing the user's attention with a clean and appealing design, highlighting key elements such as a bold headline, clear subtitles, and a conversion-focused call to action (CTA). The design should integrate high-quality images or graphics, all optimized for a smooth and effective user experience. This project covers UI design, UX/UI design, product design, and web design.`;
@@ -604,11 +601,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
-    
-    const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${miniature}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
@@ -1170,6 +1165,9 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
+    
+
+
 
     
     
@@ -1249,7 +1247,7 @@ imageUrls.forEach((imageUrl) => {
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
     buttonsContainer.appendChild(filterButton);
-
+    
 
     
 
@@ -1257,7 +1255,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, ].forEach(button => buttonsContainer.appendChild(button));
 
    
 
