@@ -303,6 +303,9 @@ function generateBlurredBackground () {
     return "This scene is designed with a tilt-shift effect, which creates an illusion of a tiny model-like scene.";
 }
     
+    function generateMiniature(customText) {
+    return `  picture a miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText} weapons or tools, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
+   }
     
     
       function generateSheet() {
@@ -604,6 +607,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const blurredBackground = document.getElementById("blurredTextCheckbox")?.checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox")?.checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox")?.checked ? generateSheet() : "";
+     const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
     const tilt = document.getElementById("tiltCheckbox")?.checked ? generateTilt() : "";
 
     const uxui = document.getElementById("uxuiCheckbox")?.checked ? generateUxui() : "";
@@ -614,7 +618,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
