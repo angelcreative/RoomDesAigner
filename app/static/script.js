@@ -1187,14 +1187,18 @@ async function clarityUpscale(imageUrl) {
             while (status === "starting" || status === "processing") {
                 const statusResponse = await fetch(predictionUrl);
                 const statusData = await statusResponse.json();
-                console.log(statusData);
+                console.log("Estado de la predicción:", statusData);  // Verifica la respuesta
 
                 status = statusData.status;
 
-                // Asegúrate de que 'output' esté presente en la respuesta
-                if (status === "succeeded" && statusData.output) {
-                    upscaledImageUrl = statusData.output;  // Accede a la URL aquí
-                    break;
+                // Verifica si el estado es "succeeded" y si hay un output
+                if (status === "succeeded") {
+                    if (statusData.output) {
+                        upscaledImageUrl = statusData.output;  // Accede a la URL aquí
+                        break;
+                    } else {
+                        console.error("Error: 'output' no está presente en la respuesta.");
+                    }
                 }
 
                 await new Promise(resolve => setTimeout(resolve, 9000));
