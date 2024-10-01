@@ -3059,9 +3059,7 @@ select#materials {
 }
 
 
-.image-buttons button:nth-child(7) {
-    display: none;
-}
+
 /* Loading message styles */
 #loadingMessage,
 .containerUpscale {
