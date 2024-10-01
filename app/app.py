@@ -72,6 +72,7 @@ def clarity_upscale():
 
 
 
+
 @app.route('/prediction-status/<prediction_id>', methods=['GET'])
 def prediction_status(prediction_id):
     try:
