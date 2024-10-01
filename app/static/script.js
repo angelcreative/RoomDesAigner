@@ -1304,7 +1304,7 @@ buttonsContainer.appendChild(clarityButton);
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton clarityButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
 
    
 
