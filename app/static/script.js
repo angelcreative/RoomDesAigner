@@ -1292,7 +1292,9 @@ imageUrls.forEach((imageUrl) => {
     const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
     const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
     const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
-    const enhanceButton = createButton("Enhance", () => upscaleImage(imageUrl));
+    // Aquí añadimos el botón "Filters"
+    const filterButton = createButton("Filters", toggleFilterMenu);
+    buttonsContainer.appendChild(filterButton);
 const clarityButton = createButton("Clarity", () => clarityUpscale(imageUrl));
 buttonsContainer.appendChild(clarityButton);
 
@@ -1302,11 +1304,9 @@ buttonsContainer.appendChild(clarityButton);
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, enhanceButton, clarityButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton clarityButton].forEach(button => buttonsContainer.appendChild(button));
 
-    // Aquí añadimos el botón "Filters"
-    const filterButton = createButton("Filters", toggleFilterMenu);
-    buttonsContainer.appendChild(filterButton);
+   
 
     // Crear el menú de filtros y añadir sliders
     const filterMenu = document.createElement("div");
