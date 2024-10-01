@@ -64,10 +64,16 @@ def clarity_upscale():
             version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={"image": image_url}
         )
-        
-        return jsonify({"id": prediction.id}), 200
+
+        # Revisamos si prediction devuelve el objeto correcto
+        if isinstance(prediction, replicate.prediction.Prediction):
+            return jsonify({"id": prediction.id}), 200
+        else:
+            return jsonify({"error": "Invalid response from prediction service"}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
 
 
 
