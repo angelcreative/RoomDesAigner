@@ -1182,7 +1182,7 @@ async function clarityUpscale(imageUrl) {
         if (prediction.id) {
             const predictionUrl = `/prediction-status/${prediction.id}`;
             let status = "starting";
-            let upscaledImageUrl = null;
+            let upscaledImageUrls = [];  // Cambiar a un array
 
             while (status === "starting" || status === "processing") {
                 const statusResponse = await fetch(predictionUrl);
@@ -1193,19 +1193,20 @@ async function clarityUpscale(imageUrl) {
 
                 // Verifica si el estado es "succeeded" y si hay un output
                 if (status === "succeeded") {
-                    if (statusData.output) {
-                        upscaledImageUrl = statusData.output;  // Accede a la URL aquí
+                    if (Array.isArray(statusData.output)) {
+                        upscaledImageUrls = statusData.output;  // Asigna el array de URLs
                         break;
                     } else {
-                        console.error("Error: 'output' no está presente en la respuesta.");
+                        console.error("Error: 'output' no es un array.");
                     }
                 }
 
                 await new Promise(resolve => setTimeout(resolve, 9000));
             }
 
-            if (upscaledImageUrl) {
-                window.open(upscaledImageUrl, "_blank");
+            if (upscaledImageUrls.length > 0) {
+                // Abre todas las URLs en nuevas pestañas
+                upscaledImageUrls.forEach(url => window.open(url, "_blank"));
             } else {
                 console.error("Error: No se recibió la URL de la imagen escalada.");
             }
