@@ -304,7 +304,7 @@ function generateBlurredBackground () {
 }
     
     function generateMiniature(customText) {
-    return `  picture a miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText} weapons or tools, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
+    return `  picture an already painted miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText} weapons or tools, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
    }
     
     
