@@ -67,7 +67,8 @@ def clarity_upscale():
         }
         payload = {
             "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            "input": {"image": image_url}
+            "input": {"image": image_url},
+            "webhook": "https://www.roomdesaigner.com/webhook"  # Cambia esto a tu URL de webhook
         }
 
         # Hacemos la solicitud POST a la API de Replicate
@@ -108,10 +109,22 @@ def prediction_status(prediction_id):
             return jsonify({"status": prediction.get("status")}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
 
-
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.json
+    prediction_id = data.get('id')
+    status = data.get('status')
     
+    if not prediction_id or not status:
+        return jsonify({"error": "Invalid data received"}), 400
+
+    if status == 'succeeded':
+        output_urls = data.get('output', [])
+        # Aquí puedes guardar la URL en la base de datos o enviar una notificación al cliente
+        logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
+    
+    return jsonify({"status": "received"}), 200 
     
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 if openai_api_key:
