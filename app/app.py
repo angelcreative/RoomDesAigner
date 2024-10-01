@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template, Response, redirect, url_for, session, flash
 from pydantic import BaseModel, Field
 from typing import Optional
+from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import hmac
 import hashlib
@@ -18,6 +19,7 @@ import time
 import openai
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
 #CORS(app, resources={r"/*": {"origins": "*"}})
@@ -59,7 +61,6 @@ def clarity_upscale():
         if not image_url:
             return jsonify({"error": "Image URL is required"}), 400
 
-        # Configura la solicitud al API de Replicate
         url = "https://api.replicate.com/v1/predictions"
         headers = {
             "Authorization": f"Token {REPLICATE_API_TOKEN}",
@@ -68,14 +69,12 @@ def clarity_upscale():
         payload = {
             "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             "input": {"image": image_url},
-            "webhook": "https://www.roomdesaigner.com/webhook",  # Cambia esto a tu URL de webhook
-            "webhook_events_filter": ["completed"]  # Solo recibir notificaciones cuando se complete
+            "webhook": "https://your-server-url/webhook",  # Change to your actual URL
+            "webhook_events_filter": ["completed"]
         }
 
-        # Hacemos la solicitud POST a la API de Replicate
         response = requests.post(url, json=payload, headers=headers)
 
-        # Verificamos el estado de la respuesta
         if response.status_code == 201:
             prediction = response.json()
             return jsonify({"id": prediction["id"]}), 200
@@ -96,7 +95,8 @@ def webhook():
     if status == 'succeeded':
         output_urls = data.get('output', [])
         if output_urls:
-            # Aquí puedes guardar la URL en la base de datos o enviar una notificación al cliente
+            # Emit the result to the frontend using WebSocket
+            socketio.emit('image_ready', {'url': output_urls[0]})
             logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
         else:
             logging.error(f"Predicción {prediction_id} completada, pero no se encontraron URLs.")

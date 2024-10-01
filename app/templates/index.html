@@ -3823,6 +3823,50 @@ for (i = 0; i < coll.length; i++) {
 }
 </script>
 
+    
+    <!-- socket -->
+    
+<script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+<script>
+    // Initialize the WebSocket connection
+    const socket = io();
+
+    // Listen for the 'image_ready' event from the backend
+    socket.on('image_ready', function(data) {
+        alert('La imagen escalada está lista: ' + data.url);
+    });
+
+    // Function to initiate the image upscale
+    async function clarityUpscale(imageUrl) {
+        try {
+            const createResponse = await fetch('/clarity-upscale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image_url: imageUrl }),
+            });
+
+            const prediction = await createResponse.json();
+
+            if (prediction.id) {
+                console.log('Predicción iniciada con ID:', prediction.id);
+                // WebSocket will handle notifying the client when the image is ready
+            } else {
+                console.error('Error al iniciar la predicción:', prediction.error);
+            }
+        } catch (error) {
+            console.error('Error al mejorar la imagen con Clarity:', error);
+        }
+    }
+</script>
+
+    
+    <!-- end socket -->
+    
+    
+<script>
+    
     <!--custom menu-->
     
 <script>

@@ -3776,6 +3776,13 @@ select {
       font-size: var(--m);
 }
 
+
+#magicButton[disabled] {
+    background: var(--bunker-300);
+    box-shadow: none;
+    color: var(--bunker-400);
+}
+
 #magicButton .fa.fa-arrow-right {
         color: #fff;
         margin: 0;
