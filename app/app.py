@@ -49,7 +49,6 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
-import requests
 
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
@@ -83,7 +82,25 @@ def clarity_upscale():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/prediction-status/<prediction_id>', methods=['GET'])
+def prediction_status(prediction_id):
+    try:
+        headers = {
+            "Authorization": f"Token {REPLICATE_API_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        response = requests.get(f"https://api.replicate.com/v1/predictions/{prediction_id}", headers=headers)
+        prediction = response.json()
 
+        # Revisamos si la predicción ha sido exitosa
+        if prediction.get("status") == "succeeded":
+            return jsonify({"output": prediction["output"]}), 200
+        else:
+            return jsonify({"status": prediction["status"]}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    
 
 
     
