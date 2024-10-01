@@ -1619,7 +1619,7 @@ h4 {
         display: none;
 }
 
-.menu {position: sticky;top: -10px;backdrop-filter: blur(2px);z-index: 9;height: 40px;background: var(--java-600);border-radius: var(--2xl);padding: 4px 16px;display: flex;align-items: center;margin: 0 auto 8px auto;box-shadow: 0px 2px 4px 2px #11192263;}
+.menu {/* position: sticky; *//* top: -10px; *//* z-index: 9; */height: 40px;border-radius: var(--2xl);display: flex;align-items: center;margin: 0 auto 8px auto;}
 
 .menu h1 {
     margin:0;
@@ -3760,7 +3760,20 @@ select {
 }
 
 #magicButton {
-      
+      position: sticky;
+      top: -10px;
+      backdrop-filter: blur(2px);
+      z-index: 9;
+      height: 40px;
+      background: var(--java-600);
+      border-radius: var(--2xl);
+      padding: var(--xl);
+      display: flex;
+      align-items: center;
+      margin: 0 auto 8px auto;
+      box-shadow: 0px 2px 20px 0px #00ffd269;
+      color: var(--aztec-50);
+      font-size: var(--m);
 }
 
 #magicButton .fa.fa-arrow-right {
