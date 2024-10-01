@@ -1195,22 +1195,24 @@ async function clarityUpscale(imageUrl) {
                 // Verifica si el estado es "succeeded" y si hay un output
                 if (status === "succeeded") {
                     if (Array.isArray(statusData.output) && statusData.output.length > 0) {
-    upscaledImageUrls = statusData.output;
-} else {
-    console.error("Error: 'output' no es un array o está vacío.");
-}
+                        upscaledImageUrls = statusData.output;
+                    } else {
+                        console.error("Error: 'output' no es un array o está vacío.");
+                    }
                 }
 
                 await new Promise(resolve => setTimeout(resolve, 30000));
             }
 
             if (upscaledImageUrls.length > 0) {
-    console.log("URL escaladas recibidas:", upscaledImageUrls);  // Verifica el contenido del array
-    upscaledImageUrls.forEach(url => window.open(url, "_blank"));
-} else {
-    console.error("Error: No se recibió la URL de la imagen escalada. Array:", upscaledImageUrls);
-}
-
+                console.log("URL escaladas recibidas:", upscaledImageUrls);  // Verifica el contenido del array
+                upscaledImageUrls.forEach(url => window.open(url, "_blank"));
+            } else {
+                console.error("Error: No se recibió la URL de la imagen escalada. Array:", upscaledImageUrls);
+            }
+        } else {
+            console.error('Error al iniciar la predicción:', prediction.error);
+        }
     } catch (error) {
         console.error('Error al mejorar la imagen con Clarity:', error);
     }
