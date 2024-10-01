@@ -92,13 +92,18 @@ def prediction_status(prediction_id):
         response = requests.get(f"https://api.replicate.com/v1/predictions/{prediction_id}", headers=headers)
         prediction = response.json()
 
-        # Revisamos si la predicción ha sido exitosa
+        # Si la predicción se ha completado, devolver la URL de la imagen
         if prediction.get("status") == "succeeded":
-            return jsonify({"output": prediction["output"]}), 200
+            output_urls = prediction.get("output", [])
+            if output_urls:
+                return jsonify({"output": output_urls[0]}), 200
+            else:
+                return jsonify({"error": "No output found"}), 500
         else:
-            return jsonify({"status": prediction["status"]}), 200
+            return jsonify({"status": prediction.get("status")}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
     
 
