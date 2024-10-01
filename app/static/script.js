@@ -1166,10 +1166,8 @@ function openPhotopeaWithImage(imageUrl) {
 }
 
     
-    
 async function clarityUpscale(imageUrl) {
     try {
-        // Crear la predicción
         const createResponse = await fetch('/clarity-upscale', {
             method: 'POST',
             headers: {
@@ -1183,32 +1181,32 @@ async function clarityUpscale(imageUrl) {
         if (prediction.id) {
             const predictionUrl = `/prediction-status/${prediction.id}`;
             let status = "starting";
-            let upscaledImageUrls = [];  // Cambiar a un array
+            let upscaledImageUrls = [];  
 
             while (status === "starting" || status === "processing") {
                 const statusResponse = await fetch(predictionUrl);
                 const statusData = await statusResponse.json();
-                console.log("Estado de la predicción:", statusData);  // Verifica la respuesta
+                console.log("Estado de la predicción:", statusData);  // Verifica la respuesta completa
 
                 status = statusData.status;
 
-                // Verifica si el estado es "succeeded" y si hay un output
                 if (status === "succeeded") {
                     if (Array.isArray(statusData.output) && statusData.output.length > 0) {
                         upscaledImageUrls = statusData.output;
                     } else {
                         console.error("Error: 'output' no es un array o está vacío.");
                     }
+                    break;
                 }
 
-                await new Promise(resolve => setTimeout(resolve, 30000));
+                await new Promise(resolve => setTimeout(resolve, 60000));  // Esperar más tiempo
             }
 
             if (upscaledImageUrls.length > 0) {
-                console.log("URL escaladas recibidas:", upscaledImageUrls);  // Verifica el contenido del array
+                console.log("URL escaladas recibidas:", upscaledImageUrls);
                 upscaledImageUrls.forEach(url => window.open(url, "_blank"));
             } else {
-                console.error("Error: No se recibió la URL de la imagen escalada. Array:", upscaledImageUrls);
+                console.error("Error: No se recibió la URL de la imagen escalada.");
             }
         } else {
             console.error('Error al iniciar la predicción:', prediction.error);
@@ -1217,6 +1215,7 @@ async function clarityUpscale(imageUrl) {
         console.error('Error al mejorar la imagen con Clarity:', error);
     }
 }
+
 
 
 

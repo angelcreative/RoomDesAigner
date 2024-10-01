@@ -2966,7 +2966,7 @@ option[title]:hover:after {
 .thumbnail {
     width: 100%;
     height: auto;
-    border-radius: var(--xl) var(--xl) 0 0;
+    border-radius: var(--xl);
     opacity: 1;
     transition: opacity ease-out 30ms, transform 300ms ease-in;
     border-top: none;
