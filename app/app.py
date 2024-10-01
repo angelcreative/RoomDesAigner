@@ -49,6 +49,7 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
+import requests
 
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
@@ -59,20 +60,28 @@ def clarity_upscale():
         if not image_url:
             return jsonify({"error": "Image URL is required"}), 400
 
-        # Inicia la predicción asincrónica
-        prediction = replicate.predictions.create(
-            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            input={"image": image_url}
-        )
+        # Configura la solicitud al API de Replicate
+        url = "https://api.replicate.com/v1/predictions"
+        headers = {
+            "Authorization": f"Token {REPLICATE_API_TOKEN}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            "input": {"image": image_url}
+        }
 
-        # Revisamos si prediction devuelve el objeto correcto
-        if isinstance(prediction, replicate.prediction.Prediction):
-            return jsonify({"id": prediction.id}), 200
+        # Hacemos la solicitud POST a la API de Replicate
+        response = requests.post(url, json=payload, headers=headers)
+
+        # Verificamos el estado de la respuesta
+        if response.status_code == 201:
+            prediction = response.json()
+            return jsonify({"id": prediction["id"]}), 200
         else:
-            return jsonify({"error": "Invalid response from prediction service"}), 500
+            return jsonify({"error": "Failed to start prediction"}), response.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 
 
