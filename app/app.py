@@ -70,14 +70,6 @@ def clarity_upscale():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/prediction-status/<prediction_id>', methods=['GET'])
-def prediction_status(prediction_id):
-    try:
-        prediction = replicate.predictions.get(prediction_id)
-        return jsonify(prediction), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 
     
     
