@@ -575,8 +575,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
     if (aspectRatio === "landscape") {
-        width = 1080;
-        height = 800;
+        width = 1600;
+        height = 900;
     } else if (aspectRatio === "portrait") {
         width = 800;
         height = 1080;
