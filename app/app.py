@@ -52,21 +52,28 @@ REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
-    data = request.get_json()
-    image_url = data.get('image_url')
-    prediction = replicate.predictions.create(
-        version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-        input={"image": image_url}
-    )
-    return jsonify({"id": prediction.id})
+    try:
+        data = request.get_json()
+        image_url = data.get('image_url')
+        
+        # Obtén el modelo y crea la predicción
+        model = replicate.models.get("philz1337x/clarity-upscaler")
+        prediction = model.predict(
+            version="dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+            input={"image": image_url}
+        )
+        return jsonify({"id": prediction.id}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/prediction-status/<prediction_id>', methods=['GET'])
 def prediction_status(prediction_id):
-    prediction = replicate.predictions.get(prediction_id)
-    return jsonify(prediction)
+    try:
+        prediction = replicate.predictions.get(prediction_id)
+        return jsonify(prediction), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-
- 
     
     
 openai_api_key = os.environ.get('OPENAI_API_KEY')
