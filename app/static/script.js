@@ -1194,12 +1194,11 @@ async function clarityUpscale(imageUrl) {
 
                 // Verifica si el estado es "succeeded" y si hay un output
                 if (status === "succeeded") {
-                    if (Array.isArray(statusData.output)) {
-                        upscaledImageUrls = statusData.output;  // Asigna el array de URLs
-                        break;
-                    } else {
-                        console.error("Error: 'output' no es un array.");
-                    }
+                    if (Array.isArray(statusData.output) && statusData.output.length > 0) {
+    upscaledImageUrls = statusData.output;
+} else {
+    console.error("Error: 'output' no es un array o está vacío.");
+}
                 }
 
                 await new Promise(resolve => setTimeout(resolve, 9000));
