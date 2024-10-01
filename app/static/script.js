@@ -619,8 +619,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (selectedModel === "fluxdev") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: null,
-            lora_strength: null
+            lora_model: "midjourney-flux-v2",
+            lora_strength: 0.7
         };
     }
 
@@ -1187,6 +1187,9 @@ async function clarityUpscale(imageUrl) {
             while (status === "starting" || status === "processing") {
                 const statusResponse = await fetch(predictionUrl);
                 const statusData = await statusResponse.json();
+                console.log(statusData);
+                console.log("Output: ", statusData.output);
+
                 status = statusData.status;
 
                 if (status === "succeeded") {
