@@ -491,11 +491,22 @@ function showError(error) {
     
     const errorContainer = document.getElementById("errorContainer");
     if (errorContainer) {
-        errorContainer.innerHTML = `<p>Error: ${error.message}</p>`;
+        errorContainer.innerHTML = `
+            <div style="position: relative;">
+                <button id="closeButton" type="button" style="position: absolute; top: 10px; right: 10px;">x</button>
+                <p>Error: ${error.message}</p>
+            </div>
+        `;
         errorContainer.style.display = "block";
+
+        // Agregar el evento para cerrar el modal
+        document.getElementById('closeButton').addEventListener('click', function() {
+            errorContainer.style.display = 'none';
+        });
     } else {
         alert("Error: " + error.message); // Mensaje de alerta en caso de error
     }
+
 
     hideGeneratingImagesDialog(); // Asegúrate de que esta función esté definida si quieres ocultar el diálogo de espera en caso de error
 }
