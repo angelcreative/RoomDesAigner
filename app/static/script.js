@@ -342,7 +342,7 @@ function generateEvo() {
     
    function generateMiniature(customText) {
     return `  picture a miniature figure designed for an rpg tabletop game, styled as a fantasy ${customText} reminiscent of warhammer fantasy. this small, intricately detailed figure is positioned as if ready for battle. the  ${customText}  is adorned in traditional armor, poised with their  ${customText}weapons, capturing the mythical and adventurous essence of fantasy gaming. the colors are matte, specific for the ${customText}.`;
-   }
+    
     
    function generateUxuiWeb(customText) {
     return `Imagine designing a sleek, modern hero section for a landing page dedicated to ${customText}. This hero section should focus on capturing the user's attention with a clean and appealing design, highlighting key elements such as a bold headline, clear subtitles, and a conversion-focused call to action (CTA). The design should integrate high-quality images or graphics, all optimized for a smooth and effective user experience. This project covers UI design, UX/UI design, product design, and web design.`;
@@ -575,8 +575,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
     if (aspectRatio === "landscape") {
-        width = 1600;
-        height = 900;
+        width = 1080;
+        height = 800;
     } else if (aspectRatio === "portrait") {
         width = 800;
         height = 1080;
@@ -1170,10 +1170,7 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-    
 
-
-       
     
     
     // Function to toggle the visibility of the prompt details
@@ -1260,7 +1257,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton, ].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
 
    
 
