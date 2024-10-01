@@ -1188,13 +1188,12 @@ async function clarityUpscale(imageUrl) {
                 const statusResponse = await fetch(predictionUrl);
                 const statusData = await statusResponse.json();
                 console.log(statusData);
-                console.log("Output: ", statusData.output);
 
                 status = statusData.status;
 
-                if (status === "succeeded") {
-                            
-                    upscaledImageUrl = statusData.output;
+                // Asegúrate de que 'output' esté presente en la respuesta
+                if (status === "succeeded" && statusData.output) {
+                    upscaledImageUrl = statusData.output;  // Accede a la URL aquí
                     break;
                 }
 
