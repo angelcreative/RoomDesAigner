@@ -61,10 +61,10 @@ def clarity_upscale():
 
         # Obtén el modelo y su versión
         model = replicate.models.get("philz1337x/clarity-upscaler")
-        version = model.versions.get("dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e")
+        version_id = "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e"  # ID de la versión directamente
         
         # Inicia la predicción asincrónica
-        prediction = replicate.predictions.create(version=version.id, input={"image": image_url})
+        prediction = replicate.predictions.create(version=version_id, input={"image": image_url})
         
         return jsonify({"id": prediction.id}), 200
     except Exception as e:
