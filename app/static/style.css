@@ -4258,8 +4258,32 @@ label.hamburger:hover {
     
     .serialButton button {
         display: none;}
-    }
+    
+    
+        .loginModal {
+
+background: #fff;
+    border-radius: var(--l);
+    width: auto;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    align-items: center;
+    justify-content: space-around;
+
+
 }
+    
+    
+    form.loginForm {
+        width:auto;
+    }
+    
+    }
+
+
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (min-device-width: 481px) and (max-device-width: 600px) {
@@ -4286,20 +4310,26 @@ label.hamburger:hover {
     
     
     form.loginForm {
-        width: 100%
+        width:auto;
     }
     
     
     .loginModal {
-    
-    width: calc(100% - 100px);
+
+background: #fff;
+    border-radius: var(--l);
+    width: auto;
     margin: auto;
-    
+    text-align: center;
+    display: flex;
     flex-direction: column;
     padding: 40px;
     align-items: center;
     justify-content: space-around;
+
+
 }
+
     
     
     }
