@@ -1904,21 +1904,47 @@ select#harmonyType {
 
 div#errorContainer {
     text-align: center;
-    display: flex;
     align-content: center;
     margin: 15% auto;
     position: relative;
     z-index: 10;
-    height: 40px;
-    background: var(--dragon-600);
-    width: 300px;
-    padding: var(
-    --l);
-    color: var(--dragon-100);
+    background: var(--dragon-200);
+    width: 30%;
+    padding: var(--l);
+    color: var(--dragon-600);
     box-shadow: 0px 0px 1000px 1000px #111922e6;
     border-radius: var(--l);
     height: fit-content;
 }
+
+
+#errorContainer > div #closeButton {
+    border-color: var(--dragon-500);
+   color: var(--dragon-50);
+    border-radius: 900px;
+        background:var(--dragon-400);
+    transition:background ease 100ms
+
+}
+
+
+#errorContainer > div #closeButton:hover {
+    border-color: var(--dragon-500);
+    color: var(--dragon-50);
+    border-radius: 900px;
+    background:var(--dragon-600)
+    
+}
+
+#errorContainer > div {
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+}
+
+
 
 .colorIndicator {
         position: absolute;
