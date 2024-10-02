@@ -1664,7 +1664,9 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     ///ig
     
     
-    //combined document.addEventListener("DOMContentLoaded", function() {
+    //combined 
+    
+    document.addEventListener("DOMContentLoaded", function() {
     const fileInput = document.getElementById("imageDisplayUrl");
     const thumbnailContainer = document.querySelector(".thumbImg");
     const thumbnailImage = document.getElementById("img2imgThumbnail");
