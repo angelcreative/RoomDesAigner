@@ -4118,6 +4118,7 @@ label.hamburger:hover {
     background: #111922e8;
     top: -476px;
     right: 0;
+    z-index: 2;
 }
 
 

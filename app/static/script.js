@@ -1663,6 +1663,162 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     ///ig
     
+    
+    //combined document.addEventListener("DOMContentLoaded", function() {
+    const fileInput = document.getElementById("imageDisplayUrl");
+    const thumbnailContainer = document.querySelector(".thumbImg");
+    const thumbnailImage = document.getElementById("img2imgThumbnail");
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                thumbnailImage.src = e.target.result;
+                thumbnailContainer.style.display = 'block';
+
+                // Generar los botones de filtros de Instagram y personalizados cuando se carga la imagen
+                const buttonsContainer = document.querySelector(".image-buttons"); // Ajusta el selector según tu código
+                generateInstagramFilterGrid(buttonsContainer, e.target.result, thumbnailImage);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Función para aplicar filtros combinados (Instagram y personalizados)
+    function applyCombinedFiltersToCanvas(instagramFilterType, imageUrl) {
+        const grainAmount = parseInt(grainSlider.slider.value);
+        const contrast = parseInt(contrastSlider.slider.value);
+        const brightness = parseInt(brightnessSlider.slider.value);
+        const hueRotation = parseInt(hueSlider.slider.value);
+        const saturation = parseInt(saturateSlider.slider.value);
+        const sepia = parseFloat(sepiaSlider.slider.value);
+        const grayscale = parseFloat(grayscaleSlider.slider.value);
+        const invert = parseFloat(invertSlider.slider.value);
+        const blur = parseFloat(blurSlider.slider.value);
+        const opacity = parseFloat(opacitySlider.slider.value);
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const img = new Image();
+        img.src = imageUrl;
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Aplicar los filtros de Instagram y los filtros personalizados juntos
+            let instagramFilter = '';
+            switch (instagramFilterType) {
+                case '1977':
+                    instagramFilter = 'sepia(0.5) contrast(1.1)';
+                    break;
+                case 'aden':
+                    instagramFilter = 'contrast(0.9) saturate(0.85)';
+                    break;
+                case 'brannan':
+                    instagramFilter = 'contrast(1.4) sepia(0.5)';
+                    break;
+                case 'brooklyn':
+                    instagramFilter = 'contrast(0.9) brightness(1.1)';
+                    break;
+                case 'clarendon':
+                    instagramFilter = 'contrast(1.2) saturate(1.35)';
+                    break;
+                case 'earlybird':
+                    instagramFilter = 'sepia(0.4) saturate(1.6)';
+                    break;
+                case 'gingham':
+                    instagramFilter = 'brightness(1.05) hue-rotate(340deg)';
+                    break;
+                case 'hudson':
+                    instagramFilter = 'brightness(1.2) contrast(0.9)';
+                    break;
+                case 'inkwell':
+                    instagramFilter = 'grayscale(1) contrast(1.2)';
+                    break;
+                case 'kelvin':
+                    instagramFilter = 'brightness(1.5) contrast(1.2)';
+                    break;
+                case 'lofi':
+                    instagramFilter = 'contrast(1.5) saturate(1.2)';
+                    break;
+                case 'moon':
+                    instagramFilter = 'grayscale(1) contrast(1.1)';
+                    break;
+                default:
+                    instagramFilter = 'none';
+            }
+
+            // Aplicar todos los filtros al canvas
+            ctx.filter = `
+                contrast(${contrast}%) 
+                brightness(${brightness}%) 
+                hue-rotate(${hueRotation}deg)
+                saturate(${saturation}%) 
+                sepia(${sepia}) 
+                grayscale(${grayscale}) 
+                invert(${invert}) 
+                blur(${blur}px) 
+                opacity(${opacity}) 
+                ${instagramFilter}
+            `;
+            
+            ctx.drawImage(img, 0, 0);
+
+            // Obtener los datos de la imagen para aplicar el grano
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Añadir grano a la imagen
+            for (let i = 0; i < data.length; i += 4) {
+                let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+                data[i] += grain;     // Rojo
+                data[i+1] += grain;   // Verde
+                data[i+2] += grain;   // Azul
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            // Actualizar la imagen con los filtros aplicados
+            thumbnailImage.src = canvas.toDataURL();
+
+            // Crear un enlace de descarga
+            const downloadLink = document.createElement("a");
+            downloadLink.href = canvas.toDataURL("image/png"); // Convertir canvas a URL de imagen
+            downloadLink.download = `filtered_image_combined.png`; // Nombre del archivo a descargar
+            downloadLink.textContent = "Download Image with Combined Filters";
+
+            // Añadir el enlace de descarga al contenedor de botones
+            const buttonsContainer = document.querySelector(".image-buttons");
+            buttonsContainer.innerHTML = ''; // Limpiar botones anteriores
+            buttonsContainer.appendChild(downloadLink);
+        };
+    }
+
+    // Generar el grid de filtros de Instagram
+    function generateInstagramFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+        const filters = [
+            '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+            'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+        ];
+
+        filters.forEach((filter) => {
+            const button = document.createElement("button");
+            button.textContent = filter;
+            button.addEventListener("click", function() {
+                // Aplicar el filtro combinado (Instagram y personalizado)
+                applyCombinedFiltersToCanvas(filter, imageUrl);
+            });
+
+            // Añadir el botón de filtro al contenedor de botones
+            buttonsContainer.appendChild(button);
+        });
+    }
+});
+
+    
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
     generateFilterGrid(buttonsContainer, imageUrl, image);
 
