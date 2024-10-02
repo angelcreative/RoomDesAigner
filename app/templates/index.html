@@ -574,23 +574,28 @@ Shot settings</h1><span class="material-symbols-outlined" translate="no"> close 
                     <!-- ratio -->
                     <h4>Apect ratio</h4>
                     <div class="aspectRatioShot">
-                     
                         <div class="ar">
-                        <input type="radio" name="aspectRatio" value="landscape" id="landscape">
-                        <label for="landscape">Landscape</label>
+                            <input type="radio" name="aspectRatio" value="square" id="resolution-square" checked>
+                            <label for="resolution-square">Cuadrado 1:1 (1024x1024px)</label>
                         </div>
-                       
-                         <div class="ar">
-                        <input type="radio" name="aspectRatio" value="portrait" id="portrait" >
-                        <label for="portrait">Portrait</label>
-                         </div>
-                       
-                         <div class="ar">
-                        <input type="radio" name="aspectRatio" value="square" id="square" checked>
-                        <label for="square" >Square</label>
-                         </div>
+                        <div class="ar">
+                            <input type="radio" name="aspectRatio" value="widescreen" id="resolution-widescreen">
+                            <label for="resolution-widescreen">Widescreen Muy Wide (1536x640px)</label>
+                        </div>
+                        <div class="ar">
+                            <input type="radio" name="aspectRatio" value="landscape" id="resolution-landscape">
+                            <label for="resolution-landscape">Landscape Normal (1344x768px)</label>
+                        </div>
+                        <div class="ar">
+                            <input type="radio" name="aspectRatio" value="portrait" id="resolution-portrait">
+                            <label for="resolution-portrait">Portrait (896x1152px)</label>
+                        </div>
+                        <div class="ar">
+                            <input type="radio" name="aspectRatio" value="social-vertical" id="resolution-social-vertical">
+                            <label for="resolution-social-vertical">Redes Sociales Vertical (640x1536px)</label>
+                        </div>
                     </div>
-                    
+
                     <!-- level shot -->
 <h4>Shot Angle</h4>
 <div class="custom-dropdown" data-placeholder="Level shot">

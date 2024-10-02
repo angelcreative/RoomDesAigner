@@ -585,16 +585,26 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Definir proporciones de imagen basadas en la selección
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
-    if (aspectRatio === "landscape") {
-        width = 1200;
-        height = 800;
+
+    // Definir proporciones de imagen basadas en la selección
+    if (aspectRatio === "square") {
+        width = 1024;
+        height = 1024;
+    } else if (aspectRatio === "widescreen") {
+        width = 1536;
+        height = 640;
+    } else if (aspectRatio === "landscape") {
+        width = 1344;
+        height = 768;
     } else if (aspectRatio === "portrait") {
-        width = 800;
-        height = 1200;
-    } else if (aspectRatio === "square") {
-        width = 1200;
-        height = 1200;
+        width = 896;
+        height = 1152;
+    } else if (aspectRatio === "social-vertical") {
+        width = 640;
+        height = 1536;
     }
+
+    console.log(`Selected Resolution: ${width}x${height}px`);
 
     // Configurar semilla si está activada la opción
     const seedSwitch = document.getElementById("seedSwitch");
@@ -634,8 +644,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (selectedModel === "fluxdev") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "midjourney-flux-v2",
-            lora_strength: 0.7
+            lora_model: null,
+            lora_strength: null
         };
     }
 
