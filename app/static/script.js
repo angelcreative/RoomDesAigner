@@ -644,8 +644,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (selectedModel === "fluxdev") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: null,
-            lora_strength: null
+            lora_model: "surreal-photorealism",
+            lora_strength: ".7"
         };
     } 
 
@@ -657,7 +657,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         height: height,
         samples: 4,
         guidance_scale: 7.5,
-        steps: 41,
+        steps: 31,
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
