@@ -663,7 +663,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         height: height,
         samples: 4,
         guidance_scale: 7.5,
-        steps: 21,
+        steps: 41,
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
