@@ -644,8 +644,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (selectedModel === "fluxdev") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: null,
-            lora_strength: null
+            lora_model: "surreal-photorealism",
+            lora_strength: 1
         };
     } 
 
