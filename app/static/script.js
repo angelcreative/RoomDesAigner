@@ -647,7 +647,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: null,
             lora_strength: null
         };
-    } else if (selectedModel === "flux-real") {
+    } else if (selectedModel === "flux-pro") {
         modelConfig = {
             model_id: "flux-real",
             lora_model: null,
