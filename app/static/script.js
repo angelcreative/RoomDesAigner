@@ -651,7 +651,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "flux-fasion",
+            lora_model: "flux-fashion",
             lora_strength: "1"
         };
     } 
