@@ -648,6 +648,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: ".7"
         };
     } 
+    else if (selectedModel === "mystic") {
+        modelConfig = {
+            model_id: "mystic",
+            lora_model: null,
+            lora_strength: null
+        };
+    } 
 
     // Configuración del prompt
     const prompt = {
