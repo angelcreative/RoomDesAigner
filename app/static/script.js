@@ -670,6 +670,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: "1"
         };
     } 
+    
+     else if (selectedModel === "realismB") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "porsche-911",
+            lora_strength: "1"
+        };
+    } 
      else if (selectedModel === "mystic") {
         modelConfig = {
             model_id: "mystic",
