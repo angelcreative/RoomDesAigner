@@ -678,6 +678,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: 1
         };
     } 
+       else if (selectedModel === "realismC") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "pixar-style-hd",
+            lora_strength: 1
+        };
+    } 
      else if (selectedModel === "mystic") {
         modelConfig = {
             model_id: "mystic",
