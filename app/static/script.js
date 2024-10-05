@@ -660,14 +660,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "flux-fashion",
-            lora_strength: "1"
+            lora_strength: 1
         };
     } 
     else if (selectedModel === "realism") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "surreal-photorealism",
-            lora_strength: "1"
+            lora_strength: 1
         };
     } 
     
@@ -675,7 +675,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "porsche-911",
-            lora_strength: "1"
+            lora_strength: 1
         };
     } 
      else if (selectedModel === "mystic") {
