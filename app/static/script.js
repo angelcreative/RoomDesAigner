@@ -192,7 +192,8 @@ function getSelectedValues() {
         "shoes",
         "accessories",
          "photography_pose",
-        "style_image"
+        "style_image",
+        "subject_emotion"
     ];
 
     const colorElements = [
@@ -301,6 +302,11 @@ function generateBlurredBackground () {
     
      function generateTilt() {
     return "This scene is designed with a tilt-shift effect, which creates an illusion of a tiny model-like scene.";
+}
+    
+    
+    function generateR3d() {
+    return "CINEMA_MASTER_8K_SC01_TK01.r3d";
 }
     
     function generateMiniature(customText) {
@@ -626,9 +632,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
+    
+    const r3d = document.getElementById("r3dCheckbox")?.checked ? generateR3d() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui}  ${r3d} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;

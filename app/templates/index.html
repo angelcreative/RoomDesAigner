@@ -483,11 +483,11 @@ close
         <label for="fluxdevfashion">👠 Fashion<small> for fashion</small></label>
     </div>
     <div class="ar">
-        <input type="radio" name="modelType" id="fluxdevfashion" value="realism">
+        <input type="radio" name="modelType" id="realism" value="realism">
         <label for="realism">🤳 Realism [BETA]<small> for real life shots</small></label>
     </div>
      <div class="ar">
-        <input type="radio" name="modelType" id="fluxdevfashion" value="mystic">
+        <input type="radio" name="modelType" id="mystic" value="mystic">
         <label for="mystic">🫠 Super stylized reality [BETA]<small> for weird shots</small></label>
     </div>
    
@@ -1066,6 +1066,19 @@ Shot settings</h1><span class="material-symbols-outlined" translate="no"> close 
 
                     </div>
                     
+                
+                
+                <h4>.R3D</h4>
+                
+                    <div class="switchContainer">
+                        <label  for="r3dtCheckbox"  class="switchLabel"> Use .r3d emulation <label class="switch">
+                                <input type="checkbox" name="switchLabel" id="r3d">
+                                <span class="slider round"></span>
+                            </label>
+                        </label>
+                                            <sub>Turn on this option to use .r3d emule, it will add "CINEMA_MASTER_8K_SC01_TK01.r3d"  to your prompt</sub>
+
+                    </div>
                 
                 
                   <!-- blurred -->
@@ -3037,7 +3050,38 @@ Add a character</h1><span class="material-symbols-outlined" translate="no"> clos
     <input type="hidden" name="gender" id="gender" value="">
 </div>
                     
-  
+  <!--emotion-->
+                    <div class="custom-dropdown" data-placeholder="Select Emotion">
+    <div class="dropdown-selected">
+        <span class="selected-text">Select Emotion</span>
+        <span class="clear-selection"> <span class="material-symbols-outlined" translate="no">close</span> </span>
+    </div>
+    <div class="selected-value"></div>
+    <div class="dropdown-options">
+        <div class="option" value="smiling_broad_genuine_smile_with_bright_eyes" title="broad_genuine_smile_with_bright_eyes">Smiling</div>
+        <div class="option" value="severe_tight_lips_with_furrowed_brows" title="tight_lips_with_furrowed_brows">Severe</div>
+        <div class="option" value="amused_slight_smirk_with_twinkle_in_eyes" title="slight_smirk_with_twinkle_in_eyes">Amused</div>
+        <div class="option" value="angry_frowning_with_clenched_jaw_and_narrowed_eyes" title="frowning_clenched_jaw_narrowed_eyes">Angry</div>
+        <div class="option" value="surprised_wide_eyes_and_raised_eyebrows" title="wide_eyes_raised_eyebrows">Surprised</div>
+        <div class="option" value="sad_downturned_mouth_and_soft_gaze" title="downturned_mouth_soft_gaze">Sad</div>
+        <div class="option" value="confused_furrowed_brows_and_slight_head_tilt" title="furrowed_brows_slight_head_tilt">Confused</div>
+        <div class="option" value="content_calm_pleasant_smile_and_relaxed_expression" title="calm_pleasant_smile_relaxed_expression">Content</div>
+        <div class="option" value="frustrated_tensed_jaw_with_a_deep_sighing_expression" title="tensed_jaw_deep_sighing_expression">Frustrated </div>
+        <div class="option" value="joyful_bright_smile_with_lively_expression" title="bright_smile_lively_expression">Joyful</div>
+        <div class="option" value="anxious_tense_lips_with_darting_eyes" title="tense_lips_darting_eyes">Anxious</div>
+        <div class="option" value="thoughtful_pursed_lips_and_downcast_eyes" title="pursed_lips_downcast_eyes">Thoughtful</div>
+        <div class="option" value="excited_wide_smile_with_bright_eyes_and_raised_eyebrows" title="wide_smile_bright_eyes_raised_eyebrows">Excited</div>
+        <div class="option" value="scared_wide_eyes_and_tense_expression" title="wide_eyes_tense_expression">Scared</div>
+        <div class="option" value="disappointed_downturned_mouth_with_a_slight_frown" title="downturned_mouth_slight_frown">Disappointed</div>
+        <div class="option" value="curious_raised_eyebrows_and_slight_head_tilt" title="raised_eyebrows_slight_head_tilt">Curious</div>
+        <div class="option" value="determined_firm_lips_and_focused_gaze" title="firm_lips_focused_gaze">Determined</div>
+        <div class="option" value="bored_lackluster_expression_and_half_closed_eyes" title="lackluster_expression_half_closed_eyes">Bored</div>
+        <div class="option" value="embarrassed_flushed_cheeks_with_awkward_smile" title="flushed_cheeks_awkward_smile">Embarrassed</div>
+        <div class="option" value="hopeful_soft_smile_with_slightly_raised_eyebrows" title="soft_smile_slightly_raised_eyebrows">Hopeful</div>
+    </div>
+    <input type="hidden" name="subject_emotion" id="subject_emotion" value="">
+</div>
+
                     
 <!-- Outfit Brands -->
 <div class="custom-dropdown" data-placeholder="Select an outfit type">
