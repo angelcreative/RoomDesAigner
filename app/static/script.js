@@ -15,7 +15,7 @@ const magicButton = document.getElementById("magicButton");
 document.addEventListener("DOMContentLoaded", function() {
 
 
-//AIDESIGN
+/*AIDESIGN
 // Predefined attributes for randomness
 const attributes = {
     room_size: ['small', 'medium', 'large'],
@@ -48,7 +48,7 @@ function mixAttributes(baseAttributes) {
 });
 
     
-//AIDESIGN
+*/
 
  
  
@@ -594,8 +594,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Definir proporciones de imagen basadas en la selección
     if (aspectRatio === "square") {
-        width = 1024;
-        height = 1024;
+        width = 1200;
+        height = 1200;
     } else if (aspectRatio === "widescreen") {
         width = 1536;
         height = 640;
@@ -675,13 +675,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "porsche-911",
-            lora_strength: 1
-        };
-    } 
-       else if (selectedModel === "realismC") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: "pixar-style-hd",
             lora_strength: 1
         };
     } 
@@ -876,7 +869,7 @@ function showGeneratingImagesDialog() {
     if (dialogTitle) {
         dialogTitle.innerHTML = `
             <h2 id="changingText">painting walls</h2>
-            <p>Sit back and relax, your design will be ready soon.<br>It takes some time to make it perfect.</p>
+            <p>Sit back and relax—your creation is on the way! Its completion time will vary depending on the model you've selected.</p>
             <p id="chronometer">00:00:00</p>
         `;
     } else {
@@ -885,24 +878,24 @@ function showGeneratingImagesDialog() {
 
     // Lista de mensajes que van cambiando
     const changingMessages = [
-        'painting walls', 'furnishing room', 'choosing decoration', 
-        'adding plants', 'hanging lamps', 'placing furniture', 
-        'adjusting lighting', 'selecting colors', 'arranging art', 
-        'organizing shelves', 'setting the table', 'tidying up', 
-        'adding textures', 'installing hardware', 'finishing touches', 
-        'polishing surfaces', 'applying finishes', 'arranging flowers', 
-        'laying carpets', 'curating books', 'mounting frames', 
-        'setting up tech', 'installing curtains', 'hanging mirrors',
-        'refinishing floors', 'installing lighting fixtures', 'choosing fabrics',
-        'updating hardware', 'placing rugs', 'installing shelves',
-        'mounting TVs', 'cleaning windows', 'arranging pillows', 
-        'painting trim', 'hanging blinds', 'decorating with candles',
-        'adding greenery', 'staging furniture', 'setting up appliances',
-        'installing art', 'organizing pantry', 'decorating walls', 
-        'designing layout', 'setting up workspace', 'choosing flooring',
-        'placing decor items', 'organizing closet', 'setting up entertainment system',
-        'arranging outdoor furniture'
-    ];
+    'casting spells of creation', 'weaving enchanted visions', 'shaping mystical worlds', 
+    'summoning creative wonders', 'breathing life into ideas', 'building realms of fantasy', 
+    'illuminating dreams', 'conjuring vibrant possibilities', 'crafting magical artifacts', 
+    'organizing realms of imagination', 'bringing stories to life', 'unleashing boundless creativity', 
+    'weaving enchanted textures', 'sculpting magical forms', 'adding finishing touches of wonder', 
+    'polishing mystical surfaces', 'casting final charms', 'arranging enchanted details', 
+    'painting visions with light', 'curating worlds of imagination', 'framing mystical moments', 
+    'setting up magical technologies', 'drawing curtains on creativity', 'reflecting magic through mirrors',
+    'reimagining enchanted landscapes', 'installing wonders of light', 'selecting fabrics of fantasy',
+    'upgrading magical tools', 'placing enchanted objects', 'creating floating wonders',
+    'bringing screens to life', 'clearing pathways for magic', 'arranging mystical symbols', 
+    'painting with enchanted strokes', 'opening windows to new worlds', 'decorating with creative light',
+    'adding touches of nature', 'staging creative atmospheres', 'building with mystical tools',
+    'installing artifacts of wonder', 'organizing spaces of creation', 'decorating realms of fantasy', 
+    'designing boundless realities', 'setting up creative sanctuaries', 'choosing pathways of imagination',
+    'placing objects of wonder', 'organizing tools of creation', 'setting up fantastical systems',
+    'arranging outdoor enchanted realms'
+];
 
     let chronometerInterval;
     let textChangeInterval;
@@ -975,7 +968,7 @@ document.getElementById('closeDialogButton').addEventListener('click', function(
     generateImages(imageUrl, selectedValues);
 }
 
-// Modify the event listener for the reroll button
+/* Modify the event listener for the reroll button
 const rerollButton = document.getElementById("rerollButton");
 rerollButton.addEventListener("click", rerollImages);
 
@@ -986,7 +979,7 @@ rerollButton.addEventListener("click", rerollImages);
     }
     
     
-   
+  */ 
 
 
     
@@ -1032,159 +1025,13 @@ async function copyTextToClipboard(text) {
     
     
     
-    
-// Function to search an image on RapidAPI and display results in a new tab
-async function searchImageOnRapidAPI(imageUrl) {
-    const url = `https://reverse-image-search-by-copyseeker.p.rapidapi.com/?imageUrl=${encodeURIComponent(imageUrl)}`;
-
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': '397b9622b6mshdcad3d01de5d22fp110064jsn7b977be6f115',
-            'X-RapidAPI-Host': 'reverse-image-search-by-copyseeker.p.rapidapi.com'
-        }
-    };
-
-    try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        displayResultsInNewTab(result);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// Function to display search results in a new tab
-function displayResultsInNewTab(data) {
-    const newWindow = window.open('', '_blank');
-    const htmlContent = `
-        <html>
-        <head>
-            <title>Search Results</title>
-            <link rel="icon" type="image/png" sizes="192x192" href="https://roomdesaigner.onrender.com/static/img/android-icon-192x192.png">
-            <link rel="icon" type="image/png" sizes="32x32" href="https://roomdesaigner.onrender.com/static/img/favicon-32x32.png">
-            <link rel="icon" type="image/png" sizes="96x96" href="https://roomdesaigner.onrender.com/static/img/favicon-96x96.png">
-            <link rel="icon" type="image/png" sizes="16x16" href="https://roomdesaigner.onrender.com/static/img/favicon-16x16.png">
-            <style>
-                html {
-                    background: #15202b;
-                }
-                img.logoRD {
-                    margin: 20px auto 0 auto;
-                    display: block;
-                    height: 50px;
-                }
-                
-                h3 {
-                    padding: 10px;
-                    white-space: pre-wrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    width: 160px;
-                    font-weight: 300;
-                    font-size: 12px;
-                }
-                h1 {
-                    color: #a9fff5;
-                    margin: 2rem 0;
-                    font-weight: lighter;
-                    text-align: center;
-                    font-family: sans-serif;
-                    font-size: 20px;
-                }
-                
-                p {
-                    text-align: center;
-                    color: #6d7b87;
-                    font-family: courier;
-                }
-                p a {
-                    font-size: 16px;
-                }
-                .card img {
-                    width: 100%;
-                    height: auto;
-                    border-radius: 4px;
-                }
-                .source-icon {
-                    width: 20px !important;
-                    height: 20px !important;
-                    margin-right: 4px;
-                }
-                a {
-                    color: #9aabba;
-                    font-size: 12px;
-                    text-decoration: underline;
-                }
-
-
-.card-container {
-    column-count: 4; /* Number of columns */
-    column-gap: 20px;
-    padding: 20px;
-}
-
-.card {
-    break-inside: avoid;
-    margin-bottom: 20px;
-    display: inline-block;
-    width: 100%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    color: #6d7b87;
-    font-family: courier;
-    font-size: 14px;
-}
-
-.maskImage {
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    overflow: hidden;
-    width: 100%;
-}
-
-.maskImage img {
-    width: 100%;
-    height: auto;
-    border-radius: 4px;
-}
-            </style>
-        </head>
-        <body>
-            <img class="logoRD" src="https://roomdesaigner.onrender.com/static/img/logo_web_dark.svg">
-            <h1 class="headerStore">Image Search Results</h1>
-            <p>For refined product search, download the desired image, <a href="https://lens.google.com/search?ep=subb&re=df&p=AbrfA8pD_XRKs4Uk9azAVO5kckRoS9BffYYqJCUAtcFI-L6CDrn-F6GbtF1ugO9JjR7NCiQx_fRUl7j7uInPEIsCAU5bqRfLb2H64GxcuUEVz04AdAl07SuomVAiFja96VxMDK3q2aahJHwPRX_eKJ6sXMkl-KxprRofgMz7dqPPewM0habspTYyyyRJyozlmT7xHPXCR5JWo8gciq0Sz6-R2xE_Y75025eluHD5o4kcf0RB6y62vkoMB1GIuRMPKvmAExpqeJ_jAvs5pwXxIiCo49Z9qnP_7g%3D%3D#lns=W251bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsIkVrY0tKR0kwTUdFek16WXpMV05oWW1JdE5EYzJaQzFpTVdJMExUQmxNbU14WVRNeFpEWTROeElmYTNwR2NHMW5NVzlsVTFsVWIwUk1aa3hPVEZCZlpWQTJhRlUwT1Rkb1p3PT0iXQ==" target="_blank"> upload it here</a> and start searching for specific products</p>
-            <div class="card-container">
-                ${data.VisuallySimilar.map(match => `
-                    <div class="card">
-                        <div class="maskImage">
-                            <img src="${match}" alt="Thumbnail">
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </body>
-        </html>
-    `;
-    newWindow.document.write(htmlContent);
-    newWindow.document.close();
-}
-
-    //end reverse
 
 
 
-  //compare
+
+  /*compare
 function openComparisonWindow(userImageBase64, generatedImageUrl) {
-    // Send the base64 image data to the server
-    fetch('/create-comparison-session', {
+     fetch('/create-comparison-session', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1197,8 +1044,7 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
     .then(response => response.json())
     .then(data => {
         if (data.slug) {
-            // Open the new window with the unique URL
-            const url = `https://roomdesaigner.onrender.com/compare/${data.slug}`;
+             const url = `https://roomdesaigner.onrender.com/compare/${data.slug}`;
             window.open(url, '_blank');
         }
     })
@@ -1206,7 +1052,7 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
         console.error('Error:', error);
     });
 }
-//end compare
+*/
 
 
  
@@ -1224,7 +1070,7 @@ function openComparisonWindow(userImageBase64, generatedImageUrl) {
     }
    
     
-    // Function to open Photopea with the specified image
+    /* Function to open Photopea with the specified image
 function openPhotopeaWithImage(imageUrl) {
     const photopeaUrl = `https://www.photopea.com#`;
     const photopeaConfig = {
@@ -1234,7 +1080,7 @@ function openPhotopeaWithImage(imageUrl) {
     window.open(photopeaUrl + encodedConfig, '_blank');
 }
 
-    
+ */   
 
 
 
@@ -1302,6 +1148,35 @@ imageUrls.forEach((imageUrl) => {
     image.src = imageUrl;
     image.alt = "Generated Image";
     image.classList.add("thumbnail");
+    
+    
+    // Crear el enlace <a> para la descarga
+const downloadLink = document.createElement('a');
+
+downloadLink.href = imageUrl; // Usa la URL dinámica de la imagen para el enlace
+downloadLink.download = imageUrl.split('/').pop(); // Nombre del archivo basado en la URL
+downloadLink.target = "_blank"; // Asegura que siempre se abra en una nueva pestaña
+
+
+// Añadir el icono en lugar del texto "Download"
+downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span>';
+
+// Añadir la funcionalidad de descarga al hacer clic en el enlace
+downloadLink.addEventListener('click', (e) => {
+    // Solo para navegadores que soportan la propiedad download
+    if (!downloadLink.download) {
+        e.preventDefault(); // Previene la navegación si el navegador no soporta la descarga
+        const a = document.createElement('a');
+        a.href = imageUrl; // Usa la URL dinámica de la imagen
+        a.download = imageUrl.split('/').pop(); // Nombre del archivo basado en la URL
+        a.target = "_blank"; // Abrir en una nueva pestaña
+        a.click(); // Simular el clic para iniciar la descarga
+    }
+});
+
+// Añadir la imagen y el enlace al contenedor
+imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al contenedor
+
 
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("image-buttons");
@@ -1309,10 +1184,8 @@ imageUrls.forEach((imageUrl) => {
     // Botones de acción
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-    const editButton = createButton("Edit in Photopea", () => openPhotopeaWithImage(imageUrl));
     const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-    const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-    const searchSimilarImagesButton = createButton("Search Similar Images", () => searchImageOnRapidAPI(imageUrl));
+    //const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
     // Aquí añadimos el botón "Filters"
     const filterButton = createButton("Filters", toggleFilterMenu);
     buttonsContainer.appendChild(filterButton);
@@ -1324,7 +1197,7 @@ imageUrls.forEach((imageUrl) => {
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, editButton, copyPromptButton, compareButton, searchSimilarImagesButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+    [downloadButton, copyButton, copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
 
    
 
@@ -1499,8 +1372,9 @@ function applyFilters() {
     
     
     //ig
-    // Generar dinámicamente las miniaturas con filtros
-function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+    
+    
+    function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
@@ -1515,7 +1389,10 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
         'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
     ];
 
-    filters.forEach((filter, index) => {
+    // Usa la imagen estática predeterminada (igram.png) para las miniaturas
+    const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
+
+    filters.forEach((filter) => {
         const label = document.createElement('label');
 
         const radio = document.createElement('input');
@@ -1526,74 +1403,20 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
         const img = document.createElement('img');
         img.alt = filter;
 
-        // Delay para evitar saturar la red o el servidor con múltiples solicitudes simultáneas
-        setTimeout(() => {
-            const imgElement = new Image();
-            imgElement.src = imageUrl;
-            imgElement.crossOrigin = 'Anonymous';
-            imgElement.onload = function () {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+        // No cargar dinámicamente, usar la imagen estática predeterminada
+        img.src = staticImageUrl;
 
-                canvas.width = imgElement.width;
-                canvas.height = imgElement.height;
+        // Añadir el input y la imagen al label
+        label.appendChild(radio);
+        label.appendChild(img);
 
-                // Aplicar filtro dinámicamente
-                switch (filter) {
-                    case '1977':
-                        ctx.filter = 'sepia(0.5) contrast(1.1)';
-                        break;
-                    case 'aden':
-                        ctx.filter = 'contrast(0.9) saturate(0.85)';
-                        break;
-                    case 'brannan':
-                        ctx.filter = 'contrast(1.4) sepia(0.5)';
-                        break;
-                    case 'brooklyn':
-                        ctx.filter = 'contrast(0.9) brightness(1.1)';
-                        break;
-                    case 'clarendon':
-                        ctx.filter = 'contrast(1.2) saturate(1.35)';
-                        break;
-                    case 'earlybird':
-                        ctx.filter = 'sepia(0.4) saturate(1.6)';
-                        break;
-                    case 'gingham':
-                        ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
-                        break;
-                    case 'hudson':
-                        ctx.filter = 'brightness(1.2) contrast(0.9)';
-                        break;
-                    case 'inkwell':
-                        ctx.filter = 'grayscale(1) contrast(1.2)';
-                        break;
-                    case 'kelvin':
-                        ctx.filter = 'brightness(1.5) contrast(1.2)';
-                        break;
-                    case 'lofi':
-                        ctx.filter = 'contrast(1.5) saturate(1.2)';
-                        break;
-                    case 'moon':
-                        ctx.filter = 'grayscale(1) contrast(1.1)';
-                        break;
-                }
+        // Añadir el label al contenedor de miniaturas
+        igDiv.appendChild(label);
 
-                ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
-                img.src = canvas.toDataURL();
-            };
-
-            // Añadir el input y la imagen al label
-            label.appendChild(radio);
-            label.appendChild(img);
-
-            // Añadir el label al contenedor de miniaturas
-            igDiv.appendChild(label);
-
-            // Evento 'change' para aplicar el filtro al cambiar de opción
-            radio.addEventListener('change', (event) => {
-                applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
-            });
-        }, index * 400);  // 200ms delay para cada miniatura
+        // Evento 'change' para aplicar el filtro al cambiar de opción
+        radio.addEventListener('change', (event) => {
+            applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
+        });
     });
 
     // Añadir botón para limpiar el filtro
@@ -1616,17 +1439,17 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 
     // Crear el botón de "Show/Hide"
     const toggleButton = document.createElement('button');
-    toggleButton.textContent = 'Show Filters';
+    toggleButton.textContent = 'Filters';
     toggleButton.type = 'button';
     
     // Evento para hacer toggle del contenedor 'ig'
     toggleButton.addEventListener('click', () => {
         if (igDiv.style.display === 'none') {
             igDiv.style.display = 'flex';
-            toggleButton.textContent = 'Hide Filters';
+            toggleButton.textContent = 'Close';
         } else {
             igDiv.style.display = 'none';
-            toggleButton.textContent = 'Show Filters';
+            toggleButton.textContent = 'Filters';
         }
     });
 
@@ -1636,8 +1459,6 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     // Añadir el contenedor de miniaturas al contenedor de botones
     buttonsContainer.appendChild(filDiv);
 }
-
-
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, image) {
     if (!image) {
@@ -1704,6 +1525,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
         image.src = canvas.toDataURL();
     };
 }
+
     
     ///ig
     
@@ -2122,9 +1944,9 @@ function downloadImage(imageUrl) {
   // Add event listener to the close button of the modal
   const closeButton = document.getElementsByClassName("close")[0];
   closeButton.addEventListener("click", closeModal);
-  // Add event listener to the "Clear All" button
+  /* Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
-  clearAllButton.addEventListener("click", clearAll);
+  clearAllButton.addEventListener("click", clearAll);*/
 });
 
 
@@ -2204,20 +2026,6 @@ document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button =>
 
 //try
 
-window.addEventListener('load', function() {
-  setTimeout(function() {
-    var splash = document.getElementById('splash');
-    var content = document.getElementById('content');
-
-    splash.style.transition = 'top 0.5s ease-in-out'; // Add transition effect
-    splash.style.top = '-100%'; // Move the splash screen to the top
-
-    setTimeout(function() {
-      splash.style.display = 'none'; // Hide the splash screen
-//      content.style.display = 'block'; // Show the website content
-    }, 500); // Wait for the transition to complete (0.5 seconds)
-  }, 4000); // 4 seconds (4000 milliseconds)
-});
 
 
 
@@ -2292,7 +2100,7 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
 
 
 
-// Event listener for opening the lightbox when the avatar is clicked
+/*Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
     document.getElementById('avatarLightbox').style.display = 'block';
 });
@@ -2313,4 +2121,4 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
             document.getElementById('avatarLightbox').style.display = 'none';
         }
     });
-});
+});*/
