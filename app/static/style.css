@@ -597,17 +597,9 @@ span.close:hover {
 }
 
 .rightOff button {
-        padding: 8px 16px;
-        border-radius:var(--2xs);
-        color: #ffffff;
-        width: 100%;
-        margin: 0;
-        /* background: linear-gradient(138deg,#f79533,#f37055,#ef4e7b,#a166ab,#5073b8,#1098ad,#07b39b,#6fba82); */
-        /* animation: animatedgradient 6s ease infinite alternate; */
-        background-size: 300% 300%;
-         : 12px;
-        box-shadow: 0px 4px 20px 7px #1d82fd47;
-        margin-bottom: 16px;
+         gap: var(--2xs);
+    display: flex;
+    flex-direction: row;
 }
 
 .rightOff .menu-button:hover {
