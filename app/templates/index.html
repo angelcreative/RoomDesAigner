@@ -201,6 +201,229 @@ close
 
                 </div>
                      
+                       
+
+
+<h2>Prompt enhacers</h2>
+
+
+   <!-- presets -->
+
+
+   <section type="button" class="collapsible"><h1><span class="material-symbols-outlined">
+page_info
+</span>
+
+                Pre built prompt enhacers</h1><span class="material-symbols-outlined" translate="no"> close </span></section>     
+                 <div class="content">
+                     
+                     
+                                    <h4>Seed</h4>
+                                    <div class="switchContainer">
+                                        <label class="switchLabel"> Seed <label class="switch">
+                                                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </label>
+                                         <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
+                                    </div>
+
+                                 <!-- organic -->
+                                <h4>Special organic style</h4>
+
+                                    <div class="switchContainer">
+                                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
+                                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </label>
+                                                            <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub> 
+
+                                    </div>
+
+                                    <!-- fractal -->
+                                <h4>Fractality</h4>
+
+                                    <div class="switchContainer">
+                                        <label  for="fractalTextCheckbox"  class="switchLabel"> Make fractal forms <label class="switch">
+                                                <input type="checkbox" name="switchLabel" id="fractalTextCheckbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </label>
+                                                            <sub>Turn on this option to get fractal elements in your designs</sub> 
+
+                                    </div>
+
+
+
+                                <h4>.R3D</h4>
+
+                                    <div class="switchContainer">
+                                        <label  for="r3dtCheckbox"  class="switchLabel"> Use .r3d emulation <label class="switch">
+                                                <input type="checkbox" name="switchLabel" id="r3d">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </label>
+                                                            <sub>Turn on this option to use .r3d emule, it will add "CINEMA_MASTER_8K_SC01_TK01.r3d"  to your prompt</sub>
+
+                                    </div>
+
+
+                                  <!-- blurred -->
+                                <h4>Blurred</h4>
+
+                                    <div class="switchContainer">
+                                        <label  for="blurredTextCheckbox"  class="switchLabel"> Make blurred background <label class="switch">
+                                                <input type="checkbox" name="switchLabel" id="blurredTextCheckbox">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </label>
+                                                            <sub>Turn on this option to get a blurred background</sub>
+
+                                    </div>
+
+
+                                <!-- bokeh -->
+                                <div class="switchContainer">
+                    <label for="bokehCheckbox" class="switchLabel"> Enable bokeh background 
+                        <label class="switch">
+                            <input type="checkbox" name="bokehSwitch" id="bokehCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to apply a bokeh background effect</sub>
+                </div>
+
+                                            <!-- tilt -->
+                                <div class="switchContainer">
+                    <label for="tiltCheckbox" class="switchLabel"> Enable tilt effect 
+                        <label class="switch">
+                            <input type="checkbox" name="tiltSwitch" id="tiltCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to apply a tilt effect</sub>
+                </div>
+
+
+                                                 <!-- miniature -->
+                                <div class="switchContainer">
+                    <label for="miniatureCheckbox" class="switchLabel"> RPG miniature 
+                        <label class="switch">
+                            <input type="checkbox" name="miniatureSwitch" id="miniatureCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a tabletop miniature</sub>
+                </div> 
+
+
+                                   <!-- sheet -->
+                                <div class="switchContainer">
+                    <label for="sheetCheckbox" class="switchLabel"> Character sheet 
+                        <label class="switch">
+                            <input type="checkbox" name="sheetSwitch" id="sheetCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a character sheet</sub>
+                </div>
+
+                                  <!-- evolution -->
+                                <div class="switchContainer">
+                    <label for="evolutionCycleCheckbox" class="switchLabel"> Evolution sheet 
+                        <label class="switch">
+                            <input type="checkbox" name="sheetSwitch" id="evolutionCycleCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a evolution cycle of any subject</sub>
+                </div>
+
+
+                            <!-- evolution-->
+
+
+
+
+                                <div class="aspectRatioShot">
+                    <div class="ar">
+                                <input type="radio" name="evolutionType" value="technological_evolution_add_elements_to_the_subject_to_make_it_more_apparatus_and_powerful_The_design_should_seamlessly_transition_between_each_stage_focusing_on_the_incremental_addition_of_technology_and_power" id="technological" checked>
+
+                        <label for="technological">Technological Evolution</label>
+                    </div>
+
+
+                    <div class="ar">
+                        <input type="radio" name="evolutionType" value="biological evolution" id="biological">
+                        <label for="biological">Biological Evolution</label>
+                    </div>
+                    <div class="ar">
+                    <input type="radio" name="evolutionType" value="gear_progression_and_armor_upgrade_and_outfit_improvememts_The_characters_size_and_pose_should_remain_consistent_throughout_emphasizing_the_transformation_in_equipment_rather_than_the_characters_size_The_design_should_seamlessly_transition_between_each_stage_focusing_on_the_upgrades_in_equipment_armor_and_tactical_elements" id="gearProgression">
+                    <label for="gearProgression">Gear Progression</label>
+                </div>
+
+                                     <sub>Only affects the image if Evolution Sheet is on.</sub>
+                </div>
+
+
+
+                                                <!-- 360 -->
+                                <div class="switchContainer">
+                    <label for="viewRenderingCheckbox" class="switchLabel"> 360 product view
+                        <label class="switch">
+                            <input type="checkbox" name="uxuiSwitch" id="viewRenderingCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a 360 product view<br>
+                <b>Tip</b>Add 3D render at the end.</sub>
+                </div>
+
+                                           <!-- produc place -->
+                                <div class="switchContainer">
+                    <label for="productViewCheckbox" class="switchLabel"> A product view shot
+                        <label class="switch">
+                            <input type="checkbox" name="uxuiSwitch" id="productViewCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a product view shot, you can use the "location" option too. <br>
+                <b>Tip</b>
+                                    Use this trick:
+                Layer 1 (Background): What's the distant scenario
+
+                Layer 2 (Middle ground): What't right behind your product, subtle blurred
+
+                Layer 3 (Foreground): Your product, the words for a logo or a known logo</sub>
+                </div>
+
+
+
+                                      <!-- UX UI -->
+                                <div class="switchContainer">
+                    <label for="uxuiCheckbox" class="switchLabel"> UX/UI app design
+                        <label class="switch">
+                            <input type="checkbox" name="uxuiSwitch" id="uxuiCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to generate a UX/UI app mockup</sub>
+                </div>
+
+
+                                <!-- Web -->
+                                <div class="switchContainer">
+                    <label for="uxuiWebCheckbox" class="switchLabel"> UX/UI website design 
+                        <label class="switch">
+                            <input type="checkbox" name="uxuiWebSwitch" id="uxuiWebCheckbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <sub>Turn on this option to design a landing page hero section</sub>
+                </div>
+
+</div>
                      
                                           <h2>Camera angle</h2>
 
@@ -930,230 +1153,23 @@ close
                  </div>
                   <!-- //COLLAPSE --> 
                      
-                       <h2>Prompt presets</h2>
-   <!-- seed -->
-                                    <h4>Seed</h4>
-                                    <div class="switchContainer">
-                                        <label class="switchLabel"> Seed <label class="switch">
-                                                <input type="checkbox" name="switchLabel" id="seedSwitch" checked>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </label>
-                                         <sub>Leave seed on to generate consistent four images, turn it off to get variety. </sub>
-                                    </div>
-
-                                 <!-- organic -->
-                                <h4>Special organic style</h4>
-
-                                    <div class="switchContainer">
-                                        <label  for="optionalTextCheckbox"  class="switchLabel"> Make organic shapes <label class="switch">
-                                                <input type="checkbox" name="switchLabel" id="optionalTextCheckbox">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </label>
-                                                            <sub>Turn on this option to get heavily rounded shapes for outdoor/indoor designs</sub> 
-
-                                    </div>
-
-                                    <!-- fractal -->
-                                <h4>Fractality</h4>
-
-                                    <div class="switchContainer">
-                                        <label  for="fractalTextCheckbox"  class="switchLabel"> Make fractal forms <label class="switch">
-                                                <input type="checkbox" name="switchLabel" id="fractalTextCheckbox">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </label>
-                                                            <sub>Turn on this option to get fractal elements in your designs</sub> 
-
-                                    </div>
-
-
-
-                                <h4>.R3D</h4>
-
-                                    <div class="switchContainer">
-                                        <label  for="r3dtCheckbox"  class="switchLabel"> Use .r3d emulation <label class="switch">
-                                                <input type="checkbox" name="switchLabel" id="r3d">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </label>
-                                                            <sub>Turn on this option to use .r3d emule, it will add "CINEMA_MASTER_8K_SC01_TK01.r3d"  to your prompt</sub>
-
-                                    </div>
-
-
-                                  <!-- blurred -->
-                                <h4>Blurred</h4>
-
-                                    <div class="switchContainer">
-                                        <label  for="blurredTextCheckbox"  class="switchLabel"> Make blurred background <label class="switch">
-                                                <input type="checkbox" name="switchLabel" id="blurredTextCheckbox">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </label>
-                                                            <sub>Turn on this option to get a blurred background</sub>
-
-                                    </div>
-
-
-                                <!-- bokeh -->
-                                <div class="switchContainer">
-                    <label for="bokehCheckbox" class="switchLabel"> Enable bokeh background 
-                        <label class="switch">
-                            <input type="checkbox" name="bokehSwitch" id="bokehCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to apply a bokeh background effect</sub>
-                </div>
-
-                                            <!-- tilt -->
-                                <div class="switchContainer">
-                    <label for="tiltCheckbox" class="switchLabel"> Enable tilt effect 
-                        <label class="switch">
-                            <input type="checkbox" name="tiltSwitch" id="tiltCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to apply a tilt effect</sub>
-                </div>
-
-
-                                                 <!-- miniature -->
-                                <div class="switchContainer">
-                    <label for="miniatureCheckbox" class="switchLabel"> RPG miniature 
-                        <label class="switch">
-                            <input type="checkbox" name="miniatureSwitch" id="miniatureCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a tabletop miniature</sub>
-                </div> 
-
-
-                                   <!-- sheet -->
-                                <div class="switchContainer">
-                    <label for="sheetCheckbox" class="switchLabel"> Character sheet 
-                        <label class="switch">
-                            <input type="checkbox" name="sheetSwitch" id="sheetCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a character sheet</sub>
-                </div>
-
-                                  <!-- evolution -->
-                                <div class="switchContainer">
-                    <label for="evolutionCycleCheckbox" class="switchLabel"> Evolution sheet 
-                        <label class="switch">
-                            <input type="checkbox" name="sheetSwitch" id="evolutionCycleCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a evolution cycle of any subject</sub>
-                </div>
-
-
-                            <!-- evolution-->
-
-
-
-
-                                <div class="aspectRatioShot">
-                    <div class="ar">
-                                <input type="radio" name="evolutionType" value="technological_evolution_add_elements_to_the_subject_to_make_it_more_apparatus_and_powerful_The_design_should_seamlessly_transition_between_each_stage_focusing_on_the_incremental_addition_of_technology_and_power" id="technological" checked>
-
-                        <label for="technological">Technological Evolution</label>
-                    </div>
-
-
-                    <div class="ar">
-                        <input type="radio" name="evolutionType" value="biological evolution" id="biological">
-                        <label for="biological">Biological Evolution</label>
-                    </div>
-                    <div class="ar">
-                    <input type="radio" name="evolutionType" value="gear_progression_and_armor_upgrade_and_outfit_improvememts_The_characters_size_and_pose_should_remain_consistent_throughout_emphasizing_the_transformation_in_equipment_rather_than_the_characters_size_The_design_should_seamlessly_transition_between_each_stage_focusing_on_the_upgrades_in_equipment_armor_and_tactical_elements" id="gearProgression">
-                    <label for="gearProgression">Gear Progression</label>
-                </div>
-
-                                     <sub>Only affects the image if Evolution Sheet is on.</sub>
-                </div>
-
-
-
-                                                <!-- 360 -->
-                                <div class="switchContainer">
-                    <label for="viewRenderingCheckbox" class="switchLabel"> 360 product view
-                        <label class="switch">
-                            <input type="checkbox" name="uxuiSwitch" id="viewRenderingCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a 360 product view<br>
-                <b>Tip</b>Add 3D render at the end.</sub>
-                </div>
-
-                                           <!-- produc place -->
-                                <div class="switchContainer">
-                    <label for="productViewCheckbox" class="switchLabel"> A product view shot
-                        <label class="switch">
-                            <input type="checkbox" name="uxuiSwitch" id="productViewCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a product view shot, you can use the "location" option too. <br>
-                <b>Tip</b>
-                                    Use this trick:
-                Layer 1 (Background): What's the distant scenario
-
-                Layer 2 (Middle ground): What't right behind your product, subtle blurred
-
-                Layer 3 (Foreground): Your product, the words for a logo or a known logo</sub>
-                </div>
-
-
-
-                                      <!-- UX UI -->
-                                <div class="switchContainer">
-                    <label for="uxuiCheckbox" class="switchLabel"> UX/UI app design
-                        <label class="switch">
-                            <input type="checkbox" name="uxuiSwitch" id="uxuiCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to generate a UX/UI app mockup</sub>
-                </div>
-
-
-                                <!-- Web -->
-                                <div class="switchContainer">
-                    <label for="uxuiWebCheckbox" class="switchLabel"> UX/UI website design 
-                        <label class="switch">
-                            <input type="checkbox" name="uxuiWebSwitch" id="uxuiWebCheckbox">
-                            <span class="slider round"></span>
-                        </label>
-                    </label>
-                    <sub>Turn on this option to design a landing page hero section</sub>
-                </div>
-                 
                  </aside>
                  <main class="center-column">
                      <div class="flux"><p>FLUX</p><div><small>Use the power of Flux models</small></div></div>
                      <div class="middleContainer">
                         <div id="modal" class="modal" style="display: none;">
                             <div class="modal-content">
-                                <div class="serialButton"> 
+                               
+
+                                <div class="imageGrid" id="imageGrid"></div>
+ <div class="serialButton"> 
                                     <button type="button" onclick="toggleContent()">See Ai prompt <span class="material-symbols-outlined" translate="no"> visibility</span></button>
 
                                     <div id="chipsSV" class="toggle-content"></div>
                                 </div>
-
-                                <div class="imageGrid" id="imageGrid"></div>
-
                       
                             <div id="resultContainer"></div>
-                            <span class="close">&times;</span>
+                            <span class="close">Clear all images &times;</span>
                         </div>
                               </div>
                           </div>
