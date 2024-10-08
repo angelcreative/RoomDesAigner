@@ -597,9 +597,12 @@ span.close:hover {
 }
 
 .rightOff button {
-         gap: var(--2xs);
+        gap: var(--2xs);
     display: flex;
     flex-direction: row;
+    font-family: 'GeistMono', sans-serif;
+    font-weight: 300;
+    font-size: var(--xs);
 }
 
 .rightOff .menu-button:hover {
