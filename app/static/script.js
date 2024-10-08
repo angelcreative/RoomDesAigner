@@ -655,7 +655,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: null,
             lora_strength: null
         };
-    } 
+    } else if (selectedModel === "hydra") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "hydra-flux",
+            lora_strength: 1
+        };
+    }  
+    
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
@@ -685,6 +692,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: null
         };
     } 
+    
+    
+    
 
     // Configuración del prompt
     const prompt = {
