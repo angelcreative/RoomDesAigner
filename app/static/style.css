@@ -2251,7 +2251,7 @@ i {
 .serialButton button {
    background: none;
    font-size: var(--xs);
-   margin: 0 var(--s);
+  
    min-width: 136px;
    height: 36px;
    border: 1px solid var(--bunker-50);
@@ -3126,6 +3126,7 @@ option[title]:hover:after {
        position: relative;
        z-index: 9;
        font-size: var(--xs);
+    padding-bottom: var(--2xl);
 }
 
 .chipSV {
