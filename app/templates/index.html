@@ -103,6 +103,10 @@
  
                  <div class="user-profile"> <div class="logout">
         <div class="rightOff">
+            
+            <button class="menu-button" id="menuButton">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
             <button  type="button"  style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
 
 
@@ -3642,7 +3646,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
-    
+
+    <script>const menuButton = document.getElementById('menuButton');
+    const layout = document.querySelector('.layout');
+
+    menuButton.addEventListener('click', () => {
+      layout.classList.toggle('show-aside');
+    });</script>
     
 </body>
 

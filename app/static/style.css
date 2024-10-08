@@ -4458,6 +4458,14 @@ body, html {
   box-shadow: 0px 8px 12px 8px rgba(0, 0, 0, .9);
 }
 
+.menu-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
 /* Main Content */
 .main-content {
   display: grid;
@@ -4473,6 +4481,31 @@ body, html {
   padding: 0 var(--s);
   overflow: auto; /* Prevent scrolling */
   background: #000;
+    
+width: 250px; /* Width of the columns */
+  position: relative;
+  transform: translateX(-100%); /* Start off-screen for left */
+  opacity: 0; /* Hidden by default */
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+
+
+.right-column {
+  transform: translateX(100%); /* Start off-screen for right */
+}
+
+/* When the layout has .show-aside, the columns slide in */
+.show-aside .left-column {
+  transform: translateX(0); /* Slide in from the left */
+  opacity: 1; /* Make it visible */
+  animation: bounceLeft 0.6s ease-out;
+}
+
+.show-aside .right-column {
+  transform: translateX(0); /* Slide in from the right */
+  opacity: 1;
+  animation: bounceRight 0.6s ease-out;
 }
 
 .center-column {
