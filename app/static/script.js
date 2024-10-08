@@ -869,7 +869,7 @@ function showGeneratingImagesDialog() {
     if (dialogTitle) {
         dialogTitle.innerHTML = `
             <h2 id="changingText">painting walls</h2>
-            <p>Sit back and relax—your creation is on the way! Its completion time will vary depending on the model you've selected.</p>
+            <p>The time will vary depending on the selected model.</p>
             <p id="chronometer">00:00:00</p>
         `;
     } else {

@@ -120,7 +120,7 @@ def transform_prompt(prompt_text):
     messages = [
        {
             "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. Follow this order: Subject (main focus), Room Area or Location (e.g., living room, forest), Style (design approach), Composition (layout or arrangement), Lighting (type and quality), Color Palette (primary, secondary, tertiary with RGB values), Mood/Atmosphere (emotional tone), and Technical Details (camera settings, perspective). Always mention colors with RGB values."
+            "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. Follow this order: Subject (main focus), Location (e.g., living room, forest, city), Style (design approach), Composition (layout or arrangement), Lighting (type and quality), Color Palette (primary, secondary, tertiary with RGB values), Mood/Atmosphere (emotional tone), and Technical Details (camera settings, perspective). Always mention colors with RGB values."
         },
         {
             "role": "user",
