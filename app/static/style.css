@@ -4527,6 +4527,9 @@ body, html {
   .left-column, .right-column {
     display: none; /* Hide left and right columns on small devices */
   }
+    
+    .rightOff button {
+        display: none;
 }
 
 .flux {
