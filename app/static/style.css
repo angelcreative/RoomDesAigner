@@ -4763,8 +4763,12 @@ background: #fff;
   
     
      .center-column {
-        padding-bottom: 190px
+        padding-bottom: 220px
     }
+    
+     .aspectRatioShot {
+   display: none
+}
    
     
     }
@@ -4816,14 +4820,12 @@ background: #fff;
 
 }
  .aspectRatioShot {
-    
-    display: flex;
-    flex-direction: row;
-    
-    flex-wrap: wrap;
-    justify-content: space-between;
+   display: none
 }
     
+   .center-column {
+        padding-bottom: 220px
+    }
     
     }
     
