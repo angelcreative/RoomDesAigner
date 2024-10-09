@@ -1677,11 +1677,12 @@ span.username {
 }
 
 .usernameCredits {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left:var(--2xs);
-        color: var(--bunker-500);
+       display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding-left: var(--2xs);
+    color: var(--bunker-500);
+    gap: var(--xs);
 }
 
 /*logout*/
