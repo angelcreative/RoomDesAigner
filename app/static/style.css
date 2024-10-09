@@ -1382,7 +1382,7 @@ img#thumbnail {
         max-height: 170px;
         max-width: 230px;
 }
-
+/*
 .image-buttons button:first-child,
 .image-buttons button:nth-child(2),
 .image-buttons button:nth-child(3),
@@ -1439,7 +1439,7 @@ img#thumbnail {
 .image-buttons button:nth-child(8):hover::after {
         content: "Clarity enhance";
 }
-
+*/
 .pricing-card {
         padding: 40px;
         text-align: left;
@@ -1982,7 +1982,7 @@ label.custom-checkbox {
 select#harmonyType {
         margin-bottom: 0;
 }
-
+/*
 .image-buttons button:first-child {
         background: url(/static/img/ico_grid/ico_open.svg) center center
                 no-repeat;
@@ -2027,7 +2027,7 @@ select#harmonyType {
                 no-repeat;
         background-size: 36px; display: none
 }
-
+*/
 
 div#errorContainer {
     text-align: center;
@@ -2216,10 +2216,8 @@ i {
 }
 
 
-.carousel-slide a {
+.carousel-slide a, .carousel-slide button {
     position: absolute;
-    top: 8px;
-    left: 8px;
     background: #0000005c;
     color: var(--bunker-50);
     border-radius: 100%;
@@ -2229,10 +2227,26 @@ i {
     visibility: hidden;
 }
 
-.carousel-slide:hover a {
+.carousel-slide:hover a,  .carousel-slide:hover button {
     visibility: visible;
 }
+.carousel-slide a {
+    left: 8px;
+    top: 8px;
+    margin: 0;
+}
+.carousel-slide button {
+    right: 8px;
+    top: 8px;
+    margin: 0;
+}
 
+.carousel-slide button:nth-of-type(2){
+    left: 8px;
+    top: 51px;
+    margin: 0;
+    background-image: none;
+}
 
 .serialButton{
   display: block;
@@ -3179,35 +3193,41 @@ option[title]:hover:after {
 }
 
 .image-buttons {
+        /* display: flex; */
+        /* width: 100% !important; */
+        /* flex-wrap: wrap; */
+        /* flex-direction: row; */
+        /* background: none; */
+        /* border-radius: 0 0 var(--xl) var(--xl); */
+        /* margin: -2px 0 0 0; */
+        /* padding: 0 0 var(--xs) 0; */ 0; 0; 0; 0; 0;
+        /* position: absolute; */
+        /* zoom: .8; */
+        /* opacity: .9; */
+        /* justify-content: flex-end; */
+        /* display: none; */
+        position: absolute;
+        top: 40px;
+        left: 0;
         display: flex;
-        width: 100% !important;
-        flex-wrap: wrap;
-        flex-direction: row;
-        background: none;
-        border-radius: 0 0 var(--xl) var(--xl);
-        margin: -2px 0 0 0;
-        padding: 0 0 var(--xs) 0; 0; 0; 0; 0; 0;
-        position: relative;
-        zoom: .8;
-        opacity: .9;
-        justify-content: flex-end;
-        display: none;
+        margin: 0;
+        width: 100%;
 }
 
 .image-buttons button {
-        margin: 0 2px;
-        border-radius: 100%;
-        border: none;
-        color: #ffffff00;
-        padding: 0.5rem;
-        cursor: pointer;
-        transition: background 300ms ease-in-out;
+        /* margin: 0 2px; */
+        /* border-radius: 100%; */
+        /* border: none; */
+        /* color: #ffffff00; */
+        /* padding: 0.5rem; */
+        /* cursor: pointer; */
+        /* transition: background 300ms ease-in-out; */
          : 12px;
-        background-size: 16px !important;
-        width: 36px;
-        height: 36px;
-        display: inline-block;
-        opacity: 1;
+        /* background-size: 16px !important; */
+        /* width: 36px; */
+        /* height: 36px; */
+        /* display: inline-block; */
+        /* opacity: 1; */
 }
 
 .image-buttons button:hover {
@@ -4238,10 +4258,10 @@ label.hamburger:hover {
 
 
 .image-buttons button {
-  margin: 5px;
-  padding: 5px 10px;
-  font-size: 12px;
-  cursor: pointer;
+  /* margin: 5px; */
+  /* padding: 5px 10px; */
+  /* font-size: 12px; */
+  /* cursor: pointer; */
 }
 
 .front  { transform: rotateY(  0deg) translateZ(150px); }
@@ -4267,14 +4287,16 @@ label.hamburger:hover {
 }
 
 .filter-menu {
-   width: 50%;
+   width: 200px;
    padding: var(--xs);
-   border-radius: var(--m) 0 0;
+   border-radius: 0;
    position: absolute;
    background: #111922e8;
-   top: -516px;
-   right: 0;
    z-index: 2;
+   top: 0;
+   /* display: flex; */
+   /* flex-direction: row; */
+   right: 0;
 }
 
 
@@ -4334,7 +4356,8 @@ label.hamburger:hover {
    flex-direction: row;
    flex-wrap: wrap;
    height: fit-content;
-   margin-top: -40px;
+   margin-top: 0;
+   display: none;
 }
 
 

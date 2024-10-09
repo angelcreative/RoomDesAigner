@@ -1194,11 +1194,14 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
     // Botones de acción
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-    const copyPromptButton = createButton("Copy Prompt", () => copyTextToClipboard(transformedPrompt));
-    //const compareButton = createButton("Compare", () => openComparisonWindow(userImageBase64, imageUrl));
-    // Aquí añadimos el botón "Filters"
-    const filterButton = createButton("Filters", toggleFilterMenu);
-    buttonsContainer.appendChild(filterButton);
+   // Crear botones con iconos en lugar de texto
+const copyPromptButton = createButton();
+copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
+copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
+
+const filterButton = createButton();
+filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
+filterButton.onclick = toggleFilterMenu;
     
 
     
@@ -1207,7 +1210,7 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
     
 
     // Añadir los botones a su contenedor
-    [downloadButton, copyButton, copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+    [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
 
    
 
