@@ -1687,7 +1687,7 @@ span.username {
 
 .usernameCredits {
        display: flex;
-    flex-direction: row;
+    flex-direction: colum;
     align-items: flex-start;
     padding-left: var(--2xs);
     color: var(--bunker-500);
