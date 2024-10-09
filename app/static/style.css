@@ -4499,7 +4499,7 @@ body, html {
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0px 8px 12px 8px rgba(0, 0, 0, .9);
+  /*box-shadow: 0px 8px 12px 8px rgba(0, 0, 0, .9);*/
 }
 
 .menu-button {
@@ -4520,7 +4520,7 @@ body, html {
   background: #000;
   width: 100%;
   height: 100vh;
-  padding-bottom: 280px;
+ 
 }
 
 .left-column, .right-column {
@@ -4558,25 +4558,26 @@ body, html {
   /* padding: 20px; */
   overflow-y: auto; /* Enable scrolling */
   background: #000;
+    padding-bottom: 260px;
 }
 
 /* Footer */
 .footer {
-     color: white;
+    color: white;
     padding: 0 var(--xs) var(--xs) var(--xs);
     text-align: center;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: fit-content;
     background: #000;
-    box-shadow: 0px -78px 8px 0px rgba(0, 0, 0, 1);
+    /* box-shadow: 0px -78px 8px 0px rgba(0, 0, 0, 1); */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    padding: 12px;
+    border-radius: 12px;
 }
-
 
 
 .flux {
@@ -4708,7 +4709,12 @@ body {
     .rightOff button {
         display: none;
 }
-
+    
+    
+    .center-column {
+        padding-bottom: 60px
+    }
+}
 
 /* Smartphones (portrait and landscape) */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
@@ -4767,10 +4773,10 @@ background: #fff;
     justify-content: space-between;
 }
     
-    
-     .main-content {
-        padding-bottom: 320px
+     .center-column {
+        padding-bottom: 60px
     }
+   
     
     }
 
@@ -4796,9 +4802,7 @@ background: #fff;
         right: 8px;
         zoom: .6;}}
     
-    .main-content {
-        padding-bottom: 320px
-    }
+  
     
     
     
