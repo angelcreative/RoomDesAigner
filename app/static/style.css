@@ -566,10 +566,10 @@ h2.loginTitle {
 /* end ref */
 
 .modal-content span.close {
- position: absolute;
+position: absolute;
     cursor: pointer;
     color: var(--dragon-500);
-    top: calc(100% + 16px);
+    top: 0px;
     right: calc(0px + 8px);
     padding: 12px 16px;
     border: 1px solid var(--dragon-500);
@@ -2262,8 +2262,7 @@ i {
 
 .serialButton{
   display: block;
-    position: absolute;
-    top: 100%;
+  
 }
 
 .serialButton button {
@@ -4709,7 +4708,7 @@ body {
     
     
     .center-column {
-        padding-bottom: 60px
+        padding-bottom: 180px
     }
 }
 
@@ -4731,8 +4730,8 @@ body {
         padding: 0px 0px;}
     
     .modal-content span.close {
-   top: 100%;
-        right: 8px;
+   top: 0;
+        right:0;
         zoom: .85;}
     
     .serialButton button {
@@ -4761,17 +4760,10 @@ background: #fff;
     }
     
     
-    .aspectRatioShot {
-    
-    display: flex;
-    flex-direction: row;
-    
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
+  
     
      .center-column {
-        padding-bottom: 60px
+        padding-bottom: 190px
     }
    
     
