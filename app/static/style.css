@@ -297,7 +297,6 @@ body {
 .aspectRatioShot {
     border-radius:var(--2xs);
     background-color: var(--bunker-700);
-    max-width: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: row;
@@ -324,9 +323,9 @@ body {
 }
 
 .ar input[type="radio"]:checked {
-    background-color: var(--java-500); /* Color cuando está seleccionado */
+    /* background-color: var(--java-500); Color cuando está seleccionado 
     border-color: var(--java-800);
-    box-shadow: 0 0 var(--3xs) rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 var(--3xs) rgba(0, 0, 0, 0.2);*/
 }
 
 .ar label {
@@ -4515,11 +4514,12 @@ body, html {
   background: #000;
   width: 100%;
   height: 100vh;
-  padding-bottom: 220px;
+  padding-bottom: 280px;
 }
 
 .left-column, .right-column {
   padding: 0 var(--s);
+    padding-bottom: 100px;
   overflow: auto; /* Prevent scrolling */
   background: #000;
     
@@ -4556,27 +4556,19 @@ body, html {
 
 /* Footer */
 .footer {
-  color: white;
-  padding: 0 var(--xs) var(--xs) var(--xs); var(
-  --s); var(
-  --s); var(
-  --2xl); var(
-  --2xl); var(
-  --2xl); var(
-  --2xl); var(
-  --2xl); var(
-  --2xl); var();
-  var;
-  va;
-  revert;
-  revert;
-  v;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: transparent;
-  box-shadow: 0px -20px 20px 0px rgba(0, 0, 0, 1);
+     color: white;
+    padding: 0 var(--xs) var(--xs) var(--xs);
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: #000;
+    box-shadow: 0px -78px 8px 0px rgba(0, 0, 0, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
 }
 
 /* Responsive Design */
@@ -4619,6 +4611,94 @@ body, html {
     text-transform: uppercase;
 }
 
+    
+    
+ /*ORB*/
+@mixin dimensions($width, $height: $width) {
+	width: $width;
+	height: $height;
+}
+%reset {
+	margin: 0;
+	padding: 0;
+}
+
+
+html {background:#000}
+/* Orb*/
+.orb {
+	@include dimensions($width: 180px);
+	animation: shapeColorShift 7s infinite;
+	filter: blur(12px);
+	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000 ,#000000, #08AEEA);
+	background-size: 500% 800%;
+
+	// Orb's Shadow
+	&:before {
+		content: '';
+		display: block;
+		position: absolute;
+		top: -10px;
+		right: -35px;
+		bottom: -35px;
+		left: -10px;
+		background: inherit;
+		filter: blur(30px);
+		opacity: .6;
+		animation: shapeColorShift 7s infinite;
+	}
+}
+
+/* Animation*/
+@keyframes shapeColorShift {
+	0% {
+		border-radius: 50vw 50vw 50vw 50vw / 50vw 50vw 50vw 50vw;
+		background-position: 0% 0%;
+	}
+	50%{
+		border-radius: 20vw 40vw 20vw 40vw / 20vw 40vw 20vw 40vw;
+		background-position: 100% 100%;
+	}
+	100% {
+		border-radius: 50vw 50vw 50vw 50vw / 50vw 50vw 50vw 50vw;
+		background-position: 0% 0%;
+		transform: rotate(1turn);
+	}
+}
+
+
+
+
+
+
+
+
+
+/*demo*/
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	@include dimensions($width: 100%);
+	@extend %reset;
+	font-family: "Assistant", sans-serif;
+}
+
+body {
+	@extend %reset;
+	@include dimensions($width:100%);
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+    
 /*=========================   MEDIA QUERIES ===================*/
 
     
@@ -4671,6 +4751,21 @@ background: #fff;
         width:auto;
     }
     
+    
+    .aspectRatioShot {
+    
+    display: flex;
+    flex-direction: row;
+    
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+    
+    
+     .main-content {
+        padding-bottom: 320px
+    }
+    
     }
 
 
@@ -4695,7 +4790,9 @@ background: #fff;
         right: 8px;
         zoom: .6;}}
     
- 
+    .main-content {
+        padding-bottom: 320px
+    }
     
     
     
@@ -4719,7 +4816,14 @@ background: #fff;
 
 
 }
-
+ .aspectRatioShot {
+    
+    display: flex;
+    flex-direction: row;
+    
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
     
     
     }
