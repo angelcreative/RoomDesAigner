@@ -4627,7 +4627,7 @@ html {background:#000}
 	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000 ,#000000, #08AEEA);
 	background-size: 500% 800%;
 
-	// Orb's Shadow
+	/* Orb's Shadow */
 	&:before {
 		content: '';
 		display: block;
