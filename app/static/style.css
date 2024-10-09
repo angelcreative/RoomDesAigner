@@ -2333,7 +2333,6 @@ background: var(--bunker-900);
 }
 
 .image-buttons button:hover {
-    background-color: #7899ba;
 }
 
 .prev, .next {
@@ -2900,6 +2899,7 @@ button {
   align-items: center;
   gap: 12px;
   width: fit-content;
+  justify-content: center;
 }
 
 
@@ -3235,7 +3235,6 @@ option[title]:hover:after {
 }
 
 .image-buttons button:hover {
-        background-color: #1a2038;
 }
 
 .spinner {
@@ -3379,16 +3378,16 @@ select#materials {
 
 #message {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
+        bottom: 10px;
+        right: 10px;
+        background-color: var(--java-700);
         padding: var(--m);
         text-align: center;
         z-index: 9999;
         border-radius: 4px;
-        box-shadow: rgb(0 0 0 / 23%) 0px 24px 24pxvar(--2xs);
-        width: 300px;
+        width: fit-content;
+        color: var(--bunker-50);
+        border: 1px solid var(--bunker-50);
 }
 
 .message-microcopy {
@@ -3398,17 +3397,17 @@ select#materials {
 .message-close-btn,
 .secondary {
  margin: var(--m) auto;
-    border-radius: var(--2xs);
-    border: 1px solid var(--bunker-600);
-    background: transparent;
-    color: var(--bunker-600);
-    padding: var(--s) var(--m);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: fit-content;
-    font-size: var(--s);
+ border-radius: var(--2xs);
+ border: 1px solid #fff;
+ background: transparent;
+ color: var(--bunker-50);
+ padding: var(--s) var(--m);
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ width: fit-content;
+ font-size: var(--s);
 }
 
 .message-close-btn:hover,
@@ -3434,7 +3433,7 @@ tertiary:hover {
 }
 
 .imgLoader {
-        display: block;
+        display: none;
         width: auto;
         height: 200px;
         margin: 0 auto;
