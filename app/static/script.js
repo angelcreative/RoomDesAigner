@@ -1243,13 +1243,13 @@ filterButton.onclick = toggleFilterMenu;
     filterMenu.appendChild(brightnessLabel);
     filterMenu.appendChild(brightnessSlider.slider);
 
-    /*Slider para el tinte (hue rotation) con label
+    //Slider para el tinte (hue rotation) con label
     const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
     const hueLabel = document.createElement("label");
     hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
     hueLabel.setAttribute("for", hueSlider.slider.id);
     filterMenu.appendChild(hueLabel);
-    filterMenu.appendChild(hueSlider.slider);*/
+    filterMenu.appendChild(hueSlider.slider);
     
     // Slider para la saturación con label
 const saturateSlider = createSlider("Saturate", 100, 300, 100, applyFilters);
@@ -1277,14 +1277,14 @@ grayscaleLabel.setAttribute("for", grayscaleSlider.slider.id);
 filterMenu.appendChild(grayscaleLabel);
 filterMenu.appendChild(grayscaleSlider.slider);
 
-/*Slider para invertir colores con label
+//Slider para invertir colores con label
 const invertSlider = createSlider("Invert", 0, 1, 0, applyFilters);
 invertSlider.slider.step = 0.01;
 const invertLabel = document.createElement("label");
 invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
 invertLabel.setAttribute("for", invertSlider.slider.id);
 filterMenu.appendChild(invertLabel);
-filterMenu.appendChild(invertSlider.slider);*/
+filterMenu.appendChild(invertSlider.slider);
 
 // Slider para el desenfoque con label
 const blurSlider = createSlider("Blur", 0, 10, 0, applyFilters);
@@ -1295,14 +1295,14 @@ blurLabel.setAttribute("for", blurSlider.slider.id);
 filterMenu.appendChild(blurLabel);
 filterMenu.appendChild(blurSlider.slider);
 
-/*Slider para la opacidad con label
+//Slider para la opacidad con label
 const opacitySlider = createSlider("Opacity", 0, 1, 1, applyFilters);
 opacitySlider.slider.step = 0.01;
 const opacityLabel = document.createElement("label");
 opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
 opacityLabel.setAttribute("for", opacitySlider.slider.id);
 filterMenu.appendChild(opacityLabel);
-filterMenu.appendChild(opacitySlider.slider);*/
+filterMenu.appendChild(opacitySlider.slider);
 
 
     // Añadir el menú de filtros debajo del botón "Filters"
