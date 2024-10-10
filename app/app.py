@@ -117,16 +117,47 @@ else:
 openai.api_key = openai_api_key
 
 def transform_prompt(prompt_text):
-    messages = [
-       {
-            "role": "system",
-            "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. Follow this order: Subject (main focus), Location (e.g., living room, forest, city), Style (design approach), Composition (layout or arrangement), Lighting (type and quality), Color Palette (primary, secondary, tertiary with RGB values), Mood/Atmosphere (emotional tone), and Technical Details (camera settings, perspective). Always mention colors with RGB values."
-        },
-        {
-            "role": "user",
-            "content": f"Transform the following list of values into a detailed, professional natural language prompt, with a clear structure, in less than 700 characters:\n\n{prompt_text}"
-        }
-    ]
+    # Detecta si el prompt es sobre personas
+    if "person" in prompt_text.lower() or "woman" in prompt_text.lower() or "man" in prompt_text.lower() or "people" in prompt_text.lower():
+        # Estructura para prompts sobre personas
+        messages = [
+           {
+                "role": "system",
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject, Hair/Skin color, Pose, Clothing/Accessories, Emotion, Location, and Technical Details. Do not fill in the fields; just output the labels in this order."
+            },
+            {
+                "role": "user",
+                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+            }
+        ]
+    # Detecta si el prompt menciona elementos tipográficos, animales, o estilos artísticos específicos
+    elif "typographic" in prompt_text.lower() or "silhouette" in prompt_text.lower() or "line art" in prompt_text.lower() or "geometric" in prompt_text.lower() or "logo" in prompt_text.lower():
+        # Estructura para logos y estilos artísticos
+        messages = [
+           {
+                "role": "system",
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for logos and artistic styles. Follow this structure: Subject, Style, Composition, Color Palette (mention RGB values), Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+            },
+            {
+                "role": "user",
+                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+            }
+        ]
+    else:
+        # Estructura para prompts sobre otros elementos (escenas, objetos, etc.)
+        messages = [
+           {
+                "role": "system",
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For non-human subjects (scenes, objects, etc.), follow this structure: Subject, Location, Style, Composition, Lighting, Color Palette (mention RGB values), Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+            },
+            {
+                "role": "user",
+                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+            }
+        ]
+
+    # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
+
 
     response = openai.ChatCompletion.create(
         model="gpt-4-turbo",
