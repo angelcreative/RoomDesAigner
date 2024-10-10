@@ -130,6 +130,7 @@ def transform_prompt(prompt_text):
                 "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
+    
     # Detecta si el prompt menciona elementos tipográficos, animales, o estilos artísticos específicos
     elif "typographic" in prompt_text.lower() or "silhouette" in prompt_text.lower() or "line art" in prompt_text.lower() or "geometric" in prompt_text.lower() or "logo" in prompt_text.lower():
         # Estructura para logos y estilos artísticos
@@ -143,6 +144,35 @@ def transform_prompt(prompt_text):
                 "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
+    
+    # Detecta si el prompt es sobre diseño de interfaces
+    elif "interface" in prompt_text.lower() or "UI" in prompt_text.lower() or "UX" in prompt_text.lower() or "dashboard" in prompt_text.lower():
+        # Estructura para prompts sobre diseño de interfaces
+        messages = [
+           {
+                "role": "system",
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for UI/UX design. Follow this structure: Screen Type, Main Elements, Layout, Style, Color Palette (mention RGB values), Typography, Interactions/Animations, and Technical Details. Do not fill in the fields; just output the labels in this order."
+            },
+            {
+                "role": "user",
+                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+            }
+        ]
+    
+    # Detecta si el prompt es sobre diseño de interiores
+    elif "interior design" in prompt_text.lower() or "living room" in prompt_text.lower() or "bedroom" in prompt_text.lower() or "kitchen" in prompt_text.lower():
+        # Estructura para prompts sobre diseño de interiores
+        messages = [
+           {
+                "role": "system",
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for interior design. Follow this structure: Room Type, Main Furniture, Materials, Style, Color Palette (mention RGB values), Lighting, Decorative Elements, Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+            },
+            {
+                "role": "user",
+                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+            }
+        ]
+    
     else:
         # Estructura para prompts sobre otros elementos (escenas, objetos, etc.)
         messages = [
@@ -155,6 +185,9 @@ def transform_prompt(prompt_text):
                 "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
+
+    # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
+
 
     # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
 
