@@ -574,7 +574,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     document.getElementById('imageGrid').style.display = 'none';
 
     
-    showGeneratingImagesDialog();  // Mostrar el diálogo de espera
+    //showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
@@ -737,25 +737,15 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
- try {
-
-        // Enviar solicitud al backend en lugar de a la API externa
-
-        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
-
+try {
+        // Enviar solicitud al backend
+        const data = await fetchWithRetry("/generate-images", {  
             method: "POST",
-
             headers: {
-
                 "Content-Type": "application/json"
-
             },
-
             body: JSON.stringify(prompt)
-
         });
-
-
 
         console.log('Respuesta del backend en generateImages:', data);
 
@@ -784,7 +774,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             document.getElementById('imagePlaceholderGrid').style.display = 'none';
             document.getElementById('imageGrid').style.display = 'grid';
 
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+          
         } else if (data.request_id) {
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
             // Las imágenes aún se están procesando, iniciar polling
