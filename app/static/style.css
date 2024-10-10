@@ -683,8 +683,8 @@ span.close:hover {
     margin: auto;
     text-align: center;
     display: flex;
-    flex-direction: row;
-    padding: 40px;
+    flex-direction: column;
+    /* padding: 40px; */
     align-items: center;
     justify-content: space-around;
 }
