@@ -582,6 +582,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         generatingDialogContainer.className = 'generating-dialog-container'; // Agregar clase para estilo
         document.getElementById('imageGrid').insertAdjacentElement('afterend', generatingDialogContainer);
     }
+    
+    // Mostrar el contenedor inmediatamente
+    generatingDialogContainer.style.display = 'block';
 
     // Crear diálogos de generación inmediatamente al solicitar las imágenes
     for (let i = 0; i < numImages; i++) {
@@ -750,7 +753,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-  try {
+try {
         const data = await fetchWithRetry("/generate-images", {
             method: "POST",
             headers: {
@@ -766,6 +769,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             data.images.forEach((imageUrl, index) => {
                 showImageAndRemoveDialog(imageUrl, index);
             });
+
+            // Ocultar el contenedor de generación una vez que todas las imágenes se han generado
+            generatingDialogContainer.style.display = 'none';
         } else if (data.request_id) {
             // Continuar verificando el estado si las imágenes aún están procesándose
             await checkImageStatus(data.request_id);
@@ -777,6 +783,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 }
 
+
 // Función para crear un diálogo de "generating" dinámicamente y añadirlo al contenedor
 function createGeneratingDialog(requestId, dialogContainer) {
     const dialog = document.createElement('div');
@@ -786,7 +793,7 @@ function createGeneratingDialog(requestId, dialogContainer) {
     // El contenido del diálogo
     dialog.innerHTML = `
         <div class="message-content message">
-          
+            <img src="/static/img/modal_img/designing.svg" alt="Loading Image">
             <div class="bigTitle">Generating image ${requestId + 1}...</div>
             <div id="etaDisplay"><span id="etaValue"></span></div>
             <div class="preloader"><img src="/static/img/gen.svg" alt="Loading Spinner"></div>
