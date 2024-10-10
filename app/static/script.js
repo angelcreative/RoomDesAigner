@@ -574,15 +574,18 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
        // Mostrar tantos diálogos de generación como imágenes se soliciten
     const numImages = 4; // Número de imágenes solicitadas en esta generación (puedes cambiar esto según el contexto)
     
-    // Contenedor para los diálogos
-    const generatingDialogContainer = document.createElement('div');
-    generatingDialogContainer.id = 'generatingDialogContainer';
-    generatingDialogContainer.className = 'generating-dialog-container'; // Agregar clase para estilo
-    document.getElementById('imageGrid').insertAdjacentElement('afterend', generatingDialogContainer);
+     // Contenedor para los diálogos (asegúrate de que exista un contenedor único para los diálogos)
+    let generatingDialogContainer = document.getElementById('generatingDialogContainer');
+    if (!generatingDialogContainer) {
+        generatingDialogContainer = document.createElement('div');
+        generatingDialogContainer.id = 'generatingDialogContainer';
+        generatingDialogContainer.className = 'generating-dialog-container'; // Agregar clase para estilo
+        document.getElementById('imageGrid').insertAdjacentElement('afterend', generatingDialogContainer);
+    }
 
     // Crear diálogos de generación inmediatamente al solicitar las imágenes
     for (let i = 0; i < numImages; i++) {
-        createGeneratingDialog(requestCount, generatingDialogContainer); // Pasar el contenedor como parámetro
+        createGeneratingDialog(requestCount, generatingDialogContainer); // Crear un diálogo por imagen solicitada
         requestCount++; // Incrementar para asegurar que cada diálogo tiene un ID único
     }
     
@@ -783,7 +786,7 @@ function createGeneratingDialog(requestId, dialogContainer) {
     // El contenido del diálogo
     dialog.innerHTML = `
         <div class="message-content message">
-            <img src="/static/img/modal_img/designing.svg" alt="Loading Image">
+          
             <div class="bigTitle">Generating image ${requestId + 1}...</div>
             <div id="etaDisplay"><span id="etaValue"></span></div>
             <div class="preloader"><img src="/static/img/gen.svg" alt="Loading Spinner"></div>

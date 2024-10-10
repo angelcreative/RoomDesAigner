@@ -1492,7 +1492,7 @@ img#thumbnail {
 }
 
 .message {
-        position: fixed;
+       /* position: fixed;
         bottom: var(--2xs);
         left: var(--2xs);
         background-color: var(--bunker-900);
@@ -1505,7 +1505,11 @@ img#thumbnail {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        gap: var(--s);
+        gap: var(--s);*/
+}
+
+.message img {
+    display: none;
 }
 
 #generatingImagesDialog {
@@ -4681,6 +4685,22 @@ html {
 	}
 }
 
+
+#generatingDialogContainer {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.generating-dialog {
+    height: 310px;
+    width: 49%;
+    background: gray;
+}
 
 
     
