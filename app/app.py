@@ -123,7 +123,7 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject (e.g., young woman, man), Hair/Skin color (e.g., long brown hair, pale skin), Pose (e.g., sitting, standing), Clothing/Accessories (e.g., wearing a red dress), Emotion (e.g., smiling, thoughtful), Location (e.g., in a park), and Technical Details (e.g., shot with a 50mm lens). Generate a complete and natural description, not just labels."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject (e.g., young woman, man), Hair/Skin color (e.g., long brown hair, pale skin), Pose (e.g., sitting, standing), Clothing/Accessories (e.g., wearing a red dress), Emotion (e.g., smiling, thoughtful), Location (e.g., in a park), and Technical Details (e.g., shot with a 50mm lens). Color Palette (mention RGB values).Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",

@@ -1493,8 +1493,8 @@ img#thumbnail {
 
 .message {
         position: fixed;
-        bottom: var(--2xs);
-        left: var(--2xs);
+        top: 0;
+        right: 0;
         background-color: var(--bunker-900);
         padding: var(--m);
         z-index: 9999;
@@ -2402,7 +2402,7 @@ background: var(--bunker-900);
        color: var(--bunker-400);
        transform: rotate(45deg);
        cursor: pointer;
-       z-index: 1;
+       z-index: 10001;
 }
 
 #clearImg:hover,
@@ -2834,10 +2834,10 @@ select:hover {
         color: var(--bunker-400);
 }
 .selected {
-        box-shadow: inset 0px 0px 0px 3px var(--bunker-600) !important;
-    border: none !important;
-    background: var(--bunker-200) !important;
-    color: var(--bunker-600) !important;
+        /* box-shadow: inset 0px 0px 0px 3px var(--bunker-600) !important; */
+        border: none !important;
+        background: var(--java-500) !important; !important; !important; !important;
+        color: #000;
 }
 
 textarea {
@@ -3926,7 +3926,7 @@ textarea {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        border-radius:var(--2xs);
+        border-radius: var(--3xs);
         box-shadow: inset 0px -8px 16px rgb(0 0 0 / 5%);
         color: var(--bunker-200);
         height: 30px;
@@ -3954,13 +3954,13 @@ textarea:focus-visible {
 
 .dropdown-selected .clear-selection {
    display: none;
-    cursor: pointer;
-    color: var(--bunker-400);
-    margin-right: -5px;
-    position: relative;
-    z-index: 1;
-    background: #c8d0d0;
-    zoom: .8;
+   cursor: pointer;
+   color: #000;
+   margin-right: -5px;
+   position: relative;
+   z-index: 1;
+   background: var(--java-500);
+   zoom: .8;
 }
 
 .dropdown-selected.selected .clear-selection {
@@ -4014,7 +4014,7 @@ textarea:focus-visible {
 }
 
 .selected .selected-text {
-        color: var(--bunker-600);
+        color: #000;
 }
 .color-swatch {
         width: var(--m);
@@ -4681,6 +4681,25 @@ html {
 	}
 }
 
+
+
+#imagePlaceholderGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 10px;
+}
+
+.image-placeholder {
+    width: 100%;
+    padding-top: 100%; /* Esto asegura que los placeholders sean siempre 1:1 */
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
 
 
     

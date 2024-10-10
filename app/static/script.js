@@ -324,7 +324,8 @@ function generateBlurredBackground () {
 
     Start on the left by showing the initial stage, depicting the earliest form or level of ${customText}. As we move to the right, show the next level, highlighting significant advancements or changes in ${evolutionType}, whether biological, technological, or equipment-based. In the third section, depict a further transformation stage, capturing ${customText} in a more advanced form or configuration.
 
-    Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.`;
+    Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.
+    Subject has same tall.`;
 }
     
     
@@ -568,6 +569,11 @@ function updateCreditsDisplay(remainingCredits) {
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
+      // Mostrar los placeholders (siempre 1:1)
+    document.getElementById('imagePlaceholderGrid').style.display = 'grid';
+    document.getElementById('imageGrid').style.display = 'none';
+
+    
     showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
@@ -756,29 +762,36 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 
         if (data.status === "success" && data.images) {
-
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
 
-            // Las imágenes están listas
+            // Reemplazar placeholders por las imágenes generadas
+            const imageGrid = document.getElementById('imageGrid');
+            imageGrid.innerHTML = ''; // Limpiar cualquier contenido anterior
 
-            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+            data.images.forEach(imageUrl => {
+                const imageContainer = document.createElement("div");
+                const image = document.createElement("img");
+                image.src = imageUrl;
+                image.alt = "Generated Image";
+                image.style.width = "100%"; // Ajustar al contenedor
+                image.style.height = "auto"; // Mantener la proporción de la imagen
+
+                imageContainer.appendChild(image);
+                imageGrid.appendChild(imageContainer);
+            });
+
+            // Ocultar los placeholders y mostrar las imágenes generadas
+            document.getElementById('imagePlaceholderGrid').style.display = 'none';
+            document.getElementById('imageGrid').style.display = 'grid';
 
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-
         } else if (data.request_id) {
-
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-
             // Las imágenes aún se están procesando, iniciar polling
-
             await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
-
         } else {
-
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
-
         }
-
     } catch (error) {
 
         showError(error);  // Manejo de errores
