@@ -657,6 +657,11 @@ span.close:hover {
     
 }
 
+.loginLogo h1 {
+    font-size: var(--l);
+    color: var(--bunker-50);
+}
+
 .loginBox p {
     color: var(--bunker-600);
     margin: 16px auto;
@@ -673,7 +678,6 @@ span.close:hover {
 }
 
 .loginModal {
-        background: #fff;
     border-radius: var(--l);
     width: 860px;
     margin: auto;
@@ -1302,7 +1306,7 @@ form.loginForm input {
     margin: 0 0 10px 0;
     border-radius: var(--2xs);
     border: 1px solid var(--bunker-500);
-    width: calc(100% - 40px);
+    width: 100%;
     background: var(--bunker-50);
     color: var(--bunker-500) !important;
 }
@@ -1314,7 +1318,7 @@ padding: 16px 36px;
     width: 100%;
     margin: 20px auto;
     font-size: var(--s);
-    background: var(--bunker-500);
+   background:#000;
     transition: background ease-in-out 300ms;
     text-align: center;
     display: flex;
@@ -1756,6 +1760,22 @@ h4 {
 
 .logoApp {
         height: 40px;
+}
+
+
+.logo {
+    margin: 0;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: var(--l);
+    color: var(--bunker-50);
 }
 
 .menu {/* position: sticky; *//* top: -10px; *//* z-index: 9; */height: 40px;border-radius: var(--2xl);display: flex;align-items: center;margin: 0 auto 8px auto;}
@@ -2918,7 +2938,7 @@ button {
 
 
 button:hover {
-    background: var(--bunker-50);
+    background: #000;
     color: var(--bunker-600);
 }
 
@@ -4612,22 +4632,26 @@ body, html {
 	width: $width;
 	height: $height;
 }
+
 %reset {
 	margin: 0;
 	padding: 0;
 }
 
+html {
+	background: #000;
+}
 
-html {background:#000}
 /* Orb*/
 .orb {
 	@include dimensions($width: 180px);
-	animation: shapeColorShift 7s infinite;
+	animation: shapeColorShift 10s infinite;
 	filter: blur(12px);
-	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000 ,#000000, #08AEEA);
+	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000, #000000, #08AEEA);
 	background-size: 500% 800%;
+	border-radius: 50%; /* Hacemos que sea siempre un círculo*/
 
-	/* Orb's Shadow */
+	/*Orb's Shadow*/
 	&:before {
 		content: '';
 		display: block;
@@ -4638,55 +4662,29 @@ html {background:#000}
 		left: -10px;
 		background: inherit;
 		filter: blur(30px);
-		opacity: .6;
+		opacity: 1;
 		animation: shapeColorShift 7s infinite;
+		border-radius: 50%; /*También hacemos que la sombra sea circular*/
 	}
 }
 
-/* Animation*/
+/* Animation */
 @keyframes shapeColorShift {
 	0% {
-		border-radius: 50vw 50vw 50vw 50vw / 50vw 50vw 50vw 50vw;
+		border-radius: 50%; /* Forma de círculo*/
 		background-position: 0% 0%;
 	}
-	50%{
-		border-radius: 20vw 40vw 20vw 40vw / 20vw 40vw 20vw 40vw;
+	50% {
+		border-radius: 50%; /* Forma de círculo*/
 		background-position: 100% 100%;
 	}
 	100% {
-		border-radius: 50vw 50vw 50vw 50vw / 50vw 50vw 50vw 50vw;
+		border-radius: 50%; /* Forma de círculo*/
 		background-position: 0% 0%;
 		transform: rotate(1turn);
 	}
 }
 
-
-
-
-
-
-
-
-
-/*demo*/
-*,
-*:before,
-*:after {
-	box-sizing: border-box;
-}
-
-html,
-body {
-	@include dimensions($width: 100%);
-	@extend %reset;
-	font-family: "Assistant", sans-serif;
-}
-
-body {
-	@extend %reset;
-	@include dimensions($width:100%);
-	
-}
 
 
     
@@ -4740,7 +4738,6 @@ body {
     
         .loginModal {
 
-background: #fff;
     border-radius: var(--l);
     width: auto;
     margin: auto;
@@ -4806,7 +4803,6 @@ background: #fff;
     
     .loginModal {
 
-background: #fff;
     border-radius: var(--l);
     width: auto;
     margin: auto;
