@@ -679,7 +679,7 @@ span.close:hover {
 .loginModal {
     border-radius: var(--l);
     width: 860px;
-    margin: auto;
+    margin: 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -1691,6 +1691,7 @@ span#clearImg {
 
 span.username {
     font-size: var(--xs);
+    max-width: 20px;
 }
 
 .usernameCredits {
@@ -4744,7 +4745,7 @@ html {
 
     border-radius: var(--l);
     width: auto;
-    margin: auto;
+    margin: 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -4809,7 +4810,7 @@ html {
 
     border-radius: var(--l);
     width: auto;
-    margin: auto;
+    margin: 0 auto;
     text-align: center;
     display: flex;
     flex-direction: column;

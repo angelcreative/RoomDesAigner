@@ -1318,13 +1318,13 @@ function applyFilters() {
     const grainAmount = parseInt(grainSlider.slider.value);
     const contrast = parseInt(contrastSlider.slider.value);
     const brightness = parseInt(brightnessSlider.slider.value);
-    //const hueRotation = parseInt(hueSlider.slider.value);
+    const hueRotation = parseInt(hueSlider.slider.value);
     const saturation = parseInt(saturateSlider.slider.value);
     const sepia = parseFloat(sepiaSlider.slider.value);
     const grayscale = parseFloat(grayscaleSlider.slider.value);
-    //const invert = parseFloat(invertSlider.slider.value);
+    const invert = parseFloat(invertSlider.slider.value);
     const blur = parseFloat(blurSlider.slider.value);
-    //const opacity = parseFloat(opacitySlider.slider.value);
+    const opacity = parseFloat(opacitySlider.slider.value);
 
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
