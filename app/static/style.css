@@ -693,6 +693,11 @@ span.close:hover {
     height: auto;
 }
 
+
+.scLangSelector {
+    display: none !important;
+}
+
 .testim {
         width: 100%;
 }
