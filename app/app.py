@@ -123,11 +123,11 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject, Hair/Skin color, Pose, Clothing/Accessories, Emotion, Location, and Technical Details. Do not fill in the fields; just output the labels in this order."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject (e.g., young woman, man), Hair/Skin color (e.g., long brown hair, pale skin), Pose (e.g., sitting, standing), Clothing/Accessories (e.g., wearing a red dress), Emotion (e.g., smiling, thoughtful), Location (e.g., in a park), and Technical Details (e.g., shot with a 50mm lens). Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",
-                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
     
@@ -137,11 +137,11 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for logos and artistic styles. Follow this structure: Subject, Style, Composition, Color Palette (mention RGB values), Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for logos and artistic styles. Follow this structure: Subject (e.g., a geometric logo), Style (e.g., minimalist, retro), Composition (e.g., centered, using simple shapes), Color Palette (mention RGB values), Mood/Atmosphere (e.g., elegant, playful), and Technical Details (e.g., vector format). Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",
-                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
     
@@ -151,11 +151,11 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for UI/UX design. Follow this structure: Screen Type, Main Elements, Layout, Style, Color Palette (mention RGB values), Typography, Interactions/Animations, and Technical Details. Do not fill in the fields; just output the labels in this order."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for UI/UX design. Follow this structure: Screen Type (e.g., dashboard, login screen), Main Elements (e.g., buttons, forms), Layout (e.g., grid layout), Style (e.g., modern, minimalistic), Color Palette (mention RGB values), Typography (e.g., sans-serif, bold), Interactions/Animations (e.g., hover effects, transitions), and Technical Details (e.g., responsive design). Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",
-                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
     
@@ -165,11 +165,11 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for interior design. Follow this structure: Room Type, Main Furniture, Materials, Style, Color Palette (mention RGB values), Lighting, Decorative Elements, Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for interior design. Follow this structure: Room Type (e.g., living room, bedroom), Main Furniture (e.g., sofa, bed), Materials (e.g., wood, metal), Style (e.g., modern, Scandinavian), Color Palette (mention RGB values), Lighting (e.g., natural light, ceiling lamps), Decorative Elements (e.g., plants, rugs), Mood/Atmosphere (e.g., cozy, elegant), and Technical Details (e.g., room dimensions). Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",
-                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
     
@@ -178,16 +178,13 @@ def transform_prompt(prompt_text):
         messages = [
            {
                 "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For non-human subjects (scenes, objects, etc.), follow this structure: Subject, Location, Style, Composition, Lighting, Color Palette (mention RGB values), Mood/Atmosphere, and Technical Details. Do not fill in the fields; just output the labels in this order."
+                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For non-human subjects (scenes, objects, etc.), follow this structure: Subject (e.g., a cityscape at night), Location (e.g., urban setting), Style (e.g., realistic, abstract), Composition (e.g., landscape view), Lighting (e.g., dim, natural light), Color Palette (mention RGB values), Mood/Atmosphere (e.g., mysterious, vibrant), and Technical Details (e.g., shot with a wide-angle lens). Generate a complete and natural description, not just labels."
             },
             {
                 "role": "user",
-                "content": f"Transform the following list of values into a structured prompt with labels only, in less than 700 characters:\n\n{prompt_text}"
+                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
             }
         ]
-
-    # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
-
 
     # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
 
