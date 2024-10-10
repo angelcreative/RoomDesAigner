@@ -324,8 +324,7 @@ function generateBlurredBackground () {
 
     Start on the left by showing the initial stage, depicting the earliest form or level of ${customText}. As we move to the right, show the next level, highlighting significant advancements or changes in ${evolutionType}, whether biological, technological, or equipment-based. In the third section, depict a further transformation stage, capturing ${customText} in a more advanced form or configuration.
 
-    Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.
-    Subject has same tall.`;
+    Finally, on the right side, show the fully developed form of ${customText}, presenting the final stage of its ${evolutionType}. The design should seamlessly transition from one stage to the next, ensuring a coherent flow. The background should subtly shift to reflect the progression, using changes in lighting, scenery, or other visual cues to indicate the passage of time or advancement of technology.`;
 }
     
     
@@ -567,14 +566,18 @@ function updateCreditsDisplay(remainingCredits) {
     creditDisplay.textContent = remainingCredits;  
 }
    
-// Función para generar imágenes
-async function generateImages(imageUrl, selectedValues, isImg2Img) {
-      // Mostrar los placeholders (siempre 1:1)
-    document.getElementById('imagePlaceholderGrid').style.display = 'grid';
-    document.getElementById('imageGrid').style.display = 'none';
+let requestCount = 0; // Para contar las solicitudes y manejar los IDs únicos de los diálogos
 
     
-    //showGeneratingImagesDialog();  // Mostrar el diálogo de espera
+// Función para generar imágenes
+async function generateImages(imageUrl, selectedValues, isImg2Img) {
+       // Mostrar tantos diálogos de generación como imágenes se soliciten
+    const numImages = 4; // Número de imágenes solicitadas en esta generación (puedes cambiar esto según el contexto)
+    
+    for (let i = 0; i < numImages; i++) {
+        createGeneratingDialog(requestCount);  // Crear un nuevo diálogo para esta imagen
+        requestCount++; // Incrementar para asegurar que cada diálogo tiene un ID único
+    }
 
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
@@ -737,9 +740,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-try {
-        // Enviar solicitud al backend
-        const data = await fetchWithRetry("/generate-images", {  
+  try {
+        const data = await fetchWithRetry("/generate-images", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -749,40 +751,18 @@ try {
 
         console.log('Respuesta del backend en generateImages:', data);
 
-
-
         if (data.status === "success" && data.images) {
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-
-            // Reemplazar placeholders por las imágenes generadas
-            const imageGrid = document.getElementById('imageGrid');
-            imageGrid.innerHTML = ''; // Limpiar cualquier contenido anterior
-
-            data.images.forEach(imageUrl => {
-                const imageContainer = document.createElement("div");
-                const image = document.createElement("img");
-                image.src = imageUrl;
-                image.alt = "Generated Image";
-                image.style.width = "100%"; // Ajustar al contenedor
-                image.style.height = "auto"; // Mantener la proporción de la imagen
-
-                imageContainer.appendChild(image);
-                imageGrid.appendChild(imageContainer);
+            // Muestra cada imagen generada y elimina el diálogo correspondiente
+            data.images.forEach((imageUrl, index) => {
+                showImageAndRemoveDialog(imageUrl, index);
             });
-
-            // Ocultar los placeholders y mostrar las imágenes generadas
-            document.getElementById('imagePlaceholderGrid').style.display = 'none';
-            document.getElementById('imageGrid').style.display = 'grid';
-
-          
         } else if (data.request_id) {
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            // Las imágenes aún se están procesando, iniciar polling
-            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
+            // Continuar verificando el estado si las imágenes aún están procesándose
+            await checkImageStatus(data.request_id);
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
         }
-    } catch (error) {
+    }  catch (error) {
 
         showError(error);  // Manejo de errores
 
@@ -790,7 +770,47 @@ try {
     
 }
 
- 
+ // Función para crear un diálogo de "generating" dinámicamente
+function createGeneratingDialog(requestId) {
+    const dialogContainer = document.createElement('div');
+    dialogContainer.id = `generatingImagesDialog-${requestId}`;
+    dialogContainer.className = 'generating-dialog'; // Aplica el estilo necesario
+
+    // El contenido del diálogo
+    dialogContainer.innerHTML = `
+        <div class="message-content message">
+            <img src="/static/img/modal_img/designing.svg" alt="Loading Image">
+            <div class="bigTitle">Generating image...</div>
+            <div id="etaDisplay"><span id="etaValue"></span></div>
+            <div class="preloader"><img src="/static/img/gen.svg" alt="Loading Spinner"></div>
+        </div>
+    `;
+
+    // Agregar el diálogo generado al DOM, bajo el `imageGrid`
+    const imageGrid = document.getElementById('imageGrid');
+    imageGrid.insertAdjacentElement('afterend', dialogContainer);
+}
+
+// Función para mostrar la imagen generada y eliminar el diálogo correspondiente
+function showImageAndRemoveDialog(imageUrl, requestId) {
+    // Crear y mostrar la imagen
+    const imageContainer = document.createElement("div");
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.style.width = "100%";
+    image.style.height = "auto";
+
+    imageContainer.appendChild(image);
+    const imageGrid = document.getElementById('imageGrid');
+    imageGrid.appendChild(imageContainer);
+
+    // Eliminar el diálogo correspondiente
+    const dialog = document.getElementById(`generatingImagesDialog-${requestId}`);
+    if (dialog) {
+        dialog.remove();
+    }
+}
     
     
 // Polling para verificar el estado de la generación de imágenes
