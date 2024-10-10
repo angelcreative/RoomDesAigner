@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- icons for mobile -->
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='img/apple-icon-57x57.png') }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='img/apple-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='img/apple-icon-72x72.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='img/apple-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='img/apple-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='img/apple-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='img/apple-icon-144x144.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='img/apple-icon-152x152.png') }}"> 
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='img/android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='img/favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='img/ms-icon-144x144.png') }}">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- //end icons for mobile -->
+    <title>ADEM by Room DesAigner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    
+    <!-- ======= STYLES ========== -->
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        .toggle-content {
+            display: none;
+        }
+        .chipSV {
+            display: block;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        @media (min-width: 600px) {
+            .chipSV {
+                display: inline-block;
+                margin: 5px;
+                font-size: 16px;
+            }
+        }
+    </style>
+   
+    
+    
+    <!-- ======= SCRIPTS ========== -->
+     <script>
+        function toggleContent() {
+            const content = document.getElementById("chipsSV");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("chipsSV").style.display = "none";
+        });
+    </script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
+
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chroma-js@2.1.0/chroma.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.5.1/dist/iro.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-62Z2N81J3F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-62Z2N81J3F');
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
+<script src="{{ url_for('static', filename='ntc.js') }}"></script>
+
+  <!--  <script id='sc-script' src="https://cdn.smartcat-proxy.com/de10bee7679942e5b623ea375f520920/script-v1/__translator.js?hash=c1e4a26903725fa3dca2056d434674a7"></script>-->
+</head>
+<body>
+
+    <h1>Master the Art of AI with ADEM: Top 15 Prompts</h1>
+
+    <div class="prompt-block">
+        <div class="prompt-title">1. Hyper-Realistic Portrait</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt1')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt1">
+            A young man with short, curly black hair sits at a wooden table, his hands clasped in front of him. He gazes directly into the camera. He is dressed in a navy blue sweater, and a silver ring adorns his left hand. His expression is calm and composed. The background is softly lit, with a slight blur that highlights his face and hands.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Hyper-Realistic Portrait">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">2. Game Environment Design</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt2')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt2">
+            A 3D model of a spacecraft resembling a bioluminescent sea creature, designed for an adventure game. It’s displayed from a front-view angle, with intricate detailing across its organic surface. The scene has a photorealistic finish, merging elements of fantasy with deep-sea aesthetics, set against a neutral white background for clarity.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Game Environment Design">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">3. Fantasy-Themed Scene</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt3')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt3">
+            A mystical forest setting inspired by fantasy novels: A small, glowing mushroom village sits nestled under the roots of an ancient tree. The scene is shot with a wide-angle lens, capturing the soft moonlight filtering through the branches above. The color palette includes deep purples and soft greens, enhancing the magical, ethereal atmosphere. The image is rendered at high resolution to showcase the intricate details of the tiny village.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Fantasy-Themed Scene">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">4. Futuristic and Technological Portrait</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt4')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt4">
+            A high-tech portrait of a woman with sleek, silver hair styled in a futuristic bob, wearing neon blue cyberpunk goggles. She is surrounded by holographic displays, her hands navigating through a transparent user interface. The background is a sleek, futuristic lab, filled with glowing screens and minimalistic furniture, lit by soft white and neon blue lighting.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Futuristic Portrait">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">5. Corporate Presentation Imagery</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt5')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt5">
+            A professional keynote speaker in action, mid-presentation. He has short, neatly styled black hair and wears a fitted dark grey suit with a white shirt. He holds a clicker in his right hand, gesturing towards a presentation screen with his left. His expression is animated as he explains a complex idea. The background features a blurred conference audience and a large digital screen displaying dynamic graphs and business visuals.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Corporate Presentation">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">6. Surreal Environments with Contrasting Elements</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt6')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt6">
+            Create a surreal desert landscape with enormous glass skyscrapers rising from the sand. The sun is setting in the background, casting long shadows across the desert. In the sky, gigantic, soft clouds float between the buildings, reflecting off their mirrored surfaces. The warm orange hues of the sunset contrast with the cool blues of the glass, creating an otherworldly, dream-like atmosphere.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Surreal Environment">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">7. Travel-Inspired Scene</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt7')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt7">
+            A coastal cliffside house perched precariously over the edge, viewed from a low angle. The house is weathered, with wooden planks and a tin roof, surrounded by wildflowers and shrubs. The sky is overcast, casting a moody atmosphere, while the ocean below crashes against the rocky cliff. Despite the day being grey, the scene evokes a sense of adventure and isolation, with fine detail in the textures of the house and landscape.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Travel-Inspired Scene">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">8. Artistic Style Experimentation</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt8')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt8">
+            A retro 1960s-inspired poster featuring a sleek, mid-century modern car in front of a neon-lit diner. The car is a glossy red with chrome accents, while the diner has a classic neon sign in bright turquoise and pink. The background shows a starry night sky, with deep purples and blues, evoking a nostalgic, vibrant mood.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Artistic Style Experimentation">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">9. UI Design for a Mobile App</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt9')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt9">
+            Design a sleek, modern mobile app interface for a task management app. The interface should feature a clear, easy-to-use dashboard with a to-do list, calendar integration, and color-coded task categories. Buttons and icons should be minimalist, using soft gradients for a polished, professional look. The overall user experience should focus on intuitive navigation and clean design, enhancing productivity.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="UI Design for a Mobile App">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">10. Cinematic Poster Design</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt10')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt10">
+            Create a cinematic movie poster for "Lost in Time," featuring a lone explorer in a futuristic cityscape where ancient ruins blend with advanced technology. The title "Lost in Time" is bold and centered at the top, while the tagline "History is the future" appears beneath it. The background showcases towering skyscrapers next to ancient monuments, with a color palette of deep blues and golds, creating a mysterious and epic atmosphere.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Cinematic Poster Design">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">11. Tilt-Shift Scene</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt11')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt11">
+            This scene is designed with a tilt-shift effect, which creates an illusion of a tiny model-like scene. The miniature-like quality is enhanced by soft focus and vivid, playful colors that give the impression of a toy-world landscape.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Tilt-Shift Scene">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">12. Miniature Figure Design for RPG</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt12')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt12">
+            Picture an already painted miniature figure designed for an RPG tabletop game, styled as a fantasy knight reminiscent of Warhammer Fantasy. This small, intricately detailed figure is positioned as if ready for battle. The knight is adorned in traditional armor, poised with their sword and shield, capturing the mythical and adventurous essence of fantasy gaming. The colors are matte, specific for the knight's regalia.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Miniature Figure Design for RPG">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">13. Character Full-Body Turnaround Sheet</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt13')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt13">
+            Create a full-body turnaround of a character. Show the character from five angles: front, three-quarters front left, side left, three-quarters back left, and back. The character stands in a neutral position with their arms down by their sides. The details of the clothing, including visible accessories, should be clearly visible from each angle.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Full-Body Turnaround">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">14. Evolution Cycle Visualization</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt14')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt14">
+            Illustrate the biological evolution of a dragon in a single, continuous image. Divide the canvas into four seamlessly blending sections, each representing a stage of the dragon's evolution. Start on the left by showing the initial stage, depicting the earliest form as a small, wingless creature. As we move to the right, show the next level, highlighting the growth of wings and a longer body. In the third section, depict the dragon in its adolescent stage, with sharpened claws and larger wings. Finally, on the right side, show the fully developed form, with massive wings and a fire-breathing ability. The background should subtly shift from a peaceful forest to a fiery mountain range.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Evolution Cycle Visualization">
+    </div>
+
+    <div class="prompt-block">
+        <div class="prompt-title">15. Full Product View Rendering</div>
+        <button class="copy-btn" onclick="copyPrompt('prompt15')">Copy Prompt</button>
+        <div class="improve-prompt">The AI will automatically improve this prompt when copied.</div>
+        <div class="prompt-content" id="prompt15">
+            Envision a product design for a high-end smartwatch. The task is to create a full-product turnaround of the smartwatch, showing the product from five distinct angles: front, three-quarters front left, side left, three-quarters back left, and back. In each depiction, the smartwatch must look highly detailed, with its sleek casing and digital display clearly visible from every perspective.
+        </div>
+        <img src="path-to-your-image.jpg" class="prompt-image" alt="Full Product View Rendering">
+    </div>
+
+    <script>
+        function copyPrompt(promptId) {
+            var promptText = document.getElementById(promptId).innerText;
+            navigator.clipboard.writeText(promptText).then(function() {
+                alert("Prompt copied to clipboard!");
+            }, function() {
+                alert("Failed to copy prompt.");
+            });
+        }
+    </script>
+
+</body>
+</html>
