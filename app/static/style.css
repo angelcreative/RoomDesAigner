@@ -565,20 +565,7 @@ h2.loginTitle {
 }
 /* end ref */
 
-.modal-content span.close {
-position: absolute;
-    cursor: pointer;
-    color: var(--dragon-500);
-    top: 0px;
-    right: calc(0px + 8px);
-    padding: 12px 16px;
-    border: 1px solid var(--dragon-500);
-    border-radius: var(--2xs);
-    transform: rotate(0);
-    height: fit-content;
-    display: block;
-    width: fit-content;
-}
+.modal-content span.close {position: absolute;cursor: pointer;color: var(--dragon-500);top: 0px;right: calc(0px + 8px);padding: 12px 16px;border: 1px solid var(--dragon-500);border-radius: var(--2xs);transform: rotate(0);height: fit-content;display: block;width: fit-content;z-index: 9;}
 
 span.close {
        
@@ -2287,7 +2274,11 @@ i {
 
 .serialButton{
   display: block;
-  
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  background: #000;
 }
 
 .serialButton button {
