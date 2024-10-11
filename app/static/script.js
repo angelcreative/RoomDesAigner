@@ -566,32 +566,10 @@ function updateCreditsDisplay(remainingCredits) {
     creditDisplay.textContent = remainingCredits;  
 }
    
-let requestCount = 0; // Para contar las solicitudes y manejar los IDs únicos de los diálogos
-
-    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
-       // Mostrar tantos diálogos de generación como imágenes se soliciten
-    const numImages = 4; // Número de imágenes solicitadas en esta generación (puedes cambiar esto según el contexto)
-    
-     // Contenedor para los diálogos (asegúrate de que exista un contenedor único para los diálogos)
-    let generatingDialogContainer = document.getElementById('generatingDialogContainer');
-    if (!generatingDialogContainer) {
-        generatingDialogContainer = document.createElement('div');
-        generatingDialogContainer.id = 'generatingDialogContainer';
-        generatingDialogContainer.className = 'generating-dialog-container'; // Agregar clase para estilo
-        document.getElementById('imageGrid').insertAdjacentElement('afterend', generatingDialogContainer);
-    }
-    
-    // Mostrar el contenedor inmediatamente
-    generatingDialogContainer.style.display = 'block';
+    showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
-    // Crear diálogos de generación inmediatamente al solicitar las imágenes
-    for (let i = 0; i < numImages; i++) {
-        createGeneratingDialog(requestCount, generatingDialogContainer); // Crear un diálogo por imagen solicitada
-        requestCount++; // Incrementar para asegurar que cada diálogo tiene un ID único
-    }
-    
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
     const selectedPicture = pictureSelect ? pictureSelect.value : null;
@@ -753,78 +731,64 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-try {
-        const data = await fetchWithRetry("/generate-images", {
+ try {
+
+        // Enviar solicitud al backend en lugar de a la API externa
+
+        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
+
             method: "POST",
+
             headers: {
+
                 "Content-Type": "application/json"
+
             },
+
             body: JSON.stringify(prompt)
+
         });
+
+
 
         console.log('Respuesta del backend en generateImages:', data);
 
+
+
         if (data.status === "success" && data.images) {
-            // Muestra cada imagen generada y elimina el diálogo correspondiente
-            data.images.forEach((imageUrl, index) => {
-                showImageAndRemoveDialog(imageUrl, index);
-            });
 
-            // Ocultar el contenedor de generación una vez que todas las imágenes se han generado
-            generatingDialogContainer.style.display = 'none';
+            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
+
+            // Las imágenes están listas
+
+            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+
         } else if (data.request_id) {
-            // Continuar verificando el estado si las imágenes aún están procesándose
-            await checkImageStatus(data.request_id);
+
+            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
+
+            // Las imágenes aún se están procesando, iniciar polling
+
+            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
+
         } else {
+
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+
         }
+
     } catch (error) {
-        showError(error); // Manejo de errores
+
+        showError(error);  // Manejo de errores
+
     }
+    
 }
 
-
-// Función para crear un diálogo de "generating" dinámicamente y añadirlo al contenedor
-function createGeneratingDialog(requestId, dialogContainer) {
-    const dialog = document.createElement('div');
-    dialog.id = `generatingImagesDialog-${requestId}`;
-    dialog.className = 'generating-dialog'; // Aplica el estilo necesario
-
-    // El contenido del diálogo
-    dialog.innerHTML = `
-        <div class="message-content message">
-            <img src="/static/img/modal_img/designing.svg" alt="Loading Image">
-            <div class="bigTitle">Generating image ${requestId + 1}...</div>
-            <div id="etaDisplay"><span id="etaValue"></span></div>
-            <div class="preloader"><img src="/static/img/gen.svg" alt="Loading Spinner"></div>
-        </div>
-    `;
-
-    // Agregar el diálogo generado al contenedor
-    dialogContainer.appendChild(dialog);
-}
-
-// Función para mostrar la imagen generada y eliminar el diálogo correspondiente
-function showImageAndRemoveDialog(imageUrl, requestId) {
-    // Crear y mostrar la imagen
-    const imageContainer = document.createElement("div");
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = "Generated Image";
-    image.style.width = "100%";
-    image.style.height = "auto";
-
-    imageContainer.appendChild(image);
-    const imageGrid = document.getElementById('imageGrid');
-    imageGrid.appendChild(imageContainer);
-
-    // Eliminar el diálogo correspondiente
-    const dialog = document.getElementById(`generatingImagesDialog-${requestId}`);
-    if (dialog) {
-        dialog.remove();
-    }
-}
-
+ 
+    
     
 // Polling para verificar el estado de la generación de imágenes
 
