@@ -4364,8 +4364,8 @@ label.hamburger:hover {
    border-radius: 0;
    position: absolute;
    background: #111922e8;
-   z-index: 2;
-   top: 0;
+   z-index: 0;
+   top: 0px;
    /* display: flex; */
    /* flex-direction: row; */
    right: 0;
@@ -4421,6 +4421,11 @@ label.hamburger:hover {
     display: block;
     margin: var(--xs) 0 0 0; 0 0 0;
 }
+
+
+
+
+
 
 .fil {
    width: 100%;
@@ -4794,6 +4799,21 @@ html {
     
      .aspectRatioShot {
    display: none
+}
+
+        
+/* Ocultar todos los pares de <label> e <input> */
+.filter-menu label, 
+.filter-menu input {
+  display: none;
+}
+
+/* Mostrar solo los dos primeros pares <label> e <input> */
+.filter-menu label:nth-child(-n+2),
+.filter-menu input:nth-child(-n+2)
+/*.filter-menu label:nth-child(3),
+.filter-menu input:nth-child(4)*/ {
+  display: inline-block; /* O block si lo prefieres */
 }
    
     
