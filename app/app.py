@@ -784,6 +784,12 @@ def upload_file():
         return jsonify({'relighted_image_url': relighted_image_path})
     return jsonify({'error': 'File upload failed'}), 500
 
+#templates html regular
+@app.route('/adem-guide')
+def adem_guide():
+    return render_template('adem-guide.html')
+
+
 @app.route('/logout')
 def logout():
     # Clear all data stored in the session
