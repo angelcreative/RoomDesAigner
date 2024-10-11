@@ -4675,6 +4675,8 @@ html {
 		opacity: 1;
 		animation: shapeColorShift 7s infinite;
 		border-radius: 50%; /*También hacemos que la sombra sea circular*/
+         height: 100px;
+    width: 100px;
 	}
 }
 
