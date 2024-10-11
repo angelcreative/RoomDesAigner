@@ -864,94 +864,56 @@ async function checkImageStatus(requestId, transformedPrompt, retries = 40, dela
 
 
 
+let generatingDialogCount = 0;  // Mantiene el conteo de diálogos activos
+
 function showGeneratingImagesDialog() {
-    // Mostrar el diálogo
-    const dialog = document.getElementById('generatingImagesDialog');
-    if (dialog) {
-        dialog.style.display = 'block';
-    } else {
-        console.error("No se encontró el elemento con id 'generatingImagesDialog'");
-        return;
-    }
+    generatingDialogCount++;
+    const dialogId = `generatingImagesDialog-${generatingDialogCount}`;
+    
+    // Crear un nuevo diálogo duplicado
+    const newDialog = document.createElement('div');
+    newDialog.id = dialogId;
+    newDialog.className = 'generatingImagesDialog';
+    newDialog.innerHTML = `
+        <h2 id="changingText-${generatingDialogCount}">painting walls</h2>
+        <p>The time will vary depending on the selected model.</p>
+        <p id="chronometer-${generatingDialogCount}">00:00:00</p>
+        <button id="closeDialogButton-${generatingDialogCount}">Close</button>
+    `;
+    document.body.appendChild(newDialog);
 
-    // Establecer el contenido inicial del diálogo
-    const dialogTitle = document.getElementById('dialogTitle');
-    if (dialogTitle) {
-        dialogTitle.innerHTML = `
-            <h2 id="changingText">painting walls</h2>
-            <p>The time will vary depending on the selected model.</p>
-            <p id="chronometer">00:00:00</p>
-        `;
-    } else {
-        console.error("No se encontró el elemento con id 'dialogTitle'");
-    }
+    // Agregar el cronómetro individual
+    let milliseconds = 0;
+    const chronometer = document.getElementById(`chronometer-${generatingDialogCount}`);
+    const interval = setInterval(() => {
+        milliseconds += 10;
+        const minutes = Math.floor((milliseconds / 1000) / 60);
+        const seconds = Math.floor((milliseconds / 1000) % 60);
+        const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
+        chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
+    }, 10);
 
-    // Lista de mensajes que van cambiando
+    // Agregar mensajes que cambian
     const changingMessages = [
-    'casting spells of creation', 'weaving enchanted visions', 'shaping mystical worlds', 
-    'summoning creative wonders', 'breathing life into ideas', 'building realms of fantasy', 
-    'illuminating dreams', 'conjuring vibrant possibilities', 'crafting magical artifacts', 
-    'organizing realms of imagination', 'bringing stories to life', 'unleashing boundless creativity', 
-    'weaving enchanted textures', 'sculpting magical forms', 'adding finishing touches of wonder', 
-    'polishing mystical surfaces', 'casting final charms', 'arranging enchanted details', 
-    'painting visions with light', 'curating worlds of imagination', 'framing mystical moments', 
-    'setting up magical technologies', 'drawing curtains on creativity', 'reflecting magic through mirrors',
-    'reimagining enchanted landscapes', 'installing wonders of light', 'selecting fabrics of fantasy',
-    'upgrading magical tools', 'placing enchanted objects', 'creating floating wonders',
-    'bringing screens to life', 'clearing pathways for magic', 'arranging mystical symbols', 
-    'painting with enchanted strokes', 'opening windows to new worlds', 'decorating with creative light',
-    'adding touches of nature', 'staging creative atmospheres', 'building with mystical tools',
-    'installing artifacts of wonder', 'organizing spaces of creation', 'decorating realms of fantasy', 
-    'designing boundless realities', 'setting up creative sanctuaries', 'choosing pathways of imagination',
-    'placing objects of wonder', 'organizing tools of creation', 'setting up fantastical systems',
-    'arranging outdoor enchanted realms'
-];
+        'casting spells of creation', 'weaving enchanted visions', 'shaping mystical worlds', 
+        'summoning creative wonders', 'breathing life into ideas', 'building realms of fantasy'
+    ];
+    let messageIndex = 0;
+    const changingText = document.getElementById(`changingText-${generatingDialogCount}`);
+    setInterval(() => {
+        messageIndex = (messageIndex + 1) % changingMessages.length;
+        changingText.textContent = changingMessages[messageIndex];
+    }, 4000);
 
-    let chronometerInterval;
-    let textChangeInterval;
+    // Función para cerrar el diálogo
+    document.getElementById(`closeDialogButton-${generatingDialogCount}`).addEventListener('click', () => {
+        clearInterval(interval);  // Detener el cronómetro
+        newDialog.style.display = 'none';
+    });
 
-    function resetChronometer() {
-        clearInterval(chronometerInterval);
-        const chronometer = document.getElementById('chronometer');
-        if (!chronometer) {
-            console.error("No se encontró el elemento con id 'chronometer'");
-            return;
-        }
-        let milliseconds = 0;
-
-        chronometer.textContent = '00:00:00';
-
-        chronometerInterval = setInterval(() => {
-            milliseconds += 10;
-            const minutes = Math.floor((milliseconds / 1000) / 60);
-            const seconds = Math.floor((milliseconds / 1000) % 60);
-            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
-            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
-        }, 10);
-    }
-
-    function changeText() {
-        let index = 0;
-        const changingText = document.getElementById('changingText');
-        if (!changingText) {
-            console.error("No se encontró el elemento con id 'changingText'");
-            return;
-        }
-        
-        changingText.textContent = changingMessages[index];
-
-        clearInterval(textChangeInterval);
-
-        textChangeInterval = setInterval(() => {
-            index = (index + 1) % changingMessages.length;
-            changingText.textContent = changingMessages[index];
-        }, 4000);
-    }
-
-    resetChronometer();
-    changeText();
+    newDialog.style.display = 'block';
 }
-   
+  
 // Event listener para el botón de cerrar
 document.getElementById('closeDialogButton').addEventListener('click', function() {
     const dialog = document.getElementById('generatingImagesDialog');
