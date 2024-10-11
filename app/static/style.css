@@ -1287,7 +1287,7 @@ form.loginForm {
        flex-direction: column;
        align-items: flex-start;
        text-align: left;
-       margin: 40px 0 0 0;
+       margin: 0;
        width: 50%;
        color: var(--bunker-800);
 }
@@ -4778,20 +4778,7 @@ html {
        margin-top:0;}
     
     
-        .loginModal {
-
-    border-radius: var(--l);
-    width: auto;
-    margin: 0 auto;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    align-items: center;
-    justify-content: space-around;
-
-
-}
+        .loginModal {border-radius: var(--l);width: auto;margin: 0 auto;text-align: center;display: flex;flex-direction: column;padding: 0 40px;align-items: center;justify-content: space-around;}
     
     
     form.loginForm {
