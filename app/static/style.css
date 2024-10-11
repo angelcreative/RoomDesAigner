@@ -351,7 +351,7 @@ body {
 
 
 #dialogTitle {
-        text-align: left;
+        text-align: center;
 }
 
 #dialogTitle h1 { 
@@ -360,7 +360,7 @@ body {
 }
 
 #dialogTitle h2 {
-         text-align: left;
+         text-align: center;
          color: var(--bunker-50);
 }
 
@@ -1506,6 +1506,19 @@ img#thumbnail {
         flex-direction: row;
         justify-content: space-between;
         gap: var(--s);*/
+       padding-top: 20px;
+       display: flex;
+       justify-content: center;
+       align-items: flex-start;
+       text-align: center;
+}
+
+
+.message .preloader {
+    position: absolute;
+    top: 10px;
+    z-index: 0;
+    opacity: .4;
 }
 
 .message img {
@@ -1514,14 +1527,15 @@ img#thumbnail {
 
 #generatingImagesDialog {
     z-index: 1000;
-    width: 300px;
+    width: 100%;
     position: absolute;
     right: 0;
-    top: 0;
-    background: #000;
-    border: 1px solid var(--bunker-50);
+    top: 0px;
+    background: linear-gradient(#1d1d1dc7, #000000);
+    /* border: 1px solid var(--bunker-50); */
     padding: var(--m);
     border-radius: var(--s);
+    backdrop-filter: blur(10px);
 }
 
 .close-dialog-button {
