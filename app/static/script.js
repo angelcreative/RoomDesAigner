@@ -568,6 +568,7 @@ function updateCreditsDisplay(remainingCredits) {
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
+    showGeneratingImagesDialog();  // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
@@ -591,6 +592,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
 
+    // Definir proporciones de imagen basadas en la selección
     if (aspectRatio === "square") {
         width = 1200;
         height = 1200;
@@ -610,16 +612,18 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     console.log(`Selected Resolution: ${width}x${height}px`);
 
+    // Configurar semilla si está activada la opción
     const seedSwitch = document.getElementById("seedSwitch");
     const seedEnabled = seedSwitch && seedSwitch.checked;
     const seedValue = seedEnabled ? null : "19071975";  // Valor predeterminado si no se usa la semilla
 
+    // Generar textos opcionales si están habilitados
     const optionalText = document.getElementById("optionalTextCheckbox")?.checked ? generateOptionalText() : "";
     const fractalText = document.getElementById("fractalTextCheckbox")?.checked ? generateFractalText() : "";
     const blurredBackground = document.getElementById("blurredTextCheckbox")?.checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox")?.checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox")?.checked ? generateSheet() : "";
-    const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
+     const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
     const tilt = document.getElementById("tiltCheckbox")?.checked ? generateTilt() : "";
 
     const uxui = document.getElementById("uxuiCheckbox")?.checked ? generateUxui() : "";
@@ -628,12 +632,16 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
+    
     const r3d = document.getElementById("r3dCheckbox")?.checked ? generateR3d() : "";
 
+    // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui}  ${r3d} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
+    // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
+    // Configuración del modelo basada en la selección del usuario
     let modelConfig;
     if (selectedModel === "flux") {
         modelConfig = {
@@ -653,32 +661,42 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "hydra-flux",
             lora_strength: 1
         };
-    } else if (selectedModel === "fluxdevfashion") {
+    }  
+    
+    else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "flux-fashion",
             lora_strength: 1
         };
-    } else if (selectedModel === "realism") {
+    } 
+    else if (selectedModel === "realism") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "surreal-photorealism",
             lora_strength: 1
         };
-    } else if (selectedModel === "realismB") {
+    } 
+    
+     else if (selectedModel === "realismB") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "porsche-911",
             lora_strength: 1
         };
-    } else if (selectedModel === "mystic") {
+    } 
+     else if (selectedModel === "mystic") {
         modelConfig = {
             model_id: "mystic",
             lora_model: null,
             lora_strength: null
         };
-    }
+    } 
+    
+    
+    
 
+    // Configuración del prompt
     const prompt = {
         prompt: promptText,
         negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
@@ -700,182 +718,240 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         enhance_prompt: "no"
     };
 
+    // Si es img2img, añade la imagen inicial
     if (isImg2Img && imageUrl) {
         const img2imgThumbnail = document.getElementById('img2imgThumbnail');
         if (img2imgThumbnail) {
-            img2imgThumbnail.src = imageUrl;
+            img2imgThumbnail.src = imageUrl;  // Asigna la URL de la imagen al contenedor
         }
         const strengthSlider = document.getElementById("strengthSlider");
         prompt.init_image = imageUrl;
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    let transformedPrompt;
+    let transformedPrompt;  // Declara transformedPrompt fuera del try
 
-    try {
-        // Enviar solicitud al backend para generar imágenes
-        const data = await fetchWithRetry("/generate-images", {
+ try {
+
+        // Enviar solicitud al backend en lugar de a la API externa
+
+        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
+
             method: "POST",
+
             headers: {
+
                 "Content-Type": "application/json"
+
             },
+
             body: JSON.stringify(prompt)
+
         });
+
+
 
         console.log('Respuesta del backend en generateImages:', data);
 
+
+
         if (data.status === "success" && data.images) {
+
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            showModal(data.images, transformedPrompt);    // Mostrar imágenes generadas
+
+            // Las imágenes están listas
+
+            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+
             hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+
         } else if (data.request_id) {
+
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-            
-            // **Aquí llamamos a showGeneratingImagesDialog con el request_id**
-            showGeneratingImagesDialog(data.request_id);  // Mostrar diálogo de espera con requestId
 
             // Las imágenes aún se están procesando, iniciar polling
-            await checkImageStatus(data.request_id, transformedPrompt);  
+
+            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
+
         } else {
+
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+
         }
+
     } catch (error) {
+
         showError(error);  // Manejo de errores
+
     }
+    
 }
 
+ 
     
     
 // Polling para verificar el estado de la generación de imágenes
 
-async function checkImageStatus(requestId, dialogId, interval, retries = 40, delay = 10000) {
+async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
+
     try {
+
         // Enviar solicitud al backend en lugar de a la API externa
+
         const data = await fetchWithRetry("/fetch-images", {  // Cambiamos la URL a la del backend
+
             method: 'POST',
+
             headers: {
+
                 "Content-Type": "application/json"
+
             },
+
             body: JSON.stringify({
+
                 request_id: requestId  // Enviamos solo el request_id
+
             })
+
         });
+
+
 
         console.log('Respuesta del backend en checkImageStatus:', data);
 
-        if (data.status === 'processing') {
-            if (retries > 0) {
-                console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
-                setTimeout(() => checkImageStatus(requestId, dialogId, interval, retries - 1, delay), delay);
-            } else {
-                throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
-            }
-        } else if (data.status === "success" && data.images) {
-            // Las imágenes están listas
-            showModal(data.images, data.transformedPrompt);  // Mostrar las imágenes generadas
 
-            // Ocultar el diálogo de espera
-            hideGeneratingImagesDialog(dialogId, interval);
+
+        if (data.status === 'processing') {
+
+            if (retries > 0) {
+
+                console.log(`Procesando... reintentando en ${delay / 1000} segundos. Reintentos restantes: ${retries}`);
+
+                setTimeout(() => checkImageStatus(requestId, transformedPrompt, retries - 1, delay), delay);
+
+            } else {
+
+                throw new Error('La generación de imágenes está tomando demasiado tiempo. Por favor, intenta de nuevo más tarde.');
+
+            }
+
+        } else if (data.status === "success" && data.images) {
+
+             
+
+            // Las imágenes están listas
+
+            showModal(data.images, transformedPrompt);  // Mostrar las imágenes generadas
+
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+
         } else {
+
             throw new Error(data.error || 'Estado inesperado recibido del servidor.');
+
         }
+
     } catch (error) {
+
         console.error('Error al verificar el estado de las imágenes:', error);
+
         showError(error);
 
-        // Ocultar el diálogo en caso de error
-        hideGeneratingImagesDialog(dialogId, interval);
     }
+
 }
 
-// Función para ocultar el diálogo correspondiente
-function hideGeneratingImagesDialog(dialogId, interval) {
-    clearInterval(interval);  // Detener el cronómetro
-    const dialog = document.getElementById(dialogId);
+
+
+function showGeneratingImagesDialog() {
+    // Mostrar el diálogo
+    const dialog = document.getElementById('generatingImagesDialog');
     if (dialog) {
-        document.body.removeChild(dialog);  // Eliminar el diálogo del DOM
-        dialogStackOffset -= 100;  // Reducir el offset al cerrar un diálogo
-        updateDialogPositions();   // Reajustar posiciones de diálogos restantes
+        dialog.style.display = 'block';
+    } else {
+        console.error("No se encontró el elemento con id 'generatingImagesDialog'");
+        return;
     }
-}
 
+    // Establecer el contenido inicial del diálogo
+    const dialogTitle = document.getElementById('dialogTitle');
+    if (dialogTitle) {
+        dialogTitle.innerHTML = `
+            <h2 id="changingText">painting walls</h2>
+            <p>The time will vary depending on the selected model.</p>
+            <p id="chronometer">00:00:00</p>
+        `;
+    } else {
+        console.error("No se encontró el elemento con id 'dialogTitle'");
+    }
 
-let generatingDialogCount = 0;  // Mantiene el conteo de diálogos activos
-let dialogStackOffset = 0;  // Mantiene el desplazamiento para apilar los diálogos
-
-function showGeneratingImagesDialog(requestId) {
-    generatingDialogCount++;
-    const dialogId = `generatingImagesDialog-${generatingDialogCount}`;
-    
-    // Crear un nuevo diálogo duplicado
-    const newDialog = document.createElement('div');
-    newDialog.id = dialogId;
-    newDialog.className = 'generatingImagesDialog';
-    newDialog.style.position = 'fixed';
-    newDialog.style.top = `${dialogStackOffset}px`;
-    newDialog.style.right = '10px';
-    newDialog.style.width = '250px';
-    newDialog.style.backgroundColor = '#fff';
-    newDialog.style.border = '1px solid #ccc';
-    newDialog.style.padding = '10px';
-    newDialog.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-    newDialog.innerHTML = `
-        <h2 id="changingText-${generatingDialogCount}">painting walls</h2>
-        <p>The time will vary depending on the selected model.</p>
-        <p id="chronometer-${generatingDialogCount}">00:00:00</p>
-        <button id="closeDialogButton-${generatingDialogCount}">Close</button>
-    `;
-    document.body.appendChild(newDialog);
-
-    // Incrementar el offset para apilar el siguiente diálogo más abajo
-    dialogStackOffset += 100;
-
-    // Agregar el cronómetro individual
-    let milliseconds = 0;
-    const chronometer = document.getElementById(`chronometer-${generatingDialogCount}`);
-    const interval = setInterval(() => {
-        milliseconds += 10;
-        const minutes = Math.floor((milliseconds / 1000) / 60);
-        const seconds = Math.floor((milliseconds / 1000) % 60);
-        const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
-        chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
-    }, 10);
-
-    // Agregar mensajes que cambian
+    // Lista de mensajes que van cambiando
     const changingMessages = [
-        'casting spells of creation', 'weaving enchanted visions', 'shaping mystical worlds', 
-        'summoning creative wonders', 'breathing life into ideas', 'building realms of fantasy'
-    ];
-    let messageIndex = 0;
-    const changingText = document.getElementById(`changingText-${generatingDialogCount}`);
-    setInterval(() => {
-        messageIndex = (messageIndex + 1) % changingMessages.length;
-        changingText.textContent = changingMessages[messageIndex];
-    }, 4000);
+    'casting spells of creation', 'weaving enchanted visions', 'shaping mystical worlds', 
+    'summoning creative wonders', 'breathing life into ideas', 'building realms of fantasy', 
+    'illuminating dreams', 'conjuring vibrant possibilities', 'crafting magical artifacts', 
+    'organizing realms of imagination', 'bringing stories to life', 'unleashing boundless creativity', 
+    'weaving enchanted textures', 'sculpting magical forms', 'adding finishing touches of wonder', 
+    'polishing mystical surfaces', 'casting final charms', 'arranging enchanted details', 
+    'painting visions with light', 'curating worlds of imagination', 'framing mystical moments', 
+    'setting up magical technologies', 'drawing curtains on creativity', 'reflecting magic through mirrors',
+    'reimagining enchanted landscapes', 'installing wonders of light', 'selecting fabrics of fantasy',
+    'upgrading magical tools', 'placing enchanted objects', 'creating floating wonders',
+    'bringing screens to life', 'clearing pathways for magic', 'arranging mystical symbols', 
+    'painting with enchanted strokes', 'opening windows to new worlds', 'decorating with creative light',
+    'adding touches of nature', 'staging creative atmospheres', 'building with mystical tools',
+    'installing artifacts of wonder', 'organizing spaces of creation', 'decorating realms of fantasy', 
+    'designing boundless realities', 'setting up creative sanctuaries', 'choosing pathways of imagination',
+    'placing objects of wonder', 'organizing tools of creation', 'setting up fantastical systems',
+    'arranging outdoor enchanted realms'
+];
 
-    // Función para cerrar el diálogo manualmente
-    document.getElementById(`closeDialogButton-${generatingDialogCount}`).addEventListener('click', () => {
-        clearInterval(interval);  // Detener el cronómetro
-        document.body.removeChild(newDialog);
-        dialogStackOffset -= 100;  // Reducir el offset al cerrar un diálogo
-        updateDialogPositions();   // Reajustar posiciones de diálogos restantes
-    });
+    let chronometerInterval;
+    let textChangeInterval;
 
-    // Ocultar el diálogo cuando la imagen esté lista
-    checkImageStatus(requestId, dialogId, interval);
+    function resetChronometer() {
+        clearInterval(chronometerInterval);
+        const chronometer = document.getElementById('chronometer');
+        if (!chronometer) {
+            console.error("No se encontró el elemento con id 'chronometer'");
+            return;
+        }
+        let milliseconds = 0;
+
+        chronometer.textContent = '00:00:00';
+
+        chronometerInterval = setInterval(() => {
+            milliseconds += 10;
+            const minutes = Math.floor((milliseconds / 1000) / 60);
+            const seconds = Math.floor((milliseconds / 1000) % 60);
+            const displayMilliseconds = Math.floor((milliseconds % 1000) / 10);
+            chronometer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${displayMilliseconds.toString().padStart(2, '0')}`;
+        }, 10);
+    }
+
+    function changeText() {
+        let index = 0;
+        const changingText = document.getElementById('changingText');
+        if (!changingText) {
+            console.error("No se encontró el elemento con id 'changingText'");
+            return;
+        }
+        
+        changingText.textContent = changingMessages[index];
+
+        clearInterval(textChangeInterval);
+
+        textChangeInterval = setInterval(() => {
+            index = (index + 1) % changingMessages.length;
+            changingText.textContent = changingMessages[index];
+        }, 4000);
+    }
+
+    resetChronometer();
+    changeText();
 }
-
-// Función para ajustar las posiciones de los diálogos restantes al cerrar uno
-function updateDialogPositions() {
-    const openDialogs = document.querySelectorAll('.generatingImagesDialog');
-    dialogStackOffset = 0;
-    openDialogs.forEach((dialog, index) => {
-        dialog.style.top = `${dialogStackOffset}px`;
-        dialogStackOffset += 100;  // Desplazar cada diálogo para que estén apilados
-    });
-}
-
-  
+   
 // Event listener para el botón de cerrar
 document.getElementById('closeDialogButton').addEventListener('click', function() {
     const dialog = document.getElementById('generatingImagesDialog');
