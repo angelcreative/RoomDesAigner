@@ -699,12 +699,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Configuración del prompt
     const prompt = {
         prompt: promptText,
-        negative_prompt: "multiple people, two persons, duplicate, cloned face, extra arms, extra legs, extra limbs, multiple faces, deformed face, deformed hands, deformed limbs, mutated hands, poorly drawn face, disfigured, long neck, fused fingers, split image, bad anatomy, bad proportions, ugly, blurry, text, low quality",
         width: width,
         height: height,
-        samples: 1,
+        samples: 4,
         guidance_scale: 7.5,
-        steps: 31,
+        steps: 21,
         use_karras_sigmas: "yes",
         tomesd: "yes",
         seed: seedValue,
@@ -715,7 +714,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         webhook: null,
         safety_checker: "no",
         track_id: null,
-        enhance_prompt: "no"
+        enhance_prompt: "no",
+        self_attention: "yes"
     };
 
     // Si es img2img, añade la imagen inicial
