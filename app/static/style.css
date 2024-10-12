@@ -291,6 +291,7 @@ body {
         color: var(--bunker-500);
         background: var(--bunker-900);
         border-radius: var(--3xs);
+        margin: var(--2xs) 0;
 }
 
 
@@ -334,6 +335,7 @@ body {
      font-size: var(--xs);
      padding: var(--xs);
      border-radius: var(--3xs);
+     background: var(--bunker-900);
 }
 
 .ar input[type="radio"]:checked + label {
@@ -4797,9 +4799,16 @@ html {
         padding-bottom: 220px
     }
     
-     .aspectRatioShot {
-   display: none
+   .aspectRatioShot .ar {
+    display: none; /* Ocultamos todos los elementos inicialmente */
 }
+
+.aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
+.aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
+.aspectRatioShot .ar:last-child {   /* Mostrar el último */
+    display: block; /* Mostrar solo estos elementos */
+}
+
 
         
 /* Ocultar todos los pares de <label> e <input> */
@@ -4864,9 +4873,16 @@ html {
 
 
 }
- .aspectRatioShot {
-   display: none
+.aspectRatioShot .ar {
+    display: none; /* Ocultamos todos los elementos inicialmente */
 }
+
+.aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
+.aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
+.aspectRatioShot .ar:last-child {   /* Mostrar el último */
+    display: block; /* Mostrar solo estos elementos */
+}
+
     
    .center-column {
         padding-bottom: 220px
