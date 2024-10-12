@@ -4824,6 +4824,13 @@ html {
 .filter-menu input:nth-child(4)*/ {
   display: inline-block; /* O block si lo prefieres */
 }
+    
+     .add-image-card {
+    
+    background: #000;
+    
+    padding-bottom: 70px;
+}
    
     
     }
@@ -4888,6 +4895,13 @@ html {
         padding-bottom: 220px
     }
     
+     .add-image-card {
+    
+    background: #000;
+    
+    padding-bottom: 70px;
+}
+    
     }
     
 
@@ -4911,6 +4925,9 @@ html {
         .fila-inferior {
                 width:800px;
         }
+    
+    
+   
         
 }
 
