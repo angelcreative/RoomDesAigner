@@ -284,6 +284,11 @@ body {
         filter: contrast(0.5);
 }
 
+.user-profile {
+    position: relative;
+    z-index: 900;
+}
+
 .ar {
         display: flex;
         flex-direction: row;
@@ -291,14 +296,14 @@ body {
         color: var(--bunker-500);
         background: var(--bunker-900);
         border-radius: var(--3xs);
-        margin: var(--2xs) 0;
+        /* margin: var(--2xs) 0; */
 }
 
 
 .aspectRatioShot {
     border-radius:var(--2xs);
     background-color: var(--bunker-700);
-    margin: 0 auto;
+    margin: 0 auto 12px;
     display: flex;
     flex-direction: row;
     gap: 12px;
@@ -1706,7 +1711,7 @@ span#clearImg {
 
 span.username {
     font-size: var(--xs);
-    max-width: 20px;
+    /* max-width: 20px; */
 }
 
 .usernameCredits {
@@ -1789,13 +1794,18 @@ h4 {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
+    width: 180px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -2px);
 }
 
 .logo h1 {
     margin: 0;
     font-size: var(--l);
     color: var(--bunker-50);
+    position: absolute;
+    z-index: 999;
 }
 
 .menu {/* position: sticky; *//* top: -10px; *//* z-index: 9; */height: 40px;border-radius: var(--2xl);display: flex;align-items: center;margin: 0 auto 8px auto;}
@@ -2612,6 +2622,7 @@ aside .aspectRatioShot {
     display: flex;
     flex-direction: column;
     margin-top: var(--xs);
+    row-gap: var(--2xs);
 }
 
 .aspectRatioShot,
@@ -4679,26 +4690,28 @@ html {
 	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000, #000000, #08AEEA);
 	background-size: 500% 800%;
 	border-radius: 50%; /* Hacemos que sea siempre un círculo*/
-    height: 100px;
-    width: 100px;
+	height: 100px;
+	width: 100px;
 
 	/*Orb's Shadow*/
-	&:before {
+	&:
+	before {
 		content: '';
-		display: block;
-		position: absolute;
-		top: -10px;
-		right: -35px;
-		bottom: -35px;
-		left: -10px;
-		background: inherit;
-		filter: blur(30px);
-		opacity: 1;
-		animation: shapeColorShift 7s infinite;
-		border-radius: 50%; /*También hacemos que la sombra sea circular*/
-         height: 100px;
-    width: 100px;
+	display: block;
+	position: absolute;
+	top: -10px;
+	right: -35px;
+	bottom: -35px;
+	left: -10px;
+	background: inherit;
+	filter: blur(30px);
+	opacity: 1;
+	animation: shapeColorShift 7s infinite;
+	border-radius: 50%; /*También hacemos que la sombra sea circular*/
+	height: 100px;
+	width: 100px;
 	}
+
 }
 
 /* Animation */
@@ -4745,14 +4758,22 @@ html {
     grid-template-columns: 1fr; /* Single column on smaller screens */
   }
   
-  .left-column, .right-column {
-    display: none; /* Hide left and right columns on small devices */
+ .right-column {
+      display: none; /* Hide left and right columns on small devices */
   }
     
     .rightOff button {
-        display: none;
+        /* display: none; */
 }
-    
+    .custom-dropdown[data-placeholder="Level shot"],
+.custom-dropdown[data-placeholder="Select Camera"],
+.custom-dropdown[data-placeholder="Select a lens for your camera"],
+.custom-dropdown[data-placeholder="Movie Still by Genre"]
+
+{
+    display: none;
+}
+
     
     .center-column {
         padding-bottom: 180px
@@ -4799,27 +4820,26 @@ html {
         padding-bottom: 220px
     }
     
-   .aspectRatioShot .ar {
+  .footer  .aspectRatioShot .ar {
     display: none; /* Ocultamos todos los elementos inicialmente */
 }
 
-.aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
-.aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
-.aspectRatioShot .ar:last-child {   /* Mostrar el último */
+.footer .aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
+.footer .aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
+.footer .aspectRatioShot .ar:last-child {   /* Mostrar el último */
     display: block; /* Mostrar solo estos elementos */
 }
 
-
-        
+      
 /* Ocultar todos los pares de <label> e <input> */
-.filter-menu label, 
-.filter-menu input {
+.footer .filter-menu label, 
+.footer .filter-menu input {
   display: none;
 }
 
 /* Mostrar solo los dos primeros pares <label> e <input> */
-.filter-menu label:nth-child(-n+2),
-.filter-menu input:nth-child(-n+2)
+.footer .filter-menu label:nth-child(-n+2),
+.footer .filter-menu input:nth-child(-n+2)
 /*.filter-menu label:nth-child(3),
 .filter-menu input:nth-child(4)*/ {
   display: inline-block; /* O block si lo prefieres */
@@ -4831,7 +4851,23 @@ html {
     
     padding-bottom: 70px;
 }
-   
+   .right-column {
+      display: none; /* Hide left and right columns on small devices */
+  }
+    
+    .rightOff button {
+        /* display: none; */
+}
+    .custom-dropdown[data-placeholder="Level shot"],
+.custom-dropdown[data-placeholder="Select Camera"],
+.custom-dropdown[data-placeholder="Select a lens for your camera"],
+.custom-dropdown[data-placeholder="Movie Still by Genre"]
+
+{
+    display: none;
+}
+
+  
     
     }
 
@@ -4880,13 +4916,13 @@ html {
 
 
 }
-.aspectRatioShot .ar {
+.footer .aspectRatioShot .ar {
     display: none; /* Ocultamos todos los elementos inicialmente */
 }
 
-.aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
-.aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
-.aspectRatioShot .ar:last-child {   /* Mostrar el último */
+.footer .aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
+.footer .aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
+.footer .aspectRatioShot .ar:last-child {   /* Mostrar el último */
     display: block; /* Mostrar solo estos elementos */
 }
 
@@ -4901,6 +4937,23 @@ html {
     
     padding-bottom: 70px;
 }
+
+        .right-column {
+      display: none; /* Hide left and right columns on small devices */
+  }
+    
+    .rightOff button {
+        /* display: none; */
+}
+    .custom-dropdown[data-placeholder="Level shot"],
+.custom-dropdown[data-placeholder="Select Camera"],
+.custom-dropdown[data-placeholder="Select a lens for your camera"],
+.custom-dropdown[data-placeholder="Movie Still by Genre"]
+
+{
+    display: none;
+}
+
     
     }
     
