@@ -1808,6 +1808,10 @@ h4 {
     z-index: 999;
 }
 
+.logo h1 img {
+    width: 110px;
+}
+
 .menu {/* position: sticky; *//* top: -10px; *//* z-index: 9; */height: 40px;border-radius: var(--2xl);display: flex;align-items: center;margin: 0 auto 8px auto;}
 
 .menu h1 {
@@ -2873,10 +2877,10 @@ select:hover {
         color: var(--bunker-400);
 }
 .selected {
-        box-shadow: inset 0px 0px 0px 3px var(--bunker-600) !important;
-    border: none !important;
-    background: var(--bunker-200) !important;
-    color: var(--bunker-600) !important;
+        /* box-shadow: inset 0px 0px 0px 3px var(--bunker-600) !important; */
+        border: none !important;
+        background: #4ce6cb !important;
+        color: #000000 !important;
 }
 
 textarea {
@@ -3993,13 +3997,14 @@ textarea:focus-visible {
 
 .dropdown-selected .clear-selection {
    display: none;
-    cursor: pointer;
-    color: var(--bunker-400);
-    margin-right: -5px;
-    position: relative;
-    z-index: 1;
-    background: #c8d0d0;
-    zoom: .8;
+   cursor: pointer;
+   color: #000000;
+   margin-right: -5px;
+   position: relative;
+   z-index: 1;
+   background: #4ce5ca;
+   zoom: .8;
+   margin-top: 2px;
 }
 
 .dropdown-selected.selected .clear-selection {
@@ -4053,7 +4058,7 @@ textarea:focus-visible {
 }
 
 .selected .selected-text {
-        color: var(--bunker-600);
+        color: #000000;
 }
 .color-swatch {
         width: var(--m);
