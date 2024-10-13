@@ -6,7 +6,7 @@
    
     <meta name="theme-color" content="#ffffff">
     <!-- //end icons for mobile -->
-    <title>ADEM by Room DesAigner</title>
+    <title>ADEM Studio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
     <div class="loginBox">
    
 
-            <h2 class="loginTitle" style="display: none">Access Room DesAigner</h2>
+            <h2 class="loginTitle" style="display: none">Access ADEM</h2>
 
    <div class="loginModal">
        <div class="orb">
@@ -32,7 +32,7 @@
              <div class="loginLogo">
                  <h1>ADEM</h1>
 <p>Unleash your imagination with AI</p>
-                 <p>ADEM is a Room DesAigner product</p>
+               
 
         </div>
             {% with messages = get_flashed_messages() %}
@@ -51,7 +51,6 @@
             </form>
         </div>
            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
-
         </div>
 </body>
 </html>
