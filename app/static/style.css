@@ -4863,6 +4863,15 @@ html {
    .right-column {
       display: none; /* Hide left and right columns on small devices */
   }
+
+
+        .left-column {
+     position: absolute;
+     width:100%;
+     z-index: 14;
+     overflow: auto;
+     height: 100vh;
+  }
     
     .rightOff button {
         /* display: none; */
