@@ -20,8 +20,8 @@ import openai
 app = Flask(__name__)
 
 # Configura CORS para permitir solicitudes de tus dominios específicos usando regex
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://www.roomdesaigner.com"}})
-
+#CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 @app.route('/image-proxy')
 def image_proxy():
