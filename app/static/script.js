@@ -1725,13 +1725,14 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     
     // Función para abrir la imagen en fullscreen
-// Función para abrir la imagen en fullscreen con solo imagen, header, sidebar, footer y botón de cerrar
-function openFullscreen(imageUrl) {
+// Función para abrir la imagen en fullscreen con el logo, header, sidebar con prompt y botón de compartir
+function openFullscreen(imageUrl, transformedPrompt) {
     const fullscreenContainer = document.getElementById('fullscreenContainer');
     const fullscreenImage = document.getElementById('fullscreenImage');
     const sidebarContent = document.getElementById('sidebarContent');
     const header = document.getElementById('header');
     const footer = document.getElementById('footer');
+    const closeFullscreen = document.getElementById('closeFullscreen');
 
     // Asignar la URL de la imagen al contenedor
     fullscreenImage.src = imageUrl;
@@ -1740,19 +1741,66 @@ function openFullscreen(imageUrl) {
     fullscreenContainer.style.display = 'block';
 
     // Mostrar el header y el footer
-    header.style.display = 'block';
-    footer.style.display = 'block';
+    header.style.display = 'flex'; // Mostrar el header con el logo y el botón de cerrar
+    footer.style.display = 'block'; // Mostrar el footer
 
     // Limpiar el contenido del sidebar
-    sidebarContent.innerHTML = ''; 
+    sidebarContent.innerHTML = '';
 
-    // Puedes añadir contenido adicional en el sidebar aquí si lo necesitas, pero lo dejo vacío según tu petición
+    // Crear el contenido del sidebar
+    const promptTitle = document.createElement('h1');
+    promptTitle.textContent = 'Prompt';
+
+    const promptText = document.createElement('p');
+    promptText.textContent = transformedPrompt;
+
+    const copyButton = document.createElement('button');
+    copyButton.type = 'button';
+    copyButton.textContent = 'Copy';
+    copyButton.addEventListener('click', () => {
+        copyTextToClipboard(transformedPrompt);
+    });
+
+    // Añadir los elementos al sidebar
+    sidebarContent.appendChild(promptTitle);
+    sidebarContent.appendChild(promptText);
+    sidebarContent.appendChild(copyButton);
+
+    // Crear botones de compartir en redes sociales
+    const socialButtonsContainer = document.createElement('div');
+    const twitterButton = document.createElement('a');
+    twitterButton.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(imageUrl)}&hashtags=ADEMstudio`;
+    twitterButton.target = '_blank';
+    twitterButton.textContent = 'Share on Twitter';
+
+    const linkedinButton = document.createElement('a');
+    linkedinButton.href = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(imageUrl)}&hashtags=ADEMstudio`;
+    linkedinButton.target = '_blank';
+    linkedinButton.textContent = 'Share on LinkedIn';
+
+    // Añadir los botones de compartir al contenedor de redes sociales
+    socialButtonsContainer.appendChild(twitterButton);
+    socialButtonsContainer.appendChild(linkedinButton);
+    sidebarContent.appendChild(socialButtonsContainer);
 
     // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-    const closeFullscreen = document.getElementById('closeFullscreen');
     closeFullscreen.addEventListener('click', () => {
         fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
     });
+
+    // Actualizar el contenido del header
+    const logo = document.createElement('img');
+    logo.src = 'path_to_logo.png'; // Ruta de la imagen del logo
+    logo.alt = 'ADEM Studio Logo';
+    header.appendChild(logo);
+
+    // Asegurarse de que el botón de cerrar esté en el header
+    closeFullscreen.textContent = 'Close';
+    header.appendChild(closeFullscreen);
+
+    // Actualizar el contenido del footer con el año actual
+    const currentYear = new Date().getFullYear();
+    footer.textContent = `ADEM Studio - ${currentYear}`;
 }
 
     

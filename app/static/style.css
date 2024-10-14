@@ -5016,19 +5016,22 @@ html {
 }
 
 .fullscreen .header, .fullscreen .footer {
-    background-color: #333;
+    background-color: #000;
     padding: 20px;
     text-align: center;
+    width: 100%;
+    border-radius: 0;
 }
 
 .fullscreen .content {
     display: flex;
     height: calc(100% - 160px); /* Espacio para header y footer */
+    background: #000;
 }
 
 .fullscreen .sidebar {
     width: 25%;
-    background-color: #222;
+    background-color: #000;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -5049,8 +5052,8 @@ html {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: red;
-    color: white;
+   
+    color: #fff;
     padding: 10px 20px;
     cursor: pointer;
 }
