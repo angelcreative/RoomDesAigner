@@ -1707,7 +1707,6 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 });
 
  
-const imageGrid = document.getElementById('imageGrid');
 const fullscreenContainer = document.getElementById('fullscreenContainer');
 const fullscreenImage = document.getElementById('fullscreenImage');
 const sidebarContent = document.getElementById('sidebarContent');
