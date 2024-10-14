@@ -1353,7 +1353,75 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
     }
 });
 
-    
+    // Función para generar los filtros en el sidebar
+function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+    const filDiv = document.createElement('div');
+    filDiv.classList.add('fil');
+
+    const igDiv = document.createElement('div');
+    igDiv.classList.add('ig');
+
+    // Inicialmente ocultar las miniaturas
+    igDiv.style.display = 'none';
+
+    const filters = [
+        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+    ];
+
+    const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
+
+    filters.forEach((filter) => {
+        const label = document.createElement('label');
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'filter';
+        radio.value = filter;
+
+        const img = document.createElement('img');
+        img.alt = filter;
+        img.src = staticImageUrl;  // Imagen estática para el filtro
+
+        label.appendChild(radio);
+        label.appendChild(img);
+
+        igDiv.appendChild(label);
+
+        // Aplicar filtro al cambiar la opción
+        radio.addEventListener('change', (event) => {
+            applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
+        });
+    });
+
+    const clearFilterLabel = document.createElement('label');
+    const clearButton = document.createElement('button');
+    clearButton.textContent = '✕';
+    clearButton.type = 'button';
+
+    clearButton.addEventListener('click', () => {
+        mainImageElement.src = imageUrl;  // Restablecer imagen original
+    });
+
+    clearFilterLabel.appendChild(clearButton);
+    igDiv.appendChild(clearFilterLabel);
+
+    filDiv.appendChild(igDiv);
+
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'Filters';
+    toggleButton.type = 'button';
+
+    toggleButton.addEventListener('click', () => {
+        igDiv.style.display = (igDiv.style.display === 'none') ? 'flex' : 'none';
+        toggleButton.textContent = (igDiv.style.display === 'none') ? 'Filters' : 'Close';
+    });
+
+    filDiv.insertBefore(toggleButton, igDiv);
+
+    buttonsContainer.appendChild(filDiv);
+}
+
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
     generateFilterGrid(buttonsContainer, imageUrl, image);
  // Añadir evento de clic para abrir la imagen en fullscreen
