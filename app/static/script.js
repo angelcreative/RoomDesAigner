@@ -1724,42 +1724,48 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 
     
     
-    // Función para abrir la imagen en fullscreen
+// Función para abrir la imagen en fullscreen
 function openFullscreen(imageUrl, transformedPrompt) {
     fullscreenImage.src = imageUrl;
     fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
-    
-  
-    
     // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-   // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-sidebarContent.innerHTML = `
-    <div class="serialButton"> 
-        <button type="button" onclick="toggleContent()">See Ai prompt 
-            <span class="material-symbols-outlined" translate="no">visibility</span>
-        </button>
-        <div id="chipsSV" class="toggle-content"></div> <!-- Este es el contenedor para el prompt -->
-    </div>
-`;
+    sidebarContent.innerHTML = `
+        <div class="serialButton"> 
+            <button type="button" onclick="toggleContent()">See Ai prompt 
+                <span class="material-symbols-outlined" translate="no">visibility</span>
+            </button>
+            <div id="chipsSV" class="toggle-content"></div> <!-- Este es el contenedor para el prompt -->
+        </div>
+    `;
+    
     // Añadir el transformedPrompt al contenedor chipsSV
-const chipsSV = document.getElementById('chipsSV');
-chipsSV.textContent = transformedPrompt; // Añadir el transformedPrompt
+    const chipsSV = document.getElementById('chipsSV');
+    chipsSV.textContent = transformedPrompt; // Añadir el transformedPrompt
    
+    // Crear botón de cerrar con type="button"
+    const closeFullscreen = document.createElement("button");
+    closeFullscreen.type = "button";
+    closeFullscreen.textContent = 'Close Fullscreen'; // El contenido del botón
+    closeFullscreen.id = "closeFullscreenButton"; // Añadir un id para asegurar que sea accesible después
+    fullscreenContainer.appendChild(closeFullscreen);
+
+    // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+    closeFullscreen.addEventListener('click', () => {
+        fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+    });
 }
 
-// Crear botón de cerrar con type="button"
-const closeFullscreen = document.createElement("button");
-closeFullscreen.type = "button";
-closeFullscreen.innerHTML = 'Close Fullscreen'; // El contenido del botón, cámbialo según sea necesario
-fullscreenContainer.appendChild(closeFullscreen);
-    
-    
-    
-// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-closeFullscreen.addEventListener('click', () => {
-    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
-});
+// Función para alternar el contenido de ver prompt
+function toggleContent() {
+    const contentDiv = document.querySelector(".toggle-content");
+    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+        contentDiv.style.display = "block"; // Mostrar el contenido
+    } else {
+        contentDiv.style.display = "none"; // Ocultar el contenido
+    }
+}
+
     
     
     
