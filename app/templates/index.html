@@ -3459,52 +3459,48 @@ page_info
              </div>
 
              <!-- Footer -->
-             <footer class="footer">
-                 
-                        <div class="aspectRatioShot">
-                  
-                    <div class="ar">
-                        <input type="radio" name="modelType" id="speed" value="flux" checked>
-                        <label for="speed">Speed</label>
-                    </div>
-                    
-                 
-                     <div class="ar">
-                        <input type="radio" name="modelType" id="quality" value="fluxdev">
-                        <label for="quality">Quality</label>
-                    </div>
-                     <div class="ar">
-                        <input type="radio" name="modelType" id="fluxdevfashion" value="fluxdevfashion">
-                        <label for="fluxdevfashion">Fashion</label>
-                    </div>
-                    <div class="ar">
-                        <input type="radio" name="modelType" id="realism" value="realism">
-                        <label for="realism">Realism A</label>
-                    </div>
-                      <div class="ar">
-                        <input type="radio" name="modelType" id="realismB" value="realismB">
-                        <label for="realismB">Realism B </label>
-                    </div>
-                 <div class="ar">
-                        <input type="radio" name="modelType" id="hydra" value="hydra">
-                        <label for="hydra">Realism C</label>
-                    </div>
-                     <div class="ar">
-                        <input type="radio" name="modelType" id="mystic" value="mystic">
-                        <label for="mystic">Weird reality</label>
-                    </div>
+           <footer class="footer" id="footer">
+    <div class="toggleButton" id="toggleButton">–</div>
+    
+    <div class="aspectRatioShot">
+        <div class="ar">
+            <input type="radio" name="modelType" id="speed" value="flux" checked="">
+            <label for="speed">Speed</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="quality" value="fluxdev">
+            <label for="quality">Quality</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="fluxdevfashion" value="fluxdevfashion">
+            <label for="fluxdevfashion">Fashion</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="realism" value="realism">
+            <label for="realism">Realism A</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="realismB" value="realismB">
+            <label for="realismB">Realism B</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="hydra" value="hydra">
+            <label for="hydra">Realism C</label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="mystic" value="mystic">
+            <label for="mystic">Weird reality</label>
+        </div>
+    </div>
+    
+    <div class="fila-inferior">
+        <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
+        <button class="buttonExt" type="submit" id="magicButton">
+            <span class="material-symbols-outlined">send</span>
+        </button>
+    </div>  
+</footer>
 
-                </div>
-                 <div class="fila-inferior">
-                    <textarea placeholder="Write your magical prompt here" id="customText" rows="8s" cols="50"></textarea>   
-                    <button class="buttonExt"  type="submit" id="magicButton"><span class="material-symbols-outlined">
-send
-</span></button>     
-                </div>  
-             
-             </footer>
-         
-         
               </form>
 </fieldset>
 
@@ -3646,6 +3642,20 @@ document.addEventListener('DOMContentLoaded', function () {
     menuButton.addEventListener('click', () => {
       layout.classList.toggle('show-aside');
     });</script>
+    
+    
+<script>const footer = document.getElementById('footer');
+const toggleButton = document.getElementById('toggleButton');
+
+toggleButton.addEventListener('click', () => {
+    footer.classList.toggle('minimized');
+    if (footer.classList.contains('minimized')) {
+        toggleButton.textContent = '+';
+    } else {
+        toggleButton.textContent = '–';
+    }
+});
+</script>    
     
 </body>
 
