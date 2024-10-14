@@ -1159,7 +1159,8 @@ imageUrls.forEach((imageUrl) => {
     image.alt = "Generated Image";
     image.classList.add("thumbnail");
     
-    
+       // Añadir lazy loading
+    image.loading = "lazy";
     // Crear el enlace <a> para la descarga
 const downloadLink = document.createElement('a');
 
