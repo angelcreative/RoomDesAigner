@@ -1135,33 +1135,39 @@ page_info
                      
                  </aside>
                  <main class="center-column">
-                    
+                     <div class="flux"><p>FLUX</p><div><small>Use the power of Flux models</small></div></div>
                      <div class="middleContainer">
                         <div id="modal" class="modal" style="display: none;">
                             <div class="modal-content">
                                
-                                <span class="close">Clear all images &times;</span>
+<div class="serialButton"> 
+                                    <button type="button" onclick="toggleContent()">See Ai prompt <span class="material-symbols-outlined" translate="no"> visibility</span></button>
+
+                                    <div id="chipsSV" class="toggle-content"></div>
+                                </div>  <span class="close">Clear all images &times;</span>
                                 
                                 <!-- Fullscreen Div -->
-                                <div id="fullscreenContainer" class="fullscreen">
-                                    <div class="header">
-        <img src="static/img/img-adem/favicon.svg">
+<div id="fullscreenContainer" class="fullscreen">
+    <div class="header">
+              <img src="static/img/img-adem/favicon.svg">
+
     </div>
-                                    <div class="content">
-                                        <div class="sidebar" id="sidebarContent">
-                                            <div class="serialButton"> 
+    <div class="content">
+        <div class="sidebar" id="sidebarContent">
+             <div class="serialButton"> 
                                     <button type="button" onclick="toggleContent()">See Ai prompt <span class="material-symbols-outlined" translate="no"> visibility</span></button>
 
                                     <div id="chipsSV" class="toggle-content"></div>
                                 </div> 
-                                            <div class="main-image">
+        </div>
+        <div class="main-image">
             <img id="fullscreenImage" src="" alt="Generated Image Fullscreen">
         </div>
-                                        </div>
+    </div>
     <div class="footer">
         <p>ADEM Studio - 2024</p>
     </div>
-    <button id="closeFullscreen" type="button" class="close-btn">Close</button>
+    <button id="closeFullscreen" class="close-btn">Close</button>
 </div>
 
 <!-- Contenedor de imágenes (imageGrid) -->
@@ -1175,7 +1181,7 @@ page_info
                         </div>
                               </div>
                           </div>
-                     </div>
+                 
                  </main>
                  <aside class="right-column">
                   <h2>Person token collections</h2>
@@ -3678,8 +3684,6 @@ toggleButton.addEventListener('click', () => {
     }
 });
 </script>    
-  
-         
     
 </body>
 
