@@ -1725,20 +1725,36 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     
     // Función para abrir la imagen en fullscreen
+// Función para abrir la imagen en fullscreen con solo imagen, header, sidebar, footer y botón de cerrar
 function openFullscreen(imageUrl) {
-    fullscreenImage.src = imageUrl;
-    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
+    const fullscreenContainer = document.getElementById('fullscreenContainer');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+    const sidebarContent = document.getElementById('sidebarContent');
+    const header = document.getElementById('header');
+    const footer = document.getElementById('footer');
 
-    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-    sidebarContent.innerHTML = ''; // Limpiar el sidebar
-    const imageButtons = createImageButtons(imageUrl);
-    sidebarContent.appendChild(imageButtons); // Añadir los image-buttons al sidebar
+    // Asignar la URL de la imagen al contenedor
+    fullscreenImage.src = imageUrl;
+
+    // Mostrar el contenedor fullscreen
+    fullscreenContainer.style.display = 'block';
+
+    // Mostrar el header y el footer
+    header.style.display = 'block';
+    footer.style.display = 'block';
+
+    // Limpiar el contenido del sidebar
+    sidebarContent.innerHTML = ''; 
+
+    // Puedes añadir contenido adicional en el sidebar aquí si lo necesitas, pero lo dejo vacío según tu petición
+
+    // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+    const closeFullscreen = document.getElementById('closeFullscreen');
+    closeFullscreen.addEventListener('click', () => {
+        fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+    });
 }
 
-// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-closeFullscreen.addEventListener('click', () => {
-    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
-});
     
     
     
