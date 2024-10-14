@@ -4653,13 +4653,22 @@ body, html {
     padding: 0 12px; /* Mantén el padding en la versión minimizada */
 }
 
+.minimized .aspectRatioShot, .minimized .fila-inferior {
+    opacity: 0;
+}
+
 .toggleButton {
+    width: var(--2xl);
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 4px;
     cursor: pointer;
     font-size: 20px;
     color: white;
+    background: var(--bunker-800);
+    padding: var(--3xs);
+    border-radius: 100%;
+    z-index: 10;
 }
 
 
