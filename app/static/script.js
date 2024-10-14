@@ -1724,6 +1724,21 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 
     
     
+    // Función para abrir la imagen en fullscreen
+function openFullscreen(imageUrl) {
+    fullscreenImage.src = imageUrl;
+    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
+
+    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+    sidebarContent.innerHTML = ''; // Limpiar el sidebar
+    const imageButtons = createImageButtons(imageUrl);
+    sidebarContent.appendChild(imageButtons); // Añadir los image-buttons al sidebar
+}
+
+// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+closeFullscreen.addEventListener('click', () => {
+    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+});
     
     
     
