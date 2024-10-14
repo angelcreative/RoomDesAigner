@@ -1725,14 +1725,21 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     
     // Función para abrir la imagen en fullscreen
-// Función para abrir la imagen en fullscreen con el logo, header, sidebar con prompt y botón de compartir
+  // Función para abrir la imagen en fullscreen con el logo, header, sidebar con prompt y botón de compartir
 function openFullscreen(imageUrl, transformedPrompt) {
+    // Obtener los elementos del DOM
     const fullscreenContainer = document.getElementById('fullscreenContainer');
     const fullscreenImage = document.getElementById('fullscreenImage');
     const sidebarContent = document.getElementById('sidebarContent');
     const header = document.getElementById('header');
     const footer = document.getElementById('footer');
     const closeFullscreen = document.getElementById('closeFullscreen');
+
+    // Verificar que los elementos existan en el DOM
+    if (!fullscreenContainer || !fullscreenImage || !sidebarContent || !header || !footer || !closeFullscreen) {
+        console.error('Uno o más elementos del DOM no están definidos.');
+        return;
+    }
 
     // Asignar la URL de la imagen al contenedor
     fullscreenImage.src = imageUrl;
@@ -1784,26 +1791,32 @@ function openFullscreen(imageUrl, transformedPrompt) {
     sidebarContent.appendChild(socialButtonsContainer);
 
     // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-    closeFullscreen.addEventListener('click', () => {
+    closeFullscreen.onclick = () => {
         fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
-    });
+    };
 
     // Actualizar el contenido del header
+    header.innerHTML = ''; // Limpiar el header
+
     const logo = document.createElement('img');
     logo.src = 'path_to_logo.png'; // Ruta de la imagen del logo
     logo.alt = 'ADEM Studio Logo';
-    header.appendChild(logo);
 
     // Asegurarse de que el botón de cerrar esté en el header
-    closeFullscreen.textContent = 'Close';
-    header.appendChild(closeFullscreen);
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.onclick = () => {
+        fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+    };
+
+    header.appendChild(logo);
+    header.appendChild(closeButton);
 
     // Actualizar el contenido del footer con el año actual
     const currentYear = new Date().getFullYear();
     footer.textContent = `ADEM Studio - ${currentYear}`;
 }
 
-    
     
     
     // Siempre añadir la card para añadir más imágenes al final
