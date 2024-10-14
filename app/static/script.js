@@ -1730,12 +1730,7 @@ function openFullscreen(imageUrl, transformedPrompt) {
     fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
     
-     // Añadir el transformedPrompt al sidebar
-    const promptContainer = document.createElement('div');
-    promptContainer.classList.add('transformed-prompt');
-    promptContainer.textContent = transformedPrompt; // Añadir el transformedPrompt
-
-    
+  
     
     // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
     sidebarContent.innerHTML = ''; // Limpiar el sidebar
