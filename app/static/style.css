@@ -2347,12 +2347,13 @@ button#zipButton {
 
 .add-image-card {
    border-radius: var(--l);
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     background: var(--bunker-900);
     width: 100%;
     margin-bottom: var(--s);
+    
 }
 
 .add-more-button {
