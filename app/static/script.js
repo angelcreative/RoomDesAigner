@@ -1161,6 +1161,12 @@ imageUrls.forEach((imageUrl) => {
     
        // Añadir lazy loading
     image.loading = "lazy";
+    
+    
+     // Añadir evento de clic para abrir la imagen en fullscreen
+    image.addEventListener('click', () => {
+        openFullscreen(imageUrl);
+    });
     // Crear el enlace <a> para la descarga
 const downloadLink = document.createElement('a');
 
@@ -1703,14 +1709,39 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
     generateFilterGrid(buttonsContainer, imageUrl, image);
+ // Añadir evento de clic para abrir la imagen en fullscreen
+    image.addEventListener('click', () => {
+        openFullscreen(imageUrl);
+    });
 
 
     // Añadir la imagen y los botones al contenedor de la imagen
     imageContainer.appendChild(image);
     imageContainer.appendChild(buttonsContainer);
     carouselWrapper.appendChild(imageContainer);
+    imageGrid.appendChild(imageContainer);
 });
 
+    
+    
+    // Función para abrir la imagen en fullscreen
+function openFullscreen(imageUrl) {
+    fullscreenImage.src = imageUrl;
+    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
+
+    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+    sidebarContent.innerHTML = ''; // Limpiar el sidebar
+    const imageButtons = createImageButtons(imageUrl);
+    sidebarContent.appendChild(imageButtons); // Añadir los image-buttons al sidebar
+}
+
+// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+closeFullscreen.addEventListener('click', () => {
+    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+});
+    
+    
+    
     // Siempre añadir la card para añadir más imágenes al final
     addImageCard = document.createElement("div");
     addImageCard.classList.add("carousel-slide", "add-image-card");

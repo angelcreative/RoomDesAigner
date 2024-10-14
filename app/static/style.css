@@ -5002,6 +5002,61 @@ html {
 
 
 
+.fullscreen {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 9999;
+    overflow: auto;
+    color: white;
+}
+
+.fullscreen .header, .fullscreen .footer {
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+.fullscreen .content {
+    display: flex;
+    height: calc(100% - 160px); /* Espacio para header y footer */
+}
+
+.fullscreen .sidebar {
+    width: 25%;
+    background-color: #222;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fullscreen .main-image {
+    width: 75%;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.fullscreen .main-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+
+
 /* iPads (portrait and landscape) */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     .carousel-slide {
