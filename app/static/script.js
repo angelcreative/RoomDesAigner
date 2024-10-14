@@ -1723,21 +1723,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
 });
 
     
-    
-    // Función para abrir la imagen en fullscreen
-function openFullscreen(imageUrl) {
-    fullscreenImage.src = imageUrl;
-    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
-    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-   // Limpiar el sidebar sidebarContent.innerHTML = ''; 
-    
-}
-
-// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-closeFullscreen.addEventListener('click', () => {
-    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
-});
     
     
     
@@ -1807,6 +1793,23 @@ closeFullscreen.addEventListener('click', () => {
             prevButton.style.display = 'block';
         }
     }
+    
+        
+    // Función para abrir la imagen en fullscreen
+function openFullscreen(imageUrl) {
+    fullscreenImage.src = imageUrl;
+    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
+
+    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+   // Limpiar el sidebar sidebarContent.innerHTML = ''; 
+    
+}
+
+// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+closeFullscreen.addEventListener('click', () => {
+    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+});
+    
 }
     
 async function upscaleImage(imageUrl) {
