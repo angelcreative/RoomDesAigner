@@ -5037,7 +5037,7 @@ html {
 }
 
 .fullscreen .main-image {
-    width: 75%;
+    width: 100%;
     padding: 20px;
     text-align: center;
     box-sizing: border-box;
@@ -5058,7 +5058,9 @@ html {
     cursor: pointer;
 }
 
-
+.fullscreenImg {
+    height: 30px;
+}
 
 /* iPads (portrait and landscape) */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
