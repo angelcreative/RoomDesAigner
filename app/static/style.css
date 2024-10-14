@@ -3256,6 +3256,11 @@ option[title]:hover:after {
 .imageGrid {
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 #imageGrid div {
