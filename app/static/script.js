@@ -1733,10 +1733,29 @@ function openFullscreen(imageUrl, transformedPrompt) {
   
     
     // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-    sidebarContent.innerHTML = ''; // Limpiar el sidebar
+   // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+sidebarContent.innerHTML = `
+    <div class="serialButton"> 
+        <button type="button" onclick="toggleContent()">See Ai prompt 
+            <span class="material-symbols-outlined" translate="no">visibility</span>
+        </button>
+        <div id="chipsSV" class="toggle-content"></div> <!-- Este es el contenedor para el prompt -->
+    </div>
+`;
+    // Añadir el transformedPrompt al contenedor chipsSV
+const chipsSV = document.getElementById('chipsSV');
+chipsSV.textContent = transformedPrompt; // Añadir el transformedPrompt
    
 }
 
+// Crear botón de cerrar con type="button"
+const closeFullscreen = document.createElement("button");
+closeFullscreen.type = "button";
+closeFullscreen.innerHTML = 'Close Fullscreen'; // El contenido del botón, cámbialo según sea necesario
+fullscreenContainer.appendChild(closeFullscreen);
+    
+    
+    
 // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
 closeFullscreen.addEventListener('click', () => {
     fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
