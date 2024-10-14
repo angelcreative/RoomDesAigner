@@ -1005,7 +1005,7 @@ rerollButton.addEventListener("click", rerollImages);
       
               <img class="imgLoader" src="/static/img/modal_img/copyurl.svg">
           <p class="message-microcopy">${message}</p>
-          <button tyoe="button" class="message-close-btn" onclick="closeMessage()">Close</button>
+          <button class="message-close-btn" onclick="closeMessage()">Close</button>
         </div>
       `;
       document.body.appendChild(messageDiv);
@@ -1195,7 +1195,360 @@ downloadLink.addEventListener('click', (e) => {
 imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al contenedor
 
 
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
+
+    // Botones de acción
+    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+   // Crear botones con iconos en lugar de texto
+const copyPromptButton = createButton();
+copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
+copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
+
+const filterButton = createButton();
+filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
+filterButton.onclick = toggleFilterMenu;
+    
+
+    
+
+    
+    
+
+    // Añadir los botones a su contenedor
+    [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+
    
+
+    // Crear el menú de filtros y añadir sliders
+    const filterMenu = document.createElement("div");
+    filterMenu.classList.add("filter-menu");
+    filterMenu.style.display = "none"; // Oculto por defecto
+
+    // Slider para el grano con label
+    const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
+    const grainLabel = document.createElement("label");
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    grainLabel.setAttribute("for", grainSlider.slider.id);  // Asociar el label con el slider
+    filterMenu.appendChild(grainLabel);
+    filterMenu.appendChild(grainSlider.slider);
+
+    // Slider para el contraste con label
+    const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
+    const contrastLabel = document.createElement("label");
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    contrastLabel.setAttribute("for", contrastSlider.slider.id);
+    filterMenu.appendChild(contrastLabel);
+    filterMenu.appendChild(contrastSlider.slider);
+
+    // Slider para el brillo con label
+    const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
+    const brightnessLabel = document.createElement("label");
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+    brightnessLabel.setAttribute("for", brightnessSlider.slider.id);
+    filterMenu.appendChild(brightnessLabel);
+    filterMenu.appendChild(brightnessSlider.slider);
+
+    //Slider para el tinte (hue rotation) con label
+    const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
+    const hueLabel = document.createElement("label");
+    hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    hueLabel.setAttribute("for", hueSlider.slider.id);
+    filterMenu.appendChild(hueLabel);
+    filterMenu.appendChild(hueSlider.slider);
+    
+    // Slider para la saturación con label
+const saturateSlider = createSlider("Saturate", 100, 300, 100, applyFilters);
+const saturateLabel = document.createElement("label");
+saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+saturateLabel.setAttribute("for", saturateSlider.slider.id);
+filterMenu.appendChild(saturateLabel);
+filterMenu.appendChild(saturateSlider.slider);
+
+// Slider para el sepia con label
+const sepiaSlider = createSlider("Sepia", 0, 1, 0, applyFilters);
+sepiaSlider.slider.step = 0.01; // Ajustar el paso del slider para valores pequeños
+const sepiaLabel = document.createElement("label");
+sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+sepiaLabel.setAttribute("for", sepiaSlider.slider.id);
+filterMenu.appendChild(sepiaLabel);
+filterMenu.appendChild(sepiaSlider.slider);
+
+// Slider para la escala de grises con label
+const grayscaleSlider = createSlider("Grayscale", 0, 1, 0, applyFilters);
+grayscaleSlider.slider.step = 0.01;
+const grayscaleLabel = document.createElement("label");
+grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+grayscaleLabel.setAttribute("for", grayscaleSlider.slider.id);
+filterMenu.appendChild(grayscaleLabel);
+filterMenu.appendChild(grayscaleSlider.slider);
+
+//Slider para invertir colores con label
+const invertSlider = createSlider("Invert", 0, 1, 0, applyFilters);
+invertSlider.slider.step = 0.01;
+const invertLabel = document.createElement("label");
+invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+invertLabel.setAttribute("for", invertSlider.slider.id);
+filterMenu.appendChild(invertLabel);
+filterMenu.appendChild(invertSlider.slider);
+
+// Slider para el desenfoque con label
+const blurSlider = createSlider("Blur", 0, 10, 0, applyFilters);
+blurSlider.slider.step = 0.1;
+const blurLabel = document.createElement("label");
+blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+blurLabel.setAttribute("for", blurSlider.slider.id);
+filterMenu.appendChild(blurLabel);
+filterMenu.appendChild(blurSlider.slider);
+
+//Slider para la opacidad con label
+const opacitySlider = createSlider("Opacity", 0, 1, 1, applyFilters);
+opacitySlider.slider.step = 0.01;
+const opacityLabel = document.createElement("label");
+opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+opacityLabel.setAttribute("for", opacitySlider.slider.id);
+filterMenu.appendChild(opacityLabel);
+filterMenu.appendChild(opacitySlider.slider);
+
+
+    // Añadir el menú de filtros debajo del botón "Filters"
+    buttonsContainer.appendChild(filterMenu);
+
+    // Función para alternar la visibilidad del menú de filtros
+    function toggleFilterMenu() {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    }
+
+   // Función para aplicar los filtros combinados
+function applyFilters() {
+    const grainAmount = parseInt(grainSlider.slider.value);
+    const contrast = parseInt(contrastSlider.slider.value);
+    const brightness = parseInt(brightnessSlider.slider.value);
+    const hueRotation = parseInt(hueSlider.slider.value);
+    const saturation = parseInt(saturateSlider.slider.value);
+    const sepia = parseFloat(sepiaSlider.slider.value);
+    const grayscale = parseFloat(grayscaleSlider.slider.value);
+    const invert = parseFloat(invertSlider.slider.value);
+    const blur = parseFloat(blurSlider.slider.value);
+    const opacity = parseFloat(opacitySlider.slider.value);
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Aplicar los filtros combinados de CSS
+        ctx.filter = `
+            contrast(${contrast}%) 
+            brightness(${brightness}%) 
+            hue-rotate(${hueRotation}deg)
+            saturate(${saturation}%) 
+            sepia(${sepia}) 
+            grayscale(${grayscale}) 
+            invert(${invert}) 
+            blur(${blur}px) 
+            opacity(${opacity})
+        `;
+        
+        ctx.drawImage(img, 0, 0);
+
+        // Obtener los datos de la imagen para aplicar el grano
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // Añadir grano a la imagen
+        for (let i = 0; i < data.length; i += 4) {
+            let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+            data[i] += grain;     // Rojo
+            data[i+1] += grain;   // Verde
+            data[i+2] += grain;   // Azul
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
+    };
+
+    // Actualizar el valor de los labels en tiempo real
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+   // hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+    sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+    grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+   // invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+    blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+   // opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+}
+
+    
+    
+    //ig
+    
+    
+    function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+    const filDiv = document.createElement('div');
+    filDiv.classList.add('fil');
+
+    const igDiv = document.createElement('div');
+    igDiv.classList.add('ig');
+
+    // Inicialmente ocultar las miniaturas
+    igDiv.style.display = 'none';
+
+    const filters = [
+        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+    ];
+
+    // Usa la imagen estática predeterminada (igram.png) para las miniaturas
+    const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
+
+    filters.forEach((filter) => {
+        const label = document.createElement('label');
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'filter';
+        radio.value = filter;
+
+        const img = document.createElement('img');
+        img.alt = filter;
+
+        // No cargar dinámicamente, usar la imagen estática predeterminada
+        img.src = staticImageUrl;
+
+        // Añadir el input y la imagen al label
+        label.appendChild(radio);
+        label.appendChild(img);
+
+        // Añadir el label al contenedor de miniaturas
+        igDiv.appendChild(label);
+
+        // Evento 'change' para aplicar el filtro al cambiar de opción
+        radio.addEventListener('change', (event) => {
+            applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
+        });
+    });
+
+    // Añadir botón para limpiar el filtro
+    const clearFilterLabel = document.createElement('label');
+    const clearButton = document.createElement('button');
+    clearButton.textContent = '✕';
+    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
+
+    // Evento para limpiar el filtro y restablecer la imagen original
+    clearButton.addEventListener('click', () => {
+        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+    });
+
+    // Añadir el botón de limpiar al contenedor
+    clearFilterLabel.appendChild(clearButton);
+    igDiv.appendChild(clearFilterLabel);
+
+    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
+    filDiv.appendChild(igDiv);
+
+    // Crear el botón de "Show/Hide"
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'Filters';
+    toggleButton.type = 'button';
+    
+    // Evento para hacer toggle del contenedor 'ig'
+    toggleButton.addEventListener('click', () => {
+        if (igDiv.style.display === 'none') {
+            igDiv.style.display = 'flex';
+            toggleButton.textContent = 'Close';
+        } else {
+            igDiv.style.display = 'none';
+            toggleButton.textContent = 'Filters';
+        }
+    });
+
+    // Añadir el botón de toggle al contenedor principal 'fil'
+    filDiv.insertBefore(toggleButton, igDiv);
+
+    // Añadir el contenedor de miniaturas al contenedor de botones
+    buttonsContainer.appendChild(filDiv);
+}
+// Función para aplicar el filtro a la imagen principal
+function applyFilterToMainImage(filterType, imageUrl, image) {
+    if (!image) {
+        console.error('Image is not defined or passed correctly');
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Aplicar filtros según el tipo seleccionado
+        switch (filterType) {
+            case '1977':
+                ctx.filter = 'sepia(0.5) contrast(1.1)';
+                break;
+            case 'aden':
+                ctx.filter = 'contrast(0.9) saturate(0.85)';
+                break;
+            case 'brannan':
+                ctx.filter = 'contrast(1.4) sepia(0.5)';
+                break;
+            case 'brooklyn':
+                ctx.filter = 'contrast(0.9) brightness(1.1)';
+                break;
+            case 'clarendon':
+                ctx.filter = 'contrast(1.2) saturate(1.35)';
+                break;
+            case 'earlybird':
+                ctx.filter = 'sepia(0.4) saturate(1.6)';
+                break;
+            case 'gingham':
+                ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
+                break;
+            case 'hudson':
+                ctx.filter = 'brightness(1.2) contrast(0.9)';
+                break;
+            case 'inkwell':
+                ctx.filter = 'grayscale(1) contrast(1.2)';
+                break;
+            case 'kelvin':
+                ctx.filter = 'brightness(1.5) contrast(1.2)';
+                break;
+            case 'lofi':
+                ctx.filter = 'contrast(1.5) saturate(1.2)';
+                break;
+            case 'moon':
+                ctx.filter = 'grayscale(1) contrast(1.1)';
+                break;
+            default:
+                ctx.filter = 'none';
+        }
+
+        // Dibujar la imagen con el filtro aplicado en el canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
+    };
+}
+
+    
+    ///ig
+    
     
     //combined 
     
@@ -1353,75 +1706,7 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
     }
 });
 
-    // Función para generar los filtros en el sidebar
-function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
-    const filDiv = document.createElement('div');
-    filDiv.classList.add('fil');
-
-    const igDiv = document.createElement('div');
-    igDiv.classList.add('ig');
-
-    // Inicialmente ocultar las miniaturas
-    igDiv.style.display = 'none';
-
-    const filters = [
-        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
-        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
-    ];
-
-    const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
-
-    filters.forEach((filter) => {
-        const label = document.createElement('label');
-
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'filter';
-        radio.value = filter;
-
-        const img = document.createElement('img');
-        img.alt = filter;
-        img.src = staticImageUrl;  // Imagen estática para el filtro
-
-        label.appendChild(radio);
-        label.appendChild(img);
-
-        igDiv.appendChild(label);
-
-        // Aplicar filtro al cambiar la opción
-        radio.addEventListener('change', (event) => {
-            applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
-        });
-    });
-
-    const clearFilterLabel = document.createElement('label');
-    const clearButton = document.createElement('button');
-    clearButton.textContent = '✕';
-    clearButton.type = 'button';
-
-    clearButton.addEventListener('click', () => {
-        mainImageElement.src = imageUrl;  // Restablecer imagen original
-    });
-
-    clearFilterLabel.appendChild(clearButton);
-    igDiv.appendChild(clearFilterLabel);
-
-    filDiv.appendChild(igDiv);
-
-    const toggleButton = document.createElement('button');
-    toggleButton.textContent = 'Filters';
-    toggleButton.type = 'button';
-
-    toggleButton.addEventListener('click', () => {
-        igDiv.style.display = (igDiv.style.display === 'none') ? 'flex' : 'none';
-        toggleButton.textContent = (igDiv.style.display === 'none') ? 'Filters' : 'Close';
-    });
-
-    filDiv.insertBefore(toggleButton, igDiv);
-
-    buttonsContainer.appendChild(filDiv);
-}
-
+    
     // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
     generateFilterGrid(buttonsContainer, imageUrl, image);
  // Añadir evento de clic para abrir la imagen en fullscreen
@@ -1437,93 +1722,24 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     imageGrid.appendChild(imageContainer);
 });
 
- 
-
     
-   
     
-// Función para abrir la imagen en fullscreen y generar los controles en el sidebar
+    // Función para abrir la imagen en fullscreen
 function openFullscreen(imageUrl) {
-    const fullscreenContainer = document.getElementById('fullscreenContainer');
-    const fullscreenImage = document.getElementById('fullscreenImage');
-    const sidebarContent = document.getElementById('sidebarContent');
-    
     fullscreenImage.src = imageUrl;
     fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
-    // Limpiar el contenido del sidebar
-    sidebarContent.innerHTML = ''; 
-
-    // Crear el contenedor para los botones y sliders
-    const buttonsContainer = document.createElement("div");
-    buttonsContainer.classList.add("image-buttons");
-
-    // Botones de acción
-    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
-    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
-
-    // Crear botones con iconos en lugar de texto
-    const copyPromptButton = createButton();
-    copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
-    copyPromptButton.type = "button"; // Asegurarse que es un button
-    copyPromptButton.onclick = () => copyTextToClipboard('Prompt related to this image');
-
-    const filterButton = createButton();
-    filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
-    filterButton.type = "button"; // Asegurarse que es un button
-    filterButton.onclick = toggleFilterMenu;
-
-    // Añadir los botones al contenedor
-    [downloadButton, copyButton, copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
-
-    // Crear el menú de filtros y añadir sliders
-    const filterMenu = document.createElement("div");
-    filterMenu.classList.add("filter-menu");
-    filterMenu.style.display = "none"; // Oculto por defecto
-
-    // Crear sliders para los filtros
-    const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
-    const grainLabel = document.createElement("label");
-    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
-    grainLabel.setAttribute("for", grainSlider.slider.id);
-    filterMenu.appendChild(grainLabel);
-    filterMenu.appendChild(grainSlider.slider);
-
-    const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
-    const contrastLabel = document.createElement("label");
-    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
-    contrastLabel.setAttribute("for", contrastSlider.slider.id);
-    filterMenu.appendChild(contrastLabel);
-    filterMenu.appendChild(contrastSlider.slider);
-
-    // Añadir más sliders según sea necesario...
-
-    // Añadir el menú de filtros al contenedor de botones
-    buttonsContainer.appendChild(filterMenu);
-
-    // Añadir los controles y filtros al sidebar
-    sidebarContent.appendChild(buttonsContainer); 
-
-    // Generar el grid de filtros
-    generateFilterGrid(sidebarContent, imageUrl, fullscreenImage); 
-}
-
-// Función para alternar la visibilidad del menú de filtros
-function toggleFilterMenu() {
-    const filterMenu = document.querySelector(".filter-menu");
-    if (filterMenu) {
-        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
-    }
+    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+    sidebarContent.innerHTML = ''; // Limpiar el sidebar
+    const imageButtons = createImageButtons(imageUrl);
+    sidebarContent.appendChild(imageButtons); // Añadir los image-buttons al sidebar
 }
 
 // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
-const closeFullscreen = document.getElementById('closeFullscreen');
 closeFullscreen.addEventListener('click', () => {
-    const fullscreenContainer = document.getElementById('fullscreenContainer');
     fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
 });
-
-
+    
     
     
     // Siempre añadir la card para añadir más imágenes al final
