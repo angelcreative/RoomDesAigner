@@ -2103,7 +2103,7 @@ div#errorContainer {
     position: relative;
     z-index: 10;
     background: var(--dragon-200);
-    width: 30%;
+    width: 60%;
     padding: var(--l);
     color: var(--dragon-600);
     box-shadow: 0px 0px 1000px 1000px #111922e6;

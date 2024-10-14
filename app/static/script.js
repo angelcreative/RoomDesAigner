@@ -1438,10 +1438,6 @@ function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
 });
 
  
-const fullscreenContainer = document.getElementById('fullscreenContainer');
-const fullscreenImage = document.getElementById('fullscreenImage');
-const sidebarContent = document.getElementById('sidebarContent');
-const closeFullscreen = document.getElementById('closeFullscreen');
 
     
    
