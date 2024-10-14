@@ -1446,7 +1446,12 @@ const closeFullscreen = document.getElementById('closeFullscreen');
     
    
     
+// Función para abrir la imagen en fullscreen y generar los controles en el sidebar
 function openFullscreen(imageUrl) {
+    const fullscreenContainer = document.getElementById('fullscreenContainer');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+    const sidebarContent = document.getElementById('sidebarContent');
+    
     fullscreenImage.src = imageUrl;
     fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
@@ -1465,7 +1470,7 @@ function openFullscreen(imageUrl) {
     const copyPromptButton = createButton();
     copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
     copyPromptButton.type = "button"; // Asegurarse que es un button
-    copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
+    copyPromptButton.onclick = () => copyTextToClipboard('Prompt related to this image');
 
     const filterButton = createButton();
     filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
@@ -1495,7 +1500,7 @@ function openFullscreen(imageUrl) {
     filterMenu.appendChild(contrastLabel);
     filterMenu.appendChild(contrastSlider.slider);
 
-    // Añadir más sliders según tu código...
+    // Añadir más sliders según sea necesario...
 
     // Añadir el menú de filtros al contenedor de botones
     buttonsContainer.appendChild(filterMenu);
@@ -1503,19 +1508,26 @@ function openFullscreen(imageUrl) {
     // Añadir los controles y filtros al sidebar
     sidebarContent.appendChild(buttonsContainer); 
 
-    // Generar el grid de filtros (si es necesario)
+    // Generar el grid de filtros
     generateFilterGrid(sidebarContent, imageUrl, fullscreenImage); 
 }
 
 // Función para alternar la visibilidad del menú de filtros
 function toggleFilterMenu() {
-    filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    const filterMenu = document.querySelector(".filter-menu");
+    if (filterMenu) {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    }
 }
 
 // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+const closeFullscreen = document.getElementById('closeFullscreen');
 closeFullscreen.addEventListener('click', () => {
+    const fullscreenContainer = document.getElementById('fullscreenContainer');
     fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
 });
+
+
     
     
     // Siempre añadir la card para añadir más imágenes al final
