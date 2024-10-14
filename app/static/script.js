@@ -1394,7 +1394,8 @@ function applyFilters() {
     //ig
     
     
-    function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+// Función para generar los filtros en el sidebar
+function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
     const filDiv = document.createElement('div');
     filDiv.classList.add('fil');
 
@@ -1409,7 +1410,6 @@ function applyFilters() {
         'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
     ];
 
-    // Usa la imagen estática predeterminada (igram.png) para las miniaturas
     const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
 
     filters.forEach((filter) => {
@@ -1422,63 +1422,47 @@ function applyFilters() {
 
         const img = document.createElement('img');
         img.alt = filter;
+        img.src = staticImageUrl;  // Imagen estática para el filtro
 
-        // No cargar dinámicamente, usar la imagen estática predeterminada
-        img.src = staticImageUrl;
-
-        // Añadir el input y la imagen al label
         label.appendChild(radio);
         label.appendChild(img);
 
-        // Añadir el label al contenedor de miniaturas
         igDiv.appendChild(label);
 
-        // Evento 'change' para aplicar el filtro al cambiar de opción
+        // Aplicar filtro al cambiar la opción
         radio.addEventListener('change', (event) => {
             applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
         });
     });
 
-    // Añadir botón para limpiar el filtro
     const clearFilterLabel = document.createElement('label');
     const clearButton = document.createElement('button');
     clearButton.textContent = '✕';
-    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
+    clearButton.type = 'button';
 
-    // Evento para limpiar el filtro y restablecer la imagen original
     clearButton.addEventListener('click', () => {
-        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+        mainImageElement.src = imageUrl;  // Restablecer imagen original
     });
 
-    // Añadir el botón de limpiar al contenedor
     clearFilterLabel.appendChild(clearButton);
     igDiv.appendChild(clearFilterLabel);
 
-    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
     filDiv.appendChild(igDiv);
 
-    // Crear el botón de "Show/Hide"
     const toggleButton = document.createElement('button');
     toggleButton.textContent = 'Filters';
     toggleButton.type = 'button';
-    
-    // Evento para hacer toggle del contenedor 'ig'
+
     toggleButton.addEventListener('click', () => {
-        if (igDiv.style.display === 'none') {
-            igDiv.style.display = 'flex';
-            toggleButton.textContent = 'Close';
-        } else {
-            igDiv.style.display = 'none';
-            toggleButton.textContent = 'Filters';
-        }
+        igDiv.style.display = (igDiv.style.display === 'none') ? 'flex' : 'none';
+        toggleButton.textContent = (igDiv.style.display === 'none') ? 'Filters' : 'Close';
     });
 
-    // Añadir el botón de toggle al contenedor principal 'fil'
     filDiv.insertBefore(toggleButton, igDiv);
 
-    // Añadir el contenedor de miniaturas al contenedor de botones
     buttonsContainer.appendChild(filDiv);
 }
+
 // Función para aplicar el filtro a la imagen principal
 function applyFilterToMainImage(filterType, imageUrl, image) {
     if (!image) {
@@ -1722,24 +1706,54 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     imageGrid.appendChild(imageContainer);
 });
 
+ 
+const imageGrid = document.getElementById('imageGrid');
+const fullscreenContainer = document.getElementById('fullscreenContainer');
+const fullscreenImage = document.getElementById('fullscreenImage');
+const sidebarContent = document.getElementById('sidebarContent');
+const closeFullscreen = document.getElementById('closeFullscreen');
+
+    
+// Función para crear los image-buttons (controles individuales de cada imagen)
+function createImageButtons(imageUrl) {
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
+
+    const copyPromptButton = document.createElement("button");
+    copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
+    copyPromptButton.onclick = () => copyTextToClipboard(`Copied prompt for image: ${imageUrl}`);
+
+    const filterButton = document.createElement("button");
+    filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
+    filterButton.onclick = () => toggleFilterMenu();
+
+    buttonsContainer.appendChild(copyPromptButton);
+    buttonsContainer.appendChild(filterButton);
+
+    return buttonsContainer;
+}    
     
     
-    // Función para abrir la imagen en fullscreen
+// Función para abrir la imagen en fullscreen y generar el sidebar
 function openFullscreen(imageUrl) {
     fullscreenImage.src = imageUrl;
     fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
 
-    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
-    sidebarContent.innerHTML = ''; // Limpiar el sidebar
+    // Limpiar el contenido del sidebar
+    sidebarContent.innerHTML = ''; 
+
+    // Crear contenedor para los controles y filtros
     const imageButtons = createImageButtons(imageUrl);
-    sidebarContent.appendChild(imageButtons); // Añadir los image-buttons al sidebar
+    sidebarContent.appendChild(imageButtons); // Añadir botones
+
+    // Generar filtros en el sidebar
+    generateFilterGrid(sidebarContent, imageUrl, fullscreenImage); 
 }
 
 // Cerrar el fullscreen cuando se hace clic en el botón de cerrar
 closeFullscreen.addEventListener('click', () => {
     fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
 });
-    
     
     
     // Siempre añadir la card para añadir más imágenes al final
