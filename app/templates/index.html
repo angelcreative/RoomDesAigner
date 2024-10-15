@@ -3528,20 +3528,20 @@ page_info
         </div>
     </div>
     
-   <div class="fila-inferior">
+  <div class="fila-inferior">
     <!-- Switch para cambiar entre escribir y conversar -->
     <label for="modeSwitch">Write</label>
     <input type="checkbox" id="modeSwitch">
     <label for="modeSwitch">Talk</label>
 
-    <!-- Textarea -->
+    <!-- Textarea para escribir el prompt o interactuar en modo talk -->
     <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
 
-    <!-- Botón -->
+    <!-- Botón para enviar el mensaje o el prompt -->
     <button class="buttonExt" type="submit" id="magicButton" disabled>
         <span class="material-symbols-outlined">send</span>
     </button>
-</div> 
+</div>
 </footer>
 
               </form>
@@ -3754,41 +3754,46 @@ function hideToast() {
 }
 </script>
     
-    
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const modeSwitch = document.getElementById('modeSwitch');
     const customText = document.getElementById('customText');
     const magicButton = document.getElementById('magicButton');
+    const conversationContainer = document.getElementById('conversationContainer');
+    const conversationHistory = document.getElementById('conversationHistory');
 
-    let mode = 'write';
+    let mode = 'write';  // El modo inicial es 'write'
+    let conversation = [];  // Almacenar la conversación con GPT
 
-    // Función para verificar si el botón debe estar habilitado en modo "talk"
+    // Función para alternar entre "write" y "talk"
+    function toggleMode() {
+        if (modeSwitch.checked) {
+            mode = 'talk';
+            customText.value = "Hola, ¿qué quieres generar?";
+            magicButton.disabled = true;  // Deshabilitar el botón hasta que escriba "generar"
+            conversationContainer.style.display = 'block';  // Mostrar la conversación
+        } else {
+            mode = 'write';
+            customText.placeholder = "Write your magical prompt here";
+            customText.value = "";  // Limpiar el textarea
+            magicButton.disabled = false;  // Habilitar el botón en write
+            conversationContainer.style.display = 'none';  // Ocultar la conversación
+        }
+    }
+
+    // Verificar si el botón debe habilitarse en modo "talk"
     function checkTalkMode() {
         if (mode === 'talk') {
-            // Habilitar solo si el texto contiene "generar"
             if (customText.value.trim().toLowerCase().includes('generar')) {
-                magicButton.disabled = false;
+                magicButton.disabled = false;  // Habilitar el botón cuando se escribe "generar"
             } else {
                 magicButton.disabled = true;
             }
         }
     }
 
-    // Evento para alternar entre "write" y "talk"
-    modeSwitch.addEventListener('change', function () {
-        if (modeSwitch.checked) {
-            // Cambiar a modo "talk"
-            mode = 'talk';
-            customText.value = "Hola, ¿qué quieres generar?";
-            magicButton.disabled = true; // Deshabilitar el botón hasta que escriba "generar"
-        } else {
-            // Cambiar a modo "write"
-            mode = 'write';
-            customText.placeholder = "Write your magical prompt here";
-            magicButton.disabled = false; // En modo write, el botón siempre está habilitado
-        }
-    });
+    // Evento para alternar el modo cuando se cambia el switch
+    modeSwitch.addEventListener('change', toggleMode);
 
     // Evento para monitorear cambios en el textarea y habilitar el botón en modo "talk"
     customText.addEventListener('input', function () {
@@ -3797,35 +3802,55 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Evento del botón "magicButton" para enviar el mensaje al backend en modo "talk"
+    // Función para enviar el mensaje o prompt al backend
     magicButton.addEventListener('click', function () {
-        if (mode === 'talk') {
-            const userMessage = customText.value.trim();
+        const userMessage = customText.value.trim();
+        
+        if (mode === 'talk' && userMessage.toLowerCase().includes('generar')) {
+            // Enviar la conversación a GPT
+            conversation.push({ role: 'user', content: userMessage });
 
-            if (userMessage.toLowerCase().includes('generar')) {
-                // Enviar el mensaje al backend para obtener la respuesta de GPT
-                fetch('/gpt-talk', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message: userMessage })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.response) {
-                        // Mostrar la respuesta de GPT en el textarea o en otro lugar
-                        customText.value += "\n\nGPT: " + data.response;
-                    } else if (data.error) {
-                        console.error("Error:", data.error);
-                    }
-                })
-                .catch(error => console.error("Error al comunicarse con GPT:", error));
-            }
+            fetch('/gpt-talk', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    // Añadir la respuesta de GPT al historial de conversación
+                    conversation.push({ role: 'assistant', content: data.response });
+
+                    // Actualizar el historial de conversación
+                    updateConversationHistory();
+
+                    // Añadir la respuesta de GPT al textarea para continuar la conversación
+                    customText.value += "\n\nGPT: " + data.response;
+                } else if (data.error) {
+                    console.error("Error:", data.error);
+                }
+            })
+            .catch(error => console.error("Error al comunicarse con GPT:", error));
+        } else if (mode === 'write') {
+            // Si es modo "write", simplemente usar el prompt
+            alert("Generando la imagen con el prompt: " + userMessage);
         }
     });
+
+    // Función para actualizar el historial de conversación
+    function updateConversationHistory() {
+        conversationHistory.innerHTML = '';
+        conversation.forEach(msg => {
+            const div = document.createElement('div');
+            div.textContent = `${msg.role === 'user' ? 'Usuario' : 'GPT'}: ${msg.content}`;
+            conversationHistory.appendChild(div);
+        });
+    }
 });
 </script>
+
 
     
 </body>
