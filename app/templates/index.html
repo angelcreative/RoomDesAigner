@@ -70,6 +70,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.2/color-thief.umd.js"></script>
 <script src="{{ url_for('static', filename='ntc.js') }}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
        <!-- Open Graph para LinkedIn y otras plataformas -->
     <meta property="og:title" content="ADEM Studio">
     <meta property="og:description" content="Find inspiration to develop your projects. Sell ideas to clients without big investment. Communicate your ideas to your team faster.">
@@ -1147,6 +1150,10 @@ page_info
                                     <button type="button" onclick="toggleContent()">See Ai prompt <span class="material-symbols-outlined" translate="no"> visibility</span></button>
 
                                     <div id="chipsSV" class="toggle-content"></div>
+    
+    <!-- Botón para descargar imágenes -->
+<button id="downloadButton" type="button">Download Images</button>
+
                                 </div>  <span class="close">Clear all images &times;</span>
                                 
                                 <!-- Fullscreen Div -->
@@ -3681,7 +3688,38 @@ toggleButton.addEventListener('click', () => {
         toggleButton.textContent = '–';
     }
 });
-</script>    
+</script>   
+    
+    <script>
+document.getElementById('downloadButton').addEventListener('click', function () {
+    const zip = new JSZip();
+    const imgFolder = zip.folder("images");
+    const images = document.querySelectorAll('#imageGrid img');
+
+    let imagePromises = [];
+
+    images.forEach((img) => {
+        let imageUrl = img.src;
+        let imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1); // Obtener nombre de imagen
+
+        let promise = fetch(imageUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                imgFolder.file(imageName, blob); // Guardar cada imagen en el ZIP con su nombre
+            });
+
+        imagePromises.push(promise);
+    });
+
+    Promise.all(imagePromises).then(() => {
+        zip.generateAsync({ type: "blob" }).then(function (content) {
+            saveAs(content, "images.zip"); // Descargar el archivo ZIP
+        });
+    }).catch(function (error) {
+        console.error("Error al descargar imágenes:", error);
+    });
+});
+</script>
     
 </body>
 
