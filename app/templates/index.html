@@ -3528,12 +3528,20 @@ page_info
         </div>
     </div>
     
-    <div class="fila-inferior">
-        <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
-        <button class="buttonExt" type="submit" id="magicButton">
-            <span class="material-symbols-outlined">send</span>
-        </button>
-    </div>  
+   <div class="fila-inferior">
+    <!-- Switch para cambiar entre escribir y conversar -->
+    <label for="modeSwitch">Write</label>
+    <input type="checkbox" id="modeSwitch">
+    <label for="modeSwitch">Talk</label>
+
+    <!-- Textarea -->
+    <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
+
+    <!-- Botón -->
+    <button class="buttonExt" type="submit" id="magicButton" disabled>
+        <span class="material-symbols-outlined">send</span>
+    </button>
+</div> 
 </footer>
 
               </form>
@@ -3744,6 +3752,79 @@ function hideToast() {
         toast.style.display = 'none'; // Esconder el toast después de un tiempo
     }, 500); // Esconder el toast después de 0.5 segundos
 }
+</script>
+    
+    
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modeSwitch = document.getElementById('modeSwitch');
+    const customText = document.getElementById('customText');
+    const magicButton = document.getElementById('magicButton');
+
+    let mode = 'write';
+
+    // Función para verificar si el botón debe estar habilitado en modo "talk"
+    function checkTalkMode() {
+        if (mode === 'talk') {
+            // Habilitar solo si el texto contiene "generar"
+            if (customText.value.trim().toLowerCase().includes('generar')) {
+                magicButton.disabled = false;
+            } else {
+                magicButton.disabled = true;
+            }
+        }
+    }
+
+    // Evento para alternar entre "write" y "talk"
+    modeSwitch.addEventListener('change', function () {
+        if (modeSwitch.checked) {
+            // Cambiar a modo "talk"
+            mode = 'talk';
+            customText.value = "Hola, ¿qué quieres generar?";
+            magicButton.disabled = true; // Deshabilitar el botón hasta que escriba "generar"
+        } else {
+            // Cambiar a modo "write"
+            mode = 'write';
+            customText.placeholder = "Write your magical prompt here";
+            magicButton.disabled = false; // En modo write, el botón siempre está habilitado
+        }
+    });
+
+    // Evento para monitorear cambios en el textarea y habilitar el botón en modo "talk"
+    customText.addEventListener('input', function () {
+        if (mode === 'talk') {
+            checkTalkMode();
+        }
+    });
+
+    // Evento del botón "magicButton" para enviar el mensaje al backend en modo "talk"
+    magicButton.addEventListener('click', function () {
+        if (mode === 'talk') {
+            const userMessage = customText.value.trim();
+
+            if (userMessage.toLowerCase().includes('generar')) {
+                // Enviar el mensaje al backend para obtener la respuesta de GPT
+                fetch('/gpt-talk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        // Mostrar la respuesta de GPT en el textarea o en otro lugar
+                        customText.value += "\n\nGPT: " + data.response;
+                    } else if (data.error) {
+                        console.error("Error:", data.error);
+                    }
+                })
+                .catch(error => console.error("Error al comunicarse con GPT:", error));
+            }
+        }
+    });
+});
 </script>
 
     

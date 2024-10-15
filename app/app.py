@@ -200,6 +200,27 @@ def transform_prompt(prompt_text):
     return transformed_prompt
 
 # Define the polling function to check image availability
+
+@app.route('/gpt-talk', methods=['POST'])
+def gpt_talk():
+    user_message = request.json.get('message')
+    
+    if not user_message:
+        return jsonify({"error": "No message provided"}), 400
+
+    try:
+        # Llamada a la API de OpenAI para generar la respuesta
+        response = openai.Completion.create(
+            model="text-davinci-003",
+            prompt=user_message,
+            max_tokens=150
+        )
+
+        # Devolver la respuesta generada por GPT
+        return jsonify({"response": response.choices[0].text.strip()})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 def check_image_availability(url, timeout=60, interval=5):
     """Poll the URL until the image is available or timeout is reached."""
     start_time = time.time()
