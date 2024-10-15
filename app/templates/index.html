@@ -1177,6 +1177,8 @@ page_info
 
 <!-- Contenedor de imágenes (imageGrid) -->
 
+<!-- Toast para mostrar el estado de la descarga -->
+<div id="toast" class="toast" style="display: none;">Zipping your images...</div>
 
                                 <div class="imageGrid" id="imageGrid"></div>
  
@@ -3690,22 +3692,27 @@ toggleButton.addEventListener('click', () => {
 });
 </script>   
     
+
     <script>
 document.getElementById('downloadButton').addEventListener('click', function () {
     const zip = new JSZip();
     const imgFolder = zip.folder("images");
     const images = document.querySelectorAll('#imageGrid img');
+    const toast = document.getElementById('toast'); // Seleccionar el toast
 
     let imagePromises = [];
 
+    // Mostrar el toast al comenzar la descarga
+    showToast();
+
     images.forEach((img) => {
         let imageUrl = img.src;
-        let imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1); // Obtener nombre de imagen
+        let imageName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
 
         let promise = fetch(imageUrl)
             .then(response => response.blob())
             .then(blob => {
-                imgFolder.file(imageName, blob); // Guardar cada imagen en el ZIP con su nombre
+                imgFolder.file(imageName, blob);
             });
 
         imagePromises.push(promise);
@@ -3713,13 +3720,32 @@ document.getElementById('downloadButton').addEventListener('click', function () 
 
     Promise.all(imagePromises).then(() => {
         zip.generateAsync({ type: "blob" }).then(function (content) {
-            saveAs(content, "images.zip"); // Descargar el archivo ZIP
+            saveAs(content, "images.zip");
+            hideToast(); // Ocultar el toast cuando la descarga comience
         });
     }).catch(function (error) {
         console.error("Error al descargar imágenes:", error);
+        hideToast(); // Asegurarse de ocultar el toast en caso de error
     });
 });
+
+// Función para mostrar el toast
+function showToast() {
+    const toast = document.getElementById('toast');
+    toast.style.display = 'block'; // Hacerlo visible
+    toast.classList.add('show'); // Añadir la clase que muestra el toast
+}
+
+// Función para ocultar el toast
+function hideToast() {
+    const toast = document.getElementById('toast');
+    setTimeout(() => {
+        toast.classList.remove('show'); // Quitar la clase que muestra el toast
+        toast.style.display = 'none'; // Esconder el toast después de un tiempo
+    }, 500); // Esconder el toast después de 0.5 segundos
+}
 </script>
+
     
 </body>
 

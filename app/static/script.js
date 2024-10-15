@@ -1410,7 +1410,7 @@ function applyFilters() {
     ];
 
     // Usa la imagen estática predeterminada (igram.png) para las miniaturas
-    const staticImageUrl = '/static/img/igram.png';  // Ruta correcta de la imagen igram.png
+    const staticImageUrl = 'static/img/adem-img/favicon.svg';  // Ruta correcta de la imagen igram.png
 
     filters.forEach((filter) => {
         const label = document.createElement('label');
