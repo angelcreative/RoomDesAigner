@@ -219,7 +219,7 @@ def gpt_talk():
 
         # Llamada a la API de OpenAI para generar la respuesta
         response = openai.Completion.create(
-            model="text-davinci-003",
+            model="gpt-4-turbo",
             prompt=prompt,
             max_tokens=150
         )

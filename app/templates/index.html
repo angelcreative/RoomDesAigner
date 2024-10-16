@@ -3527,12 +3527,14 @@ page_info
             <label for="mystic">Weird reality</label>
         </div>
     </div>
-    
-  <div class="fila-inferior">
-    <!-- Switch para cambiar entre escribir y conversar -->
-    <label for="modeSwitch">Write</label>
-    <input type="checkbox" id="modeSwitch">
-    <label for="modeSwitch">Talk</label>
+ <div class="fila-inferior">
+    <!-- Botones de radio para alternar entre "write" y "talk" -->
+    <label>
+        <input type="radio" name="mode" value="write" id="writeMode" checked> Write
+    </label>
+    <label>
+        <input type="radio" name="mode" value="talk" id="talkMode"> Talk
+    </label>
 
     <!-- Textarea para escribir el prompt o interactuar en modo talk -->
     <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
@@ -3541,6 +3543,12 @@ page_info
     <button class="buttonExt" type="submit" id="magicButton" disabled>
         <span class="material-symbols-outlined">send</span>
     </button>
+</div>
+
+<!-- Sección para mostrar las respuestas en modo "talk" -->
+<div id="conversationContainer" style="margin-top: 20px; display: none;">
+    <h3>Conversación con GPT</h3>
+    <div id="conversationHistory"></div>
 </div>
 </footer>
 
@@ -3756,7 +3764,8 @@ function hideToast() {
     
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const modeSwitch = document.getElementById('modeSwitch');
+    const writeModeRadio = document.getElementById('writeMode');
+    const talkModeRadio = document.getElementById('talkMode');
     const customText = document.getElementById('customText');
     const magicButton = document.getElementById('magicButton');
     const conversationContainer = document.getElementById('conversationContainer');
@@ -3765,12 +3774,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let mode = 'write';  // El modo inicial es 'write'
     let conversation = [];  // Almacenar la conversación con GPT
 
-    // Función para alternar entre "write" y "talk"
+    // Función para alternar entre "write" y "talk" basado en el botón de radio seleccionado
     function toggleMode() {
-        if (modeSwitch.checked) {
+        if (talkModeRadio.checked) {
             mode = 'talk';
-            customText.value = "Hola, ¿qué quieres generar?";
-            magicButton.disabled = true;  // Deshabilitar el botón hasta que escriba "generar"
+            customText.value = "Hello, what's your dream?";
+            magicButton.disabled = true;  // Deshabilitar el botón hasta que se escriba "generar"
             conversationContainer.style.display = 'block';  // Mostrar la conversación
         } else {
             mode = 'write';
@@ -3784,7 +3793,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar si el botón debe habilitarse en modo "talk"
     function checkTalkMode() {
         if (mode === 'talk') {
-            if (customText.value.trim().toLowerCase().includes('generar')) {
+            if (customText.value.trim().toLowerCase().includes('launch!')) {
                 magicButton.disabled = false;  // Habilitar el botón cuando se escribe "generar"
             } else {
                 magicButton.disabled = true;
@@ -3792,8 +3801,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Evento para alternar el modo cuando se cambia el switch
-    modeSwitch.addEventListener('change', toggleMode);
+    // Evento para alternar el modo cuando se cambia el radio button
+    writeModeRadio.addEventListener('change', toggleMode);
+    talkModeRadio.addEventListener('change', toggleMode);
 
     // Evento para monitorear cambios en el textarea y habilitar el botón en modo "talk"
     customText.addEventListener('input', function () {
