@@ -3538,7 +3538,7 @@ page_info
         </label>
 
         <!-- Textarea para escribir el prompt o interactuar en modo talk -->
-        <textarea class="magic-gpt-textarea" placeholder="Write your magical prompt here" id="magicCustomText" rows="4"></textarea>
+        <textarea class="magic-gpt-textarea" placeholder="Write your magical prompt here" id="customText" rows="4"></textarea>
 
         <!-- Botón para generar imagen en modo "write" -->
         <button class="magic-gpt-button" type="button" id="magicButton">
@@ -3772,20 +3772,41 @@ function hideToast() {
 document.addEventListener('DOMContentLoaded', function () {
     const writeModeRadio = document.getElementById('magicWriteMode');
     const talkModeRadio = document.getElementById('magicTalkMode');
-    const customText = document.getElementById('magicCustomText');
+    const customText = document.getElementById('customText');
     const magicButton = document.getElementById('magicButton');
     const conversationContainer = document.getElementById('magic-gpt-conversation-container');
     const conversationHistory = document.getElementById('magic-gpt-conversation-history');
     const infoText = document.getElementById('magicInfoText');
-
     let mode = 'write';  // El modo inicial es 'write'
     let conversation = [];  // Almacenar la conversación con ADEM
+
+    // Función para verificar si hay valores seleccionados en los dropdowns
+    function hasActiveSelectedValues() {
+        // Aquí deberías obtener los valores seleccionados de tus dropdowns
+        const selectedValues = document.querySelectorAll('select');  // Ajusta el selector a los dropdowns reales
+        return Array.from(selectedValues).some(select => select.value.trim() !== "");
+    }
+
+    // Función para habilitar o deshabilitar el botón magicButton
+    function toggleMagicButton() {
+        const hasText = customText.value.trim().length > 0;
+        const hasSelectedValues = hasActiveSelectedValues();
+        const conversationStarted = conversationHistory.children.length > 0;
+
+        // Habilitar botón si las condiciones de modo 'write' o 'talk' se cumplen
+        if ((mode === 'write' && (hasText || hasSelectedValues)) ||
+            (mode === 'talk' && (conversationStarted || hasSelectedValues))) {
+            magicButton.disabled = false;
+        } else {
+            magicButton.disabled = true;
+        }
+    }
 
     // Función para alternar entre "write" y "talk" basado en el botón de radio seleccionado
     function toggleMode() {
         if (talkModeRadio.checked) {
             mode = 'talk';
-            customText.placeholder = "Start your conversation witn ADEM here";
+            customText.placeholder = "Start your conversation with ADEM here";
             conversationContainer.style.display = 'block';  // Mostrar la conversación
             infoText.style.display = 'block';  // Mostrar el texto "Press Enter to send chat"
         } else {
@@ -3794,62 +3815,66 @@ document.addEventListener('DOMContentLoaded', function () {
             conversationContainer.style.display = 'none';  // Ocultar la conversación
             infoText.style.display = 'none';  // Ocultar el texto "Press Enter to send chat"
         }
+        toggleMagicButton();  // Verificar el estado del botón al cambiar de modo
     }
 
     // Evento para alternar el modo cuando se cambia el radio button
     writeModeRadio.addEventListener('change', toggleMode);
     talkModeRadio.addEventListener('change', toggleMode);
 
-    // Función para generar imagen en modo "write" con el magic button
-    magicButton.addEventListener('click', function () {
-        const userMessage = customText.value.trim();
-        if (userMessage === "") {
-            alert("Write something first!");
-            return;
-        }
-        alert("Generating prompt: " + userMessage);
-    });
+    // Evento para verificar si el botón se debe habilitar o deshabilitar al escribir
+    customText.addEventListener('input', toggleMagicButton);
 
-    // Enviar el mensaje al presionar Enter en modo "talk"
-    customText.addEventListener('keypress', function (event) {
-        if (event.key === 'Enter' && mode === 'talk') {
-            event.preventDefault();  // Prevenir que se añada un salto de línea
-            const userMessage = customText.value.trim();
-            if (userMessage === "") {
-                alert("Write something first!");
+    // Función para manejar el click en el botón magicButton
+    magicButton.addEventListener('click', function () {
+        const hasText = customText.value.trim().length > 0;
+        const hasSelectedValues = hasActiveSelectedValues();
+        const conversationStarted = conversationHistory.children.length > 0;
+
+        // Caso de uso para modo "write"
+        if (mode === 'write') {
+            if (!hasText && !hasSelectedValues) {
+                alert("Please write something or select a value from the dropdown to generate the image.");
+                return;
+            }
+            alert("Generating image based on your input.");
+        }
+
+        // Caso de uso para modo "talk"
+        if (mode === 'talk') {
+            if (!hasText && !conversationStarted && !hasSelectedValues) {
+                alert("Please start a conversation, write something or select a value to generate the image.");
                 return;
             }
 
-            // Añadir el mensaje del usuario a la conversación
-            conversation.push({ role: 'user', content: userMessage });
-
-            // Enviar la conversación a ADEM
-            fetch('/gpt-talk', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    message: userMessage,
-                    conversation: conversation  // Enviar el historial de la conversación al backend
+            // Enviar mensaje a ADEM en modo "talk"
+            const userMessage = customText.value.trim();
+            if (userMessage !== "") {
+                conversation.push({ role: 'user', content: userMessage });
+                // Enviar la conversación a ADEM
+                fetch('/gpt-talk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        message: userMessage,
+                        conversation: conversation
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.response) {
-                    // Añadir la respuesta de ADEM al historial de conversación
-                    conversation.push({ role: 'assistant', content: data.response });
-
-                    // Actualizar el historial de conversación
-                    updateConversationHistory();
-
-                    // Mostrar la respuesta de ADEM en el textarea para continuar la conversación
-                    customText.value = "";
-                } else if (data.error) {
-                    console.error("Error:", data.error);
-                }
-            })
-            .catch(error => console.error("Error al comunicarse con ADEM:", error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response) {
+                        // Añadir la respuesta de ADEM al historial de conversación
+                        conversation.push({ role: 'assistant', content: data.response });
+                        updateConversationHistory();
+                        customText.value = "";  // Limpiar el textarea
+                    } else if (data.error) {
+                        console.error("Error:", data.error);
+                    }
+                })
+                .catch(error => console.error("Error al comunicarse con ADEM:", error));
+            }
         }
     });
 
@@ -3863,7 +3888,11 @@ document.addEventListener('DOMContentLoaded', function () {
             conversationHistory.appendChild(div);
         });
     }
+
+    // Verificar el estado inicial del botón
+    toggleMagicButton();
 });
+
 </script>
 
 
