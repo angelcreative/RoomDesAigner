@@ -3539,9 +3539,9 @@ page_info
     <!-- Textarea para escribir el prompt o interactuar en modo talk -->
     <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
 
-    <!-- Botón para enviar el mensaje o el prompt -->
-    <button class="buttonExt" type="submit" id="magicButton" disabled>
-        <span class="material-symbols-outlined">send</span>
+    <!-- Botón para generar imagen en modo "write" -->
+    <button class="buttonExt" type="submit" id="magicButton">
+        Generate
     </button>
 </div>
 
@@ -3779,25 +3779,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (talkModeRadio.checked) {
             mode = 'talk';
             customText.value = "Hola, ¿qué quieres generar?";
-            magicButton.disabled = true;  // Deshabilitar el botón hasta que se escriba "generar"
             conversationContainer.style.display = 'block';  // Mostrar la conversación
         } else {
             mode = 'write';
             customText.placeholder = "Write your magical prompt here";
             customText.value = "";  // Limpiar el textarea
-            magicButton.disabled = false;  // Habilitar el botón en write
             conversationContainer.style.display = 'none';  // Ocultar la conversación
-        }
-    }
-
-    // Verificar si el botón debe habilitarse en modo "talk"
-    function checkTalkMode() {
-        if (mode === 'talk') {
-            if (customText.value.trim().toLowerCase().includes('generar')) {
-                magicButton.disabled = false;  // Habilitar el botón cuando se escribe "generar"
-            } else {
-                magicButton.disabled = true;
-            }
         }
     }
 
@@ -3805,18 +3792,26 @@ document.addEventListener('DOMContentLoaded', function () {
     writeModeRadio.addEventListener('change', toggleMode);
     talkModeRadio.addEventListener('change', toggleMode);
 
-    // Evento para monitorear cambios en el textarea y habilitar el botón en modo "talk"
-    customText.addEventListener('input', function () {
-        if (mode === 'talk') {
-            checkTalkMode();
-        }
-    });
-
-    // Función para enviar el mensaje o prompt al backend
+    // Función para generar imagen en modo "write" con el magic button
     magicButton.addEventListener('click', function () {
         const userMessage = customText.value.trim();
-        
-        if (mode === 'talk' && userMessage.toLowerCase().includes('generar')) {
+        if (userMessage === "") {
+            alert("Escribe un prompt antes de generar.");
+            return;
+        }
+        alert("Generando la imagen con el prompt: " + userMessage);
+    });
+
+    // Enviar el mensaje al presionar Enter en modo "talk"
+    customText.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter' && mode === 'talk') {
+            event.preventDefault();  // Prevenir que se añada un salto de línea
+            const userMessage = customText.value.trim();
+            if (userMessage === "") {
+                alert("Escribe un mensaje antes de enviarlo.");
+                return;
+            }
+
             // Añadir el mensaje del usuario a la conversación
             conversation.push({ role: 'user', content: userMessage });
 
@@ -3841,15 +3836,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateConversationHistory();
 
                     // Mostrar la respuesta de GPT en el textarea para continuar la conversación
-                    customText.value += "\n\nGPT: " + data.response;
+                    customText.value = "GPT: " + data.response;
                 } else if (data.error) {
                     console.error("Error:", data.error);
                 }
             })
             .catch(error => console.error("Error al comunicarse con GPT:", error));
-        } else if (mode === 'write') {
-            // Si es modo "write", simplemente usar el prompt
-            alert("Generando la imagen con el prompt: " + userMessage);
         }
     });
 
