@@ -3528,36 +3528,34 @@ page_info
         </div>
     </div>
 <div class="fila-inferior magic-gpt">
-   <div class="magic-gpt-fila">
-    <!-- Botones de radio para alternar entre "write" y "talk" -->
-    <label>
-        <input type="radio" name="mode" value="write" id="magicWriteMode" checked> Write
-    </label>
-    <label>
-        <input type="radio" name="mode" value="talk" id="magicTalkMode"> Talk
-    </label>
+    <div class="magic-gpt-fila">
+        <!-- Botones de radio para alternar entre "write" y "talk" -->
+        <label>
+            <input type="radio" name="mode" value="write" id="magicWriteMode" checked> Write
+        </label>
+        <label>
+            <input type="radio" name="mode" value="talk" id="magicTalkMode"> Talk
+        </label>
 
-    <!-- Textarea para escribir el prompt o interactuar en modo talk -->
-    <textarea class="magic-gpt-textarea" placeholder="Write your magical prompt here" id="magicCustomText" rows="4"></textarea>
+        <!-- Textarea para escribir el prompt o interactuar en modo talk -->
+        <textarea class="magic-gpt-textarea" placeholder="Write your magical prompt here" id="magicCustomText" rows="4"></textarea>
 
-    <!-- Botón para generar imagen en modo "write" -->
-    <button class="magic-gpt-button" type="submit" id="magicButton">
-        Generate
-    </button>
+        <!-- Botón para generar imagen en modo "write" -->
+        <button class="magic-gpt-button" type="button" id="magicButton">
+            <span class="material-symbols-outlined">send</span>
+        </button>
+    </div>
+
+    <div class="magic-gpt-info" id="magicInfoText" style="display: none;">Press Enter to send chat</div>
+
+    <!-- Sección para mostrar las respuestas en modo "talk" -->
+    <div id="magic-gpt-conversation-container" style="display: none;">
+        <h3 class="magic-gpt-title">Chat with ADEM</h3>
+        <div id="magic-gpt-conversation-history"></div>
+    </div>
 </div>
 
-<!-- Sección para mostrar las respuestas en modo "talk" -->
-<div id="magic-gpt-conversation-container" style="display: none;">
-    <h3 class="magic-gpt-title">Conversación con GPT</h3>
-    <div id="magic-gpt-conversation-history"></div>
-</div>
-</div>
 
-<!-- Sección para mostrar las respuestas en modo "talk" -->
-<div id="conversationContainer" style="margin-top: 20px; display: none;">
-    <h3>Conversación con GPT</h3>
-    <div id="conversationHistory"></div>
-</div>
 </footer>
 
               </form>
@@ -3778,21 +3776,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const magicButton = document.getElementById('magicButton');
     const conversationContainer = document.getElementById('magic-gpt-conversation-container');
     const conversationHistory = document.getElementById('magic-gpt-conversation-history');
+    const infoText = document.getElementById('magicInfoText');
 
     let mode = 'write';  // El modo inicial es 'write'
-    let conversation = [];  // Almacenar la conversación con GPT
+    let conversation = [];  // Almacenar la conversación con ADEM
 
     // Función para alternar entre "write" y "talk" basado en el botón de radio seleccionado
     function toggleMode() {
         if (talkModeRadio.checked) {
             mode = 'talk';
-            customText.value = "Hola, ¿qué quieres generar?";
+            customText.placeholder = "Start your conversation witn ADEM here";
             conversationContainer.style.display = 'block';  // Mostrar la conversación
+            infoText.style.display = 'block';  // Mostrar el texto "Press Enter to send chat"
         } else {
             mode = 'write';
             customText.placeholder = "Write your magical prompt here";
-            customText.value = "";  // Limpiar el textarea
             conversationContainer.style.display = 'none';  // Ocultar la conversación
+            infoText.style.display = 'none';  // Ocultar el texto "Press Enter to send chat"
         }
     }
 
@@ -3804,10 +3804,10 @@ document.addEventListener('DOMContentLoaded', function () {
     magicButton.addEventListener('click', function () {
         const userMessage = customText.value.trim();
         if (userMessage === "") {
-            alert("Escribe un prompt antes de generar.");
+            alert("Write something first!");
             return;
         }
-        alert("Generando la imagen con el prompt: " + userMessage);
+        alert("Generating prompt: " + userMessage);
     });
 
     // Enviar el mensaje al presionar Enter en modo "talk"
@@ -3816,14 +3816,14 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();  // Prevenir que se añada un salto de línea
             const userMessage = customText.value.trim();
             if (userMessage === "") {
-                alert("Escribe un mensaje antes de enviarlo.");
+                alert("Write something first!");
                 return;
             }
 
             // Añadir el mensaje del usuario a la conversación
             conversation.push({ role: 'user', content: userMessage });
 
-            // Enviar la conversación a GPT
+            // Enviar la conversación a ADEM
             fetch('/gpt-talk', {
                 method: 'POST',
                 headers: {
@@ -3837,19 +3837,19 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.response) {
-                    // Añadir la respuesta de GPT al historial de conversación
+                    // Añadir la respuesta de ADEM al historial de conversación
                     conversation.push({ role: 'assistant', content: data.response });
 
                     // Actualizar el historial de conversación
                     updateConversationHistory();
 
-                    // Mostrar la respuesta de GPT en el textarea para continuar la conversación
+                    // Mostrar la respuesta de ADEM en el textarea para continuar la conversación
                     customText.value = "";
                 } else if (data.error) {
                     console.error("Error:", data.error);
                 }
             })
-            .catch(error => console.error("Error al comunicarse con GPT:", error));
+            .catch(error => console.error("Error al comunicarse con ADEM:", error));
         }
     });
 
@@ -3859,7 +3859,7 @@ document.addEventListener('DOMContentLoaded', function () {
         conversation.forEach(msg => {
             const div = document.createElement('div');
             div.classList.add('magic-gpt-message', msg.role === 'user' ? 'magic-gpt-message-user' : 'magic-gpt-message-gpt');
-            div.textContent = `${msg.role === 'user' ? 'Usuario' : 'GPT'}: ${msg.content}`;
+            div.textContent = `${msg.role === 'user' ? 'YOU' : 'ADEM'}: ${msg.content}`;
             conversationHistory.appendChild(div);
         });
     }
