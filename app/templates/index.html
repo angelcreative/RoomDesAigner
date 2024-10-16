@@ -3764,25 +3764,30 @@ function hideToast() {
 }
 </script>
  <script>
-     document.getElementById('screenshotBtn').addEventListener('click', function() {
+  document.getElementById('screenshotBtn').addEventListener('click', function() {
     const elementToCapture = document.getElementById('fullscreenContainer'); // Captura solo este elemento
 
-    html2canvas(elementToCapture, {
-        useCORS: true,
-        ignoreElements: function(element) {
-            return element.classList.contains('ignore'); // Ignora elementos con la clase 'ignore'
-        }
-    }).then(function(canvas) {
-        // Convertir el canvas a una imagen
-        var imgData = canvas.toDataURL("image/png");
-        // Crear un enlace para descargar la imagen
-        var link = document.createElement('a');
-        link.href = imgData;
-        link.download = 'screenshot.png';
-        link.click();
-    }).catch(function(error) {
-        console.error('Error al capturar la pantalla:', error);
-    });
+    const img = document.getElementById('fullscreenImage');
+    if (img.complete) { // Verifica si la imagen está completamente cargada
+        html2canvas(elementToCapture, {
+            useCORS: true,
+            ignoreElements: function(element) {
+                return element.classList.contains('ignore'); // Ignora elementos con la clase 'ignore'
+            }
+        }).then(function(canvas) {
+            // Convertir el canvas a una imagen
+            var imgData = canvas.toDataURL("image/png");
+            // Crear un enlace para descargar la imagen
+            var link = document.createElement('a');
+            link.href = imgData;
+            link.download = 'screenshot.png';
+            link.click();
+        }).catch(function(error) {
+            console.error('Error al capturar la pantalla:', error);
+        });
+    } else {
+        console.error('La imagen no está completamente cargada.');
+    }
 });
     </script>
     
