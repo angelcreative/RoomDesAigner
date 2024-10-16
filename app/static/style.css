@@ -4999,7 +4999,7 @@ html {
         background: var(--bunker-900);
         border-radius: 8px;
         align-items: center;
-        height: 100px;
+        height: fit-content;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
@@ -5106,6 +5106,7 @@ input#chatInput {
     border: none;
     font-size: 14px;
     background: var(--bunker-900);
+    color:var(--bunker-50);
 }
 
 button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: none;color: var(--java-50);border-radius: 4px;}
