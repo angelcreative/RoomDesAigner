@@ -2517,35 +2517,7 @@ pre {
         padding: 2rem;
 }
 
-/* Estilo para el contenedor del tooltip */
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
 
-/* Estilo para el texto del tooltip */
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* Posición del tooltip */
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-/* Mostrar el tooltip al pasar el mouse */
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
-}
 
 #loader {
         display: none;
@@ -5126,6 +5098,39 @@ button#sendChatButton {
     margin: 0;
     padding: 8px 8px;
 }
+
+
+
+/* Estilo para el contenedor del tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo para el texto del tooltip */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Posición del tooltip */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Mostrar el tooltip al pasar el mouse */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
 /*=========================   MEDIA QUERIES ===================*/
 
     /* Responsive Design */
