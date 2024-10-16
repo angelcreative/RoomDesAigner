@@ -2517,29 +2517,34 @@ pre {
         padding: 2rem;
 }
 
+/* Estilo para el contenedor del tooltip */
 .tooltip {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
+    position: relative;
+    display: inline-block;
 }
 
-.tooltip:hover .tooltip-text {
-        visibility: visible;
+/* Estilo para el texto del tooltip */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Posición del tooltip */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-.tooltip-text {
-        visibility: hidden;
-        background-color: var(--bunker-800);
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%;
-        left: 50%;
-        transform: translateX(-50%);
-        white-space: nowrap;
+/* Mostrar el tooltip al pasar el mouse */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }
 
 #loader {
