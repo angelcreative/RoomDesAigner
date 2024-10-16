@@ -12,6 +12,117 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton"); 
  
 
+document.addEventListener("DOMContentLoaded", function() {
+
+
+/*AIDESIGN
+// Predefined attributes for randomness
+const attributes = {
+    room_size: ['small', 'medium', 'large'],
+    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
+    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
+    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
+    wall_type: ['colored', 'wallpaper', 'tiled']
+};
+
+// Mixing attributes function
+function mixAttributes(baseAttributes) {
+    const mixedAttributes = {...baseAttributes};
+    Object.keys(attributes).forEach(key => {
+        // 50% chance to swap
+        if (Math.random() > 0.5) {
+            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
+        }
+    });
+    return mixedAttributes;
+}
+
+
+    
+    
+     document.getElementById('aiDesignButton').addEventListener('click', function() {
+   console.log("Button clicked, generating images");
+   const baseValues = getSelectedValues();
+   const mixedValues = mixAttributes(baseValues);
+   generateImages(null, mixedValues, false);
+});
+
+    
+*/
+
+ 
+ 
+// Function to handle the form submission
+function handleSubmit(event) {
+  event.preventDefault();
+  const fileInput = document.getElementById("imageDisplayUrl");
+  const file = fileInput.files[0];
+  const selectedValues = getSelectedValues();
+  const isImg2Img = Boolean(file);
+
+  if (file) {
+    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
+    const uploadUrl = "https://api.imgbb.com/1/upload";
+    const formData = new FormData();
+    formData.append("key", apiKey);
+    formData.append("image", file);
+
+    fetch(uploadUrl, {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const imageUrl = data.data.url;
+        // Asignar la URL de la imagen al contenedor de img2img
+        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+        img2imgThumbnail.src = imageUrl;
+        generateImages(imageUrl, selectedValues, isImg2Img);
+      } else {
+        throw new Error("Error en la subida de imagen: " + data.error.message);
+      }
+    })
+    .catch(error => {
+      console.error("Error en la subida de la imagen:", error.message);
+    });
+  } else {
+    // Manejar caso sin img2img
+    generateImages(null, selectedValues, isImg2Img);
+  }
+}
+
+  function handleError(errorMessage) {
+  console.error(errorMessage);
+  const magicButton = document.getElementById("magicButton");
+  magicButton.disabled = false;
+  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
+  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
+}
+
+    
+        // Obtener los elementos necesarios
+const textArea = document.getElementById("customText");
+const magicButton = document.getElementById("magicButton");
+
+// Función para habilitar o deshabilitar el botón según la longitud del texto
+function toggleMagicButton() {
+  if (textArea.value.length >= 5) {
+    magicButton.disabled = false; // Habilitar el botón si hay al menos 5 caracteres
+  } else {
+    magicButton.disabled = true; // Deshabilitar si hay menos de 5 caracteres
+  }
+}
+
+// Escuchar el evento de entrada en el área de texto
+textArea.addEventListener("input", toggleMagicButton);
+
+// Verificar el estado inicial por si ya hay texto en el área
+toggleMagicButton();
+    
+    
+
+
 function getSelectedValues() {
     const elementIds = [
         "person",
@@ -135,120 +246,6 @@ function getSelectedValues() {
 
     return values;
 }
-
-
-
-document.addEventListener("DOMContentLoaded", function() {
-
-
-/*AIDESIGN
-// Predefined attributes for randomness
-const attributes = {
-    room_size: ['small', 'medium', 'large'],
-    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
-    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-    wall_type: ['colored', 'wallpaper', 'tiled']
-};
-
-// Mixing attributes function
-function mixAttributes(baseAttributes) {
-    const mixedAttributes = {...baseAttributes};
-    Object.keys(attributes).forEach(key => {
-        // 50% chance to swap
-        if (Math.random() > 0.5) {
-            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
-        }
-    });
-    return mixedAttributes;
-}
-
-
-    
-    
-     document.getElementById('aiDesignButton').addEventListener('click', function() {
-   console.log("Button clicked, generating images");
-   const baseValues = getSelectedValues();
-   const mixedValues = mixAttributes(baseValues);
-   generateImages(null, mixedValues, false);
-});
-
-    
-*/
-
- 
- 
-// Function to handle the form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0];
-  const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file);
-
-  if (file) {
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
-    const uploadUrl = "https://api.imgbb.com/1/upload";
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("image", file);
-
-    fetch(uploadUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        const imageUrl = data.data.url;
-        // Asignar la URL de la imagen al contenedor de img2img
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        img2imgThumbnail.src = imageUrl;
-        generateImages(imageUrl, selectedValues, isImg2Img);
-      } else {
-        throw new Error("Error en la subida de imagen: " + data.error.message);
-      }
-    })
-    .catch(error => {
-      console.error("Error en la subida de la imagen:", error.message);
-    });
-  } else {
-    // Manejar caso sin img2img
-    generateImages(null, selectedValues, isImg2Img);
-  }
-}
-
-  function handleError(errorMessage) {
-  console.error(errorMessage);
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
-}
-
-    
-        // Obtener los elementos necesarios
-const textArea = document.getElementById("customText");
-const magicButton = document.getElementById("magicButton");
-
-// Función para habilitar o deshabilitar el botón según la longitud del texto
-function toggleMagicButton() {
-  if (textArea.value.length >= 5) {
-    magicButton.disabled = false; // Habilitar el botón si hay al menos 5 caracteres
-  } else {
-    magicButton.disabled = true; // Deshabilitar si hay menos de 5 caracteres
-  }
-}
-
-// Escuchar el evento de entrada en el área de texto
-textArea.addEventListener("input", toggleMagicButton);
-
-// Verificar el estado inicial por si ya hay texto en el área
-toggleMagicButton();
-    
-    
-
-
 
 
 
@@ -2147,147 +2144,8 @@ function handleImageUpload(event) {
 // Add the event listener
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
-//chat
-document.addEventListener('DOMContentLoaded', function () {
-    const writeModeRadio = document.getElementById('magicWriteMode');
-    const talkModeRadio = document.getElementById('magicTalkMode');
-    const customText = document.getElementById('magicCustomText');
-    const magicButton = document.getElementById('magicButton');
-    const conversationContainer = document.getElementById('magic-gpt-conversation-container');
-    const conversationHistory = document.getElementById('magic-gpt-conversation-history');
-    const infoText = document.getElementById('magicInfoText');
-    let mode = 'write';  // El modo inicial es 'write'
-    let conversation = [];  // Almacenar la conversación con ADEM
 
-    // Función para verificar si hay valores activos en getSelectedValues()
-    function hasActiveSelectedValues() {
-        const selectedValues = getSelectedValues();
-        return selectedValues && selectedValues.length > 0;
-    }
 
-    // Función para habilitar o deshabilitar el botón magicButton
-    function toggleMagicButton() {
-        const isTalkMode = talkModeRadio.checked;
-        const conversationStarted = conversationHistory.children.length > 0;
-        const hasSelectedValues = hasActiveSelectedValues();
-
-        // Habilitar el botón si hay valores activos o si se cumplen las condiciones de write o talk
-        if (hasSelectedValues || (!isTalkMode && customText.value.length >= 5) || (isTalkMode && conversationStarted)) {
-            magicButton.disabled = false;
-        } else {
-            magicButton.disabled = true;
-        }
-    }
-
-    // Función para alternar entre "write" y "talk" basado en el botón de radio seleccionado
-    function toggleMode() {
-        if (talkModeRadio.checked) {
-            mode = 'talk';
-            customText.placeholder = "Start your conversation with ADEM here";
-            conversationContainer.style.display = 'block';  // Mostrar la conversación
-            infoText.style.display = 'block';  // Mostrar el texto "Press Enter to send chat"
-            magicButton.disabled = true;  // Deshabilitar el botón en modo "talk" hasta que haya conversación
-        } else {
-            mode = 'write';
-            customText.placeholder = "Write your magical prompt here";
-            conversationContainer.style.display = 'none';  // Ocultar la conversación
-            infoText.style.display = 'none';  // Ocultar el texto "Press Enter to send chat"
-            toggleMagicButton();  // Comprobar si el botón debe estar habilitado en modo "write"
-        }
-    }
-
-    // Evento para alternar el modo cuando se cambia el radio button
-    writeModeRadio.addEventListener('change', toggleMode);
-    talkModeRadio.addEventListener('change', toggleMode);
-
-    // Función para manejar el click en el botón magicButton
-    magicButton.addEventListener('click', function () {
-        const isTalkMode = talkModeRadio.checked;
-        const conversationStarted = conversationHistory.children.length > 0;
-        const hasSelectedValues = hasActiveSelectedValues();
-        const selectedValues = getSelectedValues();
-
-        // Validación en caso de no tener valores activos y no cumplir con las condiciones de write o talk
-        if (!hasSelectedValues) {
-            if (!isTalkMode && customText.value.length < 5) {
-                alert("Please write at least 5 characters or select a value to generate the image.");
-                return;
-            }
-            if (isTalkMode && !conversationStarted) {
-                alert("You need to start a conversation or select a value before generating an image.");
-                return;
-            }
-        }
-
-        // Combinar el texto del prompt y los valores seleccionados (si los hay)
-        const combinedPrompt = `${customText.value} ${selectedValues.join(' ')}`.trim();
-
-        // Generar las imágenes o continuar la conversación
-        if (mode === 'write') {
-            generateImages(combinedPrompt, selectedValues, false);
-        }
-    });
-
-    // Enviar el mensaje al presionar Enter en modo "talk"
-    customText.addEventListener('keypress', function (event) {
-        if (event.key === 'Enter' && mode === 'talk') {
-            event.preventDefault();  // Prevenir que se añada un salto de línea
-            const userMessage = customText.value.trim();
-            if (userMessage === "") {
-                alert("Please write something first!");
-                return;
-            }
-
-            // Añadir el mensaje del usuario a la conversación
-            conversation.push({ role: 'user', content: userMessage });
-
-            // Enviar la conversación a ADEM
-            fetch('/gpt-talk', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    message: userMessage,
-                    conversation: conversation  // Enviar el historial de la conversación al backend
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.response) {
-                    // Añadir la respuesta de ADEM al historial de conversación
-                    conversation.push({ role: 'assistant', content: data.response });
-
-                    // Actualizar el historial de conversación
-                    updateConversationHistory();
-
-                    // Mostrar la respuesta de ADEM en el textarea para continuar la conversación
-                    customText.value = "";
-
-                    // Habilitar el botón Magic Button después de la respuesta de ADEM
-                    toggleMagicButton();
-                } else if (data.error) {
-                    console.error("Error:", data.error);
-                }
-            })
-            .catch(error => console.error("Error al comunicarse con ADEM:", error));
-        }
-    });
-
-    // Función para actualizar el historial de conversación
-    function updateConversationHistory() {
-        conversationHistory.innerHTML = '';
-        conversation.forEach(msg => {
-            const div = document.createElement('div');
-            div.classList.add('magic-gpt-message', msg.role === 'user' ? 'magic-gpt-message-user' : 'magic-gpt-message-gpt');
-            div.textContent = `${msg.role === 'user' ? 'YOU' : 'ADEM'}: ${msg.content}`;
-            conversationHistory.appendChild(div);
-        });
-    }
-
-    // Escuchar el evento de entrada en el textarea para habilitar o deshabilitar el botón
-    customText.addEventListener('input', toggleMagicButton);
-});
 
 /*Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
