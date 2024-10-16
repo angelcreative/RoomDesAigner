@@ -5105,6 +5105,11 @@ div#toastChat {
     opacity: 1;
 }
 
+div#toastChat.toast {
+    background: none;
+    zoom: 0.7;
+}
+
 button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: none;color: var(--java-50);border-radius: 4px;}
 
 /*=========================   MEDIA QUERIES ===================*/
