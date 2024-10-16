@@ -72,8 +72,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
        <!-- Open Graph para LinkedIn y otras plataformas -->
     <meta property="og:title" content="ADEM Studio">
     <meta property="og:description" content="Find inspiration to develop your projects. Sell ideas to clients without big investment. Communicate your ideas to your team faster.">
@@ -1175,7 +1174,7 @@ page_info
 capture
 </span></button>
 
-        <p>ADEM Studio - 2024</p>
+        <small>ADEM Studio - 2024</small>
     </div>
     <button type="button" id="closeFullscreen" class="close-btn ignore">Close</button>
 </div>
@@ -3767,7 +3766,7 @@ function hideToast() {
 }
 </script>
  <script>
-          document.getElementById('screenshotBtn').addEventListener('click', function() {
+      document.getElementById('screenshotBtn').addEventListener('click', function() {
             // Captura el contenido del body, ignorando los elementos con la clase 'ignore'
             html2canvas(document.body, {
                 useCORS: true,
@@ -3782,6 +3781,8 @@ function hideToast() {
                 link.href = imgData;
                 link.download = 'screenshot.png';
                 link.click();
+            }).catch(function(error) {
+                console.error('Error al capturar la pantalla:', error);
             });
         });
     </script>
