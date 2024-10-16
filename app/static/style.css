@@ -4955,12 +4955,30 @@ html {
             line-height: 1.4;
         }
 
-        .magic-gpt-message-user {
-            color: #34d399; /* Color verde claro para el usuario */
+         .magic-gpt-message-user {
+            background-color: #000;); /* Color verde claro para el usuario */
+            padding: var(--s);
+            border-radius: var(--xs);
+            float: left;
+            text-align: left;
+            max-width: 80%;
         }
 
         .magic-gpt-message-gpt {
-            color: #3b82f6; /* Color azul claro para GPT */
+            color: var(--prince-50); /* Color azul claro para GPT */
+            background: var(--prince-800);
+            padding: var(--xs);
+            border-radius: var(--xs);
+            float: right;
+            text-align: left;
+            max-width: 80%;
+        }
+
+  /* Texto de información para enviar mensaje con Enter */
+        .magic-gpt-info {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
 
         h3.magic-gpt-title {
