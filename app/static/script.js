@@ -662,14 +662,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: 1
         };
     }  
-    
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "flux-fashion",
             lora_strength: 1
         };
-   
     } 
      else if (selectedModel === "mystic") {
         modelConfig = {

@@ -4996,7 +4996,7 @@ html {
     }
     .tab-content.active {
         display: flex; /* Mostrar solo la pestaña activa */
-        width: 80%;
+        width: 600px;
         padding: 12px;
         background: var(--bunker-900);
         border-radius: 8px;
@@ -5110,8 +5110,14 @@ div#toastChat.toast {
     zoom: 0.7;
 }
 
-button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: none;color: var(--java-50);border-radius: 4px;}
-
+button#sendChatButton {
+    background: var(--java-500);
+    border: none;
+    color: var(--java-50);
+    border-radius: 900px;
+    margin: 0;
+    padding: 8px 8px;
+}
 /*=========================   MEDIA QUERIES ===================*/
 
     /* Responsive Design */
@@ -5175,7 +5181,9 @@ button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: non
         width:auto;
     }
     
-    
+     .tab-content.active {
+        display: flex; /* Mostrar solo la pestaña activa */
+         width: 380px;}
   
     
      .center-column {
@@ -5268,6 +5276,9 @@ button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: non
         right: 8px;
         zoom: .6;}
     
+   .tab-content.active {
+        display: flex; /* Mostrar solo la pestaña activa */
+         width: 380px;}
   
     
     
