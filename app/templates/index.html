@@ -97,7 +97,7 @@
 
          <div class="layout">
              <!-- Top Bar -->
-             <header class="top-bar">
+             <header class="top-bar ignore">
                   <div> 
         <div class="usernameCredits"><span class="username">{{ username }}</span><span class="creditsCoin" id="creditDisplay">{{ credits }} 🟡</span></div>
         
@@ -1171,13 +1171,13 @@ page_info
         </div>
     </div>
     <div class="footer">
-            <button type="button" id="screenshotBtn"><span class="material-symbols-outlined">
+            <button type="button" id="screenshotBtn" class="ignore"><span class="material-symbols-outlined">
 capture
 </span></button>
 
         <p>ADEM Studio - 2024</p>
     </div>
-    <button type="button" id="closeFullscreen" class="close-btn">Close</button>
+    <button type="button" id="closeFullscreen" class="close-btn ignore">Close</button>
 </div>
 
 <!-- Contenedor de imágenes (imageGrid) -->
@@ -3763,18 +3763,21 @@ function hideToast() {
 }
 </script>
  <script>
-        document.getElementById('screenshotBtn').addEventListener('click', function() {
+          document.getElementById('screenshotBtn').addEventListener('click', function() {
+            // Captura el contenido del body, ignorando los elementos con la clase 'ignore'
             html2canvas(document.body, {
                 useCORS: true,
-                onrendered: function(canvas) {
-                    // Convertir el canvas a una imagen
-                    var imgData = canvas.toDataURL("image/png");
-                    // Crear un enlace para descargar la imagen
-                    var link = document.createElement('a');
-                    link.href = imgData;
-                    link.download = 'screenshot.png';
-                    link.click();
+                ignoreElements: function(element) {
+                    return element.classList.contains('ignore'); // Ignora elementos con la clase 'ignore'
                 }
+            }).then(function(canvas) {
+                // Convertir el canvas a una imagen
+                var imgData = canvas.toDataURL("image/png");
+                // Crear un enlace para descargar la imagen
+                var link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'screenshot.png';
+                link.click();
             });
         });
     </script>
