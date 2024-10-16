@@ -655,6 +655,12 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: null,
             lora_strength: null
         };
+    } else if (selectedModel === "simplevectorflux") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "simplevectorflux",
+            lora_strength: 1
+        };
     } else if (selectedModel === "flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",

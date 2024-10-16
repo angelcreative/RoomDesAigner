@@ -1170,9 +1170,7 @@ page_info
         </div>
     </div>
     <div class="footer">
-        <button type="button" id="screenshotBtn" class="ignore">
-            <span class="material-symbols-outlined">capture</span>
-        </button>
+     
         <small>ADEM Studio - 2024</small>
     </div>
     <button type="button" id="closeFullscreen" class="close-btn ignore">Close</button>
@@ -3502,23 +3500,27 @@ page_info
     <div class="aspectRatioShot">
         <div class="ar">
             <input type="radio" name="modelType" id="speed" value="flux" checked="">
-            <label for="speed">Design</label>
+            <label for="speed">Design <span class="tooltiptext">For products, 3D, sheets...</span></label>
+        </div>
+        <div class="ar">
+            <input type="radio" name="modelType" id="speed" value="simplevectorflux" checked="">
+            <label for="simplevectorflux">Vector<span class="tooltiptext">For vectors, logos...</span></label>
         </div>
         <div class="ar">
             <input type="radio" name="modelType" id="quality" value="fluxdev">
-            <label for="quality">Photo</label>
+            <label for="quality">Photo<span class="tooltiptext">Good photography</span></label>
         </div>
         <div class="ar">
             <input type="radio" name="modelType" id="fluxdevfashion" value="fluxdevfashion">
-            <label for="fluxdevfashion">Fashion</label>
+            <label for="fluxdevfashion">Fashion<span class="tooltiptext">Special for fashion shots</span></label>
         </div>
         <div class="ar">
             <input type="radio" name="modelType" id="flux-detaile" value="flux-detaile">
-            <label for="flux-detaile">Detail</label>
+            <label for="flux-detaile">Detail<span class="tooltiptext">CLose ups,  macro</span></label>
         </div>
         <div class="ar">
             <input type="radio" name="modelType" id="mystic" value="mystic">
-            <label for="mystic">Weird</label>
+            <label for="mystic">Weird<span class="tooltiptext">Good for monsters, creatures...</span></label>
         </div>
     </div>
     
@@ -3763,33 +3765,7 @@ function hideToast() {
     }, 500); // Esconder el toast después de 0.5 segundos
 }
 </script>
- <script>
-  document.getElementById('screenshotBtn').addEventListener('click', function() {
-    const elementToCapture = document.getElementById('fullscreenContainer'); // Captura solo este elemento
-
-    const img = document.getElementById('fullscreenImage');
-    if (img.complete) { // Verifica si la imagen está completamente cargada
-        html2canvas(elementToCapture, {
-            useCORS: true,
-            ignoreElements: function(element) {
-                return element.classList.contains('ignore'); // Ignora elementos con la clase 'ignore'
-            }
-        }).then(function(canvas) {
-            // Convertir el canvas a una imagen
-            var imgData = canvas.toDataURL("image/png");
-            // Crear un enlace para descargar la imagen
-            var link = document.createElement('a');
-            link.href = imgData;
-            link.download = 'screenshot.png';
-            link.click();
-        }).catch(function(error) {
-            console.error('Error al capturar la pantalla:', error);
-        });
-    } else {
-        console.error('La imagen no está completamente cargada.');
-    }
-});
-    </script>
+ 
     
 </body>
 

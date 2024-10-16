@@ -2529,7 +2529,7 @@ pre {
 
 .tooltip-text {
         visibility: hidden;
-        background-color: #000;
+        background-color: var(--bunker-800);
         color: #fff;
         text-align: center;
         border-radius: 6px;
@@ -3269,6 +3269,7 @@ option[title]:hover:after {
     transition: opacity ease-out 30ms, transform 300ms ease-in;
     border-top: none;
     margin: 0;
+    cursor: pointer;
 }
 .thumbnail:hover {
 }
@@ -4656,7 +4657,7 @@ body, html {
     padding: 12px;
     border-radius: 12px;
     transition: height 0.3s ease;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .footer.minimized {
