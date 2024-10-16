@@ -12,117 +12,6 @@ function hideOverlay() {
 const magicButton = document.getElementById("magicButton"); 
  
 
-document.addEventListener("DOMContentLoaded", function() {
-
-
-/*AIDESIGN
-// Predefined attributes for randomness
-const attributes = {
-    room_size: ['small', 'medium', 'large'],
-    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
-    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
-    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
-    wall_type: ['colored', 'wallpaper', 'tiled']
-};
-
-// Mixing attributes function
-function mixAttributes(baseAttributes) {
-    const mixedAttributes = {...baseAttributes};
-    Object.keys(attributes).forEach(key => {
-        // 50% chance to swap
-        if (Math.random() > 0.5) {
-            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
-        }
-    });
-    return mixedAttributes;
-}
-
-
-    
-    
-     document.getElementById('aiDesignButton').addEventListener('click', function() {
-   console.log("Button clicked, generating images");
-   const baseValues = getSelectedValues();
-   const mixedValues = mixAttributes(baseValues);
-   generateImages(null, mixedValues, false);
-});
-
-    
-*/
-
- 
- 
-// Function to handle the form submission
-function handleSubmit(event) {
-  event.preventDefault();
-  const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0];
-  const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file);
-
-  if (file) {
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
-    const uploadUrl = "https://api.imgbb.com/1/upload";
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("image", file);
-
-    fetch(uploadUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        const imageUrl = data.data.url;
-        // Asignar la URL de la imagen al contenedor de img2img
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        img2imgThumbnail.src = imageUrl;
-        generateImages(imageUrl, selectedValues, isImg2Img);
-      } else {
-        throw new Error("Error en la subida de imagen: " + data.error.message);
-      }
-    })
-    .catch(error => {
-      console.error("Error en la subida de la imagen:", error.message);
-    });
-  } else {
-    // Manejar caso sin img2img
-    generateImages(null, selectedValues, isImg2Img);
-  }
-}
-
-  function handleError(errorMessage) {
-  console.error(errorMessage);
-  const magicButton = document.getElementById("magicButton");
-  magicButton.disabled = false;
-  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
-  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
-}
-
-    
-        // Obtener los elementos necesarios
-const textArea = document.getElementById("customText");
-const magicButton = document.getElementById("magicButton");
-
-// Función para habilitar o deshabilitar el botón según la longitud del texto
-function toggleMagicButton() {
-  if (textArea.value.length >= 5) {
-    magicButton.disabled = false; // Habilitar el botón si hay al menos 5 caracteres
-  } else {
-    magicButton.disabled = true; // Deshabilitar si hay menos de 5 caracteres
-  }
-}
-
-// Escuchar el evento de entrada en el área de texto
-textArea.addEventListener("input", toggleMagicButton);
-
-// Verificar el estado inicial por si ya hay texto en el área
-toggleMagicButton();
-    
-    
-
-
 function getSelectedValues() {
     const elementIds = [
         "person",
@@ -246,6 +135,120 @@ function getSelectedValues() {
 
     return values;
 }
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+
+
+/*AIDESIGN
+// Predefined attributes for randomness
+const attributes = {
+    room_size: ['small', 'medium', 'large'],
+    color_scheme: ['analogous', 'triadic', 'complementary', 'square'],
+    furniture_color: ['analogous', 'triadic', 'complementary', 'square'],
+    room_type: ['living room', 'bedroom', 'kitchen', 'poolside', 'balcony', 'gazebo', 'mudroom', 'dining room'],
+    wall_type: ['colored', 'wallpaper', 'tiled']
+};
+
+// Mixing attributes function
+function mixAttributes(baseAttributes) {
+    const mixedAttributes = {...baseAttributes};
+    Object.keys(attributes).forEach(key => {
+        // 50% chance to swap
+        if (Math.random() > 0.5) {
+            mixedAttributes[key] = attributes[key][Math.floor(Math.random() * attributes[key].length)];
+        }
+    });
+    return mixedAttributes;
+}
+
+
+    
+    
+     document.getElementById('aiDesignButton').addEventListener('click', function() {
+   console.log("Button clicked, generating images");
+   const baseValues = getSelectedValues();
+   const mixedValues = mixAttributes(baseValues);
+   generateImages(null, mixedValues, false);
+});
+
+    
+*/
+
+ 
+ 
+// Function to handle the form submission
+function handleSubmit(event) {
+  event.preventDefault();
+  const fileInput = document.getElementById("imageDisplayUrl");
+  const file = fileInput.files[0];
+  const selectedValues = getSelectedValues();
+  const isImg2Img = Boolean(file);
+
+  if (file) {
+    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
+    const uploadUrl = "https://api.imgbb.com/1/upload";
+    const formData = new FormData();
+    formData.append("key", apiKey);
+    formData.append("image", file);
+
+    fetch(uploadUrl, {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        const imageUrl = data.data.url;
+        // Asignar la URL de la imagen al contenedor de img2img
+        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+        img2imgThumbnail.src = imageUrl;
+        generateImages(imageUrl, selectedValues, isImg2Img);
+      } else {
+        throw new Error("Error en la subida de imagen: " + data.error.message);
+      }
+    })
+    .catch(error => {
+      console.error("Error en la subida de la imagen:", error.message);
+    });
+  } else {
+    // Manejar caso sin img2img
+    generateImages(null, selectedValues, isImg2Img);
+  }
+}
+
+  function handleError(errorMessage) {
+  console.error(errorMessage);
+  const magicButton = document.getElementById("magicButton");
+  magicButton.disabled = false;
+  hideOverlay(); // Asegúrate de que esta función exista y oculte la interfaz de carga
+  alert(errorMessage); // Opcional: muestra el mensaje de error en una alerta
+}
+
+    
+        // Obtener los elementos necesarios
+const textArea = document.getElementById("customText");
+const magicButton = document.getElementById("magicButton");
+
+// Función para habilitar o deshabilitar el botón según la longitud del texto
+function toggleMagicButton() {
+  if (textArea.value.length >= 5) {
+    magicButton.disabled = false; // Habilitar el botón si hay al menos 5 caracteres
+  } else {
+    magicButton.disabled = true; // Deshabilitar si hay menos de 5 caracteres
+  }
+}
+
+// Escuchar el evento de entrada en el área de texto
+textArea.addEventListener("input", toggleMagicButton);
+
+// Verificar el estado inicial por si ya hay texto en el área
+toggleMagicButton();
+    
+    
+
+
 
 
 
