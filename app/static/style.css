@@ -4991,6 +4991,8 @@ html {
  .tab-content {
         display: none; /* Ocultar todas las pestañas por defecto */
         width: 100%;
+     max-height: 320px;
+     overflow: auto;
     }
     .tab-content.active {
         display: flex; /* Mostrar solo la pestaña activa */
@@ -5094,7 +5096,10 @@ input#chatInput {
     font-size: 14px;
     background: var(--bunker-900);
     color:var(--bunker-50);
+    outline:none
 }
+
+input#chatInput:focus {   outline:none }
 
 div#toastChat {
     opacity: 1;
