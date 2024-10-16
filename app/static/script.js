@@ -2146,24 +2146,30 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
 
 
     function showTab(tabName) {
-        // Ocultar todas las pestañas
-        const tabs = document.querySelectorAll('.tab-content');
-        tabs.forEach(tab => {
-            tab.classList.remove('active');
-        });
+    // Ocultar todas las pestañas
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+    });
 
-        // Desactivar todos los botones de pestañas
-        const buttons = document.querySelectorAll('.tab-button');
-        buttons.forEach(button => {
-            button.classList.remove('active');
-        });
+    // Desactivar todos los botones de pestañas
+    const buttons = document.querySelectorAll('.tab-button');
+    buttons.forEach(button => {
+        button.classList.remove('active');
+    });
 
-        // Mostrar la pestaña seleccionada
-        document.getElementById(tabName).classList.add('active');
-        // Activar el botón de la pestaña seleccionada
-        const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
-        activeButton.classList.add('active');
+    // Mostrar la pestaña seleccionada
+    document.getElementById(tabName).classList.add('active');
+    // Activar el botón de la pestaña seleccionada
+    const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
+    activeButton.classList.add('active');
+
+    // Si se selecciona la pestaña de chat, enfocar el campo de entrada
+    if (tabName === 'chat') {
+        const chatInput = document.getElementById('chatInput');
+        chatInput.focus(); // Enfocar el campo de entrada
     }
+}
 
   document.getElementById('sendChatButton').addEventListener('click', async function() {
     const chatInput = document.getElementById('chatInput');
