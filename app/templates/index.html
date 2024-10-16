@@ -3780,11 +3780,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let mode = 'write';  // El modo inicial es 'write'
     let conversation = [];  // Almacenar la conversación con ADEM
 
-    // Función para verificar si hay valores seleccionados en los dropdowns
+    // Función para verificar si hay valores seleccionados en los dropdowns personalizados
     function hasActiveSelectedValues() {
-        // Aquí deberías obtener los valores seleccionados de tus dropdowns
-        const selectedValues = document.querySelectorAll('select');  // Ajusta el selector a los dropdowns reales
-        return Array.from(selectedValues).some(select => select.value.trim() !== "");
+        const hiddenInputs = document.querySelectorAll('input[type="hidden"]');  // Selecciona los inputs ocultos
+        console.log('Verificando valores seleccionados en los dropdowns:', hiddenInputs);
+        return Array.from(hiddenInputs).some(input => input.value.trim() !== "");  // Si hay algún valor seleccionado, devolverá true
     }
 
     // Función para habilitar o deshabilitar el botón magicButton
@@ -3792,6 +3792,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const hasText = customText.value.trim().length > 0;
         const hasSelectedValues = hasActiveSelectedValues();
         const conversationStarted = conversationHistory.children.length > 0;
+
+        console.log('Estado de valores: hasText =', hasText, ', hasSelectedValues =', hasSelectedValues, ', conversationStarted =', conversationStarted);
 
         // Habilitar botón si las condiciones de modo 'write' o 'talk' se cumplen
         if ((mode === 'write' && (hasText || hasSelectedValues)) ||
@@ -3822,7 +3824,7 @@ document.addEventListener('DOMContentLoaded', function () {
     writeModeRadio.addEventListener('change', toggleMode);
     talkModeRadio.addEventListener('change', toggleMode);
 
-    // Evento para verificar si el botón se debe habilitar o deshabilitar al escribir
+    // Evento para verificar si el botón se debe habilitar o deshabilitar al escribir en el textarea
     customText.addEventListener('input', toggleMagicButton);
 
     // Función para manejar el click en el botón magicButton
@@ -3830,6 +3832,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const hasText = customText.value.trim().length > 0;
         const hasSelectedValues = hasActiveSelectedValues();
         const conversationStarted = conversationHistory.children.length > 0;
+
+        console.log('Click en magicButton: mode =', mode, ', hasText =', hasText, ', hasSelectedValues =', hasSelectedValues);
 
         // Caso de uso para modo "write"
         if (mode === 'write') {
@@ -3880,7 +3884,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para actualizar el historial de conversación
     function updateConversationHistory() {
-        conversationHistory.innerHTML = '';
+        conversationHistory.innerHTML = '';  // Limpiar el historial
         conversation.forEach(msg => {
             const div = document.createElement('div');
             div.classList.add('magic-gpt-message', msg.role === 'user' ? 'magic-gpt-message-user' : 'magic-gpt-message-gpt');
