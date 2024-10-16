@@ -4987,6 +4987,16 @@ html {
         }
 
 
+ .tab-content {
+        display: none; /* Ocultar todas las pestañas por defecto */
+    }
+    .tab-content.active {
+        display: block; /* Mostrar solo la pestaña activa */
+    }
+    .tab-button.active {
+        font-weight: bold; /* Estilo para la pestaña activa */
+    }
+
 /*=========================   MEDIA QUERIES ===================*/
 
     /* Responsive Design */

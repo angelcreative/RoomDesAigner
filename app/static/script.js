@@ -2145,6 +2145,104 @@ function handleImageUpload(event) {
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
+    function showTab(tabName) {
+        // Ocultar todas las pestañas
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Desactivar todos los botones de pestañas
+        const buttons = document.querySelectorAll('.tab-button');
+        buttons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Mostrar la pestaña seleccionada
+        document.getElementById(tabName).classList.add('active');
+        // Activar el botón de la pestaña seleccionada
+        const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
+        activeButton.classList.add('active');
+    }
+
+    document.getElementById('sendChatButton').addEventListener('click', async function() {
+        const chatInput = document.getElementById('chatInput');
+        const message = chatInput.value;
+        if (message) {
+            // Mostrar el mensaje del usuario en el chat
+            appendMessage('user', message);
+            chatInput.value = ''; // Limpiar el campo de entrada
+
+            // Mostrar el loader
+            showLoader();
+
+            // Enviar el mensaje al backend
+            try {
+                const response = await fetch('/gpt-talk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversation: getConversationHistory() // Obtener el historial de conversación
+                    }),
+                });
+
+                const data = await response.json();
+                if (data.response) {
+                    // Mostrar la respuesta del asistente en el chat
+                    appendMessage('assistant', data.response);
+                } else {
+                    console.error('Error en la respuesta del backend:', data.error);
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            } finally {
+                // Ocultar el loader
+                hideLoader();
+            }
+        }
+    });
+
+    // Función para mostrar el loader
+    function showLoader() {
+        const loader = document.getElementById('toast');
+        loader.style.display = 'block'; // Mostrar el loader
+    }
+
+    // Función para ocultar el loader
+    function hideLoader() {
+        const loader = document.getElementById('toast');
+        loader.style.display = 'none'; // Ocultar el loader
+    }
+
+    // Función para agregar mensajes al contenedor de chat
+    function appendMessage(role, content) {
+        const messagesContainer = document.getElementById('messages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = role; // 'user' o 'assistant'
+        messageDiv.textContent = content;
+        messagesContainer.appendChild(messageDiv);
+    }
+
+    // Función para obtener el historial de conversación
+    function getConversationHistory() {
+        const messages = [];
+        const userMessages = document.querySelectorAll('#messages .user');
+        const assistantMessages = document.querySelectorAll('#messages .assistant');
+
+        userMessages.forEach(msg => {
+            messages.push({ role: 'user', content: msg.textContent });
+        });
+        assistantMessages.forEach(msg => {
+            messages.push({ role: 'assistant', content: msg.textContent });
+        });
+
+        return messages;
+    }
+
+
 
 
 /*Event listener for opening the lightbox when the avatar is clicked
