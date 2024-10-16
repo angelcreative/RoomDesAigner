@@ -72,6 +72,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
 
        <!-- Open Graph para LinkedIn y otras plataformas -->
     <meta property="og:title" content="ADEM Studio">
@@ -1170,6 +1171,10 @@ page_info
         </div>
     </div>
     <div class="footer">
+            <button type="button" id="screenshotBtn"><span class="material-symbols-outlined">
+capture
+</span></button>
+
         <p>ADEM Studio - 2024</p>
     </div>
     <button type="button" id="closeFullscreen" class="close-btn">Close</button>
@@ -3757,7 +3762,22 @@ function hideToast() {
     }, 500); // Esconder el toast después de 0.5 segundos
 }
 </script>
-
+ <script>
+        document.getElementById('screenshotBtn').addEventListener('click', function() {
+            html2canvas(document.body, {
+                useCORS: true,
+                onrendered: function(canvas) {
+                    // Convertir el canvas a una imagen
+                    var imgData = canvas.toDataURL("image/png");
+                    // Crear un enlace para descargar la imagen
+                    var link = document.createElement('a');
+                    link.href = imgData;
+                    link.download = 'screenshot.png';
+                    link.click();
+                }
+            });
+        });
+    </script>
     
 </body>
 

@@ -2264,7 +2264,7 @@ i {
 }
 
 .carousel-wrapper {
-    display: flex;
+    display: none;
     transition: transform 0.5s ease-in-out;
     flex-direction: row;
     flex-wrap: wrap;
@@ -3250,13 +3250,11 @@ option[title]:hover:after {
 }
 
 .imageGrid {
-    width: 100%;
+ width: 100%;
     margin: 0 auto;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
 #imageGrid div {
@@ -5151,16 +5149,13 @@ button#sendChatButton {
 /* Smartphones (portrait and landscape) */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     .carousel-slide {
-        width: 100%;
-        flex: 0 0 100%; /* 1 slide por vista */
+      
     }
         .fil, .ig {
         display: none
     }
     
-    .carousel-slide {
-        width: 100%;}
-    
+   
     .image-buttons button {
     margin: 0px;
         padding: 0px 0px;}
@@ -5268,7 +5263,7 @@ button#sendChatButton {
     }
     
     .carousel-slide {
-        width: 100%;}
+       }
     
     .image-buttons button {
     margin: 0px;
