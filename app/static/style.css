@@ -2277,6 +2277,7 @@ i {
     margin-right: var(--2xs);
     height: auto;
     position: relative;
+    overflow: hidden;
 }
 
 
@@ -3248,7 +3249,7 @@ option[title]:hover:after {
     margin: 0;
     cursor: pointer;
 }
-.thumbnail:hover {
+.thumbnail:hover {transform: scale(1.5);
 }
 
 .image-buttons {
