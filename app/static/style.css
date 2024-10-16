@@ -3997,7 +3997,7 @@ textarea {
     cursor: default;
     height: 100px;
     color: var(--bunker-50);
-    font-size: var(--s);
+    font-size: 14px;
     border: none;
 }
 textarea:focus-visible {
@@ -4999,6 +4999,7 @@ html {
         background: var(--bunker-900);
         border-radius: 8px;
         align-items: center;
+        height: 100px;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
@@ -5019,20 +5020,21 @@ html {
     margin: 0;
 }
 
+div#messages {
+    display: flex;
+    flex-direction: column; /* Cambiar a columna para apilar los mensajes */
+    gap: 12px;
+    width: 100%; /* Asegúrate de que ocupe todo el ancho */
+}
+
 .user {
     background: var(--bunker-800);
     width: fit-content;
     padding: 4px;
     border-radius: 0 8px 8px 8px;
     font-size: var(--xs);
-}
-
-div#messages {
-    display: grid;
-    justify-items: center;
-    justify-content: space-between;
-    align-items: start;
-    gap: 12px;
+    color: var(--bunker-300);
+    align-self: flex-start; /* Alinear a la izquierda */
 }
 
 .assistant {
@@ -5042,6 +5044,8 @@ div#messages {
     border-radius: 8px 0px 8px 8px;
     font-size: var(--xs);
     max-width: 80%;
+    align-self: flex-end; /* Alinear a la derecha */
+    color: var(--bunker-300);
 }
 
 .tabs {
@@ -5065,39 +5069,46 @@ div#messages {
     padding: 4px;
     border-radius: 0 8px 8px 8px;
     font-size: var(--xs);
+    color: var(--bunker-300);
 }
 
 div#messages {
     display: grid;
-    justify-items: center;
-    justify-content: space-between;
+    justify-items: stretch;
+    justify-content: space-around;
     align-items: start;
     gap: 12px;
+    text-align: left;
 }
 
 .assistant {
-    background: var(--bunker-700);
+    background: #000;
     width: fit-content;
     padding: 4px;
     border-radius: 8px 0px 8px 8px;
     font-size: var(--xs);
     max-width: 80%;
+    margin-left: 160px;
+    float: right;
+    color: var(--bunker-300);
 }
 
 div#chatContainer {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
 }
 
 input#chatInput {
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 5px;
     border: none;
     font-size: 14px;
+    background: var(--bunker-900);
 }
 
-button#sendChatButton {margin: 0;}
+button#sendChatButton {margin: 0 0 0 92%;background: var(--java-500);border: none;color: var(--java-50);border-radius: 4px;}
 
 /*=========================   MEDIA QUERIES ===================*/
 

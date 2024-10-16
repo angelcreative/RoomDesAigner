@@ -2215,13 +2215,13 @@ document.getElementById('chatInput').addEventListener('keypress', function(event
 
 // Función para mostrar el loader
 function showLoader() {
-    const loader = document.getElementById('toast');
+    const loader = document.getElementById('toastChat');
     loader.style.display = 'block'; // Mostrar el loader
 }
 
 // Función para ocultar el loader
 function hideLoader() {
-    const loader = document.getElementById('toast');
+    const loader = document.getElementById('toastChat');
     loader.style.display = 'none'; // Ocultar el loader
 }
 
