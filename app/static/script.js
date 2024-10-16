@@ -2144,7 +2144,7 @@ function handleImageUpload(event) {
 // Add the event listener
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
-
+//chat
 document.addEventListener('DOMContentLoaded', function () {
     const writeModeRadio = document.getElementById('magicWriteMode');
     const talkModeRadio = document.getElementById('magicTalkMode');
