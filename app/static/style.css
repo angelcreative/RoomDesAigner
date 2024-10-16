@@ -5040,7 +5040,7 @@ div#messages {
 .tabs {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 600px;
     justify-content: flex-start;
     align-items: flex-start;
     gap: 12px;
