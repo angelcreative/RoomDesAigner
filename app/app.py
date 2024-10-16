@@ -206,28 +206,43 @@ def transform_prompt(prompt_text):
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
     user_message = request.json.get('message')
-    
+    conversation = request.json.get('conversation', [])  # Recibe el historial de conversación
+
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
 
     try:
-        # Contexto inicial para guiar al modelo a ser un experto en escribir prompts para generación de imágenes
-        context = "You are an expert in writing detailed and effective prompts for image generation using AI. You help users craft creative and precise prompts that can be used in AI image generation tools."
+        # Preparamos el historial de mensajes para enviar a la API
+        messages = [
+            {"role": "system", "content": "You are an expert in writing detailed and effective prompts for image generation using AI. You help users craft creative and precise prompts that can be used in AI image generation tools."}
+        ]
 
-        # Incluir el contexto como parte del prompt antes del mensaje del usuario
-        prompt = f"{context}\n\nUser: {user_message}\nAssistant:"
+        # Añadimos los mensajes previos del historial de conversación
+        for msg in conversation:
+            messages.append({
+                "role": msg['role'],  # 'user' o 'assistant'
+                "content": msg['content']
+            })
 
-        # Llamada a la API de OpenAI para generar la respuesta
-        response = openai.Completion.create(
-            model="gpt-4-turbo",
-            prompt=prompt,
-            max_tokens=150
+        # Añadimos el nuevo mensaje del usuario
+        messages.append({"role": "user", "content": user_message})
+
+        # Llamada a la API de OpenAI usando /v1/chat/completions
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=messages,
+            temperature=1,
+            max_tokens=2048,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
         )
 
         # Devolver la respuesta generada por GPT
-        return jsonify({"response": response.choices[0].text.strip()})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"response": response['choices'][0]['message']['content']})
+    
+    except openai.error.OpenAIError as e:
+        return jsonify({"error": f"OpenAI API error: {str(e)}"}), 500
 
     
 def check_image_availability(url, timeout=60, interval=5):

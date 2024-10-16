@@ -3527,7 +3527,7 @@ page_info
             <label for="mystic">Weird reality</label>
         </div>
     </div>
- <div class="fila-inferior">
+<div class="fila-inferior">
     <!-- Botones de radio para alternar entre "write" y "talk" -->
     <label>
         <input type="radio" name="mode" value="write" id="writeMode" checked> Write
@@ -3778,7 +3778,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function toggleMode() {
         if (talkModeRadio.checked) {
             mode = 'talk';
-            customText.value = "Hello, what's your dream?";
+            customText.value = "Hola, ¿qué quieres generar?";
             magicButton.disabled = true;  // Deshabilitar el botón hasta que se escriba "generar"
             conversationContainer.style.display = 'block';  // Mostrar la conversación
         } else {
@@ -3793,7 +3793,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar si el botón debe habilitarse en modo "talk"
     function checkTalkMode() {
         if (mode === 'talk') {
-            if (customText.value.trim().toLowerCase().includes('launch!')) {
+            if (customText.value.trim().toLowerCase().includes('generar')) {
                 magicButton.disabled = false;  // Habilitar el botón cuando se escribe "generar"
             } else {
                 magicButton.disabled = true;
@@ -3817,15 +3817,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const userMessage = customText.value.trim();
         
         if (mode === 'talk' && userMessage.toLowerCase().includes('generar')) {
-            // Enviar la conversación a GPT
+            // Añadir el mensaje del usuario a la conversación
             conversation.push({ role: 'user', content: userMessage });
 
+            // Enviar la conversación a GPT
             fetch('/gpt-talk', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: userMessage })
+                body: JSON.stringify({ 
+                    message: userMessage,
+                    conversation: conversation  // Enviar el historial de la conversación al backend
+                })
             })
             .then(response => response.json())
             .then(data => {
@@ -3836,7 +3840,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Actualizar el historial de conversación
                     updateConversationHistory();
 
-                    // Añadir la respuesta de GPT al textarea para continuar la conversación
+                    // Mostrar la respuesta de GPT en el textarea para continuar la conversación
                     customText.value += "\n\nGPT: " + data.response;
                 } else if (data.error) {
                     console.error("Error:", data.error);
