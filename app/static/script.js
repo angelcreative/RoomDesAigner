@@ -655,10 +655,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: null,
             lora_strength: null
         };
-    } else if (selectedModel === "hydra") {
+    } else if (selectedModel === "flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "hydra-flux",
+            lora_model: "flux-detaile",
             lora_strength: 1
         };
     }  
@@ -669,21 +669,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "flux-fashion",
             lora_strength: 1
         };
-    } 
-    else if (selectedModel === "realism") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: "surreal-photorealism",
-            lora_strength: 1
-        };
-    } 
-    
-     else if (selectedModel === "realismB") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: "porsche-911",
-            lora_strength: 1
-        };
+   
     } 
      else if (selectedModel === "mystic") {
         modelConfig = {
