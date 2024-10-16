@@ -3527,22 +3527,30 @@ page_info
             <label for="mystic">Weird reality</label>
         </div>
     </div>
-<div class="fila-inferior">
+<div class="fila-inferior magic-gpt">
+   <div class="magic-gpt-fila">
     <!-- Botones de radio para alternar entre "write" y "talk" -->
     <label>
-        <input type="radio" name="mode" value="write" id="writeMode" checked> Write
+        <input type="radio" name="mode" value="write" id="magicWriteMode" checked> Write
     </label>
     <label>
-        <input type="radio" name="mode" value="talk" id="talkMode"> Talk
+        <input type="radio" name="mode" value="talk" id="magicTalkMode"> Talk
     </label>
 
     <!-- Textarea para escribir el prompt o interactuar en modo talk -->
-    <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
+    <textarea class="magic-gpt-textarea" placeholder="Write your magical prompt here" id="magicCustomText" rows="4"></textarea>
 
     <!-- Botón para generar imagen en modo "write" -->
-    <button class="buttonExt" type="submit" id="magicButton">
+    <button class="magic-gpt-button" type="submit" id="magicButton">
         Generate
     </button>
+</div>
+
+<!-- Sección para mostrar las respuestas en modo "talk" -->
+<div id="magic-gpt-conversation-container" style="display: none;">
+    <h3 class="magic-gpt-title">Conversación con GPT</h3>
+    <div id="magic-gpt-conversation-history"></div>
+</div>
 </div>
 
 <!-- Sección para mostrar las respuestas en modo "talk" -->
@@ -3764,12 +3772,12 @@ function hideToast() {
     
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const writeModeRadio = document.getElementById('writeMode');
-    const talkModeRadio = document.getElementById('talkMode');
-    const customText = document.getElementById('customText');
+    const writeModeRadio = document.getElementById('magicWriteMode');
+    const talkModeRadio = document.getElementById('magicTalkMode');
+    const customText = document.getElementById('magicCustomText');
     const magicButton = document.getElementById('magicButton');
-    const conversationContainer = document.getElementById('conversationContainer');
-    const conversationHistory = document.getElementById('conversationHistory');
+    const conversationContainer = document.getElementById('magic-gpt-conversation-container');
+    const conversationHistory = document.getElementById('magic-gpt-conversation-history');
 
     let mode = 'write';  // El modo inicial es 'write'
     let conversation = [];  // Almacenar la conversación con GPT
@@ -3836,7 +3844,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateConversationHistory();
 
                     // Mostrar la respuesta de GPT en el textarea para continuar la conversación
-                    customText.value = "GPT: " + data.response;
+                    customText.value = "";
                 } else if (data.error) {
                     console.error("Error:", data.error);
                 }
@@ -3850,6 +3858,7 @@ document.addEventListener('DOMContentLoaded', function () {
         conversationHistory.innerHTML = '';
         conversation.forEach(msg => {
             const div = document.createElement('div');
+            div.classList.add('magic-gpt-message', msg.role === 'user' ? 'magic-gpt-message-user' : 'magic-gpt-message-gpt');
             div.textContent = `${msg.role === 'user' ? 'Usuario' : 'GPT'}: ${msg.content}`;
             conversationHistory.appendChild(div);
         });
