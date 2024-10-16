@@ -219,15 +219,16 @@ body {
     }
 
     .fila-inferior {
-      padding: 10px;
+      padding: 0;
       text-align: center;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      background: var(--bunker-900);
+      justify-content: flex-start;
+      background: #000;
       margin: 0 auto;
       border-radius: var(--xs);
+      width: 100%;
     }
 
     .fila-media {
@@ -4989,13 +4990,114 @@ html {
 
  .tab-content {
         display: none; /* Ocultar todas las pestañas por defecto */
+        width: 100%;
     }
     .tab-content.active {
-        display: block; /* Mostrar solo la pestaña activa */
+        display: flex; /* Mostrar solo la pestaña activa */
+        width: 80%;
+        padding: 12px;
+        background: var(--bunker-900);
+        border-radius: 8px;
+        align-items: center;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
     }
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.tabs button {
+    margin: 0;
+}
+
+.user {
+    background: var(--bunker-800);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 0 8px 8px 8px;
+    font-size: var(--xs);
+}
+
+div#messages {
+    display: grid;
+    justify-items: center;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+}
+
+.assistant {
+    background: var(--bunker-700);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 8px 0px 8px 8px;
+    font-size: var(--xs);
+    max-width: 80%;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.tabs button {
+    margin: 0;
+}
+
+.user {
+    background: var(--bunker-800);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 0 8px 8px 8px;
+    font-size: var(--xs);
+}
+
+div#messages {
+    display: grid;
+    justify-items: center;
+    justify-content: space-between;
+    align-items: start;
+    gap: 12px;
+}
+
+.assistant {
+    background: var(--bunker-700);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 8px 0px 8px 8px;
+    font-size: var(--xs);
+    max-width: 80%;
+}
+
+div#chatContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input#chatInput {
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+}
+
+button#sendChatButton {margin: 0;}
 
 /*=========================   MEDIA QUERIES ===================*/
 
