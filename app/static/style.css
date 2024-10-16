@@ -5190,14 +5190,14 @@ button#sendChatButton {
         padding-bottom: 220px
     }
     
-  .footer  .aspectRatioShot .ar {
-    display: none; /* Ocultamos todos los elementos inicialmente */
+ .footer .aspectRatioShot .ar {
+   zoom:.8 
 }
 
 .footer .aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
 .footer .aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
 .footer .aspectRatioShot .ar:last-child {   /* Mostrar el último */
-    display: block; /* Mostrar solo estos elementos */
+ 
 }
 
       
@@ -5251,6 +5251,9 @@ button#sendChatButton {
     border: 10px solid var(--bunker-50);
 }
   
+    .tabs {
+        width:380px;
+    }
     
     }
 
@@ -5303,13 +5306,13 @@ button#sendChatButton {
 
 }
 .footer .aspectRatioShot .ar {
-    display: none; /* Ocultamos todos los elementos inicialmente */
+   zoom:.8 
 }
 
 .footer .aspectRatioShot .ar:nth-child(1), /* Mostrar el primero */
 .footer .aspectRatioShot .ar:nth-child(2), /* Mostrar el segundo */
 .footer .aspectRatioShot .ar:last-child {   /* Mostrar el último */
-    display: block; /* Mostrar solo estos elementos */
+   /* display: block;  Mostrar solo estos elementos */
 }
 
     
@@ -5344,6 +5347,10 @@ button#sendChatButton {
     max-height: 100%;
     border: 10px solid var(--bunker-50);
 }
+    
+    .tabs {
+        width:380px;
+    }
     
     }
     
