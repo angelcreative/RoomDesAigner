@@ -224,12 +224,10 @@ body {
       display: flex;
       flex-direction: row;
       align-items: center;
-      gap: 20px;
       justify-content: center;
       background: var(--bunker-900);
       margin: 0 auto;
       border-radius: var(--xs);
-      border: 1px solid var(--bunker-800);
     }
 
     .fila-media {
@@ -2893,8 +2891,7 @@ textarea {
         border-radius:var(--2xs);
         padding: var(--m);
         border: none;
-       background: var(--bunker-400);
-      
+        /* background: var(--bunker-400); */
         width: calc(100% - 40px);
         transition: background ease-in-out 500ms, color ease-in-out 550ms;
 }
@@ -4892,7 +4889,8 @@ html {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            /* height: 100vh; */
+            gap: var(--2xs);
         }
 
         /* Estilos para la fila inferior de controles */
@@ -4900,10 +4898,9 @@ html {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: 80%;
-            padding: 10px;
-            background-color: #333;
+            width: 100%;
             border-radius: 8px;
+            gap: var(--s);
         }
 
         .magic-gpt-fila label {
@@ -4912,9 +4909,8 @@ html {
 
         /* Estilo único para el textarea */
         textarea.magic-gpt-textarea {
-            background-color: #2c2c2c;
+            background-color: #000;
             color: #f0f0f0;
-            border: 1px solid #555;
             border-radius: 8px;
             padding: 10px;
             width: 100%;
@@ -4977,13 +4973,14 @@ html {
   /* Texto de información para enviar mensaje con Enter */
         .magic-gpt-info {
             color: #aaa;
-            font-size: 0.9rem;
-            margin-top: 5px;
+            font-size: var(--xs);
+            margin: 0;
         }
 
         h3.magic-gpt-title {
-            color: #f0f0f0;
-            margin-bottom: 10px;
+            color: var(--bunker-50);
+            margin-bottom: 0;
+            font-size: var(--xs);
         }
 
 
