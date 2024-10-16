@@ -5050,6 +5050,10 @@ div#messages {
     margin: 0;
 }
 
+.tabs button:hover {
+    background: var(--bunker-800);
+}
+
 .user {
     background: var(--bunker-800);
     width: fit-content;
