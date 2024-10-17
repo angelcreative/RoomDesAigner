@@ -2135,7 +2135,7 @@ function handleImageUpload(event) {
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
-    function showTab(tabName) {
+function showTab(tabName) {
     // Ocultar todas las pestañas
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => {
@@ -2149,10 +2149,21 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
     });
 
     // Mostrar la pestaña seleccionada
-    document.getElementById(tabName).classList.add('active');
+    const selectedTab = document.getElementById(tabName);
+    if (selectedTab) {
+        selectedTab.classList.add('active');
+    }
+
     // Activar el botón de la pestaña seleccionada
-    const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
-    activeButton.classList.add('active');
+    const activeButton = Array.from(buttons).find(button => 
+        button.textContent.trim() === (tabName === 'chat' ? 'Prompt Assistant' : 'Prompt')
+    );
+
+    if (activeButton) {
+        activeButton.classList.add('active');
+    } else {
+        console.error('No se encontró el botón activo');
+    }
 
     // Si se selecciona la pestaña de chat, enfocar el campo de entrada
     if (tabName === 'chat') {
