@@ -2317,7 +2317,7 @@ i {
 }
 
 .serialButton{
-  display: block;
+  display: flex;
   position: sticky;
   top: 0;
   left: 0;
@@ -3249,7 +3249,7 @@ option[title]:hover:after {
     margin: 0;
     cursor: pointer;
 }
-.thumbnail:hover {transform: scale(1.5);
+.thumbnail:hover {transform: scale(.5);
 }
 
 .image-buttons {
@@ -4972,13 +4972,14 @@ html {
      overflow: auto;
     }
     .tab-content.active {
-        display: flex; /* Mostrar solo la pestaña activa */
-        width: 600px;
-        padding: 12px;
-        background: var(--bunker-900);
-        border-radius: 8px;
-        align-items: center;
-        height: fit-content;
+           display: flex;
+    width: 600px;
+    padding: 12px;
+    background: var(--bunker-900);
+    border-radius: 8px;
+    align-items: center;
+    height: fit-content;
+    flex-direction: column;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
@@ -5077,10 +5078,17 @@ input#chatInput {
     font-size: 14px;
     background: var(--bunker-900);
     color:var(--bunker-50);
-    outline:none
+    outline:none;
+    width:100%;
 }
 
 input#chatInput:focus {   outline:none }
+
+.chatcontrol {
+    width: 100%;
+    text-align: left;
+}
+
 
 div#toastChat {
     opacity: 1;

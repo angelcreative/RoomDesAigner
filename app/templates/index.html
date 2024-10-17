@@ -3529,7 +3529,7 @@ page_info
         <button type="button" class="tab-button active" onclick="showTab('prompt')"><span class="material-symbols-outlined">
 edit_note
 </span>Prompt</button>
-        <button type="button" class="tab-button" onclick="showTab('chat')"><span class="material-symbols-outlined">
+        <button type="button" class="tab-button active" onclick="showTab('prompt assistant')"><span class="material-symbols-outlined">
 mms
 </span> Prompt Assistant</button>
     </div>
@@ -3546,10 +3546,11 @@ send
     <div id="chat" class="tab-content">
         <div id="chatContainer">
             <div id="messages"></div>
-<input type="text" id="chatInput" placeholder="Ask ADEM ✨..."/>            <button type="button" id="sendChatButton"><span class="material-symbols-outlined">
-chat_paste_go
-</span></button>
         </div>
+        <div class="chatcontrol">
+<input type="text" id="chatInput" placeholder="Ask ADEM ✨...">            <button type="button" id="sendChatButton"><span class="material-symbols-outlined">
+chat_paste_go
+</span></button></div>
     </div>
 
     <div id="toastChat" class="toast" style="display: none;">  <div class="orb"></div></div> <!-- Loader -->
