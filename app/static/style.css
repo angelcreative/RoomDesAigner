@@ -3249,7 +3249,7 @@ option[title]:hover:after {
     margin: 0;
     cursor: pointer;
 }
-.thumbnail:hover {transform: scale(1.5);
+.thumbnail:hover {transform: scale(0.3);
 }
 
 .image-buttons {
