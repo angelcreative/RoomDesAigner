@@ -2191,7 +2191,7 @@ document.getElementById('sendChatButton').addEventListener('click', async functi
 
     if (message || image) {
         // Mostrar el mensaje del usuario en el chat
-        appendMessage('user', message || "Imagen subida");
+        appendMessage('user', message || "I got the image!");
         chatInput.value = ''; // Limpiar el campo de entrada
 
         // Mostrar el loader
