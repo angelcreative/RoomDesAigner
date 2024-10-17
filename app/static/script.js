@@ -1210,6 +1210,59 @@ filterButton.onclick = toggleFilterMenu;
     [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
 
    
+    function createImageElement(imageUrl) {
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'image-container';
+
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Generated Image';
+
+    const clarityButton = document.createElement('button');
+    clarityButton.className = 'clarity-button';
+    clarityButton.textContent = 'Clarity';
+    clarityButton.onclick = () => upscaleImage(imageUrl, img);
+
+    imgContainer.appendChild(img);
+    imgContainer.appendChild(clarityButton);
+
+    return imgContainer;
+}
+    
+    
+    function upscaleImage(imageUrl, imgElement) {
+    const button = imgElement.nextElementSibling;
+    button.disabled = true;
+    button.textContent = 'Processing...';
+
+    fetch('/clarity-upscale', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ image_url: imageUrl }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.upscaled_url) {
+            imgElement.src = data.upscaled_url;
+            button.textContent = 'Clarity Done';
+        } else {
+            throw new Error('Upscaling failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error en upscaling:', error);
+        button.textContent = 'Clarity Failed';
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
+    
+    
+    
+    
 
     // Crear el menú de filtros y añadir sliders
     const filterMenu = document.createElement("div");
@@ -1802,38 +1855,7 @@ closeFullscreen.addEventListener('click', () => {
     
 }
     
-async function upscaleImage(imageUrl) {
-    try {
-        console.log('Iniciando solicitud de mejora de imagen');
-        const response = await fetch('/upscale-image', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ image_url: imageUrl }),
-        });
 
-        console.log('Respuesta recibida del servidor');
-        const data = await response.json();
-        console.log('Datos de respuesta:', data);
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Error desconocido');
-        }
-
-        if (data.upscaled_url) {
-            console.log('URL de imagen mejorada recibida:', data.upscaled_url);
-            alert(`Imagen mejorada con éxito. Nueva URL: ${data.upscaled_url}`);
-            // Aquí puedes hacer algo con la URL de la imagen mejorada, como mostrarla en la interfaz
-        } else {
-            console.error('No se recibió URL de imagen mejorada');
-            alert('Error: No se recibió URL de imagen mejorada.');
-        }
-    } catch (error) {
-        console.error('Error al mejorar la imagen:', error);
-        alert(`Error al mejorar la imagen: ${error.message}`);
-    }
-}
     
     
 // Función auxiliar para crear un slider con etiqueta de valor

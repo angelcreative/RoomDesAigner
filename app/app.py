@@ -49,60 +49,55 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
-
 @app.route('/clarity-upscale', methods=['POST'])
 def clarity_upscale():
-    try:
-        data = request.get_json()
-        image_url = data.get('image_url')
+    data = request.get_json()
+    image_url = data.get('image_url')
 
-        if not image_url:
-            return jsonify({"error": "Image URL is required"}), 400
+    if not image_url:
+        return jsonify({"error": "Image URL is required"}), 400
 
-        # Configura la solicitud al API de Replicate
-        url = "https://api.replicate.com/v1/predictions"
-        headers = {
-            "Authorization": f"Token {REPLICATE_API_TOKEN}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
-            "input": {"image": image_url},
-            "webhook": "https://www.roomdesaigner.com/webhook",  # Cambia esto a tu URL de webhook
-            "webhook_events_filter": ["completed"]  # Solo recibir notificaciones cuando se complete
-        }
+    # Iniciar la predicción
+    prediction = start_prediction(image_url)
+    if not prediction:
+        return jsonify({"error": "Failed to start prediction"}), 500
 
-        # Hacemos la solicitud POST a la API de Replicate
-        response = requests.post(url, json=payload, headers=headers)
+    # Consultar el estado de la predicción
+    result = poll_prediction(prediction['id'])
+    if not result:
+        return jsonify({"error": "Failed to get prediction result"}), 500
 
-        # Verificamos el estado de la respuesta
-        if response.status_code == 201:
+    return jsonify({"upscaled_url": result}), 200
+
+def start_prediction(image_url):
+    url = "https://api.replicate.com/v1/predictions"
+    headers = {"Authorization": f"Token {REPLICATE_API_TOKEN}"}
+    payload = {
+        "version": "42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+        "input": {"image": image_url}
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    if response.status_code == 201:
+        return response.json()
+    return None
+
+def poll_prediction(prediction_id):
+    url = f"https://api.replicate.com/v1/predictions/{prediction_id}"
+    headers = {"Authorization": f"Token {REPLICATE_API_TOKEN}"}
+    max_attempts = 30
+    attempt = 0
+    while attempt < max_attempts:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
             prediction = response.json()
-            return jsonify({"id": prediction["id"]}), 200
-        else:
-            return jsonify({"error": "Failed to start prediction", "details": response.json()}), response.status_code
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    data = request.json
-    prediction_id = data.get('id')
-    status = data.get('status')
+            if prediction['status'] == 'succeeded':
+                return prediction['output']
+            elif prediction['status'] == 'failed':
+                return None
+        time.sleep(2)
+        attempt += 1
+    return None 
     
-    if not prediction_id or not status:
-        return jsonify({"error": "Invalid data received"}), 400
-
-    if status == 'succeeded':
-        output_urls = data.get('output', [])
-        if output_urls:
-            # Aquí puedes guardar la URL en la base de datos o enviar una notificación al cliente
-            logging.info(f"Predicción {prediction_id} completada con éxito. URLs: {output_urls}")
-        else:
-            logging.error(f"Predicción {prediction_id} completada, pero no se encontraron URLs.")
-    
-    return jsonify({"status": "received"}), 200
- 
     
     
     
