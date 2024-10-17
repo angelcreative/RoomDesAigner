@@ -206,12 +206,12 @@ def gpt_talk():
     image_data = data.get('image')  # Esperamos que la imagen se envíe como base64
 
     if not user_message and not image_data:
-        return jsonify({"error": "No se proporcionó mensaje ni imagen"}), 400
+        return jsonify({"error": "No image given"}), 400
 
     try:
         # Preparamos el historial de mensajes para enviar a la API
         messages = [
-            {"role": "system", "content": "Eres un experto en escribir prompts detallados y efectivos para la generación de imágenes con IA. Ayudas a los usuarios a crear prompts creativos y precisos que se pueden usar en herramientas de generación de imágenes con IA. Cuando se proporciona una imagen, también puedes analizarla en detalle."}
+            {"role": "system", "content": "You are an expert in writing detailed and effective prompts for AI image generation. You help users create creative and accurate prompts that can be used in AI image generation tools. When an image is provided, you can also analyse it in detail.."}
         ]
 
         # Añadimos los mensajes previos del historial de conversación
@@ -235,9 +235,9 @@ def gpt_talk():
                 }
             })
             if not user_message:
-                user_message = "Analiza esta imagen en detalle, describiendo su contenido, color, composición, estilo, iluminación, ángulo y otros elementos relevantes. Luego, sugiere un prompt detallado para generar una imagen similar."
+                user_message = "Analyse this image in detail, describing its content, colour, composition, style, lighting, angle and other relevant elements. Then suggest a detailed prompt to generate a similar image."
             else:
-                user_message += " Además, analiza la imagen proporcionada y sugiere cómo mejorar el prompt basándote en ella."
+                user_message += " In addition, it analyses the image provided and suggests how to improve the prompt based on it."
 
         # Añadimos el nuevo mensaje del usuario
         messages.append({"role": "user", "content": new_message_content if image_data else user_message})
