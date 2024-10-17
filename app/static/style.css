@@ -5078,7 +5078,20 @@ input#chatInput {
     font-size: 14px;
     background: var(--bunker-900);
     color:var(--bunker-50);
-    outline:none
+    outline:none;
+    width:100%
+}
+
+
+.chat-input-container {
+    position: relative;
+}
+
+label.image-upload-label {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor:pointer;
 }
 
 input#chatInput:focus {   outline:none }
