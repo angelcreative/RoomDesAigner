@@ -200,16 +200,18 @@ def transform_prompt(prompt_text):
 
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
-    user_message = request.json.get('message')
-    conversation = request.json.get('conversation', [])  # Recibe el historial de conversación
+    data = request.json
+    user_message = data.get('message')
+    conversation = data.get('conversation', [])
+    image_data = data.get('image')  # Esperamos que la imagen se envíe como base64
 
-    if not user_message:
-        return jsonify({"error": "No message provided"}), 400
+    if not user_message and not image_data:
+        return jsonify({"error": "No se proporcionó mensaje ni imagen"}), 400
 
     try:
         # Preparamos el historial de mensajes para enviar a la API
         messages = [
-            {"role": "system", "content": "You are an expert in writing detailed and effective prompts for image generation using AI. You help users craft creative and precise prompts that can be used in AI image generation tools."}
+            {"role": "system", "content": "Eres un experto en escribir prompts detallados y efectivos para la generación de imágenes con IA. Ayudas a los usuarios a crear prompts creativos y precisos que se pueden usar en herramientas de generación de imágenes con IA. Cuando se proporciona una imagen, también puedes analizarla en detalle."}
         ]
 
         # Añadimos los mensajes previos del historial de conversación
@@ -219,12 +221,30 @@ def gpt_talk():
                 "content": msg['content']
             })
 
-        # Añadimos el nuevo mensaje del usuario
-        messages.append({"role": "user", "content": user_message})
+        # Preparamos el contenido del nuevo mensaje
+        new_message_content = []
+        if user_message:
+            new_message_content.append({"type": "text", "text": user_message})
 
-        # Llamada a la API de OpenAI usando /v1/chat/completions
+        if image_data:
+            new_message_content.append({
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{image_data}",
+                    "detail": "high"
+                }
+            })
+            if not user_message:
+                user_message = "Analiza esta imagen en detalle, describiendo su contenido, color, composición, estilo, iluminación, ángulo y otros elementos relevantes. Luego, sugiere un prompt detallado para generar una imagen similar."
+            else:
+                user_message += " Además, analiza la imagen proporcionada y sugiere cómo mejorar el prompt basándote en ella."
+
+        # Añadimos el nuevo mensaje del usuario
+        messages.append({"role": "user", "content": new_message_content if image_data else user_message})
+
+        # Llamada a la API de OpenAI
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-vision-preview" if image_data else "gpt-4-1106-preview",
             messages=messages,
             temperature=1,
             max_tokens=2048,
@@ -237,7 +257,7 @@ def gpt_talk():
         return jsonify({"response": response['choices'][0]['message']['content']})
     
     except openai.error.OpenAIError as e:
-        return jsonify({"error": f"OpenAI API error: {str(e)}"}), 500
+        return jsonify({"error": f"Error de la API de OpenAI: {str(e)}"}), 500
 
     
 def check_image_availability(url, timeout=60, interval=5):

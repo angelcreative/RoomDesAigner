@@ -3524,35 +3524,42 @@ page_info
         </div>
     </div>
     
-   <div class="fila-inferior">
+<div class="fila-inferior">
     <div class="tabs">
-        <button type="button" class="tab-button active" onclick="showTab('prompt')"><span class="material-symbols-outlined">
-edit_note
-</span>Prompt</button>
-        <button type="button" class="tab-button" onclick="showTab('chat')"><span class="material-symbols-outlined">
-mms
-</span> Prompt Assistant</button>
+        <button type="button" class="tab-button active" onclick="showTab('prompt')">
+            <span class="material-symbols-outlined">edit_note</span>Prompt
+        </button>
+        <button type="button" class="tab-button" onclick="showTab('chat')">
+            <span class="material-symbols-outlined">mms</span> Prompt Assistant
+        </button>
     </div>
     
     <div id="prompt" class="tab-content active">
-        <textarea placeholder="Write your magical prompt here" id="customText" rows="8" cols="50"></textarea>
+        <textarea placeholder="Escribe tu prompt mágico aquí" id="customText" rows="8" cols="50"></textarea>
         <button class="buttonExt" type="submit" id="magicButton">
-           <span class="material-symbols-outlined">
-send
-</span>
+           <span class="material-symbols-outlined">send</span>
         </button>
     </div>
     
     <div id="chat" class="tab-content">
         <div id="chatContainer">
             <div id="messages"></div>
-<input type="text" id="chatInput" placeholder="Ask ADEM ✨..."/>            <button type="button" id="sendChatButton"><span class="material-symbols-outlined">
-chat_paste_go
-</span></button>
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Pregunta a ADEM ✨ o sube una imagen..."/>
+                <label for="imageInput" class="image-upload-label">
+                    <span class="material-symbols-outlined">image</span>
+                </label>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;"/>
+                <button type="button" id="sendChatButton">
+                    <span class="material-symbols-outlined">chat_paste_go</span>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div id="toastChat" class="toast" style="display: none;">  <div class="orb"></div></div> <!-- Loader -->
+    <div id="toastChat" class="toast" style="display: none;">
+        <div class="orb"></div>
+    </div>
 </div>
 </footer>
 

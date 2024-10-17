@@ -2183,46 +2183,84 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
     }
 }
 
-  document.getElementById('sendChatButton').addEventListener('click', async function() {
+document.getElementById('sendChatButton').addEventListener('click', async function() {
     const chatInput = document.getElementById('chatInput');
+    const imageInput = document.getElementById('imageInput');
     const message = chatInput.value;
-    if (message) {
+    const image = imageInput.files[0];
+
+    if (message || image) {
         // Mostrar el mensaje del usuario en el chat
-        appendMessage('user', message);
+        appendMessage('user', message || "Imagen subida");
         chatInput.value = ''; // Limpiar el campo de entrada
 
         // Mostrar el loader
         showLoader();
 
-        // Enviar el mensaje al backend
-        try {
-            const response = await fetch('/gpt-talk', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    conversation: getConversationHistory() // Obtener el historial de conversación
-                }),
-            });
+        let requestData = {
+            message: message,
+            conversation: getConversationHistory()
+        };
 
-            const data = await response.json();
-            if (data.response) {
-                // Mostrar la respuesta del asistente en el chat
-                appendMessage('assistant', data.response);
-            } else {
-                console.error('Error en la respuesta del backend:', data.error);
+        if (image) {
+            // Convertir la imagen a base64
+            const reader = new FileReader();
+            reader.onloadend = async function() {
+                requestData.image = reader.result.split(',')[1]; // Obtener solo la parte de datos base64
+
+                try {
+                    const response = await fetch('/gpt-talk', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    const data = await response.json();
+                    if (data.response) {
+                        // Mostrar la respuesta del asistente en el chat
+                        appendMessage('assistant', data.response);
+                    } else {
+                        console.error('Error en la respuesta del backend:', data.error);
+                    }
+                } catch (error) {
+                    console.error('Error al enviar el mensaje:', error);
+                } finally {
+                    // Ocultar el loader
+                    hideLoader();
+                    // Limpiar el input de imagen
+                    imageInput.value = '';
+                }
+            };
+            reader.readAsDataURL(image);
+        } else {
+            // Si no hay imagen, enviar solo el mensaje de texto
+            try {
+                const response = await fetch('/gpt-talk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+                if (data.response) {
+                    // Mostrar la respuesta del asistente en el chat
+                    appendMessage('assistant', data.response);
+                } else {
+                    console.error('Error en la respuesta del backend:', data.error);
+                }
+            } catch (error) {
+                console.error('Error al enviar el mensaje:', error);
+            } finally {
+                // Ocultar el loader
+                hideLoader();
             }
-        } catch (error) {
-            console.error('Error al enviar el mensaje:', error);
-        } finally {
-            // Ocultar el loader
-            hideLoader();
         }
     }
 });
-
 // Agregar evento para enviar mensaje al presionar "Enter"
 document.getElementById('chatInput').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
