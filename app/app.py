@@ -244,7 +244,7 @@ def gpt_talk():
 
         # Llamada a la API de OpenAI
         response = openai.ChatCompletion.create(
-            model="gpt-4-vision-preview" if image_data else "gpt-4-1106-preview",
+            model="gpt-4-turbo" if image_data else "gpt-4-turbo",
             messages=messages,
             temperature=1,
             max_tokens=2048,
