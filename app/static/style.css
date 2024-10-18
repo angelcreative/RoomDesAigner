@@ -3979,10 +3979,15 @@ textarea {
 }
 textarea {
     cursor: default;
-    height: 100px;
     color: var(--bunker-50);
     font-size: 14px;
     border: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% - 80px);
+    display: block;
+    height: 100%;
 }
 textarea:focus-visible {
         border: none;
@@ -4088,6 +4093,10 @@ select {
       font-size: var(--m);
       color: var(--java-500);
       justify-content: center;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
 }
 
 
@@ -5165,10 +5174,8 @@ button#sendChatButton {
 
 
 div#prompt {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+    position: relative;
+    height: 180px;
 }
 
 
