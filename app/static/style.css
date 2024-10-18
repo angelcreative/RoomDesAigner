@@ -228,7 +228,7 @@ body {
       background: #000;
       margin: 0 auto;
       border-radius: var(--xs);
-      width: 100%;
+      /* width: 100%; */
     }
 
     .fila-media {
@@ -4975,11 +4975,13 @@ html {
     .tab-content.active {
         display: flex; /* Mostrar solo la pestaña activa */
         width: 600px;
-        padding: 12px;
+        padding: 12px 12px 0  12px;
         background: var(--bunker-900);
         border-radius: 8px;
         align-items: center;
         height: fit-content;
+        flex-direction: column;
+        position: relative;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
@@ -5050,6 +5052,7 @@ div#messages {
     align-items: start;
     gap: 12px;
     text-align: left;
+    position: relative;
 }
 
 .assistant {
@@ -5065,10 +5068,11 @@ div#messages {
 }
 
 div#chatContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: block;
     width: 100%;
+    position: relative;
+    overflow: auto;
+    padding-bottom: 20px;
 }
 
 input#chatInput {
@@ -5084,7 +5088,14 @@ input#chatInput {
 
 
 .chat-input-container {
-    position: relative;
+    position: sticky;
+    bottom: 0px;
+    z-index: 1;
+    width: 100%;
+    background: var(--bunker-900);
+    padding: 0  0 12px 0;
+    border-top: 1px solid var(--bunker-800);
+    display: block;
 }
 
 label.image-upload-label {
@@ -5420,7 +5431,7 @@ button#sendChatButton {
         flex: 0 0 48%; /* Ajuste opcional para pantallas más grandes */
     }
           .fila-inferior {
-                width:800px;
+                /* width:800px; */
         }
         
 }
