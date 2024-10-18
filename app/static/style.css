@@ -2324,13 +2324,14 @@ i {
   left: 0;
   z-index: 9;
   background: #000;
+  display: flex;
+  flex-direction: row;
 }
 
 .serialButton button {
    background: none;
    font-size: var(--xs);
-  
-   min-width: 136px;
+   /* min-width: 136px; */
    height: 36px;
    border: 1px solid var(--bunker-50);
    color: var(--bunker-50);
@@ -3192,7 +3193,12 @@ option[title]:hover:after {
        position: relative;
        z-index: 9;
        font-size: var(--xs);
-    padding-bottom: var(--2xl);
+       padding-bottom: var(--2xl);
+       background: #000;
+       position: absolute;
+       top: 60px;
+       padding: 12px;
+       border-radius: 8px;
 }
 
 .chipSV {
@@ -5156,6 +5162,15 @@ button#sendChatButton {
     visibility: visible;
     opacity: 1;
 }
+
+
+div#prompt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 
 /*=========================   MEDIA QUERIES ===================*/
 
