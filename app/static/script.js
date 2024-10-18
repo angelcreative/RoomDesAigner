@@ -682,7 +682,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: null
         };
     } 
-    else if (selectedModel === "fluxdev") {
+    else if (selectedModel === "iphone-photo-flux-realism-booster") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "iphone-photo-flux-realism-booster",
