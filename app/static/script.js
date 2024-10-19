@@ -392,111 +392,7 @@ function generateProductView(customText, photo_location) {
         document.getElementById('dialogTitle').textContent = 'Something wrong happen when building the designs, close this window and try it again 🙏🏽';
 //        document.getElementById('closeDialogButton').style.display = 'block'; // Mostrar el botón de cierre
     }
-// COLORSEX
 
-    let extractedColors = [];
-
-document.getElementById("colorExtractionInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const colorThumbnail = document.getElementById("colorThumbnail");
-            colorThumbnail.src = e.target.result;
-
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                const colorThief = new ColorThief();
-                const palette = colorThief.getPalette(img, 5); // Extrae la paleta de colores
-
-                // Convierte los colores a HEX y luego a nombres, almacenando ambos
-                extractedColors = palette.map(rgbArray => {
-                    const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
-                    const n_match = ntc.name(hexColor);
-                    return {
-                        name: n_match[1],  // Guardamos el nombre del color
-                        hex: hexColor      // Guardamos el código HEX
-                    };
-                });
-
-                // Mostrar los colores extraídos con nombres
-                displayExtractedColors(extractedColors);
-                console.log("Extracted Color Names and HEX:", extractedColors);
-            };
-
-            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-            colorThumbContainer.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-});
-
-function rgbToHex(r, g, b) {
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-}
-
-function displayExtractedColors(colors) {
-    const colorContainer = document.querySelector('.thumbExt');
-    colorContainer.innerHTML = ''; // Limpiar cualquier color previo
-    colors.forEach(color => {
-        const colorCircle = document.createElement('div');
-        
-        // Usamos el HEX para establecer el color de fondo
-        const hexColor = color.hex;
-        const colorName = color.name;
-
-        colorCircle.style.backgroundColor = hexColor;
-        colorCircle.style.width = '100%';
-colorCircle.style.height = '40px';
-colorCircle.style.display = 'flex';
-colorCircle.style.border = '1px solid #777777';
-colorCircle.style.flexDirection = 'column';
-colorCircle.style.justifyContent = 'flex-start';
-colorCircle.style.alignItems = 'center';
-
-        const colorLabel = document.createElement('span');
-        colorLabel.textContent = colorName;
-        colorLabel.style.display = 'block';
-        colorLabel.style.textAlign = 'center';
-        colorLabel.style.fontSize = '12px';
-
-        const colorWrapper = document.createElement('div');
-        colorWrapper.style.display = 'inline-block';
-        colorWrapper.style.marginRight = '10px';
-        colorWrapper.style.textAlign = 'center';
-        colorWrapper.appendChild(colorCircle);
-        colorWrapper.appendChild(colorLabel);
-
-        colorContainer.appendChild(colorWrapper);
-    });
-}
-
-document.getElementById('clearColorImg').addEventListener('click', function() {
-    clearColorImage();
-    extractedColors = []; // Limpiar colores extraídos
-    console.log("Extracted Color Names and HEX cleared:", extractedColors);
-
-    document.getElementById('colorExtractionInput').value = '';
-});
-
-function clearColorImage() {
-    const colorThumbnail = document.getElementById('colorThumbnail');
-    colorThumbnail.src = '';
-
-    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-    colorThumbContainer.style.display = 'none';
-
-    const colorContainer = document.querySelector('.thumbExt');
-    colorContainer.innerHTML = '';
-}
-
-
-    
-    
-
-    
-// END COLORSEX
     
 //🔶    start gen img
  //Función para mostrar errores
@@ -2094,73 +1990,131 @@ document.querySelectorAll('.custom-dropdown .clear-selection').forEach(button =>
 
 
 
-document.getElementById('clearImg').addEventListener('click', function() {
-    const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-    
-    // Limpiar el src de la miniatura
-    img2imgThumbnail.src = '';
-    
-    // Opcional: También puedes ocultar la imagen para evitar mostrar la miniatura rota
-    img2imgThumbnail.style.display = 'none'; 
-    
-    // Limpiar el input de URL o carga de imagen
-    document.getElementById('imageDisplayUrl').value = ''; 
-});
-
-
-
-document.getElementById('clearColorImg').addEventListener('click', function() {
-    const colorThumbnail = document.getElementById('colorThumbnail');
-    colorThumbnail.src = '';
-    document.getElementById('colorExtractionInput').value = ''; // Limpiar input de extracción de colores
-});
-
-
-
-function clearImage() {
-    // Reset the src attribute of the thumbnail image
-    var img2imgThumbnail = document.getElementById('img2imgThumbnail');
-    img2imgThumbnail.src = '';
-
-    // Hide the thumbnail container
-    var thumbContainer = document.querySelector('.thumbImg');
-    thumbContainer.style.display = 'none';
-}
-
-
-
-
-function displayThumbnail(imageSrc) {
-    var thumbnail = document.getElementById('img2imgThumbnail');
-    var thumbDiv = document.querySelector('.thumbImg');
-    thumbnail.src = imageSrc;
-    thumbDiv.style.display = 'block';
-}
-
-function clearThumbnail() {
-    var thumbnail = document.getElementById('img2imgThumbnail');
-    var thumbDiv = document.querySelector('.thumbImg');
-    thumbnail.src = '';
-    thumbDiv.style.display = 'none';
-}
-
-function handleImageUpload(event) {
+// Función para manejar la subida de imagen para img2img
+function handleImageUploadForImg2Img(event) {
     const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        img2imgThumbnail.src = e.target.result;
-        document.querySelector(".thumbImg").style.display = 'block';
-    };
-
     if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+            img2imgThumbnail.src = e.target.result;
+            const img2imgThumbContainer = document.querySelector("#myimage .thumbImg");
+            if (img2imgThumbContainer) {
+                img2imgThumbContainer.style.display = 'block';
+            }
+        };
         reader.readAsDataURL(file);
     }
 }
 
-// Add the event listener
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
+// Función para manejar la subida de imagen para extracción de colores
+function handleImageUploadForColorExtraction(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const colorThumbnail = document.getElementById("colorThumbnail");
+            colorThumbnail.src = e.target.result;
+
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const colorThief = new ColorThief();
+                const palette = colorThief.getPalette(img, 5);
+
+                extractedColors = palette.map(rgbArray => {
+                    const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
+                    const n_match = ntc.name(hexColor);
+                    return {
+                        name: n_match[1],
+                        hex: hexColor
+                    };
+                });
+
+                displayExtractedColors(extractedColors);
+                console.log("Extracted Color Names and HEX:", extractedColors);
+            };
+
+            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+            if (colorThumbContainer) {
+                colorThumbContainer.style.display = 'block';
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Asignar los event listeners correctos
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUploadForImg2Img);
+document.getElementById('colorExtractionInput').addEventListener('change', handleImageUploadForColorExtraction);
+
+// Función para limpiar la imagen de img2img
+document.getElementById('clearImg').addEventListener('click', function() {
+    const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+    img2imgThumbnail.src = '';
+    const img2imgThumbContainer = document.querySelector("#myimage .thumbImg");
+    if (img2imgThumbContainer) {
+        img2imgThumbContainer.style.display = 'none';
+    }
+    document.getElementById('imageDisplayUrl').value = '';
+});
+
+// Función para limpiar la imagen de extracción de colores
+document.getElementById('clearColorImg').addEventListener('click', function() {
+    const colorThumbnail = document.getElementById('colorThumbnail');
+    colorThumbnail.src = '';
+    const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+    if (colorThumbContainer) {
+        colorThumbContainer.style.display = 'none';
+    }
+    document.getElementById('colorExtractionInput').value = '';
+    // Limpiar los colores extraídos
+    const thumbExt = document.querySelector('.thumbExt');
+    if (thumbExt) {
+        thumbExt.innerHTML = '';
+    }
+    extractedColors = [];
+});
+
+// Función auxiliar para convertir RGB a HEX
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+}
+
+// Función para mostrar los colores extraídos
+function displayExtractedColors(colors) {
+    const colorContainer = document.querySelector('.thumbExt');
+    if (colorContainer) {
+        colorContainer.innerHTML = ''; // Limpiar cualquier color previo
+        colors.forEach(color => {
+            const colorCircle = document.createElement('div');
+            colorCircle.style.backgroundColor = color.hex;
+            colorCircle.style.width = '100%';
+            colorCircle.style.height = '40px';
+            colorCircle.style.display = 'flex';
+            colorCircle.style.border = '1px solid #777777';
+            colorCircle.style.flexDirection = 'column';
+            colorCircle.style.justifyContent = 'flex-start';
+            colorCircle.style.alignItems = 'center';
+
+            const colorLabel = document.createElement('span');
+            colorLabel.textContent = color.name;
+            colorLabel.style.display = 'block';
+            colorLabel.style.textAlign = 'center';
+            colorLabel.style.fontSize = '12px';
+
+            const colorWrapper = document.createElement('div');
+            colorWrapper.style.display = 'inline-block';
+            colorWrapper.style.marginRight = '10px';
+            colorWrapper.style.textAlign = 'center';
+            colorWrapper.appendChild(colorCircle);
+            colorWrapper.appendChild(colorLabel);
+
+            colorContainer.appendChild(colorWrapper);
+        });
+    }
+}
+
 
 
     function showTab(tabName) {
