@@ -4184,6 +4184,12 @@ i#clearColorImg {
 .colorThumbImg {
         position: relative;
 }
+
+.thumbImg {
+    position: relative;
+}
+
+
 div#urlImageSection {
        font-size: var(--s);
         color: var(--bunker-200);
