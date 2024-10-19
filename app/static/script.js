@@ -73,16 +73,20 @@ function handleSubmit(event) {
     })
     .then(response => response.json())
     .then(data => {
-      if (data.success) {
+    if (data.success) {
         const imageUrl = data.data.url;
-        // Asignar la URL de la imagen al contenedor de img2img
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        img2imgThumbnail.src = imageUrl;
-        generateImages(imageUrl, selectedValues, isImg2Img);
-      } else {
+        if (imageUrl) {
+            const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+            img2imgThumbnail.src = imageUrl;
+            generateImages(imageUrl, selectedValues, isImg2Img);
+        } else {
+            handleError("La URL de la imagen no es válida. Intenta cargar la imagen nuevamente.");
+        }
+    } else {
         throw new Error("Error en la subida de imagen: " + data.error.message);
-      }
-    })
+    }
+})
+
     .catch(error => {
       console.error("Error en la subida de la imagen:", error.message);
     });
@@ -1603,7 +1607,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     
     document.addEventListener("DOMContentLoaded", function() {
     const fileInput = document.getElementById("imageDisplayUrl");
-    const thumbnailContainer = document.querySelector(".thumbImg");
+    const thumbnailContainer = document.querySelector(".thumbImg2Img");
     const thumbnailImage = document.getElementById("img2imgThumbnail");
 
     fileInput.addEventListener('change', function(event) {
@@ -2017,7 +2021,7 @@ function downloadImage(imageUrl) {
 
 document.addEventListener("DOMContentLoaded", function() {
   const fileInput = document.getElementById("imageDisplayUrl");
-  const thumbnailContainer = document.querySelector(".thumbImg");
+  const thumbnailContainer = document.querySelector(".thumbImg2Img");
   const thumbnailImage = document.getElementById("img2imgThumbnail");
 
   fileInput.addEventListener('change', function(event) {
@@ -2123,7 +2127,7 @@ function clearImage() {
     img2imgThumbnail.src = '';
 
     // Hide the thumbnail container
-    var thumbContainer = document.querySelector('.thumbImg');
+    var thumbContainer = document.querySelector('.thumbImg2Img');
     thumbContainer.style.display = 'none';
 }
 
@@ -2132,14 +2136,14 @@ function clearImage() {
 
 function displayThumbnail(imageSrc) {
     var thumbnail = document.getElementById('img2imgThumbnail');
-    var thumbDiv = document.querySelector('.thumbImg');
+    var thumbDiv = document.querySelector('.thumbImg2Img');
     thumbnail.src = imageSrc;
     thumbDiv.style.display = 'block';
 }
 
 function clearThumbnail() {
     var thumbnail = document.getElementById('img2imgThumbnail');
-    var thumbDiv = document.querySelector('.thumbImg');
+    var thumbDiv = document.querySelector('.thumbImg2Img');
     thumbnail.src = '';
     thumbDiv.style.display = 'none';
 }
@@ -2151,7 +2155,7 @@ function handleImageUpload(event) {
     reader.onload = function(e) {
         const img2imgThumbnail = document.getElementById('img2imgThumbnail');
         img2imgThumbnail.src = e.target.result;
-        document.querySelector(".thumbImg").style.display = 'block';
+        document.querySelector(".thumbImg2Img").style.display = 'block';
     };
 
     if (file) {

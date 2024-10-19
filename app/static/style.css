@@ -1473,7 +1473,7 @@ img#thumbnail {
         
 }
 
-.thumbImg, #img2imgThumbnail {
+.thumbImg2Img, #img2imgThumbnail {
      text-align: center;
     border-radius: var(--2xs);
     margin-top: var(--3xs);
