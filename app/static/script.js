@@ -55,13 +55,18 @@ function mixAttributes(baseAttributes) {
 // Function to handle the form submission
 function handleSubmit(event) {
   event.preventDefault();
+  const magicButton = document.getElementById("magicButton");
+  magicButton.disabled = false;
+  showOverlay();
+
   const fileInput = document.getElementById("imageDisplayUrl");
-  const file = fileInput.files[0];
+  const file = fileInput.files[0]; // Asegúrate de obtener el primer archivo si está presente
   const selectedValues = getSelectedValues();
-  const isImg2Img = Boolean(file);
+  const isImg2Img = Boolean(file); // Determina si se usa img2img basado en la presencia de un archivo
 
   if (file) {
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
+    // Procesa la subida de la imagen a imgbb si se seleccionó un archivo
+    const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Clave API de imgbb
     const uploadUrl = "https://api.imgbb.com/1/upload";
     const formData = new FormData();
     formData.append("key", apiKey);
@@ -74,23 +79,23 @@ function handleSubmit(event) {
     .then(response => response.json())
     .then(data => {
       if (data.success) {
+        // Si la imagen se subió con éxito, obtén la URL y procede con img2img
         const imageUrl = data.data.url;
-        // Asignar la URL de la imagen al contenedor de img2img
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        img2imgThumbnail.src = imageUrl;
         generateImages(imageUrl, selectedValues, isImg2Img);
       } else {
-        throw new Error("Error en la subida de imagen: " + data.error.message);
+        throw new Error("Image upload failed: " + data.error.message);
       }
     })
     .catch(error => {
-      console.error("Error en la subida de la imagen:", error.message);
+      // Manejo de errores en caso de falla en la subida de la imagen
+      handleError(error.message);
     });
   } else {
-    // Manejar caso sin img2img
+    // Procesa txt2img si no se seleccionó ningún archivo
     generateImages(null, selectedValues, isImg2Img);
   }
 }
+    
 
   function handleError(errorMessage) {
   console.error(errorMessage);
@@ -121,60 +126,7 @@ textArea.addEventListener("input", toggleMagicButton);
 toggleMagicButton();
     
     
-// Función para manejar la subida de imagen para img2img
-function handleImageUploadForImg2Img(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-            img2imgThumbnail.src = e.target.result;
-            document.querySelector(".thumbImg").style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-// Función para manejar la subida de imagen para extracción de colores
-function handleImageUploadForColorExtraction(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const colorThumbnail = document.getElementById("colorThumbnail");
-            colorThumbnail.src = e.target.result;
-
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = function() {
-                const colorThief = new ColorThief();
-                const palette = colorThief.getPalette(img, 5);
-
-                extractedColors = palette.map(rgbArray => {
-                    const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
-                    const n_match = ntc.name(hexColor);
-                    return {
-                        name: n_match[1],
-                        hex: hexColor
-                    };
-                });
-
-                displayExtractedColors(extractedColors);
-                console.log("Extracted Color Names and HEX:", extractedColors);
-            };
-
-            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
-            colorThumbContainer.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-// Asignar los event listeners correctos
-document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUploadForImg2Img);
-document.getElementById('colorExtractionInput').addEventListener('change', handleImageUploadForColorExtraction);
-    
-    
+ 
 
 function getSelectedValues() {
     const elementIds = [
@@ -768,16 +720,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     };
 
     // Si es img2img, añade la imagen inicial
-    if (isImg2Img && imageUrl) {
-        const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-        if (img2imgThumbnail) {
-            img2imgThumbnail.src = imageUrl;  // Asigna la URL de la imagen al contenedor
-        }
-        const strengthSlider = document.getElementById("strengthSlider");
-        prompt.init_image = imageUrl;
-        prompt.strength = parseFloat(strengthSlider.value);
-    }
-
+   if (isImg2Img && imageUrl) {
+    prompt.init_image = imageUrl;
+    prompt.strength = 0.60; // Valor de intensidad para img2img
+  }
+    
     let transformedPrompt;  // Declara transformedPrompt fuera del try
 
  try {
