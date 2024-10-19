@@ -62,7 +62,10 @@ def upscale_image():
 
         # Configura el cliente de replicate
         model = replicate.models.get("philz1337x/clarity-upscaler")
-        prediction = model.predict(image=image_url)
+        version = model.versions.get("a6faed361b61300a08dcd191fae53eb562026a2c14753a237484f9a486d1f555")
+        
+        # Llamada a version.predict
+        prediction = version.predict(image=image_url)
 
         # Extraer la URL de la imagen escalada
         upscale_image_url = prediction['output']
@@ -71,7 +74,7 @@ def upscale_image():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
     
     
     
