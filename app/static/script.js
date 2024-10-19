@@ -121,7 +121,60 @@ textArea.addEventListener("input", toggleMagicButton);
 toggleMagicButton();
     
     
+// Función para manejar la subida de imagen para img2img
+function handleImageUploadForImg2Img(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img2imgThumbnail = document.getElementById('img2imgThumbnail');
+            img2imgThumbnail.src = e.target.result;
+            document.querySelector(".thumbImg").style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
+// Función para manejar la subida de imagen para extracción de colores
+function handleImageUploadForColorExtraction(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const colorThumbnail = document.getElementById("colorThumbnail");
+            colorThumbnail.src = e.target.result;
+
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const colorThief = new ColorThief();
+                const palette = colorThief.getPalette(img, 5);
+
+                extractedColors = palette.map(rgbArray => {
+                    const hexColor = rgbToHex(rgbArray[0], rgbArray[1], rgbArray[2]);
+                    const n_match = ntc.name(hexColor);
+                    return {
+                        name: n_match[1],
+                        hex: hexColor
+                    };
+                });
+
+                displayExtractedColors(extractedColors);
+                console.log("Extracted Color Names and HEX:", extractedColors);
+            };
+
+            const colorThumbContainer = document.querySelector("#colorExtractionImage .thumbImg");
+            colorThumbContainer.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Asignar los event listeners correctos
+document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUploadForImg2Img);
+document.getElementById('colorExtractionInput').addEventListener('change', handleImageUploadForColorExtraction);
+    
+    
 
 function getSelectedValues() {
     const elementIds = [
