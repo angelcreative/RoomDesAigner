@@ -3458,7 +3458,7 @@ mop
                 <!-- COLLAPSE -->                     
                   <!-- COLLAPSE IMG -->
 
-                <section type="button" class="collapsible">  <h1><span class="material-symbols-outlined" translate="no">
+                <section style="visibility: hidden" type="button" class="collapsible">  <h1><span class="material-symbols-outlined" translate="no">
                 add_a_photo
                 </span>Image to image</h1><span class="material-symbols-outlined" translate="no"> close </span></section> 
                  <div  class="content">
@@ -3467,8 +3467,8 @@ mop
 
                 <div id="myimage">
                   <label class="imageup" for="imageDisplayUrl">
-                    Upload your image here<span class="material-symbols-outlined" translate="no">arrow_upward</span>
-                    <small>It will return one image at a time. Use a good resolution image less than 500Kb</small>
+                    Upload your image here (only Quality mode) <span class="material-symbols-outlined" translate="no">arrow_upward</span>
+                    <small>It will return one image at a time. Use a good resolution image less than 500Kb and 1024x1024 / 1024x768 / 768x1024 size.</small>
                 <input type="file" id="imageDisplayUrl" accept="image/*" onchange="handleImageUpload(event)">
                   </label>
                   <div class="thumbImg" style="display: none;">
@@ -3480,15 +3480,9 @@ mop
                  <div class="strenght">
                 <label for="strengthSlider">Original image strenght</label>
                 <input type="range" id="strengthSlider" min="0" max="1" step="0.01" value="0.1">
-                <span id="sliderValue">0.6</span>
-                                   <small>0 = same image / 1 = greatly differs from the original<br>
-                  Try .6 - .7 <br><br>Works on:<br><span class="material-symbols-outlined">
-imagesmode
-</span>&nbsp;<span class="material-symbols-outlined">
-yard
-</span>&nbsp;<span class="material-symbols-outlined">
-phone_iphone
-</span>
+                <span id="sliderValue">0.1</span>
+                                    <small>0 will produce an image nearly identical to the original.<br>
+                1 will produce an image that greatly differs from the original. Try .80 to .90<br>
                                         </small>
                                     </div>
 
