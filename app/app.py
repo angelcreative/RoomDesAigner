@@ -49,33 +49,35 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
-# Rutas en el backend
 @app.route('/upscale', methods=['POST'])
 def upscale_image():
     try:
-        # Obtén la URL de la imagen desde el frontend
         data = request.get_json()
         image_url = data.get('image_url')
         
         if not image_url:
             return jsonify({"error": "No se ha proporcionado la URL de la imagen"}), 400
 
-        # Configura el cliente de replicate
         model = replicate.models.get("philz1337x/clarity-upscaler")
         version = model.versions.get("dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e")
         
-        # Llamada a version.predict
-        prediction = version.predict(image=image_url)
-
-        # Extraer la URL de la imagen escalada
-        upscale_image_url = prediction['output']
+        # Crear predicción asincrónica
+        prediction = replicate.predictions.create(version=version, input={"image": image_url})
         
-        return jsonify({"upscaled_image_url": upscale_image_url}), 200
+        # Poll para obtener el estado de la predicción hasta que se complete
+        while prediction["status"] not in ["succeeded", "failed"]:
+            time.sleep(1)  # Espera 1 segundo antes de verificar el estado nuevamente
+            prediction = replicate.predictions.get(prediction["id"])
+
+        if prediction["status"] == "succeeded":
+            upscale_image_url = prediction["output"]
+            return jsonify({"upscaled_image_url": upscale_image_url}), 200
+        else:
+            return jsonify({"error": "La predicción falló."}), 500
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    
     
     
     
