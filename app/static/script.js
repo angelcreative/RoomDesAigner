@@ -686,7 +686,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "iphone-photo-flux-realism-booster",
-            lora_strength: 0.5
+            lora_strength: 1
         };
     } 
     
