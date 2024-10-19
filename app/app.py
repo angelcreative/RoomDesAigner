@@ -49,54 +49,28 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 
-@app.route('/clarity-upscale', methods=['POST'])
-def clarity_upscale():
-    data = request.get_json()
-    image_url = data.get('image_url')
+# Rutas en el backend
+@app.route('/upscale', methods=['POST'])
+def upscale_image():
+    try:
+        # Obtén la URL de la imagen desde el frontend
+        data = request.get_json()
+        image_url = data.get('image_url')
+        
+        if not image_url:
+            return jsonify({"error": "No se ha proporcionado la URL de la imagen"}), 400
 
-    if not image_url:
-        return jsonify({"error": "Image URL is required"}), 400
+        # Configura el cliente de replicate
+        model = replicate.models.get("philz1337x/clarity-upscaler")
+        prediction = model.predict(image=image_url)
 
-    # Iniciar la predicción
-    prediction = start_prediction(image_url)
-    if not prediction:
-        return jsonify({"error": "Failed to start prediction"}), 500
+        # Extraer la URL de la imagen escalada
+        upscale_image_url = prediction['output']
+        
+        return jsonify({"upscaled_image_url": upscale_image_url}), 200
 
-    # Consultar el estado de la predicción
-    result = poll_prediction(prediction['id'])
-    if not result:
-        return jsonify({"error": "Failed to get prediction result"}), 500
-
-    return jsonify({"upscaled_url": result}), 200
-
-def start_prediction(image_url):
-    url = "https://api.replicate.com/v1/predictions"
-    headers = {"Authorization": f"Token {REPLICATE_API_TOKEN}"}
-    payload = {
-        "version": "42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
-        "input": {"image": image_url}
-    }
-    response = requests.post(url, json=payload, headers=headers)
-    if response.status_code == 201:
-        return response.json()
-    return None
-
-def poll_prediction(prediction_id):
-    url = f"https://api.replicate.com/v1/predictions/{prediction_id}"
-    headers = {"Authorization": f"Token {REPLICATE_API_TOKEN}"}
-    max_attempts = 30
-    attempt = 0
-    while attempt < max_attempts:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            prediction = response.json()
-            if prediction['status'] == 'succeeded':
-                return prediction['output']
-            elif prediction['status'] == 'failed':
-                return None
-        time.sleep(2)
-        attempt += 1
-    return None 
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
     
     
     

@@ -1228,50 +1228,52 @@ filterButton.onclick = toggleFilterMenu;
     img.src = imageUrl;
     img.alt = 'Generated Image';
 
-    const clarityButton = document.createElement('button');
-    clarityButton.className = 'clarity-button';
-    clarityButton.textContent = 'Clarity';
-    clarityButton.onclick = () => upscaleImage(imageUrl, img);
-
-    imgContainer.appendChild(img);
-    imgContainer.appendChild(clarityButton);
-
     return imgContainer;
 }
     
-    
-    function upscaleImage(imageUrl, imgElement) {
-    const button = imgElement.nextElementSibling;
-    button.disabled = true;
-    button.textContent = 'Processing...';
+   
+    // Función para enviar la URL de la imagen y recibir la URL de la imagen escalada
+async function sendImageForUpscale(imageUrl) {
+    try {
+        // Llama al endpoint del backend
+        const response = await fetch('/upscale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image_url: imageUrl
+            })
+        });
 
-    fetch('/clarity-upscale', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ image_url: imageUrl }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.upscaled_url) {
-            imgElement.src = data.upscaled_url;
-            button.textContent = 'Clarity Done';
+        const data = await response.json();
+
+        if (response.ok) {
+            // Aquí está la URL de la imagen escalada
+            const upscaledImageUrl = data.upscaled_image_url;
+            console.log("Upscaled Image URL:", upscaledImageUrl);
+
+            // Ahora puedes actualizar el frontend para mostrar la imagen escalada
+            document.getElementById('upscaledImage').src = upscaledImageUrl;
+
         } else {
-            throw new Error('Upscaling failed');
+            console.error("Error:", data.error);
         }
-    })
-    .catch(error => {
-        console.error('Error en upscaling:', error);
-        button.textContent = 'Clarity Failed';
-    })
-    .finally(() => {
-        button.disabled = false;
-    });
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+    }
 }
-    
-    
-    
+
+// Event listener para el botón que activa el upscale
+document.getElementById('upscaleButton').addEventListener('click', function() {
+    const imageUrl = document.getElementById('imageInputUrl').value;
+    if (imageUrl) {
+        sendImageForUpscale(imageUrl);
+    } else {
+        alert("Por favor, ingresa una URL válida");
+    }
+});
+
     
 
     // Crear el menú de filtros y añadir sliders
