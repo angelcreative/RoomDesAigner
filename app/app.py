@@ -90,79 +90,112 @@ else:
 # Set the API key for OpenAI
 openai.api_key = openai_api_key
 
+# Define content structures for different categories
+def get_content_for_people():
+    return """
+    You are a highly skilled assistant that transforms lists of values into structured, versatile natural language prompts for generating images of people. 
+    Depending on the shot (close-up, midshot, or full-body), adapt the description to include the following:
+    - **Subject**: A [close-up, midshot, full-body shot] of [description of person: e.g., young woman, man].
+    - **Facial Features & Skin**: Emphasize highly detailed facial features, realistic skin texture, and natural lighting.
+    - **Pose**: Adjust based on shot type (e.g., head tilt for close-up, relaxed for midshot, standing for full body).
+    - **Clothing & Accessories**: Include dynamic folds in clothing and realistic textures, with accessories if present.
+    - **Emotion**: Describe the subject's emotion based on the scene.
+    - **Environment**: For close-up, use blurred backgrounds, for full-body, describe the setting (e.g., in a park).
+    - **Lighting**: Adapt lighting to the context (e.g., natural daylight or moody shadows).
+    - **Technical Details**: Adjust camera settings to shot type (85mm lens for close-up, wide-angle for full body).
+    - **Color Palette**: Mention RGB values for key elements. Ensure the colors align with the mood.
+    Generate a full, professional prompt that adapts naturally to the type of shot, and ensure the description feels seamless, not just a list of attributes.
+    """
+
+def get_content_for_logos():
+    return """
+    You are a highly skilled assistant that transforms lists of values into structured, professional natural language descriptions for logos and artistic styles. 
+    Adapt the description based on the following criteria to ensure a rich and detailed prompt:
+    - **Subject**: Clearly describe the main subject (e.g., a geometric logo, an abstract icon).
+    - **Style**: Specify the artistic style (e.g., minimalist, retro, futuristic).
+    - **Composition**: Provide details on the arrangement (e.g., centered, asymmetrical).
+    - **Color Palette**: Mention RGB values for the key colors.
+    - **Mood/Atmosphere**: Highlight the mood (e.g., playful, elegant).
+    - **Typography**: If applicable, describe the text, focusing on font style and size.
+    - **Technical Details**: Mention technical specifications (e.g., vector format, scalability).
+    Generate a full, detailed, and natural description, ensuring cohesion and completeness.
+    """
+
+def get_content_for_ui_ux():
+    return """
+    You are a highly skilled assistant that transforms lists of values into structured, detailed natural language descriptions for UI/UX design. 
+    Use the following structure to create comprehensive prompts:
+    - **Screen Type**: Specify the screen (e.g., dashboard, login screen).
+    - **Main Elements**: Highlight the key UI elements (e.g., buttons, forms).
+    - **Layout**: Describe the layout structure (grid-based, flexible).
+    - **Style**: Mention the style (modern, minimalistic) and visual consistency.
+    - **Color Palette**: Mention RGB values for primary and secondary colors.
+    - **Typography**: Detail typefaces, font sizes, and their roles in readability.
+    - **Interactions/Animations**: Describe interactions (e.g., hover effects, transitions).
+    - **Technical Details**: Include responsiveness, accessibility, and performance.
+    Generate a professional prompt focusing on user experience and design cohesion.
+    """
+
+def get_content_for_interior_design():
+    return """
+    You are a highly skilled assistant that transforms lists of values into structured, detailed natural language descriptions for interior design. 
+    Use the following structure to create comprehensive prompts:
+    - **Room Type**: Specify the room type (e.g., living room, bedroom).
+    - **Main Furniture**: Describe key pieces of furniture and their contribution to the space.
+    - **Materials**: Mention materials used (e.g., wood, metal) and their influence on atmosphere.
+    - **Style**: Specify the interior style (modern, Scandinavian).
+    - **Color Palette**: Mention the RGB values for dominant and accent colors.
+    - **Lighting**: Describe types of lighting and their effect.
+    - **Decorative Elements**: Describe decorative elements like plants, rugs.
+    - **Mood/Atmosphere**: Highlight the mood the space evokes (cozy, elegant).
+    - **Technical Details**: Mention dimensions and architectural features.
+    Generate a full, natural description that integrates all these elements seamlessly.
+    """
+
+# Main function to transform prompts
 def transform_prompt(prompt_text):
-    # Detecta si el prompt es sobre personas
-    if "person" in prompt_text.lower() or "woman" in prompt_text.lower() or "man" in prompt_text.lower() or "people" in prompt_text.lower():
-        # Estructura para prompts sobre personas
-        messages = [
-           {
-                "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For prompts about people, follow this structure: Subject (e.g., young woman, man), Hair/Skin color (e.g., long brown hair, pale skin), Pose (e.g., sitting, standing), Clothing/Accessories (e.g., wearing a red dress), Emotion (e.g., smiling, thoughtful), Location (e.g., in a park), and Technical Details (e.g., shot with a 50mm lens). Color Palette (mention RGB values).Generate a complete and natural description, not just labels."
-            },
-            {
-                "role": "user",
-                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-            }
-        ]
+    prompt_text_lower = prompt_text.lower()
+
+    if any(keyword in prompt_text_lower for keyword in ["person", "woman", "man", "people"]):
+        content = get_content_for_people()
     
-    # Detecta si el prompt menciona elementos tipográficos, animales, o estilos artísticos específicos
-    elif "typographic" in prompt_text.lower() or "silhouette" in prompt_text.lower() or "line art" in prompt_text.lower() or "geometric" in prompt_text.lower() or "logo" in prompt_text.lower():
-        # Estructura para logos y estilos artísticos
-        messages = [
-           {
-                "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for logos and artistic styles. Follow this structure: Subject (e.g., a geometric logo), Style (e.g., minimalist, retro), Composition (e.g., centered, using simple shapes), Color Palette (mention RGB values), Mood/Atmosphere (e.g., elegant, playful), and Technical Details (e.g., vector format). Generate a complete and natural description, not just labels."
-            },
-            {
-                "role": "user",
-                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-            }
-        ]
+    elif any(keyword in prompt_text_lower for keyword in ["typographic", "silhouette", "line art", "geometric", "logo"]):
+        content = get_content_for_logos()
     
-    # Detecta si el prompt es sobre diseño de interfaces
-    elif "interface" in prompt_text.lower() or "UI" in prompt_text.lower() or "UX" in prompt_text.lower() or "dashboard" in prompt_text.lower():
-        # Estructura para prompts sobre diseño de interfaces
-        messages = [
-           {
-                "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for UI/UX design. Follow this structure: Screen Type (e.g., dashboard, login screen), Main Elements (e.g., buttons, forms), Layout (e.g., grid layout), Style (e.g., modern, minimalistic), Color Palette (mention RGB values), Typography (e.g., sans-serif, bold), Interactions/Animations (e.g., hover effects, transitions), and Technical Details (e.g., responsive design). Generate a complete and natural description, not just labels."
-            },
-            {
-                "role": "user",
-                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-            }
-        ]
+    elif any(keyword in prompt_text_lower for keyword in ["interface", "ui", "ux", "dashboard"]):
+        content = get_content_for_ui_ux()
     
-    # Detecta si el prompt es sobre diseño de interiores
-    elif "interior design" in prompt_text.lower() or "living room" in prompt_text.lower() or "bedroom" in prompt_text.lower() or "kitchen" in prompt_text.lower():
-        # Estructura para prompts sobre diseño de interiores
-        messages = [
-           {
-                "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions for interior design. Follow this structure: Room Type (e.g., living room, bedroom), Main Furniture (e.g., sofa, bed), Materials (e.g., wood, metal), Style (e.g., modern, Scandinavian), Color Palette (mention RGB values), Lighting (e.g., natural light, ceiling lamps), Decorative Elements (e.g., plants, rugs), Mood/Atmosphere (e.g., cozy, elegant), and Technical Details (e.g., room dimensions). Generate a complete and natural description, not just labels."
-            },
-            {
-                "role": "user",
-                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-            }
-        ]
+    elif any(keyword in prompt_text_lower for keyword in ["interior design", "living room", "bedroom", "kitchen"]):
+        content = get_content_for_interior_design()
     
     else:
-        # Estructura para prompts sobre otros elementos (escenas, objetos, etc.)
-        messages = [
-           {
-                "role": "system",
-                "content": "You are a helpful assistant that transforms lists of values into structured natural language descriptions. For non-human subjects (scenes, objects, etc.), follow this structure: Subject (e.g., a cityscape at night), Location (e.g., urban setting), Style (e.g., realistic, abstract), Composition (e.g., landscape view), Lighting (e.g., dim, natural light), Color Palette (mention RGB values), Mood/Atmosphere (e.g., mysterious, vibrant), and Technical Details (e.g., shot with a wide-angle lens). Generate a complete and natural description, not just labels."
-            },
-            {
-                "role": "user",
-                "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-            }
-        ]
+        content = """
+        You are a helpful assistant that transforms lists of values into structured natural language descriptions for non-human subjects (scenes, objects, etc.). 
+        Follow this structure:
+        - **Subject**: Describe the subject (e.g., cityscape at night).
+        - **Location**: Mention the location (e.g., urban setting).
+        - **Style**: Specify the style (realistic, abstract).
+        - **Composition**: Describe the composition (landscape view).
+        - **Lighting**: Mention the lighting (dim, natural light).
+        - **Color Palette**: Mention RGB values for colors.
+        - **Mood/Atmosphere**: Highlight the mood (mysterious, vibrant).
+        - **Technical Details**: Mention shot details (wide-angle lens).
+        Generate a full, natural description, not just labels.
+        """
+    
+    # Prepare the message to send to OpenAI API
+    messages = [
+        {
+            "role": "system",
+            "content": content
+        },
+        {
+            "role": "user",
+            "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
+        }
+    ]
 
-    # Aquí iría el código para enviar el mensaje a OpenAI y procesar la respuesta
-
-
+    # Send the message to OpenAI API and process the response
     response = openai.ChatCompletion.create(
         model="gpt-4-turbo",
         messages=messages,
@@ -172,8 +205,6 @@ def transform_prompt(prompt_text):
 
     transformed_prompt = response.choices[0].message['content'].strip()
     return transformed_prompt
-
-# Define the polling function to check image availability
 
 
 
