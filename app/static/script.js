@@ -715,7 +715,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         safety_checker: "no",
         track_id: null,
         enhance_prompt: "no",
-        self_attention: "yes"
     };
 
     // Si es img2img, añade la imagen inicial
