@@ -671,7 +671,13 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "flux-detaile",
             lora_strength: 1
         };
-    }  
+    }  else if (selectedModel === "fluxpro-11") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "fluxpro-11",
+            lora_strength: 1
+        };
+    } 
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
