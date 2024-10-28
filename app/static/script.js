@@ -715,63 +715,75 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
         
         // Actualiza el valor del input oculto
         document.getElementById('modelType').value = option.getAttribute('value');
+        
+        // Llama a la función para actualizar la configuración después de cada selección
+        updateModelConfig();
     });
 });
 
-// Obtener el modelo seleccionado desde el input oculto
-let selectedModel = document.getElementById('modelType').value;
-
-// Configuración del modelo basada en la selección del usuario
-let modelConfig;
-if (selectedModel === "flux") {
-    modelConfig = {
-        model_id: "flux",
-        lora_model: null,
-        lora_strength: null
-    };
-} else if (selectedModel === "fluxdev") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: null,
-        lora_strength: null
-    };
-} else if (selectedModel === "simplevectorflux") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: "simplevectorflux",
-        lora_strength: 1
-    };
-} else if (selectedModel === "flux-detaile") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: "flux-detaile",
-        lora_strength: 1
-    };
-} else if (selectedModel === "fluxpro-11") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: "fluxpro-11",
-        lora_strength: 1
-    };
-} else if (selectedModel === "fluxdevfashion") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: "flux-fashion",
-        lora_strength: 1
-    };
-} else if (selectedModel === "mystic") {
-    modelConfig = {
-        model_id: "mystic",
-        lora_model: null,
-        lora_strength: null
-    };
-} else if (selectedModel === "iphone-photo-flux-realism-booster") {
-    modelConfig = {
-        model_id: "fluxdev",
-        lora_model: "iphone-photo-flux-realism-booster",
-        lora_strength: 1
-    };
+// Función para actualizar la configuración del modelo
+function updateModelConfig() {
+    const selectedModel = document.getElementById('modelType').value;
+    let modelConfig;
+    
+    // Configuración del modelo basada en la selección del usuario
+    if (selectedModel === "flux") {
+        modelConfig = {
+            model_id: "flux",
+            lora_model: null,
+            lora_strength: null
+        };
+    } else if (selectedModel === "fluxdev") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: null,
+            lora_strength: null
+        };
+    } else if (selectedModel === "simplevectorflux") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "simplevectorflux",
+            lora_strength: 1
+        };
+    } else if (selectedModel === "flux-detaile") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "flux-detaile",
+            lora_strength: 1
+        };
+    } else if (selectedModel === "fluxpro-11") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "fluxpro-11",
+            lora_strength: 1
+        };
+    } else if (selectedModel === "fluxdevfashion") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "flux-fashion",
+            lora_strength: 1
+        };
+    } else if (selectedModel === "mystic") {
+        modelConfig = {
+            model_id: "mystic",
+            lora_model: null,
+            lora_strength: null
+        };
+    } else if (selectedModel === "iphone-photo-flux-realism-booster") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "iphone-photo-flux-realism-booster",
+            lora_strength: 1
+        };
+    }
+    
+    // Mostrar la configuración en la consola para verificar
+    console.log("Modelo seleccionado:", selectedModel);
+    console.log("Configuración del modelo:", modelConfig);
 }
+
+// Llamada inicial para establecer la configuración del modelo en "Speed"
+updateModelConfig();
 
 
     
