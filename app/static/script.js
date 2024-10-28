@@ -703,6 +703,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     
 */
     
+// Declarar modelConfig en el ámbito global
+let modelConfig;
+
 // Inicializar la selección predeterminada en "Speed"
 document.querySelector('.custom-dropdown .selected-text').innerText = "Speed";
 document.getElementById('modelType').value = "flux";
@@ -724,7 +727,6 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 // Función para actualizar la configuración del modelo
 function updateModelConfig() {
     const selectedModel = document.getElementById('modelType').value;
-    let modelConfig;
     
     // Configuración del modelo basada en la selección del usuario
     if (selectedModel === "flux") {
@@ -785,6 +787,16 @@ function updateModelConfig() {
 // Llamada inicial para establecer la configuración del modelo en "Speed"
 updateModelConfig();
 
+// Función que usa la configuración del modelo para generar imágenes
+function generateImages() {
+    if (!modelConfig) {
+        console.error("Error: modelConfig no está definida");
+        return;
+    }
+    
+    // Aquí va el código para la generación de imágenes usando modelConfig
+    console.log("Generando imágenes con la configuración:", modelConfig);
+}
 
     
     
