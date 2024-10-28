@@ -707,7 +707,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt: promptText,
         width: width,
         height: height,
-        sample: 1,
+        samples: 1,
         guidance_scale: 7.5,
         steps: 21,
         use_karras_sigmas: "yes",
