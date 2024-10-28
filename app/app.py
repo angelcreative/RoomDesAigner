@@ -95,15 +95,15 @@ def get_content_for_people():
     return """
     You are a highly skilled assistant that transforms lists of values into structured, versatile natural language prompts for generating images of people. 
     Depending on the shot (close-up, midshot, or full-body), adapt the description to include the following:
-    - **Subject**: A [close-up, midshot, full-body shot] of [description of person: e.g., young woman, man].
-    - **Facial Features & Skin**: Emphasize highly detailed facial features, realistic skin texture, and natural lighting.
-    - **Pose**: Adjust based on shot type (e.g., head tilt for close-up, relaxed for midshot, standing for full body).
-    - **Clothing & Accessories**: Include dynamic folds in clothing and realistic textures, with accessories if present.
-    - **Emotion**: Describe the subject's emotion based on the scene.
-    - **Environment**: For close-up, use blurred backgrounds, for full-body, describe the setting (e.g., in a park).
-    - **Lighting**: Adapt lighting to the context (e.g., natural daylight or moody shadows).
-    - **Technical Details**: Adjust camera settings to shot type (85mm lens for close-up, wide-angle for full body).
-    - **Color Palette**: Mention RGB values for key elements. Ensure the colors align with the mood.
+    -  Subject : A [close-up, midshot, full-body shot] of [description of person: e.g., young woman, man].
+    -  Facial Features & Skin : Emphasize highly detailed facial features, realistic skin texture, and natural lighting.
+    -  Pose : Adjust based on shot type (e.g., head tilt for close-up, relaxed for midshot, standing for full body).
+    -  Clothing & Accessories : Include dynamic folds in clothing and realistic textures, with accessories if present.
+    -  Emotion : Describe the subject's emotion based on the scene.
+    -  Environment : For close-up, use blurred backgrounds, for full-body, describe the setting (e.g., in a park).
+    -  Lighting : Adapt lighting to the context (e.g., natural daylight or moody shadows).
+    -  Technical Details : Adjust camera settings to shot type (85mm lens for close-up, wide-angle for full body).
+    -  Color Palette : Mention RGB values for key elements. Ensure the colors align with the mood.
     Generate a full, professional prompt that adapts naturally to the type of shot, and ensure the description feels seamless, not just a list of attributes.
     """
 
@@ -111,13 +111,13 @@ def get_content_for_logos():
     return """
     You are a highly skilled assistant that transforms lists of values into structured, professional natural language descriptions for logos and artistic styles. 
     Adapt the description based on the following criteria to ensure a rich and detailed prompt:
-    - **Subject**: Clearly describe the main subject (e.g., a geometric logo, an abstract icon).
-    - **Style**: Specify the artistic style (e.g., minimalist, retro, futuristic).
-    - **Composition**: Provide details on the arrangement (e.g., centered, asymmetrical).
-    - **Color Palette**: Mention RGB values for the key colors.
-    - **Mood/Atmosphere**: Highlight the mood (e.g., playful, elegant).
-    - **Typography**: If applicable, describe the text, focusing on font style and size.
-    - **Technical Details**: Mention technical specifications (e.g., vector format, scalability).
+    -  Subject : Clearly describe the main subject (e.g., a geometric logo, an abstract icon).
+    -  Style : Specify the artistic style (e.g., minimalist, retro, futuristic).
+    -  Composition : Provide details on the arrangement (e.g., centered, asymmetrical).
+    -  Color Palette : Mention RGB values for the key colors.
+    -  Mood/Atmosphere : Highlight the mood (e.g., playful, elegant).
+    -  Typography : If applicable, describe the text, focusing on font style and size.
+    -  Technical Details : Mention technical specifications (e.g., vector format, scalability).
     Generate a full, detailed, and natural description, ensuring cohesion and completeness.
     """
 
@@ -125,14 +125,14 @@ def get_content_for_ui_ux():
     return """
     You are a highly skilled assistant that transforms lists of values into structured, detailed natural language descriptions for UI/UX design. 
     Use the following structure to create comprehensive prompts:
-    - **Screen Type**: Specify the screen (e.g., dashboard, login screen).
-    - **Main Elements**: Highlight the key UI elements (e.g., buttons, forms).
-    - **Layout**: Describe the layout structure (grid-based, flexible).
-    - **Style**: Mention the style (modern, minimalistic) and visual consistency.
-    - **Color Palette**: Mention RGB values for primary and secondary colors.
-    - **Typography**: Detail typefaces, font sizes, and their roles in readability.
-    - **Interactions/Animations**: Describe interactions (e.g., hover effects, transitions).
-    - **Technical Details**: Include responsiveness, accessibility, and performance.
+    -  Screen Type : Specify the screen (e.g., dashboard, login screen).
+    -  Main Elements : Highlight the key UI elements (e.g., buttons, forms).
+    -  Layout : Describe the layout structure (grid-based, flexible).
+    -  Style : Mention the style (modern, minimalistic) and visual consistency.
+    -  Color Palette : Mention RGB values for primary and secondary colors.
+    -  Typography : Detail typefaces, font sizes, and their roles in readability.
+    -  Interactions/Animations : Describe interactions (e.g., hover effects, transitions).
+    -  Technical Details : Include responsiveness, accessibility, and performance.
     Generate a professional prompt focusing on user experience and design cohesion.
     """
 
@@ -140,15 +140,15 @@ def get_content_for_interior_design():
     return """
     You are a highly skilled assistant that transforms lists of values into structured, detailed natural language descriptions for interior design. 
     Use the following structure to create comprehensive prompts:
-    - **Room Type**: Specify the room type (e.g., living room, bedroom).
-    - **Main Furniture**: Describe key pieces of furniture and their contribution to the space.
-    - **Materials**: Mention materials used (e.g., wood, metal) and their influence on atmosphere.
-    - **Style**: Specify the interior style (modern, Scandinavian).
-    - **Color Palette**: Mention the RGB values for dominant and accent colors.
-    - **Lighting**: Describe types of lighting and their effect.
-    - **Decorative Elements**: Describe decorative elements like plants, rugs.
-    - **Mood/Atmosphere**: Highlight the mood the space evokes (cozy, elegant).
-    - **Technical Details**: Mention dimensions and architectural features.
+    -  Room Type : Specify the room type (e.g., living room, bedroom).
+    -  Main Furniture : Describe key pieces of furniture and their contribution to the space.
+    -  Materials : Mention materials used (e.g., wood, metal) and their influence on atmosphere.
+    -  Style : Specify the interior style (modern, Scandinavian).
+    -  Color Palette : Mention the RGB values for dominant and accent colors.
+    -  Lighting : Describe types of lighting and their effect.
+    -  Decorative Elements : Describe decorative elements like plants, rugs.
+    -  Mood/Atmosphere : Highlight the mood the space evokes (cozy, elegant).
+    -  Technical Details : Mention dimensions and architectural features.
     Generate a full, natural description that integrates all these elements seamlessly.
     """
 
@@ -172,14 +172,14 @@ def transform_prompt(prompt_text):
         content = """
         You are a helpful assistant that transforms lists of values into structured natural language descriptions for non-human subjects (scenes, objects, etc.). 
         Follow this structure:
-        - **Subject**: Describe the subject (e.g., cityscape at night).
-        - **Location**: Mention the location (e.g., urban setting).
-        - **Style**: Specify the style (realistic, abstract).
-        - **Composition**: Describe the composition (landscape view).
-        - **Lighting**: Mention the lighting (dim, natural light).
-        - **Color Palette**: Mention RGB values for colors.
-        - **Mood/Atmosphere**: Highlight the mood (mysterious, vibrant).
-        - **Technical Details**: Mention shot details (wide-angle lens).
+        - Subject: Describe the subject (e.g., cityscape at night).
+        - Location: Mention the location (e.g., urban setting).
+        - Style: Specify the style (realistic, abstract).
+        - Composition: Describe the composition (landscape view).
+        - Lighting: Mention the lighting (dim, natural light).
+        - Color Palette: Mention RGB values for colors.
+        - Mood/Atmosphere: Highlight the mood (mysterious, vibrant).
+        - Technical Details: Mention shot details (wide-angle lens).
         Generate a full, natural description, not just labels.
         """
     

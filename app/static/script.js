@@ -641,7 +641,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui}  ${r3d} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
-
+/*
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
@@ -701,7 +701,77 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } 
     
     
+*/
+    
+    // Función para manejar la selección de modelo en el custom dropdown
+document.querySelectorAll('.custom-dropdown .option').forEach(option => {
+    option.addEventListener('click', function() {
+        // Actualiza el texto de la selección actual
+        document.querySelector('.custom-dropdown .selected-text').innerText = option.innerText;
+        
+        // Actualiza el valor del input oculto
+        document.getElementById('modelType').value = option.getAttribute('value');
+    });
+});
 
+// Obtener el modelo seleccionado desde el input oculto
+const selectedModel = document.getElementById('modelType').value;
+
+// Configuración del modelo basada en la selección del usuario
+let modelConfig;
+if (selectedModel === "flux") {
+    modelConfig = {
+        model_id: "flux",
+        lora_model: null,
+        lora_strength: null
+    };
+} else if (selectedModel === "fluxdev") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: null,
+        lora_strength: null
+    };
+} else if (selectedModel === "simplevectorflux") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: "simplevectorflux",
+        lora_strength: 1
+    };
+} else if (selectedModel === "flux-detaile") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: "flux-detaile",
+        lora_strength: 1
+    };
+} else if (selectedModel === "fluxpro-11") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: "fluxpro-11",
+        lora_strength: 1
+    };
+} else if (selectedModel === "fluxdevfashion") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: "flux-fashion",
+        lora_strength: 1
+    };
+} else if (selectedModel === "mystic") {
+    modelConfig = {
+        model_id: "mystic",
+        lora_model: null,
+        lora_strength: null
+    };
+} else if (selectedModel === "iphone-photo-flux-realism-booster") {
+    modelConfig = {
+        model_id: "fluxdev",
+        lora_model: "iphone-photo-flux-realism-booster",
+        lora_strength: 1
+    };
+}
+
+    
+    
+    
     // Configuración del prompt
     const prompt = {
         prompt: promptText,
