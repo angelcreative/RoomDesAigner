@@ -707,7 +707,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 let modelConfig;
 
 // Inicializar la selección predeterminada en "Speed"
-document.querySelector('.custom-dropdown .selected-text').innerText = "Speed";
+document.querySelector('.custom-dropdown .selected-text').innerText = "Speed - 40s";
 document.getElementById('modelType').value = "flux";
 
 // Función para manejar la selección de modelo en el custom dropdown
@@ -787,8 +787,14 @@ function updateModelConfig() {
 // Llamada inicial para establecer la configuración del modelo en "Speed"
 updateModelConfig();
 
+
+
+
 // Función que usa la configuración del modelo para generar imágenes
 function generateImages() {
+      // Asegurarse de que el valor de modelType esté actualizado
+    updateModelConfig();
+    
     if (!modelConfig) {
         console.error("Error: modelConfig no está definida");
         return;
