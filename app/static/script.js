@@ -703,7 +703,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     
 */
     
-    // Función para manejar la selección de modelo en el custom dropdown
+// Inicializar la selección predeterminada en "Speed"
+document.querySelector('.custom-dropdown .selected-text').innerText = "Speed";
+document.getElementById('modelType').value = "flux";
+
+// Función para manejar la selección de modelo en el custom dropdown
 document.querySelectorAll('.custom-dropdown .option').forEach(option => {
     option.addEventListener('click', function() {
         // Actualiza el texto de la selección actual
@@ -715,7 +719,7 @@ document.querySelectorAll('.custom-dropdown .option').forEach(option => {
 });
 
 // Obtener el modelo seleccionado desde el input oculto
-const selectedModel = document.getElementById('modelType').value;
+let selectedModel = document.getElementById('modelType').value;
 
 // Configuración del modelo basada en la selección del usuario
 let modelConfig;
@@ -768,6 +772,7 @@ if (selectedModel === "flux") {
         lora_strength: 1
     };
 }
+
 
     
     
