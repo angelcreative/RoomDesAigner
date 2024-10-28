@@ -2193,11 +2193,10 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
     const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
     activeButton.classList.add('active');
 
-    // Si se selecciona la pestaña de chat, enfocar el campo de entrada
-    if (tabName === 'chat') {
-        const chatInput = document.getElementById('chatInput');
-        chatInput.focus(); // Enfocar el campo de entrada
-    }
+// Si se selecciona la pestaña de chat, enfocar el campo de entrada
+if (tabName === 'chat') {
+    const chatInput = document.getElementById('chatInput');
+    chatInput.focus(); // Enfocar el campo de entrada
 }
 
 document.getElementById('sendChatButton').addEventListener('click', async function() {
@@ -2278,13 +2277,15 @@ document.getElementById('sendChatButton').addEventListener('click', async functi
         }
     }
 });
+
 // Agregar evento para enviar mensaje al presionar "Enter"
 document.getElementById('chatInput').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault(); // Evitar el comportamiento por defecto (como un salto de línea)
         document.getElementById('sendChatButton').click(); // Simular clic en el botón de enviar
     }
 });
+
 
 // Función para mostrar el loader
 function showLoader() {
