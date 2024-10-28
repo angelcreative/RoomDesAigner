@@ -2174,7 +2174,7 @@ function handleImageUpload(event) {
 document.getElementById('imageDisplayUrl').addEventListener('change', handleImageUpload);
 
 
-    function showTab(tabName) {
+function showTab(tabName) {
     // Ocultar todas las pestañas
     const tabs = document.querySelectorAll('.tab-content');
     tabs.forEach(tab => {
@@ -2193,10 +2193,11 @@ document.getElementById('imageDisplayUrl').addEventListener('change', handleImag
     const activeButton = Array.from(buttons).find(button => button.textContent === tabName.charAt(0).toUpperCase() + tabName.slice(1));
     activeButton.classList.add('active');
 
-// Si se selecciona la pestaña de chat, enfocar el campo de entrada
-if (tabName === 'chat') {
-    const chatInput = document.getElementById('chatInput');
-    chatInput.focus(); // Enfocar el campo de entrada
+    // Si se selecciona la pestaña de chat, enfocar el campo de entrada
+    if (tabName === 'chat') {
+        const chatInput = document.getElementById('chatInput');
+        chatInput.focus(); // Enfocar el campo de entrada
+    }
 }
 
 document.getElementById('sendChatButton').addEventListener('click', async function() {
