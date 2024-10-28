@@ -5003,7 +5003,9 @@ html {
             margin-bottom: 0;
             font-size: var(--xs);
         }
-
+div#chat {
+    min-height: 510px;
+}
 
  .tab-content {
         display: none; /* Ocultar todas las pestañas por defecto */
@@ -5021,6 +5023,8 @@ html {
         height: fit-content;
         flex-direction: column;
         position: relative;
+        height: 180px;
+        justify-content: flex-end;
     }
     .tab-button.active {
         font-weight: bold; /* Estilo para la pestaña activa */
@@ -5135,13 +5139,21 @@ input#chatInput {
     padding: 0  0 12px 0;
     border-top: 1px solid var(--bunker-800);
     display: block;
+    min-height: 140px;
 }
 
 label.image-upload-label {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: 0px;
+    bottom: 12px;
     cursor:pointer;
+    font-size: var(--xs);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--2xs);
+    color: var(--bunker-700);
+    background: var(--bunker-900);
 }
 
 input#chatInput:focus {   outline:none }
@@ -5163,6 +5175,9 @@ button#sendChatButton {
     border-radius: 900px;
     margin: 0;
     padding: 8px 8px;
+    position: absolute;
+    bottom: 12px;
+    left: 0px;
 }
 
 
