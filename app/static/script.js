@@ -665,7 +665,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "simplevectorflux",
             lora_strength: 1
         };
-    } else if (selectedModel === "flux-detaile") {
+    } else if (selectedModel === "uncensored-flux-lora,flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "flux-detaile",
@@ -707,7 +707,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt: promptText,
         width: width,
         height: height,
-        samples: 4,
+        sample: 1,
         guidance_scale: 7.5,
         steps: 21,
         use_karras_sigmas: "yes",
