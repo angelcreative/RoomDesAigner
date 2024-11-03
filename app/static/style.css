@@ -5363,6 +5363,8 @@ div#prompt {
         width:380px;
     }
     
+    .imageGrid { grid-template-columns: repeat(1, 1fr);}
+    
     }
 
 
@@ -5458,7 +5460,8 @@ div#prompt {
     
     .tabs {
         width:380px;
-    }
+    }    .imageGrid { grid-template-columns: repeat(1, 1fr);}
+
     
     }
     
