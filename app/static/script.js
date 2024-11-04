@@ -669,20 +669,20 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
            lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile",
-            lora_strength: "0.5,0,7,1"
+            lora_strength: "0.5,0.7,1"
         };
     }  else if (selectedModel === "fluxpro-11") {
         modelConfig = {
             model_id: "fluxdev",
            lora_model: "uncensored-flux-lora,polyhedron-flux,fluxpro-11",
-            lora_strength: "0.5,0,7,1"
+            lora_strength: "0.5,0.7,1"
         };
     } 
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "uncensored-flux-lora,polyhedron-flux,flux-fashion",
-            lora_strength: "0.5,0,7,1"
+            lora_strength: "0.5,0.7,1"
         };
     } 
      else if (selectedModel === "mystic") {
@@ -696,7 +696,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         modelConfig = {
             model_id: "fluxdev",
             lora_model: "uncensored-flux-lora,polyhedron-flux,iphone-photo-flux-realism-booster",
-            lora_strength: "0.5,0,7,1"
+            lora_strength: "0.5,0.7,1"
         };
     } 
     
