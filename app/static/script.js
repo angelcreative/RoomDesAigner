@@ -717,7 +717,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         model_id: modelConfig.model_id,
         lora_model: modelConfig.lora_model,
         lora_strength: modelConfig.lora_strength,
-        scheduler: "Euler",
+        scheduler: "DPMSolverSinglestepScheduler",
         webhook: null,
         safety_checker: "no",
         track_id: null,
