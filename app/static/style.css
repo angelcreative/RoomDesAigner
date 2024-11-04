@@ -3,7 +3,7 @@
     /*color*/
     
     /*majority*/
-    --majority:var(--majority);
+    --majority:#000;
     
     
         /*bunker*/
@@ -193,7 +193,7 @@ sub, sup {font-size:var(--xs)}
 
 div#mainUI,
 html {
-        background: var(--majority);
+        background: #000;
 }
 
 body {
@@ -230,7 +230,7 @@ body {
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      background: var(--majority);
+      background: #000;
       margin: 0 auto;
       border-radius: var(--xs);
       /* width: 100%; */
@@ -269,7 +269,7 @@ body {
         height: 100%;
 
         overflow: hidden;
-        background: var(--majority);
+        background: #000;
 }
 
 .video-background video {
@@ -1324,7 +1324,7 @@ padding: 16px 36px;
     width: 100%;
     margin: 20px auto;
     font-size: var(--s);
-   background:var(--majority);
+   background:#000;
     transition: background ease-in-out 300ms;
     text-align: center;
     display: flex;
@@ -1365,7 +1365,7 @@ input[type="file"] {
 
 label.imageup {
            cursor: pointer;
-           background: var(--majority);
+           background: #000;
            padding: var(--2xs); 0;
            border-radius: var(--2xs);
            color: var(--bunker-500);
@@ -1546,7 +1546,7 @@ img#thumbnail {
     position: absolute;
     right: 0;
     top: 0px;
-    background: var(--majority);
+    background: #000;
     padding: var(--m);
     border-radius: var(--s);
 }
@@ -1663,7 +1663,7 @@ b {
 .modalP input {
         border-radius: var(--2xs);
         padding: 0.5rem 0.5rem;
-        border: 1px solid var(--majority)000;
+        border: 1px solid #000000;
         background: #0e0e0e;
         box-shadow: inset 0px 4px 16px rgb(0 0 0);
         color: #808080;
@@ -1700,7 +1700,7 @@ span#clearImg {
         position: absolute;
         right: var(--m);
         top: 10px;
-        background: var(--majority)0007d;
+        background: #0000007d;
         padding: 4pxvar(--2xs);
         border-radius: 900rem;
         
@@ -1931,7 +1931,7 @@ h4 {
 
 
 .colorPickersGroup {
-    background: var(--majority);
+    background: #000;
 }
 
 .colorPickers {
@@ -1953,7 +1953,7 @@ h4 {
         align-items: stretch;
         justify-content: flex-start;
         margin-bottom: 12px;
-        background: var(--majority);
+        background: #000;
         padding: 8px 4px;
         border-radius:var(--2xs);
         height: 100%;
@@ -1998,7 +1998,7 @@ label.custom-checkbox {
         left: 0;
         height: var(--m);
         width: var(--m);
-        background-color: var(--majority);
+        background-color: #000;
         border-radius: 3px;
         margin: 0 8px 0 0;
 }
@@ -2063,7 +2063,7 @@ label.custom-checkbox {
         margin: 8pxvar(--2xs);
         border-radius: 6px;
         rotate: 45deg;
-        border: 1px solid var(--majority)00000;
+        border: 1px solid #00000000;
 }
 
 select#harmonyType {
@@ -2283,7 +2283,7 @@ i {
 }
 
 #modal {
-       background: var(--majority);
+       background: #000;
 }
 
 .carousel-wrapper {
@@ -2306,7 +2306,7 @@ i {
 
 .carousel-slide a, .carousel-slide .image-buttons button {
     position: absolute;
-    background: var(--majority)0005c;
+    background: #0000005c;
     color: var(--bunker-50);
     border-radius: 100%;
     width: 30px;
@@ -2346,7 +2346,7 @@ i {
   top: 0;
   left: 0;
   z-index: 9;
-  background: var(--majority);
+  background: #000;
   display: flex;
   flex-direction: row;
 }
@@ -2385,7 +2385,7 @@ button#zipButton {
     line-height: 0;
     box-shadow: 0px 0px 0px 20px rgb(95 138 182 / 0%);
     border: 1px dashed var(--bunker-700);
-    background: var(--majority);
+    background: #000;
     border-radius: var(--s);
     display: flex;
     justify-content: center;
@@ -2636,7 +2636,7 @@ aside .aspectRatioShot {
 
 .aspectRatioShot,
 .switchContainer {
-        background: var(--majority);
+        background: #000;
         /* display: flex; */
         /* flex-direction: column; */
         /* align-items: flex-start; */
@@ -2885,7 +2885,7 @@ select:hover {
         /* box-shadow: inset 0px 0px 0px 3px var(--bunker-600) !important; */
         border: none !important;
         background: #4ce6cb !important;
-        color: var(--majority)000 !important;
+        color: #000000 !important;
 }
 
 textarea {
@@ -2981,7 +2981,7 @@ button {
 
 
 button:hover {
-    background: var(--majority);
+    background: #000;
     color: var(--bunker-600);
 }
 
@@ -3217,7 +3217,7 @@ option[title]:hover:after {
        z-index: 9;
        font-size: var(--xs);
        padding-bottom: var(--2xl);
-       background: var(--majority);
+       background: #000;
        position: absolute;
        top: 60px;
        padding: 12px;
@@ -3237,7 +3237,7 @@ option[title]:hover:after {
 
 .toggle-content {
         display: none;
-        background: var(--majority);
+        background: #000;
         border-radius: 16px;
         color: var(--bunker-400);
         line-height: 1.5;
@@ -3576,7 +3576,7 @@ tertiary:hover {
         flex-wrap: nowrap;
         align-items: flex-start;
         height: auto;
-        background: var(--majority);
+        background: #000;
         border-radius: 16px;
         margin: 0;
 }
@@ -4027,7 +4027,7 @@ textarea:focus-visible {
 .dropdown-selected .clear-selection {
    display: none;
    cursor: pointer;
-   color: var(--majority)000;
+   color: #000000;
    margin-right: -5px;
    position: relative;
    z-index: 1;
@@ -4087,7 +4087,7 @@ textarea:focus-visible {
 }
 
 .selected .selected-text {
-    color: var(--majority)000;
+    color: #000000;
     display: flex;
     align-items: center;
     gap: var(--xs);
@@ -4340,7 +4340,7 @@ label.hamburger:hover {
 
 /* Fondo de la barra */
 ::-webkit-scrollbar-track {
-    background: var(--majority); /* Color del fondo de la barra */
+    background: #000; /* Color del fondo de la barra */
     border-radius: 10px; /* Bordes redondeados */
 }
 
@@ -4606,7 +4606,7 @@ body, html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--majority);
+  background-color: #000;
   color: white;
   padding: 10px 20px;
   position: sticky;
@@ -4630,7 +4630,7 @@ body, html {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   overflow: hidden;
-  background: var(--majority);
+  background: #000;
   width: 100%;
   height: 100vh;
  
@@ -4640,7 +4640,7 @@ body, html {
   padding: 0 var(--s);
     padding-bottom: 100px;
   overflow: auto; /* Prevent scrolling */
-  background: var(--majority);
+  background: #000;
     
   position: relative;
   transform: translateX(-100%); /* Start off-screen for left */
@@ -4670,7 +4670,7 @@ body, html {
 .center-column {
   /* padding: 20px; */
   overflow-y: auto; /* Enable scrolling */
-  background: var(--majority);
+  background: #000;
     padding-bottom: 260px;
 }
 
@@ -4682,7 +4682,7 @@ body, html {
     position: absolute;
     bottom: 0;
     width: fit-content;
-    background: var(--majority);
+    background: #000;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -4757,7 +4757,7 @@ body, html {
 }
 
 html {
-	background: var(--majority);
+	background: #000;
 }
 
 /* Orb*/
@@ -4765,7 +4765,7 @@ html {
 	@include dimensions($width: 180px);
 	animation: shapeColorShift 10s infinite;
 	filter: blur(12px);
-	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, var(--majority), var(--majority)000, #08AEEA);
+	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000, #000000, #08AEEA);
 	background-size: 500% 800%;
 	border-radius: 50%; /* Hacemos que sea siempre un círculo*/
 	height: 100px;
@@ -4841,7 +4841,7 @@ html {
 }
 
 .fullscreen .header, .fullscreen .footer {
-    background-color: var(--majority);
+    background-color: #000;
     padding: 20px;
     text-align: center;
     width: 100%;
@@ -4856,12 +4856,12 @@ html {
 .fullscreen .content {
     display: flex;
     height: calc(100% - 160px); /* Espacio para header y footer */
-    background: var(--majority);
+    background: #000;
 }
 
 .fullscreen .sidebar {
     width: 25%;
-    background-color: var(--majority);
+    background-color: #000;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -4942,7 +4942,7 @@ html {
 
         /* Estilo único para el textarea */
         textarea.magic-gpt-textarea {
-            background-color: var(--majority);
+            background-color: #000;
             color: #f0f0f0;
             border-radius: 8px;
             padding: 10px;
@@ -4971,7 +4971,7 @@ html {
         #magic-gpt-conversation-container {
             width: 80%;
             margin-top: 20px;
-            background-color: var(--majority);
+            background-color: #000;
             padding: 15px;
             border-radius: 8px;
             max-height: 300px;
@@ -4985,7 +4985,7 @@ html {
         }
 
          .magic-gpt-message-user {
-            background-color: var(--majority);); /* Color verde claro para el usuario */
+            background-color: #000;); /* Color verde claro para el usuario */
             padding: var(--xs);
             border-radius: var(--xs);
             float: left;
@@ -4997,7 +4997,7 @@ html {
 
         .magic-gpt-message-gpt {
             color: var(--bunker-400); /* Color azul claro para GPT */
-            background: var(--majority);
+            background: #000;
             padding: var(--xs);
             border-radius: var(--xs);
             float: right;
@@ -5114,7 +5114,7 @@ div#messages {
 }
 
 .assistant {
-    background: var(--majority);
+    background: #000;
     width: fit-content;
     padding: 4px;
     border-radius: 8px 0px 8px 8px;
@@ -5330,7 +5330,7 @@ div#prompt {
     
      .add-image-card {
     
-    background: var(--majority);
+    background: #000;
     
     padding-bottom: 70px;
 }
@@ -5437,7 +5437,7 @@ div#prompt {
     
      .add-image-card {
     
-    background: var(--majority);
+    background: #000;
     
     padding-bottom: 70px;
 }
