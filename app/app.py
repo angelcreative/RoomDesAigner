@@ -340,7 +340,7 @@ def generate_images():
                     session['credits'] -= 4  # Descuenta 4 créditos de la sesión
                     # Devuelve las imágenes generadas y el prompt transformado
                     return jsonify({
-                        "image": result.get('output')[0] if result.get('output') else None,
+                        "images": result.get('output'),
                         "transformed_prompt": transformed_prompt,
                         "credits": session['credits']  # Devuelve los créditos restantes
                     }), 200

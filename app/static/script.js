@@ -645,7 +645,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
-    // Configuración del modelo basada en la selección del usuario
+      // Configuración del modelo basada en la selección del usuario
     let modelConfig;
     if (selectedModel === "flux") {
         modelConfig = {
@@ -701,13 +701,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } 
     
     
+    
 
     // Configuración del prompt
     const prompt = {
         prompt: promptText,
         width: width,
         height: height,
-        samples: 1,
+        samples: 4,
         guidance_scale: 7.5,
         steps: 8,
         use_karras_sigmas: "yes",
@@ -760,12 +761,17 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
 
 
-        if (data.status === "success" && data.image) {
-    transformedPrompt = data.transformed_prompt;
-    // Las imágenes están listas
-    showModal([data.image], transformedPrompt);  // Pasa la imagen dentro de un array para mantener compatibilidad
-    hideGeneratingImagesDialog();
-} else if (data.request_id) {
+        if (data.status === "success" && data.images) {
+
+            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
+
+            // Las imágenes están listas
+
+            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
+
+            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
+
+        } else if (data.request_id) {
 
             transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
 
@@ -1109,16 +1115,6 @@ function toggleContent() {
     console.error("Toggle content div not found.");
   }
 }
-    
-function toggleFilterMenu() {
-    const filterMenu = document.querySelector(".filter-menu");
-    if (filterMenu) {
-        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
-    } else {
-        console.error("No se encontró el elemento con clase 'filter-menu'");
-    }
-}
-
 
 
 // Displays modal with generated images and associated action buttons
@@ -1159,74 +1155,724 @@ function showModal(imageUrls, transformedPrompt) {
         addImageCard.remove();
     }
 
-    // Comprueba si `imageUrls` es un array; si no, lo convierte en uno
-    const imageArray = Array.isArray(imageUrls) ? imageUrls : [imageUrls];
-
     // Añadir las nuevas imágenes generadas al final
-    imageArray.forEach((imageUrl) => {
-        const imageContainer = document.createElement("div");
-        imageContainer.classList.add("carousel-slide");
+imageUrls.forEach((imageUrl) => {
+    const imageContainer = document.createElement("div");
+    imageContainer.classList.add("carousel-slide");
 
-        const image = document.createElement("img");
-        image.src = imageUrl;
-        image.alt = "Generated Image";
-        image.classList.add("thumbnail");
-        
-        // Añadir lazy loading
-        image.loading = "lazy";
-        
-        // Añadir evento de clic para abrir la imagen en fullscreen
-        image.addEventListener('click', () => {
-            openFullscreen(imageUrl);
-        });
-
-        // Crear el enlace <a> para la descarga
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageUrl;
-        downloadLink.download = imageUrl.split('/').pop();
-        downloadLink.target = "_blank";
-        downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span>';
-
-        // Añadir la funcionalidad de descarga al hacer clic en el enlace
-        downloadLink.addEventListener('click', (e) => {
-            if (!downloadLink.download) {
-                e.preventDefault();
-                const a = document.createElement('a');
-                a.href = imageUrl;
-                a.download = imageUrl.split('/').pop();
-                a.target = "_blank";
-                a.click();
-            }
-        });
-
-        // Añadir el enlace de descarga y la imagen al contenedor
-        imageContainer.appendChild(downloadLink);
-
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.classList.add("image-buttons");
-
-        // Botones de acción
-        const copyPromptButton = createButton();
-        copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
-        copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
-
-        const filterButton = createButton();
-        filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
-        filterButton.onclick = toggleFilterMenu;
-
-        // Añadir los botones a su contenedor
-        [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
-
-        // Añadir la imagen y los botones al contenedor de la imagen
-        imageContainer.appendChild(image);
-        imageContainer.appendChild(buttonsContainer);
-        carouselWrapper.appendChild(imageContainer);
-        imageGrid.appendChild(imageContainer);
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Generated Image";
+    image.classList.add("thumbnail");
+    
+       // Añadir lazy loading
+    image.loading = "lazy";
+    
+    
+     // Añadir evento de clic para abrir la imagen en fullscreen
+    image.addEventListener('click', () => {
+        openFullscreen(imageUrl);
     });
+    // Crear el enlace <a> para la descarga
+const downloadLink = document.createElement('a');
+
+downloadLink.href = imageUrl; // Usa la URL dinámica de la imagen para el enlace
+downloadLink.download = imageUrl.split('/').pop(); // Nombre del archivo basado en la URL
+downloadLink.target = "_blank"; // Asegura que siempre se abra en una nueva pestaña
+
+
+// Añadir el icono en lugar del texto "Download"
+downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span>';
+
+// Añadir la funcionalidad de descarga al hacer clic en el enlace
+downloadLink.addEventListener('click', (e) => {
+    // Solo para navegadores que soportan la propiedad download
+    if (!downloadLink.download) {
+        e.preventDefault(); // Previene la navegación si el navegador no soporta la descarga
+        const a = document.createElement('a');
+        a.href = imageUrl; // Usa la URL dinámica de la imagen
+        a.download = imageUrl.split('/').pop(); // Nombre del archivo basado en la URL
+        a.target = "_blank"; // Abrir en una nueva pestaña
+        a.click(); // Simular el clic para iniciar la descarga
+    }
+});
+
+// Añadir la imagen y el enlace al contenedor
+imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al contenedor
+
+
+    const buttonsContainer = document.createElement("div");
+    buttonsContainer.classList.add("image-buttons");
+
+    // Botones de acción
+    const downloadButton = createButton("Download", () => downloadImage(imageUrl));
+    const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+   // Crear botones con iconos en lugar de texto
+const copyPromptButton = createButton();
+copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
+copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
+
+const filterButton = createButton();
+filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
+filterButton.onclick = toggleFilterMenu;
+    
+
+    
+
+    
+    
+
+    // Añadir los botones a su contenedor
+    [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+
+   
+    function createImageElement(imageUrl) {
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'image-container';
+
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = 'Generated Image';
+
+    return imgContainer;
+}
+    
+   
+    // Función para enviar la URL de la imagen y recibir la URL de la imagen escalada
+async function sendImageForUpscale(imageUrl) {
+    try {
+        // Llama al endpoint del backend
+        const response = await fetch('/upscale', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                image_url: imageUrl
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Aquí está la URL de la imagen escalada
+            const upscaledImageUrl = data.upscaled_image_url;
+            console.log("Upscaled Image URL:", upscaledImageUrl);
+
+            // Ahora puedes actualizar el frontend para mostrar la imagen escalada
+            document.getElementById('upscaledImage').src = upscaledImageUrl;
+
+        } else {
+            console.error("Error:", data.error);
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+    }
+}
+
+// Event listener para el botón que activa el upscale
+document.getElementById('upscaleButton').addEventListener('click', function() {
+    const imageUrl = document.getElementById('imageInputUrl').value;
+    if (imageUrl) {
+        sendImageForUpscale(imageUrl);
+    } else {
+        alert("Por favor, ingresa una URL válida");
+    }
+});
+
+    
+
+    // Crear el menú de filtros y añadir sliders
+    const filterMenu = document.createElement("div");
+    filterMenu.classList.add("filter-menu");
+    filterMenu.style.display = "none"; // Oculto por defecto
+
+    // Slider para el grano con label
+    const grainSlider = createSlider("Grain", 0, 50, 0, applyFilters);
+    const grainLabel = document.createElement("label");
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    grainLabel.setAttribute("for", grainSlider.slider.id);  // Asociar el label con el slider
+    filterMenu.appendChild(grainLabel);
+    filterMenu.appendChild(grainSlider.slider);
+
+    // Slider para el contraste con label
+    const contrastSlider = createSlider("Contrast", 100, 300, 100, applyFilters);
+    const contrastLabel = document.createElement("label");
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    contrastLabel.setAttribute("for", contrastSlider.slider.id);
+    filterMenu.appendChild(contrastLabel);
+    filterMenu.appendChild(contrastSlider.slider);
+
+    // Slider para el brillo con label
+    const brightnessSlider = createSlider("Brightness", 50, 200, 100, applyFilters);
+    const brightnessLabel = document.createElement("label");
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+    brightnessLabel.setAttribute("for", brightnessSlider.slider.id);
+    filterMenu.appendChild(brightnessLabel);
+    filterMenu.appendChild(brightnessSlider.slider);
+
+    //Slider para el tinte (hue rotation) con label
+    const hueSlider = createSlider("Hue", 0, 360, 0, applyFilters);
+    const hueLabel = document.createElement("label");
+    hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    hueLabel.setAttribute("for", hueSlider.slider.id);
+    filterMenu.appendChild(hueLabel);
+    filterMenu.appendChild(hueSlider.slider);
+    
+    // Slider para la saturación con label
+const saturateSlider = createSlider("Saturate", 100, 300, 100, applyFilters);
+const saturateLabel = document.createElement("label");
+saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+saturateLabel.setAttribute("for", saturateSlider.slider.id);
+filterMenu.appendChild(saturateLabel);
+filterMenu.appendChild(saturateSlider.slider);
+
+// Slider para el sepia con label
+const sepiaSlider = createSlider("Sepia", 0, 1, 0, applyFilters);
+sepiaSlider.slider.step = 0.01; // Ajustar el paso del slider para valores pequeños
+const sepiaLabel = document.createElement("label");
+sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+sepiaLabel.setAttribute("for", sepiaSlider.slider.id);
+filterMenu.appendChild(sepiaLabel);
+filterMenu.appendChild(sepiaSlider.slider);
+
+// Slider para la escala de grises con label
+const grayscaleSlider = createSlider("Grayscale", 0, 1, 0, applyFilters);
+grayscaleSlider.slider.step = 0.01;
+const grayscaleLabel = document.createElement("label");
+grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+grayscaleLabel.setAttribute("for", grayscaleSlider.slider.id);
+filterMenu.appendChild(grayscaleLabel);
+filterMenu.appendChild(grayscaleSlider.slider);
+
+//Slider para invertir colores con label
+const invertSlider = createSlider("Invert", 0, 1, 0, applyFilters);
+invertSlider.slider.step = 0.01;
+const invertLabel = document.createElement("label");
+invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+invertLabel.setAttribute("for", invertSlider.slider.id);
+filterMenu.appendChild(invertLabel);
+filterMenu.appendChild(invertSlider.slider);
+
+// Slider para el desenfoque con label
+const blurSlider = createSlider("Blur", 0, 10, 0, applyFilters);
+blurSlider.slider.step = 0.1;
+const blurLabel = document.createElement("label");
+blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+blurLabel.setAttribute("for", blurSlider.slider.id);
+filterMenu.appendChild(blurLabel);
+filterMenu.appendChild(blurSlider.slider);
+
+//Slider para la opacidad con label
+const opacitySlider = createSlider("Opacity", 0, 1, 1, applyFilters);
+opacitySlider.slider.step = 0.01;
+const opacityLabel = document.createElement("label");
+opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+opacityLabel.setAttribute("for", opacitySlider.slider.id);
+filterMenu.appendChild(opacityLabel);
+filterMenu.appendChild(opacitySlider.slider);
+
+
+    // Añadir el menú de filtros debajo del botón "Filters"
+    buttonsContainer.appendChild(filterMenu);
+
+    // Función para alternar la visibilidad del menú de filtros
+    function toggleFilterMenu() {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    }
+
+   // Función para aplicar los filtros combinados
+function applyFilters() {
+    const grainAmount = parseInt(grainSlider.slider.value);
+    const contrast = parseInt(contrastSlider.slider.value);
+    const brightness = parseInt(brightnessSlider.slider.value);
+    const hueRotation = parseInt(hueSlider.slider.value);
+    const saturation = parseInt(saturateSlider.slider.value);
+    const sepia = parseFloat(sepiaSlider.slider.value);
+    const grayscale = parseFloat(grayscaleSlider.slider.value);
+    const invert = parseFloat(invertSlider.slider.value);
+    const blur = parseFloat(blurSlider.slider.value);
+    const opacity = parseFloat(opacitySlider.slider.value);
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Aplicar los filtros combinados de CSS
+        ctx.filter = `
+            contrast(${contrast}%) 
+            brightness(${brightness}%) 
+            hue-rotate(${hueRotation}deg)
+            saturate(${saturation}%) 
+            sepia(${sepia}) 
+            grayscale(${grayscale}) 
+            invert(${invert}) 
+            blur(${blur}px) 
+            opacity(${opacity})
+        `;
+        
+        ctx.drawImage(img, 0, 0);
+
+        // Obtener los datos de la imagen para aplicar el grano
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        // Añadir grano a la imagen
+        for (let i = 0; i < data.length; i += 4) {
+            let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+            data[i] += grain;     // Rojo
+            data[i+1] += grain;   // Verde
+            data[i+2] += grain;   // Azul
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
+    };
+
+    // Actualizar el valor de los labels en tiempo real
+    grainLabel.textContent = `Filmgrain: ${grainSlider.slider.value}`;
+    contrastLabel.textContent = `Contrast: ${contrastSlider.slider.value}`;
+    brightnessLabel.textContent = `Brightness: ${brightnessSlider.slider.value}`;
+   // hueLabel.textContent = `Hue: ${hueSlider.slider.value}`;
+    saturateLabel.textContent = `Saturate: ${saturateSlider.slider.value}`;
+    sepiaLabel.textContent = `Sepia: ${sepiaSlider.slider.value}`;
+    grayscaleLabel.textContent = `Grayscale: ${grayscaleSlider.slider.value}`;
+   // invertLabel.textContent = `Invert: ${invertSlider.slider.value}`;
+    blurLabel.textContent = `Blur: ${blurSlider.slider.value}`;
+   // opacityLabel.textContent = `Opacity: ${opacitySlider.slider.value}`;
+}
+
+    
+    
+    //ig
+    
+    
+    function generateFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+    const filDiv = document.createElement('div');
+    filDiv.classList.add('fil');
+
+    const igDiv = document.createElement('div');
+    igDiv.classList.add('ig');
+
+    // Inicialmente ocultar las miniaturas
+    igDiv.style.display = 'none';
+
+    const filters = [
+        '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+        'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+    ];
+
+    // Usa la imagen estática predeterminada (igram.png) para las miniaturas
+    const staticImageUrl = 'static/img/adem-img/favicon.svg';  // Ruta correcta de la imagen igram.png
+
+    filters.forEach((filter) => {
+        const label = document.createElement('label');
+
+        const radio = document.createElement('input');
+        radio.type = 'radio';
+        radio.name = 'filter';
+        radio.value = filter;
+
+        const img = document.createElement('img');
+        img.alt = filter;
+
+        // No cargar dinámicamente, usar la imagen estática predeterminada
+        img.src = staticImageUrl;
+
+        // Añadir el input y la imagen al label
+        label.appendChild(radio);
+        label.appendChild(img);
+
+        // Añadir el label al contenedor de miniaturas
+        igDiv.appendChild(label);
+
+        // Evento 'change' para aplicar el filtro al cambiar de opción
+        radio.addEventListener('change', (event) => {
+            applyFilterToMainImage(event.target.value, imageUrl, mainImageElement);
+        });
+    });
+
+    // Añadir botón para limpiar el filtro
+    const clearFilterLabel = document.createElement('label');
+    const clearButton = document.createElement('button');
+    clearButton.textContent = '✕';
+    clearButton.type = 'button';  // Asegurar que el botón es de tipo button
+
+    // Evento para limpiar el filtro y restablecer la imagen original
+    clearButton.addEventListener('click', () => {
+        mainImageElement.src = imageUrl;  // Restablecer la imagen a su estado original sin filtros
+    });
+
+    // Añadir el botón de limpiar al contenedor
+    clearFilterLabel.appendChild(clearButton);
+    igDiv.appendChild(clearFilterLabel);
+
+    // Añadir las miniaturas y el botón Clear al contenedor principal 'fil'
+    filDiv.appendChild(igDiv);
+
+    // Crear el botón de "Show/Hide"
+    const toggleButton = document.createElement('button');
+    toggleButton.textContent = 'Filters';
+    toggleButton.type = 'button';
+    
+    // Evento para hacer toggle del contenedor 'ig'
+    toggleButton.addEventListener('click', () => {
+        if (igDiv.style.display === 'none') {
+            igDiv.style.display = 'flex';
+            toggleButton.textContent = 'Close';
+        } else {
+            igDiv.style.display = 'none';
+            toggleButton.textContent = 'Filters';
+        }
+    });
+
+    // Añadir el botón de toggle al contenedor principal 'fil'
+    filDiv.insertBefore(toggleButton, igDiv);
+
+    // Añadir el contenedor de miniaturas al contenedor de botones
+    buttonsContainer.appendChild(filDiv);
+}
+// Función para aplicar el filtro a la imagen principal
+function applyFilterToMainImage(filterType, imageUrl, image) {
+    if (!image) {
+        console.error('Image is not defined or passed correctly');
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    const img = new Image();
+    img.src = imageUrl;
+    img.crossOrigin = 'Anonymous';
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Aplicar filtros según el tipo seleccionado
+        switch (filterType) {
+            case '1977':
+                ctx.filter = 'sepia(0.5) contrast(1.1)';
+                break;
+            case 'aden':
+                ctx.filter = 'contrast(0.9) saturate(0.85)';
+                break;
+            case 'brannan':
+                ctx.filter = 'contrast(1.4) sepia(0.5)';
+                break;
+            case 'brooklyn':
+                ctx.filter = 'contrast(0.9) brightness(1.1)';
+                break;
+            case 'clarendon':
+                ctx.filter = 'contrast(1.2) saturate(1.35)';
+                break;
+            case 'earlybird':
+                ctx.filter = 'sepia(0.4) saturate(1.6)';
+                break;
+            case 'gingham':
+                ctx.filter = 'brightness(1.05) hue-rotate(340deg)';
+                break;
+            case 'hudson':
+                ctx.filter = 'brightness(1.2) contrast(0.9)';
+                break;
+            case 'inkwell':
+                ctx.filter = 'grayscale(1) contrast(1.2)';
+                break;
+            case 'kelvin':
+                ctx.filter = 'brightness(1.5) contrast(1.2)';
+                break;
+            case 'lofi':
+                ctx.filter = 'contrast(1.5) saturate(1.2)';
+                break;
+            case 'moon':
+                ctx.filter = 'grayscale(1) contrast(1.1)';
+                break;
+            default:
+                ctx.filter = 'none';
+        }
+
+        // Dibujar la imagen con el filtro aplicado en el canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Actualizar el src de la imagen con el canvas modificado
+        image.src = canvas.toDataURL();
+    };
+}
+
+    
+    ///ig
+    
+    
+    //combined 
+    
+    document.addEventListener("DOMContentLoaded", function() {
+    const fileInput = document.getElementById("imageDisplayUrl");
+    const thumbnailContainer = document.querySelector(".thumbImg2Img");
+    const thumbnailImage = document.getElementById("img2imgThumbnail");
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                thumbnailImage.src = e.target.result;
+                thumbnailContainer.style.display = 'block';
+
+                // Generar los botones de filtros de Instagram y personalizados cuando se carga la imagen
+                const buttonsContainer = document.querySelector(".image-buttons"); // Ajusta el selector según tu código
+                generateInstagramFilterGrid(buttonsContainer, e.target.result, thumbnailImage);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Función para aplicar filtros combinados (Instagram y personalizados)
+    function applyCombinedFiltersToCanvas(instagramFilterType, imageUrl) {
+        const grainAmount = parseInt(grainSlider.slider.value);
+        const contrast = parseInt(contrastSlider.slider.value);
+        const brightness = parseInt(brightnessSlider.slider.value);
+        const hueRotation = parseInt(hueSlider.slider.value);
+        const saturation = parseInt(saturateSlider.slider.value);
+        const sepia = parseFloat(sepiaSlider.slider.value);
+        const grayscale = parseFloat(grayscaleSlider.slider.value);
+        const invert = parseFloat(invertSlider.slider.value);
+        const blur = parseFloat(blurSlider.slider.value);
+        const opacity = parseFloat(opacitySlider.slider.value);
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const img = new Image();
+        img.src = imageUrl;
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // Aplicar los filtros de Instagram y los filtros personalizados juntos
+            let instagramFilter = '';
+            switch (instagramFilterType) {
+                case '1977':
+                    instagramFilter = 'sepia(0.5) contrast(1.1)';
+                    break;
+                case 'aden':
+                    instagramFilter = 'contrast(0.9) saturate(0.85)';
+                    break;
+                case 'brannan':
+                    instagramFilter = 'contrast(1.4) sepia(0.5)';
+                    break;
+                case 'brooklyn':
+                    instagramFilter = 'contrast(0.9) brightness(1.1)';
+                    break;
+                case 'clarendon':
+                    instagramFilter = 'contrast(1.2) saturate(1.35)';
+                    break;
+                case 'earlybird':
+                    instagramFilter = 'sepia(0.4) saturate(1.6)';
+                    break;
+                case 'gingham':
+                    instagramFilter = 'brightness(1.05) hue-rotate(340deg)';
+                    break;
+                case 'hudson':
+                    instagramFilter = 'brightness(1.2) contrast(0.9)';
+                    break;
+                case 'inkwell':
+                    instagramFilter = 'grayscale(1) contrast(1.2)';
+                    break;
+                case 'kelvin':
+                    instagramFilter = 'brightness(1.5) contrast(1.2)';
+                    break;
+                case 'lofi':
+                    instagramFilter = 'contrast(1.5) saturate(1.2)';
+                    break;
+                case 'moon':
+                    instagramFilter = 'grayscale(1) contrast(1.1)';
+                    break;
+                default:
+                    instagramFilter = 'none';
+            }
+
+            // Aplicar todos los filtros al canvas
+            ctx.filter = `
+                contrast(${contrast}%) 
+                brightness(${brightness}%) 
+                hue-rotate(${hueRotation}deg)
+                saturate(${saturation}%) 
+                sepia(${sepia}) 
+                grayscale(${grayscale}) 
+                invert(${invert}) 
+                blur(${blur}px) 
+                opacity(${opacity}) 
+                ${instagramFilter}
+            `;
+            
+            ctx.drawImage(img, 0, 0);
+
+            // Obtener los datos de la imagen para aplicar el grano
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Añadir grano a la imagen
+            for (let i = 0; i < data.length; i += 4) {
+                let grain = (Math.random() * 2 - 1) * grainAmount; // Pequeño grano para cada canal
+                data[i] += grain;     // Rojo
+                data[i+1] += grain;   // Verde
+                data[i+2] += grain;   // Azul
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            // Actualizar la imagen con los filtros aplicados
+            thumbnailImage.src = canvas.toDataURL();
+
+            // Crear un enlace de descarga
+            const downloadLink = document.createElement("a");
+            downloadLink.href = canvas.toDataURL("image/png"); // Convertir canvas a URL de imagen
+            downloadLink.download = `filtered_image_combined.png`; // Nombre del archivo a descargar
+            downloadLink.textContent = "Download Image with Combined Filters";
+
+            // Añadir el enlace de descarga al contenedor de botones
+            const buttonsContainer = document.querySelector(".image-buttons");
+            buttonsContainer.innerHTML = ''; // Limpiar botones anteriores
+            buttonsContainer.appendChild(downloadLink);
+        };
+    }
+
+    // Generar el grid de filtros de Instagram
+    function generateInstagramFilterGrid(buttonsContainer, imageUrl, mainImageElement) {
+        const filters = [
+            '1977', 'aden', 'brannan', 'brooklyn', 'clarendon', 'earlybird', 
+            'gingham', 'hudson', 'inkwell', 'kelvin', 'lofi', 'moon'
+        ];
+
+        filters.forEach((filter) => {
+            const button = document.createElement("button");
+            button.textContent = filter;
+            button.addEventListener("click", function() {
+                // Aplicar el filtro combinado (Instagram y personalizado)
+                applyCombinedFiltersToCanvas(filter, imageUrl);
+            });
+
+            // Añadir el botón de filtro al contenedor de botones
+            buttonsContainer.appendChild(button);
+        });
+    }
+});
+
+    
+    // Generar el grid de filtros dinámicamente usando 'generateFilterGrid'
+    generateFilterGrid(buttonsContainer, imageUrl, image);
+ // Añadir evento de clic para abrir la imagen en fullscreen
+    image.addEventListener('click', () => {
+        openFullscreen(imageUrl);
+    });
+
+
+    // Añadir la imagen y los botones al contenedor de la imagen
+    imageContainer.appendChild(image);
+    imageContainer.appendChild(buttonsContainer);
+    carouselWrapper.appendChild(imageContainer);
+    imageGrid.appendChild(imageContainer);
+});
+
+    
+
+    
+    
+    
+    // Siempre añadir la card para añadir más imágenes al final
+    addImageCard = document.createElement("div");
+    addImageCard.classList.add("carousel-slide", "add-image-card");
+
+    const addImageButton = document.createElement("button");
+    addImageButton.textContent = "+ Add More";
+    addImageButton.classList.add("add-more-button");
+    addImageButton.addEventListener("click", () => {
+        console.log("Add more images triggered.");
+    });
+
+    addImageCard.appendChild(addImageButton);
+    carouselWrapper.appendChild(addImageCard); // Siempre al final
+
+    // Crear botones prev y next para controlar el carrusel si no existen
+    if (!document.querySelector(".prev")) {
+        const prevButton = document.createElement("button");
+        prevButton.type = "button";
+        prevButton.classList.add("prev");
+        prevButton.innerHTML = "&#10094;";
+        prevButton.addEventListener("click", () => moveSlide(-1));
+        imageGrid.appendChild(prevButton);
+    }
+
+    if (!document.querySelector(".next")) {
+        const nextButton = document.createElement("button");
+        nextButton.type = "button";
+        nextButton.classList.add("next");
+        nextButton.innerHTML = "&#10095;";
+        nextButton.addEventListener("click", () => moveSlide(1));
+        imageGrid.appendChild(nextButton);
+    }
+
+    const toggleContentDiv = document.querySelector(".toggle-content");
+    if (toggleContentDiv) {
+        toggleContentDiv.innerHTML = transformedPrompt;
+    } else {
+        console.error("Toggle content div not found.");
+    }
 
     modal.style.display = "block";
     showOverlay();
+    // Inicializar el índice del carrusel
+    let currentIndex = 0;
+
+    function moveSlide(direction) {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+
+        // Actualiza el índice actual
+        currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
+        
+        // Mueve el carrusel
+        const offset = -currentIndex * 100;
+        carouselWrapper.style.transform = `translateX(${offset}%)`;
+
+        // Deshabilitar o esconder el botón "prev" cuando estemos en la primera diapositiva
+        const prevButton = document.querySelector('.prev');
+        if (currentIndex === 0) {
+            prevButton.disabled = true;
+            prevButton.style.display = 'none';
+        } else {
+            prevButton.disabled = false;
+            prevButton.style.display = 'block';
+        }
+    }
+    
+        
+    // Función para abrir la imagen en fullscreen
+function openFullscreen(imageUrl) {
+    fullscreenImage.src = imageUrl;
+    fullscreenContainer.style.display = 'block'; // Mostrar el contenedor fullscreen
+
+    // Limpiar el contenido del sidebar y añadir los botones de control correspondientes
+   // Limpiar el sidebar sidebarContent.innerHTML = ''; 
+    
 }
+
+// Cerrar el fullscreen cuando se hace clic en el botón de cerrar
+closeFullscreen.addEventListener('click', () => {
+    fullscreenContainer.style.display = 'none'; // Ocultar el contenedor fullscreen
+});
+    
+}
+    
 
     
     
