@@ -1,11 +1,6 @@
 :root {
     
     /*color*/
-    
-    /*majority*/
-    --majority:#000;
-    
-    
         /*bunker*/
         --bunker-50: #F1F3F3;
         --bunker-100: #E4E7E7;
@@ -3261,7 +3256,7 @@ option[title]:hover:after {
  width: 100%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     gap: 10px;
 }
 
