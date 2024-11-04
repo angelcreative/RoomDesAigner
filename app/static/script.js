@@ -665,24 +665,24 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "simplevectorflux",
             lora_strength: 1
         };
-    } else if (selectedModel === "uncensored-flux-lora,flux-detaile") {
+    } else if (selectedModel === "flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "flux-detaile",
-            lora_strength: 1
+           lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile",
+            lora_strength: "0.5,0,7,1"
         };
     }  else if (selectedModel === "fluxpro-11") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "fluxpro-11",
-            lora_strength: 1
+           lora_model: "uncensored-flux-lora,polyhedron-flux,fluxpro-11",
+            lora_strength: "0.5,0,7,1"
         };
     } 
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "flux-fashion",
-            lora_strength: 1
+            lora_model: "uncensored-flux-lora,polyhedron-flux,flux-fashion",
+            lora_strength: "0.5,0,7,1"
         };
     } 
      else if (selectedModel === "mystic") {
@@ -695,8 +695,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     else if (selectedModel === "iphone-photo-flux-realism-booster") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "iphone-photo-flux-realism-booster",
-            lora_strength: 1
+            lora_model: "uncensored-flux-lora,polyhedron-flux,iphone-photo-flux-realism-booster",
+            lora_strength: "0.5,0,7,1"
         };
     } 
     
@@ -716,7 +716,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         model_id: modelConfig.model_id,
         lora_model: modelConfig.lora_model,
         lora_strength: modelConfig.lora_strength,
-        scheduler: "DDIMScheduler",
+        scheduler: "Euler",
         webhook: null,
         safety_checker: "no",
         track_id: null,
@@ -1109,6 +1109,16 @@ function toggleContent() {
     console.error("Toggle content div not found.");
   }
 }
+    
+function toggleFilterMenu() {
+    const filterMenu = document.querySelector(".filter-menu");
+    if (filterMenu) {
+        filterMenu.style.display = filterMenu.style.display === "none" ? "block" : "none";
+    } else {
+        console.error("No se encontró el elemento con clase 'filter-menu'");
+    }
+}
+
 
 
 // Displays modal with generated images and associated action buttons
