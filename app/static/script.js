@@ -645,7 +645,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
-      // Configuración del modelo basada en la selección del usuario
+    // Configuración del modelo basada en la selección del usuario
     let modelConfig;
     if (selectedModel === "flux") {
         modelConfig = {
@@ -665,24 +665,24 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_model: "simplevectorflux",
             lora_strength: 1
         };
-    } else if (selectedModel === "flux-detaile") {
+    } else if (selectedModel === "uncensored-flux-lora,flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",
-           lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile",
-            lora_strength: "0.5,0.7,1"
+            lora_model: "flux-detaile",
+            lora_strength: 1
         };
     }  else if (selectedModel === "fluxpro-11") {
         modelConfig = {
             model_id: "fluxdev",
-           lora_model: "uncensored-flux-lora,polyhedron-flux,fluxpro-11",
-            lora_strength: "0.5,0.7,1"
+            lora_model: "fluxpro-11",
+            lora_strength: 1
         };
     } 
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "uncensored-flux-lora,polyhedron-flux,flux-fashion",
-            lora_strength: "0.5,0.7,1"
+            lora_model: "flux-fashion",
+            lora_strength: 1
         };
     } 
      else if (selectedModel === "mystic") {
@@ -695,11 +695,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     else if (selectedModel === "iphone-photo-flux-realism-booster") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "uncensored-flux-lora,polyhedron-flux,iphone-photo-flux-realism-booster",
-            lora_strength: "0.5,0.7,1"
+            lora_model: "iphone-photo-flux-realism-booster",
+            lora_strength: 1
         };
     } 
-    
     
     
 
@@ -717,7 +716,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         model_id: modelConfig.model_id,
         lora_model: modelConfig.lora_model,
         lora_strength: modelConfig.lora_strength,
-        scheduler: "DPMSolverSinglestepScheduler",
+        scheduler: "EulerDiscreteScheduler",
         webhook: null,
         safety_checker: "no",
         track_id: null,
