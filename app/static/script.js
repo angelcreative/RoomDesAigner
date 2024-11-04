@@ -699,8 +699,16 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
             lora_strength: 1
         };
     } 
+     else if (selectedModel === "polyhedron-flux") {
+        modelConfig = {
+            model_id: "fluxdev",
+            lora_model: "polyhedron-flux",
+            lora_strength: 1
+        };
+    } 
     
     
+
 
     // Configuración del prompt
     const prompt = {
