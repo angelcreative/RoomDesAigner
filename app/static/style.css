@@ -5229,6 +5229,32 @@ div#prompt {
 }
 
 
+.image-box {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bunker-300);
+    background-color: var(--bunker-900);
+    position: relative;
+}
+
+.spinner {
+    font-size: 18px;
+    color: var(--bunker-50);
+    text-align: center;
+}
+
+.timer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 14px;
+    color: var(--bunker-300);
+}
+
+
+
 /*=========================   MEDIA QUERIES ===================*/
 
     /* Responsive Design */

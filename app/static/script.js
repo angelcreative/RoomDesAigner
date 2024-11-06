@@ -1,16 +1,21 @@
  // Function to show the overlay
+
+/*
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
   overlay.style.display = "block";
-}
+}*/
+
+/*
 // Function to hide the overlay
 function hideOverlay() {
   const overlay = document.getElementById("overlay");
   overlay.style.display = "none";
-}
+} */
 // Example usage when "Make the Magic" button is clicked
 const magicButton = document.getElementById("magicButton"); 
  
+document.getElementById("magicButton").addEventListener("click", startImageGeneration);
 
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -800,7 +805,67 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     
 }
 
- 
+ async function startImageGeneration() {
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = ""; // Limpiamos el grid antes de comenzar
+
+    // Creamos 4 cajas para la generación de imágenes
+    for (let i = 0; i < 4; i++) {
+        const imageBox = document.createElement("div");
+        imageBox.classList.add("image-box");
+
+        // Spinner de carga
+        const spinner = document.createElement("div");
+        spinner.classList.add("spinner");
+        spinner.textContent = "Generating image...";
+        imageBox.appendChild(spinner);
+
+        // Temporizador
+        const timer = document.createElement("div");
+        timer.classList.add("timer");
+        imageBox.appendChild(timer);
+
+        imageGrid.appendChild(imageBox);
+
+        // Iniciamos el temporizador para cada caja
+        startTimer(timer, imageBox);
+    }
+
+    // Espera las URLs de imágenes del backend
+    const images = await generateImages(); // Llama a la función que obtiene las URLs del backend
+
+    // Muestra las imágenes y oculta el temporizador cuando estén listas
+    if (images && images.length === 4) {
+        images.forEach((imgSrc, index) => {
+            const imageBox = imageGrid.children[index];
+            displayImage(imageBox, imgSrc);
+        });
+    }
+}
+
+function startTimer(timerElement) {
+    let startTime = Date.now();
+    const intervalId = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const minutes = Math.floor(elapsedTime / 60000).toString().padStart(2, "0");
+        const seconds = Math.floor((elapsedTime % 60000) / 1000).toString().padStart(2, "0");
+        const milliseconds = Math.floor(elapsedTime % 1000).toString().padStart(3, "0");
+        timerElement.textContent = `${minutes}:${seconds}:${milliseconds}`;
+    }, 10);
+    timerElement.setAttribute("data-interval", intervalId);
+}
+
+function displayImage(imageBox, imgSrc) {
+    clearInterval(imageBox.querySelector(".timer").getAttribute("data-interval"));
+    imageBox.innerHTML = "";  // Limpia el spinner y temporizador
+    const img = document.createElement("img");
+    img.src = imgSrc;
+    img.alt = "Generated Image";
+    img.style.width = "100%";
+    img.style.height = "100%";
+    imageBox.appendChild(img);
+}
+
     
     
 // Polling para verificar el estado de la generación de imágenes
@@ -1836,7 +1901,7 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
     }
 
     modal.style.display = "block";
-    showOverlay();
+  //  showOverlay();
     // Inicializar el índice del carrusel
     let currentIndex = 0;
 
@@ -1926,11 +1991,13 @@ function closeModalHandler() {
     modal.style.display = "none";
 }
 
+    
+    /*
 // Function to show overlay during modal display
 function showOverlay() {
     const overlay = document.getElementById("overlay");
     overlay.style.display = "block";
-}
+} */
  
     
  
