@@ -668,21 +668,21 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     } else if (selectedModel === "flux-detaile") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "flux-detaile",
-            lora_strength: 1
+            lora_model: ["NSFW-flux-lora", "flux-detaile"],
+lora_strength: [0.5, 1]
         };
     }  else if (selectedModel === "fluxpro-11") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "fluxpro-11",
-            lora_strength: 1
+            lora_model: ["NSFW-flux-lora", "fluxpro-11"],
+lora_strength: [0.5, 1]
         };
     } 
     else if (selectedModel === "fluxdevfashion") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "flux-fashion",
-            lora_strength: 1
+            lora_model: ["NSFW-flux-lora", "flux-fashion"],
+lora_strength: [0.5, 1]
         };
     } 
      else if (selectedModel === "mystic") {
@@ -695,22 +695,22 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     else if (selectedModel === "iphone-photo-flux-realism-booster") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "iphone-photo-flux-realism-booster",
-            lora_strength: 1
+            lora_model: ["NSFW-flux-lora", "iphone-photo-flux-realism-booster"],
+lora_strength: [0.5, 1]
         };
     } 
      else if (selectedModel === "polyhedron-flux") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "polyhedron-flux",
-            lora_strength: 1
+           lora_model: ["NSFW-flux-lora", "polyhedron-flux"],
+lora_strength: [0.5, 1]
         };
     } 
      else if (selectedModel === "ultrarealistic-lora-project") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: "ultrarealistic-lora-project",
-            lora_strength: 1
+            lora_model: ["NSFW-flux-lora", "ultrarealistic-lora-project"],
+lora_strength: [0.5, 1]
         };
     } 
     
