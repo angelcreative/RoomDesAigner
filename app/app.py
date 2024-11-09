@@ -104,7 +104,7 @@ def get_content_for_people():
     -  Lighting : Adapt lighting to the context (e.g., natural daylight or moody shadows).
     -  Technical Details : Adjust camera settings to shot type (85mm lens for close-up, wide-angle for full body).
     -  Color Palette : Mention RGB values for key elements. Ensure the colors align with the mood.
-    Generate a full, professional prompt that adapts naturally to the type of shot, and ensure the description feels seamless, not just a list of attributes. Add DEI, diversity, body sizes, face beauty and non beauty, skin colors, if persons, not always must be white or beautiful, unless is specifically asked it must have diverse skin color, like asian, hispanic, indian, arab, persian, latino, mulatto or afrodescendant.
+    Generate a full, professional prompt that adapts naturally to the type of shot, and ensure the description feels seamless, not just a list of attributes. Add DEI, diversity, body sizes, face beauty and non beauty, skin colors, if persons, not always must be white or beautiful, unless is specifically asked it must have diverse skin color: nordic or asian or hispanic or indian or arab or persian or latino or mulatto or afrodescendant as well as color hair: blonde or redhead or brunette or black or colored.
     """
 
 def get_content_for_logos():
