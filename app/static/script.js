@@ -2342,45 +2342,6 @@ function getConversationHistory() {
 // FASHION
 
 
-async function submitImages() {
-  const clotheUrl = document.getElementById('clothe_url').value;
-  const backgroundUrl = document.getElementById('background_url').value;
-
-  // Configura los parámetros para la API de Modelslab
-  const apiUrl = 'https://modelslab.com/api/v6/image_editing/fashion'; // Reemplaza según la documentación actual de la API
-  const apiKey = 'glCDG3z3AKOSwPPwAJ3NMzuBZRSBhPC6X6qsF3xy15LvJg8ZBcNdaPmxIRk9'; // Usa tu clave de API
-
-  const payload = {
-    clothe_image_url: clotheUrl,
-    background_image_url: backgroundUrl,
-    // Otros parámetros según la documentación de Modelslab
-  };
-
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error('Error en la API');
-    }
-
-    const data = await response.json();
-    const resultImageUrl = data.result_image_url;
-
-    // Abre la imagen resultante en una nueva ventana
-    window.open(resultImageUrl, '_blank');
-  } catch (error) {
-    console.error('Error al generar la imagen:', error);
-    alert('Hubo un problema al procesar la solicitud.');
-  }
-}
-
 
 /*Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
