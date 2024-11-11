@@ -540,7 +540,7 @@ function hideGeneratingImagesDialog() {
 
     
 // Función genérica para hacer fetch con reintentos
-async function fetchWithRetry(url, options, retries = 5, delay = 2000) {
+async function fetchWithRetry(url, options, retries = 90, delay = 10000) {
     for (let i = 0; i < retries; i++) {
         try {
             const response = await fetch(url, options);
@@ -811,7 +811,7 @@ lora_strength: [0.5, 1]
     
 // Polling para verificar el estado de la generación de imágenes
 
-async function checkImageStatus(requestId, transformedPrompt, retries = 40, delay = 10000) {
+async function checkImageStatus(requestId, transformedPrompt, retries = 90, delay = 10000) {
 
     try {
 
