@@ -1156,12 +1156,15 @@ async function applyUltraResolution(imageUrl) {
         const response = await fetch('https://modelslab.com/api/v6/image_editing/super_resolution', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'ultra_resolution',
-                image_url: imageUrl
+                key: apiKey,              // Añade la clave API directamente en el cuerpo
+                init_image: imageUrl,      // Cambia `image_url` por `init_image` si es el parámetro esperado
+                face_enhance: false,       // Agrega los parámetros adicionales que la API requiere
+                scale: 3,
+                webhook: null,
+                track_id: null
             })
         });
 
@@ -1177,6 +1180,7 @@ async function applyUltraResolution(imageUrl) {
         alert("Hubo un error al aplicar la super resolución.");
     }
 }
+
     
     
 
