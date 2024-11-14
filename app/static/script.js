@@ -2339,90 +2339,79 @@ function getConversationHistory() {
     return messages;
 }
 
-// FASHION
-
-// Function to perform the virtual try-on using your backend
-// Function to perform the virtual try-on using your backend
-async function virtualTryOn() {
-    const modelImageUrl = document.getElementById("modelImageUrl").value;
-    const clothImageUrl = document.getElementById("clothImageUrl").value;
-    
-    // Get the selected cloth type from radio buttons
-    const clothType = document.querySelector('input[name="clothType"]:checked').value;
-    
-    const prompt = document.getElementById("customText")?.value || "A realistic photo of a model wearing the selected clothing"; // Default prompt if customText not present
-
-    if (!modelImageUrl || !clothImageUrl || !prompt) {
-        alert("Please enter model image URL, clothing image URL, and a prompt.");
-        return;
-    }
-
-    const requestBody = {
-        init_image: modelImageUrl,
-        cloth_image: clothImageUrl,
-        cloth_type: clothType,
-        prompt: prompt,
-        negative_prompt: "low quality, unrealistic",
-        guidance_scale: 7.5,
-        num_inference_steps: 21,
-        temp: "no"
-    };
-
+// URESO
+// Función para obtener la clave API desde el backend
+async function fetchApiKey() {
     try {
-        const response = await fetch("/api/virtual-try-on", {
-            method: "POST",
+        const response = await fetch('/get-api-key');
+        if (!response.ok) throw new Error('Error obteniendo la clave API');
+        
+        const data = await response.json();
+        return data.api_key;
+    } catch (error) {
+        console.error("Error obteniendo la clave API:", error);
+    }
+}
+
+// Función para aplicar la super resolución a una imagen
+async function applyUltraResolution(imageUrl) {
+    try {
+        const apiKey = await fetchApiKey();
+        if (!apiKey) throw new Error('Clave API no disponible');
+        
+        const response = await fetch('https://api.modelslab.com/image-editing/super-resolution', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
             },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify({
+                model: 'ultra_resolution',
+                image_url: imageUrl
+            })
         });
 
-        const data = await response.json();
+        if (!response.ok) throw new Error('Error en la super resolución');
 
-        if (data.status === "processing" && data.fetch_result) {
-            pollForResult(data.fetch_result);
-        } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
-            displayInImageGrid(data.proxy_links[0]);
-        } else {
-            throw new Error("Failed to generate the try-on image. Please check the API response.");
-        }
+        const data = await response.json();
+        const enhancedImageUrl = data.enhanced_image_url;
+
+        // Abrir la imagen mejorada en una nueva pestaña
+        window.open(enhancedImageUrl, '_blank');
     } catch (error) {
-        console.error("Error in virtual try-on:", error);
-        alert("Something went wrong with the try-on process. Please try again.");
+        console.error("Error aplicando super resolución:", error);
+        alert("Hubo un error al aplicar la super resolución.");
     }
 }
 
-// Function to poll the fetch_result URL until the image is ready
-async function pollForResult(fetchUrl) {
-    try {
-        const response = await fetch(fetchUrl);
-        const data = await response.json();
+// Añadir botón "Ultra resolución" a cada imagen en el grid
+document.querySelectorAll('.prompt-image').forEach(image => {
+    const button = document.createElement('button');
+    button.innerText = 'Ultra resolución';
+    button.classList.add('super-resolution-btn');
 
-        if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
-            displayInImageGrid(data.proxy_links[0]); // Display the generated image in the grid
-        } else if (data.status === "processing") {
-            // If still processing, wait and try again
-            setTimeout(() => pollForResult(fetchUrl), 5000); // Poll every 5 seconds
-        } else {
-            throw new Error("Failed to fetch the completed try-on image. Please check the API response.");
-        }
-    } catch (error) {
-        console.error("Error while polling for result:", error);
-        alert("Something went wrong while fetching the final image. Please try again.");
-    }
-}
+    // Estilos básicos del botón
+    button.style.position = 'absolute';
+    button.style.bottom = '10px';
+    button.style.left = '10px';
+    button.style.padding = '8px';
+    button.style.fontSize = '12px';
+    button.style.cursor = 'pointer';
+    button.style.backgroundColor = '#FF5D00';
+    button.style.color = '#FFF';
+    button.style.border = 'none';
+    button.style.borderRadius = '5px';
 
-// Function to display the generated image in a grid
-function displayInImageGrid(imageUrl) {
-    const imageGrid = document.getElementById("imageGrid");
-    const imgElement = document.createElement("img");
-    imgElement.src = imageUrl;
-    imgElement.classList.add("try-on-image");
-    imageGrid.appendChild(imgElement);
-}
+    // Evento para aplicar la super resolución al hacer clic
+    button.addEventListener('click', () => applyUltraResolution(image.src));
 
-// Attach the virtual try-on function to the "virtualMagic" button click event
-document.getElementById("virtualMagic").addEventListener("click", virtualTryOn);
+    // Asegura que el contenedor de la imagen esté en posición relativa
+    const imageContainer = image.parentElement;
+    imageContainer.style.position = 'relative';
+
+    // Agregar el botón sobre la imagen
+    imageContainer.appendChild(button);
+});
 
 
 

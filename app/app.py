@@ -807,29 +807,6 @@ def compare_images(slug):
 
 #try
 
-
-
-#tryon
-@app.route('/api/virtual-try-on', methods=['POST'])
-def virtual_try_on():
-    data = request.get_json()
-
-    # Remove the 'key' if it exists in the data from the frontend
-    if 'key' in data:
-        del data['key']
-
-    # Add your API key
-    data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'  # Replace with your actual API key
-
-    # Define the Fashion API URL
-    url = 'https://modelslab.com/api/v6/image_editing/fashion'
-
-    # Forward the request to the Fashion API
-    response = requests.post(url, json=data)
-    
-    # Return the response from the Fashion API to the frontend
-    return jsonify(response.json()), response.status_code
-
 @app.route('/relight')
 def relight_page():
     return render_template('relight.html')
@@ -851,6 +828,21 @@ def relight_image():
     img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
     return jsonify({'status': 'success', 'image': img_str, 'prompt': prompt})
+
+
+
+#ultra
+# Clave API almacenada directamente
+API_KEY = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
+
+@app.route('/get-api-key', methods=['GET'])
+def get_api_key():
+    # Opcionalmente, verifica que el usuario esté autenticado
+    if 'username' not in session:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    return jsonify({'api_key': API_KEY})
+
 
 # Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'
