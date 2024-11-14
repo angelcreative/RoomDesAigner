@@ -2328,12 +2328,20 @@ i {
     /* margin: 0; */
 }
 
-.carousel-slide button:nth-of-type(2){
+.carousel-slide button:nth-of-type(2), .carousel-slide button:nth-of-type(3){
     left: 8px;
-    top: 55px;
+  
     margin: 0;
     background-image: none;
     padding: 0 0 0 2px;
+}
+
+.carousel-slide button:nth-of-type(2) {top: 55px;}
+
+.carousel-slide button:nth-of-type(3) {
+  
+    top: 95px;
+   
 }
 
 .serialButton{

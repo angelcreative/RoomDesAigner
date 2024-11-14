@@ -1131,6 +1131,22 @@ function toggleContent() {
 
     
 // URESO
+    
+// Función para obtener la clave API desde el backend
+async function fetchApiKey() {
+    try {
+        const response = await fetch('/get-api-key');
+        if (!response.ok) throw new Error('Error obteniendo la clave API');
+        
+        const data = await response.json();
+        return data.api_key;
+    } catch (error) {
+        console.error("Error obteniendo la clave API:", error);
+        alert("Hubo un error al obtener la clave API.");
+        return null;
+    }
+}
+    
 // Función para aplicar la super resolución a una imagen
 async function applyUltraResolution(imageUrl) {
     try {
@@ -1251,12 +1267,12 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("image-buttons");
     
-     // Crear el botón de Ultra resolución
-        const ultraResolutionButton = createButton("Ultra resolución", () => applyUltraResolution(imageUrl));
+     
 
     // Botones de acción
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
     const copyButton = createButton("Copy URL", () => copyImageUrlToClipboard(imageUrl));
+    
    // Crear botones con iconos en lugar de texto
 const copyPromptButton = createButton();
 copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
@@ -1265,7 +1281,14 @@ copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
 const filterButton = createButton();
 filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
 filterButton.onclick = toggleFilterMenu;
+  
     
+     // Crear el botón de Ultra resolución con icono
+const ultraResolutionButton = createButton();
+ultraResolutionButton.innerHTML = `<span class="material-symbols-outlined">arrows_output</span>`;
+ultraResolutionButton.onclick = () => applyUltraResolution(imageUrl);
+
+
 
     
 
