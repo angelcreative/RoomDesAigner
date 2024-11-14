@@ -1129,6 +1129,40 @@ function toggleContent() {
   }
 }
 
+    
+// URESO
+// Función para aplicar la super resolución a una imagen
+async function applyUltraResolution(imageUrl) {
+    try {
+        const apiKey = await fetchApiKey();
+        if (!apiKey) throw new Error('Clave API no disponible');
+
+        const response = await fetch('https://api.modelslab.com/image-editing/super-resolution', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'ultra_resolution',
+                image_url: imageUrl
+            })
+        });
+
+        if (!response.ok) throw new Error('Error en la super resolución');
+
+        const data = await response.json();
+        const enhancedImageUrl = data.enhanced_image_url;
+
+        // Abrir la imagen mejorada en una nueva pestaña
+        window.open(enhancedImageUrl, '_blank');
+    } catch (error) {
+        console.error("Error aplicando super resolución:", error);
+        alert("Hubo un error al aplicar la super resolución.");
+    }
+}
+    
+    
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1216,6 +1250,9 @@ imageContainer.appendChild(downloadLink); // Añadir el enlace de descarga al co
 
     const buttonsContainer = document.createElement("div");
     buttonsContainer.classList.add("image-buttons");
+    
+     // Crear el botón de Ultra resolución
+        const ultraResolutionButton = createButton("Ultra resolución", () => applyUltraResolution(imageUrl));
 
     // Botones de acción
     const downloadButton = createButton("Download", () => downloadImage(imageUrl));
@@ -1236,7 +1273,7 @@ filterButton.onclick = toggleFilterMenu;
     
 
     // Añadir los botones a su contenedor
-    [copyPromptButton, filterButton].forEach(button => buttonsContainer.appendChild(button));
+    [copyPromptButton, filterButton, ultraResolutionButton].forEach(button => buttonsContainer.appendChild(button));
 
    
     function createImageElement(imageUrl) {
@@ -2338,80 +2375,6 @@ function getConversationHistory() {
 
     return messages;
 }
-
-// URESO
-// Función para obtener la clave API desde el backend
-async function fetchApiKey() {
-    try {
-        const response = await fetch('/get-api-key');
-        if (!response.ok) throw new Error('Error obteniendo la clave API');
-        
-        const data = await response.json();
-        return data.api_key;
-    } catch (error) {
-        console.error("Error obteniendo la clave API:", error);
-    }
-}
-
-// Función para aplicar la super resolución a una imagen
-async function applyUltraResolution(imageUrl) {
-    try {
-        const apiKey = await fetchApiKey();
-        if (!apiKey) throw new Error('Clave API no disponible');
-        
-        const response = await fetch('https://api.modelslab.com/image-editing/super-resolution', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: 'ultra_resolution',
-                image_url: imageUrl
-            })
-        });
-
-        if (!response.ok) throw new Error('Error en la super resolución');
-
-        const data = await response.json();
-        const enhancedImageUrl = data.enhanced_image_url;
-
-        // Abrir la imagen mejorada en una nueva pestaña
-        window.open(enhancedImageUrl, '_blank');
-    } catch (error) {
-        console.error("Error aplicando super resolución:", error);
-        alert("Hubo un error al aplicar la super resolución.");
-    }
-}
-
-// Añadir botón "Ultra resolución" a cada imagen en el grid
-document.querySelectorAll('.prompt-image').forEach(image => {
-    const button = document.createElement('button');
-    button.innerText = 'Ultra resolución';
-    button.classList.add('super-resolution-btn');
-
-    // Estilos básicos del botón
-    button.style.position = 'absolute';
-    button.style.bottom = '10px';
-    button.style.left = '10px';
-    button.style.padding = '8px';
-    button.style.fontSize = '12px';
-    button.style.cursor = 'pointer';
-    button.style.backgroundColor = '#FF5D00';
-    button.style.color = '#FFF';
-    button.style.border = 'none';
-    button.style.borderRadius = '5px';
-
-    // Evento para aplicar la super resolución al hacer clic
-    button.addEventListener('click', () => applyUltraResolution(image.src));
-
-    // Asegura que el contenedor de la imagen esté en posición relativa
-    const imageContainer = image.parentElement;
-    imageContainer.style.position = 'relative';
-
-    // Agregar el botón sobre la imagen
-    imageContainer.appendChild(button);
-});
 
 
 
