@@ -2342,10 +2342,14 @@ function getConversationHistory() {
 // FASHION
 
 // Function to perform the virtual try-on using your backend
+// Function to perform the virtual try-on using your backend
 async function virtualTryOn() {
     const modelImageUrl = document.getElementById("modelImageUrl").value;
     const clothImageUrl = document.getElementById("clothImageUrl").value;
-    const clothType = document.getElementById("clothType").value;
+    
+    // Get the selected cloth type from radio buttons
+    const clothType = document.querySelector('input[name="clothType"]:checked').value;
+    
     const prompt = document.getElementById("customText")?.value || "A realistic photo of a model wearing the selected clothing"; // Default prompt if customText not present
 
     if (!modelImageUrl || !clothImageUrl || !prompt) {
@@ -2365,7 +2369,7 @@ async function virtualTryOn() {
     };
 
     try {
-        const response = await fetch("/api/virtual-try-on", {  // Endpoint defined in app.py
+        const response = await fetch("/api/virtual-try-on", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -2375,14 +2379,36 @@ async function virtualTryOn() {
 
         const data = await response.json();
 
-        if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
-            displayInImageGrid(data.proxy_links[0]); // Display the generated image in the grid
+        if (data.status === "processing" && data.fetch_result) {
+            pollForResult(data.fetch_result);
+        } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+            displayInImageGrid(data.proxy_links[0]);
         } else {
             throw new Error("Failed to generate the try-on image. Please check the API response.");
         }
     } catch (error) {
         console.error("Error in virtual try-on:", error);
         alert("Something went wrong with the try-on process. Please try again.");
+    }
+}
+
+// Function to poll the fetch_result URL until the image is ready
+async function pollForResult(fetchUrl) {
+    try {
+        const response = await fetch(fetchUrl);
+        const data = await response.json();
+
+        if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+            displayInImageGrid(data.proxy_links[0]); // Display the generated image in the grid
+        } else if (data.status === "processing") {
+            // If still processing, wait and try again
+            setTimeout(() => pollForResult(fetchUrl), 5000); // Poll every 5 seconds
+        } else {
+            throw new Error("Failed to fetch the completed try-on image. Please check the API response.");
+        }
+    } catch (error) {
+        console.error("Error while polling for result:", error);
+        alert("Something went wrong while fetching the final image. Please try again.");
     }
 }
 

@@ -1228,19 +1228,44 @@ mop
 apparel
 </span>
                           Virtual try on</h1><span class="material-symbols-outlined" translate="no"> close </span></section>         <div class="content">
-                     <!-- Input fields for URLs and cloth type selection -->
-    <input type="url" id="modelImageUrl" placeholder="Enter model image URL" required>
-    <input type="url" id="clothImageUrl" placeholder="Enter clothing image URL" required>
+                    <div>
+    <!-- Toggle switch to enable/disable the try-on functionality -->
+    <label>
+        Enable Try-On Feature:
+        <input type="checkbox" id="tryOnToggle">
+    </label>
+</div>
 
-    <!-- Dropdown to select cloth type -->
-    <select id="clothType">
-        <option value="upper_body">Upper Body</option>
-        <option value="lower_body">Lower Body</option>
-        <option value="dresses">Dress</option>
-    </select>
+<!-- Fieldset containing try-on inputs and button, disabled by default -->
+<fieldset id="tryOnFieldset" disabled>
+    <div class="content">
+        <!-- Input fields for URLs and cloth type selection -->
+        <input type="url" id="modelImageUrl" placeholder="Enter model image URL" required>
+        <input type="url" id="clothImageUrl" placeholder="Enter clothing image URL" required>
 
-    <!-- Virtual Magic Button to initiate the virtual try-on -->
-    <button id="virtualMagic" type="button" class="gradient-animation">Try On Clothing</button>
+        <!-- Radio buttons to select cloth type -->
+        <div id="clothTypeOptions">
+            <label>
+                <input type="radio" name="clothType" value="upper_body" checked> Upper Body
+            </label>
+            <label>
+                <input type="radio" name="clothType" value="lower_body"> Lower Body
+            </label>
+            <label>
+                <input type="radio" name="clothType" value="dresses"> Dress
+            </label>
+        </div>
+
+        <!-- Virtual Magic Button to initiate the virtual try-on -->
+        <button id="virtualMagic" type="button" class="gradient-animation">Try On Clothing</button>
+    </div>
+</fieldset>
+
+<!-- Main submit button for the rest of the form -->
+<button class="buttonExt" type="submit" id="magicButton">
+    <span class="material-symbols-outlined">send</span>
+</button>
+
                      </div>
                      
                   <section type="button" class="collapsible"><h1>
@@ -3889,7 +3914,15 @@ function hideToast() {
 }
 </script>
  
-    
+    <script>// Get the toggle switch and fieldset elements
+const tryOnToggle = document.getElementById("tryOnToggle");
+const tryOnFieldset = document.getElementById("tryOnFieldset");
+
+// Event listener to toggle the enabled/disabled state of the fieldset
+tryOnToggle.addEventListener("change", function () {
+    tryOnFieldset.disabled = !this.checked;  // Enable fieldset if checked, disable if unchecked
+});
+</script>
 </body>
 
 </html>
