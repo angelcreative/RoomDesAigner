@@ -1153,7 +1153,7 @@ async function applyUltraResolution(imageUrl) {
         const apiKey = await fetchApiKey();
         if (!apiKey) throw new Error('Clave API no disponible');
 
-        const response = await fetch('https://api.modelslab.com/image-editing/super-resolution', {
+        const response = await fetch('https://modelslab.com/api/v6/image_editing/super_resolution', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
