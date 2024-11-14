@@ -807,6 +807,29 @@ def compare_images(slug):
 
 #try
 
+
+
+#tryon
+@app.route('/api/virtual-try-on', methods=['POST'])
+def virtual_try_on():
+    data = request.get_json()
+
+    # Remove the 'key' if it exists in the data from the frontend
+    if 'key' in data:
+        del data['key']
+
+    # Add your API key
+    data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'  # Replace with your actual API key
+
+    # Define the Fashion API URL
+    url = 'https://modelslab.com/api/v6/image_editing/fashion'
+
+    # Forward the request to the Fashion API
+    response = requests.post(url, json=data)
+    
+    # Return the response from the Fashion API to the frontend
+    return jsonify(response.json()), response.status_code
+
 @app.route('/relight')
 def relight_page():
     return render_template('relight.html')

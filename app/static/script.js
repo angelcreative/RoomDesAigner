@@ -2341,6 +2341,63 @@ function getConversationHistory() {
 
 // FASHION
 
+// Function to perform the virtual try-on using your backend
+async function virtualTryOn() {
+    const modelImageUrl = document.getElementById("modelImageUrl").value;
+    const clothImageUrl = document.getElementById("clothImageUrl").value;
+    const clothType = document.getElementById("clothType").value;
+    const prompt = document.getElementById("customText")?.value || "A realistic photo of a model wearing the selected clothing"; // Default prompt if customText not present
+
+    if (!modelImageUrl || !clothImageUrl || !prompt) {
+        alert("Please enter model image URL, clothing image URL, and a prompt.");
+        return;
+    }
+
+    const requestBody = {
+        init_image: modelImageUrl,
+        cloth_image: clothImageUrl,
+        cloth_type: clothType,
+        prompt: prompt,
+        negative_prompt: "low quality, unrealistic",
+        guidance_scale: 7.5,
+        num_inference_steps: 21,
+        temp: "no"
+    };
+
+    try {
+        const response = await fetch("/api/virtual-try-on", {  // Endpoint defined in app.py
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+            displayInImageGrid(data.proxy_links[0]); // Display the generated image in the grid
+        } else {
+            throw new Error("Failed to generate the try-on image. Please check the API response.");
+        }
+    } catch (error) {
+        console.error("Error in virtual try-on:", error);
+        alert("Something went wrong with the try-on process. Please try again.");
+    }
+}
+
+// Function to display the generated image in a grid
+function displayInImageGrid(imageUrl) {
+    const imageGrid = document.getElementById("imageGrid");
+    const imgElement = document.createElement("img");
+    imgElement.src = imageUrl;
+    imgElement.classList.add("try-on-image");
+    imageGrid.appendChild(imgElement);
+}
+
+// Attach the virtual try-on function to the "virtualMagic" button click event
+document.getElementById("virtualMagic").addEventListener("click", virtualTryOn);
+
 
 
 /*Event listener for opening the lightbox when the avatar is clicked

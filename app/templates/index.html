@@ -1216,9 +1216,34 @@ mop
                  
                  </main>
                  <aside class="right-column">
+               
+                     
+                     
+                     
                   <h2>Person token collections</h2>
                      
-                                                    <section type="button" class="collapsible"><h1>
+                     
+                      <section type="button" class="collapsible"><h1>
+                                     <span class="material-symbols-outlined">
+apparel
+</span>
+                          Virtual try on</h1><span class="material-symbols-outlined" translate="no"> close </span></section>         <div class="content">
+                     <!-- Input fields for URLs and cloth type selection -->
+    <input type="url" id="modelImageUrl" placeholder="Enter model image URL" required>
+    <input type="url" id="clothImageUrl" placeholder="Enter clothing image URL" required>
+
+    <!-- Dropdown to select cloth type -->
+    <select id="clothType">
+        <option value="upper_body">Upper Body</option>
+        <option value="lower_body">Lower Body</option>
+        <option value="dresses">Dress</option>
+    </select>
+
+    <!-- Virtual Magic Button to initiate the virtual try-on -->
+    <button id="virtualMagic" type="button" class="gradient-animation">Try On Clothing</button>
+                     </div>
+                     
+                  <section type="button" class="collapsible"><h1>
                                      <span class="material-symbols-outlined" translate="no">
                 emoji_people
                 </span>
