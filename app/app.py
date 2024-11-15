@@ -844,6 +844,32 @@ def get_api_key():
     return jsonify({'api_key': API_KEY})
 
 
+@app.route('/proxy/super-resolution', methods=['POST'])
+def proxy_super_resolution():
+    url = "https://modelslab.com/api/v6/image_editing/super_resolution"
+    headers = {"Content-Type": "application/json"}
+    payload = request.json
+    payload['key'] = API_KEY  # Asegúrate de agregar la clave API
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=60)
+        return jsonify(response.json()), response.status_code
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/proxy/fetch/<int:fetch_id>', methods=['POST'])
+def proxy_fetch(fetch_id):
+    url = f"https://modelslab.com/api/v6/image_editing/fetch/{fetch_id}"
+    headers = {"Content-Type": "application/json"}
+    payload = {"key": X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw}
+
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=60)
+        return jsonify(response.json()), response.status_code
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

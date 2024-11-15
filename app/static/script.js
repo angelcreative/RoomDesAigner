@@ -1132,6 +1132,11 @@ function toggleContent() {
     
 // URESO
     
+    
+const superResolutionUrl = '/proxy/super-resolution';
+const fetchUrl = (fetchId) => `/proxy/fetch/${fetchId}`;
+
+    
 // Función para obtener la clave API desde el backend
 async function fetchApiKey() {
     try {
@@ -1202,17 +1207,12 @@ async function openImageWithValidation(imageUrl) {
 // Función para aplicar la super resolución con validación de imagen escalada
 async function applyUltraResolution(imageUrl) {
     try {
-        const apiKey = await fetchApiKey();
-        if (!apiKey) throw new Error('Clave API no disponible');
-
-        // Primera solicitud para iniciar la super resolución
-        const response = await fetch('https://modelslab.com/api/v6/image_editing/super_resolution', {
+        const response = await fetch(superResolutionUrl, { // Usar proxy
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                key: apiKey,
                 init_image: imageUrl,
                 face_enhance: false,
                 scale: 3,
@@ -1227,7 +1227,7 @@ async function applyUltraResolution(imageUrl) {
 
         if (data.status === 'processing' && data.fetch_result) {
             // Si el estado es "processing", comenzar el polling
-            await pollForImage(data.fetch_result);
+            await pollForImage(fetchUrl(data.id));
         } else if (data.status === 'success' && data.output && data.output.length > 0) {
             const enhancedImageUrl = data.output[0];
             await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
@@ -1243,18 +1243,14 @@ async function applyUltraResolution(imageUrl) {
 
 
 // Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
+async function pollForImage(fetchUrl, retries = 90, interval = 3000) { // Ahora intenta 90 veces
     try {
-        const apiKey = await fetchApiKey(); // Obtener la clave API
-        if (!apiKey) throw new Error('Clave API no disponible');
-
         for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
-                method: 'POST', // Método POST requerido por la API
+                method: 'POST', // Método POST requerido por el proxy
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ key: apiKey }) // Clave API en el cuerpo
+                }
             });
 
             if (!response.ok) throw new Error('Error al obtener el estado de la super resolución');
@@ -1262,17 +1258,15 @@ async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
             const data = await response.json();
 
             if (data.status === 'success' && data.output && data.output.length > 0) {
-                // Si la imagen está lista, abrir en una nueva pestaña
                 const enhancedImageUrl = data.output[0];
                 await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
                 return;
             } else if (data.status === 'processing') {
-                console.log(`Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
+                console.log(`Intento ${i + 1}: Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
             } else {
                 throw new Error('Estado inesperado durante el polling');
             }
 
-            // Esperar antes de reintentar
             await new Promise(resolve => setTimeout(resolve, interval));
         }
 
@@ -1282,7 +1276,6 @@ async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
         alert("Hubo un error al obtener la imagen escalada.");
     }
 }
-
 
     
 
