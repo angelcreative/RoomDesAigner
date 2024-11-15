@@ -1159,9 +1159,9 @@ async function applyUltraResolution(imageUrl) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                key: apiKey,              // Añade la clave API directamente en el cuerpo
-                init_image: imageUrl,      // Cambia `image_url` por `init_image` si es el parámetro esperado
-                face_enhance: false,       // Agrega los parámetros adicionales que la API requiere
+                key: apiKey,              // Clave API en el cuerpo
+                init_image: imageUrl,     // URL de la imagen inicial
+                face_enhance: false,      // Otras opciones requeridas
                 scale: 3,
                 webhook: null,
                 track_id: null
@@ -1171,17 +1171,22 @@ async function applyUltraResolution(imageUrl) {
         if (!response.ok) throw new Error('Error en la super resolución');
 
         const data = await response.json();
-        const enhancedImageUrl = data.enhanced_image_url;
 
-        // Abrir la imagen mejorada en una nueva pestaña
-        window.open(enhancedImageUrl, '_blank');
+        // Asegurarte de que la salida existe
+        if (data.status === 'success' && data.output && data.output.length > 0) {
+            const enhancedImageUrl = data.output[0];
+
+            // Abrir la imagen mejorada en una nueva pestaña
+            window.open(enhancedImageUrl, '_blank');
+        } else {
+            throw new Error('La respuesta de la API no contiene una URL de imagen válida');
+        }
     } catch (error) {
         console.error("Error aplicando super resolución:", error);
         alert("Hubo un error al aplicar la super resolución.");
     }
 }
-
-    
+ 
     
 
 // Displays modal with generated images and associated action buttons
