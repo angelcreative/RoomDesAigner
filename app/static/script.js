@@ -1148,45 +1148,86 @@ async function fetchApiKey() {
 }
     
 // Función para aplicar la super resolución a una imagen
+// Función para aplicar la super resolución a una imagen
 async function applyUltraResolution(imageUrl) {
     try {
         const apiKey = await fetchApiKey();
         if (!apiKey) throw new Error('Clave API no disponible');
 
+        // Primera solicitud para iniciar la super resolución
         const response = await fetch('https://modelslab.com/api/v6/image_editing/super_resolution', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                key: apiKey,              // Clave API en el cuerpo
-                init_image: imageUrl,     // URL de la imagen inicial
-                face_enhance: false,      // Otras opciones requeridas
+                key: apiKey,
+                init_image: imageUrl,
+                face_enhance: false,
                 scale: 3,
                 webhook: null,
                 track_id: null
             })
         });
 
-        if (!response.ok) throw new Error('Error en la super resolución');
+        if (!response.ok) throw new Error('Error iniciando la super resolución');
 
         const data = await response.json();
 
-        // Asegurarte de que la salida existe
-        if (data.status === 'success' && data.output && data.output.length > 0) {
+        if (data.status === 'processing' && data.fetch_result) {
+            // Si el estado es "processing", comenzar el polling
+            await pollForImage(data.fetch_result);
+        } else if (data.status === 'success' && data.output && data.output.length > 0) {
+            // Si la imagen está lista de inmediato
             const enhancedImageUrl = data.output[0];
-
-            // Abrir la imagen mejorada en una nueva pestaña
             window.open(enhancedImageUrl, '_blank');
         } else {
-            throw new Error('La respuesta de la API no contiene una URL de imagen válida');
+            throw new Error('Respuesta inesperada de la API');
         }
     } catch (error) {
         console.error("Error aplicando super resolución:", error);
         alert("Hubo un error al aplicar la super resolución.");
     }
 }
- 
+
+
+    // Función para hacer polling hasta obtener la imagen escalada
+async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
+    try {
+        for (let i = 0; i < retries; i++) {
+            const response = await fetch(fetchUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error('Error al obtener el estado de la super resolución');
+
+            const data = await response.json();
+
+            if (data.status === 'success' && data.output && data.output.length > 0) {
+                // Si la imagen está lista, abrir en una nueva pestaña
+                const enhancedImageUrl = data.output[0];
+                window.open(enhancedImageUrl, '_blank');
+                return;
+            } else if (data.status === 'processing') {
+                console.log(`Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
+            } else {
+                throw new Error('Estado inesperado durante el polling');
+            }
+
+            // Esperar antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, interval));
+        }
+
+        throw new Error('Se agotaron los intentos para obtener la imagen escalada');
+    } catch (error) {
+        console.error("Error durante el polling:", error);
+        alert("Hubo un error al obtener la imagen escalada.");
+    }
+}
+
     
 
 // Displays modal with generated images and associated action buttons
