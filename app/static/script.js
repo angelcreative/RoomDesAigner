@@ -713,10 +713,10 @@ lora_strength: [1]
 lora_strength: [1]
         };
     } 
-    else if (selectedModel === "uncensored-flux-lora") {
+    else if (selectedModel === "NSFW-flux-lora") {
         modelConfig = {
             model_id: "fluxdev",
-            lora_model: ["uncensored-flux-lora"],
+            lora_model: ["NSFW-flux-lora"],
 lora_strength: [1]
         };
     } 
