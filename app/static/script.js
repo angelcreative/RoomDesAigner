@@ -1138,153 +1138,7 @@ function toggleContent() {
 
     
 // URESO
-    
-    
-const superResolutionUrl = '/proxy/super-resolution';
-const fetchUrl = (fetchId) => `/proxy/fetch/${fetchId}`;
-
-    
-// Función para obtener la clave API desde el backend
-async function fetchApiKey() {
-    try {
-        const response = await fetch('/get-api-key');
-        if (!response.ok) throw new Error('Error obteniendo la clave API');
-        
-        const data = await response.json();
-        return data.api_key;
-    } catch (error) {
-        console.error("Error obteniendo la clave API:", error);
-        alert("Hubo un error al obtener la clave API.");
-        return null;
-    }
-}
-    
-// Función para verificar si una URL está disponible
-async function isImageAvailable(url) {
-    try {
-        const response = await fetch(url, {
-            method: 'HEAD', // Solo verifica si el recurso existe
-        });
-        return response.ok;
-    } catch (error) {
-        console.error("Error comprobando disponibilidad de la imagen:", error);
-        return false;
-    }
-}
-
-// Función para mostrar un toast
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.right = '20px';
-    toast.style.padding = '10px 20px';
-    toast.style.backgroundColor = '#333';
-    toast.style.color = '#fff';
-    toast.style.borderRadius = '5px';
-    toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-    toast.style.zIndex = '1000';
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// Función para abrir la imagen escalada con validación
-async function openImageWithValidation(imageUrl) {
-    showToast("Upscaling image, it will open a new tab...");
-
-    for (let attempt = 0; attempt < 90; attempt++) {
-        const isAvailable = await isImageAvailable(imageUrl);
-        if (isAvailable) {
-            window.open(imageUrl, '_blank');
-            return;
-        }
-
-        console.log(`Intento ${attempt + 1}: La imagen aún no está disponible. Reintentando...`);
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de reintentar
-    }
-
-    console.error("La imagen escalada no está disponible después de varios intentos.");
-    alert("Hubo un problema abriendo la imagen escalada. Inténtalo nuevamente más tarde.");
-}
-
-// Función para aplicar la super resolución con validación de imagen escalada
-async function applyUltraResolution(imageUrl) {
-    try {
-        const response = await fetch(superResolutionUrl, { // Usar proxy
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                init_image: imageUrl,
-                face_enhance: false,
-                scale: 3,
-                webhook: null,
-                track_id: null
-            })
-        });
-
-        if (!response.ok) throw new Error('Error iniciando la super resolución');
-
-        const data = await response.json();
-
-        if (data.status === 'processing' && data.fetch_result) {
-            // Si el estado es "processing", comenzar el polling
-            await pollForImage(fetchUrl(data.id));
-        } else if (data.status === 'success' && data.output && data.output.length > 0) {
-            const enhancedImageUrl = data.output[0];
-            await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
-        } else {
-            throw new Error('Respuesta inesperada de la API');
-        }
-    } catch (error) {
-        console.error("Error aplicando super resolución:", error);
-        alert("Hubo un error al aplicar la super resolución.");
-    }
-}
-
-
-
-// Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 90, interval = 3000) { // Ahora intenta 90 veces
-    try {
-        for (let i = 0; i < retries; i++) {
-            const response = await fetch(fetchUrl, {
-                method: 'POST', // Método POST requerido por el proxy
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) throw new Error('Error al obtener el estado de la super resolución');
-
-            const data = await response.json();
-
-            if (data.status === 'success' && data.output && data.output.length > 0) {
-                const enhancedImageUrl = data.output[0];
-                await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
-                return;
-            } else if (data.status === 'processing') {
-                console.log(`Intento ${i + 1}: Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
-            } else {
-                throw new Error('Estado inesperado durante el polling');
-            }
-
-            await new Promise(resolve => setTimeout(resolve, interval));
-        }
-
-        throw new Error('Se agotaron los intentos para obtener la imagen escalada');
-    } catch (error) {
-        console.error("Error durante el polling:", error);
-        alert("Hubo un error al obtener la imagen escalada.");
-    }
-}
-
-    
+   
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1384,17 +1238,8 @@ const copyPromptButton = createButton();
 copyPromptButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span>`;
 copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
 
-const filterButton = createButton();
-filterButton.innerHTML = `<span class="material-symbols-outlined">blur_on</span>`;
-filterButton.onclick = toggleFilterMenu;
-  
+
     
-     // Crear el botón de Ultra resolución con icono
-const ultraResolutionButton = createButton();
-ultraResolutionButton.innerHTML = `<span class="material-symbols-outlined">arrows_output</span>`;
-ultraResolutionButton.onclick = () => applyUltraResolution(imageUrl);
-
-
 
     
 
@@ -1402,7 +1247,7 @@ ultraResolutionButton.onclick = () => applyUltraResolution(imageUrl);
     
 
     // Añadir los botones a su contenedor
-    [copyPromptButton, filterButton, ultraResolutionButton].forEach(button => buttonsContainer.appendChild(button));
+    [copyPromptButton].forEach(button => buttonsContainer.appendChild(button));
 
    
     function createImageElement(imageUrl) {
