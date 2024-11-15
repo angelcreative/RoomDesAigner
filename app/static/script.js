@@ -1189,7 +1189,7 @@ function showToast(message) {
 async function openImageWithValidation(imageUrl) {
     showToast("Upscaling image, it will open a new tab...");
 
-    for (let attempt = 0; attempt < 4; attempt++) {
+    for (let attempt = 0; attempt < 90; attempt++) {
         const isAvailable = await isImageAvailable(imageUrl);
         if (isAvailable) {
             window.open(imageUrl, '_blank');
