@@ -1147,8 +1147,59 @@ async function fetchApiKey() {
     }
 }
     
-// Función para aplicar la super resolución a una imagen
-// Función para aplicar la super resolución a una imagen
+// Función para verificar si una URL está disponible
+async function isImageAvailable(url) {
+    try {
+        const response = await fetch(url, {
+            method: 'HEAD', // Solo verifica si el recurso existe
+        });
+        return response.ok;
+    } catch (error) {
+        console.error("Error comprobando disponibilidad de la imagen:", error);
+        return false;
+    }
+}
+
+// Función para mostrar un toast
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.right = '20px';
+    toast.style.padding = '10px 20px';
+    toast.style.backgroundColor = '#333';
+    toast.style.color = '#fff';
+    toast.style.borderRadius = '5px';
+    toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Función para abrir la imagen escalada con validación
+async function openImageWithValidation(imageUrl) {
+    showToast("Upscaling image, it will open a new tab...");
+
+    for (let attempt = 0; attempt < 4; attempt++) {
+        const isAvailable = await isImageAvailable(imageUrl);
+        if (isAvailable) {
+            window.open(imageUrl, '_blank');
+            return;
+        }
+
+        console.log(`Intento ${attempt + 1}: La imagen aún no está disponible. Reintentando...`);
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de reintentar
+    }
+
+    console.error("La imagen escalada no está disponible después de varios intentos.");
+    alert("Hubo un problema abriendo la imagen escalada. Inténtalo nuevamente más tarde.");
+}
+
+// Función para aplicar la super resolución con validación de imagen escalada
 async function applyUltraResolution(imageUrl) {
     try {
         const apiKey = await fetchApiKey();
@@ -1178,9 +1229,8 @@ async function applyUltraResolution(imageUrl) {
             // Si el estado es "processing", comenzar el polling
             await pollForImage(data.fetch_result);
         } else if (data.status === 'success' && data.output && data.output.length > 0) {
-            // Si la imagen está lista de inmediato
             const enhancedImageUrl = data.output[0];
-            window.open(enhancedImageUrl, '_blank');
+            await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
         } else {
             throw new Error('Respuesta inesperada de la API');
         }
@@ -1191,12 +1241,13 @@ async function applyUltraResolution(imageUrl) {
 }
 
 
-    // Función para hacer polling hasta obtener la imagen escalada
+
+// Función para hacer polling hasta obtener la imagen escalada
 async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
     try {
         for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
-                method: 'GET',
+                method: 'POST', // Cambiado de GET a POST
                 headers: {
                     'Content-Type': 'application/json'
                 }
