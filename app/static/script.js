@@ -1245,12 +1245,16 @@ async function applyUltraResolution(imageUrl) {
 // Función para hacer polling hasta obtener la imagen escalada
 async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
     try {
+        const apiKey = await fetchApiKey(); // Obtener la clave API
+        if (!apiKey) throw new Error('Clave API no disponible');
+
         for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
-                method: 'POST', // Cambiado de GET a POST
+                method: 'POST', // Método POST requerido por la API
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ key: apiKey }) // Clave API en el cuerpo
             });
 
             if (!response.ok) throw new Error('Error al obtener el estado de la super resolución');
@@ -1260,7 +1264,7 @@ async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
             if (data.status === 'success' && data.output && data.output.length > 0) {
                 // Si la imagen está lista, abrir en una nueva pestaña
                 const enhancedImageUrl = data.output[0];
-                window.open(enhancedImageUrl, '_blank');
+                await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
                 return;
             } else if (data.status === 'processing') {
                 console.log(`Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
@@ -1278,6 +1282,7 @@ async function pollForImage(fetchUrl, retries = 10, interval = 3000) {
         alert("Hubo un error al obtener la imagen escalada.");
     }
 }
+
 
     
 
