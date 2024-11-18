@@ -704,7 +704,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: modelConfig.model_id,
-        lora: lora,  // Enviar el lora como string
+        lora_model: lora,  // Enviar el lora como string
         lora_strength: loraStrength,  // Enviar la fuerza como número
         scheduler: "EulerDiscreteScheduler",
         webhook: null,
