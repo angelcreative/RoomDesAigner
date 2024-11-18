@@ -647,6 +647,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Construir el texto del prompt final
     const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature} ${sheet} ${tilt} ${evolutionCycle} ${uxui} ${r3d} ${uxuiWeb} ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
+    // Procesar el prompt con el switch OpenAI
+    const useOpenAI = document.getElementById("useOpenAI").checked;
+    const transformedPrompt = useOpenAI ? await processPrompt(promptText) : promptText;
+
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
@@ -655,7 +659,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
     // Configuración del prompt
     const prompt = {
-        prompt: promptText,
+        prompt: transformedPrompt,  // Usar el prompt transformado o el original
         width: width,
         height: height,
         samples: 4,
@@ -672,6 +676,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         safety_checker: "no",
         track_id: null,
         enhance_prompt: "no",
+        use_openai: useOpenAI  // Incluir el estado del switch en el payload
     };
 
     // Si es img2img, añade la imagen inicial
@@ -685,10 +690,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    // Obtener el estado del switch para OpenAI
-    const useOpenAI = document.getElementById("useOpenAI").checked;
-    prompt.use_openai = useOpenAI;
-
     try {
         const data = await fetchWithRetry("/generate-images", {
             method: "POST",
@@ -701,11 +702,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         console.log('Respuesta del backend en generateImages:', data);
 
         if (data.status === "success" && data.images) {
-            transformedPrompt = data.transformed_prompt;
             showModal(data.images, transformedPrompt);  // Mostrar imágenes y prompt
             hideGeneratingImagesDialog();
         } else if (data.request_id) {
-            transformedPrompt = data.transformed_prompt;
             await checkImageStatus(data.request_id, transformedPrompt);  // Verificar estado
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
@@ -1961,20 +1960,29 @@ function processPrompt(prompt) {
     }
 }
 
-function transformPromptWithOpenAI(prompt) {
-    // Simula una llamada a OpenAI
-    return fetch("/openai/transform", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-    })
-        .then((response) => response.json())
-        .then((data) => data.transformed_prompt || prompt)
-        .catch((error) => {
-            console.error("Error using OpenAI:", error);
-            return prompt; // Retorna el original en caso de error
+    
+ async function transformPromptWithOpenAI(prompt) {
+    try {
+        const response = await fetch("/openai/transform", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ prompt, use_openai: true }) // Siempre envía el estado del switch
         });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.transformed_prompt || prompt; // Retorna el prompt transformado o el original
+    } catch (error) {
+        console.error("Error using OpenAI:", error);
+        return prompt; // Si hay un error, retorna el prompt original
+    }
 }
+
 
     
     

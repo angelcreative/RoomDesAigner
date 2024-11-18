@@ -284,6 +284,27 @@ def check_image_availability(url, timeout=60, interval=5):
     return False
 
 
+@app.route('/openai/transform', methods=['POST'])
+def transform_with_openai():
+    try:
+        data = request.json
+        prompt = data.get("prompt", "")
+        use_openai = data.get("use_openai", True)  # Estado del switch
+
+        if not prompt:
+            return jsonify({"error": "No prompt provided"}), 400
+
+        # Si el switch está desactivado, devolvemos el prompt sin transformar
+        if not use_openai:
+            return jsonify({"transformed_prompt": prompt})
+
+        # Si el switch está activado, usamos OpenAI para transformar el prompt
+        transformed_prompt = transform_prompt(prompt)
+        return jsonify({"transformed_prompt": transformed_prompt})
+    except Exception as e:
+        return jsonify({"error": f"Error transforming prompt: {str(e)}"}), 500
+
+
 
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
