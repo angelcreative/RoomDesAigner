@@ -610,7 +610,7 @@ function getModelConfig(selectedModel) {
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
-    showGeneratingImagesDialog();  // Mostrar el diálogo de espera
+    showGeneratingImagesDialog(); // Mostrar el diálogo de espera
 
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
@@ -688,6 +688,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Configuración del modelo basada en la selección del usuario
     let modelConfig = getModelConfig(selectedModel);
 
+    // Ajustar lora_model y lora_strength para la API de modelslab
+    const lora = Array.isArray(modelConfig.lora_model) ? modelConfig.lora_model[0] : modelConfig.lora_model;
+    const loraStrength = Array.isArray(modelConfig.lora_strength) ? modelConfig.lora_strength[0] : modelConfig.lora_strength;
+
     // Configuración del prompt
     const prompt = {
         prompt: transformedPrompt,  // Usar el prompt transformado o el original
@@ -700,8 +704,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
         tomesd: "yes",
         seed: seedValue,
         model_id: modelConfig.model_id,
-        lora_model: modelConfig.lora_model,
-        lora_strength: modelConfig.lora_strength,
+        lora: lora,  // Enviar el lora como string
+        lora_strength: loraStrength,  // Enviar la fuerza como número
         scheduler: "EulerDiscreteScheduler",
         webhook: null,
         safety_checker: "no",
