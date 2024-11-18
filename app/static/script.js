@@ -598,7 +598,7 @@ function getModelConfig(selectedModel) {
             lora_model: ["ultrarealistic-lora-project"],
             lora_strength: [1],
         },
-        "Photorealistic-NSFW-flux": { model_id: "fluxdev", lora_model: ["Photorealistic-NSFW-flux"], lora_strength: [1] },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: ["uncensored-flux-lora"], lora_strength: [1] },
     };
 
     if (!models[selectedModel]) {
