@@ -55,45 +55,52 @@ function mixAttributes(baseAttributes) {
 // Function to handle the form submission
 function handleSubmit(event) {
   event.preventDefault();
+
   const fileInput = document.getElementById("imageDisplayUrl");
   const file = fileInput.files[0];
   const selectedValues = getSelectedValues();
   const isImg2Img = Boolean(file);
 
-  if (file) {
-    const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
-    const uploadUrl = "https://api.imgbb.com/1/upload";
-    const formData = new FormData();
-    formData.append("key", apiKey);
-    formData.append("image", file);
+  // Obtener el prompt y el estado del switch
+  const prompt = document.getElementById("customText").value;
+  const useOpenAI = document.getElementById("useOpenAI").checked; // Estado del switch
 
-    fetch(uploadUrl, {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-    if (data.success) {
-        const imageUrl = data.data.url;
-        if (imageUrl) {
-            const img2imgThumbnail = document.getElementById('img2imgThumbnail');
-            img2imgThumbnail.src = imageUrl;
-            generateImages(imageUrl, selectedValues, isImg2Img);
-        } else {
-            handleError("La URL de la imagen no es válida. Intenta cargar la imagen nuevamente.");
-        }
+  processPrompt(prompt).then((processedPrompt) => {
+    if (file) {
+      const apiKey = "ba238be3f3764905b1bba03fc7a22e28";
+      const uploadUrl = "https://api.imgbb.com/1/upload";
+      const formData = new FormData();
+      formData.append("key", apiKey);
+      formData.append("image", file);
+
+      fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            const imageUrl = data.data.url;
+            if (imageUrl) {
+              const img2imgThumbnail = document.getElementById("img2imgThumbnail");
+              img2imgThumbnail.src = imageUrl;
+
+              // Enviar datos al backend
+              generateImages(imageUrl, selectedValues, isImg2Img, processedPrompt, useOpenAI);
+            } else {
+              handleError("La URL de la imagen no es válida. Intenta cargar la imagen nuevamente.");
+            }
+          } else {
+            throw new Error("Error en la subida de imagen: " + data.error.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error en la subida de la imagen:", error.message);
+        });
     } else {
-        throw new Error("Error en la subida de imagen: " + data.error.message);
+      generateImages(null, selectedValues, isImg2Img, processedPrompt, useOpenAI);
     }
-})
-
-    .catch(error => {
-      console.error("Error en la subida de la imagen:", error.message);
-    });
-  } else {
-    // Manejar caso sin img2img
-    generateImages(null, selectedValues, isImg2Img);
-  }
+  });
 }
 
   function handleError(errorMessage) {
@@ -596,7 +603,6 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
 
-    // Definir proporciones de imagen basadas en la selección
     if (aspectRatio === "square") {
         width = 1200;
         height = 1200;
@@ -627,7 +633,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const blurredBackground = document.getElementById("blurredTextCheckbox")?.checked ? generateBlurredBackground() : "";
     const bokehBackground = document.getElementById("bokehCheckbox")?.checked ? generateBokehBackground() : "";
     const sheet = document.getElementById("sheetCheckbox")?.checked ? generateSheet() : "";
-     const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
+    const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
     const tilt = document.getElementById("tiltCheckbox")?.checked ? generateTilt() : "";
 
     const uxui = document.getElementById("uxuiCheckbox")?.checked ? generateUxui() : "";
@@ -636,92 +642,16 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
 
     const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
-    
     const r3d = document.getElementById("r3dCheckbox")?.checked ? generateR3d() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature}  ${sheet}  ${tilt}  ${evolutionCycle}  ${uxui}  ${r3d} ${uxuiWeb}  ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature} ${sheet} ${tilt} ${evolutionCycle} ${uxui} ${r3d} ${uxuiWeb} ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
     // Configuración del modelo basada en la selección del usuario
-    let modelConfig;
-    if (selectedModel === "flux") {
-        modelConfig = {
-            model_id: "flux",
-            lora_model: null,
-            lora_strength: null
-        };
-    } else if (selectedModel === "fluxdev") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: null,
-            lora_strength: null
-        };
-    } else if (selectedModel === "simplevectorflux") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: "simplevectorflux",
-            lora_strength: 1
-        };
-    } else if (selectedModel === "flux-detaile") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: ["flux-detaile"],
-lora_strength: [1]
-        };
-    }  else if (selectedModel === "fluxpro-11") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: ["fluxpro-11"],
-lora_strength: [1]
-        };
-    } 
-    else if (selectedModel === "fluxdevfashion") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: ["flux-fashion"],
-lora_strength: [1]
-        };
-    } 
-     else if (selectedModel === "mystic") {
-        modelConfig = {
-            model_id: "mystic",
-            lora_model: null,
-            lora_strength: null
-        };
-    } 
-    else if (selectedModel === "iphone-photo-flux-realism-booster") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: ["iphone-photo-flux-realism-booster"],
-lora_strength: [1]
-        };
-    } 
-     else if (selectedModel === "polyhedron-flux") {
-        modelConfig = {
-            model_id: "fluxdev",
-           lora_model: ["polyhedron-flux"],
-lora_strength: [1]
-        };
-    } 
-     else if (selectedModel === "ultrarealistic-lora-project") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: [ "ultrarealistic-lora-project"],
-lora_strength: [1]
-        };
-    } 
-    else if (selectedModel === "NSFW-flux-lora") {
-        modelConfig = {
-            model_id: "fluxdev",
-            lora_model: ["NSFW-flux-lora"],
-lora_strength: [1]
-        };
-    } 
-    
-
+    let modelConfig = getModelConfig(selectedModel);
 
     // Configuración del prompt
     const prompt = {
@@ -755,65 +685,36 @@ lora_strength: [1]
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-    let transformedPrompt;  // Declara transformedPrompt fuera del try
+    // Obtener el estado del switch para OpenAI
+    const useOpenAI = document.getElementById("useOpenAI").checked;
+    prompt.use_openai = useOpenAI;
 
- try {
-
-        // Enviar solicitud al backend en lugar de a la API externa
-
-        const data = await fetchWithRetry("/generate-images", {  // Cambiamos la URL a la del backend
-
+    try {
+        const data = await fetchWithRetry("/generate-images", {
             method: "POST",
-
             headers: {
-
                 "Content-Type": "application/json"
-
             },
-
             body: JSON.stringify(prompt)
-
         });
-
-
 
         console.log('Respuesta del backend en generateImages:', data);
 
-
-
         if (data.status === "success" && data.images) {
-
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-
-            // Las imágenes están listas
-
-            showModal(data.images, transformedPrompt);  // Pasa transformedPrompt
-
-            hideGeneratingImagesDialog();  // Ocultar el diálogo de espera
-
+            transformedPrompt = data.transformed_prompt;
+            showModal(data.images, transformedPrompt);  // Mostrar imágenes y prompt
+            hideGeneratingImagesDialog();
         } else if (data.request_id) {
-
-            transformedPrompt = data.transformed_prompt;  // Captura transformedPrompt
-
-            // Las imágenes aún se están procesando, iniciar polling
-
-            await checkImageStatus(data.request_id, transformedPrompt);  // Pasa transformedPrompt
-
+            transformedPrompt = data.transformed_prompt;
+            await checkImageStatus(data.request_id, transformedPrompt);  // Verificar estado
         } else {
-
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
-
         }
-
     } catch (error) {
-
-        showError(error);  // Manejo de errores
-
+        showError(error);
     }
-    
 }
 
- 
     
     
 // Polling para verificar el estado de la generación de imágenes
@@ -2048,6 +1949,36 @@ function downloadImage(imageUrl) {
   /* Add event listener to the "Clear All" button
   const clearAllButton = document.getElementById("clearAllButton");
   clearAllButton.addEventListener("click", clearAll);*/
+    
+
+    let useOpenAI = true; // Controla el estado del switch
+
+function processPrompt(prompt) {
+    if (useOpenAI) {
+        return transformPromptWithOpenAI(prompt); // Usa OpenAI si está activado
+    } else {
+        return Promise.resolve(prompt); // Devuelve el prompt original si está desactivado
+    }
+}
+
+function transformPromptWithOpenAI(prompt) {
+    // Simula una llamada a OpenAI
+    return fetch("/openai/transform", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
+    })
+        .then((response) => response.json())
+        .then((data) => data.transformed_prompt || prompt)
+        .catch((error) => {
+            console.error("Error using OpenAI:", error);
+            return prompt; // Retorna el original en caso de error
+        });
+}
+
+    
+    
+    
 });
 
 

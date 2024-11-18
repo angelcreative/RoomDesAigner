@@ -288,103 +288,79 @@ def check_image_availability(url, timeout=60, interval=5):
 @app.route('/generate-images', methods=['POST'])
 def generate_images():
     try:
-        # Verifica si el usuario ha iniciado sesión
         if 'username' not in session:
-            return jsonify({"error": "Not logged in"}), 401  # Retorna error 401 si el usuario no está autenticado
+            return jsonify({"error": "Not logged in"}), 401
 
-        # Obtiene el nombre de usuario desde la sesión
         username = session['username']
-        # Recupera los datos del usuario
         user_data = get_user_data(username)
 
-        # Verifica si el usuario tiene al menos 4 créditos disponibles
-        if user_data and user_data.get('credits', 0) >= 4:  
-            # Obtiene los datos de la solicitud POST en formato JSON
+        if user_data and user_data.get('credits', 0) >= 4:
             data = request.get_json()
 
-            # Extrae el campo 'prompt' del JSON recibido
             prompt_text = data.get('prompt')
+            use_openai = data.get('use_openai', True)  # Obtener el estado del switch
 
-            # Si no hay prompt, retorna un error 400 indicando que falta este campo
             if not prompt_text:
                 return jsonify({"error": "Missing prompt text"}), 400
 
-            # Aplica una transformación al texto del prompt
-            transformed_prompt = transform_prompt(prompt_text)
+            # Decidir si transformar el prompt según el estado del switch
+            transformed_prompt = (
+                transform_prompt(prompt_text) if use_openai else prompt_text
+            )
 
-            # Reemplaza el prompt original por el prompt transformado
             data['prompt'] = transformed_prompt
-
-            # Elimina la clave 'key' si existe en los datos
             if 'key' in data:
                 del data['key']
 
-            # Agrega la clave API a los datos
-            data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'  # Reemplaza con tu clave API real
+            data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
+            url = (
+                'https://modelslab.com/api/v6/images/img2img'
+                if 'init_image' in data
+                else 'https://modelslab.com/api/v6/images/text2img'
+            )
 
-            # Define la URL de la API, dependiendo si es una solicitud img2img o text2img
-            url = 'https://modelslab.com/api/v6/images/img2img' if 'init_image' in data else 'https://modelslab.com/api/v6/images/text2img'
-
-            # Realiza la solicitud POST a la API con los datos proporcionados, con un timeout de 180 segundos
             response = requests.post(url, json=data, timeout=180)
 
-            # Verifica si la respuesta del servidor fue exitosa
             if response.status_code == 200:
                 result = response.json()
 
-                # Si la respuesta indica éxito y contiene las imágenes generadas
                 if result.get('status') == 'success' and result.get('output'):
-                    # Deduce 4 créditos del usuario
-                    deduct_credits(username, 4)  # Cambia a 4 créditos
-                    # Actualiza la sesión del usuario para reflejar los nuevos créditos
-                    session['credits'] -= 4  # Descuenta 4 créditos de la sesión
-                    # Devuelve las imágenes generadas y el prompt transformado
+                    deduct_credits(username, 4)
+                    session['credits'] -= 4
                     return jsonify({
                         "images": result.get('output'),
                         "transformed_prompt": transformed_prompt,
-                        "credits": session['credits']  # Devuelve los créditos restantes
+                        "credits": session['credits']
                     }), 200
 
-                # Si las imágenes están en proceso, devuelve un mensaje indicando que están procesándose
                 elif result.get('status') == 'processing' and result.get('id'):
-                    request_id = result.get('id')
-                    # Devuelve un código 202 indicando que la solicitud ha sido aceptada pero aún no está lista
                     return jsonify({
-                        "message": "La generación de imágenes está en proceso. Usa el endpoint /fetch-images para obtener las imágenes.",
-                        "request_id": request_id,
-                        "eta": result.get('eta'),  # Tiempo estimado para completar
+                        "message": "La generación de imágenes está en proceso.",
+                        "request_id": result.get('id'),
+                        "eta": result.get('eta'),
                         "transformed_prompt": transformed_prompt
-                    }), 202  # HTTP 202 Accepted
+                    }), 202
 
-                # Si se obtiene una respuesta inesperada, retorna un error 500
                 else:
-                    return jsonify({"error": "Respuesta inesperada del servicio de generación de imágenes", "details": result}), 500
+                    return jsonify({"error": "Unexpected service response", "details": result}), 500
 
-            # Si el servidor devuelve un código de error, lo retorna con los detalles de la respuesta
             else:
-                return jsonify({"error": "La generación de imágenes falló", "details": response.text}), response.status_code
-
-        # Si el usuario tiene 3 créditos o menos, muestra un mensaje
+                return jsonify({"error": "Image generation failed", "details": response.text}), response.status_code
 
         elif user_data and user_data.get('credits', 0) <= 3:
+            return jsonify({"error": "Insufficient credits", "redirect": "https://www.google.com"}), 403
 
-            return jsonify({"error": "Créditos insuficientes. Por favor, visita Google para más información.", "redirect": "https://www.google.com"}), 403
-
-    # Maneja los casos donde la solicitud a la API se agota por tiempo
     except requests.exceptions.Timeout:
-        return jsonify({"error": "La solicitud agotó el tiempo de espera. Por favor, intenta de nuevo."}), 504
+        return jsonify({"error": "Request timed out. Try again."}), 504
 
-    # Maneja cualquier otro error relacionado con la solicitud a la API
     except requests.exceptions.RequestException as e:
-        return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
+        return jsonify({"error": f"Error: {str(e)}"}), 500
 
-    # Captura cualquier otro error inesperado que ocurra en el servidor
     except Exception as e:
-        return jsonify({"error": f"Error interno del servidor: {str(e)}"}), 500
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
-
-
-
+    
+    
 @app.route('/fetch-images', methods=['POST'])
 def fetch_images():
     try:
