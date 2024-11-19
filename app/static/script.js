@@ -688,7 +688,9 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Configuración del modelo basada en la selección del usuario
     let modelConfig = getModelConfig(selectedModel);
 
-   // Ajustar lora_model y lora_strength para la API de modelslab
+  
+    
+    // Ajustar lora_model y lora_strength para la API de modelslab
 const lora = Array.isArray(modelConfig.lora_model) && modelConfig.lora_model.length > 0
     ? modelConfig.lora_model[0]
     : ""; // Valor predeterminado vacío
@@ -696,8 +698,8 @@ const lora = Array.isArray(modelConfig.lora_model) && modelConfig.lora_model.len
 const loraStrength = Array.isArray(modelConfig.lora_strength) && modelConfig.lora_strength.length > 0
     ? modelConfig.lora_strength[0]
     : 0; // Valor predeterminado 0
-h) ? modelConfig.lora_strength[0] : modelConfig.lora_strength;
 
+    
     // Configuración del prompt
    // Configuración del prompt
 const prompt = {
