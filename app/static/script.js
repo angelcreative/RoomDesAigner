@@ -580,7 +580,7 @@ function updateCreditsDisplay(remainingCredits) {
     
 function getModelConfig(selectedModel) {
     const models = {
-        "flux": { model_id: "flux", lora_model: null, lora_strength: null },
+       "flux": { model_id: "flux", lora_model: "", lora_strength: 0 },
         "fluxdev": { model_id: "fluxdev", lora_model: null, lora_strength: null },
         "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: 1 },
         "flux-detaile": { model_id: "fluxdev", lora_model: ["flux-detaile"], lora_strength: [1] },
@@ -688,31 +688,38 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Configuración del modelo basada en la selección del usuario
     let modelConfig = getModelConfig(selectedModel);
 
-    // Ajustar lora_model y lora_strength para la API de modelslab
-    const lora = Array.isArray(modelConfig.lora_model) ? modelConfig.lora_model[0] : modelConfig.lora_model;
-    const loraStrength = Array.isArray(modelConfig.lora_strength) ? modelConfig.lora_strength[0] : modelConfig.lora_strength;
+   // Ajustar lora_model y lora_strength para la API de modelslab
+const lora = Array.isArray(modelConfig.lora_model) && modelConfig.lora_model.length > 0
+    ? modelConfig.lora_model[0]
+    : ""; // Valor predeterminado vacío
+
+const loraStrength = Array.isArray(modelConfig.lora_strength) && modelConfig.lora_strength.length > 0
+    ? modelConfig.lora_strength[0]
+    : 0; // Valor predeterminado 0
+h) ? modelConfig.lora_strength[0] : modelConfig.lora_strength;
 
     // Configuración del prompt
-    const prompt = {
-        prompt: transformedPrompt,  // Usar el prompt transformado o el original
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 8,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: modelConfig.model_id,
-        lora_model: lora,  // Enviar el lora como string
-        lora_strength: loraStrength,  // Enviar la fuerza como número
-        scheduler: "EulerDiscreteScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no",
-        use_openai: useOpenAI  // Incluir el estado del switch en el payload
-    };
+   // Configuración del prompt
+const prompt = {
+    prompt: transformedPrompt,  // Usar el prompt transformado o el original
+    width: width,
+    height: height,
+    samples: 4,
+    guidance_scale: 7.5,
+    steps: 8,
+    use_karras_sigmas: "yes",
+    tomesd: "yes",
+    seed: seedValue,
+    model_id: modelConfig.model_id,
+    lora_model: lora,  // Enviar el lora ajustado
+    lora_strength: loraStrength,  // Enviar la fuerza ajustada
+    scheduler: "EulerDiscreteScheduler",
+    webhook: null,
+    safety_checker: "no",
+    track_id: null,
+    enhance_prompt: "no",
+    use_openai: useOpenAI  // Incluir el estado del switch en el payload
+};
 
     // Si es img2img, añade la imagen inicial
     if (isImg2Img && imageUrl) {
