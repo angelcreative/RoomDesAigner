@@ -734,7 +734,7 @@ const prompt = {
         prompt.strength = parseFloat(strengthSlider.value);
     }
 
-   try {
+    try {
         console.log("Iniciando solicitud para generar imágenes...");
 
         const data = await fetchWithRetry("/generate-images", {
@@ -747,24 +747,17 @@ const prompt = {
 
         console.log("Respuesta del backend recibida:", data);
 
-        if (data.status === "success" && data.images) {
-            // **VALIDAR LAS IMÁGENES AQUÍ**
-            if (data.images && Array.isArray(data.images)) {
-                const validImages = data.images.filter((url) => url.startsWith("http"));
-                if (validImages.length === 0) {
-                    throw new Error("No se encontraron imágenes válidas en la respuesta del backend.");
-                }
-                console.log("Imágenes válidas encontradas:", validImages);
-                showModal(validImages, transformedPrompt); // Mostrar imágenes
-            } else {
-                throw new Error("La respuesta del backend no contiene imágenes.");
-            }
-
+        // Verificar si la respuesta tiene imágenes listas
+        if (data.status === "success" && data.images && Array.isArray(data.images) && data.images.length > 0) {
+            console.log("Imágenes generadas correctamente, mostrando modal...");
+            showModal(data.images, transformedPrompt); // Mostrar imágenes
             hideGeneratingImagesDialog(); // Ocultar el diálogo
         } else if (data.request_id) {
+            // Las imágenes aún están procesándose, iniciar polling
             console.log("Las imágenes aún están procesándose, iniciando polling...");
             await checkImageStatus(data.request_id, transformedPrompt);
         } else {
+            // Lanza un error solo si no hay imágenes y no hay `request_id`
             console.error("Respuesta inesperada del backend:", data);
             throw new Error(data.error || "Error inesperado en la generación de imágenes.");
         }
