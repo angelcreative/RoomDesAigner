@@ -690,18 +690,17 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 
   
     
-    // Ajustar lora_model y lora_strength para la API de modelslab
+// Ajustar lora_model y lora_strength para la API de modelslab
 const lora = Array.isArray(modelConfig.lora_model) && modelConfig.lora_model.length > 0
     ? modelConfig.lora_model[0]
-    : ""; // Valor predeterminado vacío
+    : null; // Enviar null como valor
 
 const loraStrength = Array.isArray(modelConfig.lora_strength) && modelConfig.lora_strength.length > 0
     ? modelConfig.lora_strength[0]
-    : 0; // Valor predeterminado 0
+    : null; // Enviar null como valor
 
     
-    // Configuración del prompt
-   // Configuración del prompt
+// Configuración del prompt
 const prompt = {
     prompt: transformedPrompt,  // Usar el prompt transformado o el original
     width: width,
@@ -713,8 +712,8 @@ const prompt = {
     tomesd: "yes",
     seed: seedValue,
     model_id: modelConfig.model_id,
-    lora_model: lora,  // Enviar el lora ajustado
-    lora_strength: loraStrength,  // Enviar la fuerza ajustada
+    lora_model: lora,  // Enviar null si no hay valor
+    lora_strength: loraStrength,  // Enviar null si no hay valor
     scheduler: "EulerDiscreteScheduler",
     webhook: null,
     safety_checker: "no",
@@ -722,6 +721,7 @@ const prompt = {
     enhance_prompt: "no",
     use_openai: useOpenAI  // Incluir el estado del switch en el payload
 };
+
 
     // Si es img2img, añade la imagen inicial
     if (isImg2Img && imageUrl) {
