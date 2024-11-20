@@ -598,7 +598,7 @@ function getModelConfig(selectedModel) {
             lora_model: ["ultrarealistic-lora-project"],
             lora_strength: [1],
         },
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: ["uncensored-flux-lora"], lora_strength: [1] },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: ["uncensored-flux-lora,polyhedron-flux"], lora_strength: [1,0.7] },
     };
 
     if (!models[selectedModel]) {
@@ -606,7 +606,6 @@ function getModelConfig(selectedModel) {
     }
     return models[selectedModel];
 }
-
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
@@ -685,34 +684,39 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
 
-    // Configuración del modelo basada en la selección del usuario
-    let modelConfig = getModelConfig(selectedModel);
+// Configuración del modelo basada en la selección del usuario
+let modelConfig = getModelConfig(selectedModel);
 
-    // Ajustar lora_model y lora_strength para la API de modelslab
-    const lora = Array.isArray(modelConfig.lora_model) ? modelConfig.lora_model[0] : modelConfig.lora_model;
-    const loraStrength = Array.isArray(modelConfig.lora_strength) ? modelConfig.lora_strength[0] : modelConfig.lora_strength;
+// Ajustar lora_model y lora_strength para la API de modelslab
+const lora = Array.isArray(modelConfig.lora_model) ? modelConfig.lora_model.join(",") : modelConfig.lora_model;
+const loraStrength = Array.isArray(modelConfig.lora_strength) ? modelConfig.lora_strength.join(",") : modelConfig.lora_strength;
 
-    // Configuración del prompt
-    const prompt = {
-        prompt: transformedPrompt,  // Usar el prompt transformado o el original
-        width: width,
-        height: height,
-        samples: 4,
-        guidance_scale: 7.5,
-        steps: 8,
-        use_karras_sigmas: "yes",
-        tomesd: "yes",
-        seed: seedValue,
-        model_id: modelConfig.model_id,
-        lora_model: lora,  // Enviar el lora como string
-        lora_strength: loraStrength,  // Enviar la fuerza como número
-        scheduler: "EulerDiscreteScheduler",
-        webhook: null,
-        safety_checker: "no",
-        track_id: null,
-        enhance_prompt: "no",
-        use_openai: useOpenAI  // Incluir el estado del switch en el payload
-    };
+// Validar que existan valores para lora_model y lora_strength y que la cantidad coincida
+if (lora && loraStrength && lora.split(",").length !== loraStrength.split(",").length) {
+    throw new Error("La cantidad de LoRAs y fuerzas especificadas no coincide.");
+}
+
+// Configuración del prompt
+const prompt = {
+    prompt: transformedPrompt,  // Usar el prompt transformado o el original
+    width: width,
+    height: height,
+    samples: 4,
+    guidance_scale: 7.5,
+    steps: 8,
+    use_karras_sigmas: "yes",
+    tomesd: "yes",
+    seed: seedValue,
+    model_id: modelConfig.model_id,
+    lora_model: lora,  // Enviar los LoRAs como string separado por comas
+    lora_strength: loraStrength,  // Enviar las fuerzas como string separado por comas
+    scheduler: "EulerDiscreteScheduler",
+    webhook: null,
+    safety_checker: "no",
+    track_id: null,
+    enhance_prompt: "no",
+    use_openai: useOpenAI  // Incluir el estado del switch en el payload
+};
 
     // Si es img2img, añade la imagen inicial
     if (isImg2Img && imageUrl) {
