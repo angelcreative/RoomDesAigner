@@ -582,23 +582,17 @@ function getModelConfig(selectedModel) {
     const models = {
         "flux": { model_id: "flux", lora_model: null, lora_strength: null },
         "fluxdev": { model_id: "fluxdev", lora_model: null, lora_strength: null },
-        "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: 1 },
-        "flux-detaile": { model_id: "fluxdev", lora_model: ["flux-detaile"], lora_strength: [1] },
-        "fluxpro-11": { model_id: "fluxdev", lora_model: ["fluxpro-11"], lora_strength: [1] },
-        "fluxdevfashion": { model_id: "fluxdev", lora_model: ["flux-fashion"], lora_strength: [1] },
-        "mystic": { model_id: "mystic", lora_model: null, lora_strength: null },
+        "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: "1" },
+        "flux-detaile": { model_id: "fluxdev", lora_model: "flux-detaile,polyhedron-flux", lora_strength: "1,0.7" },
+        "fluxpro-11": { model_id: "fluxdev", lora_model: "fluxpro-11,polyhedron-flux", lora_strength: "1,0.7" },
+        "fluxdevfashion": { model_id: "fluxdev", lora_model: "flux-fashion,polyhedron-flux", lora_strength: "1,0.7" },
+        "mystic": { model_id: "mystic", lora_model: "polyhedron-flux", lora_strength: "1" },
         "iphone-photo-flux-realism-booster": {
             model_id: "fluxdev",
-            lora_model: ["iphone-photo-flux-realism-booster"],
-            lora_strength: [1],
+            lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux",
+            lora_strength: "1,0.7"
         },
-        "polyhedron-flux": { model_id: "fluxdev", lora_model: ["polyhedron-flux"], lora_strength: [1] },
-        "ultrarealistic-lora-project": {
-            model_id: "fluxdev",
-            lora_model: ["ultrarealistic-lora-project"],
-            lora_strength: [1],
-        },
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: ["uncensored-flux-lora,polyhedron-flux"], lora_strength: [1,0.7] },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux", lora_strength: "1,0.7" },
     };
 
     if (!models[selectedModel]) {
@@ -606,6 +600,7 @@ function getModelConfig(selectedModel) {
     }
     return models[selectedModel];
 }
+
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img) {
