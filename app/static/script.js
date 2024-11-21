@@ -14,6 +14,14 @@ const magicButton = document.getElementById("magicButton");
 
 document.addEventListener("DOMContentLoaded", function() {
 
+document.getElementById("magicButton").addEventListener("click", function () {
+    const generatingImagesDialog = document.getElementById("generatingImagesDialog");
+    if (generatingImagesDialog) {
+        generatingImagesDialog.style.display = "block"; // Muestra el modal
+    } else {
+        console.error("No se encontró el modal con id 'generatingImagesDialog'");
+    }
+});
 
 /*AIDESIGN
 // Predefined attributes for randomness
