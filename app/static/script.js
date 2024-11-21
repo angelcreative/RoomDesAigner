@@ -605,7 +605,7 @@ function getModelConfig(selectedModel) {
             lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux",
             lora_strength: "1,0.7"
         },
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile", lora_strength: "1,0.7,0.5" },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile", lora_strength: "0.7,1,0.9" },
     };
 
     if (!models[selectedModel]) {
