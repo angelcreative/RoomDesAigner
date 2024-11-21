@@ -1129,21 +1129,27 @@ function showToast(message) {
 // Función para abrir la imagen escalada con validación
 async function openImageWithValidation(imageUrl) {
     showToast("Upscaling image, it will open a new tab...");
+    const maxRetries = 90; // Maximum number of attempts
+    let attempt = 0;
+    const retryInterval = 2000; // Initial interval in milliseconds
 
-    for (let attempt = 0; attempt < 90; attempt++) {
+    while (attempt < maxRetries) {
         const isAvailable = await isImageAvailable(imageUrl);
         if (isAvailable) {
             window.open(imageUrl, '_blank');
             return;
         }
 
-        console.log(`Intento ${attempt + 1}: La imagen aún no está disponible. Reintentando...`);
-        await new Promise(resolve => setTimeout(resolve, 2000)); // Espera 2 segundos antes de reintentar
+        console.log(`Attempt ${attempt + 1}: The image is not yet available. Retrying in ${retryInterval / 1000} seconds...`);
+
+        attempt++;
+        await new Promise(resolve => setTimeout(resolve, retryInterval));
     }
 
-    console.error("La imagen escalada no está disponible después de varios intentos.");
-    alert("Hubo un problema abriendo la imagen escalada. Inténtalo nuevamente más tarde.");
+    console.error("The upscaled image is not available after multiple attempts.");
+    alert("There was an issue opening the upscaled image. Please try again later.");
 }
+
 
 // Función para aplicar la super resolución con validación de imagen escalada
 async function applyUltraResolution(imageUrl) {
@@ -1184,39 +1190,36 @@ async function applyUltraResolution(imageUrl) {
 
 
 // Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 90, interval = 3000) { // Ahora intenta 90 veces
+async function pollForImage(fetchUrl, retries = 90, interval = 3000) {
     try {
         for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
-                method: 'POST', // Método POST requerido por el proxy
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                method: 'POST', // Use POST for the proxy fetch
+                headers: { 'Content-Type': 'application/json' }
             });
 
-            if (!response.ok) throw new Error('Error al obtener el estado de la super resolución');
+            if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
             const data = await response.json();
 
             if (data.status === 'success' && data.output && data.output.length > 0) {
                 const enhancedImageUrl = data.output[0];
-                await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
+                await openImageWithValidation(enhancedImageUrl); // Validate and open image
                 return;
             } else if (data.status === 'processing') {
-                console.log(`Intento ${i + 1}: Imagen aún procesándose. Reintentando en ${interval / 1000} segundos...`);
-            } else {
-                throw new Error('Estado inesperado durante el polling');
+                console.log(`Attempt ${i + 1}: Image still processing. Retrying...`);
             }
 
             await new Promise(resolve => setTimeout(resolve, interval));
         }
 
-        throw new Error('Se agotaron los intentos para obtener la imagen escalada');
+        throw new Error('Image not available after maximum retries');
     } catch (error) {
-        console.error("Error durante el polling:", error);
-        alert("Hubo un error al obtener la imagen escalada.");
+        console.error("Error during polling:", error);
+        alert("There was an issue retrieving the upscaled image.");
     }
 }
+
 
     
 //END URESO     
