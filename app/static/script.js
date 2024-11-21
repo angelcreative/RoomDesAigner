@@ -1195,42 +1195,34 @@ async function applyUltraResolution(imageUrl) {
 
 
 // Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 90, interval = 5000) {
-    for (let i = 0; i < retries; i++) {
-        try {
+async function pollForImage(fetchUrl, retries = 90, interval = 3000) {
+    try {
+        for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
-                method: 'POST',
+                method: 'POST', // Use POST for the proxy fetch
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
             const data = await response.json();
 
             if (data.status === 'success' && data.output && data.output.length > 0) {
                 const enhancedImageUrl = data.output[0];
-                await openImageWithValidation(enhancedImageUrl);
+                await openImageWithValidation(enhancedImageUrl); // Validate and open image
                 return;
             } else if (data.status === 'processing') {
-                console.log(`Attempt ${i + 1}: Image still processing. Retrying in ${interval / 1000}s...`);
-            } else {
-                throw new Error(`Unexpected API status: ${data.status}`);
+                console.log(`Attempt ${i + 1}: Image still processing. Retrying...`);
             }
-        } catch (error) {
-            console.error(`Polling error at attempt ${i + 1}: ${error.message}`);
-            if (error.message.includes('HTTP error')) {
-                throw new Error('Critical HTTP error. Stopping retries.');
-            }
+
+            await new Promise(resolve => setTimeout(resolve, interval));
         }
 
-        // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, interval));
+        throw new Error('Image not available after maximum retries');
+    } catch (error) {
+        console.error("Error during polling:", error);
+        alert("There was an issue retrieving the upscaled image.");
     }
-
-    // If we exhaust retries, throw a descriptive error
-    throw new Error('Image not available after maximum retries');
 }
 
 
