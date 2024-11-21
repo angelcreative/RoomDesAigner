@@ -14,7 +14,9 @@ const magicButton = document.getElementById("magicButton");
 
 document.addEventListener("DOMContentLoaded", function() {
 
-document.getElementById("magicButton").addEventListener("click", function () {
+
+    /*
+    document.getElementById("magicButton").addEventListener("click", function () {
     const generatingImagesDialog = document.getElementById("generatingImagesDialog");
     if (generatingImagesDialog) {
         // Agregar contenido al modal si está vacío
@@ -29,7 +31,7 @@ document.getElementById("magicButton").addEventListener("click", function () {
         console.error("No se encontró el modal con id 'generatingImagesDialog'");
     }
 });
-
+*/
 
 /*AIDESIGN
 // Predefined attributes for randomness
