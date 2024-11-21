@@ -2597,17 +2597,24 @@ background: var(--bunker-900);
 
 /* Botón de cierre */
 .dialog-content button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
+  
   cursor: pointer;
+    
+    padding: 16px 36px;
+    border-radius: var(--2xs);
+    color: var(--bunker-100);
+    width: 100%;
+    margin: 20px auto;
+    font-size: var(--s);
+    background: #000;
+    transition: background ease-in-out 300ms;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .dialog-content button:hover {
-  background: #0056b3;
+  opacity:.8
 }
 
 
