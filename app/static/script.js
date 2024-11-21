@@ -1101,7 +1101,7 @@ async function isImageAvailable(url) {
         });
         return response.ok;
     } catch (error) {
-        console.error("Error comprobando disponibilidad de la imagen:", error);
+        console.error("Error comprobando disponibilidad de la imagen:", error.message || error);
         return false;
     }
 }
@@ -1128,26 +1128,30 @@ function showToast(message) {
 
 // Función para abrir la imagen escalada con validación
 async function openImageWithValidation(imageUrl) {
-    showToast("Upscaling image, it will open a new tab...");
-    const maxRetries = 90; // Maximum number of attempts
+    showToast("Upscaling image, it will open in a new tab...");
+    const maxRetries = 120; // Número máximo de intentos
     let attempt = 0;
-    const retryInterval = 2000; // Initial interval in milliseconds
+    const retryInterval = 3000; // Intervalo entre reintentos (en milisegundos)
 
     while (attempt < maxRetries) {
-        const isAvailable = await isImageAvailable(imageUrl);
-        if (isAvailable) {
-            window.open(imageUrl, '_blank');
-            return;
+        try {
+            const isAvailable = await isImageAvailable(imageUrl);
+            if (isAvailable) {
+                console.log(`Imagen disponible en intento ${attempt + 1}. Abriendo la imagen...`);
+                window.open(imageUrl, '_blank');
+                return;
+            }
+
+            console.log(`Intento ${attempt + 1}: La imagen no está disponible. Reintentando en ${retryInterval / 1000} segundos...`);
+            attempt++;
+            await new Promise(resolve => setTimeout(resolve, retryInterval));
+        } catch (error) {
+            console.error(`Error en intento ${attempt + 1}: ${error.message || error}`);
         }
-
-        console.log(`Attempt ${attempt + 1}: The image is not yet available. Retrying in ${retryInterval / 1000} seconds...`);
-
-        attempt++;
-        await new Promise(resolve => setTimeout(resolve, retryInterval));
     }
 
-    console.error("The upscaled image is not available after multiple attempts.");
-    alert("There was an issue opening the upscaled image. Please try again later.");
+    console.error("La imagen escalada no está disponible después de múltiples intentos.");
+    alert("Hubo un problema al abrir la imagen escalada. Por favor, inténtalo nuevamente más tarde.");
 }
 
 
