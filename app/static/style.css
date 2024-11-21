@@ -2582,13 +2582,17 @@ background: var(--bunker-900);
 
 /* Contenido del diálogo */
 .dialog-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background: var(--bunker-900);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--bunker-600);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Botón de cierre */
