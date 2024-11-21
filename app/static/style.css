@@ -2565,6 +2565,48 @@ background: var(--bunker-900);
         backdrop-filter: blur(10px);
 }
 
+
+/* Overlay estilo */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none; /* Oculto por defecto */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Contenido del diálogo */
+.dialog-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón de cierre */
+.dialog-content button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dialog-content button:hover {
+  background: #0056b3;
+}
+
+
 #myModal {
         display: none;
         background: #b5ac9f78;

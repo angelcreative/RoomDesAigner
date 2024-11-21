@@ -1226,7 +1226,8 @@ async function pollForImage(fetchUrl, retries = 90, interval = 3000) {
 }
 
 
-    
+ 
+ 
 //END URESO     
    
 
@@ -1332,11 +1333,46 @@ copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
     
 
     
-     // Crear el botón de Ultra resolución con icono
+// Crear el botón de Ultra resolución con icono
 const ultraResolutionButton = createButton();
 ultraResolutionButton.innerHTML = `<span class="material-symbols-outlined">arrows_output</span>`;
-ultraResolutionButton.onclick = () => applyUltraResolution(imageUrl);
 
+// Agregar funcionalidad existente al botón
+ultraResolutionButton.onclick = () => {
+  // Mostrar el diálogo antes de aplicar la ultra resolución
+  showUltraResolutionDialog();
+
+  // Continuar con la funcionalidad existente
+  applyUltraResolution(imageUrl);
+};
+
+// Función para mostrar el diálogo
+function showUltraResolutionDialog() {
+  const ultraResolutionDialog = document.getElementById('ultraResolutionDialog');
+  if (ultraResolutionDialog) {
+    ultraResolutionDialog.style.display = 'flex';
+  } else {
+    console.error("No se encontró el elemento con id 'ultraResolutionDialog'. Asegúrate de agregarlo al HTML.");
+  }
+}
+
+// Función para cerrar el diálogo
+function closeUltraResolutionDialog() {
+  const ultraResolutionDialog = document.getElementById('ultraResolutionDialog');
+  if (ultraResolutionDialog) {
+    ultraResolutionDialog.style.display = 'none';
+  }
+}
+
+// Evento para cerrar el diálogo al hacer clic en el botón de cierre
+document.getElementById('closeUltraResolutionDialog').addEventListener('click', closeUltraResolutionDialog);
+
+// Opcional: cerrar el diálogo al hacer clic fuera del contenido
+document.getElementById('ultraResolutionDialog').addEventListener('click', (e) => {
+  if (e.target.id === 'ultraResolutionDialog') {
+    closeUltraResolutionDialog();
+  }
+});
 
 
     
