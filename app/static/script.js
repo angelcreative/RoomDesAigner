@@ -263,22 +263,35 @@ function getSelectedValues() {
 // Event listener for the color switches
 document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
     switchElement.addEventListener('change', function() {
-        const colorPickers = this.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-        colorPickers.forEach(picker => {
-            picker.disabled = !this.checked;
-        });
+        // Verificar si existe el elemento .colorPickersGroup
+        const colorPickersGroup = this.closest('.colorPickersGroup');
+        if (colorPickersGroup) {
+            const colorPickers = colorPickersGroup.querySelectorAll('.colorPicker');
+            colorPickers.forEach(picker => {
+                picker.disabled = !this.checked;
+            });
+        } else {
+            console.warn(`No se encontró '.colorPickersGroup' para el switch con ID: ${this.id}`);
+        }
     });
 });
 
 // Ensure color pickers are enabled/disabled on page load based on switch state
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.switchContainer input[type="checkbox"]').forEach(switchElement => {
-        const colorPickers = switchElement.closest('.colorPickersGroup').querySelectorAll('.colorPicker');
-        colorPickers.forEach(picker => {
-            picker.disabled = !switchElement.checked;
-        });
+        // Verificar si existe el elemento .colorPickersGroup
+        const colorPickersGroup = switchElement.closest('.colorPickersGroup');
+        if (colorPickersGroup) {
+            const colorPickers = colorPickersGroup.querySelectorAll('.colorPicker');
+            colorPickers.forEach(picker => {
+                picker.disabled = !switchElement.checked;
+            });
+        } else {
+            console.warn(`No se encontró '.colorPickersGroup' para el switch con ID: ${switchElement.id}`);
+        }
     });
 });
+
 
 // Slider event listener for displaying value
   const slider = document.getElementById("strengthSlider");
