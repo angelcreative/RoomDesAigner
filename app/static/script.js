@@ -1165,7 +1165,7 @@ async function applyUltraResolution(imageUrl) {
             },
             body: JSON.stringify({
                 init_image: imageUrl,
-                face_enhance: true,
+                face_enhance: false,
                 model_id:"ultra_resolution",
                 scale: 3,
                 webhook: null,
