@@ -1195,7 +1195,7 @@ async function applyUltraResolution(imageUrl) {
 
 
 // Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 90, interval = 3000) {
+async function pollForImage(fetchUrl, retries = 120, interval = 5000) {
     try {
         for (let i = 0; i < retries; i++) {
             const response = await fetch(fetchUrl, {
@@ -1224,7 +1224,6 @@ async function pollForImage(fetchUrl, retries = 90, interval = 3000) {
         alert("There was an issue retrieving the upscaled image.");
     }
 }
-
 
  
  
