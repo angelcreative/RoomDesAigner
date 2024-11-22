@@ -666,11 +666,11 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     width = 1440;
     height = Math.round(1440 * (6 / 19)); // Relación 19:6
 } else if (aspectRatio === "landscape") {
-    width = 1440; // Ancho máximo permitido
-    height = Math.round(1440 * (2 / 3)); // Relación 3:2
+    width = 1200; // Ancho fijo
+    height = Math.round(1200 * (2 / 3)); // Relación 3:2, ajustado
 } else if (aspectRatio === "portrait") {
-    width = Math.round(1200 * (2 / 3)); // Relación 2:3
-    height = 1200; // Alto máximo permitido
+    width = Math.round(1200 * (2 / 3)); // Relación 2:3, ajustado
+    height = 1200; // Alto fijo
 } else if (aspectRatio === "social-vertical") {
     width = Math.round(1440 * (9 / 16)); // Relación 9:16
     height = 1440; // Alto máximo permitido
