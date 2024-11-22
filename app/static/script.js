@@ -625,7 +625,7 @@ function getModelConfig(selectedModel) {
             lora_strength: "1,0.7,0.7,0.5"
         },
         
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile, ultrarealistic-lora-project,flux-image-enhancer-by-dever", lora_strength: "0.7,1,0.9,0.7,0.5" },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile,flux-image-enhancer-by-dever", lora_strength: "0.7,1,0.9,0.5" },
     };
 
     if (!models[selectedModel]) {
