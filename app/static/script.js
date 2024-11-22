@@ -1103,91 +1103,7 @@ function toggleContent() {
 }
 
     
-// URESO
 
-  // Función para mostrar un toast
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.right = '20px';
-    toast.style.padding = '10px 20px';
-    toast.style.backgroundColor = '#333';
-    toast.style.color = '#fff';
-    toast.style.borderRadius = '5px';
-    toast.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-    toast.style.zIndex = '1000';
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// Función simplificada para aplicar la super resolución
-async function applyUltraResolution(imageUrl) {
-    try {
-        // Mostrar mensaje inicial
-        showToast("Procesando imagen, se abrirá en una nueva pestaña cuando esté lista...");
-
-        // Iniciar el proceso de escalado
-        const response = await fetch('/proxy/super-resolution', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                init_image: imageUrl,
-                face_enhance: false,
-                model_id: "ultra_resolution",
-                scale: 3
-            })
-        });
-
-        if (!response.ok) throw new Error('Error al iniciar el proceso');
-        const data = await response.json();
-
-        // Esperar a que la imagen esté lista
-        await checkImageStatus(data.id);
-
-    } catch (error) {
-        console.error("Error:", error);
-        showToast("Hubo un error al procesar la imagen");
-    }
-}
-
-// Función para verificar el estado de la imagen
-async function checkImageStatus(id) {
-    const checkInterval = 5000; // 5 segundos entre cada intento
-    
-    const checkStatus = async () => {
-        const response = await fetch(`/proxy/fetch/${id}`, {
-            method: 'POST'
-        });
-        const data = await response.json();
-
-        if (data.status === 'success' && data.output?.[0]) {
-            window.open(data.output[0], '_blank');
-            return true;
-        }
-        return false;
-    };
-
-    // Intentar hasta que la imagen esté lista
-    while (true) {
-        try {
-            const isComplete = await checkStatus();
-            if (isComplete) break;
-            await new Promise(resolve => setTimeout(resolve, checkInterval));
-        } catch (error) {
-            console.error("Error al verificar estado:", error);
-            throw error;
-        }
-    }
-}
-//END URESO     
-   
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1290,47 +1206,8 @@ copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
 
     
 
-    
-// Crear el botón de Ultra resolución con icono
-const ultraResolutionButton = createButton();
-ultraResolutionButton.innerHTML = `<span class="material-symbols-outlined">arrows_output</span>`;
 
-// Agregar funcionalidad existente al botón
-ultraResolutionButton.onclick = () => {
-  // Mostrar el diálogo antes de aplicar la ultra resolución
-  showUltraResolutionDialog();
 
-  // Continuar con la funcionalidad existente
-  applyUltraResolution(imageUrl);
-};
-
-// Función para mostrar el diálogo
-function showUltraResolutionDialog() {
-  const ultraResolutionDialog = document.getElementById('ultraResolutionDialog');
-  if (ultraResolutionDialog) {
-    ultraResolutionDialog.style.display = 'flex';
-  } else {
-    console.error("No se encontró el elemento con id 'ultraResolutionDialog'. Asegúrate de agregarlo al HTML.");
-  }
-}
-
-// Función para cerrar el diálogo
-function closeUltraResolutionDialog() {
-  const ultraResolutionDialog = document.getElementById('ultraResolutionDialog');
-  if (ultraResolutionDialog) {
-    ultraResolutionDialog.style.display = 'none';
-  }
-}
-
-// Evento para cerrar el diálogo al hacer clic en el botón de cierre
-document.getElementById('closeUltraResolutionDialog').addEventListener('click', closeUltraResolutionDialog);
-
-// Opcional: cerrar el diálogo al hacer clic fuera del contenido
-document.getElementById('ultraResolutionDialog').addEventListener('click', (e) => {
-  if (e.target.id === 'ultraResolutionDialog') {
-    closeUltraResolutionDialog();
-  }
-});
 
 
     
@@ -1339,7 +1216,7 @@ document.getElementById('ultraResolutionDialog').addEventListener('click', (e) =
     
 
     // Añadir los botones a su contenedor
-    [copyPromptButton, ultraResolutionButton].forEach(button => buttonsContainer.appendChild(button));
+    [copyPromptButton].forEach(button => buttonsContainer.appendChild(button));
 
 
    
