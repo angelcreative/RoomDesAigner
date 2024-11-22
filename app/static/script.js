@@ -659,22 +659,23 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
     let width, height;
 
-    if (aspectRatio === "square") {
-        width = 1200;
-        height = 1200;
-    } else if (aspectRatio === "widescreen") {
-        width = 1536;
-        height = 640;
-    } else if (aspectRatio === "landscape") {
-        width = 1344;
-        height = 768;
-    } else if (aspectRatio === "portrait") {
-        width = 896;
-        height = 1152;
-    } else if (aspectRatio === "social-vertical") {
-        width = 640;
-        height = 1536;
-    }
+   if (aspectRatio === "square") {
+    width = 1200;
+    height = 1200; // Relación 1:1
+} else if (aspectRatio === "widescreen") {
+    width = 1440;
+    height = Math.round(1440 * (6 / 19)); // Relación 19:6
+} else if (aspectRatio === "landscape") {
+    width = 1440; // Ancho máximo permitido
+    height = Math.round(1440 * (2 / 3)); // Relación 3:2
+} else if (aspectRatio === "portrait") {
+    width = Math.round(1200 * (2 / 3)); // Relación 2:3
+    height = 1200; // Alto máximo permitido
+} else if (aspectRatio === "social-vertical") {
+    width = Math.round(1440 * (9 / 16)); // Relación 9:16
+    height = 1440; // Alto máximo permitido
+}
+
 
     console.log(`Selected Resolution: ${width}x${height}px`);
 
@@ -1104,40 +1105,7 @@ function toggleContent() {
     
 // URESO
 
-    
-    const superResolutionUrl = '/proxy/super-resolution';
-const fetchUrl = (fetchId) => `/proxy/fetch/${fetchId}`;
-
-    
-// Función para obtener la clave API desde el backend
-async function fetchApiKey() {
-    try {
-        const response = await fetch('/get-api-key');
-        if (!response.ok) throw new Error('Error obteniendo la clave API');
-        
-        const data = await response.json();
-        return data.api_key;
-    } catch (error) {
-        console.error("Error obteniendo la clave API:", error);
-        alert("Hubo un error al obtener la clave API.");
-        return null;
-    }
-}
-    
-// Función para verificar si una URL está disponible
-async function isImageAvailable(url) {
-    try {
-        const response = await fetch(url, {
-            method: 'HEAD', // Solo verifica si el recurso existe
-        });
-        return response.ok;
-    } catch (error) {
-        console.error("Error comprobando disponibilidad de la imagen:", error.message || error);
-        return false;
-    }
-}
-
-// Función para mostrar un toast
+  // Función para mostrar un toast
 function showToast(message) {
     const toast = document.createElement('div');
     toast.textContent = message;
@@ -1157,39 +1125,14 @@ function showToast(message) {
     }, 3000);
 }
 
-// Función para abrir la imagen escalada con validación
-async function openImageWithValidation(imageUrl) {
-    showToast("Upscaling image, it will open in a new tab...");
-    const maxRetries = 120; // Número máximo de intentos
-    let attempt = 0;
-    const retryInterval = 3000; // Intervalo entre reintentos (en milisegundos)
-
-    while (attempt < maxRetries) {
-        try {
-            const isAvailable = await isImageAvailable(imageUrl);
-            if (isAvailable) {
-                console.log(`Imagen disponible en intento ${attempt + 1}. Abriendo la imagen...`);
-                window.open(imageUrl, '_blank');
-                return;
-            }
-
-            console.log(`Intento ${attempt + 1}: La imagen no está disponible. Reintentando en ${retryInterval / 1000} segundos...`);
-            attempt++;
-            await new Promise(resolve => setTimeout(resolve, retryInterval));
-        } catch (error) {
-            console.error(`Error en intento ${attempt + 1}: ${error.message || error}`);
-        }
-    }
-
-    console.error("La imagen escalada no está disponible después de múltiples intentos.");
-    alert("Hubo un problema al abrir la imagen escalada. Por favor, inténtalo nuevamente más tarde.");
-}
-
-
-// Función para aplicar la super resolución con validación de imagen escalada
+// Función simplificada para aplicar la super resolución
 async function applyUltraResolution(imageUrl) {
     try {
-        const response = await fetch(superResolutionUrl, { // Usar proxy
+        // Mostrar mensaje inicial
+        showToast("Procesando imagen, se abrirá en una nueva pestaña cuando esté lista...");
+
+        // Iniciar el proceso de escalado
+        const response = await fetch('/proxy/super-resolution', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1197,103 +1140,52 @@ async function applyUltraResolution(imageUrl) {
             body: JSON.stringify({
                 init_image: imageUrl,
                 face_enhance: false,
-                model_id:"ultra_resolution",
-                scale: 3,
-                webhook: null,
-                track_id: null
+                model_id: "ultra_resolution",
+                scale: 3
             })
         });
 
-        if (!response.ok) throw new Error('Error iniciando la super resolución');
-
+        if (!response.ok) throw new Error('Error al iniciar el proceso');
         const data = await response.json();
 
-        if (data.status === 'processing' && data.fetch_result) {
-            // Si el estado es "processing", comenzar el polling
-            await pollForImage(fetchUrl(data.id));
-        } else if (data.status === 'success' && data.output && data.output.length > 0) {
-            const enhancedImageUrl = data.output[0];
-            await openImageWithValidation(enhancedImageUrl); // Validar y abrir la imagen
-        } else {
-            throw new Error('Respuesta inesperada de la API');
-        }
+        // Esperar a que la imagen esté lista
+        await checkImageStatus(data.id);
+
     } catch (error) {
-        console.error("Error aplicando super resolución:", error);
-        alert("Hubo un error al aplicar la super resolución.");
+        console.error("Error:", error);
+        showToast("Hubo un error al procesar la imagen");
     }
 }
 
-
-
-// Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, eta, maxRetries = 120, interval = 5000) {
-    // Esperar el tiempo estimado antes de comenzar el polling
-    await new Promise(resolve => setTimeout(resolve, eta * 1000));
-
-    for (let i = 0; i < maxRetries; i++) {
-        try {
-            const response = await fetch(fetchUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-
-            const data = await response.json();
-
-            if (data.status === 'success' && data.output && data.output.length > 0) {
-                const enhancedImageUrl = data.output[0];
-                await openImageWithValidation(enhancedImageUrl);
-                return;
-            } else if (data.status === 'processing') {
-                console.log(`Attempt ${i + 1}: Image still processing. Retrying...`);
-            } else {
-                throw new Error(`Unexpected status: ${data.status}`);
-            }
-
-            // Esperar antes del siguiente intento
-            await new Promise(resolve => setTimeout(resolve, interval));
-        } catch (error) {
-            console.error("Error during polling:", error);
-            // Puedes decidir si quieres continuar o abortar dependiendo del error
-        }
-    }
-
-    throw new Error('Image not available after maximum retries');
-}
-
- 
+// Función para verificar el estado de la imagen
+async function checkImageStatus(id) {
+    const checkInterval = 5000; // 5 segundos entre cada intento
     
-    async function pollUntilComplete(id) {
-    const maxAttempts = 10;
-    const delayBetweenAttempts = 5000; // 5 segundos
-    let attempts = 0;
+    const checkStatus = async () => {
+        const response = await fetch(`/proxy/fetch/${id}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
 
-    while (attempts < maxAttempts) {
-        try {
-            const response = await fetch(`https://adem.studio/proxy/fetch/${id}`, {
-                method: 'POST',
-            });
-            const data = await response.json();
-            if (data.status === 'succeeded') {
-                console.log("Image processing complete:", data);
-                return data;
-            } else if (data.status === 'processing') {
-                console.log("Still processing, retrying...");
-                await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts));
-            } else {
-                throw new Error(`Unexpected status: ${data.status}`);
-            }
-        } catch (error) {
-            console.error("Error during polling:", error);
+        if (data.status === 'success' && data.output?.[0]) {
+            window.open(data.output[0], '_blank');
+            return true;
         }
-        attempts++;
+        return false;
+    };
+
+    // Intentar hasta que la imagen esté lista
+    while (true) {
+        try {
+            const isComplete = await checkStatus();
+            if (isComplete) break;
+            await new Promise(resolve => setTimeout(resolve, checkInterval));
+        } catch (error) {
+            console.error("Error al verificar estado:", error);
+            throw error;
+        }
     }
-
-    throw new Error("Max polling attempts reached without success");
 }
-
- 
 //END URESO     
    
 
