@@ -860,15 +860,14 @@ def proxy_fetch_with_propagation_check(fetch_id):
     headers = {"Content-Type": "application/json"}
     payload = {"key": API_KEY}
 
-    max_retries = 15  # Maximum number of retries
-    delay = 2  # Delay in seconds between retries
+    max_retries = 60  # Aumenta a 60 intentos
+    delay = 5  # Aumenta a 5 segundos entre intentos
 
     try:
         for attempt in range(max_retries):
             response = requests.post(url, headers=headers, json=payload, timeout=60)
             if response.ok:
                 data = response.json()
-                # If the image is ready, return success
                 if data.get('status') == 'success' and data.get('output'):
                     return jsonify(data), response.status_code
                 elif data.get('status') == 'processing':
@@ -880,17 +879,14 @@ def proxy_fetch_with_propagation_check(fetch_id):
             else:
                 response.raise_for_status()
 
-        # If we exhaust retries, return an error
         return jsonify({"error": "Image not available after retries"}), 504
-    except requests.HTTPError as http_err:
-        print(f"HTTP error occurred: {http_err}")
-        return jsonify({"error": f"HTTP error: {http_err}"}), response.status_code
     except requests.RequestException as req_err:
         print(f"Request error occurred: {req_err}")
         return jsonify({"error": f"Request error: {req_err}"}), 500
     except Exception as e:
         print(f"Unexpected error: {e}")
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
+
 
 
 # Set upload folder

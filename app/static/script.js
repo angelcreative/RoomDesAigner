@@ -1226,11 +1226,14 @@ async function applyUltraResolution(imageUrl) {
 
 
 // Función para hacer polling hasta obtener la imagen escalada
-async function pollForImage(fetchUrl, retries = 120, interval = 5000) {
-    try {
-        for (let i = 0; i < retries; i++) {
+async function pollForImage(fetchUrl, eta, maxRetries = 120, interval = 5000) {
+    // Esperar el tiempo estimado antes de comenzar el polling
+    await new Promise(resolve => setTimeout(resolve, eta * 1000));
+
+    for (let i = 0; i < maxRetries; i++) {
+        try {
             const response = await fetch(fetchUrl, {
-                method: 'POST', // Use POST for the proxy fetch
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
 
@@ -1240,23 +1243,56 @@ async function pollForImage(fetchUrl, retries = 120, interval = 5000) {
 
             if (data.status === 'success' && data.output && data.output.length > 0) {
                 const enhancedImageUrl = data.output[0];
-                await openImageWithValidation(enhancedImageUrl); // Validate and open image
+                await openImageWithValidation(enhancedImageUrl);
                 return;
             } else if (data.status === 'processing') {
                 console.log(`Attempt ${i + 1}: Image still processing. Retrying...`);
+            } else {
+                throw new Error(`Unexpected status: ${data.status}`);
             }
 
+            // Esperar antes del siguiente intento
             await new Promise(resolve => setTimeout(resolve, interval));
+        } catch (error) {
+            console.error("Error during polling:", error);
+            // Puedes decidir si quieres continuar o abortar dependiendo del error
         }
-
-        throw new Error('Image not available after maximum retries');
-    } catch (error) {
-        console.error("Error during polling:", error);
-        alert("There was an issue retrieving the upscaled image.");
     }
+
+    throw new Error('Image not available after maximum retries');
 }
 
  
+    
+    async function pollUntilComplete(id) {
+    const maxAttempts = 10;
+    const delayBetweenAttempts = 5000; // 5 segundos
+    let attempts = 0;
+
+    while (attempts < maxAttempts) {
+        try {
+            const response = await fetch(`https://adem.studio/proxy/fetch/${id}`, {
+                method: 'POST',
+            });
+            const data = await response.json();
+            if (data.status === 'succeeded') {
+                console.log("Image processing complete:", data);
+                return data;
+            } else if (data.status === 'processing') {
+                console.log("Still processing, retrying...");
+                await new Promise(resolve => setTimeout(resolve, delayBetweenAttempts));
+            } else {
+                throw new Error(`Unexpected status: ${data.status}`);
+            }
+        } catch (error) {
+            console.error("Error during polling:", error);
+        }
+        attempts++;
+    }
+
+    throw new Error("Max polling attempts reached without success");
+}
+
  
 //END URESO     
    
