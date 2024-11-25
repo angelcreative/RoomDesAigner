@@ -896,39 +896,22 @@ def proxy_fetch_with_propagation_check(fetch_id):
 @app.route('/virtual-try-on')
 def virtual_try_on_page():
     return render_template('virtual-try-on.html')
-
-@app.route('/virtual-try-on', methods=['POST'])
+@app.route('/api/virtual-try-on', methods=['POST'])
 def virtual_try_on():
     try:
-        data = request.json
+        # Obtener datos del frontend
+        data = request.get_json()
 
-        # Validar datos obligatorios
-        if not data.get("init_image_url") or not data.get("cloth_image_url") or not data.get("cloth_type"):
-            return jsonify({"error": "Faltan parámetros obligatorios"}), 400
+        # Agregar la clave API de ModelsLab
+        data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
 
-        # Construir el payload para ModelsLab
-        modelslab_payload = {
-            "key": "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  # Clave de ModelsLab
-            "init_image": data["init_image_url"],
-            "cloth_image": data["cloth_image_url"],
-            "cloth_type": data["cloth_type"],
-            "prompt": data["prompt"],
-            "negative_prompt": data.get("negative_prompt", ""),
-            "num_inference_steps": int(data["num_steps"]),
-            "guidance_scale": float(data["guidance_scale"]),
-        }
+        # Enviar solicitud a la API de ModelsLab
+        modelslab_url = 'https://modelslab.com/api/v6/image_editing/fashion'
+        response = requests.post(modelslab_url, json=data)
 
-        # Llamar a ModelsLab API
-        response = requests.post("https://modelslab.com/api/v6/image_editing/fashion", json=modelslab_payload)
+        # Manejar la respuesta
         response_data = response.json()
-
-        if response.status_code == 200 and response_data.get("status") == "success":
-            return jsonify({
-                "status": "success",
-                "generated_image": response_data["proxy_links"][0],
-            })
-        else:
-            return jsonify({"error": response_data.get("error", "Error desconocido")}), 500
+        return jsonify(response_data), response.status_code
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
