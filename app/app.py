@@ -900,6 +900,8 @@ IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"  # Reemplaza con tu clave Img
 def virtual_try_on_page():
     return render_template('virtual-try-on.html')
 
+
+
 # Ruta para procesar las solicitudes de generación
 @app.route('/virtual-try-on', methods=['POST'])
 def virtual_try_on():
@@ -912,21 +914,21 @@ def virtual_try_on():
             if response_data.get("success"):
                 return response_data["data"]["url"]
             else:
-                raise ValueError("Error al subir la imagen a ImgBB")
+                raise ValueError(f"Error al subir la imagen a ImgBB: {response_data.get('error')}")
 
         # Obtener las URLs de imágenes del formulario
         init_image_url = request.form.get('init_image_url')
         cloth_image_url = request.form.get('cloth_image_url')
 
-        # Subir imágenes a ImgBB
-        init_image = upload_to_imgbb(init_image_url)
-        cloth_image = upload_to_imgbb(cloth_image_url)
+        # Subir imágenes a ImgBB y obtener las URLs públicas
+        init_image_uploaded_url = upload_to_imgbb(init_image_url)
+        cloth_image_uploaded_url = upload_to_imgbb(cloth_image_url)
 
         # Construir los datos para enviar a ModelsLab
         data = {
             'key': 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Clave de ModelsLab
-            'init_image': init_image,
-            'cloth_image': cloth_image,
+            'init_image': init_image_uploaded_url,
+            'cloth_image': cloth_image_uploaded_url,
             'cloth_type': request.form.get('cloth_type'),
             'prompt': request.form.get('prompt'),
             'negative_prompt': request.form.get('negative_prompt', ''),
@@ -958,8 +960,7 @@ def virtual_try_on():
     except Exception as e:
         # Manejo de errores
         return jsonify({"error": str(e)}), 500
-    
-    
+
 
 # Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'
