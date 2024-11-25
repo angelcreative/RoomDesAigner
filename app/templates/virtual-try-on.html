@@ -8,7 +8,7 @@
 <body>
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
-    
+
     <label for="modelImage">Model Image:</label>
     <input type="file" id="modelImage" accept="image/*" required>
 
@@ -28,77 +28,116 @@
     <button type="submit">Generate</button>
   </form>
 
+  <!-- Div para mostrar el resultado -->
   <div id="result"></div>
 
+
   <script>
-    // Function to upload an image to ImgBB
-    async function uploadToImgBB(file) {
-      const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Reemplaza con tu clave de ImgBB
-      const uploadUrl = "https://api.imgbb.com/1/upload";
-      const formData = new FormData();
-      formData.append("key", apiKey);
-      formData.append("image", file);
+   // Función principal para realizar el try-on
+async function virtualTryOn() {
+  const modelImageFile = document.getElementById("modelImage").files[0];
+  const clothImageFile = document.getElementById("clothImage").files[0];
+  const clothType = document.querySelector('input[name="clothType"]:checked').value;
+  const prompt = document.getElementById("prompt").value.trim();
+  const resultDiv = document.getElementById("result");
 
-      const response = await fetch(uploadUrl, {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      if (data.success) {
-        return data.data.url;
-      } else {
-        throw new Error("Error al subir la imagen a ImgBB");
-      }
-    }
+  try {
+    // Mostrar un mensaje de carga
+    resultDiv.innerHTML = "<p>Processing your image... Please wait.</p>";
 
-    document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+    // Subir imágenes a ImgBB
+    const modelImageUrl = await uploadToImgBB(modelImageFile);
+    const clothImageUrl = await uploadToImgBB(clothImageFile);
 
-      const modelImageFile = document.getElementById("modelImage").files[0];
-      const clothImageFile = document.getElementById("clothImage").files[0];
-      const clothType = document.querySelector('input[name="clothType"]:checked').value;
-      const prompt = document.getElementById("prompt").value.trim();
+    // Crear el payload para enviar al backend
+    const requestBody = {
+      init_image: modelImageUrl,
+      cloth_image: clothImageUrl,
+      cloth_type: clothType,
+      prompt,
+      negative_prompt: "low quality, unrealistic",
+      guidance_scale: 7.5,
+      num_inference_steps: 21,
+    };
 
-      try {
-        // Subir imágenes a ImgBB
-        const modelImageUrl = await uploadToImgBB(modelImageFile);
-        const clothImageUrl = await uploadToImgBB(clothImageFile);
-
-        // Crear el payload
-        const requestBody = {
-          init_image: modelImageUrl,
-          cloth_image: clothImageUrl,
-          cloth_type: clothType,
-          prompt,
-          negative_prompt: "low quality, unrealistic",
-          guidance_scale: 7.5,
-          num_inference_steps: 21
-        };
-
-        // Enviar al backend
-        const response = await fetch("/api/virtual-try-on", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(requestBody)
-        });
-
-        const data = await response.json();
-
-        if (data.status === "success") {
-          document.getElementById("result").innerHTML = `
-            <h3>Generated Image:</h3>
-            <img src="${data.generated_image}" alt="Generated Image">
-          `;
-        } else {
-          throw new Error(data.error || "Failed to generate the try-on image.");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-        alert("Something went wrong. Please try again.");
-      }
+    // Enviar al backend
+    const response = await fetch("/api/virtual-try-on", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
     });
+
+    const data = await response.json();
+
+    if (data.status === "processing" && data.fetch_result) {
+      // Iniciar polling para verificar si la imagen está lista
+      pollForResult(data.fetch_result);
+    } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      // Mostrar la imagen si está lista de inmediato
+      showGeneratedImage(data.proxy_links[0]);
+    } else {
+      throw new Error("Failed to generate the try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error in virtual try-on:", error);
+    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+}
+
+// Función para realizar polling en fetch_result hasta que la imagen esté lista
+async function pollForResult(fetchUrl) {
+  const resultDiv = document.getElementById("result");
+
+  try {
+    const response = await fetch(fetchUrl);
+    const data = await response.json();
+
+    if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      // Mostrar la imagen generada
+      showGeneratedImage(data.proxy_links[0]);
+    } else if (data.status === "processing") {
+      // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
+      setTimeout(() => pollForResult(fetchUrl), 5000);
+    } else {
+      throw new Error("Failed to fetch the completed try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error while polling for result:", error);
+    resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
+  }
+}
+
+// Función para mostrar la imagen generada
+function showGeneratedImage(imageUrl) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `
+    <h3>Generated Image:</h3>
+    <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; height: auto;">
+  `;
+}
+
+// Función para subir una imagen a ImgBB
+async function uploadToImgBB(file) {
+  const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Reemplaza con tu clave de ImgBB
+  const uploadUrl = "https://api.imgbb.com/1/upload";
+  const formData = new FormData();
+  formData.append("key", apiKey);
+  formData.append("image", file);
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    body: formData,
+  });
+  const data = await response.json();
+  if (data.success) {
+    return data.data.url;
+  } else {
+    throw new Error("Error al subir la imagen a ImgBB");
+  }
+}
+
   </script>
 </body>
 </html>
