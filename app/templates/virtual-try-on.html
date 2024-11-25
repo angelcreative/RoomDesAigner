@@ -31,15 +31,20 @@
   <!-- Div para mostrar el resultado -->
   <div id="result"></div>
 
+<script>
+document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
+  event.preventDefault(); // Evita que el formulario realice un envío GET por defecto
 
-  <script>
-   // Función principal para realizar el try-on
-async function virtualTryOn() {
   const modelImageFile = document.getElementById("modelImage").files[0];
   const clothImageFile = document.getElementById("clothImage").files[0];
   const clothType = document.querySelector('input[name="clothType"]:checked').value;
   const prompt = document.getElementById("prompt").value.trim();
   const resultDiv = document.getElementById("result");
+
+  if (!modelImageFile || !clothImageFile || !clothType || !prompt) {
+    alert("All fields are required!");
+    return;
+  }
 
   try {
     // Mostrar un mensaje de carga
@@ -69,13 +74,16 @@ async function virtualTryOn() {
       body: JSON.stringify(requestBody),
     });
 
+    if (!response.ok) {
+      throw new Error("Failed to contact the backend.");
+    }
+
     const data = await response.json();
 
     if (data.status === "processing" && data.fetch_result) {
       // Iniciar polling para verificar si la imagen está lista
       pollForResult(data.fetch_result);
     } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
-      // Mostrar la imagen si está lista de inmediato
       showGeneratedImage(data.proxy_links[0]);
     } else {
       throw new Error("Failed to generate the try-on image. Please check the API response.");
@@ -84,7 +92,7 @@ async function virtualTryOn() {
     console.error("Error in virtual try-on:", error);
     resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
   }
-}
+});
 
 // Función para realizar polling en fetch_result hasta que la imagen esté lista
 async function pollForResult(fetchUrl) {
@@ -95,8 +103,7 @@ async function pollForResult(fetchUrl) {
     const data = await response.json();
 
     if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
-      // Mostrar la imagen generada
-      showGeneratedImage(data.proxy_links[0]);
+      showGeneratedImage(data.proxy_links[0]); // Mostrar la imagen generada
     } else if (data.status === "processing") {
       // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
       setTimeout(() => pollForResult(fetchUrl), 5000);
@@ -130,14 +137,21 @@ async function uploadToImgBB(file) {
     method: "POST",
     body: formData,
   });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload the image to ImgBB.");
+  }
+
   const data = await response.json();
+
   if (data.success) {
     return data.data.url;
   } else {
-    throw new Error("Error al subir la imagen a ImgBB");
+    throw new Error("Error uploading image to ImgBB");
   }
 }
-
-  </script>
+    
+    
+</script>
 </body>
 </html>
