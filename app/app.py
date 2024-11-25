@@ -891,6 +891,10 @@ def proxy_fetch_with_propagation_check(fetch_id):
     
 
 
+
+# Clave de API de ImgBB
+IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"  # Reemplaza con tu clave ImgBB
+
 # Ruta para servir la página HTML
 @app.route('/virtual-try-on')
 def virtual_try_on_page():
@@ -900,11 +904,29 @@ def virtual_try_on_page():
 @app.route('/virtual-try-on', methods=['POST'])
 def virtual_try_on():
     try:
+        # Función para subir imágenes a ImgBB
+        def upload_to_imgbb(image_url):
+            upload_url = "https://api.imgbb.com/1/upload"
+            response = requests.post(upload_url, data={"key": IMGBB_API_KEY, "image": image_url})
+            response_data = response.json()
+            if response_data.get("success"):
+                return response_data["data"]["url"]
+            else:
+                raise ValueError("Error al subir la imagen a ImgBB")
+
+        # Obtener las URLs de imágenes del formulario
+        init_image_url = request.form.get('init_image_url')
+        cloth_image_url = request.form.get('cloth_image_url')
+
+        # Subir imágenes a ImgBB
+        init_image = upload_to_imgbb(init_image_url)
+        cloth_image = upload_to_imgbb(cloth_image_url)
+
         # Construir los datos para enviar a ModelsLab
         data = {
-            'key': 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Tu clave de ModelsLab
-            'init_image': request.form.get('init_image_url'),
-            'cloth_image': request.form.get('cloth_image_url'),
+            'key': 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Clave de ModelsLab
+            'init_image': init_image,
+            'cloth_image': cloth_image,
             'cloth_type': request.form.get('cloth_type'),
             'prompt': request.form.get('prompt'),
             'negative_prompt': request.form.get('negative_prompt', ''),
@@ -936,8 +958,6 @@ def virtual_try_on():
     except Exception as e:
         # Manejo de errores
         return jsonify({"error": str(e)}), 500
-
-
     
     
 
