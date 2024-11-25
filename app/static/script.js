@@ -612,20 +612,18 @@ function updateCreditsDisplay(remainingCredits) {
 function getModelConfig(selectedModel) {
     const models = {
         "flux": { model_id: "flux", lora_model: null, lora_strength: null },
-    
         "fluxdev": { model_id: "fluxdev", lora_model: null, lora_strength: null },
-        
-        "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux,flux-detaile", lora_strength: "1,0.7" },
-    
-        "mystic": { model_id: "mystic", lora_model: "flux-detaile,polyhedron-flux,ultrarealistic-lora-project,flux-image-enhancer-by-dever", lora_strength: "0.9,1,0.7,0.5" },
-        
+        "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: "1" },
+        "flux-detaile": { model_id: "fluxdev", lora_model: "flux-detaile,polyhedron-flux", lora_strength: "1,0.7" },
+        "fluxpro-11": { model_id: "fluxdev", lora_model: "fluxpro-11,polyhedron-flux", lora_strength: "1,0.7" },
+        "fluxdevfashion": { model_id: "fluxdev", lora_model: "flux-fashion,polyhedron-flux", lora_strength: "1,0.7" },
+        "mystic": { model_id: "mystic", lora_model: "flux-detaile,polyhedron-flux", lora_strength: "0.9,1" },
         "iphone-photo-flux-realism-booster": {
             model_id: "fluxdev",
-            lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux,ultrarealistic-lora-project,flux-image-enhancer-by-dever",
-            lora_strength: "1,0.7,0.7,0.5"
+            lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux",
+            lora_strength: "1,0.7"
         },
-        
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile,flux-image-enhancer-by-dever", lora_strength: "0.7,1,0.9,0.5" },
+        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,flux-detaile", lora_strength: "0.5,1,0.9" },
     };
 
     if (!models[selectedModel]) {
@@ -658,25 +656,27 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     }
 
     // Definir proporciones de imagen basadas en la selección
-    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
-    let width, height;
+   const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+let width, height;
 
-   if (aspectRatio === "square") {
-    width = 1200;
-    height = 1200; // Relación 1:1
+if (aspectRatio === "square") {
+    width = 1200; // Relación 1:1
+    height = 1200;
 } else if (aspectRatio === "widescreen") {
-    width = 1440;
-    height = Math.round(1440 * (6 / 19)); // Relación 19:6
+    width = 1440; // Relación 19:6
+    height = 456;
 } else if (aspectRatio === "landscape") {
-    width = 1200; // Ancho fijo
-    height = Math.round(1200 * (2 / 3)); // Relación 3:2, ajustado
+    width = 1200; // Relación 3:2
+    height = 800;
 } else if (aspectRatio === "portrait") {
-    width = Math.round(1200 * (2 / 3)); // Relación 2:3, ajustado
-    height = 1200; // Alto fijo
+    width = 800; // Relación 2:3
+    height = 1200;
 } else if (aspectRatio === "social-vertical") {
-    width = Math.round(1440 * (9 / 16)); // Relación 9:16
-    height = 1440; // Alto máximo permitido
+    width = 800; // Relación 9:16
+    height = 1440;
 }
+
+console.log(`Width: ${width}, Height: ${height}`);
 
 
     console.log(`Selected Resolution: ${width}x${height}px`);
@@ -704,7 +704,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     const r3d = document.getElementById("r3dCheckbox")?.checked ? generateR3d() : "";
 
     // Construir el texto del prompt final
-    const promptText = `Imagine ${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature} ${sheet} ${tilt} ${evolutionCycle} ${uxui} ${r3d} ${uxuiWeb} ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
+    const promptText = `${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature} ${sheet} ${tilt} ${evolutionCycle} ${uxui} ${r3d} ${uxuiWeb} ${viewRendering} ${productView} ${promptEndy} ${optionalText}`;
 
     // Procesar el prompt con el switch OpenAI
     const useOpenAI = document.getElementById("useOpenAI").checked;
