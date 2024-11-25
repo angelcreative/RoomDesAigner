@@ -99,7 +99,23 @@ async function pollForResult(fetchUrl) {
   const resultDiv = document.getElementById("result");
 
   try {
-    const response = await fetch(fetchUrl);
+    // Configurar el cuerpo de la solicitud para el endpoint de fetch
+    const requestBody = {
+      key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw", // Clave de ModelsLab
+    };
+
+    const response = await fetch(fetchUrl, {
+      method: "POST", // Cambiar de GET a POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody), // Asegurar que se envíe un cuerpo, aunque sea vacío
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error while fetching result: ${response.statusText}`);
+    }
+
     const data = await response.json();
 
     if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
@@ -115,6 +131,7 @@ async function pollForResult(fetchUrl) {
     resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
   }
 }
+
 
 // Función para mostrar la imagen generada
 function showGeneratedImage(imageUrl) {

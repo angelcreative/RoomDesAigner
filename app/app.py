@@ -896,11 +896,11 @@ def proxy_fetch_with_propagation_check(fetch_id):
 @app.route('/virtual-try-on')
 def virtual_try_on_page():
     return render_template('virtual-try-on.html')
+
 @app.route('/api/virtual-try-on', methods=['POST'])
 def virtual_try_on():
     try:
-        # Obtener datos del frontend
-        data = request.get_json()
+        data = request.json
 
         # Agregar la clave API de ModelsLab
         data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
@@ -909,12 +909,16 @@ def virtual_try_on():
         modelslab_url = 'https://modelslab.com/api/v6/image_editing/fashion'
         response = requests.post(modelslab_url, json=data)
 
-        # Manejar la respuesta
+        # Manejar la respuesta inicial
         response_data = response.json()
-        return jsonify(response_data), response.status_code
 
+        if response.status_code == 200:
+            return jsonify(response_data), 200
+        else:
+            return jsonify({"error": response_data.get("error", "Unknown error")}), response.status_code
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 
