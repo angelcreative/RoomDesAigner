@@ -892,74 +892,47 @@ def proxy_fetch_with_propagation_check(fetch_id):
 
 
 
-# Clave de API de ImgBB
-IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"  # Reemplaza con tu clave ImgBB
-
 # Ruta para servir la página HTML
 @app.route('/virtual-try-on')
 def virtual_try_on_page():
     return render_template('virtual-try-on.html')
 
-
-
-# Ruta para procesar las solicitudes de generación
 @app.route('/virtual-try-on', methods=['POST'])
 def virtual_try_on():
     try:
-        # Función para subir imágenes a ImgBB
-        def upload_to_imgbb(image_url):
-            upload_url = "https://api.imgbb.com/1/upload"
-            response = requests.post(upload_url, data={"key": IMGBB_API_KEY, "image": image_url})
-            response_data = response.json()
-            if response_data.get("success"):
-                return response_data["data"]["url"]
-            else:
-                raise ValueError(f"Error al subir la imagen a ImgBB: {response_data.get('error')}")
-
-        # Obtener las URLs de imágenes del formulario
-        init_image_url = request.form.get('init_image_url')
-        cloth_image_url = request.form.get('cloth_image_url')
-
-        # Subir imágenes a ImgBB y obtener las URLs públicas
-        init_image_uploaded_url = upload_to_imgbb(init_image_url)
-        cloth_image_uploaded_url = upload_to_imgbb(cloth_image_url)
-
-        # Construir los datos para enviar a ModelsLab
-        data = {
-            'key': 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Clave de ModelsLab
-            'init_image': init_image_uploaded_url,
-            'cloth_image': cloth_image_uploaded_url,
-            'cloth_type': request.form.get('cloth_type'),
-            'prompt': request.form.get('prompt'),
-            'negative_prompt': request.form.get('negative_prompt', ''),
-            'num_inference_steps': int(request.form.get('num_steps', 21)),
-            'guidance_scale': float(request.form.get('guidance_scale', 7.5))
-        }
+        data = request.json
 
         # Validar datos obligatorios
-        if not data['init_image'] or not data['cloth_image'] or not data['cloth_type']:
-            return jsonify({"error": "Faltan parámetros obligatorios: init_image, cloth_image o cloth_type"}), 400
+        if not data.get("init_image_url") or not data.get("cloth_image_url") or not data.get("cloth_type"):
+            return jsonify({"error": "Faltan parámetros obligatorios"}), 400
 
-        # Endpoint de ModelsLab
-        url = 'https://modelslab.com/api/v6/image_editing/fashion'
+        # Construir el payload para ModelsLab
+        modelslab_payload = {
+            "key": "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",  # Clave de ModelsLab
+            "init_image": data["init_image_url"],
+            "cloth_image": data["cloth_image_url"],
+            "cloth_type": data["cloth_type"],
+            "prompt": data["prompt"],
+            "negative_prompt": data.get("negative_prompt", ""),
+            "num_inference_steps": int(data["num_steps"]),
+            "guidance_scale": float(data["guidance_scale"]),
+        }
 
-        # Enviar solicitud a ModelsLab
-        response = requests.post(url, json=data)
+        # Llamar a ModelsLab API
+        response = requests.post("https://modelslab.com/api/v6/image_editing/fashion", json=modelslab_payload)
         response_data = response.json()
 
-        # Manejar la respuesta
         if response.status_code == 200 and response_data.get("status") == "success":
             return jsonify({
                 "status": "success",
-                "generated_image": response_data.get("proxy_links", [None])[0],
-                "details": response_data.get("meta", {})
+                "generated_image": response_data["proxy_links"][0],
             })
         else:
             return jsonify({"error": response_data.get("error", "Error desconocido")}), 500
 
     except Exception as e:
-        # Manejo de errores
         return jsonify({"error": str(e)}), 500
+
 
 
 # Set upload folder

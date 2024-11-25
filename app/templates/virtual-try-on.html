@@ -9,11 +9,11 @@
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
     
-    <label for="initImageUrl">Model Image URL:</label>
-    <input type="text" id="initImageUrl" placeholder="Enter URL" required>
+    <label for="initImage">Model Image:</label>
+    <input type="file" id="initImage" accept="image/*" required>
 
-    <label for="clothImageUrl">Cloth Image URL:</label>
-    <input type="text" id="clothImageUrl" placeholder="Enter URL" required>
+    <label for="clothImage">Cloth Image:</label>
+    <input type="file" id="clothImage" accept="image/*" required>
 
     <fieldset>
       <legend>Cloth Type:</legend>
@@ -23,7 +23,7 @@
     </fieldset>
 
     <label for="prompt">Prompt:</label>
-    <textarea id="prompt" placeholder="Describe the generated image"></textarea>
+    <textarea id="prompt" placeholder="Describe the generated image" required></textarea>
 
     <label for="negativePrompt">Negative Prompt:</label>
     <textarea id="negativePrompt" placeholder="What you don't want"></textarea>
@@ -44,25 +44,62 @@
   <div id="result"></div>
 
   <script>
+    async function uploadToImgBB(file) {
+      const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Reemplaza con tu clave ImgBB
+      const uploadUrl = "https://api.imgbb.com/1/upload";
+      const formData = new FormData();
+      formData.append("key", apiKey);
+      formData.append("image", file);
+
+      const response = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        return data.data.url;
+      } else {
+        throw new Error("Error al subir la imagen a ImgBB");
+      }
+    }
+
     document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
       event.preventDefault();
 
-      const formData = new FormData();
-      formData.append("init_image_url", document.getElementById("initImageUrl").value.trim());
-      formData.append("cloth_image_url", document.getElementById("clothImageUrl").value.trim());
-      formData.append("cloth_type", document.querySelector("input[name='clothType']:checked").value);
-      formData.append("prompt", document.getElementById("prompt").value.trim());
-      formData.append("negative_prompt", document.getElementById("negativePrompt").value.trim());
-      formData.append("num_steps", document.getElementById("numSteps").value);
-      formData.append("guidance_scale", document.getElementById("guidanceScale").value);
+      const initImageFile = document.getElementById("initImage").files[0];
+      const clothImageFile = document.getElementById("clothImage").files[0];
+      const clothType = document.querySelector("input[name='clothType']:checked").value;
+      const prompt = document.getElementById("prompt").value.trim();
+      const negativePrompt = document.getElementById("negativePrompt").value.trim();
+      const numSteps = document.getElementById("numSteps").value;
+      const guidanceScale = document.getElementById("guidanceScale").value;
 
       try {
+        // Subir imágenes a ImgBB
+        const initImageUrl = await uploadToImgBB(initImageFile);
+        const clothImageUrl = await uploadToImgBB(clothImageFile);
+
+        // Crear el payload
+        const payload = {
+          init_image_url: initImageUrl,
+          cloth_image_url: clothImageUrl,
+          cloth_type: clothType,
+          prompt,
+          negative_prompt: negativePrompt,
+          num_steps: numSteps,
+          guidance_scale: guidanceScale,
+        };
+
+        // Enviar los datos al backend
         const response = await fetch("/virtual-try-on", {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         });
-        const result = await response.json();
 
+        const result = await response.json();
         if (result.status === "success") {
           document.getElementById("result").innerHTML = `
             <h3>Generated Image:</h3>
