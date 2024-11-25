@@ -888,6 +888,58 @@ def proxy_fetch_with_propagation_check(fetch_id):
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 
+    
+
+
+# Ruta para servir la página HTML
+@app.route('/virtual-try-on')
+def virtual_try_on_page():
+    return render_template('virtual-try-on.html')
+
+# Ruta para procesar las solicitudes de generación
+@app.route('/virtual-try-on', methods=['POST'])
+def virtual_try_on():
+    try:
+        # Construir los datos para enviar a ModelsLab
+        data = {
+            'key': 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw',  # Tu clave de ModelsLab
+            'init_image': request.form.get('init_image_url'),
+            'cloth_image': request.form.get('cloth_image_url'),
+            'cloth_type': request.form.get('cloth_type'),
+            'prompt': request.form.get('prompt'),
+            'negative_prompt': request.form.get('negative_prompt', ''),
+            'num_inference_steps': int(request.form.get('num_steps', 21)),
+            'guidance_scale': float(request.form.get('guidance_scale', 7.5))
+        }
+
+        # Validar datos obligatorios
+        if not data['init_image'] or not data['cloth_image'] or not data['cloth_type']:
+            return jsonify({"error": "Faltan parámetros obligatorios: init_image, cloth_image o cloth_type"}), 400
+
+        # Endpoint de ModelsLab
+        url = 'https://modelslab.com/api/v6/image_editing/fashion'
+
+        # Enviar solicitud a ModelsLab
+        response = requests.post(url, json=data)
+        response_data = response.json()
+
+        # Manejar la respuesta
+        if response.status_code == 200 and response_data.get("status") == "success":
+            return jsonify({
+                "status": "success",
+                "generated_image": response_data.get("proxy_links", [None])[0],
+                "details": response_data.get("meta", {})
+            })
+        else:
+            return jsonify({"error": response_data.get("error", "Error desconocido")}), 500
+
+    except Exception as e:
+        # Manejo de errores
+        return jsonify({"error": str(e)}), 500
+
+
+    
+    
 
 # Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'

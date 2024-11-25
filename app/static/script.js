@@ -2359,6 +2359,10 @@ function getConversationHistory() {
 
 
 
+
+
+
+
 /*Event listener for opening the lightbox when the avatar is clicked
 document.getElementById('avatar').addEventListener('click', function() {
     document.getElementById('avatarLightbox').style.display = 'block';
