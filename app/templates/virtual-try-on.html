@@ -48,6 +48,28 @@ h3 {
       div#colorExtractionImage {
     width: 48%;
 }  
+        
+        .leftF {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+}
+        
+        div#result {
+    color: var(--bunker-50);
+    width: 400px;
+    background: var(--bunker-900);
+    overflow: hidden;
+    display: block;
+    border-radius: 12px;
+    min-height: 516px;
+}
+
+div#result > img {
+    border-radius: 12px;
+}
     </style>
 </head>
 <body style="overflow: auto">
@@ -84,9 +106,10 @@ logout
     </div></div>
              </header>
     
-    <div class="vto-root" style="width: 600px;
-    margin: 100px auto auto;
-    width: 600px;">
+    <div class="vto-root" style="width: 800px;
+    margin: 80px auto 0 auto;
+    text-align: left;">
+        <div class="leftF">
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
 <div class="uploaders">
@@ -114,6 +137,10 @@ accessibility_new
 
 
 </div>
+      <div id="thumbnails" style="margin-top: 20px;">
+  <h3>Selected Images Preview:</h3>
+</div>
+      
     <fieldset style="display: flex;
     flex-direction: row;
     gap: 12px;
@@ -122,7 +149,7 @@ accessibility_new
     margin: var(--2xl) 0 var(--2xs) 0;
     display: block;">Cloth Type:</legend>
       <div class="ar">
-  <input type="radio" id="upper_body" name="clothType" value="upper_body" required>
+  <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
   <label for="upper_body">Upper body</label>
 </div>
 <div class="ar">
@@ -143,14 +170,13 @@ accessibility_new
 
     <button type="submit">Generate</button>
   </form>
-
-    <div id="thumbnails" style="margin-top: 20px;">
-  <h3>Selected Images Preview:</h3>
-</div>
+              <div id="result"></div>
+    </div>
+        </div>
+ 
 
   <!-- Div para mostrar el resultado -->
-  <div id="result"></div>
-    </div>
+
 
 <script>
     
