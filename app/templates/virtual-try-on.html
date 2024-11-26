@@ -21,7 +21,25 @@ h3 {
     color: var(--bunker-50);
 }
 
+        textarea {
+    cursor: default;
+    color: var(--bunker-50);
+    font-size: 14px;
+    border: none;
+    min-height: 200px;
+    display: block;
+    width: 100%;
+}
         
+ .uploaders {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+      div#colorExtractionImage {
+    width: 48%;
+}  
     </style>
 </head>
 <body style="overflow: auto">
@@ -64,23 +82,29 @@ logout
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
 <div class="uploaders">
+    <div id="colorExtractionImage">
+     <label class="imageup" for="clothImage">
+                   Upload the cloth image <span class="material-symbols-outlined">
+apparel
+</span>
+                    <small>Use a good resolution image</small>
+                    <input type="file" accept="image/*" id="clothImage" required>
+                  </label>
+               
+                </div>
+    
    <div id="colorExtractionImage">
      <label class="imageup" for="modelImage">
-                   Upload the model image <span class="material-symbols-outlined" translate="no">arrow_upward</span>
+                   Upload the model image <span class="material-symbols-outlined">
+accessibility_new
+</span>
                     <small>Use a good resolution image</small>
                     <input type="file" accept="image/*" id="modelImage" required>
                   </label>
                
                 </div>
 
-<div id="colorExtractionImage">
-     <label class="imageup" for="clothImage">
-                   Upload the cloth image <span class="material-symbols-outlined" translate="no">arrow_upward</span>
-                    <small>Use a good resolution image</small>
-                    <input type="file" accept="image/*" id="clothImage" required>
-                  </label>
-               
-                </div>
+
 </div>
     <fieldset style="display: flex;
     flex-direction: row;
