@@ -57,14 +57,16 @@ h3 {
     gap: 40px;
 }
         
-        div#result {
-    color: var(--bunker-50);
+div#result {
+    color: var(--bunker-700);
     width: 400px;
     background: var(--bunker-900);
     overflow: hidden;
-    display: block;
+    display: flex;
     border-radius: 12px;
     min-height: 516px;
+    justify-content: center;
+    align-items: center;
 }
 
 div#result > img {
@@ -137,8 +139,11 @@ accessibility_new
 
 
 </div>
-      <div id="thumbnails" style="margin-top: 20px;">
-  <h3>Selected Images Preview:</h3>
+      <div id="thumbnails" style="margin-top: 0;
+    align-items: flex-start;
+    display: flex;
+    gap: 0;
+    justify-content: space-between;">
 </div>
       
     <fieldset style="display: flex;
@@ -348,7 +353,7 @@ async function pollForResult(fetchUrl) {
 function showGeneratedImage(imageUrl) {
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML = `
-    <h3>Generated Image:</h3>
+   
     <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; height: auto;">
   `;
 }
