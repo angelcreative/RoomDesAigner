@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Virtual Try-On</title>
+  <meta charset="utf-8">
+    <!-- icons for mobile -->
+   
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- //end icons for mobile -->
+            <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
+
+    <title>Virtual try on - App ADEM</title>
+  
       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
    
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -110,7 +118,9 @@ accessibility_new
     flex-direction: row;
     gap: 12px;
     align-items: flex-start;">
-      <legend style="color: var(--bunker-50);">Cloth Type:</legend>
+      <legend style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Cloth Type:</legend>
       <div class="ar">
   <input type="radio" id="upper_body" name="clothType" value="upper_body" required>
   <label for="upper_body">Upper body</label>
@@ -126,7 +136,9 @@ accessibility_new
 
     </fieldset>
 
-    <label for="prompt">Prompt:</label>
+    <label for="prompt" style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Prompt:</label>
     <textarea style="position: static" id="prompt" placeholder="Describe the generated image" required></textarea>
 
     <button type="submit">Generate</button>
@@ -143,19 +155,20 @@ accessibility_new
 <script>
     
     
-
-    
+// Event listener para enviar el formulario
 document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
-  event.preventDefault(); // Evita que el formulario realice un envío GET por defecto
+  event.preventDefault();
+  console.log("Formulario enviado");
 
   const modelImageFile = document.getElementById("modelImage").files[0];
   const clothImageFile = document.getElementById("clothImage").files[0];
-  const clothType = document.querySelector('input[name="clothType"]:checked').value;
+  const clothType = document.querySelector('input[name="clothType"]:checked')?.value;
   const prompt = document.getElementById("prompt").value.trim();
   const resultDiv = document.getElementById("result");
 
   if (!modelImageFile || !clothImageFile || !clothType || !prompt) {
     alert("All fields are required!");
+    console.log("Formulario incompleto - falta información");
     return;
   }
 
@@ -166,6 +179,9 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     // Subir imágenes a ImgBB
     const modelImageUrl = await uploadToImgBB(modelImageFile);
     const clothImageUrl = await uploadToImgBB(clothImageFile);
+
+    console.log("Imagen del modelo subida:", modelImageUrl);
+    console.log("Imagen de la prenda subida:", clothImageUrl);
 
     // Crear el payload para enviar al backend
     const requestBody = {
@@ -194,6 +210,7 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     const data = await response.json();
 
     if (data.status === "processing" && data.fetch_result) {
+      console.log("Iniciando polling para verificar el estado...");
       // Iniciar polling para verificar si la imagen está lista
       pollForResult(data.fetch_result);
     } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
@@ -202,24 +219,37 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
       throw new Error("Failed to generate the try-on image. Please check the API response.");
     }
   } catch (error) {
-    console.error("Error in virtual try-on:", error);
+    console.error("Error en virtual try-on:", error);
     resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
   }
 });
 
     
-// Función para mostrar vista previa de las imágenes seleccionadas
+// Función para mostrar la vista previa de una imagen seleccionada
 function previewImage(file, type) {
   const reader = new FileReader();
   reader.onload = function (e) {
     const thumbnailsDiv = document.getElementById("thumbnails");
-    const thumbnailHtml = `
-      <div style="display: inline-block; margin: 10px; text-align: center;">
+    
+    // Buscar el contenedor existente para el tipo de imagen
+    let existingThumbnail = document.querySelector(`#thumbnails .thumbnail-${type}`);
+    
+    // Si ya existe una miniatura para este tipo, reemplazarla
+    if (existingThumbnail) {
+      existingThumbnail.innerHTML = `
         <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
         <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
-      </div>
-    `;
-    thumbnailsDiv.innerHTML += thumbnailHtml;
+      `;
+    } else {
+      // Si no existe, crear un nuevo contenedor
+      const thumbnailHtml = `
+        <div class="thumbnail-${type}" style="display: inline-block; margin: 10px; text-align: center;">
+          <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+          <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+        </div>
+      `;
+      thumbnailsDiv.innerHTML += thumbnailHtml;
+    }
   };
   reader.readAsDataURL(file);
 }
@@ -238,7 +268,8 @@ document.getElementById("clothImage").addEventListener("change", (event) => {
     previewImage(file, "cloth");
   }
 });
-    
+
+
     
     
 // Función para realizar polling en fetch_result hasta que la imagen esté lista
