@@ -156,6 +156,7 @@ accessibility_new
     
     
 // Event listener para enviar el formulario
+// Event listener para enviar el formulario
 document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   console.log("Formulario enviado");
@@ -177,11 +178,13 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     resultDiv.innerHTML = "<p>Processing your image... Please wait.</p>";
 
     // Subir imágenes a ImgBB
+    console.log("Subiendo imagen del modelo a ImgBB...");
     const modelImageUrl = await uploadToImgBB(modelImageFile);
-    const clothImageUrl = await uploadToImgBB(clothImageFile);
+    console.log("Imagen del modelo subida correctamente:", modelImageUrl);
 
-    console.log("Imagen del modelo subida:", modelImageUrl);
-    console.log("Imagen de la prenda subida:", clothImageUrl);
+    console.log("Subiendo imagen de la prenda a ImgBB...");
+    const clothImageUrl = await uploadToImgBB(clothImageFile);
+    console.log("Imagen de la prenda subida correctamente:", clothImageUrl);
 
     // Crear el payload para enviar al backend
     const requestBody = {
@@ -194,6 +197,8 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
       num_inference_steps: 21,
     };
 
+    console.log("Enviando solicitud al backend con payload:", requestBody);
+
     // Enviar al backend
     const response = await fetch("/api/virtual-try-on", {
       method: "POST",
@@ -204,16 +209,19 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     });
 
     if (!response.ok) {
+      console.error("No se pudo contactar al backend. Código de respuesta:", response.status);
       throw new Error("Failed to contact the backend.");
     }
 
     const data = await response.json();
+    console.log("Respuesta del backend recibida:", data);
 
     if (data.status === "processing" && data.fetch_result) {
       console.log("Iniciando polling para verificar el estado...");
       // Iniciar polling para verificar si la imagen está lista
       pollForResult(data.fetch_result);
     } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      console.log("Imagen generada correctamente:", data.proxy_links[0]);
       showGeneratedImage(data.proxy_links[0]);
     } else {
       throw new Error("Failed to generate the try-on image. Please check the API response.");
@@ -224,7 +232,7 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
   }
 });
 
-    
+
 // Función para mostrar la vista previa de una imagen seleccionada
 function previewImage(file, type) {
   const reader = new FileReader();
@@ -268,7 +276,6 @@ document.getElementById("clothImage").addEventListener("change", (event) => {
     previewImage(file, "cloth");
   }
 });
-
 
     
     
