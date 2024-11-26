@@ -14,21 +14,46 @@
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
 
-    <label for="modelImage">Model Image:</label>
-    <input type="file" id="modelImage" accept="image/*" required>
+   <div id="colorExtractionImage">
+     <label class="imageup" for="modelImage">
+                   Upload the model image <span class="material-symbols-outlined" translate="no">arrow_upward</span>
+                    <small>Use a good resolution image</small>
+                    <input type="file" accept="image/*" id="modelImage" required>
+                  </label>
+               
+                </div>
 
-    <label for="clothImage">Cloth Image:</label>
-    <input type="file" id="clothImage" accept="image/*" required>
+<div id="colorExtractionImage">
+     <label class="imageup" for="clothImage">
+                   Upload the cloth image <span class="material-symbols-outlined" translate="no">arrow_upward</span>
+                    <small>Use a good resolution image</small>
+                    <input type="file" accept="image/*" id="clothImage" required>
+                  </label>
+               
+                </div>
 
-    <fieldset>
-      <legend>Cloth Type:</legend>
-      <label><input type="radio" name="clothType" value="upper_body" required> Upper Body</label>
-      <label><input type="radio" name="clothType" value="lower_body" required> Lower Body</label>
-      <label><input type="radio" name="clothType" value="dresses" required> Dresses</label>
+    <fieldset style="display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: flex-start;">
+      <legend style="color: var(--bunker-50);">Cloth Type:</legend>
+      <div class="ar">
+  <input type="radio" id="upper_body" name="clothType" value="upper_body" required>
+  <label for="upper_body">Upper body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="lower_body" name="clothType" value="lower_body" required>
+  <label for="lower_body">Lower body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="dresses" name="clothType" value="dresses" required>
+  <label for="dresses">Dress</label>
+</div>
+
     </fieldset>
 
     <label for="prompt">Prompt:</label>
-    <textarea id="prompt" placeholder="Describe the generated image" required></textarea>
+    <textarea style="position: static" id="prompt" placeholder="Describe the generated image" required></textarea>
 
     <button type="submit">Generate</button>
   </form>
