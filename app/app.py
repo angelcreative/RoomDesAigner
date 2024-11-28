@@ -967,7 +967,7 @@ MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
 IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
 IMGBB_URL = "https://api.imgbb.com/1/upload"
 
-@app.route('/')
+@app.route('/baby-face')
 def index():
     return render_template('baby-face.html')
 
