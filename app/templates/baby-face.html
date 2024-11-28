@@ -161,6 +161,34 @@ face_4
         const resultDiv = document.getElementById('result');
         const babyImage = document.getElementById('baby-image');
 
+        // Function to resize image to 512x512 using a <canvas>
+        async function resizeImage(file, size = 512) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = size;
+                        canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, size, size);
+
+                        canvas.toBlob((blob) => {
+                            resolve(blob); // Returns resized image as a Blob
+                        }, 'image/jpeg', 0.9); // Adjust quality (0.9 = 90%)
+                    };
+
+                    img.onerror = (error) => reject(error);
+                };
+            });
+        }
+
+        // Function to upload image to ImgBB
         async function uploadToImgBB(file) {
             const formData = new FormData();
             formData.append('key', IMGBB_API_KEY);
@@ -179,6 +207,7 @@ face_4
             }
         }
 
+        // Handle form submission
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
 
@@ -186,10 +215,16 @@ face_4
             const wifePhoto = document.getElementById('wife').files[0];
 
             try {
-                // Upload both photos to ImgBB
+                // Resize both images to 512x512 before uploading
+                const [resizedHusband, resizedWife] = await Promise.all([
+                    resizeImage(husbandPhoto, 512),
+                    resizeImage(wifePhoto, 512)
+                ]);
+
+                // Upload resized images to ImgBB
                 const [husbandUrl, wifeUrl] = await Promise.all([
-                    uploadToImgBB(husbandPhoto),
-                    uploadToImgBB(wifePhoto)
+                    uploadToImgBB(resizedHusband),
+                    uploadToImgBB(resizedWife)
                 ]);
 
                 console.log("ImgBB URLs:", husbandUrl, wifeUrl);
