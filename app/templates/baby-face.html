@@ -72,6 +72,29 @@ div#result {
 div#result > img {
     border-radius: 12px;
 }
+        
+        
+        form#baby-face-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gender {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.uploaders {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+}
     </style>
 </head>
 <body style="overflow: auto">
@@ -174,8 +197,9 @@ face_4
         
     </div>
     <script>
+    
     const IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"; // Clave de ImgBB
-    const BACKEND_API_URL = "/generate-baby-face"; // Endpoint del backend
+const BACKEND_API_URL = "/generate-baby-face"; // Endpoint del backend
 
 const form = document.getElementById('baby-face-form');
 const resultDiv = document.getElementById('result');
@@ -211,7 +235,7 @@ async function resizeImage(file, size = 512) {
 // Función para subir la imagen a ImgBB y obtener la URL
 async function uploadToImgBB(imageBlob) {
     const formData = new FormData();
-    formData.append('key', "ba238be3f3764905b1bba03fc7a22e28"); // API Key de ImgBB
+    formData.append('key', IMGBB_API_KEY);
     formData.append('image', imageBlob);
 
     const response = await fetch('https://api.imgbb.com/1/upload', {
@@ -224,6 +248,47 @@ async function uploadToImgBB(imageBlob) {
         return data.data.url;
     } else {
         throw new Error('Error al subir la imagen a ImgBB');
+    }
+}
+
+// Función para realizar polling hasta que la imagen esté lista
+async function pollForResult(fetchUrl) {
+    const loadingText = document.getElementById('loading-text');
+    const babyImage = document.getElementById('baby-image');
+
+    try {
+        const requestBody = {
+            key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw", // Clave de ModelsLab
+        };
+
+        const response = await fetch(fetchUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error while fetching result: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === "success" && data.links && data.links.length > 0) {
+            // Mostrar la imagen generada
+            loadingText.style.display = "none";
+            babyImage.src = data.links[0];
+            babyImage.style.display = "block";
+        } else if (data.status === "processing") {
+            // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
+            setTimeout(() => pollForResult(fetchUrl), 5000);
+        } else {
+            throw new Error("Failed to fetch the completed image. Please check the API response.");
+        }
+    } catch (error) {
+        console.error("Error while polling for result:", error);
+        resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
     }
 }
 
@@ -251,7 +316,7 @@ form.addEventListener('submit', async (event) => {
         const prompt = `A realistic portrait of a ${gender} toddler. blending features of two parents. The ${gender} toddler has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age`;
 
         // Enviar URLs al backend
-        const response = await fetch('/generate-baby-face', {
+        const response = await fetch(BACKEND_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -264,34 +329,9 @@ form.addEventListener('submit', async (event) => {
 
         const data = await response.json();
 
-        if (data.baby_image_url) {
-            // Mostrar el contenedor y mensaje de carga
-            const loadingText = document.getElementById('loading-text');
-            const babyImage = document.getElementById('baby-image');
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            loadingText.style.display = 'block';
-            babyImage.style.display = 'none';
-
-            // Verificar periódicamente si la imagen está lista
-            const imageUrl = data.baby_image_url;
-            const checkImage = () => {
-                const img = new Image();
-                img.src = imageUrl;
-                img.onload = () => {
-                    // Reemplazar el placeholder con la imagen final
-                    loadingText.style.display = 'none';
-                    babyImage.src = imageUrl;
-                    babyImage.style.display = 'block';
-                };
-                img.onerror = () => {
-                    // Reintentar después de un breve intervalo
-                    setTimeout(checkImage, 2000);
-                };
-            };
-
-            // Inicia la verificación de la imagen
-            checkImage();
+        if (data.fetch_url) {
+            document.getElementById("loading-text").style.display = "block"; // Mostrar texto de carga
+            pollForResult(data.fetch_url); // Iniciar polling
         } else {
             alert('Error: No se pudo generar la imagen. ' + (data.error || ''));
         }
@@ -301,17 +341,15 @@ form.addEventListener('submit', async (event) => {
     }
 });
 
-      
-        
-        
-        document.getElementById('husband').addEventListener('change', (event) => {
+// Mostrar vistas previas de las imágenes seleccionadas
+document.getElementById('husband').addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = document.getElementById('father-preview');
-            img.src = e.target.result; // Establece la vista previa
-            img.style.display = 'block'; // Asegúrate de que la imagen sea visible
+            img.src = e.target.result;
+            img.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
@@ -323,15 +361,14 @@ document.getElementById('wife').addEventListener('change', (event) => {
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = document.getElementById('mother-preview');
-            img.src = e.target.result; // Establece la vista previa
-            img.style.display = 'block'; // Asegúrate de que la imagen sea visible
+            img.src = e.target.result;
+            img.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
 });
 
-        
-</script>
+    </script>
 
 </body>
 </html>

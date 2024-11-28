@@ -968,18 +968,12 @@ MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
 
 @app.route('/baby-face')
 def index():
+    """Renderiza la página principal."""
     return render_template('baby-face.html')
-
-def upload_to_imgbb(file):
-    """Uploads an image to ImgBB and returns the URL."""
-    response = requests.post(IMGBB_URL, data={"key": IMGBB_API_KEY}, files={"image": file})
-    if response.status_code == 200:
-        return response.json().get("data", {}).get("url")
-    return None
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
-    """Generar cara de bebé."""
+    """Inicia la generación de la imagen."""
     def debug_log(message, data=None):
         print("[DEBUG - BACKEND]:", message)
         if data:
@@ -991,6 +985,7 @@ def generate_baby_face():
 
     husband_url = data.get('husband_url')
     wife_url = data.get('wife_url')
+    prompt = data.get('prompt', "A realistic portrait of a toddler. blending features of two parents.")
 
     if not husband_url or not wife_url:
         return jsonify({"error": "Faltan URLs de imágenes."}), 400
@@ -1005,7 +1000,7 @@ def generate_baby_face():
         "ip_adapter_id": "ip-adapter_sd15",
         "ip_adapter_image": wife_url,
         "ip_adapter_scale": 0.5,
-        "prompt": "A realistic portrait of a toddler. blending features of two parents. The toddler has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age",
+        "prompt": prompt,
         "width": 512,
         "height": 512,
         "samples": 1,
@@ -1017,26 +1012,54 @@ def generate_baby_face():
     }
     debug_log("Payload enviado a Modelslab:", payload)
 
-    # Llamar a la API de Modelslab
+    # Llamar a la API de Modelslab para iniciar la generación
     response = requests.post(MODEL_LAB_URL, json=payload)
     debug_log("Respuesta de Modelslab - Status:", response.status_code)
     debug_log("Respuesta de Modelslab - Body:", response.text)
 
     if response.status_code == 200:
         result = response.json()
-        # Busca la imagen generada en el campo "links"
-        if "links" in result and len(result["links"]) > 0:
-            image_url = result["links"][0]
-            debug_log("Imagen generada URL:", image_url)
-            return jsonify({"baby_image_url": image_url})
+        # Verificar si hay un URL de "fetch_url" para polling
+        if "fetch_url" in result:
+            fetch_url = result["fetch_url"]
+            debug_log("Fetch URL obtenido:", fetch_url)
+            return jsonify({"fetch_url": fetch_url})
         else:
-            return jsonify({"error": "La API de Modelslab no devolvió ninguna URL de imagen."}), 500
+            return jsonify({"error": "La API de Modelslab no devolvió un fetch_url válido."}), 500
     else:
         return jsonify({"error": f"Error en Modelslab: {response.text}"}), 500
 
+@app.route('/poll-image-status', methods=['POST'])
+def poll_image_status():
+    """Verifica el estado de la generación de la imagen."""
+    def debug_log(message, data=None):
+        print("[DEBUG - BACKEND]:", message)
+        if data:
+            print(data)
 
+    data = request.get_json()
+    fetch_url = data.get('fetch_url')
 
+    if not fetch_url:
+        return jsonify({"error": "Falta el fetch_url."}), 400
 
+    # Llamar al fetch_url para verificar el estado
+    response = requests.post(fetch_url)
+    debug_log("Respuesta de polling - Status:", response.status_code)
+    debug_log("Respuesta de polling - Body:", response.text)
+
+    if response.status_code == 200:
+        result = response.json()
+        if result.get("status") == "success" and "links" in result:
+            # Imagen generada con éxito
+            return jsonify({
+                "status": "success",
+                "links": result["links"]
+            })
+        elif result.get("status") == "processing":
+            # Aún procesándose
+            return jsonify({"status": "processing"})
+    return jsonify({"error": "Error al verificar el estado de la imagen."}), 500
 
 
 
