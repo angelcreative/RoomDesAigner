@@ -250,6 +250,68 @@ face_4
             alert('Ocurrió un error. Revisa la consola para más detalles.');
         }
     });
+        
+        // Function to display thumbnail preview
+        function showThumbnail(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById(previewId);
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Event listeners for input changes
+        document.getElementById('husband').addEventListener('change', (e) => {
+            showThumbnail(e.target, 'husband-preview');
+        });
+
+        document.getElementById('wife').addEventListener('change', (e) => {
+            showThumbnail(e.target, 'wife-preview');
+        });
+
+        const form = document.getElementById('baby-face-form');
+        const resultDiv = document.getElementById('result');
+        const babyImage = document.getElementById('baby-image');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const husbandPhoto = document.getElementById('husband').files[0];
+            const wifePhoto = document.getElementById('wife').files[0];
+
+            // Ensure the user has uploaded images
+            if (!husbandPhoto || !wifePhoto) {
+                alert("Please upload both images!");
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('husband', husbandPhoto);
+                formData.append('wife', wifePhoto);
+
+                const response = await fetch('/generate-baby-face', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const data = await response.json();
+                if (data.baby_image_url) {
+                    babyImage.src = data.baby_image_url;
+                    resultDiv.style.display = 'block';
+                } else {
+                    alert('Failed to generate baby face.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            }
+        });
 </script>
 
 </body>
