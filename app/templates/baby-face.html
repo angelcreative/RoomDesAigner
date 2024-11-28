@@ -114,11 +114,35 @@ logout
         
          <h1>Baby Face Generator</h1>
     <form id="baby-face-form" enctype="multipart/form-data">
-        <label for="husband">Husband's Photo:</label>
-        <input type="file" id="husband" name="husband" accept="image/*" required><br><br>
+        
+        
+       <div class="uploaders">
+    <div id="colorExtractionImage">
+     <label class="imageup" for="husband">
+           Upload dad's picture <span class="material-symbols-outlined">
+apparel
+</span>
+                    <small>Use a good resolution image</small>
+                            <input type="file" id="husband" name="husband" accept="image/*" required> 
 
-        <label for="wife">Wife's Photo:</label>
-        <input type="file" id="wife" name="wife" accept="image/*" required><br><br>
+                  </label>
+               
+                </div>
+    
+   <div id="colorExtractionImage">
+     <label class="imageup" for="wife">
+                   Upload mom's pic <span class="material-symbols-outlined">
+accessibility_new
+</span>
+                    <small>Use a good resolution image</small>
+                           <input type="file" id="wife" name="wife" accept="image/*" required><br><br>
+
+                  </label>
+               
+                </div>
+
+
+</div>
 
         <button type="submit">Generate Baby Face</button>
     </form>
