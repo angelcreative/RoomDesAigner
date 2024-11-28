@@ -1001,6 +1001,7 @@ def generate_baby_face():
         "ip_adapter_image": wife_url,
         "ip_adapter_scale": 0.5,
         "prompt": prompt,
+        "safety_checker": "no",
         "width": 512,
         "height": 512,
         "samples": 1,
