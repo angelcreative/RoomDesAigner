@@ -991,7 +991,6 @@ def generate_baby_face():
 
     husband_url = data.get('husband_url')
     wife_url = data.get('wife_url')
-    model_id = data.get('model_id', "controlnet-model-id")  # Model ID por defecto si no se pasa
 
     if not husband_url or not wife_url:
         return jsonify({"error": "Faltan URLs de imágenes."}), 400
@@ -999,7 +998,7 @@ def generate_baby_face():
     # Construir el payload para Modelslab
     payload = {
         "key": MODEL_LAB_API_KEY,
-        "model_id": model_id,  # Agregar model_id según la documentación
+        "model_id": "fluxdev",  # Modelo especificado explícitamente
         "controlnet_model": "canny",
         "controlnet_type": "canny",
         "init_image": husband_url,
