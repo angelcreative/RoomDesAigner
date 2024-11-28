@@ -998,21 +998,21 @@ def generate_baby_face():
     # Construir el payload para Modelslab
     payload = {
         "key": MODEL_LAB_API_KEY,
-        "model_id": "realisticvisionv60b1v60b1",  # Modelo especificado explícitamente
+        "model_id": "realisticvisionv60b1v60b1",
         "controlnet_model": "canny",
         "controlnet_type": "canny",
         "init_image": husband_url,
         "ip_adapter_id": "ip-adapter_sd15",
         "ip_adapter_image": wife_url,
         "ip_adapter_scale": 0.5,
-        "prompt": "a realistic baby face blending features of two parents, round cheeks, soft skin, large eyes, small nose, smooth proportions, photorealistic",
+        "prompt": "A realistic portrait of a 5-year-old child, could be a boy or a girl. blending features of two parents. The child has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age",
         "width": 512,
         "height": 512,
         "samples": 1,
         "scheduler": "EulerDiscreteScheduler",
-        "num_inference_steps": 50,
-        "guidance_scale": 8.0,
-        "strength": 0.7,
+        "steps": 20,
+        "guidance": 8,
+        "strength": 1,
         "controlnet_conditioning_scale": 0.6,
     }
     debug_log("Payload enviado a Modelslab:", payload)
@@ -1024,12 +1024,16 @@ def generate_baby_face():
 
     if response.status_code == 200:
         result = response.json()
-        if "image" in result:
-            return jsonify({"baby_image_url": result['image']})
+        # Busca la imagen generada en el campo "links"
+        if "links" in result and len(result["links"]) > 0:
+            image_url = result["links"][0]
+            debug_log("Imagen generada URL:", image_url)
+            return jsonify({"baby_image_url": image_url})
         else:
-            return jsonify({"error": "La API de Modelslab no devolvió una imagen."}), 500
+            return jsonify({"error": "La API de Modelslab no devolvió ninguna URL de imagen."}), 500
     else:
         return jsonify({"error": f"Error en Modelslab: {response.text}"}), 500
+
 
 
 
