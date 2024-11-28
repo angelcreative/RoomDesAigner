@@ -1005,7 +1005,7 @@ def generate_baby_face():
         "ip_adapter_id": "ip-adapter_sd15",
         "ip_adapter_image": wife_url,
         "ip_adapter_scale": 0.5,
-        "prompt": "A realistic portrait of a 5-year-old child, could be a boy or a girl. blending features of two parents. The child has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age",
+        "prompt": "A realistic portrait of a toddler. blending features of two parents. The toddler has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age",
         "width": 512,
         "height": 512,
         "samples": 1,

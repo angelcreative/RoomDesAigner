@@ -141,16 +141,36 @@ face_4
                
                 </div>
 
+           <div id="parent-images" style="display: flex; gap: 10px; margin-top: 20px;">
+    <img id="father-preview" alt="Father Image Preview" style="width: 150px; height: 150px; object-fit: cover; display: none; border: 1px solid #ccc;">
+    <img id="mother-preview" alt="Mother Image Preview" style="width: 150px; height: 150px; object-fit: cover; display: none; border: 1px solid #ccc;">
+</div>
+
 
 </div>
+      <div class="gender">  
+        <div class="ar">
+  <input type="radio" id="girl" name="gender" value="girl" required>
+  <label for="girl">It's a girl</label>
+</div>
+
+        <div class="ar">
+  <input type="radio" id="boy" name="gender" value="boy" required checked>
+  <label for="boy">It's a boy</label>
+  
+</div>
+        </div>
+        
+        
 
         <button type="submit">Generate Baby Face</button>
     </form>
 
-    <div id="result">
-        <h2>Generated Baby Face:</h2>
-        <img id="baby-image" src="" alt="Baby Face" style="display: none;">
-    </div>
+    <div id="result" style="display: none; text-align: center; margin-top: 20px;">
+    <p id="loading-text" style="font-size: 18px; color: gray;">Generating the baby face...</p>
+    <img id="baby-image" src="" alt="Baby Face" style="display: none; max-width: 100%; height: auto; border: 1px solid #ccc; margin-top: 10px;">
+</div>
+
         
     </div>
     <script>
@@ -213,6 +233,7 @@ form.addEventListener('submit', async (event) => {
 
     const husbandPhoto = document.getElementById('husband').files[0];
     const wifePhoto = document.getElementById('wife').files[0];
+    const gender = document.querySelector('input[name="gender"]:checked').value;
 
     try {
         // Redimensionar y subir imágenes
@@ -226,8 +247,8 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-        console.log("Husband URL:", husbandUrl);
-        console.log("Wife URL:", wifeUrl);
+        // Construir el prompt dinámico
+        const prompt = `A realistic portrait of a ${gender} toddler. blending features of two parents. The ${gender} toddler has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age`;
 
         // Enviar URLs al backend
         const response = await fetch('/generate-baby-face', {
@@ -236,16 +257,41 @@ form.addEventListener('submit', async (event) => {
             body: JSON.stringify({
                 husband_url: husbandUrl,
                 wife_url: wifeUrl,
-                model_id: "controlnet-model-id", // Model ID correcto
+                model_id: "realisticvisionv60b1v60b1",
+                prompt: prompt,
             }),
         });
 
         const data = await response.json();
 
         if (data.baby_image_url) {
-            // Mostrar la imagen generada
-            babyImage.src = data.baby_image_url;
+            // Mostrar el contenedor y mensaje de carga
+            const loadingText = document.getElementById('loading-text');
+            const babyImage = document.getElementById('baby-image');
+            const resultDiv = document.getElementById('result');
             resultDiv.style.display = 'block';
+            loadingText.style.display = 'block';
+            babyImage.style.display = 'none';
+
+            // Verificar periódicamente si la imagen está lista
+            const imageUrl = data.baby_image_url;
+            const checkImage = () => {
+                const img = new Image();
+                img.src = imageUrl;
+                img.onload = () => {
+                    // Reemplazar el placeholder con la imagen final
+                    loadingText.style.display = 'none';
+                    babyImage.src = imageUrl;
+                    babyImage.style.display = 'block';
+                };
+                img.onerror = () => {
+                    // Reintentar después de un breve intervalo
+                    setTimeout(checkImage, 2000);
+                };
+            };
+
+            // Inicia la verificación de la imagen
+            checkImage();
         } else {
             alert('Error: No se pudo generar la imagen. ' + (data.error || ''));
         }
@@ -255,7 +301,35 @@ form.addEventListener('submit', async (event) => {
     }
 });
 
+      
         
+        
+        document.getElementById('husband').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.getElementById('father-preview');
+            img.src = e.target.result; // Establece la vista previa
+            img.style.display = 'block'; // Asegúrate de que la imagen sea visible
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('wife').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.getElementById('mother-preview');
+            img.src = e.target.result; // Establece la vista previa
+            img.style.display = 'block'; // Asegúrate de que la imagen sea visible
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
         
 </script>
 
