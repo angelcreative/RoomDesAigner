@@ -998,7 +998,7 @@ def generate_baby_face():
     # Construir el payload para Modelslab
     payload = {
         "key": MODEL_LAB_API_KEY,
-        "model_id": "fluxdev",  # Modelo especificado explícitamente
+        "model_id": "realisticvisionv60b1v60b1",  # Modelo especificado explícitamente
         "controlnet_model": "canny",
         "controlnet_type": "canny",
         "init_image": husband_url,
