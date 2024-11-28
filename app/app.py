@@ -967,29 +967,15 @@ MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
 IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
 IMGBB_URL = "https://api.imgbb.com/1/upload"
 
-@app.route('/baby-face')
-def index():
-    return render_template('baby-face.html')
-
-def upload_to_imgbb(file):
-    """Uploads an image to ImgBB and returns the URL."""
-    response = requests.post(IMGBB_URL, data={"key": IMGBB_API_KEY}, files={"image": file})
-    if response.status_code == 200:
-        return response.json().get("data", {}).get("url")
-    return None
-
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
-    # Get uploaded files from the form
-    husband_photo = request.files.get('husband')
-    wife_photo = request.files.get('wife')
-
-    # Upload images directly to ImgBB
-    husband_url = upload_to_imgbb(husband_photo)
-    wife_url = upload_to_imgbb(wife_photo)
+    """Handle baby face generation."""
+    data = request.get_json()
+    husband_url = data.get('husband_url')
+    wife_url = data.get('wife_url')
 
     if not husband_url or not wife_url:
-        return jsonify({"error": "Failed to upload images to ImgBB."}), 500
+        return jsonify({"error": "Missing image URLs."}), 400
 
     # Prepare Modelslab API request
     payload = {
@@ -1015,10 +1001,8 @@ def generate_baby_face():
     response = requests.post(MODEL_LAB_URL, json=payload)
     result = response.json()
 
-    # Return the generated image URL
     if response.status_code == 200 and "image" in result:
-        baby_image_url = result['image']
-        return jsonify({"baby_image_url": baby_image_url})
+        return jsonify({"baby_image_url": result['image']})
     else:
         return jsonify({"error": "Failed to generate baby face."}), 500
 
