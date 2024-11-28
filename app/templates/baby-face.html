@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <!-- icons for mobile -->
+   
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- //end icons for mobile -->
+            <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
+
+    <title>Virtual try on - App ADEM</title>
+  
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        body {overflow: auto}
+        
+        div#result {
+    color: var(--bunker-50);
+    max-width: 400px;
+}
+
+h3 {
+    color: var(--bunker-50);
+}
+
+        textarea {
+    cursor: default;
+    color: var(--bunker-50);
+    font-size: 14px;
+    border: none;
+    min-height: 200px;
+    display: block;
+    width: 100%;
+}
+        
+ .uploaders {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+      div#colorExtractionImage {
+    width: 48%;
+}  
+        
+        .leftF {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+}
+        
+div#result {
+    color: var(--bunker-700);
+    width: 400px;
+    background: var(--bunker-900);
+    overflow: hidden;
+    display: flex;
+    border-radius: 12px;
+    min-height: 516px;
+    justify-content: center;
+    align-items: center;
+}
+
+div#result > img {
+    border-radius: 12px;
+}
+    </style>
+</head>
+<body style="overflow: auto">
+    <header class="top-bar ignore">
+                  <div> 
+        <div class="usernameCredits"><span class="username"><span class="material-symbols-outlined">
+identity_platform
+</span>angelcreative</span><span class="creditsCoin" id="creditDisplay">3715</span></div>
+        
+       
+    </div>
+              <div class="logo">
+                     <h1><img src="static/img/adem-img/logo_full_02.svg"></h1>
+                     <div class="orb"></div>
+</div>
+ 
+                 <div class="user-profile"> <div class="logout">
+        <div class="rightOff">
+            
+            <button class="menu-button" id="menuButton" style="display:none">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+            <button type="button" style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
+
+
+            
+            <a href="/logout">
+            <span class="material-symbols-outlined" translate="no">
+logout
+</span>
+        </a></div>
+       
+      
+    </div></div>
+             </header>
+    
+    <div class="vto-root" style="width: auto;
+    margin: 80px auto 0 auto;
+    text-align: left;">
+        
+         <h1>Baby Face Generator</h1>
+    <form id="baby-face-form" enctype="multipart/form-data">
+        <label for="husband">Husband's Photo:</label>
+        <input type="file" id="husband" name="husband" accept="image/*" required><br><br>
+
+        <label for="wife">Wife's Photo:</label>
+        <input type="file" id="wife" name="wife" accept="image/*" required><br><br>
+
+        <button type="submit">Generate Baby Face</button>
+    </form>
+
+    <div id="result">
+        <h2>Generated Baby Face:</h2>
+        <img id="baby-image" src="" alt="Baby Face" style="display: none;">
+    </div>
+        
+    </div>
+     <script>
+        const form = document.getElementById('baby-face-form');
+        const resultDiv = document.getElementById('result');
+        const babyImage = document.getElementById('baby-image');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/generate-baby-face', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.baby_image_url) {
+                    babyImage.src = data.baby_image_url;
+                    babyImage.style.display = 'block';
+                } else {
+                    alert('Failed to generate baby face.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            }
+        });
+    </script>
+</body>
+</html>

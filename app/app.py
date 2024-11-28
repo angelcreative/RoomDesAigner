@@ -959,5 +959,76 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+
+
+#babe
+MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
+MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
+IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
+IMGBB_URL = "https://api.imgbb.com/1/upload"
+
+@app.route('/')
+def index():
+    return render_template('baby-face.html')
+
+def upload_to_imgbb(file):
+    """Uploads an image to ImgBB and returns the URL."""
+    response = requests.post(IMGBB_URL, data={"key": IMGBB_API_KEY}, files={"image": file})
+    if response.status_code == 200:
+        return response.json().get("data", {}).get("url")
+    return None
+
+@app.route('/generate-baby-face', methods=['POST'])
+def generate_baby_face():
+    # Get uploaded files from the form
+    husband_photo = request.files.get('husband')
+    wife_photo = request.files.get('wife')
+
+    # Upload images directly to ImgBB
+    husband_url = upload_to_imgbb(husband_photo)
+    wife_url = upload_to_imgbb(wife_photo)
+
+    if not husband_url or not wife_url:
+        return jsonify({"error": "Failed to upload images to ImgBB."}), 500
+
+    # Prepare Modelslab API request
+    payload = {
+        "key": MODEL_LAB_API_KEY,
+        "controlnet_model": "canny",
+        "controlnet_type": "canny",
+        "init_image": husband_url,
+        "ip_adapter_id": "ip-adapter_sd15",
+        "ip_adapter_image": wife_url,
+        "ip_adapter_scale": 0.5,
+        "prompt": "a realistic baby face blending features of two parents, round cheeks, soft skin, large eyes, small nose, smooth proportions, photorealistic",
+        "width": 512,
+        "height": 512,
+        "samples": 1,
+        "scheduler": "EulerDiscreteScheduler",
+        "num_inference_steps": 50,
+        "guidance_scale": 8.0,
+        "strength": 0.7,
+        "controlnet_conditioning_scale": 0.6,
+    }
+
+    # Call Modelslab API
+    response = requests.post(MODEL_LAB_URL, json=payload)
+    result = response.json()
+
+    # Return the generated image URL
+    if response.status_code == 200 and "image" in result:
+        baby_image_url = result['image']
+        return jsonify({"baby_image_url": baby_image_url})
+    else:
+        return jsonify({"error": "Failed to generate baby face."}), 500
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+    
+    
+    
