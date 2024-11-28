@@ -960,32 +960,26 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-#babe
 MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
 MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
-IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
-IMGBB_URL = "https://api.imgbb.com/1/upload"
-
-@app.route('/baby-face')
-def index():
-    return render_template('baby-face.html')
-
-def upload_to_imgbb(file):
-    """Uploads an image to ImgBB and returns the URL."""
-    response = requests.post(IMGBB_URL, data={"key": IMGBB_API_KEY}, files={"image": file})
-    if response.status_code == 200:
-        return response.json().get("data", {}).get("url")
-    return None
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
     """Handle baby face generation."""
+    # Debug log helper
+    def debug_log(message, data=None):
+        print("[DEBUG - BACKEND]:", message)
+        if data:
+            print(data)
+
     data = request.get_json()
+    debug_log("Received payload:", data)
+
     husband_url = data.get('husband_url')
     wife_url = data.get('wife_url')
 
     if not husband_url or not wife_url:
+        debug_log("Missing image URLs in payload")
         return jsonify({"error": "Missing image URLs."}), 400
 
     # Prepare Modelslab API request
@@ -1007,18 +1001,24 @@ def generate_baby_face():
         "strength": 0.7,
         "controlnet_conditioning_scale": 0.6,
     }
+    debug_log("Modelslab payload:", payload)
 
     # Call Modelslab API
     response = requests.post(MODEL_LAB_URL, json=payload)
-    result = response.json()
+    debug_log("Modelslab API response status:", response.status_code)
+    debug_log("Modelslab API response body:", response.text)
 
-    if response.status_code == 200 and "image" in result:
-        return jsonify({"baby_image_url": result['image']})
+    if response.status_code == 200:
+        result = response.json()
+        if "image" in result:
+            debug_log("Generated image URL:", result['image'])
+            return jsonify({"baby_image_url": result['image']})
+        else:
+            debug_log("Modelslab response missing 'image' key")
+            return jsonify({"error": "Modelslab API did not return an image."}), 500
     else:
-        return jsonify({"error": "Failed to generate baby face."}), 500
-
-
-
+        debug_log("Modelslab API failed")
+        return jsonify({"error": f"Modelslab API error: {response.text}"}), 500
 
 
 
