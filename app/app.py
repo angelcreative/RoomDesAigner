@@ -960,8 +960,23 @@ def logout():
     return redirect(url_for('login'))
 
 
+
+#babe
 MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
 MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
+IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"
+IMGBB_URL = "https://api.imgbb.com/1/upload"
+
+@app.route('/baby-face')
+def index():
+    return render_template('baby-face.html')
+
+def upload_to_imgbb(file):
+    """Uploads an image to ImgBB and returns the URL."""
+    response = requests.post(IMGBB_URL, data={"key": IMGBB_API_KEY}, files={"image": file})
+    if response.status_code == 200:
+        return response.json().get("data", {}).get("url")
+    return None
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
@@ -1019,6 +1034,10 @@ def generate_baby_face():
     else:
         debug_log("Modelslab API failed")
         return jsonify({"error": f"Modelslab API error: {response.text}"}), 500
+
+
+
+
 
 
 
