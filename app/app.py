@@ -1000,6 +1000,7 @@ def generate_baby_face():
             "model_id": "realisticvisionv60b1v60b1",
             "controlnet_model": "canny",
             "controlnet_type": "canny",
+            "negative_prompt": "beard, facial hair, glasses, sunglasses, wrinkles, scars, asymmetry, blurry, extra facial features, distorted, low quality, imperfections, blemishes, acne, spots",
             "init_image": husband_url,
             "ip_adapter_id": "ip-adapter_sd15",
             "ip_adapter_image": wife_url,
