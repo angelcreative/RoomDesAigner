@@ -1004,7 +1004,7 @@ def generate_baby_face():
             "init_image": husband_url,
             "ip_adapter_id": "ip-adapter_sd15",
             "ip_adapter_image": wife_url,
-            "ip_adapter_scale": 1,
+            "ip_adapter_scale": 0.5,
             "prompt": prompt,
             "width": 512,
             "height": 512,
@@ -1026,8 +1026,14 @@ def generate_baby_face():
         if response.status_code == 200:
             result = response.json()
 
-            # Verificar si hay un `fetch_url` para hacer polling
-            if result.get("status") in ["queued", "processing"]:
+            # Si `links` contiene la URL de la imagen generada
+            if "links" in result and len(result["links"]) > 0:
+                image_url = result["links"][0]
+                debug_log("Imagen generada URL:", image_url)
+                return jsonify({"baby_image_url": image_url})
+
+            # Si el estado es `queued` o `processing`, realizar polling
+            elif result.get("status") in ["queued", "processing"]:
                 fetch_url = result.get("fetch_url")
                 if not fetch_url:
                     return jsonify({"error": "La API de Modelslab no devolvió un fetch_url válido."}), 500
@@ -1046,7 +1052,7 @@ def generate_baby_face():
                         if poll_result.get("status") == "success" and "links" in poll_result:
                             # Imagen lista, devolver la URL generada
                             image_url = poll_result["links"][0]
-                            debug_log("Imagen generada URL:", image_url)
+                            debug_log("Imagen generada URL tras polling:", image_url)
                             return jsonify({"baby_image_url": image_url})
 
                         elif poll_result.get("status") == "processing":
@@ -1061,12 +1067,6 @@ def generate_baby_face():
                 # Si se excede el tiempo de polling
                 return jsonify({"error": "Se superó el tiempo máximo de espera para generar la imagen."}), 504
 
-            elif "links" in result and len(result["links"]) > 0:
-                # Imagen ya generada inmediatamente
-                image_url = result["links"][0]
-                debug_log("Imagen generada URL (instantánea):", image_url)
-                return jsonify({"baby_image_url": image_url})
-
             else:
                 return jsonify({"error": "La API de Modelslab no devolvió una respuesta válida."}), 500
         else:
@@ -1076,42 +1076,6 @@ def generate_baby_face():
         debug_log("Error no controlado:", str(e))
         return jsonify({"error": "Ocurrió un error inesperado en el backend."}), 500
 
-@app.route('/poll-image-status', methods=['POST'])
-def poll_image_status():
-    """Verifica el estado de la generación de la imagen."""
-    def debug_log(message, data=None):
-        print("[DEBUG - BACKEND]:", message)
-        if data:
-            print(data)
-
-    try:
-        data = request.get_json()
-        fetch_url = data.get('fetch_url')
-
-        if not fetch_url:
-            return jsonify({"error": "Falta el fetch_url."}), 400
-
-        # Llamar al fetch_url para verificar el estado
-        response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
-        debug_log("Respuesta de polling - Status:", response.status_code)
-        debug_log("Respuesta de polling - Body:", response.text)
-
-        if response.status_code == 200:
-            result = response.json()
-            if result.get("status") == "success" and "links" in result:
-                # Imagen generada con éxito
-                return jsonify({
-                    "status": "success",
-                    "links": result["links"]
-                })
-            elif result.get("status") == "processing":
-                # Aún procesándose
-                return jsonify({"status": "processing"})
-        return jsonify({"error": "Error al verificar el estado de la imagen."}), 500
-
-    except Exception as e:
-        debug_log("Error no controlado en polling:", str(e))
-        return jsonify({"error": "Ocurrió un error inesperado al verificar el estado."}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
