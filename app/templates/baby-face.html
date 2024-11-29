@@ -198,7 +198,8 @@ face_4
     </div>
     <script>
     
-    const IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"; // Clave de ImgBB
+    <script>
+const IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"; // Clave de ImgBB
 const BACKEND_API_URL = "/generate-baby-face"; // Endpoint del backend
 
 const form = document.getElementById('baby-face-form');
@@ -298,7 +299,7 @@ form.addEventListener('submit', async (event) => {
 
     const husbandPhoto = document.getElementById('husband').files[0];
     const wifePhoto = document.getElementById('wife').files[0];
-    const gender = document.querySelector('input[name="gender"]:checked').value;
+    const gender = document.querySelector('input[name="gender"]:checked').value; // Obtener `boy` o `girl`
 
     try {
         // Redimensionar y subir imágenes
@@ -329,9 +330,15 @@ form.addEventListener('submit', async (event) => {
 
         const data = await response.json();
 
+        // Si devuelve un fetch_url para hacer polling
         if (data.fetch_url) {
             document.getElementById("loading-text").style.display = "block"; // Mostrar texto de carga
             pollForResult(data.fetch_url); // Iniciar polling
+        } else if (data.baby_image_url) {
+            // Imagen generada instantáneamente
+            babyImage.src = data.baby_image_url;
+            babyImage.style.display = 'block';
+            document.getElementById('loading-text').style.display = 'none';
         } else {
             alert('Error: No se pudo generar la imagen. ' + (data.error || ''));
         }
@@ -367,8 +374,9 @@ document.getElementById('wife').addEventListener('change', (event) => {
         reader.readAsDataURL(file);
     }
 });
+</script>
 
+    
     </script>
-
 </body>
 </html>

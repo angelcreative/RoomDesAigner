@@ -962,7 +962,6 @@ def logout():
 
 
 
-
 # Configuración de las APIs
 MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
 MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
@@ -976,7 +975,7 @@ def index():
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
-    """Inicia la generación de la imagen y realiza polling hasta que esté lista."""
+    """Inicia la generación de la imagen y realiza polling si es necesario."""
     def debug_log(message, data=None):
         print("[DEBUG - BACKEND]:", message)
         if data:
@@ -989,10 +988,11 @@ def generate_baby_face():
 
         husband_url = data.get('husband_url')
         wife_url = data.get('wife_url')
-        prompt = data.get('prompt', "A realistic portrait of a toddler. blending features of two parents.")
+        prompt = data.get('prompt')
 
-        if not husband_url or not wife_url:
-            return jsonify({"error": "Faltan URLs de imágenes."}), 400
+        # Validar campos obligatorios
+        if not husband_url or not wife_url or not prompt:
+            return jsonify({"error": "Faltan datos obligatorios: husband_url, wife_url o prompt."}), 400
 
         # Construir el payload para Modelslab
         payload = {
@@ -1018,7 +1018,7 @@ def generate_baby_face():
         }
         debug_log("Payload enviado a Modelslab:", payload)
 
-        # Llamar a la API de Modelslab para iniciar la generación
+        # Llamar a la API de Modelslab
         response = requests.post(MODEL_LAB_URL, json=payload)
         debug_log("Respuesta de Modelslab - Status:", response.status_code)
         debug_log("Respuesta de Modelslab - Body:", response.text)
@@ -1026,9 +1026,9 @@ def generate_baby_face():
         if response.status_code == 200:
             result = response.json()
 
-            # Verificar si hay un fetch_url para hacer polling
+            # Verificar si hay un `fetch_url` para hacer polling
             if result.get("status") in ["queued", "processing"]:
-                fetch_url = result.get("fetch_url")  # Confirmar si fetch_url es el campo correcto
+                fetch_url = result.get("fetch_url")
                 if not fetch_url:
                     return jsonify({"error": "La API de Modelslab no devolvió un fetch_url válido."}), 500
 
