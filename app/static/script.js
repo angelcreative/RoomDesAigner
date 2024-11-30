@@ -656,8 +656,8 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 let width, height;
 
 if (aspectRatio === "square") {
-    width = 1024; // Relación 1:1
-    height = 1024;
+    width = 1200; // Relación 1:1
+    height = 1200;
 } else if (aspectRatio === "widescreen") {
     width = 1448; // Relación 19:6 (ajustada para ser múltiplo de 8)
     height = 456; // Ya es múltiplo de 8
