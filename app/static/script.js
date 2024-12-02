@@ -662,11 +662,11 @@ if (aspectRatio === "square") {
     width = 1448; // Relación 19:6 (ajustada para ser múltiplo de 8)
     height = 456; // Ya es múltiplo de 8
 } else if (aspectRatio === "landscape") {
-    width = 1024; // Relación 3:2 ajustada
-    height = 680; // 1024 * (2/3), ajustado a múltiplo de 8
+    width = 1200; // Relación 3:2 ajustada
+    height = 800; // 1200 * (2/3), ajustado a múltiplo de 8
 } else if (aspectRatio === "portrait") {
-    width = 680; // Relación 2:3 ajustada
-    height = 1024; // Ya es múltiplo de 8
+    width = 800; // Relación 2:3 ajustada
+    height = 1200; // Ya es múltiplo de 8
 } else if (aspectRatio === "social-vertical") {
     width = 808; // Relación 9:16 (ajustada para ser múltiplo de 8)
     height = 1448; // Ajustada para ser múltiplo de 8
