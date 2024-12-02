@@ -97,10 +97,15 @@ div#result > img {
     width: 600px;
 }
         
-        
-        .vto-root {    width: auto;
-    margin: 80px auto 0 auto;
-    text-align: center;}
+.vto-root {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 80px auto;
+    width: fit-content;
+    gap: 24px;
+}
     </style>
 </head>
 <body style="overflow: auto">
@@ -136,16 +141,14 @@ logout
       
     </div></div>
              </header>
-    
-    <div class="vto-root" style="width: auto;
-    margin: 80px auto 0 auto;
-    text-align: left;">
-        
-         <h1 style="text-align: center;
+     <h1 style="text-align: center;
     margin: 0 auto 24px;
     display: block;
     font-size: 24px;
     color: var(--bunker-200);">Baby Face Generator</h1>
+    <div class="vto-root">
+        
+        
     <form id="baby-face-form" enctype="multipart/form-data">
         
         
