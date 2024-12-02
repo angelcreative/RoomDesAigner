@@ -1012,7 +1012,7 @@ def generate_baby_face():
 
         payload = {
             "key": MODEL_LAB_API_KEY,
-            "model_id": "realisticvisionv60b1v60b1",
+            "model_id": "epicrealismnew", #realisticvisionv60b1v60b1
             "controlnet_model": "canny",
             "controlnet_type": "canny",
             "negative_prompt": "beard, facial hair, glasses, sunglasses, wrinkles, scars, asymmetry, blurry, extra facial features, distorted, low quality, imperfections, blemishes, acne, spots",
@@ -1029,7 +1029,10 @@ def generate_baby_face():
             "guidance": 8,
             "strength": 1,
             "controlnet_conditioning_scale": 0.6,
-            "safety_checker": "no"
+            "safety_checker": "no",
+            "embeddings_model": "epicrealism-negative-embe",
+            "lora_model":"epicrealismnew",
+            "lora_strenght":0.6
         }
 
         response = requests.post(MODEL_LAB_URL, json=payload)
