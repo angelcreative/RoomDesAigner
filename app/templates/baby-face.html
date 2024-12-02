@@ -38,6 +38,13 @@ h3 {
     display: block;
     width: 100%;
 }
+        p#loading-text {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+    left: 50%;
+}
         
  
       div#colorExtractionImage {
@@ -53,15 +60,14 @@ h3 {
 }
         
 div#result {
-    color: var(--bunker-700);
+color: var(--bunker-700);
     width: 400px;
     background: var(--bunker-900);
     overflow: hidden;
-    display: flex;
     border-radius: 12px;
     min-height: 516px;
-    justify-content: center;
-    align-items: center;
+    position: relative;
+    margin: 0 auto;
 }
 
 div#result > img {
