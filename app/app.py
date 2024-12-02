@@ -961,11 +961,119 @@ def logout():
 
 
 
+# Configuración de las APIs
+MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
+MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
+POLLING_INTERVAL = 5  # Segundos entre cada intento
+MAX_POLLING_TIME = 120  # Tiempo máximo para hacer polling (en segundos)
 
 @app.route('/baby-face')
 def index():
     """Renderiza la página principal."""
     return render_template('baby-face.html')
+
+@app.route('/generate-baby-face', methods=['POST'])
+def generate_baby_face():
+    """Inicia la generación de la imagen y realiza polling si es necesario."""
+    def debug_log(message, data=None):
+        print("[DEBUG - BACKEND]:", message)
+        if data:
+            print(data)
+
+    try:
+        # Recibir datos del frontend
+        data = request.get_json()
+        debug_log("Payload recibido:", data)
+
+        husband_url = data.get('husband_url')
+        wife_url = data.get('wife_url')
+        prompt = data.get('prompt')
+
+        # Validar campos obligatorios
+        if not husband_url or not wife_url or not prompt:
+            return jsonify({"error": "Faltan datos obligatorios: husband_url, wife_url o prompt."}), 400
+
+        # Construir el payload para Modelslab
+        payload = {
+            "key": MODEL_LAB_API_KEY,
+            "model_id": "realisticvisionv60b1v60b1",
+            "controlnet_model": "canny",
+            "controlnet_type": "canny",
+            "negative_prompt": "beard, facial hair, glasses, sunglasses, wrinkles, scars, asymmetry, blurry, extra facial features, distorted, low quality, imperfections, blemishes, acne, spots",
+            "init_image": husband_url,
+            "ip_adapter_id": "ip-adapter_sd15",
+            "ip_adapter_image": wife_url,
+            "ip_adapter_scale": 1,
+            "prompt": prompt,
+            "width": 512,
+            "height": 512,
+            "samples": 1,
+            "scheduler": "EulerDiscreteScheduler",
+            "steps": 20,
+            "guidance": 8,
+            "strength": 1,
+            "controlnet_conditioning_scale": 0.6,
+            "safety_checker": "no"  # Desactiva el filtro NSFW
+        }
+        debug_log("Payload enviado a Modelslab:", payload)
+
+        # Llamar a la API de Modelslab
+        response = requests.post(MODEL_LAB_URL, json=payload)
+        debug_log("Respuesta de Modelslab - Status:", response.status_code)
+        debug_log("Respuesta de Modelslab - Body:", response.text)
+
+        if response.status_code == 200:
+            result = response.json()
+
+            # Si `links` contiene la URL de la imagen generada
+            if "links" in result and len(result["links"]) > 0:
+                image_url = result["links"][0]
+                debug_log("Imagen generada URL:", image_url)
+                return jsonify({"baby_image_url": image_url})
+
+            # Si el estado es `queued` o `processing`, realizar polling
+            elif result.get("status") in ["queued", "processing"]:
+                fetch_url = result.get("fetch_url")
+                if not fetch_url:
+                    return jsonify({"error": "La API de Modelslab no devolvió un fetch_url válido."}), 500
+
+                start_time = time.time()
+
+                # Realizar polling hasta que la imagen esté lista o se supere el tiempo máximo
+                while time.time() - start_time < MAX_POLLING_TIME:
+                    debug_log("Realizando polling a fetch_url:", fetch_url)
+
+                    poll_response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
+                    if poll_response.status_code == 200:
+                        poll_result = poll_response.json()
+                        debug_log("Respuesta de polling:", poll_result)
+
+                        if poll_result.get("status") == "success" and "links" in poll_result:
+                            # Imagen lista, devolver la URL generada
+                            image_url = poll_result["links"][0]
+                            debug_log("Imagen generada URL tras polling:", image_url)
+                            return jsonify({"baby_image_url": image_url})
+
+                        elif poll_result.get("status") == "processing":
+                            debug_log("La imagen aún está procesándose...")
+                            time.sleep(POLLING_INTERVAL)
+                        else:
+                            break
+                    else:
+                        debug_log("Error en la respuesta de polling:", poll_response.text)
+                        break
+
+                # Si se excede el tiempo de polling
+                return jsonify({"error": "Se superó el tiempo máximo de espera para generar la imagen."}), 504
+
+            else:
+                return jsonify({"error": "La API de Modelslab no devolvió una respuesta válida."}), 500
+        else:
+            return jsonify({"error": f"Error en Modelslab: {response.text}"}), 500
+
+    except Exception as e:
+        debug_log("Error no controlado:", str(e))
+        return jsonify({"error": "Ocurrió un error inesperado en el backend."}), 500
 
 
 if __name__ == '__main__':
