@@ -656,10 +656,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 let width, height;
 
 if (aspectRatio === "square") {
-    width = 1200; // Relación 1:1
-    height = 1200;
+    width = 1400; // Relación 1:1
+    height = 1400;
 } else if (aspectRatio === "widescreen") {
-    width = 1448; // Relación 19:6 (ajustada para ser múltiplo de 8)
+    width = 1400; // Relación 19:6 (ajustada para ser múltiplo de 8)
     height = 456; // Ya es múltiplo de 8
 } else if (aspectRatio === "landscape") {
     width = 1200; // Relación 3:2 ajustada
@@ -669,7 +669,7 @@ if (aspectRatio === "square") {
     height = 1200; // Ya es múltiplo de 8
 } else if (aspectRatio === "social-vertical") {
     width = 808; // Relación 9:16 (ajustada para ser múltiplo de 8)
-    height = 1448; // Ajustada para ser múltiplo de 8
+    height = 1400; // Ajustada para ser múltiplo de 8
 }
 
 

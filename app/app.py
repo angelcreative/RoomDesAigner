@@ -981,8 +981,28 @@ def generate_baby_face():
 
     try:
         data = request.get_json()
-        debug_log("Payload recibido:", data)
+        
+        # Si es una solicitud de verificación de estado
+        if data.get('check_status'):
+            fetch_url = data.get('fetch_url')
+            if not fetch_url:
+                return jsonify({"error": "URL de verificación no proporcionada"}), 400
+            
+            # Realizar la solicitud de verificación
+            check_response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
+            check_result = check_response.json()
+            
+            if check_result.get("status") == "success" and check_result.get("output"):
+                return jsonify({
+                    "status": "success",
+                    "links": [check_result["output"]]
+                })
+            return jsonify({
+                "status": "processing",
+                "message": "Imagen aún en proceso"
+            })
 
+        # Si es la solicitud inicial
         husband_url = data.get('husband_url')
         wife_url = data.get('wife_url')
         prompt = data.get('prompt')
@@ -1013,24 +1033,21 @@ def generate_baby_face():
         }
 
         response = requests.post(MODEL_LAB_URL, json=payload)
-        debug_log("Respuesta de ModelsLab:", response.json())
+        result = response.json()
+        debug_log("Respuesta de ModelsLab:", result)
 
         if response.status_code == 200:
-            result = response.json()
-            
-            # Si la imagen está lista inmediatamente
-            if result.get("links") and len(result["links"]) > 0:
-                return jsonify({
-                    "status": "success",
-                    "baby_image_url": result["links"][0]
-                })
-            
-            # Si está en cola
-            if result.get("status") == "queued":
+            if result.get("fetch_result"):
                 return jsonify({
                     "status": "processing",
-                    "message": "Imagen en proceso de generación"
+                    "fetch_url": result["fetch_result"],
+                    "eta": result.get("eta", 0)
                 })
+            
+            return jsonify({
+                "error": "No se recibió URL de verificación",
+                "details": result
+            })
 
         return jsonify({
             "error": "Error en la generación de la imagen",
@@ -1043,6 +1060,9 @@ def generate_baby_face():
             "error": "Error interno del servidor",
             "details": str(e)
         }), 500
+    
+    
+    
     
 if __name__ == '__main__':
     app.run(debug=True)

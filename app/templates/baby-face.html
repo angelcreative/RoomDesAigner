@@ -258,6 +258,7 @@ async function uploadToImgBB(imageBlob) {
 }
 
 // Función para realizar polling hasta que la imagen esté lista
+
 async function pollForResult(fetchUrl, originalPayload) {
     const loadingText = document.getElementById('loading-text');
     const maxAttempts = 24; // 2 minutos máximo (24 intentos * 5 segundos)
@@ -265,12 +266,15 @@ async function pollForResult(fetchUrl, originalPayload) {
 
     try {
         while (attempts < maxAttempts) {
-            const response = await fetch(fetchUrl, {
+            const response = await fetch(BACKEND_API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(originalPayload),
+                body: JSON.stringify({
+                    check_status: true,
+                    fetch_url: fetchUrl
+                }),
             });
 
             if (!response.ok) {
@@ -284,18 +288,19 @@ async function pollForResult(fetchUrl, originalPayload) {
             const progressPercent = Math.min((attempts / maxAttempts) * 100, 99);
             loadingText.textContent = `Generando imagen... ${Math.round(progressPercent)}%`;
 
-            if (data.links && data.links.length > 0) {
+            if (data.status === "success" && data.links && data.links.length > 0) {
                 loadingText.style.display = "none";
                 babyImage.src = data.links[0];
                 babyImage.style.display = "block";
                 return;
             }
 
-            if (data.status === "queued" || data.status === "processing") {
+            if (data.status === "processing") {
                 await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos
-            } else {
-                throw new Error("No se pudo generar la imagen. Por favor, intenta nuevamente.");
+                continue;
             }
+
+            throw new Error(data.error || "Error en la generación de la imagen");
         }
         throw new Error("Tiempo de espera agotado. Por favor, intenta nuevamente.");
     } catch (error) {
@@ -303,8 +308,8 @@ async function pollForResult(fetchUrl, originalPayload) {
         loadingText.textContent = `Error: ${error.message}`;
         babyImage.style.display = "none";
     }
-}
-
+}    
+    
 // Manejar el envío del formulario
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -360,9 +365,9 @@ form.addEventListener('submit', async (event) => {
             document.getElementById('loading-text').style.display = 'none';
             babyImage.src = data.baby_image_url;
             babyImage.style.display = 'block';
-        } else if (data.status === "processing" || data.status === "queued") {
-            // Iniciar polling
-            await pollForResult(BACKEND_API_URL, originalPayload);
+        } else if (data.status === "processing" && data.fetch_url) {
+            // Iniciar polling con la URL de verificación
+            await pollForResult(data.fetch_url, originalPayload);
         } else {
             throw new Error(data.error || 'Error desconocido');
         }
@@ -372,7 +377,6 @@ form.addEventListener('submit', async (event) => {
         document.getElementById('loading-text').textContent = `Error: ${error.message}`;
     }
 });
-
 // Mostrar vistas previas de las imágenes seleccionadas
 document.getElementById('husband').addEventListener('change', (event) => {
     const file = event.target.files[0];
