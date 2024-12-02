@@ -1024,18 +1024,20 @@ def generate_baby_face():
 
         if response.status_code == 200:
             result = response.json()
+            debug_log("Respuesta de Modelslab:", result)
 
-            # Si `links` contiene la URL de la imagen generada
-            if "links" in result and len(result["links"]) > 0:
+           # Si hay links disponibles inmediatamente, devolver el primero
+            if "links" in result and result["links"]:
                 image_url = result["links"][0]
                 debug_log("Imagen generada URL:", image_url)
                 return jsonify({"baby_image_url": image_url})
-
-            # Si el estado es `queued` o `processing`, realizar polling
-            elif result.get("status") in ["queued", "processing"]:
-                fetch_url = result.get("fetch_url")
-                if not fetch_url:
-                    return jsonify({"error": "La API de Modelslab no devolvió un fetch_url válido."}), 500
+            
+            # Si no hay links pero está en cola, devolver la información para polling
+            elif result.get("status") == "queued":
+                return jsonify({
+                    "status": "processing",
+                    "fetch_url": MODEL_LAB_URL  # Usar la misma URL base para polling
+                })
 
                 start_time = time.time()
 

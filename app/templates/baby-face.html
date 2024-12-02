@@ -39,12 +39,7 @@ h3 {
     width: 100%;
 }
         
- .uploaders {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
+ 
       div#colorExtractionImage {
     width: 48%;
 }  
@@ -94,6 +89,7 @@ div#result > img {
     justify-content: center;
     flex-wrap: wrap;
     gap: 24px;
+    width: 600px;
 }
         
         
@@ -266,16 +262,18 @@ async function pollForResult(fetchUrl) {
     const babyImage = document.getElementById('baby-image');
 
     try {
-        const requestBody = {
-            key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw", // Clave de ModelsLab
-        };
-
         const response = await fetch(fetchUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",
+                // Incluir los mismos parámetros de la solicitud original
+                model_id: "realisticvisionv60b1v60b1",
+                controlnet_model: "canny",
+                // ... otros parámetros necesarios ...
+            }),
         });
 
         if (!response.ok) {
@@ -284,16 +282,17 @@ async function pollForResult(fetchUrl) {
 
         const data = await response.json();
 
-        if (data.status === "success" && data.links && data.links.length > 0) {
-            // Mostrar la imagen generada
+        if (data.links && data.links.length > 0) {
             loadingText.style.display = "none";
             babyImage.src = data.links[0];
             babyImage.style.display = "block";
-        } else if (data.status === "processing") {
-            // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
+            return;
+        }
+
+        if (data.status === "queued" || data.status === "processing") {
             setTimeout(() => pollForResult(fetchUrl), 5000);
         } else {
-            throw new Error("Failed to fetch the completed image. Please check the API response.");
+            throw new Error("Failed to fetch the completed image");
         }
     } catch (error) {
         console.error("Error while polling for result:", error);
@@ -322,7 +321,7 @@ form.addEventListener('submit', async (event) => {
         ]);
 
         // Construir el prompt dinámico
-        const prompt = `A realistic portrait of a ${gender} toddler. blending features of two parents. The ${gender} toddler has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of a child of this age`;
+        const prompt = `a realistic portrait of a newborn ${gender}. blending features of two parents. the newborn ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
 
         // Enviar URLs al backend
         const response = await fetch(BACKEND_API_URL, {
