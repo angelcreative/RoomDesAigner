@@ -1031,7 +1031,7 @@ def generate_baby_face():
             "controlnet_conditioning_scale": 0.6,
             "safety_checker": "no",
             "embeddings_model": "epicrealism-negative-embe",
-            "lora_model":"epicrealismnew",
+            "lora_model":"epic-realism-helper",
             "lora_strenght":0.6
         }
 
