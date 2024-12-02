@@ -363,7 +363,12 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-       const prompt = ` A realistic portrait of a pre-school ${gender}, blending features of two parents. The pre-school ${gender} has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of this age. (${custom}) [rich and vibrant skin tones::2, culturally accurate facial features::1.5, and contextually appropriate details].`;
+       const prompt = ` A realistic portrait blending features of two parents. 
+    The subject has a youthful, delicate face with round cheeks, soft and smooth skin, large bright eyes, 
+    a small button nose, and harmonious proportions typical of early childhood. 
+    The image should be photorealistic, capturing the innocence, curiosity, and playful expression characteristic of this age. 
+    (${custom}) [rich and vibrant skin tones::2, culturally accurate facial features::1.5, and contextually appropriate details]. 
+    (${gender})`;
 
 
         document.getElementById('loading-text').textContent = 'Generating the child face image ..';
