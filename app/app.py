@@ -974,14 +974,12 @@ def index():
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
-    """Inicia la generación de la imagen y realiza polling si es necesario."""
     def debug_log(message, data=None):
         print("[DEBUG - BACKEND]:", message)
         if data:
             print(data)
 
     try:
-        # Recibir datos del frontend
         data = request.get_json()
         debug_log("Payload recibido:", data)
 
@@ -989,11 +987,9 @@ def generate_baby_face():
         wife_url = data.get('wife_url')
         prompt = data.get('prompt')
 
-        # Validar campos obligatorios
         if not husband_url or not wife_url or not prompt:
-            return jsonify({"error": "Faltan datos obligatorios: husband_url, wife_url o prompt."}), 400
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
 
-        # Construir el payload para Modelslab
         payload = {
             "key": MODEL_LAB_API_KEY,
             "model_id": "realisticvisionv60b1v60b1",
@@ -1013,71 +1009,41 @@ def generate_baby_face():
             "guidance": 8,
             "strength": 1,
             "controlnet_conditioning_scale": 0.6,
-            "safety_checker": "no"  # Desactiva el filtro NSFW
+            "safety_checker": "no"
         }
-        debug_log("Payload enviado a Modelslab:", payload)
 
-        # Llamar a la API de Modelslab
         response = requests.post(MODEL_LAB_URL, json=payload)
-        debug_log("Respuesta de Modelslab - Status:", response.status_code)
-        debug_log("Respuesta de Modelslab - Body:", response.text)
+        debug_log("Respuesta de ModelsLab:", response.json())
 
         if response.status_code == 200:
             result = response.json()
-            debug_log("Respuesta de Modelslab:", result)
-
-           # Si hay links disponibles inmediatamente, devolver el primero
-            if "links" in result and result["links"]:
-                image_url = result["links"][0]
-                debug_log("Imagen generada URL:", image_url)
-                return jsonify({"baby_image_url": image_url})
             
-            # Si no hay links pero está en cola, devolver la información para polling
-            elif result.get("status") == "queued":
+            # Si la imagen está lista inmediatamente
+            if result.get("links") and len(result["links"]) > 0:
+                return jsonify({
+                    "status": "success",
+                    "baby_image_url": result["links"][0]
+                })
+            
+            # Si está en cola
+            if result.get("status") == "queued":
                 return jsonify({
                     "status": "processing",
-                    "fetch_url": MODEL_LAB_URL  # Usar la misma URL base para polling
+                    "message": "Imagen en proceso de generación"
                 })
 
-                start_time = time.time()
-
-                # Realizar polling hasta que la imagen esté lista o se supere el tiempo máximo
-                while time.time() - start_time < MAX_POLLING_TIME:
-                    debug_log("Realizando polling a fetch_url:", fetch_url)
-
-                    poll_response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
-                    if poll_response.status_code == 200:
-                        poll_result = poll_response.json()
-                        debug_log("Respuesta de polling:", poll_result)
-
-                        if poll_result.get("status") == "success" and "links" in poll_result:
-                            # Imagen lista, devolver la URL generada
-                            image_url = poll_result["links"][0]
-                            debug_log("Imagen generada URL tras polling:", image_url)
-                            return jsonify({"baby_image_url": image_url})
-
-                        elif poll_result.get("status") == "processing":
-                            debug_log("La imagen aún está procesándose...")
-                            time.sleep(POLLING_INTERVAL)
-                        else:
-                            break
-                    else:
-                        debug_log("Error en la respuesta de polling:", poll_response.text)
-                        break
-
-                # Si se excede el tiempo de polling
-                return jsonify({"error": "Se superó el tiempo máximo de espera para generar la imagen."}), 504
-
-            else:
-                return jsonify({"error": "La API de Modelslab no devolvió una respuesta válida."}), 500
-        else:
-            return jsonify({"error": f"Error en Modelslab: {response.text}"}), 500
+        return jsonify({
+            "error": "Error en la generación de la imagen",
+            "details": response.text
+        }), 500
 
     except Exception as e:
-        debug_log("Error no controlado:", str(e))
-        return jsonify({"error": "Ocurrió un error inesperado en el backend."}), 500
-
-
+        debug_log("Error:", str(e))
+        return jsonify({
+            "error": "Error interno del servidor",
+            "details": str(e)
+        }), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
     

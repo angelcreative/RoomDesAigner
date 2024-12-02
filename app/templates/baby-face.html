@@ -256,10 +256,11 @@ async function uploadToImgBB(imageBlob) {
     }
 }
 
-// Función para realizar polling hasta que la imagen esté lista
-async function pollForResult(fetchUrl) {
+//async function pollForResult(fetchUrl, originalPayload) {
     const loadingText = document.getElementById('loading-text');
     const babyImage = document.getElementById('baby-image');
+    const maxAttempts = 24; // 2 minutos máximo (24 intentos * 5 segundos)
+    let attempts = 0;
 
     try {
         const response = await fetch(fetchUrl, {
@@ -269,18 +270,37 @@ async function pollForResult(fetchUrl) {
             },
             body: JSON.stringify({
                 key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",
-                // Incluir los mismos parámetros de la solicitud original
-                model_id: "realisticvisionv60b1v60b1",
-                controlnet_model: "canny",
-                // ... otros parámetros necesarios ...
+                model_id: originalPayload.model_id || "realisticvisionv60b1v60b1",
+                controlnet_model: originalPayload.controlnet_model || "canny",
+                init_image: originalPayload.husband_url,
+                ip_adapter_image: originalPayload.wife_url,
+                prompt: originalPayload.prompt,
+                // Mantener los parámetros originales
+                controlnet_type: "canny",
+                ip_adapter_id: "ip-adapter_sd15",
+                ip_adapter_scale: 1,
+                width: 512,
+                height: 512,
+                samples: 1,
+                scheduler: "EulerDiscreteScheduler",
+                steps: 20,
+                guidance: 8,
+                strength: 1,
+                controlnet_conditioning_scale: 0.6,
+                safety_checker: "no"
             }),
         });
 
         if (!response.ok) {
-            throw new Error(`Error while fetching result: ${response.statusText}`);
+            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
         }
 
         const data = await response.json();
+        
+        // Actualizar mensaje de carga con progreso
+        attempts++;
+        const progressPercent = Math.min((attempts / maxAttempts) * 100, 99);
+        loadingText.textContent = `Generando imagen... ${Math.round(progressPercent)}%`;
 
         if (data.links && data.links.length > 0) {
             loadingText.style.display = "none";
@@ -289,27 +309,41 @@ async function pollForResult(fetchUrl) {
             return;
         }
 
-        if (data.status === "queued" || data.status === "processing") {
-            setTimeout(() => pollForResult(fetchUrl), 5000);
+        if ((data.status === "queued" || data.status === "processing") && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos
+            return pollForResult(fetchUrl, originalPayload);
+        } else if (attempts >= maxAttempts) {
+            throw new Error("Tiempo de espera agotado. Por favor, intenta nuevamente.");
         } else {
-            throw new Error("Failed to fetch the completed image");
+            throw new Error("No se pudo generar la imagen. Por favor, intenta nuevamente.");
         }
     } catch (error) {
-        console.error("Error while polling for result:", error);
-        resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
+        console.error("Error durante el polling:", error);
+        loadingText.textContent = `Error: ${error.message}`;
+        babyImage.style.display = "none";
     }
 }
 
 // Manejar el envío del formulario
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
-
+    
     const husbandPhoto = document.getElementById('husband').files[0];
     const wifePhoto = document.getElementById('wife').files[0];
-    const gender = document.querySelector('input[name="gender"]:checked').value; // Obtener `boy` o `girl`
+    const gender = document.querySelector('input[name="gender"]:checked').value;
 
+    if (!husbandPhoto || !wifePhoto) {
+        alert('Por favor, selecciona ambas fotos');
+        return;
+    }
+    
     try {
-        // Redimensionar y subir imágenes
+        // Mostrar loading
+        resultDiv.style.display = 'block';
+        document.getElementById('loading-text').style.display = 'block';
+        document.getElementById('loading-text').textContent = 'Procesando imágenes...';
+        
+        // Procesar imágenes
         const [resizedHusband, resizedWife] = await Promise.all([
             resizeImage(husbandPhoto, 512),
             resizeImage(wifePhoto, 512),
@@ -320,41 +354,86 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-        // Construir el prompt dinámico
         const prompt = `a realistic portrait of a newborn ${gender}. blending features of two parents. the newborn ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
 
-        // Enviar URLs al backend
+        document.getElementById('loading-text').textContent = 'Generando la imagen del bebé...';
+
         const response = await fetch(BACKEND_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 husband_url: husbandUrl,
                 wife_url: wifeUrl,
-                model_id: "realisticvisionv60b1v60b1",
                 prompt: prompt,
+                model_id: "realisticvisionv60b1v60b1",
+                controlnet_model: "canny"
             }),
         });
 
         const data = await response.json();
 
-        // Si devuelve un fetch_url para hacer polling
-        if (data.fetch_url) {
-            document.getElementById("loading-text").style.display = "block"; // Mostrar texto de carga
-            pollForResult(data.fetch_url); // Iniciar polling
-        } else if (data.baby_image_url) {
-            // Imagen generada instantáneamente
+        if (data.baby_image_url) {
+            // Imagen generada con éxito
+            document.getElementById('loading-text').style.display = 'none';
             babyImage.src = data.baby_image_url;
             babyImage.style.display = 'block';
+        } else if (data.links && data.links.length > 0) {
+            // Imagen disponible directamente en links
             document.getElementById('loading-text').style.display = 'none';
+            babyImage.src = data.links[0];
+            babyImage.style.display = 'block';
+        } else if (data.status === "processing" || data.status === "queued") {
+            // Iniciar polling
+            document.getElementById('loading-text').textContent = data.message || 'Generando imagen...';
+            setTimeout(() => checkImageStatus(data), 5000);
         } else {
-            alert('Error: No se pudo generar la imagen. ' + (data.error || ''));
+            throw new Error(data.error || 'Error desconocido');
         }
+
     } catch (error) {
         console.error('Error:', error);
-        alert('Ocurrió un error. Revisa la consola para más detalles.');
+        document.getElementById('loading-text').textContent = `Error: ${error.message}`;
     }
 });
+        
+        
+        
+ 
+async function checkImageStatus(previousData) {
+    try {
+        const response = await fetch(BACKEND_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                check_status: true,
+                previous_data: previousData 
+            })
+        });
 
+        const data = await response.json();
+
+        if (data.baby_image_url) {
+            document.getElementById('loading-text').style.display = 'none';
+            babyImage.src = data.baby_image_url;
+            babyImage.style.display = 'block';
+        } else if (data.links && data.links.length > 0) {
+            document.getElementById('loading-text').style.display = 'none';
+            babyImage.src = data.links[0];
+            babyImage.style.display = 'block';
+        } else if (data.status === "processing" || data.status === "queued") {
+            document.getElementById('loading-text').textContent = data.message || 'Generando imagen...';
+            setTimeout(() => checkImageStatus(data), 5000);
+        } else {
+            throw new Error(data.error || 'Error en la generación');
+        }
+    } catch (error) {
+        console.error('Error en checkImageStatus:', error);
+        document.getElementById('loading-text').textContent = `Error: ${error.message}`;
+    }
+}
+        
+        
+        
 // Mostrar vistas previas de las imágenes seleccionadas
 document.getElementById('husband').addEventListener('change', (event) => {
     const file = event.target.files[0];
