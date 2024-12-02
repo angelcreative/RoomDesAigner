@@ -62,7 +62,6 @@ h3 {
 div#result {
 color: var(--bunker-700);
     width: 400px;
-    background: var(--bunker-900);
     overflow: hidden;
     border-radius: 12px;
     min-height: 516px;
@@ -349,7 +348,7 @@ form.addEventListener('submit', async (event) => {
 
         const prompt = `a realistic portrait of a newborn ${gender}. blending features of two parents. the newborn ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
 
-        document.getElementById('loading-text').textContent = 'Generando la imagen del bebé...';
+        document.getElementById('loading-text').textContent = 'Generating the child face image ..';
 
         const originalPayload = {
             husband_url: husbandUrl,

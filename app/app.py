@@ -1019,7 +1019,7 @@ def generate_baby_face():
             "init_image": husband_url,
             "ip_adapter_id": "ip-adapter_sd15",
             "ip_adapter_image": wife_url,
-            "ip_adapter_scale": 0.6,
+            "ip_adapter_scale": 0.4,
             "prompt": prompt,
             "width": 512,
             "height": 512,
