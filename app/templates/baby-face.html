@@ -258,10 +258,9 @@ async function uploadToImgBB(imageBlob) {
 }
 
 // Función para realizar polling hasta que la imagen esté lista
-
 async function pollForResult(fetchUrl, originalPayload) {
     const loadingText = document.getElementById('loading-text');
-    const maxAttempts = 24; // 2 minutos máximo (24 intentos * 5 segundos)
+    const maxAttempts = 240; // 20 minutos máximo (240 intentos * 5 segundos)
     let attempts = 0;
 
     try {
@@ -308,7 +307,9 @@ async function pollForResult(fetchUrl, originalPayload) {
         loadingText.textContent = `Error: ${error.message}`;
         babyImage.style.display = "none";
     }
-}    
+}
+
+    
     
 // Manejar el envío del formulario
 form.addEventListener('submit', async (event) => {
