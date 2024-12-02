@@ -201,8 +201,9 @@ face_4
 
         
     </div>
-    <script>
     
+    
+<script>
 const IMGBB_API_KEY = "ba238be3f3764905b1bba03fc7a22e28"; // Clave de ImgBB
 const BACKEND_API_URL = "/generate-baby-face"; // Endpoint del backend
 
@@ -256,67 +257,47 @@ async function uploadToImgBB(imageBlob) {
     }
 }
 
-//async function pollForResult(fetchUrl, originalPayload) {
+// Función para realizar polling hasta que la imagen esté lista
+async function pollForResult(fetchUrl, originalPayload) {
     const loadingText = document.getElementById('loading-text');
-    const babyImage = document.getElementById('baby-image');
     const maxAttempts = 24; // 2 minutos máximo (24 intentos * 5 segundos)
     let attempts = 0;
 
     try {
-        const response = await fetch(fetchUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw",
-                model_id: originalPayload.model_id || "realisticvisionv60b1v60b1",
-                controlnet_model: originalPayload.controlnet_model || "canny",
-                init_image: originalPayload.husband_url,
-                ip_adapter_image: originalPayload.wife_url,
-                prompt: originalPayload.prompt,
-                // Mantener los parámetros originales
-                controlnet_type: "canny",
-                ip_adapter_id: "ip-adapter_sd15",
-                ip_adapter_scale: 1,
-                width: 512,
-                height: 512,
-                samples: 1,
-                scheduler: "EulerDiscreteScheduler",
-                steps: 20,
-                guidance: 8,
-                strength: 1,
-                controlnet_conditioning_scale: 0.6,
-                safety_checker: "no"
-            }),
-        });
+        while (attempts < maxAttempts) {
+            const response = await fetch(fetchUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(originalPayload),
+            });
 
-        if (!response.ok) {
-            throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+            if (!response.ok) {
+                throw new Error(`Error en la solicitud: ${response.status} - ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            // Actualizar mensaje de carga con progreso
+            attempts++;
+            const progressPercent = Math.min((attempts / maxAttempts) * 100, 99);
+            loadingText.textContent = `Generando imagen... ${Math.round(progressPercent)}%`;
+
+            if (data.links && data.links.length > 0) {
+                loadingText.style.display = "none";
+                babyImage.src = data.links[0];
+                babyImage.style.display = "block";
+                return;
+            }
+
+            if (data.status === "queued" || data.status === "processing") {
+                await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos
+            } else {
+                throw new Error("No se pudo generar la imagen. Por favor, intenta nuevamente.");
+            }
         }
-
-        const data = await response.json();
-        
-        // Actualizar mensaje de carga con progreso
-        attempts++;
-        const progressPercent = Math.min((attempts / maxAttempts) * 100, 99);
-        loadingText.textContent = `Generando imagen... ${Math.round(progressPercent)}%`;
-
-        if (data.links && data.links.length > 0) {
-            loadingText.style.display = "none";
-            babyImage.src = data.links[0];
-            babyImage.style.display = "block";
-            return;
-        }
-
-        if ((data.status === "queued" || data.status === "processing") && attempts < maxAttempts) {
-            await new Promise(resolve => setTimeout(resolve, 5000)); // Esperar 5 segundos
-            return pollForResult(fetchUrl, originalPayload);
-        } else if (attempts >= maxAttempts) {
-            throw new Error("Tiempo de espera agotado. Por favor, intenta nuevamente.");
-        } else {
-            throw new Error("No se pudo generar la imagen. Por favor, intenta nuevamente.");
-        }
+        throw new Error("Tiempo de espera agotado. Por favor, intenta nuevamente.");
     } catch (error) {
         console.error("Error durante el polling:", error);
         loadingText.textContent = `Error: ${error.message}`;
@@ -358,16 +339,18 @@ form.addEventListener('submit', async (event) => {
 
         document.getElementById('loading-text').textContent = 'Generando la imagen del bebé...';
 
+        const originalPayload = {
+            husband_url: husbandUrl,
+            wife_url: wifeUrl,
+            prompt: prompt,
+            model_id: "realisticvisionv60b1v60b1",
+            controlnet_model: "canny"
+        };
+
         const response = await fetch(BACKEND_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                husband_url: husbandUrl,
-                wife_url: wifeUrl,
-                prompt: prompt,
-                model_id: "realisticvisionv60b1v60b1",
-                controlnet_model: "canny"
-            }),
+            body: JSON.stringify(originalPayload),
         });
 
         const data = await response.json();
@@ -377,15 +360,9 @@ form.addEventListener('submit', async (event) => {
             document.getElementById('loading-text').style.display = 'none';
             babyImage.src = data.baby_image_url;
             babyImage.style.display = 'block';
-        } else if (data.links && data.links.length > 0) {
-            // Imagen disponible directamente en links
-            document.getElementById('loading-text').style.display = 'none';
-            babyImage.src = data.links[0];
-            babyImage.style.display = 'block';
         } else if (data.status === "processing" || data.status === "queued") {
             // Iniciar polling
-            document.getElementById('loading-text').textContent = data.message || 'Generando imagen...';
-            setTimeout(() => checkImageStatus(data), 5000);
+            await pollForResult(BACKEND_API_URL, originalPayload);
         } else {
             throw new Error(data.error || 'Error desconocido');
         }
@@ -395,45 +372,7 @@ form.addEventListener('submit', async (event) => {
         document.getElementById('loading-text').textContent = `Error: ${error.message}`;
     }
 });
-        
-        
-        
- 
-async function checkImageStatus(previousData) {
-    try {
-        const response = await fetch(BACKEND_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                check_status: true,
-                previous_data: previousData 
-            })
-        });
 
-        const data = await response.json();
-
-        if (data.baby_image_url) {
-            document.getElementById('loading-text').style.display = 'none';
-            babyImage.src = data.baby_image_url;
-            babyImage.style.display = 'block';
-        } else if (data.links && data.links.length > 0) {
-            document.getElementById('loading-text').style.display = 'none';
-            babyImage.src = data.links[0];
-            babyImage.style.display = 'block';
-        } else if (data.status === "processing" || data.status === "queued") {
-            document.getElementById('loading-text').textContent = data.message || 'Generando imagen...';
-            setTimeout(() => checkImageStatus(data), 5000);
-        } else {
-            throw new Error(data.error || 'Error en la generación');
-        }
-    } catch (error) {
-        console.error('Error en checkImageStatus:', error);
-        document.getElementById('loading-text').textContent = `Error: ${error.message}`;
-    }
-}
-        
-        
-        
 // Mostrar vistas previas de las imágenes seleccionadas
 document.getElementById('husband').addEventListener('change', (event) => {
     const file = event.target.files[0];
