@@ -182,16 +182,21 @@ face_4
 
 </div>
       <div class="gender">  
-        <div class="ar">
-  <input type="radio" id="girl" name="gender" value="girl" required>
-  <label for="girl">It's a girl</label>
+    <div class="ar">
+        <input type="radio" id="girl" name="gender" 
+               value="a girl with soft, long hair, delicate facial features, and youthful feminine traits" 
+               required>
+        <label for="girl">It's a girl</label>
+    </div>
+
+    <div class="ar">
+        <input type="radio" id="boy" name="gender" 
+               value="a boy with short, neatly groomed hair, defined facial features, and youthful masculine traits" 
+               required checked>
+        <label for="boy">It's a boy</label>
+    </div>
 </div>
 
-        <div class="ar">
-  <input type="radio" id="boy" name="gender" value="boy" required checked>
-  <label for="boy">It's a boy</label>
-  
-</div>
         </div>
         
         
@@ -346,7 +351,7 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-        const prompt = `a realistic portrait of a newborn ${gender}. blending features of two parents. the newborn ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
+        const prompt = `a realistic portrait of a pre-school ${gender}. blending features of two parents. the pre-school ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
 
         document.getElementById('loading-text').textContent = 'Generating the child face image ..';
 
