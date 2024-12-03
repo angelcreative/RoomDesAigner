@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
-  <title>Virtual Try On - App ADEM</title>
+  <title>Virtual Try On - AUDIENSE</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -53,16 +53,22 @@
       text-align: center;
     }
     button {
-      background-color: #38bdf8;
-      color: #ffffff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background-color 0.3s;
+      background: #1f1f1f;
+    color: #fff;
+    padding: 16px 0;
+    border-radius: 12px;
     }
     button:hover {
-      background-color: #0ea5e9;
+      background-color: #1f1f1feb;
     }
       
+      
+      .leftF {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-end;
+}
       
       .imageup {
     @apply flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg 
@@ -127,9 +133,9 @@
 <body>
   <header class="top-bar flex justify-between items-center">
     <div class="logo">
-      <h1><img src="static/img/adem-img/logo_full_02.svg" alt="Logo"></h1>
+      <h1><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/audiense-2.png" alt="Logo"></h1>
     </div>
-    <div class="user-profile flex items-center">
+    <div style="display: none" class="user-profile flex items-center">
       <span class="material-symbols-outlined">identity_platform</span>
       <span class="ml-2">angelcreative</span>
       <span class="ml-4 material-symbols-outlined">logout</span>
@@ -139,16 +145,16 @@
   <div class="vto-root mt-20 mx-auto text-left max-w-4xl">
     <div class="leftF flex flex-col items-center">
       <form id="virtualTryOnForm" class="w-full max-w-lg">
-        <h2 class="text-2xl font-semibold mb-4">Virtual Try-On</h2>
+        <h2 class="text-2xl font-semibold mb-4">Audiense Xmas try-on</h2>
         <div class=" mb-4">
           <div id="colorExtractionImage" class="uploaders w-full">
-            <label for="clothImage" class="imageup">
+            <label for="clothImage" style="display: none" class="imageup">
               Upload the cloth image <span class="material-symbols-outlined">apparel</span>
-              <small class="block text-sm text-gray-500">Use a good resolution image</small>
+              <small class="block text-sm text-gray-500">Use a good resolution image, frontal shot, arms on both sides</small>
               <input type="file" accept="image/*" id="clothImage">
             </label>
             <div class="carousel-container mt-4">
-    <h4 class="text-lg font-medium mb-2 text-center">Selecciona una prenda o sube la tuya</h4>
+    <h4 class="text-lg font-medium mb-2 text-center">Pick a sweater!</h4>
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto w-4/5">
         <div class="carousel-track flex animate-scroll gap-4">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
@@ -175,15 +181,15 @@
 
         <div id="colorExtractionImage" class="uploaders w-full mb-4">
           <label for="modelImage" class="imageup">
-            Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
-            <small class="block text-sm text-gray-500">Use a good resolution image</small>
+           Upload your picture<span class="material-symbols-outlined">accessibility_new</span>
+            <small class="block text-sm text-gray-500">Use a decent resolution image, frontal shot, arms on both sides</small>
             <input type="file" accept="image/*" id="modelImage" required>
           </label>
         </div>
 
         <div id="thumbnails" class="flex gap-4 justify-center mb-4"></div>
 
-        <fieldset class="flex gap-4 mb-4">
+        <fieldset class="flex gap-4 mb-4" style="display:none">
           <legend class="text-lg font-medium mb-2">Cloth Type:</legend>
           <div class="ar">
             <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
@@ -199,8 +205,8 @@
           </div>
         </fieldset>
 
-        <label for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
-        <textarea id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe the cloth in a simple way, don't make it complicated. It's just a guide to help the engine." required></textarea>
+        <label style="display:none" for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
+        <textarea style="display:none" id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe the cloth in a simple way, don't make it complicated. It's just a guide to help the engine."></textarea>
 
         <button type="submit" class="w-full">Generate</button>
       </form>

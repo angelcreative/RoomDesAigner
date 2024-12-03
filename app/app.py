@@ -893,9 +893,9 @@ def proxy_fetch_with_propagation_check(fetch_id):
 
 
 # Ruta para servir la página HTML
-@app.route('/virtual-try-on')
+@app.route('/AUDIENSE-virtual-try-on')
 def virtual_try_on_page():
-    return render_template('virtual-try-on.html')
+    return render_template('AUDIENSE-virtual-try-on.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
 def virtual_try_on():
