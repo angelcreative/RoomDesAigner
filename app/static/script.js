@@ -613,6 +613,7 @@ function getModelConfig(selectedModel) {
     const models = {
         "flux": { model_id: "flux", lora_model: null, lora_strength: null },
         "fluxdev": { model_id: "fluxdev", lora_model: null, lora_strength: null },
+        "flux-pro-1.1-ultra": { model_id: "flux-pro-1.1-ultra", lora_model: null, lora_strength: null },
         "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: "1" },
         "flux-detaile": { model_id: "fluxdev", lora_model: "flux-detaile,polyhedron-flux,ultrarealistic-lora-project", lora_strength: "1,0.7,0.5" },
         "fluxpro-11": { model_id: "fluxdev", lora_model: "fluxpro-11,polyhedron-flux,ultrarealistic-lora-project", lora_strength: "1,0.7,0.5" },
