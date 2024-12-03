@@ -72,6 +72,44 @@ div#result {
 div#result > img {
     border-radius: 12px;
 }
+        
+        
+        
+        .preset-images {
+    margin-bottom: 20px;
+}
+
+.image-radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.image-radio {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.image-radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+.image-radio img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.image-radio input:checked + img {
+    border-color: var(--bunker-50);
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
     </style>
 </head>
 <body style="overflow: auto">
@@ -114,38 +152,47 @@ logout
         <div class="leftF">
   <form id="virtualTryOnForm">
     <h2>Virtual Try-On</h2>
+      
+      
 <div class="uploaders">
     <div id="colorExtractionImage">
-     <label class="imageup" for="clothImage">
-                   Upload the cloth image <span class="material-symbols-outlined">
-apparel
-</span>
-                    <small>Use a good resolution image</small>
-                    <input type="file" accept="image/*" id="clothImage" required>
-                  </label>
-               
-                </div>
-    
-   <div id="colorExtractionImage">
-     <label class="imageup" for="modelImage">
-                   Upload the model image <span class="material-symbols-outlined">
-accessibility_new
-</span>
-                    <small>Use a good resolution image</small>
-                    <input type="file" accept="image/*" id="modelImage" required>
-                  </label>
-               
-                </div>
-
-
-</div>
+        <div class="preset-images">
+            <h4>Selecciona una prenda o sube la tuya</h4>
+            <div class="image-radio-group">
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="url1">
+                    <img src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="url2">
+                    <img src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="url3">
+                    <img src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="url4">
+                    <img src="https://i.ibb.co/TrQSMw7/xmas-04.png" alt="Prenda 4">
+                </label>
+            </div>
+        </div>
+        <label class="imageup" for="clothImage">
+            Upload the cloth image <span class="material-symbols-outlined">apparel</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="clothImage">
+        </label>
+    </div>
+      
+      
+      
       <div id="thumbnails" style="margin-top: 0;
     align-items: flex-start;
     display: flex;
     gap: 0;
     justify-content: space-between;">
 </div>
-      
+      </div>     
     <fieldset style="display: flex;
     flex-direction: row;
     gap: 12px;
@@ -187,37 +234,49 @@ accessibility_new
     
     
 // Event listener para enviar el formulario
-// Event listener para enviar el formulario
 document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   console.log("Formulario enviado");
 
   const modelImageFile = document.getElementById("modelImage").files[0];
-  const clothImageFile = document.getElementById("clothImage").files[0];
+  const clothImageInput = document.getElementById("clothImage");
   const clothType = document.querySelector('input[name="clothType"]:checked')?.value;
   const prompt = document.getElementById("prompt").value.trim();
   const resultDiv = document.getElementById("result");
+  const selectedPreset = document.querySelector('input[name="preset-cloth"]:checked');
+  
+  let clothImageUrl;
 
-  if (!modelImageFile || !clothImageFile || !clothType || !prompt) {
-    alert("All fields are required!");
-    console.log("Formulario incompleto - falta información");
+  // Verificar modelo y prompt
+  if (!modelImageFile || !clothType || !prompt) {
+    alert("Model image, cloth type and prompt are required!");
     return;
   }
 
   try {
-    // Mostrar un mensaje de carga
+    // Mostrar mensaje de carga
     resultDiv.innerHTML = "<p>Processing your image... Please wait.</p>";
 
-    // Subir imágenes a ImgBB
+    // Subir imagen del modelo a ImgBB
     console.log("Subiendo imagen del modelo a ImgBB...");
     const modelImageUrl = await uploadToImgBB(modelImageFile);
     console.log("Imagen del modelo subida correctamente:", modelImageUrl);
 
-    console.log("Subiendo imagen de la prenda a ImgBB...");
-    const clothImageUrl = await uploadToImgBB(clothImageFile);
-    console.log("Imagen de la prenda subida correctamente:", clothImageUrl);
+    // Determinar la URL de la prenda
+    if (clothImageInput.files.length > 0) {
+      // Si hay una imagen subida, usarla
+      clothImageUrl = await uploadToImgBB(clothImageInput.files[0]);
+    } else if (selectedPreset) {
+      // Si hay una preset seleccionada, usar su URL
+      clothImageUrl = selectedPreset.value;
+    } else {
+      alert("Please select a cloth image or upload one!");
+      return;
+    }
 
-    // Crear el payload para enviar al backend
+    console.log("Imagen de la prenda lista:", clothImageUrl);
+
+    // Crear el payload para el backend
     const requestBody = {
       init_image: modelImageUrl,
       cloth_image: clothImageUrl,
@@ -240,7 +299,6 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     });
 
     if (!response.ok) {
-      console.error("No se pudo contactar al backend. Código de respuesta:", response.status);
       throw new Error("Failed to contact the backend.");
     }
 
@@ -249,7 +307,6 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
 
     if (data.status === "processing" && data.fetch_result) {
       console.log("Iniciando polling para verificar el estado...");
-      // Iniciar polling para verificar si la imagen está lista
       pollForResult(data.fetch_result);
     } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
       console.log("Imagen generada correctamente:", data.proxy_links[0]);
@@ -261,6 +318,37 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     console.error("Error en virtual try-on:", error);
     resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
   }
+});
+    
+    
+// Agregar event listener para las imágenes preset
+document.querySelectorAll('input[name="preset-cloth"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (this.checked) {
+            // Actualizar el thumbnail cuando se selecciona una preset
+            const thumbnailsDiv = document.getElementById("thumbnails");
+            const imgSrc = this.nextElementSibling.src;
+            
+            let existingThumbnail = document.querySelector('#thumbnails .thumbnail-cloth');
+            if (existingThumbnail) {
+                existingThumbnail.innerHTML = `
+                    <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                    <p>Cloth Image</p>
+                `;
+            } else {
+                const thumbnailHtml = `
+                    <div class="thumbnail-cloth" style="display: inline-block; margin: 10px; text-align: center;">
+                        <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                        <p>Cloth Image</p>
+                    </div>
+                `;
+                thumbnailsDiv.innerHTML += thumbnailHtml;
+            }
+            
+            // Limpiar el input de archivo
+            document.getElementById("clothImage").value = '';
+        }
+    });
 });
 
 
