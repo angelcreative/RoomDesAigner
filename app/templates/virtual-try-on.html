@@ -6,6 +6,7 @@
   <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
   <title>Virtual Try On - App ADEM</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -62,25 +63,55 @@
       background-color: #0ea5e9;
     }
       
+      
+      .imageup {
+    @apply flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg 
+    bg-white hover:bg-gray-50 transition-all cursor-pointer;
+}
+
+.imageup span {
+    @apply text-3xl text-gray-400 mb-2;
+}
+
+.imageup small {
+    @apply text-gray-500 mt-2;
+}
+      
+.carousel {
+    @apply relative overflow-hidden w-full;
+}
+
 .carousel-track {
     display: flex;
     gap: 16px;
-    width: max-content;
-    animation: scroll-loop 15s linear infinite;
+    animation: scroll 40s linear infinite;
 }
 
-.carousel {
-    overflow: hidden;
-    position: relative;
+.carousel-track img {
+    @apply w-32 h-32 object-cover rounded-lg cursor-pointer 
+    hover:scale-105 transition-transform duration-300;
 }
 
-@keyframes scroll-loop {
+@keyframes scroll {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-100% + 80%));
+        transform: translateX(calc(-100% - 16px));
     }
+}
+
+/* Agregar efecto de fade en los bordes */
+.carousel::before,
+.carousel::after {
+    content: '';
+    @apply absolute top-0 h-full w-12 z-10;
+    background: linear-gradient(to right, white, transparent);
+}
+
+.carousel::after {
+    right: 0;
+    background: linear-gradient(to left, white, transparent);
 }
 
 
@@ -450,6 +481,36 @@ document.addEventListener('DOMContentLoaded', () => {
     startLoop();
 });
 
+    
+    document.querySelectorAll('.carousel-track img').forEach(img => {
+    img.addEventListener('click', function() {
+        // Actualizar el thumbnail
+        const thumbnailsDiv = document.getElementById("thumbnails");
+        const imgSrc = this.src;
+        
+        let existingThumbnail = document.querySelector('#thumbnails .thumbnail-cloth');
+        if (existingThumbnail) {
+            existingThumbnail.innerHTML = `
+                <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
+                <p class="text-sm text-gray-600 mt-2">Cloth Image</p>
+            `;
+        } else {
+            const thumbnailHtml = `
+                <div class="thumbnail-cloth text-center">
+                    <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
+                    <p class="text-sm text-gray-600 mt-2">Cloth Image</p>
+                </div>
+            `;
+            thumbnailsDiv.innerHTML += thumbnailHtml;
+        }
+        
+        // Limpiar el input de archivo
+        document.getElementById("clothImage").value = '';
+        
+        // Guardar la URL de la imagen seleccionada para el procesamiento
+        window.selectedClothImage = imgSrc;
+    });
+});
 
     
 </script>
