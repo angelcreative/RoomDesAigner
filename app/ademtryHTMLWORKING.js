@@ -2,173 +2,244 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
-  <title>Virtual Try On - App ADEM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffffff, #f0f4f8);
-      overflow: auto;
-    }
-    .top-bar {
-      background-color: #f8fafc;
-      padding: 10px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .logo img {
-      height: 40px;
-    }
-    .uploaders label {
-      display: block;
-      background-color: #e2e8f0;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .uploaders label:hover {
-      background-color: #cbd5e1;
-    }
-    .uploaders input[type="file"] {
-      display: none;
-    }
-    .image-radio img {
-      border-radius: 8px;
-      transition: transform 0.3s;
-    }
-    .image-radio input:checked + img {
-      transform: scale(1.05);
-      border: 2px solid #38bdf8;
-    }
-    #result {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      text-align: center;
-    }
-    button {
-      background-color: #38bdf8;
-      color: #ffffff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #0ea5e9;
-    }
-      
-.carousel-track {
+    <!-- icons for mobile -->
+   
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- //end icons for mobile -->
+            <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
+
+    <title>Virtual try on - App ADEM</title>
+  
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+   <style>
+        body {overflow: auto}
+        
+        div#result {
+    color: var(--bunker-50);
+    max-width: 400px;
+}
+
+h3 {
+    color: var(--bunker-50);
+}
+
+        textarea {
+    cursor: default;
+    color: var(--bunker-50);
+    font-size: 14px;
+    border: none;
+    min-height: 200px;
+    display: block;
+    width: 100%;
+}
+        
+ .uploaders {
     display: flex;
-    gap: 16px;
-    width: max-content;
-    animation: scroll-loop 15s linear infinite;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
 }
-
-.carousel {
+      div#colorExtractionImage {
+  width: 100%;
+}  
+        
+        .leftF {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 80%;
+    margin: 0 auto;
+}
+        
+div#result {
+    color: var(--bunker-700);
+    width: 400px;
+    background: var(--bunker-900);
     overflow: hidden;
+    display: flex;
+    border-radius: 12px;
+    min-height: 516px;
+    justify-content: center;
+    align-items: center;
+}
+
+div#result > img {
+    border-radius: 12px;
+}
+        
+    form#virtualTryOnForm {
+    width: 40%;
+}    
+        
+        .preset-images {
+    margin-bottom: 20px;
+}
+
+.image-radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.image-radio {
     position: relative;
+    cursor: pointer;
+    display: block;
 }
 
-@keyframes scroll-loop {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-100% + 80%));
-    }
+.image-radio input {
+    position: absolute;
+    opacity: 0;
 }
 
+.image-radio img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
 
-  </style>
+.image-radio input:checked + img {
+    border-color: var(--bunker-50);
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+    </style>
 </head>
-<body>
-  <header class="top-bar flex justify-between items-center">
-    <div class="logo">
-      <h1><img src="static/img/adem-img/logo_full_02.svg" alt="Logo"></h1>
+<body style="overflow: auto">
+    <header class="top-bar ignore">
+                  <div> 
+        <div class="usernameCredits"><span class="username"><span class="material-symbols-outlined">
+identity_platform
+</span>angelcreative</span><span class="creditsCoin" id="creditDisplay">3715</span></div>
+        
+       
     </div>
-    <div class="user-profile flex items-center">
-      <span class="material-symbols-outlined">identity_platform</span>
-      <span class="ml-2">angelcreative</span>
-      <span class="ml-4 material-symbols-outlined">logout</span>
-    </div>
-  </header>
+              <div class="logo">
+                     <h1><img src="static/img/adem-img/logo_full_02.svg"></h1>
+                     <div class="orb"></div>
+</div>
+ 
+                 <div class="user-profile"> <div class="logout">
+        <div class="rightOff">
+            
+            <button class="menu-button" id="menuButton" style="display:none">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+            <button type="button" style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
 
-  <div class="vto-root mt-20 mx-auto text-left max-w-4xl">
-    <div class="leftF flex flex-col items-center">
-      <form id="virtualTryOnForm" class="w-full max-w-lg">
-        <h2 class="text-2xl font-semibold mb-4">Virtual Try-On</h2>
-        <div class="uploaders mb-4">
-          <div id="colorExtractionImage" class="w-full">
-            <label for="clothImage" class="imageup">
-              Upload the cloth image <span class="material-symbols-outlined">apparel</span>
-              <small class="block text-sm text-gray-500">Use a good resolution image</small>
-              <input type="file" accept="image/*" id="clothImage">
-            </label>
-            <div class="carousel-container mt-4">
-    <h4 class="text-lg font-medium mb-2 text-center">Selecciona una prenda o sube la tuya</h4>
-    <div class="carousel overflow-hidden relative border rounded-lg mx-auto w-4/5">
-        <div class="carousel-track flex animate-scroll gap-4">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/fpgsHf8/xmas-04.png" alt="Prenda 4">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/1fFBDnB/xmas-05.png" alt="Prenda 5">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/3psj9bg/xmas-06.png" alt="Prenda 6">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/T8JPSNw/xmas-07.png" alt="Prenda 7">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/cYTJzQr/xmas-08.png" alt="Prenda 8">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yQCQt16/xmas-09.png" alt="Prenda 9">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/KqZH6jc/xmas-10.png" alt="Prenda 10">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/R68Y4qL/xmas-11.png" alt="Prenda 11">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/VDBWQPw/xmas-12.png" alt="Prenda 12">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/LhsZbkJ/xmas-13.png" alt="Prenda 13">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/Wx2QQVW/xmas-14.png" alt="Prenda 14">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/gt3BxCj/xmas-15.png" alt="Prenda 15">
+
+            
+            <a href="/logout">
+            <span class="material-symbols-outlined" translate="no">
+logout
+</span>
+        </a></div>
+       
+      
+    </div></div>
+             </header>
+    
+    <div class="vto-root" style="width: auto;
+    margin: 80px auto 0 auto;
+    text-align: left;">
+        <div class="leftF">
+  <form id="virtualTryOnForm">
+    <h2>Virtual Try-On</h2>
+      
+      
+<div class="uploaders">
+    
+
+    <!-- Sección para la ropa (presets o carga) -->
+    <div id="colorExtractionImage">
+        
+        <label class="imageup" for="clothImage">
+            Upload the cloth image <span class="material-symbols-outlined">apparel</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="clothImage">
+        </label>
+        <div class="preset-images">
+            <h4>Selecciona una prenda o sube la tuya</h4>
+            <div class="image-radio-group">
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/DRxvw96/xmas-01.png">
+                    <img src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/YXRVD0v/xmas-02.png">
+                    <img src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/kHQhB0h/xmas-03.png">
+                    <img src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/TrQSMw7/xmas-04.png">
+                    <img src="https://i.ibb.co/TrQSMw7/xmas-04.png" alt="Prenda 4">
+                </label>
+            </div>
         </div>
     </div>
 </div>
 
-          </div>
-        </div>
-
-        <div id="colorExtractionImage" class="w-full mb-4">
-          <label for="modelImage" class="imageup">
+      <!-- Sección para la imagen del modelo -->
+    <div id="colorExtractionImage">
+        <label class="imageup" for="modelImage">
             Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
-            <small class="block text-sm text-gray-500">Use a good resolution image</small>
+            <small>Use a good resolution image</small>
             <input type="file" accept="image/*" id="modelImage" required>
-          </label>
-        </div>
-
-        <div id="thumbnails" class="flex gap-4 justify-center mb-4"></div>
-
-        <fieldset class="flex gap-4 mb-4">
-          <legend class="text-lg font-medium mb-2">Cloth Type:</legend>
-          <div class="ar">
-            <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
-            <label for="upper_body">Upper body</label>
-          </div>
-          <div class="ar">
-            <input type="radio" id="lower_body" name="clothType" value="lower_body" required>
-            <label for="lower_body">Lower body</label>
-          </div>
-          <div class="ar">
-            <input type="radio" id="dresses" name="clothType" value="dresses" required>
-            <label for="dresses">Dress</label>
-          </div>
-        </fieldset>
-
-        <label for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
-        <textarea id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe the cloth in a simple way, don't make it complicated. It's just a guide to help the engine." required></textarea>
-
-        <button type="submit" class="w-full">Generate</button>
-      </form>
-      <div id="result" class="mt-8"></div>
+        </label>
     </div>
-  </div>
+      
+<!-- Contenedor para los thumbnails -->
+<div id="thumbnails" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;"></div>
+      
+      
+    <fieldset style="display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: flex-start;">
+      <legend style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Cloth Type:</legend>
+      <div class="ar">
+  <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
+  <label for="upper_body">Upper body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="lower_body" name="clothType" value="lower_body" required>
+  <label for="lower_body">Lower body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="dresses" name="clothType" value="dresses" required>
+  <label for="dresses">Dress</label>
+</div>
+
+    </fieldset>
+
+    <label for="prompt" style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Prompt:</label>
+    <textarea style="position: static" id="prompt" placeholder="Describe the cloth in a simple way, don't make it complicated. It's just a guide to help the engine." required></textarea>
+
+    <button type="submit">Generate</button>
+  </form>
+              <div id="result"></div>
+    </div>
+        </div>
+ 
 
   <!-- Div para mostrar el resultado -->
 
@@ -415,42 +486,6 @@ async function uploadToImgBB(file) {
   }
 }
     
-    
-document.addEventListener('DOMContentLoaded', () => {
-    const carouselTrack = document.querySelector('.carousel-track');
-    const images = carouselTrack.querySelectorAll('img');
-
-    let interval;
-
-    // Función para iniciar el loop dinámico
-    const startLoop = () => {
-        interval = setInterval(() => {
-            carouselTrack.appendChild(carouselTrack.firstElementChild);
-        }, 3000); // Cambiar cada 3 segundos
-    };
-
-    // Función para detener el loop
-    const stopLoop = () => {
-        clearInterval(interval);
-    };
-
-    // Pausa la animación y el loop en hover
-    carouselTrack.addEventListener('mouseenter', () => {
-        stopLoop();
-        carouselTrack.style.animationPlayState = 'paused';
-    });
-
-    // Reanuda la animación y el loop al salir del hover
-    carouselTrack.addEventListener('mouseleave', () => {
-        startLoop();
-        carouselTrack.style.animationPlayState = 'running';
-    });
-
-    // Inicia el loop automáticamente
-    startLoop();
-});
-
-
     
 </script>
 </body>
