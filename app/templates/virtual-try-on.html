@@ -376,7 +376,7 @@ function previewImage(file, type) {
     // Si ya existe una miniatura para este tipo, reemplazarla
     if (existingThumbnail) {
       existingThumbnail.innerHTML = `
-<p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+<p  class="text-sm text-gray-600 mt-2">${type === "model" ? "Model Image" : "Cloth Image"}</p>
         <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd; border-radius:12px;">
         
       `;
@@ -384,7 +384,7 @@ function previewImage(file, type) {
       // Si no existe, crear un nuevo contenedor
       const thumbnailHtml = `
         <div class="thumbnail-${type}" style="display: inline-block; margin: 10px; text-align: center;">
-<p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+<p  class="text-sm text-gray-600 mt-2">${type === "model" ? "Model Image" : "Cloth Image"}</p>
           <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;  border-radius:12px;">
           
         </div>
@@ -548,8 +548,9 @@ function updateThumbnail(imgSrc) {
     const thumbnailsDiv = document.getElementById("thumbnails");
     const thumbnailHtml = `
         <div class="thumbnail-cloth text-center">
+<p class="text-sm text-gray-600 mt-2">Selected sweater</p>
             <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
-            <p class="text-sm text-gray-600 mt-2">Selected sweater</p>
+            
         </div>
     `;
     
