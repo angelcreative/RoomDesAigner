@@ -59,6 +59,7 @@
     background: #1f1f1f;
     padding: 12px 0;
     color: #fff;
+          border-radius: 12px;
 }
 
 
@@ -284,7 +285,7 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
       init_image: modelImageUrl,
       cloth_image: clothImageUrl,
       cloth_type: clothType,
-      //prompt,
+      prompt: "a cozy xmas sweater",
       negative_prompt: "low quality, unrealistic",
       guidance_scale: 15,
       num_inference_steps: 21,
