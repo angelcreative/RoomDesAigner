@@ -383,7 +383,7 @@ function previewImage(file, type) {
     } else {
       // Si no existe, crear un nuevo contenedor
       const thumbnailHtml = `
-        <div class="thumbnail-${type}" style="display: inline-block; margin: 10px; text-align: center;">
+        <div class="thumbnail-${type}" style="display: inline-block; text-align: center;">
 <p  class="text-sm text-gray-600 mt-2">${type === "model" ? "Model Image" : "Cloth Image"}</p>
           <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;  border-radius:12px;">
           
