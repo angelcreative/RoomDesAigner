@@ -960,11 +960,13 @@ def logout():
     return redirect(url_for('login'))
 
 
+
+
 # Configuración de las APIs
 MODEL_LAB_API_KEY = "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw"
 MODEL_LAB_URL = "https://modelslab.com/api/v5/controlnet"
 POLLING_INTERVAL = 5  # Segundos entre cada intento
-MAX_POLLING_TIME = 900  # 15 minutos en segundos
+MAX_POLLING_TIME = 120  # Tiempo máximo para hacer polling (en segundos)
 
 @app.route('/baby-face')
 def index():
@@ -973,7 +975,6 @@ def index():
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
-    """Maneja tanto la generación inicial como las solicitudes de verificación de estado."""
     def debug_log(message, data=None):
         print("[DEBUG - BACKEND]:", message)
         if data:
@@ -981,40 +982,38 @@ def generate_baby_face():
 
     try:
         data = request.get_json()
-        debug_log("Payload recibido:", data)
-
-        # Verificar si es una solicitud de polling
+        
+        # Si es una solicitud de verificación de estado
         if data.get('check_status'):
-            # Realizar solicitud de verificación a Modelslab
-            response = requests.get(
-                MODEL_LAB_URL,
-                params={
-                    "key": MODEL_LAB_API_KEY,
-                    "request_id": data.get('request_id')  # Asegúrate de enviar esto desde el frontend
-                }
-            )
+            fetch_url = data.get('fetch_url')
+            if not fetch_url:
+                return jsonify({"error": "URL de verificación no proporcionada"}), 400
             
-            debug_log("Respuesta de polling:", response.text)
+            # Realizar la solicitud de verificación
+            check_response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
+            check_result = check_response.json()
             
-            if response.status_code == 200:
-                result = response.json()
-                # Devolver el resultado tal cual viene de Modelslab
-                return jsonify(result)
-            else:
-                return jsonify({"error": "Error al verificar el estado"}), 500
+            if check_result.get("status") == "success" and check_result.get("output"):
+                return jsonify({
+                    "status": "success",
+                    "links": [check_result["output"]]
+                })
+            return jsonify({
+                "status": "processing",
+                "message": "Imagen aún en proceso"
+            })
 
-        # Si no es polling, proceder con la generación normal
+        # Si es la solicitud inicial
         husband_url = data.get('husband_url')
         wife_url = data.get('wife_url')
-        prompt = data.get('prompt', "A realistic portrait of a toddler blending features of two parents.")
+        prompt = data.get('prompt')
 
-        if not husband_url or not wife_url:
-            return jsonify({"error": "Faltan URLs de imágenes."}), 400
+        if not husband_url or not wife_url or not prompt:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
 
-        # Construir el payload para Modelslab
         payload = {
             "key": MODEL_LAB_API_KEY,
-            "model_id": "epicrealismnew",
+            "model_id": "epicrealismnew", #realisticvisionv60b1v60b1
             "controlnet_model": "canny",
             "controlnet_type": "canny",
             "negative_prompt": "beard, facial hair, glasses, sunglasses, wrinkles, scars, asymmetry, blurry, extra facial features, distorted, low quality, imperfections, blemishes, acne, spots",
@@ -1032,49 +1031,41 @@ def generate_baby_face():
             "strength": 1,
             "controlnet_conditioning_scale": 0.6,
             "safety_checker": "no",
-            "safety_checker_type": "no",
             "embeddings_model": "epicrealism-negative-embe",
-            "lora_model": "epic-realism-helper",
-            "lora_strenght": 0.6
+            "lora_model":"epic-realism-helper",
+            "lora_strenght":0.6
         }
-        
-        debug_log("Payload enviado a Modelslab:", payload)
 
-        # Llamar a la API de Modelslab
         response = requests.post(MODEL_LAB_URL, json=payload)
-        debug_log("Respuesta de Modelslab:", response.text)
+        result = response.json()
+        debug_log("Respuesta de ModelsLab:", result)
 
         if response.status_code == 200:
-            result = response.json()
-            
-            # Si hay resultado inmediato
-            if result.get("links") and result["links"]:
+            if result.get("fetch_result"):
                 return jsonify({
-                    "status": "success",
-                    "links": result["links"]
+                    "status": "processing",
+                    "fetch_url": result["fetch_result"],
+                    "eta": result.get("eta", 0)
                 })
             
-            # Si está en cola o procesando
-            if result.get("status") in ["queued", "processing"]:
-                return jsonify({
-                    "status": result["status"],
-                    "request_id": result.get("request_id", ""),
-                    "eta": result.get("eta", 5)
-                })
-
-            # Si no hay información útil
             return jsonify({
-                "error": "No se recibió información válida del servicio"
-            }), 500
+                "error": "No se recibió URL de verificación",
+                "details": result
+            })
 
-        else:
-            return jsonify({
-                "error": f"Error en el servicio: {response.text}"
-            }), response.status_code
+        return jsonify({
+            "error": "Error en la generación de la imagen",
+            "details": response.text
+        }), 500
 
     except Exception as e:
-        debug_log("Error no controlado:", str(e))
-        return jsonify({"error": str(e)}), 500
+        debug_log("Error:", str(e))
+        return jsonify({
+            "error": "Error interno del servidor",
+            "details": str(e)
+        }), 500
+    
+   
     
 if __name__ == '__main__':
     app.run(debug=True)

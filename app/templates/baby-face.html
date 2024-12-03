@@ -37,7 +37,6 @@ h3 {
     min-height: 200px;
     display: block;
     width: 100%;
-            position: static;
 }
         p#loading-text {
    position: absolute;
@@ -191,21 +190,17 @@ face_4
       <div class="gender">  
     <div class="ar">
         <input type="radio" id="girl" name="gender" 
-               value="a small girl with soft, long hair, delicate facial features, and youthful feminine traits" 
+               value="a girl with soft, long hair, delicate facial features, and youthful feminine traits" 
                required>
         <label for="girl">It's a girl</label>
     </div>
 
     <div class="ar">
         <input type="radio" id="boy" name="gender" 
-               value="a small boy with short, short hair, defined facial features, and youthful masculine traits" 
+               value="a boy with short, neatly groomed hair, defined facial features, and youthful masculine traits" 
                required checked>
         <label for="boy">It's a boy</label>
     </div>
-</div>
-<div class="custom-prompt">
-    <label for="custom-prompt">Add a custom touch to the prompt:</label>
-    <textarea id="custom-prompt" placeholder="Add additional details for the baby's appearance or environment (e.g., 'smiling in a sunny park')"></textarea>
 </div>
 
        
@@ -338,9 +333,7 @@ form.addEventListener('submit', async (event) => {
     const husbandPhoto = document.getElementById('husband').files[0];
     const wifePhoto = document.getElementById('wife').files[0];
     const gender = document.querySelector('input[name="gender"]:checked').value;
-    const custom = document.getElementById("custom-prompt").value.trim(); // Captura el texto personalizado
 
-    
     if (!husbandPhoto || !wifePhoto) {
         alert('Por favor, selecciona ambas fotos');
         return;
@@ -350,7 +343,7 @@ form.addEventListener('submit', async (event) => {
         // Mostrar loading
         resultDiv.style.display = 'block';
         document.getElementById('loading-text').style.display = 'block';
-        document.getElementById('loading-text').textContent = 'Processing images...';
+        document.getElementById('loading-text').textContent = 'Procesando imágenes...';
         
         // Procesar imágenes
         const [resizedHusband, resizedWife] = await Promise.all([
@@ -363,8 +356,7 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-       const prompt = ` A realistic portrait of a pre-school ${gender}, blending features of two parents. The pre-school ${gender} has round cheeks, soft skin, large bright eyes, a small button nose, and smooth, youthful proportions. The image should be photorealistic, capturing the innocence and playful expression typical of this age. (${custom}) [rich and vibrant skin tones::2, culturally accurate facial features::1.5, and contextually appropriate details].`;
-
+        const prompt = `a realistic portrait of a pre-school ${gender}. blending features of two parents. the pre-school ${gender} has round cheeks, soft skin, large bright eyes, a small on nose, and smooth, newborn proportions. the image should be photorealistic, capturing the innocence and expression typical of a of this age`;
 
         document.getElementById('loading-text').textContent = 'Generating the child face image ..';
 
