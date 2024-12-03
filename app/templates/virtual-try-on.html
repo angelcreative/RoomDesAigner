@@ -148,8 +148,18 @@ button[type=submit]:active {
 </head>
 <body>
   <header class="top-bar flex justify-between items-center">
-    <div class="logo">
-      <h1><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/audiense-2.png" alt="Logo"></h1>
+   <div class="logo" style="
+    margin: 0 auto;
+">
+      <h1 style="
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+"><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/audiense-2.png" alt="Logo"><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/Santa%20claus-bro.svg" style="
+    height: 70px;
+"></h1>
     </div>
     <div style="display: none" class="user-profile flex items-center">
       <span class="material-symbols-outlined">identity_platform</span>
@@ -158,10 +168,10 @@ button[type=submit]:active {
     </div>
   </header>
 
-  <div class="vto-root mt-20 mx-auto text-left max-w-4xl">
+  <div class="vto-root mt-20 mx-auto text-left max-w-4xl" style="margin-top:50px">
     <div class="leftF flex flex-col items-center">
       <form id="virtualTryOnForm" class="w-full max-w-lg">
-        <h2 class="text-2xl font-semibold mb-4">Audiense Xmas try-on</h2>
+        <h2 class="text-2xl font-semibold mb-4">🎅🏽 Audiense Xmas try-on</h2>
         <div class=" mb-4">
           <div id="colorExtractionImage" class="uploaders w-full">
             <label for="clothImage" style="display: none" class="imageup">
@@ -170,7 +180,7 @@ button[type=submit]:active {
               <input type="file" accept="image/*" id="clothImage">
             </label>
             <div class="carousel-container mt-4">
-    <h4 class="text-lg font-medium mb-2 text-center">Pick any of our lovely sweaters!</h4>
+    <h4 class="text-lg font-medium mb-2 text-center">Pick any of our ❤️ sweaters!</h4>
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto">
         <div class="carousel-track flex animate-scroll gap-4">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
@@ -196,8 +206,7 @@ button[type=submit]:active {
         </div>
 
         <div id="colorExtractionImage" class="uploaders w-full mb-4">
-          <label for="modelImage" class="imageup">
-           Upload your picture<span class="material-symbols-outlined">accessibility_new</span>
+          <label for="modelImage" class="imageup">🤳 Upload your picture
             <small class="block text-sm text-gray-500">Use a decent resolution image, frontal shot, arms on both sides</small>
             <input type="file" accept="image/*" id="modelImage" required>
           </label>
@@ -224,7 +233,7 @@ button[type=submit]:active {
         <label style="display:none" for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
         <textarea  style="display:none"  id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe sweater in a simple way, don't make it complicated. It's just a guide to help the engine."></textarea>
 
-        <button type="submit" class="w-full">Dress me up!</button>
+        <button type="submit" class="w-full">✨ Dress me up!</button>
       </form>
       <div id="result" class="mt-8"></div>
     </div>
@@ -367,15 +376,17 @@ function previewImage(file, type) {
     // Si ya existe una miniatura para este tipo, reemplazarla
     if (existingThumbnail) {
       existingThumbnail.innerHTML = `
-        <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
-        <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+<p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+        <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd; border-radius:12px;">
+        
       `;
     } else {
       // Si no existe, crear un nuevo contenedor
       const thumbnailHtml = `
         <div class="thumbnail-${type}" style="display: inline-block; margin: 10px; text-align: center;">
-          <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
-          <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+<p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+          <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;  border-radius:12px;">
+          
         </div>
       `;
       thumbnailsDiv.innerHTML += thumbnailHtml;
