@@ -98,8 +98,8 @@ div#result > img {
 }
 
 .image-radio img {
-    width: 100%;
-    height: 150px;
+    width: 110px
+    height: 110px;
     object-fit: cover;
     border: 2px solid transparent;
     border-radius: 8px;
@@ -155,14 +155,7 @@ logout
       
       
 <div class="uploaders">
-    <!-- Sección para la imagen del modelo -->
-    <div id="colorExtractionImage">
-        <label class="imageup" for="modelImage">
-            Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
-            <small>Use a good resolution image</small>
-            <input type="file" accept="image/*" id="modelImage" required>
-        </label>
-    </div>
+    
 
     <!-- Sección para la ropa (presets o carga) -->
     <div id="colorExtractionImage">
@@ -196,6 +189,15 @@ logout
     </div>
 </div>
 
+      <!-- Sección para la imagen del modelo -->
+    <div id="colorExtractionImage">
+        <label class="imageup" for="modelImage">
+            Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="modelImage" required>
+        </label>
+    </div>
+      
 <!-- Contenedor para los thumbnails -->
 <div id="thumbnails" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;"></div>
       

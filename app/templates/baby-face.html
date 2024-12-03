@@ -275,6 +275,7 @@ async function uploadToImgBB(imageBlob) {
     }
 }
 
+
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -333,6 +334,7 @@ form.addEventListener("submit", async (event) => {
             check_status: false
         };
 
+        // Enviar la solicitud al backend
         const response = await fetch(BACKEND_API_URL, {
             method: "POST",
             headers: { 
@@ -342,22 +344,32 @@ form.addEventListener("submit", async (event) => {
             body: JSON.stringify(payload),
         });
 
+        // Verificar si la respuesta es exitosa
         if (!response.ok) {
             throw new Error(`Error del servidor: ${response.status}`);
         }
 
+        // Procesar la respuesta JSON
         const data = await response.json();
+        console.log("Respuesta inicial:", data); // Para debugging
 
-        if (!data.fetch_url && !data.baby_image_url) {
-            throw new Error("La respuesta del servidor no contiene los datos esperados");
-        }
-
-        if (data.baby_image_url) {
+        // Si la respuesta contiene enlaces a las imágenes generadas
+        if (data.links && data.links.length > 0) {
             loadingText.style.display = "none";
-            babyImage.src = data.baby_image_url;
+            babyImage.src = data.links[0];
             babyImage.style.display = "block";
-        } else if (data.fetch_url) {
+        } 
+        // Si el estado es "queued" o "processing", iniciar el polling
+        else if (data.status === "queued" || data.status === "processing") {
+            if (!data.fetch_url) {
+                throw new Error("URL de verificación no proporcionada por el servidor");
+            }
+            loadingText.textContent = "Imagen en cola, por favor espere...";
             await pollForResult(data.fetch_url, payload);
+        }
+        // Si no se recibe una respuesta válida, lanzar un error
+        else {
+            throw new Error("No se recibió una respuesta válida del servidor");
         }
 
     } catch (error) {
@@ -366,8 +378,8 @@ form.addEventListener("submit", async (event) => {
         loadingText.textContent = `Error: ${error.message}. Por favor, intenta nuevamente.`;
         loadingText.style.color = "red";
     }
-});
-
+});    
+    
 async function pollForResult(fetchUrl, originalPayload) {
     const loadingText = document.getElementById('loading-text');
     const maxAttempts = 240;
