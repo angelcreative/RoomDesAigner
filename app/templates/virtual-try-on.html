@@ -94,6 +94,11 @@ button[type=submit]:active {
     @apply text-gray-500 mt-2;
 }
       
+      form#virtualTryOnForm {
+    text-align: center;
+}
+      
+      
 .carousel {
     @apply relative overflow-hidden w-full;
 }
@@ -165,7 +170,7 @@ button[type=submit]:active {
               <input type="file" accept="image/*" id="clothImage">
             </label>
             <div class="carousel-container mt-4">
-    <h4 class="text-lg font-medium mb-2 text-center">Or choose any of our sweaters!</h4>
+    <h4 class="text-lg font-medium mb-2 text-center">Pick any of our lovely sweaters!</h4>
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto w-4/5">
         <div class="carousel-track flex animate-scroll gap-4">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
@@ -200,7 +205,7 @@ button[type=submit]:active {
 
         <div id="thumbnails" class="flex gap-4 justify-center mb-4"></div>
 
-        <fieldset class="flex gap-4 mb-4 noType">
+        <fieldset  style="display:none"  class="flex gap-4 mb-4 noType">
           <legend class="text-lg font-medium mb-2">Cloth Type:</legend>
           <div class="ar">
             <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
@@ -216,8 +221,8 @@ button[type=submit]:active {
           </div>
         </fieldset>
 
-        <label for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
-        <textarea  id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe sweater in a simple way, don't make it complicated. It's just a guide to help the engine."></textarea>
+        <label style="display:none" for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
+        <textarea  style="display:none"  id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe sweater in a simple way, don't make it complicated. It's just a guide to help the engine."></textarea>
 
         <button type="submit" class="w-full">Dress me up!</button>
       </form>
@@ -246,10 +251,10 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
   let clothImageUrl;
 
   // Verificar modelo y prompt
-  if (!modelImageFile || !clothType || !prompt) {
-    alert("Model image, cloth type and prompt are required!");
-    return;
-  }
+ // if (!modelImageFile || !clothType || !prompt) {
+    //alert("Model image, cloth type and prompt are required!");
+    //return;
+  //}
 
   try {
     // Mostrar mensaje de carga
