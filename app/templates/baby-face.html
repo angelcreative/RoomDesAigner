@@ -395,27 +395,37 @@ async function pollForResult(fetchUrl, originalPayload) {
             const data = await response.json();
             attempts++;
 
-            if (data.status === "success" && data.links && data.links.length > 0) {
+            // Verificar si tenemos links en la respuesta
+            if (data.links && data.links.length > 0) {
                 loadingText.style.display = "none";
                 babyImage.src = data.links[0];
                 babyImage.style.display = "block";
                 return;
             }
 
-            if (data.status === "processing") {
+            // Verificar el estado
+            if (data.status === "queued" || data.status === "processing") {
                 loadingText.textContent = `Generando imagen... ${Math.min(Math.round((attempts / maxAttempts) * 100), 99)}%`;
                 await new Promise(resolve => setTimeout(resolve, 5000));
                 continue;
             }
 
-            throw new Error(data.error || "Error en la generación");
+            if (data.status === "failed") {
+                throw new Error(data.error || "La generación de imagen falló");
+            }
+
         } catch (error) {
             console.error("Error en polling:", error);
             loadingText.textContent = `Error: ${error.message}`;
             break;
         }
     }
+
+    if (attempts >= maxAttempts) {
+        loadingText.textContent = "Tiempo de espera agotado. Por favor, intenta nuevamente.";
+    }
 }
+    
 
 // Event listeners para las previsualizaciones de imágenes
 document.getElementById('husband').addEventListener('change', (event) => {
