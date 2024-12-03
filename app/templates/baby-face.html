@@ -331,28 +331,26 @@ async function pollForResult(fetchUrl, originalPayload) {
 
     
     
-// Manejar el envío del formulario
-form.addEventListener('submit', async (event) => {
+form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    
-    const husbandPhoto = document.getElementById('husband').files[0];
-    const wifePhoto = document.getElementById('wife').files[0];
-    const gender = document.querySelector('input[name="gender"]:checked').value;
-    const custom = document.getElementById("custom-prompt").value.trim(); // Captura el texto personalizado
 
-    
+    const husbandPhoto = document.getElementById("husband").files[0];
+    const wifePhoto = document.getElementById("wife").files[0];
+    const gender = document.querySelector('input[name="gender"]:checked').value;
+    const custom = document.getElementById("custom-prompt").value.trim();
+
     if (!husbandPhoto || !wifePhoto) {
-        alert('Por favor, selecciona ambas fotos');
+        alert("Por favor, selecciona ambas fotos.");
         return;
     }
-    
+
     try {
-        // Mostrar loading
-        resultDiv.style.display = 'block';
-        document.getElementById('loading-text').style.display = 'block';
-        document.getElementById('loading-text').textContent = 'Processing images...';
-        
-        // Procesar imágenes
+        // Mostrar mensaje de carga
+        resultDiv.style.display = "block";
+        document.getElementById("loading-text").style.display = "block";
+        document.getElementById("loading-text").textContent = "Processing images...";
+
+        // Redimensionar y subir imágenes
         const [resizedHusband, resizedWife] = await Promise.all([
             resizeImage(husbandPhoto, 512),
             resizeImage(wifePhoto, 512),
@@ -363,49 +361,90 @@ form.addEventListener('submit', async (event) => {
             uploadToImgBB(resizedWife),
         ]);
 
-       const prompt = ` A realistic portrait blending features of two parents. 
-    The subject has a youthful, delicate face with round cheeks, soft and smooth skin, large bright eyes, 
-    a small button nose, and harmonious proportions typical of a newborn ${gender}. 
-    The image should be photorealistic, capturing the innocence, curiosity, and playful expression characteristic of this age. 
-    (${custom}) [rich and vibrant skin tones::2, culturally accurate facial features::1.5, and contextually appropriate details]. 
-    (${gender})`;
+        // Mostrar thumbnails de las imágenes seleccionadas
+        document.getElementById("father-preview").src = husbandUrl;
+        document.getElementById("father-preview").style.display = "block";
+        document.getElementById("mother-preview").src = wifeUrl;
+        document.getElementById("mother-preview").style.display = "block";
 
+        // Construir el prompt dinámico
+        const prompt = `
+            A realistic portrait blending features of two parents. 
+            The subject has a youthful, delicate face with round cheeks, soft and smooth skin, large bright eyes, 
+            a small button nose, and harmonious proportions typical of a newborn ${gender}. 
+            The image should be photorealistic, capturing the innocence, curiosity, and playful expression characteristic of this age. 
+            (${custom}) [rich and vibrant skin tones::2, culturally accurate facial features::1.5, and contextually appropriate details]. 
+            (${gender})
+        `;
 
-        document.getElementById('loading-text').textContent = 'Generating the child face image ..';
+        // Mostrar mensaje de carga para la generación
+        document.getElementById("loading-text").textContent = "Generating the child face image...";
 
+        // Enviar el payload al backend
         const originalPayload = {
             husband_url: husbandUrl,
             wife_url: wifeUrl,
             prompt: prompt,
             model_id: "realisticvisionv60b1v60b1",
-            controlnet_model: "canny"
+            controlnet_model: "canny",
         };
 
-        const response = await fetch(BACKEND_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/generate-baby-face", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(originalPayload),
         });
 
         const data = await response.json();
 
         if (data.baby_image_url) {
-            // Imagen generada con éxito
-            document.getElementById('loading-text').style.display = 'none';
+            // Mostrar la imagen generada
+            document.getElementById("loading-text").style.display = "none";
             babyImage.src = data.baby_image_url;
-            babyImage.style.display = 'block';
-        } else if (data.status === "processing" && data.fetch_url) {
-            // Iniciar polling con la URL de verificación
+            babyImage.style.display = "block";
+        } else if (data.fetch_url) {
+            // Manejar polling si es necesario
+            document.getElementById("loading-text").textContent = "The image is being processed...";
             await pollForResult(data.fetch_url, originalPayload);
         } else {
-            throw new Error(data.error || 'Error desconocido');
+            throw new Error(data.error || "Error desconocido");
         }
-
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('loading-text').textContent = `Error: ${error.message}`;
+        console.error("Error:", error);
+        document.getElementById("loading-text").textContent = `Error: ${error.message}`;
     }
 });
+
+// Función de Polling
+async function pollForResult(fetchUrl, payload) {
+    try {
+        const response = await fetch(fetchUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success" && data.output && data.output.length > 0) {
+            // Imagen lista, mostrarla
+            document.getElementById("loading-text").style.display = "none";
+            babyImage.src = data.output[0];
+            babyImage.style.display = "block";
+        } else if (data.status === "processing") {
+            // Reintentar después de un tiempo
+            setTimeout(() => pollForResult(fetchUrl, payload), 5000);
+        } else {
+            throw new Error("Error during polling: " + (data.error || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Error en el polling:", error);
+        document.getElementById("loading-text").textContent = `Polling Error: ${error.message}`;
+    }
+}
+
+    
+    
 // Mostrar vistas previas de las imágenes seleccionadas
 document.getElementById('husband').addEventListener('change', (event) => {
     const file = event.target.files[0];

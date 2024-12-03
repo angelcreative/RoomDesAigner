@@ -974,44 +974,27 @@ def index():
 
 @app.route('/generate-baby-face', methods=['POST'])
 def generate_baby_face():
+    """Inicia la generación de la imagen y maneja la respuesta inmediata o con polling."""
     def debug_log(message, data=None):
         print("[DEBUG - BACKEND]:", message)
         if data:
             print(data)
 
     try:
+        # Recibir datos del frontend
         data = request.get_json()
-        
-        # Si es una solicitud de verificación de estado
-        if data.get('check_status'):
-            fetch_url = data.get('fetch_url')
-            if not fetch_url:
-                return jsonify({"error": "URL de verificación no proporcionada"}), 400
-            
-            # Realizar la solicitud de verificación
-            check_response = requests.post(fetch_url, json={"key": MODEL_LAB_API_KEY})
-            check_result = check_response.json()
-            
-            if check_result.get("status") == "success" and check_result.get("output"):
-                return jsonify({
-                    "status": "success",
-                    "links": [check_result["output"]]
-                })
-            return jsonify({
-                "status": "processing",
-                "message": "Imagen aún en proceso"
-            })
+        debug_log("Payload recibido:", data)
 
-        # Si es la solicitud inicial
         husband_url = data.get('husband_url')
         wife_url = data.get('wife_url')
-        prompt = data.get('prompt')
+        prompt = data.get('prompt', "A realistic portrait of a toddler blending features of two parents.")
 
-        if not husband_url or not wife_url or not prompt:
-            return jsonify({"error": "Faltan datos obligatorios"}), 400
+        if not husband_url or not wife_url:
+            return jsonify({"error": "Faltan URLs de imágenes."}), 400
 
+        # Construir el payload para Modelslab
         payload = {
-            "key": MODEL_LAB_API_KEY,
+             "key": MODEL_LAB_API_KEY,
             "model_id": "epicrealismnew", #realisticvisionv60b1v60b1
             "controlnet_model": "canny",
             "controlnet_type": "canny",
@@ -1035,36 +1018,36 @@ def generate_baby_face():
             "lora_model":"epic-realism-helper",
             "lora_strenght":0.6
         }
+        debug_log("Payload enviado a Modelslab:", payload)
 
+        # Llamar a la API de Modelslab para iniciar la generación
         response = requests.post(MODEL_LAB_URL, json=payload)
-        result = response.json()
-        debug_log("Respuesta de ModelsLab:", result)
+        debug_log("Respuesta de Modelslab - Status:", response.status_code)
+        debug_log("Respuesta de Modelslab - Body:", response.text)
 
         if response.status_code == 200:
-            if result.get("fetch_result"):
-                return jsonify({
-                    "status": "processing",
-                    "fetch_url": result["fetch_result"],
-                    "eta": result.get("eta", 0)
-                })
-            
-            return jsonify({
-                "error": "No se recibió URL de verificación",
-                "details": result
-            })
+            result = response.json()
 
-        return jsonify({
-            "error": "Error en la generación de la imagen",
-            "details": response.text
-        }), 500
+            # Manejar caso de respuesta inmediata
+            if result.get("details") and result["details"].get("output"):
+                image_url = result["details"]["output"][0]
+                debug_log("Imagen generada URL:", image_url)
+                return jsonify({"baby_image_url": image_url})
+
+            # Manejar caso de polling (si fetch_url existe)
+            fetch_url = result.get("fetch_url")
+            if fetch_url:
+                return jsonify({"fetch_url": fetch_url})
+
+            # Si no hay URL inmediata ni fetch_url, error
+            return jsonify({"error": "No se recibió URL de verificación ni imagen generada."}), 500
+        else:
+            return jsonify({"error": f"Error en Modelslab: {response.text}"}), 500
 
     except Exception as e:
-        debug_log("Error:", str(e))
-        return jsonify({
-            "error": "Error interno del servidor",
-            "details": str(e)
-        }), 500
-    
+        debug_log("Error no controlado:", str(e))
+        return jsonify({"error": "Ocurrió un error inesperado en el backend."}), 500
+
     
     
     
