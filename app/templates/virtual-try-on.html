@@ -102,44 +102,43 @@ button[type=submit]:active {
       
 .carousel {
     @apply relative overflow-hidden w-full;
+    padding: 1rem 0;
 }
 
 .carousel-track {
     display: flex;
     gap: 16px;
+    width: max-content; /* Importante para el scroll suave */
+}
+
+.carousel-track {
     animation: scroll 40s linear infinite;
 }
 
-.carousel-track img {
-    @apply w-32 h-32 object-cover rounded-lg cursor-pointer 
-    hover:scale-105 transition-transform duration-300;
-}
-
-.carousel-track img.selected {
-    border: 2px solid #38bdf8;
-    transform: scale(1.05);
-}     
-      
-      /* Agregar efecto de fade en los bordes */
-.carousel::before,
-.carousel::after {
-    content: '';
-    @apply absolute top-0 h-full w-12 z-10;
-    background: linear-gradient(to right, white, transparent);
-}
-
-.carousel::after {
-    right: 0;
-    background: linear-gradient(to left, white, transparent);
-}
-      
 @keyframes scroll {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(calc(-100% - 16px));
+        transform: translateX(-50%); /* Ajustado para scroll suave */
     }
+}
+
+/* Modificar el contenido del carrusel para duplicar las imágenes */
+.carousel-content {
+    display: flex;
+    gap: 16px;
+}
+
+/* Efecto de hover más suave */
+.carousel-track img {
+    @apply w-32 h-32 object-cover rounded-lg cursor-pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.carousel-track img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 
@@ -478,75 +477,78 @@ async function uploadToImgBB(file) {
     
     
 document.addEventListener('DOMContentLoaded', () => {
-    const carouselTrack = document.querySelector('.carousel-track');
-    const images = carouselTrack.querySelectorAll('img');
-
-    let interval;
-
-    // Función para iniciar el loop dinámico
-    const startLoop = () => {
-        interval = setInterval(() => {
-            carouselTrack.appendChild(carouselTrack.firstElementChild);
-        }, 3000); // Cambiar cada 3 segundos
-    };
-
-    // Función para detener el loop
-    const stopLoop = () => {
-        clearInterval(interval);
-    };
-
-    // Pausa la animación y el loop en hover
-    carouselTrack.addEventListener('mouseenter', () => {
-        stopLoop();
-        carouselTrack.style.animationPlayState = 'paused';
-    });
-
-    // Reanuda la animación y el loop al salir del hover
-    carouselTrack.addEventListener('mouseleave', () => {
-        startLoop();
-        carouselTrack.style.animationPlayState = 'running';
-    });
-
-    // Inicia el loop automáticamente
-    startLoop();
-});
-
+    const carousel = document.querySelector('.carousel');
+    const track = document.querySelector('.carousel-track');
     
-document.querySelectorAll('.carousel-track img').forEach(img => {
-    img.addEventListener('click', function() {
-        // Actualizar el thumbnail
-        const thumbnailsDiv = document.getElementById("thumbnails");
-        const imgSrc = this.src;
-        
-        let existingThumbnail = document.querySelector('#thumbnails .thumbnail-cloth');
-        if (existingThumbnail) {
-            existingThumbnail.innerHTML = `
-                <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
-                <p class="text-sm text-gray-600 mt-2">Cloth Image</p>
-            `;
-        } else {
-            const thumbnailHtml = `
-                <div class="thumbnail-cloth text-center">
-                    <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
-                    <p class="text-sm text-gray-600 mt-2">Cloth Image</p>
-                </div>
-            `;
-            thumbnailsDiv.innerHTML += thumbnailHtml;
+    // Duplicar las imágenes originales para crear un loop continuo
+    const images = track.querySelectorAll('img');
+    images.forEach(img => {
+        const clone = img.cloneNode(true);
+        track.appendChild(clone);
+    });
+
+    // Calcular el ancho total para la animación
+    const updateTrackWidth = () => {
+        const imageWidth = images[0].offsetWidth;
+        const gap = 16;
+        const totalWidth = (imageWidth + gap) * images.length;
+        track.style.width = `${totalWidth * 2}px`;
+    };
+
+    // Actualizar el ancho inicial y en resize
+    updateTrackWidth();
+    window.addEventListener('resize', updateTrackWidth);
+
+    // Control de hover
+    carousel.addEventListener('mouseenter', () => {
+        track.style.animationPlayState = 'paused';
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+        track.style.animationPlayState = 'running';
+    });
+
+    // Manejar clicks en las imágenes (unificado)
+    track.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG') {
+            const clickedSrc = e.target.src;
+            
+            // Remover selección previa
+            track.querySelectorAll('img').forEach(img => {
+                img.classList.remove('selected');
+                if (img.src === clickedSrc) {
+                    img.classList.add('selected');
+                }
+            });
+
+            // Actualizar thumbnail y guardar selección
+            updateThumbnail(clickedSrc);
+            window.selectedClothImage = clickedSrc;
+            
+            // Limpiar el input de archivo
+            document.getElementById("clothImage").value = '';
         }
-        
-        // Limpiar el input de archivo
-        document.getElementById("clothImage").value = '';
-        
-        // Guardar la URL de la imagen seleccionada para el procesamiento
-        window.selectedClothImage = imgSrc;
-        
-        // Añadir clase visual para mostrar selección
-        document.querySelectorAll('.carousel-track img').forEach(i => {
-            i.classList.remove('selected');
-        });
-        this.classList.add('selected');
     });
 });
+ 
+ 
+// Función unificada para actualizar thumbnail
+function updateThumbnail(imgSrc) {
+    const thumbnailsDiv = document.getElementById("thumbnails");
+    const thumbnailHtml = `
+        <div class="thumbnail-cloth text-center">
+            <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
+            <p class="text-sm text-gray-600 mt-2">Selected sweater</p>
+        </div>
+    `;
+    
+    const existingThumbnail = thumbnailsDiv.querySelector('.thumbnail-cloth');
+    if (existingThumbnail) {
+        existingThumbnail.innerHTML = thumbnailHtml;
+    } else {
+        thumbnailsDiv.innerHTML = thumbnailHtml;
+    }
+}
 
     
 </script>
