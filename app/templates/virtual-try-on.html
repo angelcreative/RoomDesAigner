@@ -92,16 +92,12 @@
     hover:scale-105 transition-transform duration-300;
 }
 
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-100% - 16px));
-    }
-}
-
-/* Agregar efecto de fade en los bordes */
+.carousel-track img.selected {
+    border: 2px solid #38bdf8;
+    transform: scale(1.05);
+}     
+      
+      /* Agregar efecto de fade en los bordes */
 .carousel::before,
 .carousel::after {
     content: '';
@@ -113,6 +109,17 @@
     right: 0;
     background: linear-gradient(to left, white, transparent);
 }
+      
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100% - 16px));
+    }
+}
+
+
 
 
   </style>
@@ -133,8 +140,8 @@
     <div class="leftF flex flex-col items-center">
       <form id="virtualTryOnForm" class="w-full max-w-lg">
         <h2 class="text-2xl font-semibold mb-4">Virtual Try-On</h2>
-        <div class="uploaders mb-4">
-          <div id="colorExtractionImage" class="w-full">
+        <div class=" mb-4">
+          <div id="colorExtractionImage" class="uploaders w-full">
             <label for="clothImage" class="imageup">
               Upload the cloth image <span class="material-symbols-outlined">apparel</span>
               <small class="block text-sm text-gray-500">Use a good resolution image</small>
@@ -166,7 +173,7 @@
           </div>
         </div>
 
-        <div id="colorExtractionImage" class="w-full mb-4">
+        <div id="colorExtractionImage" class="uploaders w-full mb-4">
           <label for="modelImage" class="imageup">
             Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
             <small class="block text-sm text-gray-500">Use a good resolution image</small>
@@ -208,6 +215,7 @@
     
     
 // Event listener para enviar el formulario
+// Event listener para enviar el formulario
 document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   console.log("Formulario enviado");
@@ -217,7 +225,6 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
   const clothType = document.querySelector('input[name="clothType"]:checked')?.value;
   const prompt = document.getElementById("prompt").value.trim();
   const resultDiv = document.getElementById("result");
-  const selectedPreset = document.querySelector('input[name="preset-cloth"]:checked');
   
   let clothImageUrl;
 
@@ -240,9 +247,9 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     if (clothImageInput.files.length > 0) {
       // Si hay una imagen subida, usarla
       clothImageUrl = await uploadToImgBB(clothImageInput.files[0]);
-    } else if (selectedPreset) {
-      // Si hay una preset seleccionada, usar su URL
-      clothImageUrl = selectedPreset.value;
+    } else if (window.selectedClothImage) {
+      // Usar la imagen seleccionada del carousel
+      clothImageUrl = window.selectedClothImage;
     } else {
       alert("Please select a cloth image or upload one!");
       return;
@@ -482,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     
-    document.querySelectorAll('.carousel-track img').forEach(img => {
+document.querySelectorAll('.carousel-track img').forEach(img => {
     img.addEventListener('click', function() {
         // Actualizar el thumbnail
         const thumbnailsDiv = document.getElementById("thumbnails");
@@ -509,6 +516,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Guardar la URL de la imagen seleccionada para el procesamiento
         window.selectedClothImage = imgSrc;
+        
+        // Añadir clase visual para mostrar selección
+        document.querySelectorAll('.carousel-track img').forEach(i => {
+            i.classList.remove('selected');
+        });
+        this.classList.add('selected');
     });
 });
 
