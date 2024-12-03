@@ -155,24 +155,34 @@ logout
       
       
 <div class="uploaders">
+    <!-- Sección para la imagen del modelo -->
+    <div id="colorExtractionImage">
+        <label class="imageup" for="modelImage">
+            Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="modelImage" required>
+        </label>
+    </div>
+
+    <!-- Sección para la ropa (presets o carga) -->
     <div id="colorExtractionImage">
         <div class="preset-images">
             <h4>Selecciona una prenda o sube la tuya</h4>
             <div class="image-radio-group">
                 <label class="image-radio">
-                    <input type="radio" name="preset-cloth" value="url1">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/DRxvw96/xmas-01.png">
                     <img src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
                 </label>
                 <label class="image-radio">
-                    <input type="radio" name="preset-cloth" value="url2">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/YXRVD0v/xmas-02.png">
                     <img src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
                 </label>
                 <label class="image-radio">
-                    <input type="radio" name="preset-cloth" value="url3">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/kHQhB0h/xmas-03.png">
                     <img src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
                 </label>
                 <label class="image-radio">
-                    <input type="radio" name="preset-cloth" value="url4">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/TrQSMw7/xmas-04.png">
                     <img src="https://i.ibb.co/TrQSMw7/xmas-04.png" alt="Prenda 4">
                 </label>
             </div>
@@ -183,16 +193,9 @@ logout
             <input type="file" accept="image/*" id="clothImage">
         </label>
     </div>
-      
-      
-      
-      <div id="thumbnails" style="margin-top: 0;
-    align-items: flex-start;
-    display: flex;
-    gap: 0;
-    justify-content: space-between;">
 </div>
-      </div>     
+      
+      
     <fieldset style="display: flex;
     flex-direction: row;
     gap: 12px;
