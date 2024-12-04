@@ -99,54 +99,38 @@ button[type=submit]:active {
     text-align: center;
 }
       
+      
 .carousel {
     @apply relative overflow-hidden w-full;
     padding: 1rem 0;
-    position: relative;
-}
-
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    padding: 8px;
-    cursor: pointer;
-    z-index: 10;
-    transition: background-color 0.3s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.carousel-nav.left {
-    left: 10px;
-}
-
-.carousel-nav.right {
-    right: 10px;
-}
-
-.carousel-nav:hover {
-    background-color: rgba(255, 255, 255, 1);
 }
 
 .carousel-track {
     display: flex;
     gap: 16px;
-    width: max-content;
-    scroll-behavior: smooth; /* Añadir esto */
-    overflow-x: scroll; /* Añadir esto */
-    scrollbar-width: none; /* Ocultar scrollbar en Firefox */
-    -ms-overflow-style: none; /* Ocultar scrollbar en IE/Edge */
+    width: max-content; /* Importante para el scroll suave */
 }
 
-      
-      /* Ocultar scrollbar en Chrome/Safari */
-.carousel-track::-webkit-scrollbar {
-    display: none;
+.carousel-track {
+    animation: scroll 40s linear infinite;
 }
 
-/* Estilos para las imágenes */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Ajustado para scroll suave */
+    }
+}
+
+/* Modificar el contenido del carrusel para duplicar las imágenes */
+.carousel-content {
+    display: flex;
+    gap: 16px;
+}
+
+/* Efecto de hover más suave */
 .carousel-track img {
     @apply w-32 h-32 object-cover rounded-lg cursor-pointer;
     transition: all 0.3s ease-in-out;
@@ -157,11 +141,6 @@ button[type=submit]:active {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Estilo para la imagen seleccionada */
-.carousel-track img.selected {
-    border: 2px solid #38bdf8;
-    transform: scale(1.05);
-}
 
 
 
@@ -203,10 +182,7 @@ button[type=submit]:active {
             <div class="carousel-container mt-4">
     <h4 class="text-lg font-medium mb-2 text-center">Pick any of our ❤️ sweaters!</h4>
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto">
-         <!-- Botón de navegación izquierda -->
-        <span class="material-symbols-outlined carousel-nav left">arrow_back</span>
-       
-        <div class="carousel-track flex animate-scroll gap-4">
+         <div class="carousel-track flex animate-scroll gap-4">
     <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
     <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
     <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
@@ -234,10 +210,6 @@ button[type=submit]:active {
     <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/pPFF73S/xmas-sec-11.png" alt="Prenda 25">
     <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/GMXxS7m/xmas-sec-12.png" alt="Prenda 26">
 </div>
-
-        
-        <!-- Botón de navegación derecha -->
-        <span class="material-symbols-outlined carousel-nav right">arrow_forward</span>
     </div>
 </div>
 
@@ -525,86 +497,45 @@ async function uploadToImgBB(file) {
   }
 }
     
-
     
-//funcion carousel
-
 document.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('.carousel');
     const track = document.querySelector('.carousel-track');
-    const leftNav = document.querySelector('.carousel-nav.left');
-    const rightNav = document.querySelector('.carousel-nav.right');
-    const imageWidth = 144; // 128px (w-32) + 16px (gap)
-    let autoScrollInterval;
-
-    // Función para mover el carrusel
-    const moveCarousel = (direction) => {
-        const scrollAmount = imageWidth;
-        const currentScroll = track.scrollLeft;
-        
-        if (direction === 'left') {
-            track.scrollTo({
-                left: currentScroll - scrollAmount,
-                behavior: 'smooth'
-            });
-            
-            // Si estamos al inicio, saltar al final
-            if (currentScroll <= scrollAmount) {
-                track.scrollTo({
-                    left: track.scrollWidth - track.clientWidth,
-                    behavior: 'smooth'
-                });
-            }
-        } else {
-            track.scrollTo({
-                left: currentScroll + scrollAmount,
-                behavior: 'smooth'
-            });
-            
-            // Si estamos al final, saltar al inicio
-            if (currentScroll >= track.scrollWidth - track.clientWidth - scrollAmount) {
-                track.scrollTo({
-                    left: 0,
-                    behavior: 'smooth'
-                });
-            }
-        }
-    };
-
-    // Función para el desplazamiento automático
-    const startAutoScroll = () => {
-        autoScrollInterval = setInterval(() => moveCarousel('right'), 2000);
-    };
-
-    // Detener el desplazamiento automático
-    const stopAutoScroll = () => {
-        clearInterval(autoScrollInterval);
-    };
-
-    // Iniciar el desplazamiento automático
-    startAutoScroll();
-
-    // Event listeners para los botones de navegación
-    leftNav.addEventListener('click', () => {
-        stopAutoScroll();
-        moveCarousel('left');
-        startAutoScroll();
+    
+    // Duplicar las imágenes originales para crear un loop continuo
+    const images = track.querySelectorAll('img');
+    images.forEach(img => {
+        const clone = img.cloneNode(true);
+        track.appendChild(clone);
     });
 
-    rightNav.addEventListener('click', () => {
-        stopAutoScroll();
-        moveCarousel('right');
-        startAutoScroll();
+    // Calcular el ancho total para la animación
+    const updateTrackWidth = () => {
+        const imageWidth = images[0].offsetWidth;
+        const gap = 16;
+        const totalWidth = (imageWidth + gap) * images.length;
+        track.style.width = `${totalWidth * 2}px`;
+    };
+
+    // Actualizar el ancho inicial y en resize
+    updateTrackWidth();
+    window.addEventListener('resize', updateTrackWidth);
+
+    // Control de hover
+    carousel.addEventListener('mouseenter', () => {
+        track.style.animationPlayState = 'paused';
     });
 
-    // Detener el desplazamiento automático al hacer hover
-    track.addEventListener('mouseenter', stopAutoScroll);
-    track.addEventListener('mouseleave', startAutoScroll);
+    carousel.addEventListener('mouseleave', () => {
+        track.style.animationPlayState = 'running';
+    });
 
-    // Click handler para selección de imágenes
+    // Manejar clicks en las imágenes (unificado)
     track.addEventListener('click', (e) => {
         if (e.target.tagName === 'IMG') {
             const clickedSrc = e.target.src;
             
+            // Remover selección previa
             track.querySelectorAll('img').forEach(img => {
                 img.classList.remove('selected');
                 if (img.src === clickedSrc) {
@@ -612,14 +543,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Actualizar thumbnail y guardar selección
             updateThumbnail(clickedSrc);
             window.selectedClothImage = clickedSrc;
+            
+            // Limpiar el input de archivo
             document.getElementById("clothImage").value = '';
         }
     });
-}); 
-    
-    
+});
+ 
+ 
 // Función unificada para actualizar thumbnail
 function updateThumbnail(imgSrc) {
     const thumbnailsDiv = document.getElementById("thumbnails");
