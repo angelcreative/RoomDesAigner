@@ -99,16 +99,13 @@ button[type=submit]:active {
     text-align: center;
 }
       
-      
 .carousel {
     @apply relative overflow-hidden w-full;
     padding: 1rem 0;
-        position: relative; /* Asegura que los botones se posicionen correctamente */
-
+    position: relative;
 }
-      
-      
-      .carousel-nav {
+
+.carousel-nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -118,6 +115,7 @@ button[type=submit]:active {
     cursor: pointer;
     z-index: 10;
     transition: background-color 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .carousel-nav.left {
@@ -135,29 +133,11 @@ button[type=submit]:active {
 .carousel-track {
     display: flex;
     gap: 16px;
-    width: max-content; /* Importante para el scroll suave */
+    width: max-content;
+    transition: transform 0.3s ease;
 }
 
-.carousel-track {
-    animation: scroll 40s linear infinite;
-}
-
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%); /* Ajustado para scroll suave */
-    }
-}
-
-/* Modificar el contenido del carrusel para duplicar las imágenes */
-.carousel-content {
-    display: flex;
-    gap: 16px;
-}
-
-/* Efecto de hover más suave */
+/* Estilos para las imágenes */
 .carousel-track img {
     @apply w-32 h-32 object-cover rounded-lg cursor-pointer;
     transition: all 0.3s ease-in-out;
@@ -168,6 +148,11 @@ button[type=submit]:active {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* Estilo para la imagen seleccionada */
+.carousel-track img.selected {
+    border: 2px solid #38bdf8;
+    transform: scale(1.05);
+}
 
 
 
@@ -211,23 +196,37 @@ button[type=submit]:active {
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto">
          <!-- Botón de navegación izquierda -->
         <span class="material-symbols-outlined carousel-nav left">arrow_back</span>
+       
         <div class="carousel-track flex animate-scroll gap-4">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/fpgsHf8/xmas-04.png" alt="Prenda 4">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/1fFBDnB/xmas-05.png" alt="Prenda 5">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/3psj9bg/xmas-06.png" alt="Prenda 6">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/T8JPSNw/xmas-07.png" alt="Prenda 7">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/cYTJzQr/xmas-08.png" alt="Prenda 8">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yQCQt16/xmas-09.png" alt="Prenda 9">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/KqZH6jc/xmas-10.png" alt="Prenda 10">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/R68Y4qL/xmas-11.png" alt="Prenda 11">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/VDBWQPw/xmas-12.png" alt="Prenda 12">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/LhsZbkJ/xmas-13.png" alt="Prenda 13">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/Wx2QQVW/xmas-14.png" alt="Prenda 14">
-            <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/gt3BxCj/xmas-15.png" alt="Prenda 15">
-        </div>
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/fpgsHf8/xmas-04.png" alt="Prenda 4">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/1fFBDnB/xmas-05.png" alt="Prenda 5">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/3psj9bg/xmas-06.png" alt="Prenda 6">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/T8JPSNw/xmas-07.png" alt="Prenda 7">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/cYTJzQr/xmas-08.png" alt="Prenda 8">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yQCQt16/xmas-09.png" alt="Prenda 9">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/KqZH6jc/xmas-10.png" alt="Prenda 10">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/R68Y4qL/xmas-11.png" alt="Prenda 11">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/VDBWQPw/xmas-12.png" alt="Prenda 12">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/LhsZbkJ/xmas-13.png" alt="Prenda 13">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/Wx2QQVW/xmas-14.png" alt="Prenda 14">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/gt3BxCj/xmas-15.png" alt="Prenda 15">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/68C2snV/xmas-sec-02.png" alt="Prenda 16">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/9wSBCnb/xmas-sec-03.png" alt="Prenda 17">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/r4zk3RD/xmas-sec-04.png" alt="Prenda 18">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ZzYKrQm/xmas-sec-05.png" alt="Prenda 19">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ZzNSmPK/xmas-sec-06.png" alt="Prenda 20">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ydCG7qb/xmas-sec-07.png" alt="Prenda 21">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/PDBK4qD/xmas-sec-08.png" alt="Prenda 22">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/nmkc6st/xmas-sec-09.png" alt="Prenda 23">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yq7Gn8d/xmas-sec-10.png" alt="Prenda 24">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/pPFF73S/xmas-sec-11.png" alt="Prenda 25">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/GMXxS7m/xmas-sec-12.png" alt="Prenda 26">
+</div>
+
+        
         <!-- Botón de navegación derecha -->
         <span class="material-symbols-outlined carousel-nav right">arrow_forward</span>
     </div>
@@ -517,47 +516,41 @@ async function uploadToImgBB(file) {
   }
 }
     
-    
+
 document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel');
     const track = document.querySelector('.carousel-track');
     const leftNav = document.querySelector('.carousel-nav.left');
     const rightNav = document.querySelector('.carousel-nav.right');
     
-    // Duplicar las imágenes originales para crear un loop continuo
+    // Obtener las imágenes originales
     const images = track.querySelectorAll('img');
-    images.forEach(img => {
-        const clone = img.cloneNode(true);
-        track.appendChild(clone);
-    });
+    
+    // Crear clones al inicio y al final para un scroll infinito más suave
+    const firstClone = images[0].cloneNode(true);
+    const lastClone = images[images.length - 1].cloneNode(true);
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, images[0]);
 
-    // Calcular el ancho total para la animación
+    // Calcular el ancho total
     const updateTrackWidth = () => {
         const imageWidth = images[0].offsetWidth;
         const gap = 16;
-        const totalWidth = (imageWidth + gap) * images.length;
-        track.style.width = `${totalWidth * 2}px`;
+        const totalWidth = (imageWidth + gap) * (images.length + 2); // +2 por los clones
+        track.style.width = `${totalWidth}px`;
+        
+        // Posicionar inicialmente en la primera imagen real (después del clon)
+        track.scrollLeft = imageWidth + gap;
     };
 
-    // Actualizar el ancho inicial y en resize
     updateTrackWidth();
     window.addEventListener('resize', updateTrackWidth);
 
-    // Control de hover
-    carousel.addEventListener('mouseenter', () => {
-        track.style.animationPlayState = 'paused';
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-        track.style.animationPlayState = 'running';
-    });
-
-    // Manejar clicks en las imágenes (unificado)
+    // Manejar clicks en las imágenes
     track.addEventListener('click', (e) => {
         if (e.target.tagName === 'IMG') {
             const clickedSrc = e.target.src;
             
-            // Remover selección previa
             track.querySelectorAll('img').forEach(img => {
                 img.classList.remove('selected');
                 if (img.src === clickedSrc) {
@@ -565,23 +558,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Actualizar thumbnail y guardar selección
             updateThumbnail(clickedSrc);
             window.selectedClothImage = clickedSrc;
-            
-            // Limpiar el input de archivo
             document.getElementById("clothImage").value = '';
         }
     });
 
-    // Funciones para mover el carrusel
+    // Función mejorada para mover el carrusel
     const moveCarousel = (direction) => {
-        const scrollAmount = images[0].offsetWidth + 16; // Ancho de la imagen + gap
+        const imageWidth = images[0].offsetWidth + 16; // Ancho de imagen + gap
         const currentScroll = track.scrollLeft;
+        
+        let newScroll = direction === 'left' 
+            ? currentScroll - imageWidth 
+            : currentScroll + imageWidth;
+
         track.scrollTo({
-            left: direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount,
+            left: newScroll,
             behavior: 'smooth'
         });
+
+        // Verificar y ajustar la posición después del scroll
+        setTimeout(() => {
+            // Si llegamos al clon del final, saltar al inicio real
+            if (currentScroll >= (track.scrollWidth - track.clientWidth - 10)) {
+                track.scrollTo({ left: imageWidth, behavior: 'auto' });
+            }
+            // Si llegamos al clon del inicio, saltar al final real
+            else if (currentScroll <= 10) {
+                track.scrollTo({ 
+                    left: track.scrollWidth - track.clientWidth - imageWidth * 2, 
+                    behavior: 'auto' 
+                });
+            }
+        }, 300); // Esperar a que termine la animación de scroll
     };
 
     leftNav.addEventListener('click', () => moveCarousel('left'));
