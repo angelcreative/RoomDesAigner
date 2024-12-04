@@ -655,7 +655,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
     // Definir proporciones de imagen basadas en la selección
    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
 let width, height;
-
+//You can use height and width as 512,768,1024,1280,1536,2562 
 if (aspectRatio === "square") {
     width = 1280; // Relación 1:1
     height = 1280;
