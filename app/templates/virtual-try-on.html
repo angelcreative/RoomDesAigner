@@ -134,7 +134,16 @@ button[type=submit]:active {
     display: flex;
     gap: 16px;
     width: max-content;
-    transition: transform 0.3s ease;
+    scroll-behavior: smooth; /* Añadir esto */
+    overflow-x: scroll; /* Añadir esto */
+    scrollbar-width: none; /* Ocultar scrollbar en Firefox */
+    -ms-overflow-style: none; /* Ocultar scrollbar en IE/Edge */
+}
+
+      
+      /* Ocultar scrollbar en Chrome/Safari */
+.carousel-track::-webkit-scrollbar {
+    display: none;
 }
 
 /* Estilos para las imágenes */
@@ -517,36 +526,55 @@ async function uploadToImgBB(file) {
 }
     
 
+
 document.addEventListener('DOMContentLoaded', () => {
-    const carousel = document.querySelector('.carousel');
     const track = document.querySelector('.carousel-track');
     const leftNav = document.querySelector('.carousel-nav.left');
     const rightNav = document.querySelector('.carousel-nav.right');
     
-    // Obtener las imágenes originales
+    // Obtener las imágenes
     const images = track.querySelectorAll('img');
-    
-    // Crear clones al inicio y al final para un scroll infinito más suave
-    const firstClone = images[0].cloneNode(true);
-    const lastClone = images[images.length - 1].cloneNode(true);
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, images[0]);
+    const imageWidth = 144; // 128px (w-32) + 16px (gap)
 
-    // Calcular el ancho total
-    const updateTrackWidth = () => {
-        const imageWidth = images[0].offsetWidth;
-        const gap = 16;
-        const totalWidth = (imageWidth + gap) * (images.length + 2); // +2 por los clones
-        track.style.width = `${totalWidth}px`;
+    // Función para mover el carrusel
+    const moveCarousel = (direction) => {
+        const scrollAmount = imageWidth;
+        const currentScroll = track.scrollLeft;
         
-        // Posicionar inicialmente en la primera imagen real (después del clon)
-        track.scrollLeft = imageWidth + gap;
+        if (direction === 'left') {
+            track.scrollTo({
+                left: currentScroll - scrollAmount,
+                behavior: 'smooth'
+            });
+            
+            // Si estamos al inicio, saltar al final
+            if (currentScroll <= scrollAmount) {
+                track.scrollTo({
+                    left: track.scrollWidth - track.clientWidth,
+                    behavior: 'smooth'
+                });
+            }
+        } else {
+            track.scrollTo({
+                left: currentScroll + scrollAmount,
+                behavior: 'smooth'
+            });
+            
+            // Si estamos al final, saltar al inicio
+            if (currentScroll >= track.scrollWidth - track.clientWidth - scrollAmount) {
+                track.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
     };
 
-    updateTrackWidth();
-    window.addEventListener('resize', updateTrackWidth);
+    // Event listeners para los botones de navegación
+    leftNav.addEventListener('click', () => moveCarousel('left'));
+    rightNav.addEventListener('click', () => moveCarousel('right'));
 
-    // Manejar clicks en las imágenes
+    // Click handler para selección de imágenes
     track.addEventListener('click', (e) => {
         if (e.target.tagName === 'IMG') {
             const clickedSrc = e.target.src;
@@ -563,41 +591,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("clothImage").value = '';
         }
     });
-
-    // Función mejorada para mover el carrusel
-    const moveCarousel = (direction) => {
-        const imageWidth = images[0].offsetWidth + 16; // Ancho de imagen + gap
-        const currentScroll = track.scrollLeft;
-        
-        let newScroll = direction === 'left' 
-            ? currentScroll - imageWidth 
-            : currentScroll + imageWidth;
-
-        track.scrollTo({
-            left: newScroll,
-            behavior: 'smooth'
-        });
-
-        // Verificar y ajustar la posición después del scroll
-        setTimeout(() => {
-            // Si llegamos al clon del final, saltar al inicio real
-            if (currentScroll >= (track.scrollWidth - track.clientWidth - 10)) {
-                track.scrollTo({ left: imageWidth, behavior: 'auto' });
-            }
-            // Si llegamos al clon del inicio, saltar al final real
-            else if (currentScroll <= 10) {
-                track.scrollTo({ 
-                    left: track.scrollWidth - track.clientWidth - imageWidth * 2, 
-                    behavior: 'auto' 
-                });
-            }
-        }, 300); // Esperar a que termine la animación de scroll
-    };
-
-    leftNav.addEventListener('click', () => moveCarousel('left'));
-    rightNav.addEventListener('click', () => moveCarousel('right'));
-});
- 
+});    
+    
+    
 // Función unificada para actualizar thumbnail
 function updateThumbnail(imgSrc) {
     const thumbnailsDiv = document.getElementById("thumbnails");
