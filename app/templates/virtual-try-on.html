@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="background: #f6f9fb;">
+<html lang="en" class="gradient-background">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -11,7 +11,7 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ffffff, #f0f4f8);
+      background: transparent;
       overflow: auto;
     }
     .top-bar {
@@ -180,6 +180,25 @@ button[type=submit]:active {
     color: gray;
 }  
 
+      
+      .gradient-background {
+  background: linear-gradient(300deg,#e5f6de,#f6f2de,#f6dede);
+  background-size: 180% 180%;
+  animation: gradient-animation 3s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+      
   </style>
 </head>
 <body>
