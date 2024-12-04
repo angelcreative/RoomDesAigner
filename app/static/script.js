@@ -657,20 +657,20 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 let width, height;
 
 if (aspectRatio === "square") {
-    width = 1400; // Relación 1:1
-    height = 1400;
+    width = 1280; // Relación 1:1
+    height = 1280;
 } else if (aspectRatio === "widescreen") {
-    width = 1400; // Relación 19:6 (ajustada para ser múltiplo de 8)
-    height = 456; // Ya es múltiplo de 8
+    width = 2562; // Relación 19:6 (ajustada para ser múltiplo de 8)
+    height = 768; // Ya es múltiplo de 8
 } else if (aspectRatio === "landscape") {
-    width = 1200; // Relación 3:2 ajustada
-    height = 800; // 1200 * (2/3), ajustado a múltiplo de 8
+    width = 1280; // Relación 3:2 ajustada
+    height = 768; // 1200 * (2/3), ajustado a múltiplo de 8
 } else if (aspectRatio === "portrait") {
-    width = 800; // Relación 2:3 ajustada
-    height = 1200; // Ya es múltiplo de 8
+    width = 768; // Relación 2:3 ajustada
+    height = 1280; // Ya es múltiplo de 8
 } else if (aspectRatio === "social-vertical") {
-    width = 808; // Relación 9:16 (ajustada para ser múltiplo de 8)
-    height = 1400; // Ajustada para ser múltiplo de 8
+    width = 1024; // Relación 9:16 (ajustada para ser múltiplo de 8)
+    height = 2562; // Ajustada para ser múltiplo de 8
 }
 
 
