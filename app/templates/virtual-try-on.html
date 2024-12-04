@@ -142,9 +142,40 @@ button[type=submit]:active {
 }
 
 .overflow-hidden {
-    overflow: auto;
+    overflow: auto !important;
 }
 
+      
+    .howTo {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 9px;
+    align-items: center;
+}
+
+.stepHT img {
+    max-width: 120px;
+    height: auto;
+}
+
+.stepHT {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.howTo span {
+    margin: 0;
+    line-height: 0;
+    color: gray;
+}  
 
   </style>
 </head>
@@ -174,6 +205,33 @@ button[type=submit]:active {
     <div class="leftF flex flex-col items-center">
       <form id="virtualTryOnForm" class="w-full max-w-lg">
         <h2 class="text-2xl font-semibold mb-4">🎅🏽 Audiense Xmas try-on</h2>
+        
+          <div class="howTo">
+<div class="stepHT">
+<p>☝️ Choose a design</p>
+<img src="https://i.ibb.co/HrT78jf/steps-01.png">
+</div>
+    <span class="material-symbols-outlined">
+arrow_forward
+</span>
+    <div class="stepHT">
+<p>🤳🏼 Upload your picture</p>
+<img src="https://i.ibb.co/QQJDLLV/steps-02.png">
+</div>
+    <span class="material-symbols-outlined">
+arrow_forward
+</span>
+    <div class="stepHT">
+<p>✨ Hit the button!</p>
+<img src="https://i.ibb.co/D9yfSWf/steps-03.png">
+</div>
+    
+
+
+
+
+</div>
+          
         <div class=" mb-4">
           <div id="colorExtractionImage" class="uploaders w-full">
             <label for="clothImage" style="display: none" class="imageup">
