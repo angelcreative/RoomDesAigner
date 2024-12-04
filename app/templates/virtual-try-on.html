@@ -526,15 +526,15 @@ async function uploadToImgBB(file) {
 }
     
 
+    
+//funcion carousel
 
 document.addEventListener('DOMContentLoaded', () => {
     const track = document.querySelector('.carousel-track');
     const leftNav = document.querySelector('.carousel-nav.left');
     const rightNav = document.querySelector('.carousel-nav.right');
-    
-    // Obtener las imágenes
-    const images = track.querySelectorAll('img');
     const imageWidth = 144; // 128px (w-32) + 16px (gap)
+    let autoScrollInterval;
 
     // Función para mover el carrusel
     const moveCarousel = (direction) => {
@@ -570,9 +570,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Función para el desplazamiento automático
+    const startAutoScroll = () => {
+        autoScrollInterval = setInterval(() => moveCarousel('right'), 2000);
+    };
+
+    // Detener el desplazamiento automático
+    const stopAutoScroll = () => {
+        clearInterval(autoScrollInterval);
+    };
+
+    // Iniciar el desplazamiento automático
+    startAutoScroll();
+
     // Event listeners para los botones de navegación
-    leftNav.addEventListener('click', () => moveCarousel('left'));
-    rightNav.addEventListener('click', () => moveCarousel('right'));
+    leftNav.addEventListener('click', () => {
+        stopAutoScroll();
+        moveCarousel('left');
+        startAutoScroll();
+    });
+
+    rightNav.addEventListener('click', () => {
+        stopAutoScroll();
+        moveCarousel('right');
+        startAutoScroll();
+    });
+
+    // Detener el desplazamiento automático al hacer hover
+    track.addEventListener('mouseenter', stopAutoScroll);
+    track.addEventListener('mouseleave', startAutoScroll);
 
     // Click handler para selección de imágenes
     track.addEventListener('click', (e) => {
@@ -592,6 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });    
+    
     
     
 // Función unificada para actualizar thumbnail
