@@ -103,6 +103,33 @@ button[type=submit]:active {
 .carousel {
     @apply relative overflow-hidden w-full;
     padding: 1rem 0;
+        position: relative; /* Asegura que los botones se posicionen correctamente */
+
+}
+      
+      
+      .carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s;
+}
+
+.carousel-nav.left {
+    left: 10px;
+}
+
+.carousel-nav.right {
+    right: 10px;
+}
+
+.carousel-nav:hover {
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .carousel-track {
@@ -182,6 +209,8 @@ button[type=submit]:active {
             <div class="carousel-container mt-4">
     <h4 class="text-lg font-medium mb-2 text-center">Pick any of our ❤️ sweaters!</h4>
     <div class="carousel overflow-hidden relative border rounded-lg mx-auto">
+         <!-- Botón de navegación izquierda -->
+        <span class="material-symbols-outlined carousel-nav left">arrow_back</span>
         <div class="carousel-track flex animate-scroll gap-4">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
@@ -199,6 +228,8 @@ button[type=submit]:active {
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/Wx2QQVW/xmas-14.png" alt="Prenda 14">
             <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/gt3BxCj/xmas-15.png" alt="Prenda 15">
         </div>
+        <!-- Botón de navegación derecha -->
+        <span class="material-symbols-outlined carousel-nav right">arrow_forward</span>
     </div>
 </div>
 
@@ -490,6 +521,8 @@ async function uploadToImgBB(file) {
 document.addEventListener('DOMContentLoaded', () => {
     const carousel = document.querySelector('.carousel');
     const track = document.querySelector('.carousel-track');
+    const leftNav = document.querySelector('.carousel-nav.left');
+    const rightNav = document.querySelector('.carousel-nav.right');
     
     // Duplicar las imágenes originales para crear un loop continuo
     const images = track.querySelectorAll('img');
@@ -540,8 +573,20 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("clothImage").value = '';
         }
     });
+
+    // Funciones para mover el carrusel
+    const moveCarousel = (direction) => {
+        const scrollAmount = images[0].offsetWidth + 16; // Ancho de la imagen + gap
+        const currentScroll = track.scrollLeft;
+        track.scrollTo({
+            left: direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount,
+            behavior: 'smooth'
+        });
+    };
+
+    leftNav.addEventListener('click', () => moveCarousel('left'));
+    rightNav.addEventListener('click', () => moveCarousel('right'));
 });
- 
  
 // Función unificada para actualizar thumbnail
 function updateThumbnail(imgSrc) {
