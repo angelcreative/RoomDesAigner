@@ -654,6 +654,10 @@ span.close:hover {
     
 }
 
+
+.logo h1 img {}
+}
+
 .loginLogo h1 {
     font-size: var(--l);
     color: var(--bunker-50);
@@ -1824,13 +1828,12 @@ h4 {
     z-index: 999;
 }
 
-.logo h1 img {
-    width: 110px;
+.logo h1 img[src*="logo_full_02.svg"] {
+    filter: brightness(0) invert(1);
+width:100px
 }
 
-.loginLogo h1 img {
-    width: 120px;
-}
+
 
 .menu {/* position: sticky; *//* top: -10px; *//* z-index: 9; */height: 40px;border-radius: var(--2xl);display: flex;align-items: center;margin: 0 auto 8px auto;}
 
@@ -4879,16 +4882,25 @@ html {
 	background: #000;
 }
 
+
+animation: shapeColorShift 5s infinite;
+    filter: blur(12px);
+    background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #00000000, #00000000, #08AEEA);
+    background-size: 500% 800%;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+
 /* Orb*/
 .orb {
 	@include dimensions($width: 180px);
-	animation: shapeColorShift 10s infinite;
-	filter: blur(12px);
-	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000, #000000, #08AEEA);
-	background-size: 500% 800%;
-	border-radius: 50%; /* Hacemos que sea siempre un círculo*/
-	height: 100px;
-	width: 100px;
+	animation: shapeColorShift 5s infinite;
+    filter: blur(12px);
+    background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #00000000, #00000000, #08AEEA);
+    background-size: 500% 800%;
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
 
 	/*Orb's Shadow*/
 	&:
@@ -5315,9 +5327,18 @@ div#toastChat {
 }
 
 div#toastChat.toast {
-    background: none;
+   background: none;
     zoom: 2;
-    margin-bottom: 0px;
+    padding: 0;
+    position: relative;
+    top: -50px;
+    left: 0px;
+}
+
+
+#toastChat .orb {
+    height: 40px;
+    width: 40px;
 }
 
 button#sendChatButton {
