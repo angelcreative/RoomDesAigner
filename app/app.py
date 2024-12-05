@@ -889,7 +889,10 @@ def proxy_fetch_with_propagation_check(fetch_id):
 
 
     
-
+# Ruta para servir la página HTML
+@app.route('/xmas')
+def xmas_page():
+    return render_template('xmas.html')
 
 
 # Ruta para servir la página HTML
@@ -922,10 +925,7 @@ def virtual_try_on():
 
     
     
-# Ruta para servir la página HTML
-@app.route('/xmas')
-def virtual_try_on_page():
-    return render_template('xmas.html')
+
 
 
 
