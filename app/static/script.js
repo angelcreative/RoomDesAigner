@@ -2358,6 +2358,25 @@ function getConversationHistory() {
 }
 
 
+document.querySelectorAll('.assistant').forEach(div => {
+        // Crear el icono de copiar
+        const copyIcon = document.createElement('span');
+        copyIcon.className = 'material-symbols-outlined copy-icon';
+        copyIcon.textContent = 'content_copy';
+
+        // Añadir el icono al div
+        div.appendChild(copyIcon);
+
+        // Añadir el evento de clic para copiar el contenido
+        copyIcon.addEventListener('click', () => {
+            const content = div.textContent.replace('content_copy', '').trim();
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Contenido copiado: ' + content);
+            }).catch(err => {
+                console.error('Error al copiar: ', err);
+            });
+        });
+    });
 
 
 
