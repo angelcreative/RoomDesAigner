@@ -2292,11 +2292,12 @@ i {
     gap: var(--xs) var(--2xs);
 }
 .carousel-slide {
-    box-sizing: border-box;
+  box-sizing: border-box;
     margin-right: var(--2xs);
     height: auto;
     position: relative;
     overflow: hidden;
+    width: 23%;
 }
 
 
@@ -3376,11 +3377,11 @@ option[title]:hover:after {
 }
 
 .imageGrid {
- width: 100%;
+width: 100%;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 #imageGrid div {
@@ -5641,8 +5642,7 @@ div#prompt {
 /* iPads (portrait and landscape) */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     .carousel-slide {
-        flex: 0 0 47%; /* 2 slides por vista */
-    }
+     }
 }
 
 /* Desktops and laptops */
@@ -5650,8 +5650,7 @@ div#prompt {
 
 
     .carousel-slide {
-        flex: 0 0 45%; /* 4 slides por vista */
-    }
+     }
 
         .fila-inferior {
                 width:800px;
@@ -5670,7 +5669,6 @@ div#prompt {
 /* Large screens */
 @media only screen and (min-width: 1440px) {
     .carousel-slide {
-        flex: 0 0 48%; /* Ajuste opcional para pantallas más grandes */
     }
           .fila-inferior {
                 /* width:800px; */
