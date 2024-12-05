@@ -1090,10 +1090,10 @@ function openPhotopeaWithImage(imageUrl) {
 function toggleContent() {
   const contentDiv = document.querySelector(".toggle-content");
   if (contentDiv) {
-    if (contentDiv.style.display === "none" || contentDiv.style.display === "") {
+    if (contentDiv.style.display === "" || contentDiv.style.display === "") {
       contentDiv.style.display = "block";
     } else {
-      contentDiv.style.display = "none";
+      contentDiv.style.display = "";
     }
   } else {
     console.error("Toggle content div not found.");
