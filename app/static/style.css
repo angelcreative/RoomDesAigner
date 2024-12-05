@@ -2407,13 +2407,12 @@ i {
 
 
 .serialButton{
-  display: block;
   position: sticky;
   top: 0;
   left: 0;
   z-index: 9;
   background: #000;
-  display: flex;
+  display: none;
   flex-direction: row;
 }
 
@@ -3355,12 +3354,13 @@ option[title]:hover:after {
 }
 
 .toggle-content {
-        display: none;
-        background: #000;
-        border-radius: 16px;
-        color: var(--bunker-400);
-        line-height: 1.5;
-        text-align: left;
+      background: #000;
+    border-radius: 16px;
+    color: var(--bunker-400);
+    line-height: 1.5;
+    text-align: left;
+    font-size: var(--xs);
+    width: 60%;
 }
 
 .hexDot {
