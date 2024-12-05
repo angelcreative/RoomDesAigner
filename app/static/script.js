@@ -2321,6 +2321,7 @@ document.getElementById('chatInput').addEventListener('keypress', function(event
 
 
 // Función para mostrar el loader
+// Función para mostrar el loader
 function showLoader() {
     const loader = document.getElementById('toastChat');
     loader.style.display = 'block'; // Mostrar el loader
