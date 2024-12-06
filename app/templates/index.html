@@ -3639,7 +3639,10 @@ local_fire_department
     </div>
                 </div>
     </div>
-</div>      
+</div>   
+               
+               
+               
 <div class="fila-inferior">
     <div class="tabs">
         <button type="button" class="tab-button active" onclick="showTab('prompt')">
@@ -3913,19 +3916,33 @@ function hideToast() {
 </script>
  
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function() {
     const combobox = document.querySelector('[role="combobox"]');
     const popup = document.getElementById('model-listbox');
     const selectedText = document.querySelector('.selected-text');
     const options = document.querySelectorAll('.ar input[type="radio"]');
 
-    // Función para actualizar la opción seleccionada
+    // Función modificada para actualizar la opción seleccionada
     function updateSelectedOption(input) {
+        if (!input) return;
+        
         const label = input.nextElementSibling;
-        const icon = label.querySelector('.material-symbols-outlined').textContent;
+        if (!label) return;
+        
+        const iconElement = label.querySelector('.material-symbols-outlined');
+        if (!iconElement) return;
+
+        // Obtener el HTML completo del icono en lugar de solo el texto
+        const iconHtml = iconElement.outerHTML;
+        
+        // Obtener un texto descriptivo más amigable (puedes personalizarlo)
+        const displayText = input.id.split('-').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+        ).join(' ');
+
         selectedText.innerHTML = `
-            <span class="material-symbols-outlined">${icon}</span>
-            <span>${input.id}</span>
+            ${iconHtml}
+            <span>${displayText}</span>
         `;
     }
 
@@ -3950,7 +3967,6 @@ function hideToast() {
             popup.classList.remove('show');
         });
     });
-        
 
     // Cerrar al hacer clic fuera
     document.addEventListener('click', (e) => {
@@ -3972,9 +3988,7 @@ function hideToast() {
             popup.classList.toggle('show');
         }
     });
-});        
-    
-    
+});
     </script>  
 </body>
 
