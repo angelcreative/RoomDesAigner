@@ -3338,6 +3338,7 @@ option[title]:hover:after {
        z-index: 9;
        font-size: var(--xs);
        padding-bottom: var(--2xl);
+    color:var(--bunker-700);
 }
 
 .chipSV {
