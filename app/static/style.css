@@ -4974,23 +4974,58 @@ html {
 
 .combobox-popup {
     position: absolute;
-    top: 100%;
     left: 0;
     width: 100%;
-    margin-top: 4px;
     background: var(--bunker-900);
-    border: none;
+    border: 1px solid var(--bunker-600);
     border-radius: 6px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     display: none;
     z-index: 1000;
     max-height: 300px;
     overflow-y: auto;
+    margin: 4px 0;
 }
 
+
+/* Estilos para cuando el popup va hacia arriba */
+.combobox-popup.popup-up {
+    margin-bottom: 4px;
+}
+
+
+/* Animaciones para ambas direcciones */
 .combobox-popup.show {
     display: block;
+    animation: fadeIn 0.2s ease-out;
 }
+
+.combobox-popup.popup-up.show {
+    animation: fadeInUp 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 #model-listbox .aspectRatioShot {
     display: flex;

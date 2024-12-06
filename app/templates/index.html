@@ -3935,14 +3935,48 @@ function hideToast() {
     if (initialSelected) {
         updateSelectedOption(initialSelected);
     }
+      
+      
+      // Función para determinar la dirección del popup
+    function updatePopupDirection() {
+        const comboboxRect = combobox.getBoundingClientRect();
+        const popupHeight = popup.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const spaceBelow = viewportHeight - comboboxRect.bottom;
+        const spaceAbove = comboboxRect.top;
 
-    // Toggle combobox
+        // Si hay menos espacio abajo que el alto del popup y hay más espacio arriba
+        if (spaceBelow < popupHeight && spaceAbove > popupHeight) {
+            popup.style.bottom = '100%';
+            popup.style.top = 'auto';
+            popup.classList.add('popup-up');
+        } else {
+            popup.style.top = '100%';
+            popup.style.bottom = 'auto';
+            popup.classList.remove('popup-up');
+        }
+    }
+
+
+    // Modificar el evento de clic del combobox
     combobox.addEventListener('click', () => {
         const isExpanded = combobox.getAttribute('aria-expanded') === 'true';
         combobox.setAttribute('aria-expanded', !isExpanded);
-        popup.classList.toggle('show');
+        
+        if (!isExpanded) {
+            popup.classList.add('show');
+            updatePopupDirection();
+        } else {
+            popup.classList.remove('show');
+        }
     });
 
+    // Actualizar dirección al redimensionar la ventana
+    window.addEventListener('resize', () => {
+        if (popup.classList.contains('show')) {
+            updatePopupDirection();
+        }
+    });
     // Manejar selección de opciones
     options.forEach(option => {
         option.addEventListener('change', function() {
