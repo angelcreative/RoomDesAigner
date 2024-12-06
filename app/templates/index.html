@@ -42,15 +42,7 @@
     
     
     <!-- ======= SCRIPTS ========== -->
-     <script>
-        function toggleContent() {
-            const content = document.getElementById("chipsSV");
-            content.style.display = content.style.display === "none" ? "block" : "none";
-        }
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("chipsSV").style.display = "none";
-        });
-    </script>
+   
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='jquery.event.move.js') }}"></script>
 
@@ -3534,7 +3526,19 @@ phone_iphone
            <footer class="footer" id="footer">
     <div class="toggleButton" id="toggleButton">–</div>
     
-  <div class="combobox-wrapper">
+   
+               
+               
+               
+<div class="fila-inferior">
+    <div class="tabs">
+        <button type="button" class="tab-button active" onclick="showTab('prompt')">
+            <span class="material-symbols-outlined">edit_note</span>Prompt
+        </button>
+        <button type="button" class="tab-button" onclick="showTab('chat')">
+            <span class="material-symbols-outlined">mms</span> Prompt Assistant
+        </button>
+        <div class="combobox-wrapper">
     <div role="combobox" 
          aria-controls="model-listbox" 
          aria-expanded="false" 
@@ -3621,7 +3625,7 @@ camera_roll
         
           <div class="ar">
             <input type="radio" name="modelType" id="uncensored-flux-lora" value="uncensored-flux-lora">
-            <label for="uncensored-flux-lora"> ><span class="material-symbols-outlined">
+            <label for="uncensored-flux-lora"> <span class="material-symbols-outlined">
 local_fire_department
 </span><span>Realistic shot</span></label>
         </div>
@@ -3630,18 +3634,7 @@ local_fire_department
     </div>
                 </div>
     </div>
-</div>   
-               
-               
-               
-<div class="fila-inferior">
-    <div class="tabs">
-        <button type="button" class="tab-button active" onclick="showTab('prompt')">
-            <span class="material-symbols-outlined">edit_note</span>Prompt
-        </button>
-        <button type="button" class="tab-button" onclick="showTab('chat')">
-            <span class="material-symbols-outlined">mms</span> Prompt Assistant
-        </button>
+</div>  
     </div>
     
     <div id="prompt" class="tab-content active">

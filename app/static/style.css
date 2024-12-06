@@ -4939,13 +4939,12 @@ html {
 }
 
 .combobox-button {
-    display: flex;
+  display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     padding: 10px 15px;
-    background: white;
-    border: 1px solid #ddd;
+    border: 1px solid var(--bunker-600);
     border-radius: 6px;
     cursor: pointer;
     transition: border-color 0.2s;
