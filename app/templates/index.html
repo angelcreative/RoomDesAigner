@@ -3534,7 +3534,26 @@ phone_iphone
            <footer class="footer" id="footer">
     <div class="toggleButton" id="toggleButton">–</div>
     
-    <div class="aspectRatioShot">
+  <div class="combobox-wrapper">
+    <div role="combobox" 
+         aria-controls="model-listbox" 
+         aria-expanded="false" 
+         aria-haspopup="listbox" 
+         aria-labelledby="model-label" 
+         class="combobox-button">
+        <span id="model-label" class="selected-text">
+            <span class="material-symbols-outlined">design_services</span>
+            <span>Standard</span>
+        </span>
+        <span class="material-symbols-outlined arrow">expand_more</span>
+    </div>
+    
+    <div id="model-listbox" 
+         role="listbox" 
+         aria-labelledby="model-label" 
+         class="combobox-popup">
+        <div class="aspectRatioShot">
+<div class="aspectRatioShot">
         
          <div class="ar">
             <input type="radio" name="modelType" id="speed" value="flux"  checked="">
@@ -3618,7 +3637,9 @@ local_fire_department
         
        
     </div>
-               
+                </div>
+    </div>
+</div>      
 <div class="fila-inferior">
     <div class="tabs">
         <button type="button" class="tab-button active" onclick="showTab('prompt')">
@@ -3891,7 +3912,70 @@ function hideToast() {
 }
 </script>
  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const combobox = document.querySelector('[role="combobox"]');
+    const popup = document.getElementById('model-listbox');
+    const selectedText = document.querySelector('.selected-text');
+    const options = document.querySelectorAll('.ar input[type="radio"]');
+
+    // Función para actualizar la opción seleccionada
+    function updateSelectedOption(input) {
+        const label = input.nextElementSibling;
+        const icon = label.querySelector('.material-symbols-outlined').textContent;
+        selectedText.innerHTML = `
+            <span class="material-symbols-outlined">${icon}</span>
+            <span>${input.id}</span>
+        `;
+    }
+
+    // Inicializar con la opción seleccionada
+    const initialSelected = document.querySelector('input[type="radio"]:checked');
+    if (initialSelected) {
+        updateSelectedOption(initialSelected);
+    }
+
+    // Toggle combobox
+    combobox.addEventListener('click', () => {
+        const isExpanded = combobox.getAttribute('aria-expanded') === 'true';
+        combobox.setAttribute('aria-expanded', !isExpanded);
+        popup.classList.toggle('show');
+    });
+
+    // Manejar selección de opciones
+    options.forEach(option => {
+        option.addEventListener('change', function() {
+            updateSelectedOption(this);
+            combobox.setAttribute('aria-expanded', 'false');
+            popup.classList.remove('show');
+        });
+    });
+        
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!combobox.contains(e.target) && !popup.contains(e.target)) {
+            combobox.setAttribute('aria-expanded', 'false');
+            popup.classList.remove('show');
+        }
+    });
+
+    // Manejo de teclado
+    combobox.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            combobox.setAttribute('aria-expanded', 'false');
+            popup.classList.remove('show');
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+            const isExpanded = combobox.getAttribute('aria-expanded') === 'true';
+            combobox.setAttribute('aria-expanded', !isExpanded);
+            popup.classList.toggle('show');
+        }
+    });
+});        
     
+    
+    </script>  
 </body>
 
 </html>

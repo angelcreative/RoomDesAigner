@@ -4882,25 +4882,16 @@ html {
 	background: #000;
 }
 
-
-animation: shapeColorShift 5s infinite;
-    filter: blur(12px);
-    background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #00000000, #00000000, #08AEEA);
-    background-size: 500% 800%;
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
-
 /* Orb*/
 .orb {
 	@include dimensions($width: 180px);
-	animation: shapeColorShift 5s infinite;
-    filter: blur(12px);
-    background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #00000000, #00000000, #08AEEA);
-    background-size: 500% 800%;
-    border-radius: 50%;
-    height: 100px;
-    width: 100px;
+	animation: shapeColorShift 10s infinite;
+	filter: blur(12px);
+	background: linear-gradient(-45deg, #08AEEA, #2AF598, #2AF598, #0086ff, #27b2ff, #000, #000000, #08AEEA);
+	background-size: 500% 800%;
+	border-radius: 50%; /* Hacemos que sea siempre un círculo*/
+	height: 100px;
+	width: 100px;
 
 	/*Orb's Shadow*/
 	&:
@@ -4939,6 +4930,68 @@ animation: shapeColorShift 5s infinite;
 		transform: rotate(1turn);
 	}
 }
+
+
+.combobox-wrapper {
+    position: relative;
+    width: 300px;
+}
+
+.combobox-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.combobox-button:hover {
+    border-color: #999;
+}
+
+.combobox-button[aria-expanded="true"] {
+    border-color: #666;
+}
+
+.selected-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.arrow {
+    transition: transform 0.2s;
+}
+
+.combobox-button[aria-expanded="true"] .arrow {
+    transform: rotate(180deg);
+}
+
+.combobox-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    margin-top: 4px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.combobox-popup.show {
+    display: block;
+}
+
 
 
 #generatingDialogContainer {
