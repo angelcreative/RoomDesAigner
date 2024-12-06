@@ -3360,7 +3360,7 @@ option[title]:hover:after {
     text-align: left;
     font-size: var(--xs);
     width: auto;
-    display:block;
+    display:block !important;
 }
 
 .hexDot {
