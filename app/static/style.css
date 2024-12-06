@@ -3338,11 +3338,6 @@ option[title]:hover:after {
        z-index: 9;
        font-size: var(--xs);
        padding-bottom: var(--2xl);
-       background: #000;
-       position: absolute;
-       top: 60px;
-       padding: 12px;
-       border-radius: 8px;
 }
 
 .chipSV {
