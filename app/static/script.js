@@ -1084,21 +1084,7 @@ function openPhotopeaWithImage(imageUrl) {
 
 
 
-    
-    
-    // Function to toggle the visibility of the prompt details
-function toggleContent() {
-  const contentDiv = document.querySelector(".toggle-content");
-  if (contentDiv) {
-    if (contentDiv.style.display === "" || contentDiv.style.display === "") {
-      contentDiv.style.display = "block";
-    } else {
-      contentDiv.style.display = "";
-    }
-  } else {
-    console.error("Toggle content div not found.");
-  }
-}
+  
 
     
 
