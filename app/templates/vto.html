@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <!-- icons for mobile -->
+   
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- //end icons for mobile -->
+            <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
+
+    <title>Virtual try on - App ADEM</title>
+  
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+   <style>
+        body {overflow: auto}
+        
+        div#result {
+    color: var(--bunker-50);
+    max-width: 400px;
+}
+
+h3 {
+    color: var(--bunker-50);
+}
+
+        textarea {
+    cursor: default;
+    color: var(--bunker-50);
+    font-size: 14px;
+    border: none;
+    min-height: 200px;
+    display: block;
+    width: 100%;
+}
+        
+ .uploaders {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+}
+      div#colorExtractionImage {
+  width: 100%;
+}  
+        
+        .leftF {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 80%;
+    margin: 0 auto;
+}
+        
+div#result {
+    color: var(--bunker-700);
+    width: 400px;
+    background: var(--bunker-900);
+    overflow: hidden;
+    display: flex;
+    border-radius: 12px;
+    min-height: 516px;
+    justify-content: center;
+    align-items: center;
+}
+
+div#result > img {
+    border-radius: 12px;
+}
+        
+    form#virtualTryOnForm {
+    width: 40%;
+}    
+        
+        .preset-images {
+    margin-bottom: 20px;
+}
+
+.image-radio-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.image-radio {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.image-radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+.image-radio img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.image-radio input:checked + img {
+    border-color: var(--bunker-50);
+    box-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+    </style>
+</head>
+<body style="overflow: auto">
+    <header class="top-bar ignore">
+                  <div> 
+        <div class="usernameCredits"><span class="username"><span class="material-symbols-outlined">
+identity_platform
+</span>angelcreative</span><span class="creditsCoin" id="creditDisplay">3715</span></div>
+        
+       
+    </div>
+              <div class="logo">
+                     <h1><img src="static/img/adem-img/logo_full_02.svg"></h1>
+                     <div class="orb"></div>
+</div>
+ 
+                 <div class="user-profile"> <div class="logout">
+        <div class="rightOff">
+            
+            <button class="menu-button" id="menuButton" style="display:none">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+            <button type="button" style="display:none" class="gradient-animation" onclick="window.open('https://roomdesaigner.onrender.com/upgrade', '_blank')">Upgrade Account</button>
+
+
+            
+            <a href="/logout">
+            <span class="material-symbols-outlined" translate="no">
+logout
+</span>
+        </a></div>
+       
+      
+    </div></div>
+             </header>
+    
+    <div class="vto-root" style="width: auto;
+    margin: 80px auto 0 auto;
+    text-align: left;">
+        <div class="leftF">
+  <form id="virtualTryOnForm">
+    <h2>Virtual Try-On</h2>
+      
+      
+<div class="uploaders">
+    
+
+    <!-- Sección para la ropa (presets o carga) -->
+    <div id="colorExtractionImage">
+        
+        <label class="imageup" for="clothImage">
+            Upload the cloth image <span class="material-symbols-outlined">apparel</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="clothImage">
+        </label>
+        <div class="preset-images">
+            <h4>Selecciona una prenda o sube la tuya</h4>
+            <div class="image-radio-group">
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/DRxvw96/xmas-01.png">
+                    <img src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/YXRVD0v/xmas-02.png">
+                    <img src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/kHQhB0h/xmas-03.png">
+                    <img src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
+                </label>
+                <label class="image-radio">
+                    <input type="radio" name="preset-cloth" value="https://i.ibb.co/TrQSMw7/xmas-04.png">
+                    <img src="https://i.ibb.co/TrQSMw7/xmas-04.png" alt="Prenda 4">
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <!-- Sección para la imagen del modelo -->
+    <div id="colorExtractionImage">
+        <label class="imageup" for="modelImage">
+            Upload the model image <span class="material-symbols-outlined">accessibility_new</span>
+            <small>Use a good resolution image</small>
+            <input type="file" accept="image/*" id="modelImage" required>
+        </label>
+    </div>
+      
+<!-- Contenedor para los thumbnails -->
+<div id="thumbnails" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;"></div>
+      
+      
+    <fieldset style="display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: flex-start;">
+      <legend style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Cloth Type:</legend>
+      <div class="ar">
+  <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
+  <label for="upper_body">Upper body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="lower_body" name="clothType" value="lower_body" required>
+  <label for="lower_body">Lower body</label>
+</div>
+<div class="ar">
+  <input type="radio" id="dresses" name="clothType" value="dresses" required>
+  <label for="dresses">Dress</label>
+</div>
+
+    </fieldset>
+
+    <label for="prompt" style="    color: var(--bunker-50);
+    margin: var(--2xl) 0 var(--2xs) 0;
+    display: block;">Prompt:</label>
+    <textarea style="position: static" id="prompt" placeholder="Describe the cloth in a simple way, don't make it complicated. It's just a guide to help the engine." required></textarea>
+
+    <button type="submit">Generate</button>
+  </form>
+              <div id="result"></div>
+    </div>
+        </div>
+ 
+
+  <!-- Div para mostrar el resultado -->
+
+
+<script>
+    
+    
+// Event listener para enviar el formulario
+document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  console.log("Formulario enviado");
+
+  const modelImageFile = document.getElementById("modelImage").files[0];
+  const clothImageInput = document.getElementById("clothImage");
+  const clothType = document.querySelector('input[name="clothType"]:checked')?.value;
+  const prompt = document.getElementById("prompt").value.trim();
+  const resultDiv = document.getElementById("result");
+  const selectedPreset = document.querySelector('input[name="preset-cloth"]:checked');
+  
+  let clothImageUrl;
+
+  // Verificar modelo y prompt
+  if (!modelImageFile || !clothType || !prompt) {
+    alert("Model image, cloth type and prompt are required!");
+    return;
+  }
+
+  try {
+    // Mostrar mensaje de carga
+    resultDiv.innerHTML = "<p>Processing your image... Please wait.</p>";
+
+    // Subir imagen del modelo a ImgBB
+    console.log("Subiendo imagen del modelo a ImgBB...");
+    const modelImageUrl = await uploadToImgBB(modelImageFile);
+    console.log("Imagen del modelo subida correctamente:", modelImageUrl);
+
+    // Determinar la URL de la prenda
+    if (clothImageInput.files.length > 0) {
+      // Si hay una imagen subida, usarla
+      clothImageUrl = await uploadToImgBB(clothImageInput.files[0]);
+    } else if (selectedPreset) {
+      // Si hay una preset seleccionada, usar su URL
+      clothImageUrl = selectedPreset.value;
+    } else {
+      alert("Please select a cloth image or upload one!");
+      return;
+    }
+
+    console.log("Imagen de la prenda lista:", clothImageUrl);
+
+    // Crear el payload para el backend
+    const requestBody = {
+      init_image: modelImageUrl,
+      cloth_image: clothImageUrl,
+      cloth_type: clothType,
+      prompt,
+      negative_prompt: "low quality, unrealistic",
+      guidance_scale: 15,
+      num_inference_steps: 21,
+    };
+
+    console.log("Enviando solicitud al backend con payload:", requestBody);
+
+    // Enviar al backend
+    const response = await fetch("/api/virtual-try-on", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to contact the backend.");
+    }
+
+    const data = await response.json();
+    console.log("Respuesta del backend recibida:", data);
+
+    if (data.status === "processing" && data.fetch_result) {
+      console.log("Iniciando polling para verificar el estado...");
+      pollForResult(data.fetch_result);
+    } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      console.log("Imagen generada correctamente:", data.proxy_links[0]);
+      showGeneratedImage(data.proxy_links[0]);
+    } else {
+      throw new Error("Failed to generate the try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error en virtual try-on:", error);
+    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+});
+    
+    
+// Agregar event listener para las imágenes preset
+document.querySelectorAll('input[name="preset-cloth"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (this.checked) {
+            // Actualizar el thumbnail cuando se selecciona una preset
+            const thumbnailsDiv = document.getElementById("thumbnails");
+            const imgSrc = this.nextElementSibling.src;
+            
+            let existingThumbnail = document.querySelector('#thumbnails .thumbnail-cloth');
+            if (existingThumbnail) {
+                existingThumbnail.innerHTML = `
+                    <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                    <p>Cloth Image</p>
+                `;
+            } else {
+                const thumbnailHtml = `
+                    <div class="thumbnail-cloth" style="display: inline-block; margin: 10px; text-align: center;">
+                        <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                        <p>Cloth Image</p>
+                    </div>
+                `;
+                thumbnailsDiv.innerHTML += thumbnailHtml;
+            }
+            
+            // Limpiar el input de archivo
+            document.getElementById("clothImage").value = '';
+        }
+    });
+});
+
+
+// Función para mostrar la vista previa de una imagen seleccionada
+function previewImage(file, type) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const thumbnailsDiv = document.getElementById("thumbnails");
+    
+    // Buscar el contenedor existente para el tipo de imagen
+    let existingThumbnail = document.querySelector(`#thumbnails .thumbnail-${type}`);
+    
+    // Si ya existe una miniatura para este tipo, reemplazarla
+    if (existingThumbnail) {
+      existingThumbnail.innerHTML = `
+        <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+        <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+      `;
+    } else {
+      // Si no existe, crear un nuevo contenedor
+      const thumbnailHtml = `
+        <div class="thumbnail-${type}" style="display: inline-block; margin: 10px; text-align: center;">
+          <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+          <p>${type === "model" ? "Model Image" : "Cloth Image"}</p>
+        </div>
+      `;
+      thumbnailsDiv.innerHTML += thumbnailHtml;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// Event listeners para generar vistas previas cuando el usuario selecciona imágenes
+document.getElementById("modelImage").addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    previewImage(file, "model");
+  }
+});
+
+document.getElementById("clothImage").addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    previewImage(file, "cloth");
+  }
+});
+
+    
+    
+// Función para realizar polling en fetch_result hasta que la imagen esté lista
+async function pollForResult(fetchUrl) {
+  const resultDiv = document.getElementById("result");
+
+  try {
+    // Configurar el cuerpo de la solicitud para el endpoint de fetch
+    const requestBody = {
+      key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw", // Clave de ModelsLab
+    };
+
+    const response = await fetch(fetchUrl, {
+      method: "POST", // Cambiar de GET a POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody), // Asegurar que se envíe un cuerpo, aunque sea vacío
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error while fetching result: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      showGeneratedImage(data.proxy_links[0]); // Mostrar la imagen generada
+    } else if (data.status === "processing") {
+      // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
+      setTimeout(() => pollForResult(fetchUrl), 5000);
+    } else {
+      throw new Error("Failed to fetch the completed try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error while polling for result:", error);
+    resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
+  }
+}
+
+
+// Función para mostrar la imagen generada
+function showGeneratedImage(imageUrl) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `
+   
+    <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; height: auto;">
+  `;
+}
+
+// Función para subir una imagen a ImgBB
+async function uploadToImgBB(file) {
+  const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Reemplaza con tu clave de ImgBB
+  const uploadUrl = "https://api.imgbb.com/1/upload";
+  const formData = new FormData();
+  formData.append("key", apiKey);
+  formData.append("image", file);
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload the image to ImgBB.");
+  }
+
+  const data = await response.json();
+
+  if (data.success) {
+    return data.data.url;
+  } else {
+    throw new Error("Error uploading image to ImgBB");
+  }
+}
+    
+    
+</script>
+</body>
+</html>
+
+
+
+ <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
