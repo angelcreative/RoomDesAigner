@@ -896,9 +896,9 @@ def xmas_page():
 
 
 # Ruta para servir la página HTML
-@app.route('/virtual-try-on')
+@app.route('/xmas')
 def virtual_try_on_page():
-    return render_template('virtual-try-on.html')
+    return render_template('xmas.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
 def virtual_try_on():
