@@ -897,11 +897,11 @@ def xmas_page():
 
 # Ruta para servir la página HTML
 @app.route('/xmas')
-def virtual_try_on_page():
+def xmas_page():
     return render_template('xmas.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
-def virtual_try_on():
+def xmas():
     try:
         data = request.json
 
@@ -926,17 +926,17 @@ def virtual_try_on():
     
     # Ruta para servir la página HTML
 @app.route('/vto')
-def xmas_page():
+def vto_page():
     return render_template('vto.html')
 
 
 # Ruta para servir la página HTML
 @app.route('/vto')
-def virtual_try_on_page():
+def vto_page():
     return render_template('vto.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
-def virtual_try_on():
+def vto():
     try:
         data = request.json
 
