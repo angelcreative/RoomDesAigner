@@ -888,11 +888,6 @@ def proxy_fetch_with_propagation_check(fetch_id):
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 
-    
-# Ruta para servir la página HTML
-@app.route('/xmas')
-def xmas_page():
-    return render_template('xmas.html')
 
 
 # Ruta para servir la página HTML
