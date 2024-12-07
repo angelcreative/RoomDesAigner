@@ -919,10 +919,6 @@ def xmas():
 
 
     
-    # Ruta para servir la página HTML
-@app.route('/vto')
-def vto_page():
-    return render_template('vto.html')
 
 
 # Ruta para servir la página HTML
