@@ -656,21 +656,22 @@ async function generateImages(imageUrl, selectedValues, isImg2Img) {
 let width, height;
 
 if (aspectRatio === "square") {
-    width = 1200; // Relación 1:1
-    height = 1200;
+    width = 1024; // Relación 1:1
+    height = 1024;
 } else if (aspectRatio === "widescreen") {
-    width = 1440; // Relación 19:6
-    height = 456;
+    width = 1440; // Relación 19:6, ajustada a múltiplos de 8
+    height = 456; // Múltiplo de 8
 } else if (aspectRatio === "landscape") {
-    width = 1200; // Relación 3:2
-    height = 800;
+    width = 1024; // Relación 3:2, ajustada a múltiplos de 8
+    height = 768; // Múltiplo de 8
 } else if (aspectRatio === "portrait") {
-    width = 800; // Relación 2:3
-    height = 1200;
+    width = 768; // Relación 2:3, ajustada a múltiplos de 8
+    height = 1024; // Múltiplo de 8
 } else if (aspectRatio === "social-vertical") {
-    width = 800; // Relación 9:16
-    height = 1440;
+    width = 800; // Relación 9:16, ajustada a múltiplos de 8
+    height = 1440; // Múltiplo de 8
 }
+
 
 console.log(`Width: ${width}, Height: ${height}`);
 
