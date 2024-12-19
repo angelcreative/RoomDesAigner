@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" class="gradient-background">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" href="https://cdn.prod.website-files.com/61a61781d327712f7cb32e56/61d42349bb7cd04187bec6a6_favicon.png" type="image/svg+xml">
+  <title>AUDIENSE - Holidays Sweater</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: transparent;
+      overflow: auto;
+    }
+    .top-bar {
+      background-color: #f8fafc;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .logo img {
+      height: 40px;
+    }
+    .uploaders label {
+      display: block;
+    background-color: #e2e8f0;
+    padding: 40px 10px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: 1px dashed #bdc5d5;
+    }
+    .uploaders label:hover {
+      background-color: #cbd5e1;
+    }
+    .uploaders input[type="file"] {
+      display: none;
+    }
+    .image-radio img {
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    .image-radio input:checked + img {
+      transform: scale(1.05);
+      border: 2px solid #38bdf8;
+    }
+    #result {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+  
+      
+      
+      button[type=submit] {
+    background: #1f1f1f;
+    padding: 12px 0;
+    color: #fff;
+          border-radius: 12px;
+}
+
+
+button[type=submit]:hover {
+    background: #1f1f1fe0;
+    padding: 12px 0;
+    color: #fff;
+}
+
+button[type=submit]:active {
+    background: #000;
+    padding: 12px 0;
+    color: #fff;
+}
+      
+      .leftF {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-end;
+}
+      
+      .imageup {
+    @apply flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg 
+    bg-white hover:bg-gray-50 transition-all cursor-pointer;
+}
+
+.imageup span {
+    @apply text-3xl text-gray-400 mb-2;
+}
+
+.imageup small {
+    @apply text-gray-500 mt-2;
+}
+      
+      form#virtualTryOnForm {
+    text-align: center;
+}
+      
+      
+.carousel {
+    @apply relative overflow-hidden w-full;
+    padding: 1rem 0;
+    background:#000;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 16px;
+    width: max-content; /* Importante para el scroll suave */
+}
+
+.carousel-track {
+    animation: scroll 40s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Ajustado para scroll suave */
+    }
+}
+
+/* Modificar el contenido del carrusel para duplicar las imágenes */
+.carousel-content {
+    display: flex;
+    gap: 16px;
+}
+
+/* Efecto de hover más suave */
+.carousel-track img {
+    @apply w-32 h-32 object-cover rounded-lg cursor-pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.carousel-track img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.overflow-hidden {
+    overflow: auto !important;
+}
+
+      
+    .howTo {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    gap: 9px;
+    align-items: center;
+        margin-bottom: 60px;
+}
+
+.stepHT img {
+    max-width: 120px;
+    height: auto;
+}
+
+.stepHT {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.howTo span {
+    margin: 0;
+    line-height: 0;
+    color: gray;
+}  
+
+      
+      .gradient-background {
+  background: linear-gradient(300deg,#e5f6de,#f6f2de,#f6dede);
+  background-size: 180% 180%;
+  animation: gradient-animation 3s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+      
+  </style>
+</head>
+<body>
+  <header class="top-bar flex justify-between items-center">
+   <div class="logo" style="
+    margin: 0 auto;
+">
+      <h1 style="
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+"><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/audiense-2.png" alt="Logo"><img src="https://369237.fs1.hubspotusercontent-na1.net/hubfs/369237/Santa%20claus-bro.svg" style="
+    height: 70px;
+"></h1>
+    </div>
+    <div style="display: none" class="user-profile flex items-center">
+      <span class="material-symbols-outlined">identity_platform</span>
+      <span class="ml-2">angelcreative</span>
+      <span class="ml-4 material-symbols-outlined">logout</span>
+    </div>
+  </header>
+
+  <div class="vto-root mt-20 mx-auto text-left max-w-4xl" style="margin-top:50px">
+    <div class="leftF flex flex-col items-center">
+      <form id="virtualTryOnForm" class="w-full max-w-2xl">
+        <h2 class="text-2xl font-semibold mb-4">🎅 Audiense Holidays Sweater Try-On
+</h2>
+        
+          <div class="howTo">
+<div class="stepHT">
+    <p><b>👕 Pick your sweater</b><br>
+</p>
+<img src="https://i.ibb.co/HrT78jf/steps-01.png">
+</div>
+    <span class="material-symbols-outlined">
+arrow_forward
+</span>
+    <div class="stepHT">
+<p><b>📸 Upload your photo</b>
+</p>
+<img src="https://i.ibb.co/QQJDLLV/steps-02.png">
+</div>
+    <span class="material-symbols-outlined">
+arrow_forward
+</span>
+    <div class="stepHT">
+<p><b>🎉 Transform your look!</b><br>
+
+
+</p>
+<img src="https://i.ibb.co/D9yfSWf/steps-03.png">
+</div>
+    
+
+
+
+
+</div>
+          
+        <div class=" mb-4">
+          <div id="colorExtractionImage" class="uploaders w-full">
+            <label for="clothImage" style="display: none" class="imageup">
+              Upload a nice sweater <span class="material-symbols-outlined">apparel</span>
+              <small class="block text-sm text-gray-500">Use a good resolution image, frontal shot</small>
+              <input type="file" accept="image/*" id="clothImage">
+            </label>
+            <div class="carousel-container mt-4">
+    <h4 class="text-lg font-medium mb-2 text-center">🎄 Choose from a variety of fun and festive designs!</h4>
+    <div class="carousel overflow-hidden relative border rounded-lg mx-auto">
+         <div class="carousel-track flex animate-scroll gap-4">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/DRxvw96/xmas-01.png" alt="Prenda 1">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/YXRVD0v/xmas-02.png" alt="Prenda 2">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/kHQhB0h/xmas-03.png" alt="Prenda 3">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/fpgsHf8/xmas-04.png" alt="Prenda 4">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/1fFBDnB/xmas-05.png" alt="Prenda 5">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/3psj9bg/xmas-06.png" alt="Prenda 6">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/T8JPSNw/xmas-07.png" alt="Prenda 7">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/cYTJzQr/xmas-08.png" alt="Prenda 8">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yQCQt16/xmas-09.png" alt="Prenda 9">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/KqZH6jc/xmas-10.png" alt="Prenda 10">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/R68Y4qL/xmas-11.png" alt="Prenda 11">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/VDBWQPw/xmas-12.png" alt="Prenda 12">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/LhsZbkJ/xmas-13.png" alt="Prenda 13">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/Wx2QQVW/xmas-14.png" alt="Prenda 14">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/gt3BxCj/xmas-15.png" alt="Prenda 15">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/68C2snV/xmas-sec-02.png" alt="Prenda 16">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/9wSBCnb/xmas-sec-03.png" alt="Prenda 17">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/r4zk3RD/xmas-sec-04.png" alt="Prenda 18">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ZzYKrQm/xmas-sec-05.png" alt="Prenda 19">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ZzNSmPK/xmas-sec-06.png" alt="Prenda 20">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/ydCG7qb/xmas-sec-07.png" alt="Prenda 21">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/PDBK4qD/xmas-sec-08.png" alt="Prenda 22">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/nmkc6st/xmas-sec-09.png" alt="Prenda 23">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/yq7Gn8d/xmas-sec-10.png" alt="Prenda 24">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/pPFF73S/xmas-sec-11.png" alt="Prenda 25">
+    <img class="w-32 h-auto rounded-lg" src="https://i.ibb.co/GMXxS7m/xmas-sec-12.png" alt="Prenda 26">
+</div>
+    </div>
+</div>
+
+          </div>
+        </div>
+
+        <div id="colorExtractionImage" class="uploaders w-full mb-4">
+          <label for="modelImage" class="imageup">🤳 Upload your picture
+            <small class="block text-sm text-gray-500">💡 Use a high-quality, frontal image with your arms visible.</small>
+            <input type="file" accept="image/*" id="modelImage" required>
+          </label>
+        </div>
+
+        <div id="thumbnails" class="flex gap-4 justify-center mb-4"></div>
+
+        <fieldset  style="display:none"  class="flex gap-4 mb-4 noType">
+          <legend class="text-lg font-medium mb-2">Cloth Type:</legend>
+          <div class="ar">
+            <input type="radio" id="upper_body" name="clothType" value="upper_body" required checked>
+            <label for="upper_body">Upper body</label>
+          </div>
+          <div class="ar">
+            <input type="radio" id="lower_body" name="clothType" value="lower_body" required>
+            <label for="lower_body">Lower body</label>
+          </div>
+          <div class="ar">
+            <input type="radio" id="dresses" name="clothType" value="dresses" required>
+            <label for="dresses">Dress</label>
+          </div>
+        </fieldset>
+
+        <label style="display:none" for="prompt" class="block text-lg font-medium mb-2">Prompt:</label>
+        <textarea  style="display:none"  id="prompt" class="w-full p-2 border border-gray-300 rounded mb-4" placeholder="Describe sweater in a simple way, don't make it complicated. It's just a guide to help the engine."></textarea>
+
+        <button type="submit" class="w-full">✨ Show me the magic!</button>
+          <small style="
+    opacity: .5;
+">Try one sweater at a time and wait for the result before selecting another. Patience brings the magic!</small>
+      </form>
+<div id="result" class="mt-8"><p>Made with ❤️ by the <a style="text-decoration:underline;" href="https://audiense.com" target="_blank">Audiense</a> Design Team</p></div>    </div>
+  </div>
+
+  <!-- Div para mostrar el resultado -->
+
+
+<script>
+    
+    
+// Event listener para enviar el formulario
+// Event listener para enviar el formulario
+document.getElementById("virtualTryOnForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  console.log("Formulario enviado");
+
+  const modelImageFile = document.getElementById("modelImage").files[0];
+  const clothImageInput = document.getElementById("clothImage");
+  const clothType = document.querySelector('input[name="clothType"]:checked')?.value;
+  const prompt = document.getElementById("prompt").value.trim();
+  const resultDiv = document.getElementById("result");
+  
+  let clothImageUrl;
+
+  // Verificar modelo y prompt
+ // if (!modelImageFile || !clothType || !prompt) {
+    //alert("Model image, cloth type and prompt are required!");
+    //return;
+  //}
+
+  try {
+    // Mostrar mensaje de carga
+    resultDiv.innerHTML = "<p>Processing your image... Please wait a couple of minutes.</p>";
+
+    // Subir imagen del modelo a ImgBB
+    console.log("Subiendo imagen del modelo a ImgBB...");
+    const modelImageUrl = await uploadToImgBB(modelImageFile);
+    console.log("Imagen del modelo subida correctamente:", modelImageUrl);
+
+    // Determinar la URL de la prenda
+    if (clothImageInput.files.length > 0) {
+      // Si hay una imagen subida, usarla
+      clothImageUrl = await uploadToImgBB(clothImageInput.files[0]);
+    } else if (window.selectedClothImage) {
+      // Usar la imagen seleccionada del carousel
+      clothImageUrl = window.selectedClothImage;
+    } else {
+      alert("Please select a cloth image or upload one!");
+      return;
+    }
+
+    console.log("Imagen de la prenda lista:", clothImageUrl);
+
+    // Crear el payload para el backend
+    const requestBody = {
+      init_image: modelImageUrl,
+      cloth_image: clothImageUrl,
+      cloth_type: clothType,
+      prompt: "a cozy xmas sweater",
+      negative_prompt: "low quality, unrealistic",
+      guidance_scale: 15,
+      num_inference_steps: 21,
+    };
+
+    console.log("Enviando solicitud al backend con payload:", requestBody);
+
+    // Enviar al backend
+    const response = await fetch("/api/virtual-try-on", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to contact the backend.");
+    }
+
+    const data = await response.json();
+    console.log("Respuesta del backend recibida:", data);
+
+    if (data.status === "processing" && data.fetch_result) {
+      console.log("Iniciando polling para verificar el estado...");
+      pollForResult(data.fetch_result);
+    } else if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      console.log("Imagen generada correctamente:", data.proxy_links[0]);
+      showGeneratedImage(data.proxy_links[0]);
+    } else {
+      throw new Error("Failed to generate the try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error en virtual try-on:", error);
+    resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+  }
+});
+    
+    
+// Agregar event listener para las imágenes preset
+document.querySelectorAll('input[name="preset-cloth"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        if (this.checked) {
+            // Actualizar el thumbnail cuando se selecciona una preset
+            const thumbnailsDiv = document.getElementById("thumbnails");
+            const imgSrc = this.nextElementSibling.src;
+            
+            let existingThumbnail = document.querySelector('#thumbnails .thumbnail-cloth');
+            if (existingThumbnail) {
+                existingThumbnail.innerHTML = `
+                    <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                    <p>Cloth Image</p>
+                `;
+            } else {
+                const thumbnailHtml = `
+                    <div class="thumbnail-cloth" style="display: inline-block; text-align: center;">
+                        <img src="${imgSrc}" alt="Cloth thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;">
+                        <p>Cloth Image</p>
+                    </div>
+                `;
+                thumbnailsDiv.innerHTML += thumbnailHtml;
+            }
+            
+            // Limpiar el input de archivo
+            document.getElementById("clothImage").value = '';
+        }
+    });
+});
+
+
+// Función para mostrar la vista previa de una imagen seleccionada
+function previewImage(file, type) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const thumbnailsDiv = document.getElementById("thumbnails");
+    
+    // Buscar el contenedor existente para el tipo de imagen
+    let existingThumbnail = document.querySelector(`#thumbnails .thumbnail-${type}`);
+    
+    // Si ya existe una miniatura para este tipo, reemplazarla
+    if (existingThumbnail) {
+      existingThumbnail.innerHTML = `
+<p  class="text-sm text-gray-600 mt-2">${type === "model" ? "Model Image" : "Cloth Image"}</p>
+        <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd; border-radius:12px;">
+        
+      `;
+    } else {
+      // Si no existe, crear un nuevo contenedor
+      const thumbnailHtml = `
+        <div class="thumbnail-${type}" style="display: inline-block; text-align: center;">
+<p  class="text-sm text-gray-600 mt-2">${type === "model" ? "Model Image" : "Cloth Image"}</p>
+          <img src="${e.target.result}" alt="${type} thumbnail" style="max-width: 150px; height: auto; border: 1px solid #ddd;  border-radius:12px;">
+          
+        </div>
+      `;
+      thumbnailsDiv.innerHTML += thumbnailHtml;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+// Event listeners para generar vistas previas cuando el usuario selecciona imágenes
+document.getElementById("modelImage").addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    previewImage(file, "model");
+  }
+});
+
+document.getElementById("clothImage").addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    previewImage(file, "cloth");
+  }
+});
+
+    
+    
+// Función para realizar polling en fetch_result hasta que la imagen esté lista
+async function pollForResult(fetchUrl) {
+  const resultDiv = document.getElementById("result");
+
+  try {
+    // Configurar el cuerpo de la solicitud para el endpoint de fetch
+    const requestBody = {
+      key: "X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw", // Clave de ModelsLab
+    };
+
+    const response = await fetch(fetchUrl, {
+      method: "POST", // Cambiar de GET a POST
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody), // Asegurar que se envíe un cuerpo, aunque sea vacío
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error while fetching result: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (data.status === "success" && data.proxy_links && data.proxy_links.length > 0) {
+      showGeneratedImage(data.proxy_links[0]); // Mostrar la imagen generada
+    } else if (data.status === "processing") {
+      // Si sigue procesando, esperar 5 segundos antes de intentarlo de nuevo
+      setTimeout(() => pollForResult(fetchUrl), 5000);
+    } else {
+      throw new Error("Failed to fetch the completed try-on image. Please check the API response.");
+    }
+  } catch (error) {
+    console.error("Error while polling for result:", error);
+    resultDiv.innerHTML = `<p>Error while processing: ${error.message}</p>`;
+  }
+}
+
+
+// Función para mostrar la imagen generada
+function showGeneratedImage(imageUrl) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `
+   
+    <img src="${imageUrl}" alt="Generated Image" style="max-width: 100%; height: auto;">
+  `;
+}
+
+// Función para subir una imagen a ImgBB
+async function uploadToImgBB(file) {
+  const apiKey = "ba238be3f3764905b1bba03fc7a22e28"; // Reemplaza con tu clave de ImgBB
+  const uploadUrl = "https://api.imgbb.com/1/upload";
+  const formData = new FormData();
+  formData.append("key", apiKey);
+  formData.append("image", file);
+
+  const response = await fetch(uploadUrl, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload the image to ImgBB.");
+  }
+
+  const data = await response.json();
+
+  if (data.success) {
+    return data.data.url;
+  } else {
+    throw new Error("Error uploading image to ImgBB");
+  }
+}
+    
+    
+document.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('.carousel');
+    const track = document.querySelector('.carousel-track');
+    
+    // Duplicar las imágenes originales para crear un loop continuo
+    const images = track.querySelectorAll('img');
+    images.forEach(img => {
+        const clone = img.cloneNode(true);
+        track.appendChild(clone);
+    });
+
+    // Calcular el ancho total para la animación
+    const updateTrackWidth = () => {
+        const imageWidth = images[0].offsetWidth;
+        const gap = 16;
+        const totalWidth = (imageWidth + gap) * images.length;
+        track.style.width = `${totalWidth * 2}px`;
+    };
+
+    // Actualizar el ancho inicial y en resize
+    updateTrackWidth();
+    window.addEventListener('resize', updateTrackWidth);
+
+    // Control de hover
+    carousel.addEventListener('mouseenter', () => {
+        track.style.animationPlayState = 'paused';
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+        track.style.animationPlayState = 'running';
+    });
+
+    // Manejar clicks en las imágenes (unificado)
+    track.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG') {
+            const clickedSrc = e.target.src;
+            
+            // Remover selección previa
+            track.querySelectorAll('img').forEach(img => {
+                img.classList.remove('selected');
+                if (img.src === clickedSrc) {
+                    img.classList.add('selected');
+                }
+            });
+
+            // Actualizar thumbnail y guardar selección
+            updateThumbnail(clickedSrc);
+            window.selectedClothImage = clickedSrc;
+            
+            // Limpiar el input de archivo
+            document.getElementById("clothImage").value = '';
+        }
+    });
+});
+ 
+ 
+// Función unificada para actualizar thumbnail
+function updateThumbnail(imgSrc) {
+    const thumbnailsDiv = document.getElementById("thumbnails");
+    const thumbnailHtml = `
+        <div class="thumbnail-cloth text-center">
+<p class="text-sm text-gray-600 mt-2">Selected sweater</p>
+            <img src="${imgSrc}" alt="Cloth thumbnail" class="max-w-[150px] h-auto border border-gray-200 rounded-lg">
+            
+        </div>
+    `;
+    
+    const existingThumbnail = thumbnailsDiv.querySelector('.thumbnail-cloth');
+    if (existingThumbnail) {
+        existingThumbnail.innerHTML = thumbnailHtml;
+    } else {
+        thumbnailsDiv.innerHTML = thumbnailHtml;
+    }
+}
+
+    
+</script>
+</body>
+</html>

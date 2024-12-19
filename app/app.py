@@ -888,6 +888,34 @@ def proxy_fetch_with_propagation_check(fetch_id):
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
 
+    
+# Ruta para servir la página HTML
+@app.route('/audiense-sweater')
+def xmas_page():
+    return render_template('audiense-sweater.html')
+
+@app.route('/api/virtual-try-on', methods=['POST'])
+def xmas():
+    try:
+        data = request.json
+
+        # Agregar la clave API de ModelsLab
+        data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
+
+        # Enviar solicitud a la API de ModelsLab
+        modelslab_url = 'https://modelslab.com/api/v6/image_editing/fashion'
+        response = requests.post(modelslab_url, json=data)
+
+        # Manejar la respuesta inicial
+        response_data = response.json()
+
+        if response.status_code == 200:
+            return jsonify(response_data), 200
+        else:
+            return jsonify({"error": response_data.get("error", "Unknown error")}), response.status_code
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500    
+    
 
 # Set upload folder
 UPLOAD_FOLDER = 'static/uploads/'
