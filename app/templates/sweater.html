@@ -347,8 +347,7 @@ arrow_forward
 <!-- Agregar en el div de resultado -->
 <div id="result" class="mt-8">
     <div id="loading" style="display: none;">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-        <p class="mt-2">Processing your image, it could take a couple of minutes to craft your sweater!...</p>
+       
     </div>
     <p>Made with ❤️ by the <a style="text-decoration:underline;" href="https://audiense.com" target="_blank">Audiense</a> Design Team</p>
 </div>    
@@ -379,9 +378,42 @@ document.getElementById("virtualTryOnForm").addEventListener("submit", async (ev
     //return;
   //}
 
-  try {
-    // Mostrar mensaje de carga
-    resultDiv.innerHTML = "<p>Processing your image... Please wait a couple of minutes.</p>";
+ try {
+    // Estilos para el loader
+    const styles = `
+      <style>
+        .loading-dots:after {
+          content: '.';
+          animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+          0%, 20% { content: '.'; }
+          40% { content: '..'; }
+          60% { content: '...'; }
+          80%, 100% { content: ''; }
+        }
+        
+        .processing-container {
+          background: #f8f8f8;
+          border-radius: 12px;
+          padding: 2rem;
+          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+      </style>
+    `;
+
+    // Mostrar mensaje de carga con loader
+    resultDiv.innerHTML = `
+      ${styles}
+      <div class="processing-container">
+        <div class="flex flex-col items-center gap-4">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-[#1f1f1f]"></div>
+          <p class="text-lg font-medium loading-dots">Processing your image</p>
+          <small class="text-gray-500">This might take a couple of minutes</small>
+        </div>
+      </div>
+    `;
 
     // Subir imagen del modelo a ImgBB
     console.log("Subiendo imagen del modelo a ImgBB...");
