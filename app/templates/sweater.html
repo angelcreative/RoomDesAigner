@@ -113,10 +113,11 @@ button[type=submit]:active {
     width: max-content; /* Importante para el scroll suave */
 }
 
-.carousel-track {
-    animation: scroll 40s linear infinite;
-}
 
+.carousel-track {
+    animation: scroll 60s linear infinite; /* Aumentado de 40s a 60s para movimiento más suave */
+}      
+      
 @keyframes scroll {
     0% {
         transform: translateX(0);
@@ -337,8 +338,20 @@ arrow_forward
     opacity: .5;
 ">Try one sweater at a time and wait for the result before selecting another. Patience brings the magic!</small>
       </form>
-<div id="result" class="mt-8"><p>Made with ❤️ by the <a style="text-decoration:underline;" href="https://audiense.com" target="_blank">Audiense</a> Design Team</p></div>    </div>
-  </div>
+        
+        
+
+    
+    
+    
+<!-- Agregar en el div de resultado -->
+<div id="result" class="mt-8">
+    <div id="loading" style="display: none;">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        <p class="mt-2">Procesando tu imagen...</p>
+    </div>
+    <p>Made with ❤️ by the <a style="text-decoration:underline;" href="https://audiense.com" target="_blank">Audiense</a> Design Team</p>
+</div>    
 
   <!-- Div para mostrar el resultado -->
 

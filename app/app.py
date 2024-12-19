@@ -889,7 +889,6 @@ def proxy_fetch_with_propagation_check(fetch_id):
 
 
     
-# Ruta para servir la página HTML
 @app.route('/sweater')
 def sweater_page():
     return render_template('sweater.html')
@@ -897,24 +896,37 @@ def sweater_page():
 @app.route('/api/virtual-try-on', methods=['POST'])
 def sweater():
     try:
+        # Verificar que se recibieron datos JSON
+        if not request.is_json:
+            return jsonify({"error": "Se requiere contenido JSON"}), 400
+
         data = request.json
+        
+        # Validar datos requeridos
+        if not data.get('init_image') or not data.get('cloth_image'):
+            return jsonify({"error": "Se requieren imágenes de inicio y de ropa"}), 400
 
         # Agregar la clave API de ModelsLab
         data['key'] = 'X0qYOcbNktuRv1ri0A8VK1WagXs9vNjpEBLfO8SnRRQhN0iWym8pOrH1dOMw'
 
-        # Enviar solicitud a la API de ModelsLab
+        # Enviar solicitud a la API de ModelsLab con timeout
         modelslab_url = 'https://modelslab.com/api/v6/image_editing/fashion'
-        response = requests.post(modelslab_url, json=data)
+        response = requests.post(modelslab_url, json=data, timeout=30)
 
-        # Manejar la respuesta inicial
         response_data = response.json()
 
         if response.status_code == 200:
             return jsonify(response_data), 200
         else:
-            return jsonify({"error": response_data.get("error", "Unknown error")}), response.status_code
+            return jsonify({
+                "error": response_data.get("error", "Error desconocido"),
+                "status_code": response.status_code
+            }), response.status_code
+
+    except requests.Timeout:
+        return jsonify({"error": "Tiempo de espera agotado"}), 504
     except Exception as e:
-        return jsonify({"error": str(e)}), 500    
+        return jsonify({"error": str(e)}), 500  
     
 
 # Set upload folder
