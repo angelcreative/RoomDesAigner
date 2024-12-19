@@ -890,12 +890,12 @@ def proxy_fetch_with_propagation_check(fetch_id):
 
     
 # Ruta para servir la página HTML
-@app.route('/audiense-sweater')
-def audiense-sweater_page():
-    return render_template('audiense-sweater.html')
+@app.route('/sweater')
+def sweater_page():
+    return render_template('sweater.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
-def audiense-sweater():
+def sweater():
     try:
         data = request.json
 
