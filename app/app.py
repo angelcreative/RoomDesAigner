@@ -891,11 +891,11 @@ def proxy_fetch_with_propagation_check(fetch_id):
     
 # Ruta para servir la página HTML
 @app.route('/audiense-sweater')
-def xmas_page():
+def audiense-sweater_page():
     return render_template('audiense-sweater.html')
 
 @app.route('/api/virtual-try-on', methods=['POST'])
-def xmas():
+def audiense-sweater():
     try:
         data = request.json
 
