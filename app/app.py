@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, Response, redirect, 
 from pydantic import BaseModel, Field
 from typing import Optional
 from flask_cors import CORS
+from functools import wraps
 import hmac
 import hashlib
 import requests
@@ -50,7 +51,25 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
+def retry_on_error(max_retries=10, delay=1):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            retries = 0
+            while retries < max_retries:
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    retries += 1
+                    if retries == max_retries:
+                        raise e
+                    time.sleep(delay)
+            return None
+        return wrapper
+    return decorator
+
 @app.route('/upscale', methods=['POST'])
+@retry_on_error(max_retries=10)
 def upscale_image():
     try:
         data = request.json
@@ -59,30 +78,15 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        # Configurar el modelo de upscaling
-        model = replicate.models.get("zsyoaoa/invsr")
+        version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
+        output = version.predict(image=image_url)
         
-        # Iniciar la predicción
-        prediction = model.predict(
-            image=image_url,
-            scale=4,  # Factor de escala (2x, 4x)
-            steps=20,  # Número de pasos de difusión
-            seed=42,   # Semilla para reproducibilidad
-            scheduler="ddim",  # Scheduler para el proceso de difusión
-            guidance_scale=7.5  # Escala de guía para el proceso
-        )
-
-        # Esperar y verificar el resultado
-        while prediction.status != "succeeded":
-            if prediction.status == "failed":
-                return jsonify({'error': 'Upscaling failed'}), 500
-            time.sleep(1)
-            prediction.reload()
-
-        # Devolver la URL de la imagen escalada
+        if not output:
+            raise Exception("No output received from model")
+            
         return jsonify({
             'status': 'success',
-            'upscaled_url': prediction.output
+            'upscaled_url': output
         })
 
     except Exception as e:
