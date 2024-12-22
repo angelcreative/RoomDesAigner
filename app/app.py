@@ -36,8 +36,9 @@ def image_proxy():
     except requests.exceptions.RequestException as e:
         return f"Error fetching image: {str(e)}", 500
     
+    
 logging.basicConfig(level=logging.INFO)
-
+logger = logging.getLogger(__name__)
 
 
 app.secret_key = os.environ.get('SECRET_KEY', 'S3cR#tK3y_2023$!')
@@ -51,25 +52,32 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
 os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
-def retry_on_error(max_retries=10, delay=1):
+def retry_with_backoff(max_retries=10, initial_delay=1, max_delay=10):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            delay = initial_delay
             retries = 0
+            
             while retries < max_retries:
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
                     retries += 1
                     if retries == max_retries:
+                        logger.error(f"Failed after {max_retries} attempts: {str(e)}")
                         raise e
+                    
+                    logger.warning(f"Attempt {retries} failed: {str(e)}")
                     time.sleep(delay)
+                    delay = min(delay * 2, max_delay)
+            
             return None
         return wrapper
     return decorator
 
 @app.route('/upscale', methods=['POST'])
-@retry_on_error(max_retries=10)
+@retry_with_backoff()
 def upscale_image():
     try:
         data = request.json
@@ -78,18 +86,40 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
-        output = version.predict(image=image_url)
+        logger.info(f"Starting upscale for image: {image_url}")
         
-        if not output:
-            raise Exception("No output received from model")
+        version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
+        prediction = version.predict(image=image_url)
+        
+        max_attempts = 30
+        attempt = 0
+        
+        while attempt < max_attempts:
+            if isinstance(prediction, str):
+                logger.info("Upscale completed successfully")
+                return jsonify({
+                    'status': 'success',
+                    'upscaled_url': prediction
+                })
+            elif isinstance(prediction, dict):
+                status = prediction.get('status')
+                logger.info(f"Prediction status: {status}")
+                
+                if status == 'succeeded':
+                    return jsonify({
+                        'status': 'success',
+                        'upscaled_url': prediction.get('output')
+                    })
+                elif status == 'failed':
+                    raise Exception(f"Prediction failed: {prediction.get('error')}")
             
-        return jsonify({
-            'status': 'success',
-            'upscaled_url': output
-        })
+            time.sleep(1)
+            attempt += 1
+            
+        raise Exception("Timeout waiting for prediction")
 
     except Exception as e:
+        logger.error(f"Error in upscale_image: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

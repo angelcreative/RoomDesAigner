@@ -1104,23 +1104,26 @@ class ImageUpscaler {
         this.apiEndpoint = apiEndpoint;
     }
 
-    async upscaleImage(imageUrl, progressCallback = null) {
+   async upscaleImage(imageUrl, progressCallback = null) {
         try {
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ image_url: imageUrl })
+                body: JSON.stringify({ 
+                    image_url: imageUrl
+                })
             });
 
             if (!response.ok) {
-                throw new Error('Upscaling request failed');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Upscaling request failed');
             }
 
             const data = await response.json();
             
-            if (data.status === 'success') {
+            if (data.status === 'success' && data.upscaled_url) {
                 return data.upscaled_url;
             } else {
                 throw new Error(data.error || 'Unknown error occurred');
@@ -1209,26 +1212,29 @@ downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span
         const upscaler = new ImageUpscaler();
 
         upscaleButton.addEventListener("click", async () => {
-            try {
-                upscaleButton.disabled = true;
-                const loader = createLoader(imageContainer);
-                
-                const upscaledUrl = await upscaler.upscaleImage(imageUrl);
-                image.src = upscaledUrl;
-                
-                // Actualizar el enlace de descarga con la nueva URL
-                downloadLink.href = upscaledUrl;
-                downloadLink.download = upscaledUrl.split('/').pop();
-                
-                showNotification("Image successfully upscaled!", "success");
-            } catch (error) {
-                console.error("Upscaling failed:", error);
-                showNotification("Failed to upscale image. Please try again.", "error");
-            } finally {
-                removeLoader(imageContainer);
-                upscaleButton.disabled = false;
-            }
-        });
+    try {
+        upscaleButton.disabled = true;
+        const loader = createLoader(imageContainer);
+        
+        const upscaler = new ImageUpscaler();
+        const upscaledUrl = await upscaler.upscaleImage(imageUrl);
+        
+        // Actualizar la imagen con la versión upscaled
+        image.src = upscaledUrl;
+        
+        // Actualizar el enlace de descarga
+        downloadLink.href = upscaledUrl;
+        downloadLink.download = upscaledUrl.split('/').pop();
+        
+        showNotification("Image successfully upscaled!", "success");
+    } catch (error) {
+        console.error("Upscaling failed:", error);
+        showNotification("Failed to upscale image. Please try again.", "error");
+    } finally {
+        removeLoader(imageContainer);
+        upscaleButton.disabled = false;
+    }
+});
     
     
 
