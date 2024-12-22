@@ -85,62 +85,33 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        # Obtener el modelo y crear la predicción
-        version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
+        # Crear la predicción usando el cliente de la API directamente
+        client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
-        # Iniciar la predicción
-        prediction = version.predict(image=image_url)
-        
-        # Esperar y verificar el resultado
-        max_attempts = 30
-        attempt = 0
-        
-        while attempt < max_attempts:
-            # Si la predicción es una URL directa
-            if isinstance(prediction, str):
-                return jsonify({
-                    'status': 'success',
-                    'upscaled_url': prediction
-                })
-            
-            # Si la predicción es un diccionario
-            if isinstance(prediction, dict):
-                # Si tenemos un output directo
-                if 'output' in prediction:
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': prediction['output']
-                    })
-                
-                # Si tenemos un ID de predicción, necesitamos consultar el estado
-                if 'id' in prediction:
-                    # Obtener el estado actual de la predicción
-                    prediction_status = replicate.predictions.get(prediction['id'])
-                    
-                    if prediction_status.status == 'succeeded':
-                        return jsonify({
-                            'status': 'success',
-                            'upscaled_url': prediction_status.output
-                        })
-                    elif prediction_status.status == 'failed':
-                        raise Exception(f"Prediction failed: {prediction_status.error}")
-            
-            # Esperar antes del siguiente intento
-            time.sleep(1)
-            attempt += 1
-        
-        raise Exception("Timeout waiting for prediction completion")
+        prediction = client.predictions.create(
+            model="nightmareai/real-esrgan",
+            version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+            input={"image": image_url}
+        )
+
+        # Esperar a que la predicción se complete
+        prediction = client.predictions.wait(prediction.id)
+
+        if prediction.status == 'succeeded':
+            return jsonify({
+                'status': 'success',
+                'upscaled_url': prediction.output
+            })
+        else:
+            raise Exception(f"Prediction failed with status: {prediction.status}")
 
     except Exception as e:
-        logger.error(f"Error in upscale_image: {str(e)}")
+        print(f"Error in upscale_image: {str(e)}")
         return jsonify({
             'status': 'error',
-            'error': str(e),
-            'details': {
-                'message': 'Failed to process upscale request',
-                'technical_details': str(e)
-            }
+            'error': str(e)
         }), 500
+    
     
 if __name__ == '__main__':
     app.run(debug=True)
