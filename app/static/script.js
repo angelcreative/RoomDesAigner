@@ -1118,18 +1118,15 @@ class ImageUpscaler {
 
             const data = await response.json();
 
-            if (!response.ok) {
-                throw new Error(data.error || data.details?.message || 'Upscaling request failed');
+            if (data.status === 'error') {
+                throw new Error(data.error || 'Upscaling failed');
             }
 
-            // Verificar si tenemos una URL válida en la respuesta
             if (data.status === 'success' && data.upscaled_url) {
                 return data.upscaled_url;
-            } else if (data.output && typeof data.output === 'string') {
-                return data.output;
-            } else {
-                throw new Error('No valid upscaled image URL in response');
             }
+
+            throw new Error('No valid upscaled image URL in response');
         } catch (error) {
             console.error('Upscaling error:', error);
             throw error;
@@ -1949,17 +1946,65 @@ closeFullscreen.addEventListener('click', () => {
 }
     
 
-   // Funciones auxiliares para el loader y notificaciones
+// En la función showModal, actualiza el loader para mostrar progreso:
 function createLoader(container) {
     const loader = document.createElement("div");
     loader.classList.add("loader");
     loader.innerHTML = `
         <div class="spinner"></div>
-        <p>Upscaling image...</p>
+        <p class="loader-text">Upscaling image... This may take a few moments.</p>
+        <div class="loader-progress">Please wait while we process your image</div>
     `;
     container.appendChild(loader);
     return loader;
 }
+
+// Actualizar el estilo del loader para mostrar mejor el progreso
+const styles = `
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 1000;
+}
+
+.loader-text {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.loader-progress {
+    font-size: 14px;
+    color: #aaa;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+`;
+
+// Agregar los estilos al documento
+const styleSheet = document.createElement("style");
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
 
 function removeLoader(container) {
     const loader = container.querySelector(".loader");

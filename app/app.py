@@ -85,38 +85,51 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        logger.info(f"Starting upscale for image: {image_url}")
-        
         # Obtener el modelo y crear la predicción
         version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
         
-        # Crear la predicción y esperar el resultado
+        # Iniciar la predicción
         prediction = version.predict(image=image_url)
         
-        # Si la predicción es exitosa y devuelve directamente la URL
-        if isinstance(prediction, str):
-            return jsonify({
-                'status': 'success',
-                'upscaled_url': prediction
-            })
+        # Esperar y verificar el resultado
+        max_attempts = 30
+        attempt = 0
         
-        # Si la predicción devuelve un objeto con la información completa
-        if isinstance(prediction, dict):
-            if prediction.get('status') == 'succeeded':
+        while attempt < max_attempts:
+            # Si la predicción es una URL directa
+            if isinstance(prediction, str):
                 return jsonify({
                     'status': 'success',
-                    'upscaled_url': prediction.get('output')
+                    'upscaled_url': prediction
                 })
-            elif prediction.get('output'):  # Si hay output directo en la respuesta
-                return jsonify({
-                    'status': 'success',
-                    'upscaled_url': prediction['output']
-                })
-            else:
-                raise Exception(f"Unexpected prediction response: {prediction}")
-
-        # Si llegamos aquí, algo salió mal
-        raise Exception("Failed to get upscaled image URL")
+            
+            # Si la predicción es un diccionario
+            if isinstance(prediction, dict):
+                # Si tenemos un output directo
+                if 'output' in prediction:
+                    return jsonify({
+                        'status': 'success',
+                        'upscaled_url': prediction['output']
+                    })
+                
+                # Si tenemos un ID de predicción, necesitamos consultar el estado
+                if 'id' in prediction:
+                    # Obtener el estado actual de la predicción
+                    prediction_status = replicate.predictions.get(prediction['id'])
+                    
+                    if prediction_status.status == 'succeeded':
+                        return jsonify({
+                            'status': 'success',
+                            'upscaled_url': prediction_status.output
+                        })
+                    elif prediction_status.status == 'failed':
+                        raise Exception(f"Prediction failed: {prediction_status.error}")
+            
+            # Esperar antes del siguiente intento
+            time.sleep(1)
+            attempt += 1
+        
+        raise Exception("Timeout waiting for prediction completion")
 
     except Exception as e:
         logger.error(f"Error in upscale_image: {str(e)}")
