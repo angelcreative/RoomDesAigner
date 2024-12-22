@@ -77,7 +77,6 @@ def retry_with_backoff(max_retries=10, initial_delay=1, max_delay=10):
     return decorator
 
 @app.route('/upscale', methods=['POST'])
-@retry_with_backoff()
 def upscale_image():
     try:
         data = request.json
@@ -88,40 +87,48 @@ def upscale_image():
 
         logger.info(f"Starting upscale for image: {image_url}")
         
+        # Obtener el modelo y crear la predicción
         version = replicate.models.get("nightmareai/real-esrgan").versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
+        
+        # Crear la predicción y esperar el resultado
         prediction = version.predict(image=image_url)
         
-        max_attempts = 30
-        attempt = 0
+        # Si la predicción es exitosa y devuelve directamente la URL
+        if isinstance(prediction, str):
+            return jsonify({
+                'status': 'success',
+                'upscaled_url': prediction
+            })
         
-        while attempt < max_attempts:
-            if isinstance(prediction, str):
-                logger.info("Upscale completed successfully")
+        # Si la predicción devuelve un objeto con la información completa
+        if isinstance(prediction, dict):
+            if prediction.get('status') == 'succeeded':
                 return jsonify({
                     'status': 'success',
-                    'upscaled_url': prediction
+                    'upscaled_url': prediction.get('output')
                 })
-            elif isinstance(prediction, dict):
-                status = prediction.get('status')
-                logger.info(f"Prediction status: {status}")
-                
-                if status == 'succeeded':
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': prediction.get('output')
-                    })
-                elif status == 'failed':
-                    raise Exception(f"Prediction failed: {prediction.get('error')}")
-            
-            time.sleep(1)
-            attempt += 1
-            
-        raise Exception("Timeout waiting for prediction")
+            elif prediction.get('output'):  # Si hay output directo en la respuesta
+                return jsonify({
+                    'status': 'success',
+                    'upscaled_url': prediction['output']
+                })
+            else:
+                raise Exception(f"Unexpected prediction response: {prediction}")
+
+        # Si llegamos aquí, algo salió mal
+        raise Exception("Failed to get upscaled image URL")
 
     except Exception as e:
         logger.error(f"Error in upscale_image: {str(e)}")
-        return jsonify({'error': str(e)}), 500
-
+        return jsonify({
+            'status': 'error',
+            'error': str(e),
+            'details': {
+                'message': 'Failed to process upscale request',
+                'technical_details': str(e)
+            }
+        }), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

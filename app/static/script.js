@@ -1104,7 +1104,7 @@ class ImageUpscaler {
         this.apiEndpoint = apiEndpoint;
     }
 
-   async upscaleImage(imageUrl, progressCallback = null) {
+    async upscaleImage(imageUrl, progressCallback = null) {
         try {
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
@@ -1116,25 +1116,26 @@ class ImageUpscaler {
                 })
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Upscaling request failed');
+                throw new Error(data.error || data.details?.message || 'Upscaling request failed');
             }
 
-            const data = await response.json();
-            
+            // Verificar si tenemos una URL válida en la respuesta
             if (data.status === 'success' && data.upscaled_url) {
                 return data.upscaled_url;
+            } else if (data.output && typeof data.output === 'string') {
+                return data.output;
             } else {
-                throw new Error(data.error || 'Unknown error occurred');
+                throw new Error('No valid upscaled image URL in response');
             }
         } catch (error) {
             console.error('Upscaling error:', error);
             throw error;
         }
     }
-}    
-
+}
 
 // Displays modal with generated images and associated action buttons
 function showModal(imageUrls, transformedPrompt) {
@@ -1207,11 +1208,14 @@ downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span
         const upscaleButton = document.createElement("button");
         upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
         upscaleButton.title = "Upscale Image";
-        
+        upscaleButton.classList.add('upscale-button'); // Añadir clase para estilos
+
         // Crear instancia del upscaler
         const upscaler = new ImageUpscaler();
 
-        upscaleButton.addEventListener("click", async () => {
+       upscaleButton.addEventListener("click", async () => {
+    if (upscaleButton.disabled) return;
+
     try {
         upscaleButton.disabled = true;
         const loader = createLoader(imageContainer);
@@ -1219,17 +1223,23 @@ downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span
         const upscaler = new ImageUpscaler();
         const upscaledUrl = await upscaler.upscaleImage(imageUrl);
         
+        if (!upscaledUrl) {
+            throw new Error('No upscaled URL received');
+        }
+
         // Actualizar la imagen con la versión upscaled
         image.src = upscaledUrl;
         
         // Actualizar el enlace de descarga
-        downloadLink.href = upscaledUrl;
-        downloadLink.download = upscaledUrl.split('/').pop();
+        if (downloadLink) {
+            downloadLink.href = upscaledUrl;
+            downloadLink.download = upscaledUrl.split('/').pop();
+        }
         
         showNotification("Image successfully upscaled!", "success");
     } catch (error) {
         console.error("Upscaling failed:", error);
-        showNotification("Failed to upscale image. Please try again.", "error");
+        showNotification(error.message || "Failed to upscale image. Please try again.", "error");
     } finally {
         removeLoader(imageContainer);
         upscaleButton.disabled = false;
