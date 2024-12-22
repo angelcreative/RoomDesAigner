@@ -88,14 +88,16 @@ def upscale_image():
         # Crear la predicción usando el cliente de la API directamente
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
+        # Crear la predicción con la versión específica
         prediction = client.predictions.create(
-            model="nightmareai/real-esrgan",
             version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
             input={"image": image_url}
         )
 
         # Esperar a que la predicción se complete
-        prediction = client.predictions.wait(prediction.id)
+        while prediction.status in ['starting', 'processing']:
+            prediction = client.predictions.get(prediction.id)
+            time.sleep(1)
 
         if prediction.status == 'succeeded':
             return jsonify({
