@@ -1098,7 +1098,39 @@ function toggleContent() {
   }
 }
 
-    
+// Añadir al inicio del archivo, junto con las otras clases
+class ImageUpscaler {
+    constructor(apiEndpoint = '/upscale') {
+        this.apiEndpoint = apiEndpoint;
+    }
+
+    async upscaleImage(imageUrl, progressCallback = null) {
+        try {
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_url: imageUrl })
+            });
+
+            if (!response.ok) {
+                throw new Error('Upscaling request failed');
+            }
+
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                return data.upscaled_url;
+            } else {
+                throw new Error(data.error || 'Unknown error occurred');
+            }
+        } catch (error) {
+            console.error('Upscaling error:', error);
+            throw error;
+        }
+    }
+}    
 
 
 // Displays modal with generated images and associated action buttons
@@ -1167,6 +1199,38 @@ downloadLink.target = "_blank"; // Asegura que siempre se abra en una nueva pest
 
 // Añadir el icono en lugar del texto "Download"
 downloadLink.innerHTML = '<span class="material-symbols-outlined">download</span>';
+    
+    // Añadir el botón de upscale
+        const upscaleButton = document.createElement("button");
+        upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+        upscaleButton.title = "Upscale Image";
+        
+        // Crear instancia del upscaler
+        const upscaler = new ImageUpscaler();
+
+        upscaleButton.addEventListener("click", async () => {
+            try {
+                upscaleButton.disabled = true;
+                const loader = createLoader(imageContainer);
+                
+                const upscaledUrl = await upscaler.upscaleImage(imageUrl);
+                image.src = upscaledUrl;
+                
+                // Actualizar el enlace de descarga con la nueva URL
+                downloadLink.href = upscaledUrl;
+                downloadLink.download = upscaledUrl.split('/').pop();
+                
+                showNotification("Image successfully upscaled!", "success");
+            } catch (error) {
+                console.error("Upscaling failed:", error);
+                showNotification("Failed to upscale image. Please try again.", "error");
+            } finally {
+                removeLoader(imageContainer);
+                upscaleButton.disabled = false;
+            }
+        });
+    
+    
 
 // Añadir la funcionalidad de descarga al hacer clic en el enlace
 downloadLink.addEventListener('click', (e) => {
@@ -1213,6 +1277,9 @@ copyPromptButton.onclick = () => copyTextToClipboard(transformedPrompt);
 
     // Añadir los botones a su contenedor
     [copyPromptButton].forEach(button => buttonsContainer.appendChild(button));
+    // Añadir los botones al contenedor en el orden deseado
+        buttonsContainer.appendChild(downloadLink);
+        buttonsContainer.appendChild(upscaleButton);
 
 
    
@@ -1616,6 +1683,8 @@ function applyFilterToMainImage(filterType, imageUrl, image) {
                 thumbnailImage.src = e.target.result;
                 thumbnailContainer.style.display = 'block';
 
+
+
                 // Generar los botones de filtros de Instagram y personalizados cuando se carga la imagen
                 const buttonsContainer = document.querySelector(".image-buttons"); // Ajusta el selector según tu código
                 generateInstagramFilterGrid(buttonsContainer, e.target.result, thumbnailImage);
@@ -1864,7 +1933,35 @@ closeFullscreen.addEventListener('click', () => {
 }
     
 
-    
+   // Funciones auxiliares para el loader y notificaciones
+function createLoader(container) {
+    const loader = document.createElement("div");
+    loader.classList.add("loader");
+    loader.innerHTML = `
+        <div class="spinner"></div>
+        <p>Upscaling image...</p>
+    `;
+    container.appendChild(loader);
+    return loader;
+}
+
+function removeLoader(container) {
+    const loader = container.querySelector(".loader");
+    if (loader) {
+        loader.remove();
+    }
+}
+
+function showNotification(message, type = "info") {
+    const notification = document.createElement("div");
+    notification.classList.add("notification", type);
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+} 
     
 // Función auxiliar para crear un slider con etiqueta de valor
 function createSlider(label, min, max, defaultValue, onChange) {

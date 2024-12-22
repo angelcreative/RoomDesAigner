@@ -48,37 +48,49 @@ mongo_data_api_key = os.environ.get('MONGO_DATA_API_KEY', 'vDRaSGZa9qwvm4KG8eSMd
 
 #replicate token 
 REPLICATE_API_TOKEN = os.environ.get('REPLICATE_API_TOKEN')
+os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
 @app.route('/upscale', methods=['POST'])
 def upscale_image():
     try:
-        data = request.get_json()
+        data = request.json
         image_url = data.get('image_url')
         
         if not image_url:
-            return jsonify({"error": "No se ha proporcionado la URL de la imagen"}), 400
+            return jsonify({'error': 'No image URL provided'}), 400
 
-        model = replicate.models.get("philz1337x/clarity-upscaler")
-        version = model.versions.get("dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e")
+        # Configurar el modelo de upscaling
+        model = replicate.models.get("zsyoaoa/invsr")
         
-        # Crear predicción asincrónica
-        prediction = replicate.predictions.create(version=version, input={"image": image_url})
-        
-        # Poll para obtener el estado de la predicción hasta que se complete
-        while prediction["status"] not in ["succeeded", "failed"]:
-            time.sleep(1)  # Espera 1 segundo antes de verificar el estado nuevamente
-            prediction = replicate.predictions.get(prediction["id"])
+        # Iniciar la predicción
+        prediction = model.predict(
+            image=image_url,
+            scale=4,  # Factor de escala (2x, 4x)
+            steps=20,  # Número de pasos de difusión
+            seed=42,   # Semilla para reproducibilidad
+            scheduler="ddim",  # Scheduler para el proceso de difusión
+            guidance_scale=7.5  # Escala de guía para el proceso
+        )
 
-        if prediction["status"] == "succeeded":
-            upscale_image_url = prediction["output"]
-            return jsonify({"upscaled_image_url": upscale_image_url}), 200
-        else:
-            return jsonify({"error": "La predicción falló."}), 500
+        # Esperar y verificar el resultado
+        while prediction.status != "succeeded":
+            if prediction.status == "failed":
+                return jsonify({'error': 'Upscaling failed'}), 500
+            time.sleep(1)
+            prediction.reload()
+
+        # Devolver la URL de la imagen escalada
+        return jsonify({
+            'status': 'success',
+            'upscaled_url': prediction.output
+        })
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({'error': str(e)}), 500
 
-    
+if __name__ == '__main__':
+    app.run(debug=True)
+
     
     
 openai_api_key = os.environ.get('OPENAI_API_KEY')
