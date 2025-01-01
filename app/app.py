@@ -82,58 +82,38 @@ def upscale_image():
         data = request.json
         image_url = data.get('image_url')
         
+        print(f"📥 Recibida solicitud de upscaling para: {image_url}")
+        
         if not image_url:
-            return jsonify({'error': 'No image URL provided'}), 400
+            return jsonify({'error': 'No image URL provided', 'status': 'error'}), 400
 
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
-        # Crear la predicción
-        prediction = client.predictions.create(
-            version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
-            input={"image": image_url}
+        print("🔄 Iniciando proceso de upscaling...")
+        output = client.run(
+            "zsyoaoa/invsr:6e15f8b4fc526a8b62151f2f1b7e3c6f0cd43f2f4be99eebde7da6f2f2b33a68",
+            input={
+                "image": image_url,
+                "scale": 4,
+                "steps": 25
+            }
         )
+        print(f"✅ Upscaling completado. Output: {output}")
 
-        # Configurar timeout
-        max_attempts = 30
-        attempt = 0
-
-        while attempt < max_attempts:
-            prediction = client.predictions.get(prediction.id)
-            print(f"Prediction status: {prediction.status}")  # Debug log
-            
-            if prediction.status == 'succeeded':
-                output = prediction.output
-                print(f"Prediction output: {output}")  # Debug log
-                
-                if isinstance(output, str):
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': output
-                    })
-                elif isinstance(output, list) and len(output) > 0:
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': output[0]
-                    })
-                else:
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': str(output)
-                    })
-            
-            elif prediction.status == 'failed':
-                raise Exception(f"Prediction failed: {prediction.error}")
-            
-            elif prediction.status == 'canceled':
-                raise Exception("Prediction was canceled")
-            
-            time.sleep(1)
-            attempt += 1
-
-        raise Exception("Timeout waiting for prediction")
+        if output:
+            return jsonify({
+                'status': 'success',
+                'upscaled_url': output
+            })
+        else:
+            print("❌ No se recibió output del modelo")
+            return jsonify({
+                'status': 'error',
+                'error': 'No output received from model'
+            }), 500
 
     except Exception as e:
-        print(f"Error in upscale_image: {str(e)}")
+        print(f"❌ Error en upscale_image: {str(e)}")
         return jsonify({
             'status': 'error',
             'error': str(e)
