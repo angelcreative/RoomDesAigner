@@ -87,10 +87,13 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
+        # Crear el cliente
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
-        # Crear predicción y obtener ID directamente como string
-        prediction_response = client.predictions.create(
+        print(f"🔄 Procesando imagen: {image_url}")
+
+        # 1. Crear la predicción y obtener el ID como string
+        prediction_id = client.predictions.create(
             version="37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
             input={
                 "in_path": image_url,
@@ -99,24 +102,54 @@ def upscale_image():
                 "chopping_size": 128
             }
         )
-        
-        # Usar el string directamente como ID
-        prediction_id = str(prediction_response)
-        
-        # Polling simple
-        for _ in range(30):
-            status = client.predictions.get(prediction_id)
-            if hasattr(status, 'output') and status.output:
-                return jsonify({
-                    'status': 'success',
-                    'upscaled_url': status.output
-                })
-            time.sleep(2)
+
+        print(f"⏳ Predicción creada con ID: {prediction_id}")
+
+        # 2. Esperar y obtener resultado usando el ID como string
+        for attempt in range(30):
+            prediction = client.predictions.get(prediction_id)
             
-        return jsonify({'error': 'Timeout'}), 504
+            print(f"🔄 Verificando estado... Intento {attempt + 1}")
+            
+            # Si prediction es un diccionario
+            if isinstance(prediction, dict):
+                if prediction.get('output'):
+                    return jsonify({
+                        'status': 'success',
+                        'upscaled_url': prediction['output']
+                    })
+                elif prediction.get('status') == 'failed':
+                    return jsonify({
+                        'status': 'error',
+                        'error': prediction.get('error', 'Failed to process image')
+                    }), 500
+            
+            # Si prediction es un objeto
+            else:
+                if getattr(prediction, 'output', None):
+                    return jsonify({
+                        'status': 'success',
+                        'upscaled_url': prediction.output
+                    })
+                elif getattr(prediction, 'status', None) == 'failed':
+                    return jsonify({
+                        'status': 'error',
+                        'error': getattr(prediction, 'error', 'Failed to process image')
+                    }), 500
+            
+            time.sleep(2)
+
+        return jsonify({
+            'status': 'error',
+            'error': 'Timeout waiting for prediction'
+        }), 504
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"❌ Error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
 
 
 if __name__ == '__main__':
