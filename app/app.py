@@ -92,8 +92,8 @@ def upscale_image():
         
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # 1. Crear la predicción y obtener el ID como string
-        prediction_id = client.predictions.create(
+        # Crear la predicción
+        prediction = client.predictions.create(
             version="37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
             input={
                 "in_path": image_url,
@@ -103,46 +103,26 @@ def upscale_image():
             }
         )
 
-        print(f"⏳ Predicción creada con ID: {prediction_id}")
+        print(f"⏳ Predicción creada con ID: {prediction.id}")
 
-        # 2. Esperar y obtener resultado usando el ID como string
-        for attempt in range(30):
-            prediction = client.predictions.get(prediction_id)
-            
-            print(f"🔄 Verificando estado... Intento {attempt + 1}")
-            
-            # Si prediction es un diccionario
-            if isinstance(prediction, dict):
-                if prediction.get('output'):
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': prediction['output']
-                    })
-                elif prediction.get('status') == 'failed':
-                    return jsonify({
-                        'status': 'error',
-                        'error': prediction.get('error', 'Failed to process image')
-                    }), 500
-            
-            # Si prediction es un objeto
-            else:
-                if getattr(prediction, 'output', None):
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': prediction.output
-                    })
-                elif getattr(prediction, 'status', None) == 'failed':
-                    return jsonify({
-                        'status': 'error',
-                        'error': getattr(prediction, 'error', 'Failed to process image')
-                    }), 500
-            
+        # Esperar y obtener resultado
+        prediction = client.predictions.get(prediction.id)
+
+        while prediction.status == 'processing':
             time.sleep(2)
+            prediction = client.predictions.get(prediction.id)
+            print(f"🔄 Estado actual: {prediction.status}")
 
-        return jsonify({
-            'status': 'error',
-            'error': 'Timeout waiting for prediction'
-        }), 504
+        if prediction.status == 'succeeded':
+            return jsonify({
+                'status': 'success',
+                'upscaled_url': prediction.output
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'error': prediction.error
+            }), 500
 
     except Exception as e:
         print(f"❌ Error: {str(e)}")
