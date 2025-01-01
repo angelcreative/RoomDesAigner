@@ -82,46 +82,45 @@ def upscale_image():
         data = request.json
         image_url = data.get('image_url')
         
+        print(f"📥 Recibida solicitud de upscaling para: {image_url}")
+        
         if not image_url:
             return jsonify({'error': 'No image URL provided', 'status': 'error'}), 400
 
-        client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
-        
-        # Crear predicción y convertir la respuesta a diccionario si es necesario
-        prediction = client.predictions.create(
-            version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
-            input={"image": image_url}
+        print("🔄 Iniciando proceso de upscaling...")
+
+        # Usar los parámetros exactos según el esquema de entrada
+        output = replicate.run(
+            "zsyoaoa/invsr:37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
+            input={
+                "in_path": image_url,        # Campo requerido según el esquema
+                "seed": 12345,               # Valor por defecto
+                "num_steps": 1,              # Valor por defecto
+                "chopping_size": 128         # Valor por defecto
+            }
         )
         
-        # Si es un string, usarlo directamente como ID
-        prediction_id = prediction if isinstance(prediction, str) else vars(prediction).get('id')
-        
-        if not prediction_id:
-            raise ValueError("No se pudo obtener el ID de la predicción")
+        print(f"✅ Upscaling completado. Output: {output}")
 
-        # Esperar el resultado
-        for _ in range(30):
-            result = client.predictions.get(prediction_id)
-            if hasattr(result, 'status'):
-                status = result.status
-            else:
-                status = result.get('status')
-
-            if status == 'succeeded':
-                output = getattr(result, 'output', None) or result.get('output')
-                return jsonify({'status': 'success', 'upscaled_url': output})
-            
-            elif status in ['failed', 'canceled']:
-                error = getattr(result, 'error', None) or result.get('error', 'Unknown error')
-                return jsonify({'status': 'error', 'error': error}), 500
-            
-            time.sleep(2)
-
-        return jsonify({'status': 'error', 'error': 'Timeout'}), 504
+        # El esquema de salida indica que es una URI string
+        if isinstance(output, str):
+            return jsonify({
+                'status': 'success',
+                'upscaled_url': output
+            })
+        else:
+            print("❌ Formato de salida inesperado")
+            return jsonify({
+                'status': 'error',
+                'error': 'Unexpected output format'
+            }), 500
 
     except Exception as e:
-        print(f"Error: {str(e)}")
-        return jsonify({'status': 'error', 'error': str(e)}), 500
+        print(f"❌ Error en upscale_image: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
