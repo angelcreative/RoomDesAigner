@@ -82,81 +82,46 @@ def upscale_image():
         data = request.json
         image_url = data.get('image_url')
         
-        print(f"📥 Recibida solicitud de upscaling para: {image_url}")
-        
         if not image_url:
             return jsonify({'error': 'No image URL provided', 'status': 'error'}), 400
 
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
-        print("🔄 Iniciando proceso de upscaling...")
-
-        # Crear predicción directamente con un diccionario
-        prediction_response = client.predictions.create(
+        # Crear predicción y convertir la respuesta a diccionario si es necesario
+        prediction = client.predictions.create(
             version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
             input={"image": image_url}
         )
         
-        # Verificar si la respuesta es un string o un objeto
-        if isinstance(prediction_response, str):
-            prediction_id = prediction_response
-        else:
-            prediction_id = prediction_response.id
+        # Si es un string, usarlo directamente como ID
+        prediction_id = prediction if isinstance(prediction, str) else vars(prediction).get('id')
+        
+        if not prediction_id:
+            raise ValueError("No se pudo obtener el ID de la predicción")
+
+        # Esperar el resultado
+        for _ in range(30):
+            result = client.predictions.get(prediction_id)
+            if hasattr(result, 'status'):
+                status = result.status
+            else:
+                status = result.get('status')
+
+            if status == 'succeeded':
+                output = getattr(result, 'output', None) or result.get('output')
+                return jsonify({'status': 'success', 'upscaled_url': output})
             
-        print(f"⏳ Predicción creada con ID: {prediction_id}")
-        
-        # Esperar y obtener resultado
-        max_attempts = 30
-        attempt = 0
-        
-        while attempt < max_attempts:
-            try:
-                # Obtener el estado actual de la predicción
-                current_prediction = client.predictions.get(prediction_id)
-                status = current_prediction.get('status') if isinstance(current_prediction, dict) else current_prediction.status
-                print(f"🔄 Intento {attempt + 1}: Estado = {status}")
-                
-                if status == 'succeeded':
-                    output = current_prediction.get('output') if isinstance(current_prediction, dict) else current_prediction.output
-                    print(f"✅ Upscaling exitoso: {output}")
-                    return jsonify({
-                        'status': 'success',
-                        'upscaled_url': output
-                    })
-                
-                elif status == 'failed':
-                    error_msg = current_prediction.get('error', "Unknown error") if isinstance(current_prediction, dict) else getattr(current_prediction, 'error', "Unknown error")
-                    print(f"❌ La predicción falló: {error_msg}")
-                    return jsonify({
-                        'status': 'error',
-                        'error': error_msg
-                    }), 500
-                
-                elif status == 'canceled':
-                    print("❌ La predicción fue cancelada")
-                    return jsonify({
-                        'status': 'error',
-                        'error': 'Prediction was canceled'
-                    }), 500
-                
-            except Exception as poll_error:
-                print(f"⚠️ Error en el polling: {str(poll_error)}")
-                
+            elif status in ['failed', 'canceled']:
+                error = getattr(result, 'error', None) or result.get('error', 'Unknown error')
+                return jsonify({'status': 'error', 'error': error}), 500
+            
             time.sleep(2)
-            attempt += 1
-        
-        return jsonify({
-            'status': 'error',
-            'error': 'Timeout waiting for prediction'
-        }), 504
+
+        return jsonify({'status': 'error', 'error': 'Timeout'}), 504
 
     except Exception as e:
-        print(f"❌ Error en upscale_image: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'error': str(e)
-        }), 500
-    
+        print(f"Error: {str(e)}")
+        return jsonify({'status': 'error', 'error': str(e)}), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
