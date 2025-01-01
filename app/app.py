@@ -91,32 +91,45 @@ def upscale_image():
         
         print("🔄 Iniciando proceso de upscaling...")
         
-        # Crear la predicción
+        # Crear la predicción usando el modelo correcto
         prediction = client.predictions.create(
-            version="9283608cc6b7be6b65a8e44983db012355fde4132009bf99d976b2f0896856a3",
-            input={
-                "img": image_url,
-                "version": "v1.4",
-                "scale": 2
-            }
+            model="nightmareai/real-esrgan",
+            version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+            input={"image": image_url}
         )
-
-        # Esperar el resultado
-        prediction = client.predictions.wait(prediction.id)
-        print(f"✅ Upscaling completado. Status: {prediction.status}")
-
-        if prediction.status == 'succeeded':
-            return jsonify({
-                'status': 'success',
-                'upscaled_url': prediction.output
-            })
-        else:
-            error_message = prediction.error or 'Unknown error occurred'
-            print(f"❌ Error en la predicción: {error_message}")
-            return jsonify({
-                'status': 'error',
-                'error': error_message
-            }), 500
+        
+        print(f"⏳ Predicción creada con ID: {prediction.id}")
+        
+        # Esperar y obtener resultado
+        max_attempts = 30
+        attempt = 0
+        
+        while attempt < max_attempts:
+            prediction_status = client.predictions.get(prediction.id)
+            print(f"🔄 Intento {attempt + 1}: Estado = {prediction_status.status}")
+            
+            if prediction_status.status == 'succeeded':
+                print(f"✅ Upscaling exitoso: {prediction_status.output}")
+                return jsonify({
+                    'status': 'success',
+                    'upscaled_url': prediction_status.output
+                })
+            
+            elif prediction_status.status == 'failed':
+                error_msg = prediction_status.error or "Unknown error"
+                print(f"❌ La predicción falló: {error_msg}")
+                return jsonify({
+                    'status': 'error',
+                    'error': error_msg
+                }), 500
+            
+            time.sleep(1)
+            attempt += 1
+        
+        return jsonify({
+            'status': 'error',
+            'error': 'Timeout waiting for prediction'
+        }), 504
 
     except Exception as e:
         print(f"❌ Error en upscale_image: {str(e)}")
