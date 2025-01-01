@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from flask_cors import CORS
 from functools import wraps
+from datetime import datetime
 import hmac
 import hashlib
 import requests
@@ -76,6 +77,15 @@ def retry_with_backoff(max_retries=10, initial_delay=1, max_delay=10):
         return wrapper
     return decorator
 
+
+# Modelo Pydantic para la predicción
+class Prediction(BaseModel):
+    id: str
+    started_at: datetime = datetime.now()
+    completed_at: datetime = None
+    status: str = "processing"
+    output: str = None
+
 @app.route('/upscale', methods=['POST'])
 def upscale_image():
     try:
@@ -89,39 +99,52 @@ def upscale_image():
 
         print("🔄 Iniciando proceso de upscaling...")
 
-        # Usar los parámetros exactos según el esquema de entrada
-        output = replicate.run(
-            "zsyoaoa/invsr:37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
-            input={
-                "in_path": image_url,        # Campo requerido según el esquema
-                "seed": 12345,               # Valor por defecto
-                "num_steps": 1,              # Valor por defecto
-                "chopping_size": 128         # Valor por defecto
-            }
+        # Crear la predicción con el modelo Pydantic
+        prediction = Prediction(
+            id=str(uuid.uuid4()),  # Generar un ID único
+            started_at=datetime.now()
         )
-        
-        print(f"✅ Upscaling completado. Output: {output}")
 
-        # El esquema de salida indica que es una URI string
-        if isinstance(output, str):
+        try:
+            # Ejecutar el modelo
+            output = replicate.run(
+                "zsyoaoa/invsr:37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
+                input={
+                    "in_path": image_url,
+                    "seed": 12345,
+                    "num_steps": 1,
+                    "chopping_size": 128
+                }
+            )
+            
+            # Actualizar la predicción con el resultado
+            prediction.completed_at = datetime.now()
+            prediction.status = "succeeded"
+            prediction.output = output
+
+            print(f"✅ Upscaling completado. Output: {output}")
+
             return jsonify({
                 'status': 'success',
-                'upscaled_url': output
+                'upscaled_url': output,
+                'prediction': prediction.dict()
             })
-        else:
-            print("❌ Formato de salida inesperado")
-            return jsonify({
-                'status': 'error',
-                'error': 'Unexpected output format'
-            }), 500
+
+        except Exception as model_error:
+            # Actualizar la predicción en caso de error
+            prediction.completed_at = datetime.now()
+            prediction.status = "failed"
+            raise model_error
 
     except Exception as e:
         print(f"❌ Error en upscale_image: {str(e)}")
         return jsonify({
             'status': 'error',
-            'error': str(e)
+            'error': str(e),
+            'prediction': prediction.dict() if 'prediction' in locals() else None
         }), 500
-    
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
