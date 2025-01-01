@@ -101,8 +101,8 @@ def upscale_image():
         print("🔄 Iniciando proceso de upscaling...")
 
         try:
-            # Crear la predicción y obtener la respuesta
-            response = client.predictions.create(
+            # Crear la predicción
+            prediction = client.predictions.create(
                 version="37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
                 input={
                     "in_path": image_url,
@@ -111,28 +111,40 @@ def upscale_image():
                     "chopping_size": 128
                 }
             )
+            
+            # Convertir la respuesta a diccionario si es necesario
+            if isinstance(prediction, str):
+                prediction_dict = {'id': prediction}
+            else:
+                prediction_dict = prediction.__dict__ if hasattr(prediction, '__dict__') else {'id': str(prediction)}
 
-            # Extraer el ID de la respuesta de manera segura
-            prediction_id = response.id if hasattr(response, 'id') else str(response)
+            prediction_id = prediction_dict.get('id')
             print(f"⏳ ID de predicción: {prediction_id}")
 
             # Esperar el resultado
             max_attempts = 30
             for attempt in range(max_attempts):
                 try:
-                    # Obtener el estado de la predicción
-                    prediction = client.predictions.get(prediction_id)
-                    status = prediction.status if hasattr(prediction, 'status') else 'processing'
+                    # Obtener estado como diccionario
+                    status_response = client.predictions.get(prediction_id)
+                    
+                    if isinstance(status_response, dict):
+                        status = status_response.get('status')
+                        output = status_response.get('output')
+                    else:
+                        status = getattr(status_response, 'status', 'processing')
+                        output = getattr(status_response, 'output', None)
+
                     print(f"🔄 Intento {attempt + 1}: Estado = {status}")
 
-                    if hasattr(prediction, 'output') and prediction.output:
-                        print(f"✅ Upscaling exitoso: {prediction.output}")
+                    if output:
+                        print(f"✅ Upscaling exitoso: {output}")
                         return jsonify({
                             'status': 'success',
-                            'upscaled_url': prediction.output
+                            'upscaled_url': output
                         })
                     elif status == 'failed':
-                        error_msg = getattr(prediction, 'error', 'Unknown error')
+                        error_msg = status_response.get('error', 'Unknown error') if isinstance(status_response, dict) else getattr(status_response, 'error', 'Unknown error')
                         return jsonify({
                             'status': 'error',
                             'error': error_msg
