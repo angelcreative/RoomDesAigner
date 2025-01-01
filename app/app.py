@@ -91,13 +91,18 @@ def upscale_image():
         
         print("🔄 Iniciando proceso de upscaling...")
 
-        # Crear predicción y obtener su ID
-        prediction = client.predictions.create(
+        # Crear predicción directamente con un diccionario
+        prediction_response = client.predictions.create(
             version="42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
             input={"image": image_url}
         )
-        prediction_id = prediction.id
         
+        # Verificar si la respuesta es un string o un objeto
+        if isinstance(prediction_response, str):
+            prediction_id = prediction_response
+        else:
+            prediction_id = prediction_response.id
+            
         print(f"⏳ Predicción creada con ID: {prediction_id}")
         
         # Esperar y obtener resultado
@@ -105,35 +110,39 @@ def upscale_image():
         attempt = 0
         
         while attempt < max_attempts:
-            # Obtener el estado actual de la predicción
-            current_prediction = client.predictions.get(prediction_id)
-            status = current_prediction.status
-            print(f"🔄 Intento {attempt + 1}: Estado = {status}")
-            
-            if status == 'succeeded':
-                output = current_prediction.output
-                print(f"✅ Upscaling exitoso: {output}")
-                return jsonify({
-                    'status': 'success',
-                    'upscaled_url': output
-                })
-            
-            elif status == 'failed':
-                error_msg = getattr(current_prediction, 'error', "Unknown error")
-                print(f"❌ La predicción falló: {error_msg}")
-                return jsonify({
-                    'status': 'error',
-                    'error': error_msg
-                }), 500
-            
-            elif status == 'canceled':
-                print("❌ La predicción fue cancelada")
-                return jsonify({
-                    'status': 'error',
-                    'error': 'Prediction was canceled'
-                }), 500
-            
-            time.sleep(2)  # Esperar 2 segundos entre intentos
+            try:
+                # Obtener el estado actual de la predicción
+                current_prediction = client.predictions.get(prediction_id)
+                status = current_prediction.get('status') if isinstance(current_prediction, dict) else current_prediction.status
+                print(f"🔄 Intento {attempt + 1}: Estado = {status}")
+                
+                if status == 'succeeded':
+                    output = current_prediction.get('output') if isinstance(current_prediction, dict) else current_prediction.output
+                    print(f"✅ Upscaling exitoso: {output}")
+                    return jsonify({
+                        'status': 'success',
+                        'upscaled_url': output
+                    })
+                
+                elif status == 'failed':
+                    error_msg = current_prediction.get('error', "Unknown error") if isinstance(current_prediction, dict) else getattr(current_prediction, 'error', "Unknown error")
+                    print(f"❌ La predicción falló: {error_msg}")
+                    return jsonify({
+                        'status': 'error',
+                        'error': error_msg
+                    }), 500
+                
+                elif status == 'canceled':
+                    print("❌ La predicción fue cancelada")
+                    return jsonify({
+                        'status': 'error',
+                        'error': 'Prediction was canceled'
+                    }), 500
+                
+            except Exception as poll_error:
+                print(f"⚠️ Error en el polling: {str(poll_error)}")
+                
+            time.sleep(2)
             attempt += 1
         
         return jsonify({
