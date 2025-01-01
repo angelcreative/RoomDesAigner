@@ -100,15 +100,40 @@ def upscale_image():
 
         print(f"✅ Imagen procesada. URL de salida: {output}")
 
+        # Si output es una lista, tomar el primer elemento
+        if isinstance(output, list):
+            output = output[0]
+        
+        # Esperar hasta que la imagen esté disponible
         if output:
+            # Intentar verificar que la imagen está accesible
+            max_retries = 10
+            retry_delay = 3  # segundos
+            
+            for attempt in range(max_retries):
+                try:
+                    # Verificar si la imagen está disponible
+                    response = requests.head(output, timeout=5)
+                    if response.status_code == 200:
+                        return jsonify({
+                            'status': 'success',
+                            'upscaled_url': output
+                        })
+                except requests.RequestException:
+                    if attempt < max_retries - 1:
+                        print(f"Intento {attempt + 1}: Esperando que la imagen esté disponible...")
+                        time.sleep(retry_delay)
+                    continue
+
+            # Si llegamos aquí, la imagen no estaba disponible después de todos los intentos
             return jsonify({
-                'status': 'success',
-                'upscaled_url': output
-            })
+                'status': 'error',
+                'error': 'Image URL generated but not accessible after multiple attempts'
+            }), 500
         else:
             return jsonify({
                 'status': 'error',
-                'error': 'No output generated'
+                'error': 'No output URL generated'
             }), 500
 
     except Exception as e:
