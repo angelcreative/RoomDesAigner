@@ -90,27 +90,32 @@ def upscale_image():
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
         print("🔄 Iniciando proceso de upscaling...")
-        # Usando el modelo más reciente de Real-ESRGAN
-        output = client.run(
-            "tencentarc/gfpgan:9283608cc6b7be6b65a8e44983db012355fde4132009bf99d976b2f0896856a3",
+        
+        # Crear la predicción
+        prediction = client.predictions.create(
+            version="9283608cc6b7be6b65a8e44983db012355fde4132009bf99d976b2f0896856a3",
             input={
                 "img": image_url,
                 "version": "v1.4",
                 "scale": 2
             }
         )
-        print(f"✅ Upscaling completado. Output: {output}")
 
-        if output:
+        # Esperar el resultado
+        prediction = client.predictions.wait(prediction.id)
+        print(f"✅ Upscaling completado. Status: {prediction.status}")
+
+        if prediction.status == 'succeeded':
             return jsonify({
                 'status': 'success',
-                'upscaled_url': output
+                'upscaled_url': prediction.output
             })
         else:
-            print("❌ No se recibió output del modelo")
+            error_message = prediction.error or 'Unknown error occurred'
+            print(f"❌ Error en la predicción: {error_message}")
             return jsonify({
                 'status': 'error',
-                'error': 'No output received from model'
+                'error': error_message
             }), 500
 
     except Exception as e:
