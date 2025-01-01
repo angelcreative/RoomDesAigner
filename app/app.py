@@ -97,18 +97,13 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided', 'status': 'error'}), 400
 
+        client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         print("🔄 Iniciando proceso de upscaling...")
 
-        # Crear la predicción con el modelo Pydantic
-        prediction = Prediction(
-            id=str(uuid.uuid4()),  # Generar un ID único
-            started_at=datetime.now()
-        )
-
         try:
-            # Ejecutar el modelo
-            output = replicate.run(
-                "zsyoaoa/invsr:37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
+            # Crear la predicción y obtener la respuesta
+            response = client.predictions.create(
+                version="37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
                 input={
                     "in_path": image_url,
                     "seed": 12345,
@@ -116,32 +111,55 @@ def upscale_image():
                     "chopping_size": 128
                 }
             )
-            
-            # Actualizar la predicción con el resultado
-            prediction.completed_at = datetime.now()
-            prediction.status = "succeeded"
-            prediction.output = output
 
-            print(f"✅ Upscaling completado. Output: {output}")
+            # Extraer el ID de la respuesta de manera segura
+            prediction_id = response.id if hasattr(response, 'id') else str(response)
+            print(f"⏳ ID de predicción: {prediction_id}")
+
+            # Esperar el resultado
+            max_attempts = 30
+            for attempt in range(max_attempts):
+                try:
+                    # Obtener el estado de la predicción
+                    prediction = client.predictions.get(prediction_id)
+                    status = prediction.status if hasattr(prediction, 'status') else 'processing'
+                    print(f"🔄 Intento {attempt + 1}: Estado = {status}")
+
+                    if hasattr(prediction, 'output') and prediction.output:
+                        print(f"✅ Upscaling exitoso: {prediction.output}")
+                        return jsonify({
+                            'status': 'success',
+                            'upscaled_url': prediction.output
+                        })
+                    elif status == 'failed':
+                        error_msg = getattr(prediction, 'error', 'Unknown error')
+                        return jsonify({
+                            'status': 'error',
+                            'error': error_msg
+                        }), 500
+
+                except Exception as poll_error:
+                    print(f"⚠️ Error en polling: {str(poll_error)}")
+
+                time.sleep(2)
 
             return jsonify({
-                'status': 'success',
-                'upscaled_url': output,
-                'prediction': prediction.dict()
-            })
+                'status': 'error',
+                'error': 'Timeout waiting for prediction'
+            }), 504
 
-        except Exception as model_error:
-            # Actualizar la predicción en caso de error
-            prediction.completed_at = datetime.now()
-            prediction.status = "failed"
-            raise model_error
+        except replicate.exceptions.ReplicateError as e:
+            print(f"❌ Error de Replicate: {str(e)}")
+            return jsonify({
+                'status': 'error',
+                'error': str(e)
+            }), 500
 
     except Exception as e:
-        print(f"❌ Error en upscale_image: {str(e)}")
+        print(f"❌ Error general: {str(e)}")
         return jsonify({
             'status': 'error',
-            'error': str(e),
-            'prediction': prediction.dict() if 'prediction' in locals() else None
+            'error': str(e)
         }), 500
 
 
