@@ -92,36 +92,23 @@ def upscale_image():
         
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Crear la predicción
-        prediction = client.predictions.create(
-            version="37eebabfb6cdc4be2892b884b96b361d6fedc9f6a934d2fa3c1a2f85f004b0f0",
-            input={
-                "in_path": image_url,
-                "seed": 12345,
-                "num_steps": 1,
-                "chopping_size": 128
-            }
+        # Crear la predicción usando el modelo correcto
+        output = replicate.run(
+            "nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+            input={"image": image_url}
         )
 
-        print(f"⏳ Predicción creada con ID: {prediction.id}")
+        print(f"✅ Imagen procesada. URL de salida: {output}")
 
-        # Esperar y obtener resultado
-        prediction = client.predictions.get(prediction.id)
-
-        while prediction.status == 'processing':
-            time.sleep(2)
-            prediction = client.predictions.get(prediction.id)
-            print(f"🔄 Estado actual: {prediction.status}")
-
-        if prediction.status == 'succeeded':
+        if output:
             return jsonify({
                 'status': 'success',
-                'upscaled_url': prediction.output
+                'upscaled_url': output
             })
         else:
             return jsonify({
                 'status': 'error',
-                'error': prediction.error
+                'error': 'No output generated'
             }), 500
 
     except Exception as e:
