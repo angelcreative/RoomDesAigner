@@ -2318,7 +2318,7 @@ i {
 }
 .carousel-slide a {
     left: 8px;
-    top: 8px;
+    top: -16px;
     margin: 0;
     z-index: 1
 }
