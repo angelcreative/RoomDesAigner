@@ -90,12 +90,13 @@ def upscale_image():
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
         print("🔄 Iniciando proceso de upscaling...")
+        # Usando el modelo más reciente de Real-ESRGAN
         output = client.run(
-            "zsyoaoa/invsr:6e15f8b4fc526a8b62151f2f1b7e3c6f0cd43f2f4be99eebde7da6f2f2b33a68",
+            "tencentarc/gfpgan:9283608cc6b7be6b65a8e44983db012355fde4132009bf99d976b2f0896856a3",
             input={
-                "image": image_url,
-                "scale": 4,
-                "steps": 25
+                "img": image_url,
+                "version": "v1.4",
+                "scale": 2
             }
         )
         print(f"✅ Upscaling completado. Output: {output}")
