@@ -78,14 +78,6 @@ def retry_with_backoff(max_retries=10, initial_delay=1, max_delay=10):
     return decorator
 
 
-# Modelo Pydantic para la predicción
-class Prediction(BaseModel):
-    id: str
-    started_at: datetime = datetime.now()
-    completed_at: datetime = None
-    status: str = "processing"
-    output: str = None
-
 @app.route('/upscale', methods=['POST'])
 def upscale_image():
     try:
@@ -125,18 +117,6 @@ def upscale_image():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-            print(f"❌ Error de Replicate: {str(e)}")
-            return jsonify({
-                'status': 'error',
-                'error': str(e)
-            }), 500
-
-    except Exception as e:
-        print(f"❌ Error general: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'error': str(e)
-        }), 500
 
 
 if __name__ == '__main__':
