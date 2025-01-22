@@ -87,66 +87,45 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        # Crear el cliente de Replicate
-        client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
-        
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Crear la predicción usando el modelo Clarity Upscaler
-        prediction = client.predictions.create(
-            version="a8cd5deb6d2a126e55d704c419dff37583ef92c41cdc1e82c0987be4c9dea1ba",
-            input={
-                "input_image": image_url,
-                "upscale": 2,
-                "enhance_face": False
-            }
+        # Usar el modelo directamente con replicate.models.get()
+        model = replicate.models.get("nightmareai/real-esrgan")
+        version = model.versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
+        
+        # Crear la predicción
+        prediction = version.predict(
+            image=image_url
         )
 
-        # Añadir timeout general
-        max_attempts = 30  # 30 segundos máximo
-        attempts = 0
+        print(f"✅ Imagen procesada. Salida: {prediction}")
 
-        # Esperar el resultado
-        while prediction.status in ["starting", "processing"] and attempts < max_attempts:
-            prediction.reload()
-            print(f"Estado actual: {prediction.status} (intento {attempts + 1}/{max_attempts})")
-            time.sleep(1)
-            attempts += 1
-
-        if attempts >= max_attempts:
+        # La salida puede ser una lista o una URL directa
+        if isinstance(prediction, list):
+            prediction = prediction[0]
+        
+        # Verificar que la URL es accesible
+        response = requests.head(prediction, timeout=5)
+        if response.status_code == 200:
             return jsonify({
-                'status': 'error',
-                'error': 'Timeout waiting for prediction'
-            }), 504
-
-        if prediction.status == "succeeded":
-            output_url = prediction.output
-            print(f"✅ Imagen procesada. URL de salida: {output_url}")
-            
-            # Verificar que la URL es accesible
-            response = requests.head(output_url, timeout=5)
-            if response.status_code == 200:
-                return jsonify({
-                    'status': 'success',
-                    'upscaled_url': output_url
-                })
-            else:
-                return jsonify({
-                    'status': 'error',
-                    'error': 'Generated URL is not accessible'
-                }), 500
+                'status': 'success',
+                'upscaled_url': prediction
+            })
         else:
-            error_msg = f"Prediction failed with status: {prediction.status}"
-            if hasattr(prediction, 'error'):
-                error_msg += f" - {prediction.error}"
-            print(f"❌ Error: {error_msg}")
             return jsonify({
                 'status': 'error',
-                'error': error_msg
+                'error': 'Generated URL is not accessible'
             }), 500
 
+    except replicate.exceptions.ReplicateError as e:
+        print(f"❌ Error de Replicate: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
+
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f"❌ Error general: {str(e)}")
         return jsonify({
             'status': 'error',
             'error': str(e)
