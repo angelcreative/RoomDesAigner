@@ -623,6 +623,12 @@ function getModelConfig(selectedModel) {
             lora_strength: "1",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
+     "fluxdev": { 
+            model_id: "fluxdev", 
+            lora_model: null, 
+            lora_strength: null,
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
         "fluxpro-11": { 
             model_id: "fluxdev", 
             lora_model: "fluxpro-11,polyhedron-flux,ultrarealistic-lora-project", 
@@ -643,7 +649,7 @@ function getModelConfig(selectedModel) {
         },
         "uncensored-flux-lora": { 
             model_id: "fluxdev", 
-            lora_model: "uncensored-flux-lora,polyhedron-flux,ultrarealistic-lora-project", 
+            lora_model: "sldr_flux_nsfw_v2,polyhedron-flux,ultrarealistic-lora-project", 
             lora_strength: "0.8,0.5,0.5",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
