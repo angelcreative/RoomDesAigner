@@ -611,13 +611,48 @@ function updateCreditsDisplay(remainingCredits) {
     
 function getModelConfig(selectedModel) {
     const models = {
-        "flux": { model_id: "flux", lora_model: null, lora_strength: null },
-         "simplevectorflux": { model_id: "fluxdev", lora_model: "simplevectorflux", lora_strength: "1" },
-        "fluxpro-11": { model_id: "fluxdev", lora_model: "fluxpro-11,polyhedron-flux,ultrarealistic-lora-project ", lora_strength: "1,0.7,0.5 " },
-        "fluxdevfashion": { model_id: "fluxdev", lora_model: "flux-fashion,polyhedron-flux ", lora_strength: "1,0.7 " },
-        "iphone-photo-flux-realism-booster": { model_id: "fluxdev",lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux,ultrarealistic-lora-project",lora_strength:"1,0.7,0.5 "},
-        "uncensored-flux-lora": { model_id: "fluxdev", lora_model: "uncensored-flux-lora,polyhedron-flux,ultrarealistic-lora-project ", lora_strength: "0.8,0.5,0.5 " },
-        "flux-pro-1.1-ultra": { model_id: "flux-pro-1.1-ultra", lora_model: null, lora_strength: null },
+        "flux": { 
+            model_id: "flux", 
+            lora_model: null, 
+            lora_strength: null,
+            steps: 8  // Solo flux usa 8 steps
+        },
+        "simplevectorflux": { 
+            model_id: "fluxdev", 
+            lora_model: "simplevectorflux", 
+            lora_strength: "1",
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
+        "fluxpro-11": { 
+            model_id: "fluxdev", 
+            lora_model: "fluxpro-11,polyhedron-flux,ultrarealistic-lora-project", 
+            lora_strength: "1,0.7,0.5",
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
+        "fluxdevfashion": { 
+            model_id: "fluxdev", 
+            lora_model: "flux-fashion,polyhedron-flux", 
+            lora_strength: "1,0.7",
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
+        "iphone-photo-flux-realism-booster": { 
+            model_id: "fluxdev",
+            lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux,ultrarealistic-lora-project",
+            lora_strength: "1,0.7,0.5",
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
+        "uncensored-flux-lora": { 
+            model_id: "fluxdev", 
+            lora_model: "uncensored-flux-lora,polyhedron-flux,ultrarealistic-lora-project", 
+            lora_strength: "0.8,0.5,0.5",
+            steps: 28  // Usa fluxdev, por lo tanto 28 steps
+        },
+        "flux-pro-1.1-ultra": { 
+            model_id: "flux-pro-1.1-ultra", 
+            lora_model: null, 
+            lora_strength: null,
+            steps: 28  // No es flux base, por lo tanto 28 steps
+        },
     };
 
     if (!models[selectedModel]) {
@@ -727,7 +762,7 @@ const prompt = {
     height: height,
     samples: 4,
     guidance_scale: 7.5,
-    steps: 28,
+    steps: modelConfig.steps,
     use_karras_sigmas: "yes",
     tomesd: "yes",
     seed: seedValue,
