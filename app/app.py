@@ -87,53 +87,51 @@ def upscale_image():
         if not image_url:
             return jsonify({'error': 'No image URL provided'}), 400
 
-        # Crear el cliente
+        # Crear el cliente de Replicate
         client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
         
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Crear la predicción usando el modelo correcto
-        output = replicate.run(
-            "nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
-            input={"image": image_url}
+        # Crear la predicción usando el modelo Clarity Upscaler
+        prediction = client.predictions.create(
+            version="a8cd5deb6d2a126e55d704c419dff37583ef92c41cdc1e82c0987be4c9dea1ba",
+            input={
+                "input_image": image_url,
+                "upscale": 2,
+                "enhance_face": False
+            }
         )
 
-        print(f"✅ Imagen procesada. URL de salida: {output}")
+        # Esperar el resultado
+        while prediction.status in ["starting", "processing"]:
+            prediction.reload()
+            print(f"Estado actual: {prediction.status}")
+            time.sleep(1)
 
-        # Si output es una lista, tomar el primer elemento
-        if isinstance(output, list):
-            output = output[0]
-        
-        # Esperar hasta que la imagen esté disponible
-        if output:
-            # Intentar verificar que la imagen está accesible
-            max_retries = 10
-            retry_delay = 3  # segundos
+        if prediction.status == "succeeded":
+            output_url = prediction.output
+            print(f"✅ Imagen procesada. URL de salida: {output_url}")
             
-            for attempt in range(max_retries):
-                try:
-                    # Verificar si la imagen está disponible
-                    response = requests.head(output, timeout=5)
-                    if response.status_code == 200:
-                        return jsonify({
-                            'status': 'success',
-                            'upscaled_url': output
-                        })
-                except requests.RequestException:
-                    if attempt < max_retries - 1:
-                        print(f"Intento {attempt + 1}: Esperando que la imagen esté disponible...")
-                        time.sleep(retry_delay)
-                    continue
-
-            # Si llegamos aquí, la imagen no estaba disponible después de todos los intentos
-            return jsonify({
-                'status': 'error',
-                'error': 'Image URL generated but not accessible after multiple attempts'
-            }), 500
+            # Verificar que la URL es accesible
+            response = requests.head(output_url, timeout=5)
+            if response.status_code == 200:
+                return jsonify({
+                    'status': 'success',
+                    'upscaled_url': output_url
+                })
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'error': 'Generated URL is not accessible'
+                }), 500
         else:
+            error_msg = f"Prediction failed with status: {prediction.status}"
+            if hasattr(prediction, 'error'):
+                error_msg += f" - {prediction.error}"
+            print(f"❌ Error: {error_msg}")
             return jsonify({
                 'status': 'error',
-                'error': 'No output URL generated'
+                'error': error_msg
             }), 500
 
     except Exception as e:
