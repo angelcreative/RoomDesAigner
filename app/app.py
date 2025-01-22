@@ -102,11 +102,22 @@ def upscale_image():
             }
         )
 
+        # Añadir timeout general
+        max_attempts = 30  # 30 segundos máximo
+        attempts = 0
+
         # Esperar el resultado
-        while prediction.status in ["starting", "processing"]:
+        while prediction.status in ["starting", "processing"] and attempts < max_attempts:
             prediction.reload()
-            print(f"Estado actual: {prediction.status}")
+            print(f"Estado actual: {prediction.status} (intento {attempts + 1}/{max_attempts})")
             time.sleep(1)
+            attempts += 1
+
+        if attempts >= max_attempts:
+            return jsonify({
+                'status': 'error',
+                'error': 'Timeout waiting for prediction'
+            }), 504
 
         if prediction.status == "succeeded":
             output_url = prediction.output
