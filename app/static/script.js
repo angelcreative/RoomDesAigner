@@ -727,7 +727,7 @@ const prompt = {
     height: height,
     samples: 4,
     guidance_scale: 7.5,
-    steps: 8,
+    steps: 28,
     use_karras_sigmas: "yes",
     tomesd: "yes",
     seed: seedValue,
