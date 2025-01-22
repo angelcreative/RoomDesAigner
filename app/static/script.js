@@ -1,4 +1,4 @@
- // Function to show the overlay
+// Function to show the overlay
 function showOverlay() {
   const overlay = document.getElementById("overlay"); 
   overlay.style.display = "block";
@@ -2579,3 +2579,56 @@ document.querySelectorAll('.avatar-option input[type="radio"]').forEach(function
         }
     });
 });*/
+
+// Función para añadir todos los botones a una imagen
+function addImageButtons(imageContainer, imageUrl) {
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'image-buttons';
+    
+    const upscaleButton = document.createElement('button');
+    upscaleButton.className = 'gradient-animation';
+    upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+    upscaleButton.title = 'Upscale with Real-ESRGAN';
+    
+    buttonContainer.appendChild(upscaleButton);
+    imageContainer.appendChild(buttonContainer);
+    
+    upscaleButton.onclick = async function() {
+        try {
+            upscaleButton.disabled = true;
+            upscaleButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
+            
+            const response = await fetch('/upscale', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_url: imageUrl })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'success' && data.upscaled_url) {
+                const newImageContainer = document.createElement('div');
+                newImageContainer.className = 'carousel-slide';
+                
+                const newImage = document.createElement('img');
+                newImage.src = data.upscaled_url;
+                newImage.alt = 'Upscaled Image';
+                
+                newImageContainer.appendChild(newImage);
+                imageContainer.parentNode.insertBefore(newImageContainer, imageContainer.nextSibling);
+                
+                addImageButtons(newImageContainer, data.upscaled_url);
+            } else {
+                throw new Error(data.error || 'Upscale failed');
+            }
+        } catch (error) {
+            console.error('Error during upscale:', error);
+            alert('Error during upscale: ' + error.message);
+        } finally {
+            upscaleButton.disabled = false;
+            upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+        }
+    };
+}

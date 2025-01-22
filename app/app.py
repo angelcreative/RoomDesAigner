@@ -94,22 +94,24 @@ def upscale_image():
         version = model.versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
         
         # Crear la predicción
-        prediction = version.predict(
+        result = version.predict(
             image=image_url
         )
 
-        print(f"✅ Imagen procesada. Salida: {prediction}")
+        print(f"✅ Imagen procesada. Salida: {result}")
 
         # La salida puede ser una lista o una URL directa
-        if isinstance(prediction, list):
-            prediction = prediction[0]
+        if isinstance(result, list):
+            result = result[0]
+        elif isinstance(result, dict):
+            result = result.get('output') or result.get('url')
         
         # Verificar que la URL es accesible
-        response = requests.head(prediction, timeout=5)
+        response = requests.head(result, timeout=5)
         if response.status_code == 200:
             return jsonify({
                 'status': 'success',
-                'upscaled_url': prediction
+                'upscaled_url': result
             })
         else:
             return jsonify({
