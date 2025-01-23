@@ -2588,10 +2588,7 @@ function addImageButtons(imageContainer, imageUrl) {
     const upscaleButton = document.createElement('button');
     upscaleButton.className = 'gradient-animation';
     upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
-    upscaleButton.title = 'Upscale with Real-ESRGAN';
-    
-    buttonContainer.appendChild(upscaleButton);
-    imageContainer.appendChild(buttonContainer);
+    upscaleButton.title = 'Upscale Image';
     
     upscaleButton.onclick = async function() {
         try {
@@ -2600,35 +2597,27 @@ function addImageButtons(imageContainer, imageUrl) {
             
             const response = await fetch('/upscale', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ image_url: imageUrl })
             });
             
             const data = await response.json();
             
-            if (data.status === 'success' && data.upscaled_url) {
-                const newImageContainer = document.createElement('div');
-                newImageContainer.className = 'carousel-slide';
-                
-                const newImage = document.createElement('img');
-                newImage.src = data.upscaled_url;
-                newImage.alt = 'Upscaled Image';
-                
-                newImageContainer.appendChild(newImage);
-                imageContainer.parentNode.insertBefore(newImageContainer, imageContainer.nextSibling);
-                
-                addImageButtons(newImageContainer, data.upscaled_url);
+            if (data.status === 'success') {
+                // Abrir la imagen en una nueva pestaña
+                window.open(data.upscaled_url, '_blank');
             } else {
                 throw new Error(data.error || 'Upscale failed');
             }
         } catch (error) {
-            console.error('Error during upscale:', error);
+            console.error('Error:', error);
             alert('Error during upscale: ' + error.message);
         } finally {
             upscaleButton.disabled = false;
             upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
         }
     };
+    
+    buttonContainer.appendChild(upscaleButton);
+    imageContainer.appendChild(buttonContainer);
 }

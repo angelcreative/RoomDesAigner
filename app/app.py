@@ -89,45 +89,29 @@ def upscale_image():
 
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Usar el modelo directamente con replicate.models.get()
-        model = replicate.models.get("nightmareai/real-esrgan")
-        version = model.versions.get("42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b")
-        
-        # Crear la predicción
-        result = version.predict(
-            image=image_url
+        # Usar el modelo directamente
+        output = replicate.run(
+            "nightmareai/real-esrgan:f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa",
+            input={
+                "image": image_url
+            }
         )
 
-        print(f"✅ Imagen procesada. Salida: {result}")
-
-        # La salida puede ser una lista o una URL directa
-        if isinstance(result, list):
-            result = result[0]
-        elif isinstance(result, dict):
-            result = result.get('output') or result.get('url')
-        
-        # Verificar que la URL es accesible
-        response = requests.head(result, timeout=5)
-        if response.status_code == 200:
-            return jsonify({
-                'status': 'success',
-                'upscaled_url': result
-            })
+        # El output puede ser directamente la URL o estar en una lista
+        if isinstance(output, list):
+            output_url = output[0]
         else:
-            return jsonify({
-                'status': 'error',
-                'error': 'Generated URL is not accessible'
-            }), 500
+            output_url = output
 
-    except replicate.exceptions.ReplicateError as e:
-        print(f"❌ Error de Replicate: {str(e)}")
+        print(f"✅ Imagen procesada. URL: {output_url}")
+
         return jsonify({
-            'status': 'error',
-            'error': str(e)
-        }), 500
+            'status': 'success',
+            'upscaled_url': output_url
+        })
 
     except Exception as e:
-        print(f"❌ Error general: {str(e)}")
+        print(f"❌ Error: {str(e)}")
         return jsonify({
             'status': 'error',
             'error': str(e)
