@@ -89,19 +89,27 @@ def upscale_image():
 
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Usar el modelo directamente
-        output = replicate.run(
-            "nightmareai/real-esrgan:f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa",
-            input={
-                "image": image_url
-            }
+        # Crear el cliente
+        client = replicate.Client(api_token=os.environ['REPLICATE_API_TOKEN'])
+
+        # Crear la predicción
+        prediction = client.predictions.create(
+            version="f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa",
+            input={"image": image_url}
         )
 
-        # El output puede ser directamente la URL o estar en una lista
-        if isinstance(output, list):
-            output_url = output[0]
-        else:
-            output_url = output
+        # Esperar a que la predicción se complete
+        while prediction.status != "succeeded":
+            prediction.reload()
+            print(f"Estado: {prediction.status}")
+            if prediction.status == "failed":
+                raise Exception(prediction.error)
+            time.sleep(1)
+
+        # Obtener la URL de la imagen procesada
+        output_url = prediction.output
+        if isinstance(output_url, list):
+            output_url = output_url[0]
 
         print(f"✅ Imagen procesada. URL: {output_url}")
 

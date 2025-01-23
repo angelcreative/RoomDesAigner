@@ -2592,8 +2592,10 @@ function addImageButtons(imageContainer, imageUrl) {
     
     upscaleButton.onclick = async function() {
         try {
+            // Mostrar estado de procesamiento
             upscaleButton.disabled = true;
             upscaleButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
+            upscaleButton.title = 'Processing...';
             
             const response = await fetch('/upscale', {
                 method: 'POST',
@@ -2613,8 +2615,10 @@ function addImageButtons(imageContainer, imageUrl) {
             console.error('Error:', error);
             alert('Error during upscale: ' + error.message);
         } finally {
+            // Restaurar el botón
             upscaleButton.disabled = false;
             upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+            upscaleButton.title = 'Upscale Image';
         }
     };
     
