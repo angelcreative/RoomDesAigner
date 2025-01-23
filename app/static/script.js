@@ -2596,7 +2596,6 @@ function addImageButtons(imageContainer, imageUrl) {
             upscaleButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
             upscaleButton.title = 'Processing...';
             
-            // Hacer la petición inicial
             const response = await fetch('/upscale', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2605,18 +2604,19 @@ function addImageButtons(imageContainer, imageUrl) {
             
             const data = await response.json();
             
-            if (data.status === 'success' && data.upscaled_url) {
+            if (data.status === 'success' && data.prediction && data.prediction.output) {
+                const upscaledUrl = data.prediction.output;
+                
                 // Intentar acceder a la URL con reintentos
                 let attempts = 0;
                 const maxAttempts = 30;
-                const delay = 1000; // 1 segundo entre intentos
+                const delay = 1000;
                 
                 const checkImage = async () => {
                     try {
-                        const imgResponse = await fetch(data.upscaled_url, { method: 'HEAD' });
+                        const imgResponse = await fetch(upscaledUrl, { method: 'HEAD' });
                         if (imgResponse.ok) {
-                            // La imagen está lista, abrirla en nueva pestaña
-                            window.open(data.upscaled_url, '_blank');
+                            window.open(upscaledUrl, '_blank');
                             return true;
                         }
                     } catch (error) {
@@ -2625,23 +2625,18 @@ function addImageButtons(imageContainer, imageUrl) {
                     return false;
                 };
                 
-                const waitForImage = async () => {
-                    while (attempts < maxAttempts) {
-                        if (await checkImage()) break;
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        attempts++;
-                        upscaleButton.title = `Processing... ${attempts}/${maxAttempts}`;
-                    }
-                    
-                    if (attempts >= maxAttempts) {
-                        throw new Error('Timeout waiting for image');
-                    }
-                };
+                while (attempts < maxAttempts) {
+                    if (await checkImage()) break;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    attempts++;
+                    upscaleButton.title = `Processing... ${attempts}/${maxAttempts}`;
+                }
                 
-                await waitForImage();
-                
+                if (attempts >= maxAttempts) {
+                    throw new Error('Timeout waiting for image');
+                }
             } else {
-                throw new Error(data.error || 'Upscale failed');
+                throw new Error(data.error || data.prediction?.error || 'Upscale failed');
             }
         } catch (error) {
             console.error('Error:', error);

@@ -95,24 +95,47 @@ def upscale_image():
             input={"image": image_url}
         )
 
-        # Manejar la salida
+        # Manejar la salida y crear respuesta "fake" completa
         if isinstance(output, list):
             output_url = output[0]
         else:
             output_url = output
 
+        # Crear respuesta que satisface la validación de Pydantic
+        current_time = datetime.datetime.now().isoformat() + "Z"
+        prediction_response = {
+            'id': 'fake_id_' + str(uuid.uuid4()),
+            'status': 'succeeded',
+            'started_at': current_time,
+            'completed_at': current_time,
+            'output': output_url,
+            'error': None,
+            'logs': "Upscale completed successfully"
+        }
+
         print(f"✅ Imagen procesada. URL: {output_url}")
         
         return jsonify({
             'status': 'success',
-            'upscaled_url': output_url
+            'upscaled_url': output_url,
+            'prediction': prediction_response  # Incluimos los campos que necesita Pydantic
         })
 
     except Exception as e:
         print(f"❌ Error: {str(e)}")
+        error_response = {
+            'id': 'error_' + str(uuid.uuid4()),
+            'status': 'failed',
+            'started_at': datetime.datetime.now().isoformat() + "Z",
+            'completed_at': datetime.datetime.now().isoformat() + "Z",
+            'output': None,
+            'error': str(e),
+            'logs': "Error during upscale"
+        }
         return jsonify({
             'status': 'error',
-            'error': str(e)
+            'error': str(e),
+            'prediction': error_response
         }), 500
 
 
