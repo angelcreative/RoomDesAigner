@@ -89,53 +89,34 @@ def upscale_image():
 
         print(f"🔄 Procesando imagen: {image_url}")
 
-        # Usar run directamente
+        # Usar el modelo directamente con replicate.run()
         output = replicate.run(
-            "nightmareai/real-esrgan:f121d640bd286e1fdc67f9799164c1d5be36ff74576ee11c803ae5b665dd46aa",
-            input={"image": image_url}
+            "nightmareai/real-esrgan:42fed1c4974146d4d2414e2be2c5277c7fcf05fcc3a73abf41610695738c1d7b",
+            input={
+                "image": image_url
+            }
         )
 
-        # Manejar la salida y crear respuesta "fake" completa
+        print(f"✅ Respuesta de la API: {output}")
+
+        # La salida puede ser una URL directa o estar en una lista
         if isinstance(output, list):
             output_url = output[0]
         else:
             output_url = output
 
-        # Crear respuesta que satisface la validación de Pydantic
-        current_time = datetime.datetime.now().isoformat() + "Z"
-        prediction_response = {
-            'id': 'fake_id_' + str(uuid.uuid4()),
-            'status': 'succeeded',
-            'started_at': current_time,
-            'completed_at': current_time,
-            'output': output_url,
-            'error': None,
-            'logs': "Upscale completed successfully"
-        }
-
-        print(f"✅ Imagen procesada. URL: {output_url}")
+        print(f"✅ URL final: {output_url}")
         
         return jsonify({
             'status': 'success',
-            'upscaled_url': output_url,
-            'prediction': prediction_response  # Incluimos los campos que necesita Pydantic
+            'upscaled_url': output_url
         })
 
     except Exception as e:
         print(f"❌ Error: {str(e)}")
-        error_response = {
-            'id': 'error_' + str(uuid.uuid4()),
-            'status': 'failed',
-            'started_at': datetime.datetime.now().isoformat() + "Z",
-            'completed_at': datetime.datetime.now().isoformat() + "Z",
-            'output': None,
-            'error': str(e),
-            'logs': "Error during upscale"
-        }
         return jsonify({
             'status': 'error',
-            'error': str(e),
-            'prediction': error_response
+            'error': str(e)
         }), 500
 
 
