@@ -202,34 +202,34 @@ def transform_prompt(prompt_text):
     if not openai_api_key:
         return prompt_text
     
-    # Cargar datos étnicos
-    ethnic_data = load_ethnic_data()
-    
-    # Detectar nacionalidad en el prompt
-    nationality_mapping = {
-        'argentinian': 'argentina',
-        'argentine': 'argentina',
-        # ... añadir más mappings según necesites
-    }
-    
-    words = prompt_text.lower().split()
-    detected_nationality = None
-    
-    for word in words:
-        if word in nationality_mapping:
-            detected_nationality = nationality_mapping[word]
-            break
-        elif word in ethnic_data['countries']:
-            detected_nationality = word
-            break
-    
-    if detected_nationality:
-        characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-        if characteristics:
-            ethnic_prompt = f", {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
-            prompt_text += ethnic_prompt
-
     try:
+        # Cargar datos étnicos
+        ethnic_data = load_ethnic_data()
+        
+        # Detectar nacionalidad en el prompt
+        nationality_mapping = {
+            'argentinian': 'argentina',
+            'argentine': 'argentina',
+            # ... añadir más mappings según necesites
+        }
+        
+        words = prompt_text.lower().split()
+        detected_nationality = None
+        
+        for word in words:
+            if word in nationality_mapping:
+                detected_nationality = nationality_mapping[word]
+                break
+            elif word in ethnic_data['countries']:
+                detected_nationality = word
+                break
+        
+        if detected_nationality:
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            if characteristics:
+                ethnic_prompt = f", {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
+                prompt_text += ethnic_prompt
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -238,11 +238,15 @@ def transform_prompt(prompt_text):
             ]
         )
         
-        enhanced_prompt = response.choices[0].message['content']
-        return enhanced_prompt
+        # Asegurarnos de que obtenemos el texto correctamente de la respuesta
+        if response and response.choices and len(response.choices) > 0:
+            enhanced_prompt = response.choices[0].message.content
+            return enhanced_prompt
+        return prompt_text
         
     except Exception as e:
-        print(f"Error in transform_prompt: {str(e)}")
+        print(f"Error transforming prompt: {str(e)}")
+        logging.error(f"Full error details: {e}", exc_info=True)
         return prompt_text
 
 
