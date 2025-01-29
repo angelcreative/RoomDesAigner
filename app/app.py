@@ -197,80 +197,61 @@ def get_content_for_interior_design():
     Generate a full, natural description that integrates all these elements seamlessly.
     """
 
+# Definir el nationality_mapping al inicio del archivo
+nationality_mapping = {
+    # América del Sur
+    'peruvian': 'peru',
+    'peru': 'peru',
+    'bolivian': 'bolivia',
+    'bolivia': 'bolivia',
+    # ... resto de mappings
+}
+
 # Main function to transform prompts
-def transform_prompt(prompt_text):
-    use_openai = request.json.get('use_openai', False)
+def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
-    if not openai_api_key or not use_openai:
-        print("⚡ Using basic prompt generator")
-        return generate_basic_prompt(prompt_text)
+    # Si no usamos OpenAI, devolver el prompt original a menos que tenga nacionalidad
+    if not use_openai:
+        # Detectar nacionalidad
+        words = prompt_text.lower().split()
+        detected_nationality = None
+        for word in words:
+            if word in nationality_mapping:
+                detected_nationality = nationality_mapping[word]
+                break
+        
+        # Si hay nacionalidad, añadir características étnicas
+        if detected_nationality:
+            ethnic_data = load_ethnic_data()
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            if characteristics:
+                facial_features_text = ", ".join(characteristics['facial_features'])
+                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, {facial_features_text}"
+        
+        return prompt_text
     
     print("🤖 Using OpenAI prompt generator")
     return generate_openai_prompt(prompt_text)
 
-def generate_basic_prompt(prompt_text):
-    try:
-        ethnic_data = load_ethnic_data()
-        words = prompt_text.lower().split()
-        
-        detected_nationality = None
-        for word in words:
-            if word in nationality_mapping:
-                detected_nationality = nationality_mapping[word]
-                print(f"🎯 Detected nationality: {detected_nationality}")
-                break
-        
-        if detected_nationality:
-            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            if characteristics:
-                # Construir el prompt básico
-                facial_features_text = ", ".join(characteristics['facial_features'])
-                basic_prompt = f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, {facial_features_text}"
-                print(f"📝 Generated basic prompt: {basic_prompt}")
-                return basic_prompt
-        
-        return prompt_text
-    except Exception as e:
-        print(f"❌ Error in basic prompt: {str(e)}")
-        return prompt_text
-
 def generate_openai_prompt(prompt_text):
     try:
-        # Cargar datos étnicos
-        ethnic_data = load_ethnic_data()
-        print("🔍 Ethnic data loaded successfully")
-        
-        words = prompt_text.lower().split()
-        print(f"🔤 Words detected: {words}")
-        
-        detected_nationality = None
-        for word in words:
-            if word in nationality_mapping:
-                detected_nationality = nationality_mapping[word]
-                print(f"🎯 Nationality detected: {detected_nationality}")
-                break
-        
-        ethnic_description = ""
-        if detected_nationality:
-            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            if characteristics:
-                facial_features_text = ", ".join(characteristics['facial_features'])
-                ethnic_description = f"The person should have {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, with {facial_features_text}"
-                print(f"📝 Generated ethnic description: {ethnic_description}")
-        
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
-                Your task is to create concise prompts that:
-                1. Include the provided ethnic features naturally in the description
-                2. Focus on physical characteristics from the ethnic data
-                3. Avoid flowery language or poetic descriptions
-                4. Keep the prompt simple and direct
-                5. Do not add assumptions about style, personality, or cultural stereotypes
-                Example: 'A [nationality] woman with [skin tone] skin, [hair color] hair and [eye color] eyes [doing action] and [facial features]'"""},
-                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning and adding more details. {ethnic_description}\nPrompt: {prompt_text}"}
+                When the prompt includes a nationality, you MUST:
+                1. Detect the nationality and include appropriate ethnic features
+                2. Use skin tones, hair colors, eye colors typical of that ethnicity
+                3. Include appropriate facial features
+                4. Keep descriptions respectful and accurate
+                
+                For all prompts:
+                1. Enhance visual details
+                2. Keep language clear and direct
+                3. Focus on visual elements
+                4. Maintain the original intent"""},
+                {"role": "user", "content": f"Enhance this image generation prompt: {prompt_text}"}
             ],
             temperature=0.7,
             max_tokens=150
@@ -363,24 +344,13 @@ def check_image_availability(url, timeout=60, interval=5):
 
 
 @app.route('/openai/transform', methods=['POST'])
-def transform_with_openai():
-    try:
-        data = request.json
-        prompt = data.get("prompt", "")
-        use_openai = data.get("use_openai", True)  # Estado del switch
-
-        if not prompt:
-            return jsonify({"error": "No prompt provided"}), 400
-
-        # Si el switch está desactivado, devolvemos el prompt sin transformar
-        if not use_openai:
-            return jsonify({"transformed_prompt": prompt})
-
-        # Si el switch está activado, usamos OpenAI para transformar el prompt
-        transformed_prompt = transform_prompt(prompt)
-        return jsonify({"transformed_prompt": transformed_prompt})
-    except Exception as e:
-        return jsonify({"error": f"Error transforming prompt: {str(e)}"}), 500
+def transform_prompt_endpoint():
+    data = request.json
+    prompt = data.get('prompt', '')
+    use_openai = data.get('use_openai', False)
+    
+    transformed_prompt = transform_prompt(prompt, use_openai)
+    return jsonify({'transformed_prompt': transformed_prompt})
 
 
 
@@ -404,7 +374,7 @@ def generate_images():
 
             # Decidir si transformar el prompt según el estado del switch
             transformed_prompt = (
-                transform_prompt(prompt_text) if use_openai else prompt_text
+                transform_prompt(prompt_text, use_openai)
             )
 
             data['prompt'] = transformed_prompt
