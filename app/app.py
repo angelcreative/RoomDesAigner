@@ -1202,9 +1202,10 @@ def get_ethnic_characteristics(nationality, ethnic_data):
         "eye_color": selected_ethnicity['features']['eye_colors'][0]
     }
 
-@app.route('/fashion', methods=['GET', 'POST'])
+@app.route('/fashion')
 def fashion():
     if request.method == 'GET':
+        print("Accessing fashion route...")  # Para debug
         return render_template('fashion.html')
     
     try:
