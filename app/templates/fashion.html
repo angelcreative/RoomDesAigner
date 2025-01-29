@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Fashion Image Generator</h2>
+    
+    <div class="fashion-inputs">
+        <div class="input-group">
+            <label>Model Image (person):</label>
+            <input type="file" id="modelImage" accept="image/*">
+            <img id="modelPreview" class="preview-image" style="display:none">
+        </div>
+        
+        <div class="input-group">
+            <label>Clothing Image:</label>
+            <input type="file" id="clothingImage" accept="image/*">
+            <img id="clothingPreview" class="preview-image" style="display:none">
+        </div>
+        
+        <button id="generateFashion" class="gradient-animation">Generate Fashion Image</button>
+    </div>
+    
+    <div id="resultContainer" style="display:none">
+        <h3>Result:</h3>
+        <img id="resultImage" class="result-image">
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Preview handlers
+    function handleImageUpload(input, previewId) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    document.getElementById('modelImage').addEventListener('change', function() {
+        handleImageUpload(this, 'modelPreview');
+    });
+    
+    document.getElementById('clothingImage').addEventListener('change', function() {
+        handleImageUpload(this, 'clothingPreview');
+    });
+    
+    // Generate button handler
+    document.getElementById('generateFashion').addEventListener('click', async function() {
+        const modelImage = document.getElementById('modelPreview').src;
+        const clothingImage = document.getElementById('clothingPreview').src;
+        
+        try {
+            const response = await fetch('/fashion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    init_image: modelImage,
+                    cloth_image: clothingImage
+                })
+            });
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                document.getElementById('resultImage').src = data.proxy_links[0];
+                document.getElementById('resultContainer').style.display = 'block';
+            } else {
+                alert('Error generating image: ' + data.error);
+            }
+        } catch (error) {
+            alert('Error: ' + error);
+        }
+    });
+});
+</script>
+
+<style>
+.fashion-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.preview-image {
+    max-width: 300px;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.result-image {
+    max-width: 100%;
+    margin-top: 20px;
+}
+</style>
+{% endblock %} 

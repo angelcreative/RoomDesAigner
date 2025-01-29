@@ -1201,3 +1201,45 @@ def get_ethnic_characteristics(nationality, ethnic_data):
         "hair_color": selected_ethnicity['features']['hair_colors'][0],
         "eye_color": selected_ethnicity['features']['eye_colors'][0]
     }
+
+@app.route('/fashion', methods=['GET', 'POST'])
+def fashion():
+    if request.method == 'GET':
+        return render_template('fashion.html')
+    
+    try:
+        init_image = request.json.get('init_image')
+        cloth_image = request.json.get('cloth_image')
+        
+        if not init_image or not cloth_image:
+            return jsonify({"error": "Both model and clothing images are required"}), 400
+        
+        payload = {
+            "key": os.environ.get('MODELSLAB_API_KEY'),
+            "prompt": "A realistic photo of a model wearing the clothing",
+            "negative_prompt": "Low quality, unrealistic, bad cloth, warped cloth",
+            "init_image": init_image,
+            "cloth_image": cloth_image,
+            "cloth_type": "upper_body",  # Podríamos hacer esto seleccionable
+            "guidance_scale": 7.5,
+            "num_inference_steps": 21,
+            "temp": "no"
+        }
+        
+        print("Sending request to ModelsLab API...")
+        response = requests.post(
+            "https://modelslab.com/api/v6/image_editing/fashion",
+            json=payload,
+            headers={'Content-Type': 'application/json'}
+        )
+        
+        if response.status_code != 200:
+            print(f"Error from ModelsLab API: {response.text}")
+            return jsonify({"error": "Error from ModelsLab API"}), response.status_code
+        
+        print(f"ModelsLab API response: {response.json()}")
+        return jsonify(response.json())
+        
+    except Exception as e:
+        print(f"Error in fashion endpoint: {str(e)}")
+        return jsonify({"error": str(e)}), 500
