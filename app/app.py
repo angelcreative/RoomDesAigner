@@ -360,7 +360,8 @@ def transform_prompt(prompt_text):
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
             print(f"👤 Ethnic characteristics found: {characteristics}")
             if characteristics:
-                ethnic_description = f"The person should have {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, and {characteristics['eye_color']} eyes, which are typical physical characteristics of their ethnicity."
+                facial_features_text = ", ".join(characteristics['facial_features'])
+                ethnic_description = f"The person should have {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, with {facial_features_text}, which are typical physical characteristics of their ethnicity."
                 print(f"📝 Generated ethnic description: {ethnic_description}")
 
         # Añadir logging para debug
@@ -372,16 +373,17 @@ def transform_prompt(prompt_text):
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
-                When the prompt includes a nationality or ethnicity, you MUST:
-                1. Maintain all ethnic and physical characteristics in the enhanced prompt
-                2. Include them naturally in the description
-                3. Never remove or alter the specified ethnic features
-                4. Always describe physical appearance in detail
-                Your goal is to create detailed, respectful, and accurate descriptions."""},
+                Your task is to create concise prompts that:
+                1. Include the provided ethnic features naturally in the description
+                2. Focus on physical characteristics from the ethnic data
+                3. Avoid flowery language or poetic descriptions
+                4. Keep the prompt simple and direct
+                5. Do not add assumptions about style, personality, or cultural stereotypes
+                Example: 'A [nationality] woman with [skin tone] skin, [hair color] hair and [eye color] eyes [doing action] and [facial features]'"""},
                 {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning and adding more details. {ethnic_description}\nPrompt: {prompt_text}"}
             ],
             temperature=0.7,
-            max_tokens=300
+            max_tokens=150  # Reducir para forzar respuestas más concisas
         )
         
         # Asegurarnos de que obtenemos el texto correctamente de la respuesta
@@ -1199,7 +1201,8 @@ def get_ethnic_characteristics(nationality, ethnic_data):
     return {
         "skin_tone": selected_ethnicity['features']['skin_tones'][0],
         "hair_color": selected_ethnicity['features']['hair_colors'][0],
-        "eye_color": selected_ethnicity['features']['eye_colors'][0]
+        "eye_color": selected_ethnicity['features']['eye_colors'][0],
+        "facial_features": selected_ethnicity['features']['facial_features']
     }
 
 @app.route('/fashion')
