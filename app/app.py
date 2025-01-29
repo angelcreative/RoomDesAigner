@@ -199,205 +199,70 @@ def get_content_for_interior_design():
 
 # Main function to transform prompts
 def transform_prompt(prompt_text):
-    if not openai_api_key:
-        return prompt_text
+    # Si no hay OpenAI key o use_openai es False, usar el generador de prompts básico
+    use_openai = request.args.get('use_openai', 'false').lower() == 'true'
     
+    if not openai_api_key or not use_openai:
+        return generate_basic_prompt(prompt_text)
+    
+    # Si hay OpenAI key y use_openai es True, usar el generador avanzado
+    return generate_openai_prompt(prompt_text)
+
+def generate_basic_prompt(prompt_text):
     try:
-        # Cargar datos étnicos
         ethnic_data = load_ethnic_data()
-        print("🔍 Ethnic data loaded successfully")
-        
-        # Detectar nacionalidad en el prompt
-        nationality_mapping = {
-            # América del Sur
-            'argentinian': 'argentina',
-            'argentine': 'argentina',
-            'bolivia': 'bolivia',
-            'bolivian': 'bolivia',
-            'brazil': 'brazil',
-            'brazilian': 'brazil',
-            'chile': 'chile',
-            'chilean': 'chile',
-            'colombia': 'colombia',
-            'colombian': 'colombia',
-            'ecuador': 'ecuador',
-            'ecuadorian': 'ecuador',
-            'paraguay': 'paraguay',
-            'paraguayan': 'paraguay',
-            'peru': 'peru',
-            'peruvian': 'peru',
-            'uruguay': 'uruguay',
-            'uruguayan': 'uruguay',
-            'venezuela': 'venezuela',
-            'venezuelan': 'venezuela',
-            # América del Norte y Central
-            'mexico': 'mexico',
-            'mexican': 'mexican',
-            'usa': 'united_states',
-            'american': 'united_states',
-            'united states': 'united_states',
-            'canada': 'canada',
-            'canadian': 'canada',
-            'costa rica': 'costa_rica',
-            'costa rican': 'costa_rica',
-            'cuba': 'cuba',
-            'cuban': 'cuba',
-            'dominican': 'dominican_republic',
-            'guatemala': 'guatemala',
-            'guatemalan': 'guatemala',
-            'haiti': 'haiti',
-            'haitian': 'haiti',
-            'honduras': 'honduras',
-            'honduran': 'honduras',
-            'jamaica': 'jamaica',
-            'jamaican': 'jamaica',
-            'panama': 'panama',
-            'panamanian': 'panama',
-            # Europa
-            'spain': 'spain',
-            'spanish': 'spain',
-            'france': 'france',
-            'french': 'france',
-            'germany': 'germany',
-            'german': 'germany',
-            'italy': 'italy',
-            'italian': 'italy',
-            'uk': 'united_kingdom',
-            'british': 'united_kingdom',
-            'english': 'united_kingdom',
-            'scottish': 'united_kingdom',
-            'welsh': 'united_kingdom',
-            'ireland': 'ireland',
-            'irish': 'ireland',
-            'portugal': 'portugal',
-            'portuguese': 'portugal',
-            'greece': 'greece',
-            'greek': 'greece',
-            'netherlands': 'netherlands',
-            'dutch': 'netherlands',
-            'belgium': 'belgium',
-            'belgian': 'belgium',
-            'sweden': 'sweden',
-            'swedish': 'sweden',
-            'norway': 'norway',
-            'norwegian': 'norway',
-            'denmark': 'denmark',
-            'danish': 'denmark',
-            'finland': 'finland',
-            'finnish': 'finland',
-            'russia': 'russia',
-            'russian': 'russia',
-            'poland': 'poland',
-            'polish': 'poland',
-            # Asia
-            'china': 'china',
-            'chinese': 'china',
-            'japan': 'japan',
-            'japanese': 'japan',
-            'korea': 'south_korea',
-            'korean': 'south_korea',
-            'south korea': 'south_korea',
-            'india': 'india',
-            'indian': 'india',
-            'vietnam': 'vietnam',
-            'vietnamese': 'vietnam',
-            'thailand': 'thailand',
-            'thai': 'thailand',
-            'philippines': 'philippines',
-            'filipino': 'philippines',
-            'indonesian': 'indonesia',
-            'indonesia': 'indonesia',
-            'malaysia': 'malaysia',
-            'malaysian': 'malaysia',
-            # Medio Oriente
-            'iran': 'iran',
-            'iranian': 'iran',
-            'iraq': 'iraq',
-            'iraqi': 'iraq',
-            'saudi': 'saudi_arabia',
-            'saudi arabia': 'saudi_arabia',
-            'turkey': 'turkey',
-            'turkish': 'turkey',
-            'israel': 'israel',
-            'israeli': 'israel',
-            # África
-            'egypt': 'egypt',
-            'egyptian': 'egypt',
-            'morocco': 'morocco',
-            'moroccan': 'morocco',
-            'south africa': 'south_africa',
-            'south african': 'south_africa',
-            'nigeria': 'nigeria',
-            'nigerian': 'nigeria',
-            'kenya': 'kenya',
-            'kenyan': 'kenya',
-            # Oceanía
-            'australia': 'australia',
-            'australian': 'australia',
-            'new zealand': 'new_zealand',
-            'new zealander': 'new_zealand',
-            'kiwi': 'new_zealand'
-        }
-        
         words = prompt_text.lower().split()
-        print(f"🔤 Words detected: {words}")
         
+        # Detectar nacionalidad
         detected_nationality = None
         for word in words:
             if word in nationality_mapping:
                 detected_nationality = nationality_mapping[word]
-                print(f"🎯 Nationality detected from mapping: {detected_nationality}")
-                break
-            elif word in ethnic_data['countries']:
-                detected_nationality = word
-                print(f"🎯 Nationality detected directly: {detected_nationality}")
                 break
         
-        print(f"🌍 Final detected nationality: {detected_nationality}")
+        # Extraer la acción del prompt original
+        action = " ".join([w for w in words if w not in nationality_mapping])
         
-        ethnic_description = ""
         if detected_nationality:
-            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            print(f"👤 Ethnic characteristics found: {characteristics}")
-            if characteristics:
-                facial_features_text = ", ".join(characteristics['facial_features'])
-                ethnic_description = f"The person should have {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, with {facial_features_text}, which are typical physical characteristics of their ethnicity."
-                print(f"📝 Generated ethnic description: {ethnic_description}")
-
-        # Añadir logging para debug
-        print(f"Prompt original: {prompt_text}")
-        print(f"Palabras detectadas: {words}")
-        print(f"Nacionalidad detectada: {detected_nationality}")
-
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
-                Your task is to create concise prompts that:
-                1. Include the provided ethnic features naturally in the description
-                2. Focus on physical characteristics from the ethnic data
-                3. Avoid flowery language or poetic descriptions
-                4. Keep the prompt simple and direct
-                5. Do not add assumptions about style, personality, or cultural stereotypes
-                Example: 'A [nationality] woman with [skin tone] skin, [hair color] hair and [eye color] eyes [doing action] and [facial features]'"""},
-                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning and adding more details. {ethnic_description}\nPrompt: {prompt_text}"}
-            ],
-            temperature=0.7,
-            max_tokens=150  # Reducir para forzar respuestas más concisas
-        )
+            # Obtener datos étnicos del país
+            country_data = ethnic_data['countries'].get(detected_nationality)
+            if country_data:
+                # Convertir etnias a lista con pesos
+                ethnicities = []
+                for name, percentage in country_data['ethnicities'].items():
+                    ethnic_type = country_data['ethnic_references'].get(name)
+                    if ethnic_type and ethnic_type in ethnic_data['ethnic_types']:
+                        ethnicities.append({
+                            'name': name,
+                            'percentage': float(percentage),
+                            'type': ethnic_type
+                        })
+                
+                # Seleccionar una etnia basada en los pesos
+                total_weight = sum(e['percentage'] for e in ethnicities)
+                weights = [e['percentage']/total_weight for e in ethnicities]
+                selected_ethnicity = random.choices(ethnicities, weights=weights, k=1)[0]
+                
+                # Obtener características de la etnia seleccionada
+                ethnic_features = ethnic_data['ethnic_types'][selected_ethnicity['type']]['features']
+                
+                # Seleccionar características aleatorias
+                skin_tone = random.choice(ethnic_features['skin_tones'])
+                hair_color = random.choice(ethnic_features['hair_colors'])
+                eye_color = random.choice(ethnic_features['eye_colors'])
+                facial_features = ethnic_features['facial_features']  # Usamos todas las facial features
+                
+                # Construir el prompt
+                features_text = f"with {skin_tone} skin, {hair_color} hair, {eye_color} eyes"
+                if facial_features:
+                    features_text += f", {', '.join(facial_features)}"
+                
+                return f"A {detected_nationality} person {features_text} {action}".strip()
         
-        # Asegurarnos de que obtenemos el texto correctamente de la respuesta
-        if response and response.choices and len(response.choices) > 0:
-            enhanced_prompt = response.choices[0].message.content
-            return enhanced_prompt
         return prompt_text
-        
     except Exception as e:
-        print(f"Error transforming prompt: {str(e)}")
-        logging.error(f"Full error details: {e}", exc_info=True)
+        print(f"Error in basic prompt generation: {str(e)}")
         return prompt_text
-
-
 
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
