@@ -349,12 +349,12 @@ def transform_prompt(prompt_text):
                 detected_nationality = word
                 break
         
+        ethnic_description = ""
         if detected_nationality:
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
             print(f"Características encontradas: {characteristics}")
             if characteristics:
-                ethnic_prompt = f", {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
-                prompt_text += ethnic_prompt
+                ethnic_description = f"The person should have {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, and {characteristics['eye_color']} eyes, which are typical physical characteristics of their ethnicity."
                 print(f"Prompt modificado: {prompt_text}")
 
         # Añadir logging para debug
@@ -365,9 +365,17 @@ def transform_prompt(prompt_text):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant that enhances image generation prompts."},
-                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning but adding more details: {prompt_text}"}
-            ]
+                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
+                When the prompt includes a nationality or ethnicity, you MUST:
+                1. Maintain all ethnic and physical characteristics in the enhanced prompt
+                2. Include them naturally in the description
+                3. Never remove or alter the specified ethnic features
+                4. Always describe physical appearance in detail
+                Your goal is to create detailed, respectful, and accurate descriptions."""},
+                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning and adding more details. {ethnic_description}\nPrompt: {prompt_text}"}
+            ],
+            temperature=0.7,
+            max_tokens=300
         )
         
         # Asegurarnos de que obtenemos el texto correctamente de la respuesta
