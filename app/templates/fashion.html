@@ -1,5 +1,12 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Try-On</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 <div class="container">
     <h2>Fashion Image Generator</h2>
     
@@ -105,4 +112,5 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-top: 20px;
 }
 </style>
-{% endblock %} 
+</body>
+</html> 
