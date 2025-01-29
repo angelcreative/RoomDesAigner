@@ -199,13 +199,14 @@ def get_content_for_interior_design():
 
 # Main function to transform prompts
 def transform_prompt(prompt_text):
-    # Si no hay OpenAI key o use_openai es False, usar el generador de prompts básico
-    use_openai = request.args.get('use_openai', 'false').lower() == 'true'
+    use_openai = request.json.get('use_openai', False)
+    print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
     if not openai_api_key or not use_openai:
+        print("⚡ Using basic prompt generator")
         return generate_basic_prompt(prompt_text)
     
-    # Si hay OpenAI key y use_openai es True, usar el generador avanzado
+    print("🤖 Using OpenAI prompt generator")
     return generate_openai_prompt(prompt_text)
 
 def generate_basic_prompt(prompt_text):
@@ -213,55 +214,76 @@ def generate_basic_prompt(prompt_text):
         ethnic_data = load_ethnic_data()
         words = prompt_text.lower().split()
         
-        # Detectar nacionalidad
         detected_nationality = None
         for word in words:
             if word in nationality_mapping:
                 detected_nationality = nationality_mapping[word]
+                print(f"🎯 Detected nationality: {detected_nationality}")
                 break
         
-        # Extraer la acción del prompt original
-        action = " ".join([w for w in words if w not in nationality_mapping])
-        
         if detected_nationality:
-            # Obtener datos étnicos del país
-            country_data = ethnic_data['countries'].get(detected_nationality)
-            if country_data:
-                # Convertir etnias a lista con pesos
-                ethnicities = []
-                for name, percentage in country_data['ethnicities'].items():
-                    ethnic_type = country_data['ethnic_references'].get(name)
-                    if ethnic_type and ethnic_type in ethnic_data['ethnic_types']:
-                        ethnicities.append({
-                            'name': name,
-                            'percentage': float(percentage),
-                            'type': ethnic_type
-                        })
-                
-                # Seleccionar una etnia basada en los pesos
-                total_weight = sum(e['percentage'] for e in ethnicities)
-                weights = [e['percentage']/total_weight for e in ethnicities]
-                selected_ethnicity = random.choices(ethnicities, weights=weights, k=1)[0]
-                
-                # Obtener características de la etnia seleccionada
-                ethnic_features = ethnic_data['ethnic_types'][selected_ethnicity['type']]['features']
-                
-                # Seleccionar características aleatorias
-                skin_tone = random.choice(ethnic_features['skin_tones'])
-                hair_color = random.choice(ethnic_features['hair_colors'])
-                eye_color = random.choice(ethnic_features['eye_colors'])
-                facial_features = ethnic_features['facial_features']  # Usamos todas las facial features
-                
-                # Construir el prompt
-                features_text = f"with {skin_tone} skin, {hair_color} hair, {eye_color} eyes"
-                if facial_features:
-                    features_text += f", {', '.join(facial_features)}"
-                
-                return f"A {detected_nationality} person {features_text} {action}".strip()
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            if characteristics:
+                # Construir el prompt básico
+                facial_features_text = ", ".join(characteristics['facial_features'])
+                basic_prompt = f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, {facial_features_text}"
+                print(f"📝 Generated basic prompt: {basic_prompt}")
+                return basic_prompt
         
         return prompt_text
     except Exception as e:
-        print(f"Error in basic prompt generation: {str(e)}")
+        print(f"❌ Error in basic prompt: {str(e)}")
+        return prompt_text
+
+def generate_openai_prompt(prompt_text):
+    try:
+        # Cargar datos étnicos
+        ethnic_data = load_ethnic_data()
+        print("🔍 Ethnic data loaded successfully")
+        
+        words = prompt_text.lower().split()
+        print(f"🔤 Words detected: {words}")
+        
+        detected_nationality = None
+        for word in words:
+            if word in nationality_mapping:
+                detected_nationality = nationality_mapping[word]
+                print(f"🎯 Nationality detected: {detected_nationality}")
+                break
+        
+        ethnic_description = ""
+        if detected_nationality:
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            if characteristics:
+                facial_features_text = ", ".join(characteristics['facial_features'])
+                ethnic_description = f"The person should have {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, with {facial_features_text}"
+                print(f"📝 Generated ethnic description: {ethnic_description}")
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
+                Your task is to create concise prompts that:
+                1. Include the provided ethnic features naturally in the description
+                2. Focus on physical characteristics from the ethnic data
+                3. Avoid flowery language or poetic descriptions
+                4. Keep the prompt simple and direct
+                5. Do not add assumptions about style, personality, or cultural stereotypes
+                Example: 'A [nationality] woman with [skin tone] skin, [hair color] hair and [eye color] eyes [doing action] and [facial features]'"""},
+                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning and adding more details. {ethnic_description}\nPrompt: {prompt_text}"}
+            ],
+            temperature=0.7,
+            max_tokens=150
+        )
+        
+        if response and response.choices and len(response.choices) > 0:
+            enhanced_prompt = response.choices[0].message.content
+            return enhanced_prompt
+        return prompt_text
+        
+    except Exception as e:
+        print(f"Error transforming prompt: {str(e)}")
+        logging.error(f"Full error details: {e}", exc_info=True)
         return prompt_text
 
 @app.route('/gpt-talk', methods=['POST'])
@@ -1064,9 +1086,9 @@ def get_ethnic_characteristics(nationality, ethnic_data):
     print(f"👥 Selected ethnicity: {selected_ethnicity}")
     
     return {
-        "skin_tone": selected_ethnicity['features']['skin_tones'][0],
-        "hair_color": selected_ethnicity['features']['hair_colors'][0],
-        "eye_color": selected_ethnicity['features']['eye_colors'][0],
+        "skin_tone": random.choice(selected_ethnicity['features']['skin_tones']),
+        "hair_color": random.choice(selected_ethnicity['features']['hair_colors']),
+        "eye_color": random.choice(selected_ethnicity['features']['eye_colors']),
         "facial_features": selected_ethnicity['features']['facial_features']
     }
 
