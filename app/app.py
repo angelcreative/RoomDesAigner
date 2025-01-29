@@ -1076,7 +1076,7 @@ def fashion():
             return jsonify({"error": "Both model and clothing images are required"}), 400
         
         payload = {
-            "key": os.environ.get('MODELSLAB_API_KEY'),
+            "key": os.environ.get('MODELSLAB_API_KEY'), 
             "prompt": "A realistic photo of a model wearing the clothing",
             "negative_prompt": "Low quality, unrealistic, bad cloth, warped cloth",
             "init_image": init_image,
