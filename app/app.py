@@ -227,7 +227,7 @@ def transform_prompt(prompt_text, use_openai=False):
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
             if characteristics:
                 facial_features_text = ", ".join(characteristics['facial_features'])
-                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and facial features including {facial_features_text}"
+                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and facial features including {facial_features_text}, {characteristics['ethnic_description']}"
         
         return prompt_text
     
@@ -1048,18 +1048,26 @@ def get_ethnic_characteristics(nationality, ethnic_data):
             ethnicities.append({
                 'name': name,
                 'percentage': str(percentage),
-                'features': ethnic_data['ethnic_types'][ethnic_type]['features']
+                'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
+                'ethnic_type': ethnic_type,
+                'other_details': ethnic_data['ethnic_types'][ethnic_type].get('other_details') if name == 'indigenous' else None
             })
     
     # Seleccionar una etnia basada en los pesos
     selected_ethnicity = select_ethnicity_by_weight(ethnicities)
     print(f"👥 Selected ethnicity: {selected_ethnicity}")
     
+    # Construir la descripción de herencia étnica
+    ethnic_description = f"of {selected_ethnicity['name']} heritage with {selected_ethnicity['ethnic_type'].replace('_', ' ')} features"
+    if selected_ethnicity.get('other_details'):
+        ethnic_description += f", {selected_ethnicity['other_details']}"
+    
     return {
         "skin_tone": random.choice(selected_ethnicity['features']['skin_tones']),
         "hair_color": random.choice(selected_ethnicity['features']['hair_colors']),
         "eye_color": random.choice(selected_ethnicity['features']['eye_colors']),
-        "facial_features": selected_ethnicity['features']['facial_features']
+        "facial_features": selected_ethnicity['features']['facial_features'],
+        "ethnic_description": ethnic_description
     }
 
 @app.route('/fashion')
