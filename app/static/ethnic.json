@@ -1,0 +1,3010 @@
+{
+  "ethnic_types": {
+    "pashtun": {
+      "features": {
+        "skin_tones": ["medium", "olive"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["prominent_nose", "strong_brow", "defined_cheekbones"]
+      }
+    },
+    "tajik": {
+      "features": {
+        "skin_tones": ["light", "medium"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "hazel", "green"],
+        "facial_features": ["high_cheekbones", "almond_eyes"]
+      }
+    },
+    "arab_berber": {
+      "features": {
+        "skin_tones": ["olive", "medium", "tan"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["prominent_nose", "strong_brow", "full_lips"]
+      }
+    },
+    "pacific_islander": {
+      "features": {
+        "skin_tones": ["medium_brown", "dark_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["round_face", "wide_nose", "full_lips"]
+      }
+    },
+    "mediterranean_european": {
+      "features": {
+        "skin_tones": ["olive", "light"],
+        "hair_colors": ["dark_brown", "black", "brown"],
+        "eye_colors": ["brown", "hazel", "green"],
+        "facial_features": ["straight_nose", "defined_features"]
+      }
+    },
+    "black_african": {
+      "features": {
+        "skin_tones": ["dark_brown", "medium_brown", "deep_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["full_lips", "broad_nose", "high_cheekbones"]
+      }
+    },
+    "white_european": {
+      "features": {
+        "skin_tones": ["fair", "light", "medium"],
+        "hair_colors": ["blonde", "brown", "dark_brown", "black"],
+        "eye_colors": ["blue", "green", "brown", "hazel"],
+        "facial_features": ["narrow_nose", "thin_lips", "angular_features"]
+      }
+    },
+    "armenian": {
+      "features": {
+        "skin_tones": ["light", "olive"],
+        "hair_colors": ["dark_brown", "black"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["prominent_nose", "strong_brow", "defined_features"]
+      }
+    },
+    "east_asian": {
+      "features": {
+        "skin_tones": ["light", "fair"],
+        "hair_colors": ["black"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["monolid_eyes", "flat_nose_bridge", "round_face"]
+      }
+    },
+    "south_asian": {
+      "features": {
+        "skin_tones": ["medium", "tan", "brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["almond_eyes", "defined_nose", "full_lips"]
+      }
+    },
+    "indigenous_american": {
+      "features": {
+        "skin_tones": ["copper", "tan", "medium_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["high_cheekbones", "straight_nose", "almond_eyes"]
+      }
+    },
+    "polynesian": {
+      "features": {
+        "skin_tones": ["brown", "medium_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "full_lips", "round_face"]
+      }
+    },
+    "central_asian": {
+      "features": {
+        "skin_tones": ["light", "medium"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown"],
+        "facial_features": ["high_cheekbones", "almond_eyes", "straight_nose"]
+      }
+    },
+    "indigenous_australian": {
+      "features": {
+        "skin_tones": ["dark_brown", "deep_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "full_lips", "pronounced_brow"]
+      }
+    },
+    "caucasian_slavic": {
+      "features": {
+        "skin_tones": ["fair", "light", "pale"],
+        "hair_colors": ["blonde", "light_brown", "dark_blonde"],
+        "eye_colors": ["blue", "green", "gray"],
+        "facial_features": ["high_cheekbones", "straight_nose", "round_face"]
+      }
+    },
+    "nordic_european": {
+      "features": {
+        "skin_tones": ["fair", "very_light", "pale"],
+        "hair_colors": ["blonde", "light_blonde", "red", "light_brown"],
+        "eye_colors": ["blue", "light_blue", "green", "gray"],
+        "facial_features": ["defined_jawline", "straight_nose", "high_cheekbones"]
+      }
+    },
+    "southeast_asian": {
+      "features": {
+        "skin_tones": ["light_brown", "medium_brown", "tan"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["flat_nose_bridge", "round_face", "small_eyes"]
+      }
+    },
+    "horn_african": {
+      "features": {
+        "skin_tones": ["medium_brown", "dark_brown", "reddish_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["narrow_nose", "high_cheekbones", "oval_face"]
+      }
+    },
+    "celtic_european": {
+      "features": {
+        "skin_tones": ["very_fair", "pale", "freckled"],
+        "hair_colors": ["red", "auburn", "dark_brown", "black"],
+        "eye_colors": ["blue", "green", "gray", "hazel"],
+        "facial_features": ["high_cheekbones", "pointed_nose", "round_face"]
+      }
+    },
+    "melanesian": {
+      "features": {
+        "skin_tones": ["dark_brown", "black_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "full_lips", "strong_brow"]
+      }
+    },
+    "micronesian": {
+      "features": {
+        "skin_tones": ["brown", "light_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["round_face", "wide_nose", "prominent_cheekbones"]
+      }
+    },
+    "west_african": {
+      "features": {
+        "skin_tones": ["dark_brown", "deep_brown", "ebony"],
+        "hair_colors": ["black"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "full_lips", "defined_cheekbones"]
+      }
+    },
+    "north_african": {
+      "features": {
+        "skin_tones": ["olive", "medium", "light_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["aquiline_nose", "almond_eyes", "defined_features"]
+      }
+    },
+    "persian": {
+      "features": {
+        "skin_tones": ["olive", "medium", "light"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["defined_nose", "almond_eyes", "strong_brow"]
+      }
+    },
+    "oceanic": {
+      "features": {
+        "skin_tones": ["brown", "dark_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["wide_nose", "full_lips", "round_face"]
+      }
+    },
+    "caribbean": {
+      "features": {
+        "skin_tones": ["medium_brown", "dark_brown", "light_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["full_lips", "broad_nose", "mixed_features"]
+      }
+    },
+    "southeast_european": {
+      "features": {
+        "skin_tones": ["light", "olive"],
+        "hair_colors": ["dark_brown", "black", "brown"],
+        "eye_colors": ["brown", "hazel", "green", "blue"],
+        "facial_features": ["defined_nose", "high_cheekbones", "oval_face"]
+      }
+    },
+    "nilotic": {
+      "features": {
+        "skin_tones": ["very_dark_brown", "deep_brown", "black"],
+        "hair_colors": ["black"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["very_tall", "long_limbs", "narrow_features"]
+      }
+    },
+    "semitic": {
+      "features": {
+        "skin_tones": ["olive", "medium", "light_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["prominent_nose", "strong_brow", "defined_features"]
+      }
+    },
+    "turkic": {
+      "features": {
+        "skin_tones": ["light", "medium", "olive"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["brown", "dark_brown", "hazel"],
+        "facial_features": ["high_cheekbones", "almond_eyes", "prominent_nose"]
+      }
+    },
+    "baltic": {
+      "features": {
+        "skin_tones": ["fair", "light"],
+        "hair_colors": ["blonde", "light_brown", "dark_blonde"],
+        "eye_colors": ["blue", "gray", "green"],
+        "facial_features": ["straight_nose", "defined_jawline", "high_cheekbones"]
+      }
+    },
+    "malagasy": {
+      "features": {
+        "skin_tones": ["medium_brown", "light_brown", "olive"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["round_face", "wide_nose", "full_lips"]
+      }
+    },
+    "pacific_asian": {
+      "features": {
+        "skin_tones": ["light_brown", "medium_brown"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["flat_nose_bridge", "round_face", "epicanthic_fold"]
+      }
+    },
+    "austronesian": {
+      "features": {
+        "skin_tones": ["medium_brown", "light_brown", "tan"],
+        "hair_colors": ["black", "dark_brown"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "high_cheekbones", "round_face"]
+      }
+    },
+    "scandinavian": {
+      "features": {
+        "skin_tones": ["very_fair", "pale", "light"],
+        "hair_colors": ["blonde", "light_blonde", "ash_blonde"],
+        "eye_colors": ["blue", "light_blue", "green", "gray"],
+        "facial_features": ["defined_jawline", "straight_nose", "high_forehead"]
+      }
+    },
+    "dravidian": {
+      "features": {
+        "skin_tones": ["dark_brown", "medium_brown", "light_brown"],
+        "hair_colors": ["black"],
+        "eye_colors": ["dark_brown", "brown"],
+        "facial_features": ["broad_nose", "full_lips", "round_face"]
+      }
+    }
+  },
+  "countries": {
+    "afghanistan": {
+      "ethnicities": {
+        "pashtun": 42.0,
+        "tajik": 27.0,
+        "hazara": 9.0,
+        "uzbek": 9.0,
+        "aimak": 4.0,
+        "turkmen": 3.0,
+        "baloch": 2.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "hazara": "tajik",
+        "uzbek": "tajik",
+        "aimak": "tajik",
+        "turkmen": "tajik",
+        "baloch": "pashtun"
+      }
+    },
+    "albania": {
+      "ethnicities": {
+        "albanian": 95.0,
+        "greek": 3.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "albanian": "mediterranean_european",
+        "greek": "mediterranean_european"
+      },
+      "other_details": "Other includes Vlach, Roma (Gypsy), Serb, Macedonian, Bulgarian"
+    },
+    "algeria": {
+      "ethnicities": {
+        "arab_berber": 99.0,
+        "european": 1.0
+      },
+      "ethnic_references": {
+        "european": "mediterranean_european"
+      }
+    },
+    "american_samoa": {
+      "ethnicities": {
+        "pacific_islander": 91.6,
+        "asian": 2.8,
+        "white": 1.1,
+        "mixed": 4.2,
+        "other": 0.3
+      },
+      "ethnic_references": {
+        "white": "white_european",
+        "asian": "pacific_islander"
+      }
+    },
+    "andorra": {
+      "ethnicities": {
+        "spanish": 43.0,
+        "andorran": 33.0,
+        "portuguese": 11.0,
+        "french": 7.0,
+        "other": 6.0
+      },
+      "ethnic_references": {
+        "spanish": "mediterranean_european",
+        "andorran": "mediterranean_european",
+        "portuguese": "mediterranean_european",
+        "french": "white_european"
+      }
+    },
+    "angola": {
+      "ethnicities": {
+        "ovimbundu": 37.0,
+        "kimbundu": 25.0,
+        "bakongo": 13.0,
+        "mestico": 2.0,
+        "european": 1.0,
+        "other": 22.0
+      },
+      "ethnic_references": {
+        "ovimbundu": "black_african",
+        "kimbundu": "black_african",
+        "bakongo": "black_african",
+        "mestico": "black_african",
+        "european": "mediterranean_european"
+      }
+    },
+    "anguilla": {
+      "ethnicities": {
+        "black": 90.1,
+        "mixed": 4.6,
+        "white": 3.7,
+        "other": 1.5
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "white": "white_european",
+        "mixed": "black_african"
+      }
+    },
+    "antigua_and_barbuda": {
+      "ethnicities": {
+        "black": 91.0,
+        "mixed": 4.4,
+        "white": 1.7,
+        "other": 2.9
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "white": "white_european",
+        "mixed": "black_african"
+      }
+    },
+    "argentina": {
+      "ethnicities": {
+        "white": 97.0,
+        "mestizo": 2.0,
+        "amerindian": 1.0
+      },
+      "ethnic_references": {
+        "white": "mediterranean_european",
+        "mestizo": "mediterranean_european",
+        "amerindian": "pacific_islander"
+      },
+      "other_details": "White population mostly of Spanish and Italian descent"
+    },
+    "armenia": {
+      "ethnicities": {
+        "armenian": 93.0,
+        "azeri": 1.0,
+        "russian": 2.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "azeri": "armenian",
+        "russian": "white_european"
+      },
+      "other_details": "Other includes mostly Yezidi Kurds. Note: as of 1993, virtually all Azeris had emigrated"
+    },
+    "australia": {
+      "ethnicities": {
+        "white": 91.0,
+        "asian": 12.0,
+        "aboriginal": 3.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "white": "white_european",
+        "asian": "east_asian",
+        "aboriginal": "indigenous_australian"
+      }
+    },
+    "austria": {
+      "ethnicities": {
+        "austrian": 80.8,
+        "german": 2.6,
+        "bosnian": 1.9,
+        "turkish": 1.8,
+        "serbian": 1.6,
+        "other": 11.3
+      },
+      "ethnic_references": {
+        "austrian": "white_european",
+        "german": "white_european",
+        "bosnian": "mediterranean_european",
+        "turkish": "central_asian",
+        "serbian": "mediterranean_european"
+      }
+    },
+    "azerbaijan": {
+      "ethnicities": {
+        "azerbaijani": 91.6,
+        "lezgin": 2.0,
+        "russian": 1.3,
+        "armenian": 1.3,
+        "other": 3.8
+      },
+      "ethnic_references": {
+        "azerbaijani": "central_asian",
+        "lezgin": "central_asian",
+        "russian": "caucasian_slavic",
+        "armenian": "armenian"
+      }
+    },
+    "bahamas": {
+      "ethnicities": {
+        "black": 85.0,
+        "white": 12.0,
+        "asian": 1.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "white": "white_european",
+        "asian": "east_asian"
+      }
+    },
+    "bahrain": {
+      "ethnicities": {
+        "bahraini": 46.0,
+        "asian": 45.5,
+        "other_arab": 4.7,
+        "african": 1.6,
+        "european": 1.0,
+        "other": 1.2
+      },
+      "ethnic_references": {
+        "bahraini": "arab_berber",
+        "asian": "south_asian",
+        "other_arab": "arab_berber",
+        "african": "black_african",
+        "european": "white_european"
+      }
+    },
+    "bangladesh": {
+      "ethnicities": {
+        "bengali": 98.0,
+        "tribal_groups": 1.1,
+        "other": 0.9
+      },
+      "ethnic_references": {
+        "bengali": "south_asian",
+        "tribal_groups": "south_asian"
+      }
+    },
+    "barbados": {
+      "ethnicities": {
+        "black": 92.4,
+        "mixed": 3.1,
+        "white": 2.7,
+        "east_indian": 1.3,
+        "other": 0.5
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "black_african",
+        "white": "white_european",
+        "east_indian": "south_asian"
+      }
+    },
+    "belarus": {
+      "ethnicities": {
+        "belarusian": 83.7,
+        "russian": 8.3,
+        "polish": 3.1,
+        "ukrainian": 1.7,
+        "other": 3.2
+      },
+      "ethnic_references": {
+        "belarusian": "caucasian_slavic",
+        "russian": "caucasian_slavic",
+        "polish": "caucasian_slavic",
+        "ukrainian": "caucasian_slavic"
+      }
+    },
+    "belgium": {
+      "ethnicities": {
+        "belgian": 75.0,
+        "italian": 4.1,
+        "moroccan": 3.7,
+        "french": 2.4,
+        "turkish": 2.0,
+        "dutch": 2.0,
+        "other": 10.8
+      },
+      "ethnic_references": {
+        "belgian": "white_european",
+        "italian": "mediterranean_european",
+        "moroccan": "arab_berber",
+        "french": "white_european",
+        "turkish": "central_asian",
+        "dutch": "white_european"
+      }
+    },
+    "belize": {
+      "ethnicities": {
+        "mestizo": 52.9,
+        "creole": 25.9,
+        "maya": 11.3,
+        "garifuna": 6.1,
+        "other": 3.8
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "creole": "black_african",
+        "maya": "indigenous_american",
+        "garifuna": "black_african"
+      }
+    },
+    "benin": {
+      "ethnicities": {
+        "fon": 39.2,
+        "adja": 15.2,
+        "yoruba": 12.3,
+        "bariba": 9.2,
+        "other": 24.1
+      },
+      "ethnic_references": {
+        "fon": "black_african",
+        "adja": "black_african",
+        "yoruba": "black_african",
+        "bariba": "black_african"
+      }
+    },
+    "bhutan": {
+      "ethnicities": {
+        "ngalop": 50.0,
+        "ethnic_nepalese": 35.0,
+        "indigenous": 15.0
+      },
+      "ethnic_references": {
+        "ngalop": "east_asian",
+        "ethnic_nepalese": "south_asian",
+        "indigenous": "south_asian"
+      },
+      "other_details": "Ngalop (also known as Bhote) are people of Tibetan origin"
+    },
+    "bolivia": {
+      "ethnicities": {
+        "mestizo": 68.0,
+        "indigenous": 20.0,
+        "white": 5.0,
+        "cholo": 2.0,
+        "black": 1.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "indigenous": "indigenous_american",
+        "white": "mediterranean_european",
+        "cholo": "indigenous_american",
+        "black": "black_african"
+      },
+      "other_details": "Indigenous includes Quechua and Aymara peoples"
+    },
+    "bosnia_and_herzegovina": {
+      "ethnicities": {
+        "bosniak": 48.0,
+        "serb": 33.0,
+        "croat": 14.0,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "bosniak": "mediterranean_european",
+        "serb": "caucasian_slavic",
+        "croat": "caucasian_slavic"
+      }
+    },
+    "botswana": {
+      "ethnicities": {
+        "tswana": 79.0,
+        "kalanga": 11.0,
+        "basarwa": 3.0,
+        "kgalagadi": 3.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "tswana": "black_african",
+        "kalanga": "black_african",
+        "basarwa": "black_african",
+        "kgalagadi": "black_african"
+      }
+    },
+    "brazil": {
+      "ethnicities": {
+        "white": 47.7,
+        "mixed": 43.1,
+        "black": 7.6,
+        "asian": 1.1,
+        "indigenous": 0.4
+      },
+      "ethnic_references": {
+        "white": "mediterranean_european",
+        "mixed": "indigenous_american",
+        "black": "black_african",
+        "asian": "east_asian",
+        "indigenous": "indigenous_american"
+      },
+      "other_details": "Large Japanese-Brazilian population included in Asian category"
+    },
+    "brunei": {
+      "ethnicities": {
+        "malay": 65.7,
+        "chinese": 10.3,
+        "other": 24.0
+      },
+      "ethnic_references": {
+        "malay": "southeast_asian",
+        "chinese": "east_asian"
+      }
+    },
+    "bulgaria": {
+      "ethnicities": {
+        "bulgarian": 76.9,
+        "turkish": 8.0,
+        "roma": 4.4,
+        "other": 10.7
+      },
+      "ethnic_references": {
+        "bulgarian": "caucasian_slavic",
+        "turkish": "central_asian",
+        "roma": "south_asian"
+      }
+    },
+    "burkina_faso": {
+      "ethnicities": {
+        "mossi": 52.0,
+        "fulani": 8.4,
+        "gurma": 7.0,
+        "bobo": 4.8,
+        "other": 27.8
+      },
+      "ethnic_references": {
+        "mossi": "black_african",
+        "fulani": "black_african",
+        "gurma": "black_african",
+        "bobo": "black_african"
+      }
+    },
+    "burundi": {
+      "ethnicities": {
+        "hutu": 85.0,
+        "tutsi": 14.0,
+        "twa": 1.0
+      },
+      "ethnic_references": {
+        "hutu": "black_african",
+        "tutsi": "black_african",
+        "twa": "black_african"
+      }
+    },
+    "cambodia": {
+      "ethnicities": {
+        "khmer": 90.0,
+        "vietnamese": 5.0,
+        "chinese": 1.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "khmer": "southeast_asian",
+        "vietnamese": "southeast_asian",
+        "chinese": "east_asian"
+      }
+    },
+    "cameroon": {
+      "ethnicities": {
+        "cameroon_highlanders": 31.0,
+        "equatorial_bantu": 19.0,
+        "kirdi": 11.0,
+        "fulani": 10.0,
+        "northwestern_bantu": 8.0,
+        "eastern_nigritic": 7.0,
+        "other": 14.0
+      },
+      "ethnic_references": {
+        "cameroon_highlanders": "black_african",
+        "equatorial_bantu": "black_african",
+        "kirdi": "black_african",
+        "fulani": "black_african",
+        "northwestern_bantu": "black_african",
+        "eastern_nigritic": "black_african"
+      }
+    },
+    "canada": {
+      "ethnicities": {
+        "european": 72.9,
+        "asian": 17.7,
+        "indigenous": 4.9,
+        "black": 3.8,
+        "latin_american": 1.9,
+        "other": 0.3
+      },
+      "ethnic_references": {
+        "european": "white_european",
+        "asian": "east_asian",
+        "indigenous": "indigenous_american",
+        "black": "black_african",
+        "latin_american": "indigenous_american"
+      },
+      "other_details": "Large Chinese and South Asian populations included in Asian category"
+    },
+    "cape_verde": {
+      "ethnicities": {
+        "creole": 71.0,
+        "african": 28.0,
+        "european": 1.0
+      },
+      "ethnic_references": {
+        "creole": "black_african",
+        "african": "black_african",
+        "european": "mediterranean_european"
+      }
+    },
+    "central_african_republic": {
+      "ethnicities": {
+        "baya": 33.0,
+        "banda": 27.0,
+        "mandjia": 13.0,
+        "sara": 10.0,
+        "mboum": 7.0,
+        "other": 10.0
+      },
+      "ethnic_references": {
+        "baya": "black_african",
+        "banda": "black_african",
+        "mandjia": "black_african",
+        "sara": "black_african",
+        "mboum": "black_african"
+      }
+    },
+    "chad": {
+      "ethnicities": {
+        "sara": 27.7,
+        "arab": 12.3,
+        "mayo_kebbi": 11.5,
+        "kanem_bornou": 9.0,
+        "other": 39.5
+      },
+      "ethnic_references": {
+        "sara": "black_african",
+        "arab": "arab_berber",
+        "mayo_kebbi": "black_african",
+        "kanem_bornou": "black_african"
+      }
+    },
+    "chile": {
+      "ethnicities": {
+        "white_and_non_indigenous": 88.9,
+        "mapuche": 9.1,
+        "aymara": 0.7,
+        "other_indigenous": 1.0,
+        "other": 0.3
+      },
+      "ethnic_references": {
+        "white_and_non_indigenous": "mediterranean_european",
+        "mapuche": "indigenous_american",
+        "aymara": "indigenous_american",
+        "other_indigenous": "indigenous_american"
+      }
+    },
+    "china": {
+      "ethnicities": {
+        "han": 91.6,
+        "zhuang": 1.3,
+        "hui": 0.8,
+        "manchu": 0.9,
+        "uyghur": 0.8,
+        "other": 4.6
+      },
+      "ethnic_references": {
+        "han": "east_asian",
+        "zhuang": "east_asian",
+        "hui": "east_asian",
+        "manchu": "east_asian",
+        "uyghur": "central_asian"
+      }
+    },
+    "colombia": {
+      "ethnicities": {
+        "mestizo_and_white": 87.6,
+        "afro_colombian": 6.8,
+        "indigenous": 4.3,
+        "other": 1.3
+      },
+      "ethnic_references": {
+        "mestizo_and_white": "indigenous_american",
+        "afro_colombian": "black_african",
+        "indigenous": "indigenous_american"
+      }
+    },
+    "comoros": {
+      "ethnicities": {
+        "antalote": 30.0,
+        "cafre": 25.0,
+        "makoa": 20.0,
+        "oimatsaha": 15.0,
+        "other": 10.0
+      },
+      "ethnic_references": {
+        "antalote": "black_african",
+        "cafre": "black_african",
+        "makoa": "black_african",
+        "oimatsaha": "black_african"
+      }
+    },
+    "congo_republic": {
+      "ethnicities": {
+        "kongo": 48.0,
+        "sangha": 20.0,
+        "teke": 17.0,
+        "mbochi": 12.0,
+        "other": 3.0
+      },
+      "ethnic_references": {
+        "kongo": "black_african",
+        "sangha": "black_african",
+        "teke": "black_african",
+        "mbochi": "black_african"
+      }
+    },
+    "congo_democratic_republic": {
+      "ethnicities": {
+        "luba": 18.0,
+        "kongo": 16.0,
+        "mangbetu_azande": 10.0,
+        "other": 56.0
+      },
+      "ethnic_references": {
+        "luba": "black_african",
+        "kongo": "black_african",
+        "mangbetu_azande": "black_african"
+      }
+    },
+    "costa_rica": {
+      "ethnicities": {
+        "white_and_mestizo": 83.6,
+        "mulatto": 6.7,
+        "indigenous": 2.4,
+        "black": 1.1,
+        "chinese": 0.2,
+        "other": 6.0
+      },
+      "ethnic_references": {
+        "white_and_mestizo": "mediterranean_european",
+        "mulatto": "black_african",
+        "indigenous": "indigenous_american",
+        "black": "black_african",
+        "chinese": "east_asian"
+      }
+    },
+    "croatia": {
+      "ethnicities": {
+        "croat": 90.4,
+        "serb": 4.4,
+        "other": 5.2
+      },
+      "ethnic_references": {
+        "croat": "caucasian_slavic",
+        "serb": "caucasian_slavic"
+      }
+    },
+    "cuba": {
+      "ethnicities": {
+        "white": 64.1,
+        "mulatto_and_mestizo": 26.6,
+        "black": 9.3
+      },
+      "ethnic_references": {
+        "white": "mediterranean_european",
+        "mulatto_and_mestizo": "black_african",
+        "black": "black_african"
+      }
+    },
+    "cyprus": {
+      "ethnicities": {
+        "greek": 78.6,
+        "turkish": 21.4
+      },
+      "ethnic_references": {
+        "greek": "mediterranean_european",
+        "turkish": "central_asian"
+      }
+    },
+    "czech_republic": {
+      "ethnicities": {
+        "czech": 64.3,
+        "moravian": 5.0,
+        "slovak": 1.4,
+        "other": 29.3
+      },
+      "ethnic_references": {
+        "czech": "caucasian_slavic",
+        "moravian": "caucasian_slavic",
+        "slovak": "caucasian_slavic"
+      }
+    },
+    "denmark": {
+      "ethnicities": {
+        "danish": 86.3,
+        "turkish": 1.1,
+        "polish": 0.8,
+        "syrian": 0.7,
+        "other": 11.1
+      },
+      "ethnic_references": {
+        "danish": "nordic_european",
+        "turkish": "central_asian",
+        "polish": "caucasian_slavic",
+        "syrian": "arab_berber"
+      }
+    },
+    "djibouti": {
+      "ethnicities": {
+        "somali": 60.0,
+        "afar": 35.0,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "somali": "horn_african",
+        "afar": "horn_african"
+      }
+    },
+    "dominica": {
+      "ethnicities": {
+        "black": 86.6,
+        "mixed": 9.1,
+        "kalinago": 2.9,
+        "other": 1.4
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "black_african",
+        "kalinago": "indigenous_american"
+      }
+    },
+    "dominican_republic": {
+      "ethnicities": {
+        "mixed": 73.0,
+        "white": 16.0,
+        "black": 11.0
+      },
+      "ethnic_references": {
+        "mixed": "black_african",
+        "white": "mediterranean_european",
+        "black": "black_african"
+      }
+    },
+    "east_timor": {
+      "ethnicities": {
+        "austronesian": 78.0,
+        "papuan": 20.0,
+        "chinese": 2.0
+      },
+      "ethnic_references": {
+        "austronesian": "southeast_asian",
+        "papuan": "melanesian",
+        "chinese": "east_asian"
+      }
+    },
+    "ecuador": {
+      "ethnicities": {
+        "mestizo": 71.9,
+        "montubio": 7.4,
+        "afro_ecuadorian": 7.2,
+        "indigenous": 7.0,
+        "white": 6.1,
+        "other": 0.4
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "montubio": "indigenous_american",
+        "afro_ecuadorian": "black_african",
+        "indigenous": "indigenous_american",
+        "white": "mediterranean_european"
+      }
+    },
+    "egypt": {
+      "ethnicities": {
+        "egyptian": 98.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "egyptian": "north_african"
+      },
+      "other_details": "Includes Bedouin Arab, Berber, and Nubian minorities"
+    },
+    "el_salvador": {
+      "ethnicities": {
+        "mestizo": 86.3,
+        "white": 12.7,
+        "indigenous": 0.2,
+        "black": 0.1,
+        "other": 0.7
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "white": "mediterranean_european",
+        "indigenous": "indigenous_american",
+        "black": "black_african"
+      }
+    },
+    "equatorial_guinea": {
+      "ethnicities": {
+        "fang": 85.7,
+        "bubi": 6.5,
+        "mdowe": 3.6,
+        "annobon": 1.6,
+        "other": 2.6
+      },
+      "ethnic_references": {
+        "fang": "black_african",
+        "bubi": "black_african",
+        "mdowe": "black_african",
+        "annobon": "black_african"
+      }
+    },
+    "eritrea": {
+      "ethnicities": {
+        "tigrinya": 55.0,
+        "tigre": 30.0,
+        "saho": 4.0,
+        "kunama": 2.0,
+        "other": 9.0
+      },
+      "ethnic_references": {
+        "tigrinya": "horn_african",
+        "tigre": "horn_african",
+        "saho": "horn_african",
+        "kunama": "horn_african"
+      }
+    },
+    "estonia": {
+      "ethnicities": {
+        "estonian": 68.7,
+        "russian": 24.8,
+        "ukrainian": 1.7,
+        "belarusian": 1.0,
+        "other": 3.8
+      },
+      "ethnic_references": {
+        "estonian": "nordic_european",
+        "russian": "caucasian_slavic",
+        "ukrainian": "caucasian_slavic",
+        "belarusian": "caucasian_slavic"
+      }
+    },
+    "ethiopia": {
+      "ethnicities": {
+        "oromo": 34.4,
+        "amhara": 27.0,
+        "tigray": 6.1,
+        "somali": 6.1,
+        "sidama": 4.0,
+        "other": 22.4
+      },
+      "ethnic_references": {
+        "oromo": "horn_african",
+        "amhara": "horn_african",
+        "tigray": "horn_african",
+        "somali": "horn_african",
+        "sidama": "horn_african"
+      }
+    },
+    "fiji": {
+      "ethnicities": {
+        "itaukei": 56.8,
+        "indian": 37.5,
+        "rotuman": 1.2,
+        "other": 4.5
+      },
+      "ethnic_references": {
+        "itaukei": "melanesian",
+        "indian": "south_asian",
+        "rotuman": "polynesian"
+      }
+    },
+    "finland": {
+      "ethnicities": {
+        "finnish": 93.4,
+        "swedish": 5.6,
+        "russian": 0.5,
+        "other": 0.5
+      },
+      "ethnic_references": {
+        "finnish": "nordic_european",
+        "swedish": "nordic_european",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "france": {
+      "ethnicities": {
+        "french": 85.0,
+        "north_african": 10.0,
+        "sub_saharan_african": 3.5,
+        "asian": 1.5
+      },
+      "ethnic_references": {
+        "french": "white_european",
+        "north_african": "arab_berber",
+        "sub_saharan_african": "black_african",
+        "asian": "east_asian"
+      },
+      "other_details": "Note: France does not collect official statistics on ethnicity"
+    },
+    "gabon": {
+      "ethnicities": {
+        "fang": 35.0,
+        "mpongwe": 15.0,
+        "mbete": 14.0,
+        "punu": 12.0,
+        "other": 24.0
+      },
+      "ethnic_references": {
+        "fang": "black_african",
+        "mpongwe": "black_african",
+        "mbete": "black_african",
+        "punu": "black_african"
+      }
+    },
+    "gambia": {
+      "ethnicities": {
+        "mandinka": 34.0,
+        "fula": 22.0,
+        "wolof": 12.0,
+        "jola": 10.0,
+        "serahuli": 7.0,
+        "other": 15.0
+      },
+      "ethnic_references": {
+        "mandinka": "west_african",
+        "fula": "west_african",
+        "wolof": "west_african",
+        "jola": "west_african",
+        "serahuli": "west_african"
+      }
+    },
+    "georgia": {
+      "ethnicities": {
+        "georgian": 86.8,
+        "azeri": 6.3,
+        "armenian": 4.5,
+        "russian": 0.7,
+        "other": 1.7
+      },
+      "ethnic_references": {
+        "georgian": "caucasian_slavic",
+        "azeri": "central_asian",
+        "armenian": "armenian",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "germany": {
+      "ethnicities": {
+        "german": 87.2,
+        "turkish": 1.8,
+        "polish": 1.0,
+        "syrian": 1.0,
+        "other": 9.0
+      },
+      "ethnic_references": {
+        "german": "white_european",
+        "turkish": "central_asian",
+        "polish": "caucasian_slavic",
+        "syrian": "arab_berber"
+      }
+    },
+    "ghana": {
+      "ethnicities": {
+        "akan": 47.5,
+        "mole_dagbon": 16.6,
+        "ewe": 13.9,
+        "ga_dangme": 7.4,
+        "gurma": 5.7,
+        "other": 8.9
+      },
+      "ethnic_references": {
+        "akan": "west_african",
+        "mole_dagbon": "west_african",
+        "ewe": "west_african",
+        "ga_dangme": "west_african",
+        "gurma": "west_african"
+      }
+    },
+    "greece": {
+      "ethnicities": {
+        "greek": 91.6,
+        "albanian": 4.4,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "greek": "mediterranean_european",
+        "albanian": "mediterranean_european"
+      }
+    },
+    "grenada": {
+      "ethnicities": {
+        "black": 82.4,
+        "mixed": 13.3,
+        "east_indian": 2.2,
+        "other": 2.1
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "black_african",
+        "east_indian": "south_asian"
+      }
+    },
+    "guatemala": {
+      "ethnicities": {
+        "mestizo": 56.0,
+        "maya": 41.7,
+        "xinca": 1.8,
+        "other": 0.5
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "maya": "indigenous_american",
+        "xinca": "indigenous_american"
+      }
+    },
+    "guinea": {
+      "ethnicities": {
+        "fulani": 32.1,
+        "malinke": 29.8,
+        "susu": 19.8,
+        "guerze": 6.2,
+        "kissi": 4.7,
+        "other": 7.4
+      },
+      "ethnic_references": {
+        "fulani": "west_african",
+        "malinke": "west_african",
+        "susu": "west_african",
+        "guerze": "west_african",
+        "kissi": "west_african"
+      }
+    },
+    "guinea_bissau": {
+      "ethnicities": {
+        "fulani": 28.5,
+        "balanta": 22.5,
+        "mandinga": 14.7,
+        "papel": 9.1,
+        "manjaco": 8.3,
+        "other": 16.9
+      },
+      "ethnic_references": {
+        "fulani": "west_african",
+        "balanta": "west_african",
+        "mandinga": "west_african",
+        "papel": "west_african",
+        "manjaco": "west_african"
+      }
+    },
+    "guyana": {
+      "ethnicities": {
+        "indo_guyanese": 39.8,
+        "afro_guyanese": 29.3,
+        "mixed": 19.9,
+        "amerindian": 10.5,
+        "other": 0.5
+      },
+      "ethnic_references": {
+        "indo_guyanese": "south_asian",
+        "afro_guyanese": "black_african",
+        "mixed": "caribbean",
+        "amerindian": "indigenous_american"
+      }
+    },
+    "haiti": {
+      "ethnicities": {
+        "black": 95.0,
+        "mixed_and_white": 5.0
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed_and_white": "caribbean"
+      }
+    },
+    "honduras": {
+      "ethnicities": {
+        "mestizo": 90.0,
+        "indigenous": 7.0,
+        "black": 2.0,
+        "white": 1.0
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "indigenous": "indigenous_american",
+        "black": "black_african",
+        "white": "mediterranean_european"
+      }
+    },
+    "hungary": {
+      "ethnicities": {
+        "hungarian": 85.6,
+        "roma": 3.2,
+        "german": 1.9,
+        "other": 9.3
+      },
+      "ethnic_references": {
+        "hungarian": "southeast_european",
+        "roma": "south_asian",
+        "german": "white_european"
+      }
+    },
+    "iceland": {
+      "ethnicities": {
+        "icelandic": 91.9,
+        "polish": 3.1,
+        "lithuanian": 1.1,
+        "other": 3.9
+      },
+      "ethnic_references": {
+        "icelandic": "nordic_european",
+        "polish": "caucasian_slavic",
+        "lithuanian": "caucasian_slavic"
+      }
+    },
+    "india": {
+      "ethnicities": {
+        "indo_aryan": 72.0,
+        "dravidian": 25.0,
+        "mongoloid": 3.0
+      },
+      "ethnic_references": {
+        "indo_aryan": "south_asian",
+        "dravidian": "south_asian",
+        "mongoloid": "east_asian"
+      },
+      "other_details": "Extremely diverse with numerous subgroups within major ethnic categories"
+    },
+    "indonesia": {
+      "ethnicities": {
+        "javanese": 40.1,
+        "sundanese": 15.5,
+        "malay": 3.7,
+        "batak": 3.6,
+        "other": 37.1
+      },
+      "ethnic_references": {
+        "javanese": "southeast_asian",
+        "sundanese": "southeast_asian",
+        "malay": "southeast_asian",
+        "batak": "southeast_asian"
+      }
+    },
+    "iran": {
+      "ethnicities": {
+        "persian": 61.0,
+        "azeri": 16.0,
+        "kurd": 10.0,
+        "gilaki_and_mazandarani": 7.0,
+        "arab": 2.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "persian": "persian",
+        "azeri": "central_asian",
+        "kurd": "persian",
+        "gilaki_and_mazandarani": "persian",
+        "arab": "arab_berber"
+      }
+    },
+    "iraq": {
+      "ethnicities": {
+        "arab": 75.0,
+        "kurdish": 17.0,
+        "turkmen": 3.0,
+        "assyrian": 2.0,
+        "other": 3.0
+      },
+      "ethnic_references": {
+        "arab": "arab_berber",
+        "kurdish": "persian",
+        "turkmen": "central_asian",
+        "assyrian": "mediterranean_european"
+      }
+    },
+    "ireland": {
+      "ethnicities": {
+        "irish": 82.2,
+        "other_white": 9.5,
+        "asian": 2.1,
+        "other": 6.2
+      },
+      "ethnic_references": {
+        "irish": "celtic_european",
+        "other_white": "white_european",
+        "asian": "east_asian"
+      }
+    },
+    "israel": {
+      "ethnicities": {
+        "jewish": 74.2,
+        "arab": 20.9,
+        "other": 4.9
+      },
+      "ethnic_references": {
+        "jewish": "semitic",
+        "arab": "arab_berber"
+      },
+      "other_details": "Jewish population includes various ethnic subgroups from different regions"
+    },
+    "italy": {
+      "ethnicities": {
+        "italian": 91.5,
+        "romanian": 1.3,
+        "north_african": 1.0,
+        "albanian": 1.0,
+        "other": 5.2
+      },
+      "ethnic_references": {
+        "italian": "mediterranean_european",
+        "romanian": "southeast_european",
+        "north_african": "arab_berber",
+        "albanian": "mediterranean_european"
+      }
+    },
+    "ivory_coast": {
+      "ethnicities": {
+        "akan": 28.8,
+        "voltaique": 15.0,
+        "northern_mande": 11.9,
+        "kru": 11.0,
+        "southern_mande": 10.0,
+        "other": 23.3
+      },
+      "ethnic_references": {
+        "akan": "west_african",
+        "voltaique": "west_african",
+        "northern_mande": "west_african",
+        "kru": "west_african",
+        "southern_mande": "west_african"
+      }
+    },
+    "jamaica": {
+      "ethnicities": {
+        "black": 92.1,
+        "mixed": 6.1,
+        "east_indian": 0.8,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "caribbean",
+        "east_indian": "south_asian"
+      }
+    },
+    "japan": {
+      "ethnicities": {
+        "japanese": 98.1,
+        "chinese": 0.5,
+        "korean": 0.4,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "japanese": "east_asian",
+        "chinese": "east_asian",
+        "korean": "east_asian"
+      }
+    },
+    "jordan": {
+      "ethnicities": {
+        "jordanian": 69.3,
+        "syrian": 13.3,
+        "palestinian": 6.7,
+        "egyptian": 6.7,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "jordanian": "arab_berber",
+        "syrian": "arab_berber",
+        "palestinian": "arab_berber",
+        "egyptian": "north_african"
+      }
+    },
+    "kazakhstan": {
+      "ethnicities": {
+        "kazakh": 63.1,
+        "russian": 23.7,
+        "uzbek": 2.9,
+        "ukrainian": 2.1,
+        "other": 8.2
+      },
+      "ethnic_references": {
+        "kazakh": "central_asian",
+        "russian": "caucasian_slavic",
+        "uzbek": "central_asian",
+        "ukrainian": "caucasian_slavic"
+      }
+    },
+    "kenya": {
+      "ethnicities": {
+        "kikuyu": 17.1,
+        "luhya": 14.3,
+        "kalenjin": 13.4,
+        "luo": 10.7,
+        "kamba": 10.1,
+        "other": 34.4
+      },
+      "ethnic_references": {
+        "kikuyu": "nilotic",
+        "luhya": "nilotic",
+        "kalenjin": "nilotic",
+        "luo": "nilotic",
+        "kamba": "nilotic"
+      }
+    },
+    "kiribati": {
+      "ethnicities": {
+        "micronesian": 98.8,
+        "other": 1.2
+      },
+      "ethnic_references": {
+        "micronesian": "micronesian"
+      }
+    },
+    "kuwait": {
+      "ethnicities": {
+        "kuwaiti": 30.4,
+        "other_arab": 27.4,
+        "asian": 40.3,
+        "other": 1.9
+      },
+      "ethnic_references": {
+        "kuwaiti": "arab_berber",
+        "other_arab": "arab_berber",
+        "asian": "south_asian"
+      }
+    },
+    "kyrgyzstan": {
+      "ethnicities": {
+        "kyrgyz": 73.5,
+        "uzbek": 14.7,
+        "russian": 5.5,
+        "dungan": 1.1,
+        "other": 5.2
+      },
+      "ethnic_references": {
+        "kyrgyz": "central_asian",
+        "uzbek": "central_asian",
+        "russian": "caucasian_slavic",
+        "dungan": "east_asian"
+      }
+    },
+    "laos": {
+      "ethnicities": {
+        "lao": 53.2,
+        "khmou": 11.0,
+        "hmong": 9.2,
+        "other": 26.6
+      },
+      "ethnic_references": {
+        "lao": "southeast_asian",
+        "khmou": "southeast_asian",
+        "hmong": "east_asian"
+      }
+    },
+    "latvia": {
+      "ethnicities": {
+        "latvian": 62.2,
+        "russian": 25.2,
+        "belarusian": 3.2,
+        "ukrainian": 2.2,
+        "other": 7.2
+      },
+      "ethnic_references": {
+        "latvian": "baltic",
+        "russian": "caucasian_slavic",
+        "belarusian": "caucasian_slavic",
+        "ukrainian": "caucasian_slavic"
+      }
+    },
+    "lebanon": {
+      "ethnicities": {
+        "arab": 95.0,
+        "armenian": 4.0,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "arab": "arab_berber",
+        "armenian": "armenian"
+      }
+    },
+    "lesotho": {
+      "ethnicities": {
+        "sotho": 99.7,
+        "other": 0.3
+      },
+      "ethnic_references": {
+        "sotho": "black_african"
+      }
+    },
+    "liberia": {
+      "ethnicities": {
+        "kpelle": 20.3,
+        "bassa": 13.4,
+        "grebo": 10.0,
+        "gio": 8.0,
+        "mano": 7.9,
+        "other": 40.4
+      },
+      "ethnic_references": {
+        "kpelle": "west_african",
+        "bassa": "west_african",
+        "grebo": "west_african",
+        "gio": "west_african",
+        "mano": "west_african"
+      }
+    },
+    "libya": {
+      "ethnicities": {
+        "arab_berber": 97.0,
+        "other": 3.0
+      },
+      "ethnic_references": {
+        "arab_berber": "north_african"
+      },
+      "other_details": "Other includes Greeks, Maltese, Italians, Egyptians, Pakistanis, Turks, Indians, and Tunisians"
+    },
+    "liechtenstein": {
+      "ethnicities": {
+        "liechtenstein": 66.0,
+        "other": 34.0
+      },
+      "ethnic_references": {
+        "liechtenstein": "white_european"
+      }
+    },
+    "lithuania": {
+      "ethnicities": {
+        "lithuanian": 84.1,
+        "polish": 6.6,
+        "russian": 5.8,
+        "other": 3.5
+      },
+      "ethnic_references": {
+        "lithuanian": "baltic",
+        "polish": "caucasian_slavic",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "luxembourg": {
+      "ethnicities": {
+        "luxembourger": 52.0,
+        "portuguese": 16.0,
+        "french": 7.0,
+        "italian": 4.0,
+        "belgian": 3.0,
+        "other": 18.0
+      },
+      "ethnic_references": {
+        "luxembourger": "white_european",
+        "portuguese": "mediterranean_european",
+        "french": "white_european",
+        "italian": "mediterranean_european",
+        "belgian": "white_european"
+      }
+    },
+    "madagascar": {
+      "ethnicities": {
+        "merina": 26.0,
+        "betsimisaraka": 15.0,
+        "betsileo": 12.0,
+        "tsimihety": 7.0,
+        "sakalava": 6.0,
+        "other": 34.0
+      },
+      "ethnic_references": {
+        "merina": "malagasy",
+        "betsimisaraka": "malagasy",
+        "betsileo": "malagasy",
+        "tsimihety": "malagasy",
+        "sakalava": "malagasy"
+      }
+    },
+    "malawi": {
+      "ethnicities": {
+        "chewa": 34.3,
+        "lomwe": 18.8,
+        "yao": 13.2,
+        "ngoni": 10.4,
+        "tumbuka": 9.2,
+        "other": 14.1
+      },
+      "ethnic_references": {
+        "chewa": "black_african",
+        "lomwe": "black_african",
+        "yao": "black_african",
+        "ngoni": "black_african",
+        "tumbuka": "black_african"
+      }
+    },
+    "malaysia": {
+      "ethnicities": {
+        "malay": 50.1,
+        "chinese": 22.6,
+        "indigenous": 11.8,
+        "indian": 6.7,
+        "other": 8.8
+      },
+      "ethnic_references": {
+        "malay": "southeast_asian",
+        "chinese": "east_asian",
+        "indigenous": "southeast_asian",
+        "indian": "south_asian"
+      }
+    },
+    "maldives": {
+      "ethnicities": {
+        "south_asian": 98.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "south_asian": "south_asian"
+      }
+    },
+    "mali": {
+      "ethnicities": {
+        "bambara": 34.1,
+        "fulani": 14.7,
+        "sarakole": 10.8,
+        "senufo": 10.5,
+        "dogon": 8.9,
+        "other": 21.0
+      },
+      "ethnic_references": {
+        "bambara": "west_african",
+        "fulani": "west_african",
+        "sarakole": "west_african",
+        "senufo": "west_african",
+        "dogon": "west_african"
+      }
+    },
+    "malta": {
+      "ethnicities": {
+        "maltese": 95.0,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "maltese": "mediterranean_european"
+      }
+    },
+    "marshall_islands": {
+      "ethnicities": {
+        "marshallese": 92.1,
+        "mixed_marshallese": 5.9,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "marshallese": "micronesian",
+        "mixed_marshallese": "micronesian"
+      }
+    },
+    "mauritania": {
+      "ethnicities": {
+        "haratines": 40.0,
+        "moor": 30.0,
+        "fulani": 20.0,
+        "soninke": 8.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "haratines": "arab_berber",
+        "moor": "arab_berber",
+        "fulani": "west_african",
+        "soninke": "west_african"
+      }
+    },
+    "mauritius": {
+      "ethnicities": {
+        "indo_mauritian": 68.0,
+        "creole": 27.0,
+        "sino_mauritian": 3.0,
+        "franco_mauritian": 2.0
+      },
+      "ethnic_references": {
+        "indo_mauritian": "south_asian",
+        "creole": "black_african",
+        "sino_mauritian": "east_asian",
+        "franco_mauritian": "white_european"
+      }
+    },
+    "mexico": {
+      "ethnicities": {
+        "mestizo": 62.0,
+        "predominantly_indigenous": 21.0,
+        "indigenous": 7.0,
+        "other": 10.0
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "predominantly_indigenous": "indigenous_american",
+        "indigenous": "indigenous_american"
+      }
+    },
+    "micronesia": {
+      "ethnicities": {
+        "chuukese": 48.8,
+        "pohnpeian": 24.2,
+        "kosraean": 6.2,
+        "yapese": 5.2,
+        "other": 15.6
+      },
+      "ethnic_references": {
+        "chuukese": "micronesian",
+        "pohnpeian": "micronesian",
+        "kosraean": "micronesian",
+        "yapese": "micronesian"
+      }
+    },
+    "moldova": {
+      "ethnicities": {
+        "moldovan": 75.1,
+        "romanian": 7.0,
+        "ukrainian": 6.6,
+        "gagauz": 4.6,
+        "russian": 4.1,
+        "other": 2.6
+      },
+      "ethnic_references": {
+        "moldovan": "southeast_european",
+        "romanian": "southeast_european",
+        "ukrainian": "caucasian_slavic",
+        "gagauz": "turkic",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "monaco": {
+      "ethnicities": {
+        "monegasque": 21.6,
+        "french": 28.4,
+        "italian": 18.7,
+        "other": 31.3
+      },
+      "ethnic_references": {
+        "monegasque": "mediterranean_european",
+        "french": "white_european",
+        "italian": "mediterranean_european"
+      }
+    },
+    "mongolia": {
+      "ethnicities": {
+        "khalkh": 82.4,
+        "kazakh": 3.8,
+        "other": 13.8
+      },
+      "ethnic_references": {
+        "khalkh": "east_asian",
+        "kazakh": "central_asian"
+      }
+    },
+    "montenegro": {
+      "ethnicities": {
+        "montenegrin": 45.0,
+        "serbian": 28.7,
+        "bosniak": 8.7,
+        "albanian": 4.9,
+        "other": 12.7
+      },
+      "ethnic_references": {
+        "montenegrin": "southeast_european",
+        "serbian": "caucasian_slavic",
+        "bosniak": "mediterranean_european",
+        "albanian": "mediterranean_european"
+      }
+    },
+    "morocco": {
+      "ethnicities": {
+        "arab_berber": 99.0,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "arab_berber": "north_african"
+      }
+    },
+    "mozambique": {
+      "ethnicities": {
+        "makhuwa": 26.1,
+        "tsonga": 11.3,
+        "sena": 7.0,
+        "lomwe": 7.1,
+        "shona": 6.5,
+        "other": 42.0
+      },
+      "ethnic_references": {
+        "makhuwa": "black_african",
+        "tsonga": "black_african",
+        "sena": "black_african",
+        "lomwe": "black_african",
+        "shona": "black_african"
+      }
+    },
+    "myanmar": {
+      "ethnicities": {
+        "burman": 68.0,
+        "shan": 9.0,
+        "karen": 7.0,
+        "rakhine": 4.0,
+        "chinese": 3.0,
+        "other": 9.0
+      },
+      "ethnic_references": {
+        "burman": "southeast_asian",
+        "shan": "southeast_asian",
+        "karen": "southeast_asian",
+        "rakhine": "southeast_asian",
+        "chinese": "east_asian"
+      }
+    },
+    "namibia": {
+      "ethnicities": {
+        "ovambo": 50.0,
+        "kavango": 9.0,
+        "herero": 7.0,
+        "damara": 7.0,
+        "nama": 5.0,
+        "other": 22.0
+      },
+      "ethnic_references": {
+        "ovambo": "black_african",
+        "kavango": "black_african",
+        "herero": "black_african",
+        "damara": "black_african",
+        "nama": "black_african"
+      }
+    },
+    "nauru": {
+      "ethnicities": {
+        "nauruan": 88.0,
+        "other_pacific_islander": 8.0,
+        "chinese": 4.0
+      },
+      "ethnic_references": {
+        "nauruan": "pacific_asian",
+        "other_pacific_islander": "pacific_asian",
+        "chinese": "east_asian"
+      }
+    },
+    "nepal": {
+      "ethnicities": {
+        "chhettri": 16.6,
+        "brahman": 12.2,
+        "magar": 7.1,
+        "tharu": 6.6,
+        "tamang": 5.8,
+        "newar": 5.0,
+        "other": 46.7
+      },
+      "ethnic_references": {
+        "chhettri": "south_asian",
+        "brahman": "south_asian",
+        "magar": "east_asian",
+        "tharu": "south_asian",
+        "tamang": "east_asian",
+        "newar": "east_asian"
+      }
+    },
+    "netherlands": {
+      "ethnicities": {
+        "dutch": 76.9,
+        "eu": 6.4,
+        "turkish": 2.4,
+        "moroccan": 2.3,
+        "indonesian": 2.1,
+        "other": 9.9
+      },
+      "ethnic_references": {
+        "dutch": "nordic_european",
+        "eu": "white_european",
+        "turkish": "central_asian",
+        "moroccan": "arab_berber",
+        "indonesian": "southeast_asian"
+      }
+    },
+    "new_zealand": {
+      "ethnicities": {
+        "european": 64.1,
+        "maori": 16.5,
+        "asian": 15.1,
+        "pacific_peoples": 8.1,
+        "other": 2.7
+      },
+      "ethnic_references": {
+        "european": "white_european",
+        "maori": "polynesian",
+        "asian": "east_asian",
+        "pacific_peoples": "polynesian"
+      }
+    },
+    "nicaragua": {
+      "ethnicities": {
+        "mestizo": 69.0,
+        "white": 17.0,
+        "black": 9.0,
+        "indigenous": 5.0
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "white": "mediterranean_european",
+        "black": "black_african",
+        "indigenous": "indigenous_american"
+      }
+    },
+    "niger": {
+      "ethnicities": {
+        "hausa": 53.1,
+        "zarma": 21.2,
+        "tuareg": 11.0,
+        "fulani": 6.5,
+        "kanuri": 5.9,
+        "other": 2.3
+      },
+      "ethnic_references": {
+        "hausa": "west_african",
+        "zarma": "west_african",
+        "tuareg": "north_african",
+        "fulani": "west_african",
+        "kanuri": "west_african"
+      }
+    },
+    "nigeria": {
+      "ethnicities": {
+        "hausa": 30.0,
+        "yoruba": 15.5,
+        "igbo": 15.2,
+        "ijaw": 10.0,
+        "kanuri": 4.0,
+        "other": 25.3
+      },
+      "ethnic_references": {
+        "hausa": "west_african",
+        "yoruba": "west_african",
+        "igbo": "west_african",
+        "ijaw": "west_african",
+        "kanuri": "west_african"
+      }
+    },
+    "north_korea": {
+      "ethnicities": {
+        "korean": 100.0
+      },
+      "ethnic_references": {
+        "korean": "east_asian"
+      }
+    },
+    "north_macedonia": {
+      "ethnicities": {
+        "macedonian": 64.2,
+        "albanian": 25.2,
+        "turkish": 3.9,
+        "roma": 2.7,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "macedonian": "southeast_european",
+        "albanian": "mediterranean_european",
+        "turkish": "central_asian",
+        "roma": "south_asian"
+      }
+    },
+    "norway": {
+      "ethnicities": {
+        "norwegian": 83.2,
+        "other_european": 8.3,
+        "asian": 4.3,
+        "african": 2.4,
+        "other": 1.8
+      },
+      "ethnic_references": {
+        "norwegian": "scandinavian",
+        "other_european": "white_european",
+        "asian": "east_asian",
+        "african": "black_african"
+      }
+    },
+    "oman": {
+      "ethnicities": {
+        "omani_arab": 51.0,
+        "baluchi": 12.0,
+        "south_asian": 37.0
+      },
+      "ethnic_references": {
+        "omani_arab": "arab_berber",
+        "baluchi": "persian",
+        "south_asian": "south_asian"
+      }
+    },
+    "pakistan": {
+      "ethnicities": {
+        "punjabi": 44.7,
+        "pashtun": 15.4,
+        "sindhi": 14.1,
+        "saraiki": 8.4,
+        "muhajir": 7.6,
+        "balochi": 3.6,
+        "other": 6.2
+      },
+      "ethnic_references": {
+        "punjabi": "south_asian",
+        "pashtun": "persian",
+        "sindhi": "south_asian",
+        "saraiki": "south_asian",
+        "muhajir": "south_asian",
+        "balochi": "persian"
+      }
+    },
+    "palau": {
+      "ethnicities": {
+        "palauan": 73.0,
+        "filipino": 16.0,
+        "chinese": 4.9,
+        "other_asian": 2.4,
+        "other": 3.7
+      },
+      "ethnic_references": {
+        "palauan": "pacific_asian",
+        "filipino": "southeast_asian",
+        "chinese": "east_asian",
+        "other_asian": "east_asian"
+      }
+    },
+    "panama": {
+      "ethnicities": {
+        "mestizo": 65.0,
+        "native_american": 12.3,
+        "black": 9.2,
+        "mulatto": 6.8,
+        "white": 6.7
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "native_american": "indigenous_american",
+        "black": "black_african",
+        "mulatto": "caribbean",
+        "white": "mediterranean_european"
+      }
+    },
+    "papua_new_guinea": {
+      "ethnicities": {
+        "melanesian": 98.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "melanesian": "melanesian"
+      }
+    },
+    "paraguay": {
+      "ethnicities": {
+        "mestizo": 95.0,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american"
+      }
+    },
+    "peru": {
+      "ethnicities": {
+        "mestizo": 60.2,
+        "quechua": 22.3,
+        "white": 5.9,
+        "aymara": 2.4,
+        "other": 9.2
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "quechua": "indigenous_american",
+        "white": "mediterranean_european",
+        "aymara": "indigenous_american"
+      }
+    },
+    "philippines": {
+      "ethnicities": {
+        "tagalog": 28.1,
+        "cebuano": 13.1,
+        "ilocano": 9.0,
+        "bisaya": 7.6,
+        "hiligaynon": 7.5,
+        "other": 34.7
+      },
+      "ethnic_references": {
+        "tagalog": "southeast_asian",
+        "cebuano": "southeast_asian",
+        "ilocano": "southeast_asian",
+        "bisaya": "southeast_asian",
+        "hiligaynon": "southeast_asian"
+      }
+    },
+    "poland": {
+      "ethnicities": {
+        "polish": 96.9,
+        "silesian": 1.1,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "polish": "caucasian_slavic",
+        "silesian": "caucasian_slavic"
+      }
+    },
+    "portugal": {
+      "ethnicities": {
+        "portuguese": 95.0,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "portuguese": "mediterranean_european"
+      }
+    },
+    "qatar": {
+      "ethnicities": {
+        "qatari_arab": 11.6,
+        "other_arab": 13.0,
+        "indian": 25.0,
+        "nepali": 13.0,
+        "filipino": 11.0,
+        "other": 26.4
+      },
+      "ethnic_references": {
+        "qatari_arab": "arab_berber",
+        "other_arab": "arab_berber",
+        "indian": "south_asian",
+        "nepali": "south_asian",
+        "filipino": "southeast_asian"
+      }
+    },
+    "romania": {
+      "ethnicities": {
+        "romanian": 83.4,
+        "hungarian": 6.1,
+        "roma": 3.1,
+        "ukrainian": 0.3,
+        "other": 7.1
+      },
+      "ethnic_references": {
+        "romanian": "southeast_european",
+        "hungarian": "southeast_european",
+        "roma": "south_asian",
+        "ukrainian": "caucasian_slavic"
+      }
+    },
+    "russia": {
+      "ethnicities": {
+        "russian": 77.7,
+        "tatar": 3.7,
+        "ukrainian": 1.4,
+        "bashkir": 1.1,
+        "chuvash": 1.0,
+        "other": 15.1
+      },
+      "ethnic_references": {
+        "russian": "caucasian_slavic",
+        "tatar": "central_asian",
+        "ukrainian": "caucasian_slavic",
+        "bashkir": "central_asian",
+        "chuvash": "central_asian"
+      }
+    },
+    "rwanda": {
+      "ethnicities": {
+        "hutu": 84.0,
+        "tutsi": 15.0,
+        "twa": 1.0
+      },
+      "ethnic_references": {
+        "hutu": "black_african",
+        "tutsi": "nilotic",
+        "twa": "black_african"
+      }
+    },
+    "saint_kitts_and_nevis": {
+      "ethnicities": {
+        "african": 92.5,
+        "mixed": 3.0,
+        "white": 2.1,
+        "other": 2.4
+      },
+      "ethnic_references": {
+        "african": "black_african",
+        "mixed": "caribbean",
+        "white": "white_european"
+      }
+    },
+    "saint_lucia": {
+      "ethnicities": {
+        "black": 85.3,
+        "mixed": 10.9,
+        "east_indian": 2.2,
+        "other": 1.6
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "caribbean",
+        "east_indian": "south_asian"
+      }
+    },
+    "saint_vincent_and_the_grenadines": {
+      "ethnicities": {
+        "black": 66.0,
+        "mixed": 19.0,
+        "east_indian": 6.0,
+        "other": 9.0
+      },
+      "ethnic_references": {
+        "black": "black_african",
+        "mixed": "caribbean",
+        "east_indian": "south_asian"
+      }
+    },
+    "samoa": {
+      "ethnicities": {
+        "samoan": 96.0,
+        "samoan_european": 2.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "samoan": "polynesian",
+        "samoan_european": "polynesian"
+      }
+    },
+    "san_marino": {
+      "ethnicities": {
+        "sammarinese": 84.95,
+        "italian": 15.05
+      },
+      "ethnic_references": {
+        "sammarinese": "mediterranean_european",
+        "italian": "mediterranean_european"
+      }
+    },
+    "sao_tome_and_principe": {
+      "ethnicities": {
+        "mestico": 71.0,
+        "angolar": 3.0,
+        "forros": 2.0,
+        "other": 24.0
+      },
+      "ethnic_references": {
+        "mestico": "black_african",
+        "angolar": "black_african",
+        "forros": "black_african"
+      }
+    },
+    "saudi_arabia": {
+      "ethnicities": {
+        "saudi_arab": 90.0,
+        "other_arab": 10.0
+      },
+      "ethnic_references": {
+        "saudi_arab": "arab_berber",
+        "other_arab": "arab_berber"
+      }
+    },
+    "senegal": {
+      "ethnicities": {
+        "wolof": 37.1,
+        "pular": 26.2,
+        "serer": 17.0,
+        "mandinka": 5.6,
+        "jola": 4.5,
+        "other": 9.6
+      },
+      "ethnic_references": {
+        "wolof": "west_african",
+        "pular": "west_african",
+        "serer": "west_african",
+        "mandinka": "west_african",
+        "jola": "west_african"
+      }
+    },
+    "serbia": {
+      "ethnicities": {
+        "serb": 83.3,
+        "hungarian": 3.5,
+        "roma": 2.1,
+        "bosniak": 2.0,
+        "other": 9.1
+      },
+      "ethnic_references": {
+        "serb": "caucasian_slavic",
+        "hungarian": "southeast_european",
+        "roma": "south_asian",
+        "bosniak": "mediterranean_european"
+      }
+    },
+    "seychelles": {
+      "ethnicities": {
+        "mixed": 76.0,
+        "asian": 12.0,
+        "white": 6.0,
+        "other": 6.0
+      },
+      "ethnic_references": {
+        "mixed": "black_african",
+        "asian": "south_asian",
+        "white": "white_european"
+      }
+    },
+    "sierra_leone": {
+      "ethnicities": {
+        "temne": 35.0,
+        "mende": 31.0,
+        "limba": 8.0,
+        "kono": 5.0,
+        "other": 21.0
+      },
+      "ethnic_references": {
+        "temne": "west_african",
+        "mende": "west_african",
+        "limba": "west_african",
+        "kono": "west_african"
+      }
+    },
+    "singapore": {
+      "ethnicities": {
+        "chinese": 74.3,
+        "malay": 13.4,
+        "indian": 9.0,
+        "other": 3.3
+      },
+      "ethnic_references": {
+        "chinese": "east_asian",
+        "malay": "southeast_asian",
+        "indian": "south_asian"
+      }
+    },
+    "slovakia": {
+      "ethnicities": {
+        "slovak": 80.7,
+        "hungarian": 8.5,
+        "roma": 2.0,
+        "other": 8.8
+      },
+      "ethnic_references": {
+        "slovak": "caucasian_slavic",
+        "hungarian": "southeast_european",
+        "roma": "south_asian"
+      }
+    },
+    "slovenia": {
+      "ethnicities": {
+        "slovene": 83.1,
+        "serb": 2.0,
+        "croat": 1.8,
+        "bosniak": 1.1,
+        "other": 12.0
+      },
+      "ethnic_references": {
+        "slovene": "caucasian_slavic",
+        "serb": "caucasian_slavic",
+        "croat": "caucasian_slavic",
+        "bosniak": "mediterranean_european"
+      }
+    },
+    "solomon_islands": {
+      "ethnicities": {
+        "melanesian": 95.3,
+        "polynesian": 3.1,
+        "micronesian": 1.2,
+        "other": 0.4
+      },
+      "ethnic_references": {
+        "melanesian": "melanesian",
+        "polynesian": "polynesian",
+        "micronesian": "micronesian"
+      }
+    },
+    "somalia": {
+      "ethnicities": {
+        "somali": 85.0,
+        "bantu": 15.0
+      },
+      "ethnic_references": {
+        "somali": "horn_african",
+        "bantu": "black_african"
+      }
+    },
+    "south_africa": {
+      "ethnicities": {
+        "black_african": 80.2,
+        "colored": 8.8,
+        "white": 8.4,
+        "indian_asian": 2.5,
+        "other": 0.1
+      },
+      "ethnic_references": {
+        "black_african": "black_african",
+        "colored": "black_african",
+        "white": "white_european",
+        "indian_asian": "south_asian"
+      }
+    },
+    "south_korea": {
+      "ethnicities": {
+        "korean": 96.0,
+        "chinese": 2.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "korean": "east_asian",
+        "chinese": "east_asian"
+      }
+    },
+    "south_sudan": {
+      "ethnicities": {
+        "dinka": 35.8,
+        "nuer": 15.6,
+        "shilluk": 6.2,
+        "azande": 4.0,
+        "other": 38.4
+      },
+      "ethnic_references": {
+        "dinka": "nilotic",
+        "nuer": "nilotic",
+        "shilluk": "nilotic",
+        "azande": "black_african"
+      }
+    },
+    "spain": {
+      "ethnicities": {
+        "spanish": 84.8,
+        "moroccan": 1.7,
+        "romanian": 1.2,
+        "other": 12.3
+      },
+      "ethnic_references": {
+        "spanish": "mediterranean_european",
+        "moroccan": "arab_berber",
+        "romanian": "southeast_european"
+      }
+    },
+    "sri_lanka": {
+      "ethnicities": {
+        "sinhalese": 74.9,
+        "tamil": 15.4,
+        "moor": 9.2,
+        "other": 0.5
+      },
+      "ethnic_references": {
+        "sinhalese": "south_asian",
+        "tamil": "south_asian",
+        "moor": "arab_berber"
+      }
+    },
+    "sudan": {
+      "ethnicities": {
+        "sudanese_arab": 70.0,
+        "fur": 10.0,
+        "beja": 6.0,
+        "nuba": 5.0,
+        "other": 9.0
+      },
+      "ethnic_references": {
+        "sudanese_arab": "arab_berber",
+        "fur": "black_african",
+        "beja": "horn_african",
+        "nuba": "black_african"
+      }
+    },
+    "suriname": {
+      "ethnicities": {
+        "hindustani": 27.4,
+        "maroon": 21.7,
+        "creole": 15.7,
+        "javanese": 13.7,
+        "mixed": 13.4,
+        "other": 8.1
+      },
+      "ethnic_references": {
+        "hindustani": "south_asian",
+        "maroon": "black_african",
+        "creole": "caribbean",
+        "javanese": "southeast_asian",
+        "mixed": "caribbean"
+      }
+    },
+    "sweden": {
+      "ethnicities": {
+        "swedish": 80.3,
+        "syrian": 1.9,
+        "iraqi": 1.4,
+        "finnish": 1.4,
+        "other": 15.0
+      },
+      "ethnic_references": {
+        "swedish": "scandinavian",
+        "syrian": "arab_berber",
+        "iraqi": "arab_berber",
+        "finnish": "nordic_european"
+      }
+    },
+    "switzerland": {
+      "ethnicities": {
+        "swiss": 69.3,
+        "german": 4.2,
+        "italian": 3.2,
+        "portuguese": 2.5,
+        "french": 2.1,
+        "other": 18.7
+      },
+      "ethnic_references": {
+        "swiss": "white_european",
+        "german": "white_european",
+        "italian": "mediterranean_european",
+        "portuguese": "mediterranean_european",
+        "french": "white_european"
+      }
+    },
+    "syria": {
+      "ethnicities": {
+        "arab": 90.3,
+        "kurdish": 9.7
+      },
+      "ethnic_references": {
+        "arab": "arab_berber",
+        "kurdish": "persian"
+      }
+    },
+    "taiwan": {
+      "ethnicities": {
+        "han_chinese": 95.0,
+        "indigenous": 2.3,
+        "other": 2.7
+      },
+      "ethnic_references": {
+        "han_chinese": "east_asian",
+        "indigenous": "pacific_asian"
+      }
+    },
+    "tajikistan": {
+      "ethnicities": {
+        "tajik": 84.3,
+        "uzbek": 13.8,
+        "other": 1.9
+      },
+      "ethnic_references": {
+        "tajik": "central_asian",
+        "uzbek": "central_asian"
+      }
+    },
+    "tanzania": {
+      "ethnicities": {
+        "mainland": 99.0,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "mainland": "black_african"
+      },
+      "other_details": "Mainland includes over 130 tribes"
+    },
+    "thailand": {
+      "ethnicities": {
+        "thai": 97.5,
+        "burmese": 1.3,
+        "other": 1.2
+      },
+      "ethnic_references": {
+        "thai": "southeast_asian",
+        "burmese": "southeast_asian"
+      }
+    },
+    "timor_leste": {
+      "ethnicities": {
+        "tetun": 27.3,
+        "mambai": 17.8,
+        "makasai": 10.0,
+        "other": 44.9
+      },
+      "ethnic_references": {
+        "tetun": "southeast_asian",
+        "mambai": "southeast_asian",
+        "makasai": "southeast_asian"
+      }
+    },
+    "togo": {
+      "ethnicities": {
+        "ewe": 37.0,
+        "kabye": 22.0,
+        "tem": 10.0,
+        "other": 31.0
+      },
+      "ethnic_references": {
+        "ewe": "west_african",
+        "kabye": "west_african",
+        "tem": "west_african"
+      }
+    },
+    "tonga": {
+      "ethnicities": {
+        "tongan": 97.0,
+        "part_tongan": 1.6,
+        "other": 1.4
+      },
+      "ethnic_references": {
+        "tongan": "polynesian",
+        "part_tongan": "polynesian"
+      }
+    },
+    "trinidad_and_tobago": {
+      "ethnicities": {
+        "indian": 35.4,
+        "african": 34.2,
+        "mixed": 22.8,
+        "other": 7.6
+      },
+      "ethnic_references": {
+        "indian": "south_asian",
+        "african": "black_african",
+        "mixed": "caribbean"
+      }
+    },
+    "tunisia": {
+      "ethnicities": {
+        "arab_berber": 98.0,
+        "other": 2.0
+      },
+      "ethnic_references": {
+        "arab_berber": "north_african"
+      }
+    },
+    "turkey": {
+      "ethnicities": {
+        "turkish": 70.0,
+        "kurdish": 19.0,
+        "other": 11.0
+      },
+      "ethnic_references": {
+        "turkish": "turkic",
+        "kurdish": "persian"
+      }
+    },
+    "turkmenistan": {
+      "ethnicities": {
+        "turkmen": 85.0,
+        "uzbek": 5.0,
+        "russian": 4.0,
+        "other": 6.0
+      },
+      "ethnic_references": {
+        "turkmen": "central_asian",
+        "uzbek": "central_asian",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "tuvalu": {
+      "ethnicities": {
+        "polynesian": 96.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "polynesian": "polynesian"
+      }
+    },
+    "uganda": {
+      "ethnicities": {
+        "baganda": 16.5,
+        "banyankole": 9.6,
+        "basoga": 8.8,
+        "bakiga": 7.1,
+        "iteso": 7.0,
+        "other": 51.0
+      },
+      "ethnic_references": {
+        "baganda": "nilotic",
+        "banyankole": "nilotic",
+        "basoga": "nilotic",
+        "bakiga": "nilotic",
+        "iteso": "nilotic"
+      }
+    },
+    "ukraine": {
+      "ethnicities": {
+        "ukrainian": 77.8,
+        "russian": 17.3,
+        "other": 4.9
+      },
+      "ethnic_references": {
+        "ukrainian": "caucasian_slavic",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "united_arab_emirates": {
+      "ethnicities": {
+        "emirati": 11.6,
+        "south_asian": 59.4,
+        "other_arab": 10.2,
+        "other": 18.8
+      },
+      "ethnic_references": {
+        "emirati": "arab_berber",
+        "south_asian": "south_asian",
+        "other_arab": "arab_berber"
+      }
+    },
+    "united_kingdom": {
+      "ethnicities": {
+        "white": 87.2,
+        "asian": 6.9,
+        "black": 3.0,
+        "mixed": 2.0,
+        "other": 0.9
+      },
+      "ethnic_references": {
+        "white": "white_european",
+        "asian": "south_asian",
+        "black": "black_african",
+        "mixed": "white_european"
+      }
+    },
+    "united_states": {
+      "ethnicities": {
+        "white": 61.6,
+        "hispanic": 18.9,
+        "black": 13.4,
+        "asian": 6.0,
+        "other": 0.1
+      },
+      "ethnic_references": {
+        "white": "white_european",
+        "hispanic": "indigenous_american",
+        "black": "black_african",
+        "asian": "east_asian"
+      }
+    },
+    "uruguay": {
+      "ethnicities": {
+        "white": 88.0,
+        "black": 4.6,
+        "indigenous": 2.4,
+        "other": 5.0
+      },
+      "ethnic_references": {
+        "white": "mediterranean_european",
+        "black": "black_african",
+        "indigenous": "indigenous_american"
+      }
+    },
+    "uzbekistan": {
+      "ethnicities": {
+        "uzbek": 83.8,
+        "tajik": 4.8,
+        "kazakh": 2.5,
+        "russian": 2.3,
+        "other": 6.6
+      },
+      "ethnic_references": {
+        "uzbek": "central_asian",
+        "tajik": "central_asian",
+        "kazakh": "central_asian",
+        "russian": "caucasian_slavic"
+      }
+    },
+    "vanuatu": {
+      "ethnicities": {
+        "ni_vanuatu": 98.5,
+        "other": 1.5
+      },
+      "ethnic_references": {
+        "ni_vanuatu": "melanesian"
+      }
+    },
+    "vatican_city": {
+      "ethnicities": {
+        "italian": 100.0
+      },
+      "ethnic_references": {
+        "italian": "mediterranean_european"
+      }
+    },
+    "venezuela": {
+      "ethnicities": {
+        "mestizo": 51.6,
+        "white": 43.6,
+        "black": 3.6,
+        "indigenous": 2.7,
+        "other": 1.2
+      },
+      "ethnic_references": {
+        "mestizo": "indigenous_american",
+        "white": "mediterranean_european",
+        "black": "black_african",
+        "indigenous": "indigenous_american"
+      }
+    },
+    "vietnam": {
+      "ethnicities": {
+        "kinh": 85.7,
+        "tay": 1.9,
+        "thai": 1.8,
+        "muong": 1.5,
+        "khmer": 1.5,
+        "other": 7.6
+      },
+      "ethnic_references": {
+        "kinh": "southeast_asian",
+        "tay": "southeast_asian",
+        "thai": "southeast_asian",
+        "muong": "southeast_asian",
+        "khmer": "southeast_asian"
+      }
+    },
+    "yemen": {
+      "ethnicities": {
+        "arab": 99.0,
+        "other": 1.0
+      },
+      "ethnic_references": {
+        "arab": "arab_berber"
+      }
+    },
+    "zambia": {
+      "ethnicities": {
+        "bemba": 21.0,
+        "tonga": 13.6,
+        "chewa": 7.4,
+        "lozi": 5.7,
+        "nsenga": 5.3,
+        "other": 47.0
+      },
+      "ethnic_references": {
+        "bemba": "black_african",
+        "tonga": "black_african",
+        "chewa": "black_african",
+        "lozi": "black_african",
+        "nsenga": "black_african"
+      }
+    },
+    "zimbabwe": {
+      "ethnicities": {
+        "shona": 82.0,
+        "ndebele": 14.0,
+        "other": 4.0
+      },
+      "ethnic_references": {
+        "shona": "black_african",
+        "ndebele": "black_african"
+      }
+    }
+  }
+} 

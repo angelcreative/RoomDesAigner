@@ -18,6 +18,7 @@ import io
 import base64
 import time
 import openai
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -198,57 +199,51 @@ def get_content_for_interior_design():
 
 # Main function to transform prompts
 def transform_prompt(prompt_text):
-    prompt_text_lower = prompt_text.lower()
+    if not openai_api_key:
+        return prompt_text
+    
+    # Cargar datos étnicos
+    ethnic_data = load_ethnic_data()
+    
+    # Detectar nacionalidad en el prompt
+    nationality_mapping = {
+        'argentinian': 'argentina',
+        'argentine': 'argentina',
+        # ... añadir más mappings según necesites
+    }
+    
+    words = prompt_text.lower().split()
+    detected_nationality = None
+    
+    for word in words:
+        if word in nationality_mapping:
+            detected_nationality = nationality_mapping[word]
+            break
+        elif word in ethnic_data['countries']:
+            detected_nationality = word
+            break
+    
+    if detected_nationality:
+        characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+        if characteristics:
+            ethnic_prompt = f", {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
+            prompt_text += ethnic_prompt
 
-    if any(keyword in prompt_text_lower for keyword in ["person", "woman", "man", "people"]):
-        content = get_content_for_people()
-    
-    elif any(keyword in prompt_text_lower for keyword in ["typographic", "silhouette", "line art", "geometric", "logo"]):
-        content = get_content_for_logos()
-    
-    elif any(keyword in prompt_text_lower for keyword in ["interface", "ui", "ux", "dashboard"]):
-        content = get_content_for_ui_ux()
-    
-    elif any(keyword in prompt_text_lower for keyword in ["interior design", "living room", "bedroom", "kitchen"]):
-        content = get_content_for_interior_design()
-    
-    else:
-        content = """
-        You are a helpful assistant that transforms lists of values into structured natural language descriptions for non-human subjects (scenes, objects, etc.). 
-        Follow this structure:
-        - Subject: Describe the subject (e.g., cityscape at night).
-        - Location: Mention the location (e.g., urban setting).
-        - Style: Specify the style (realistic, abstract).
-        - Composition: Describe the composition (landscape view).
-        - Lighting: Mention the lighting (dim, natural light).
-        - Color Palette: Mention RGB values for colors.
-        - Mood/Atmosphere: Highlight the mood (mysterious, vibrant).
-        - Technical Details: Mention shot details (wide-angle lens).
-        Generate a full, natural description, not just labels.
-        """
-    
-    # Prepare the message to send to OpenAI API
-    messages = [
-        {
-            "role": "system",
-            "content": content
-        },
-        {
-            "role": "user",
-            "content": f"Transform the following list of values into a detailed, professional natural language prompt, in less than 700 characters:\n\n{prompt_text}"
-        }
-    ]
-
-    # Send the message to OpenAI API and process the response
-    response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",
-        messages=messages,
-        max_tokens=700,  # Adjust the token count as needed
-        temperature=0.7,
-    )
-
-    transformed_prompt = response.choices[0].message['content'].strip()
-    return transformed_prompt
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that enhances image generation prompts."},
+                {"role": "user", "content": f"Enhance this image generation prompt, maintaining its core meaning but adding more details: {prompt_text}"}
+            ]
+        )
+        
+        enhanced_prompt = response.choices[0].message['content']
+        return enhanced_prompt
+        
+    except Exception as e:
+        print(f"Error in transform_prompt: {str(e)}")
+        return prompt_text
 
 
 
@@ -1012,3 +1007,31 @@ def logout():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+def load_ethnic_data():
+    json_path = Path('static/ethnic.json')
+    with open(json_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def select_ethnicity_by_weight(ethnicities):
+    # Convertir porcentajes a pesos numéricos
+    total = sum(float(e['percentage'].strip('%')) for e in ethnicities)
+    weights = [float(e['percentage'].strip('%'))/total for e in ethnicities]
+    
+    # Seleccionar una etnia basada en los pesos
+    selected = random.choices(ethnicities, weights=weights, k=1)[0]
+    return selected
+
+def get_ethnic_characteristics(nationality, ethnic_data):
+    country_data = ethnic_data['countries'].get(nationality)
+    if not country_data:
+        return None
+    
+    # Seleccionar una etnia basada en los pesos
+    selected_ethnicity = select_ethnicity_by_weight(country_data['ethnicities'])
+    
+    return {
+        "skin_tone": selected_ethnicity.get('features', {}).get('skin_tones', [])[0],
+        "hair_color": selected_ethnicity.get('features', {}).get('hair_colors', [])[0],
+        "eye_color": selected_ethnicity.get('features', {}).get('eye_colors', [])[0]
+    }
