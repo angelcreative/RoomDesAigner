@@ -227,7 +227,7 @@ def transform_prompt(prompt_text, use_openai=False):
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
             if characteristics:
                 facial_features_text = ", ".join(characteristics['facial_features'])
-                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, {facial_features_text}"
+                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and facial features including {facial_features_text}"
         
         return prompt_text
     
