@@ -325,7 +325,7 @@ def transform_prompt(prompt_text, use_openai=False):
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
             if characteristics:
                 facial_features_text = ", ".join(characteristics['facial_features'])
-                return f"{prompt_text}, with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and facial features including {facial_features_text}, {characteristics['ethnic_description']}"
+                return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
         
         return prompt_text
     
@@ -476,6 +476,7 @@ def generate_images():
             )
 
             data['prompt'] = transformed_prompt
+            data['negative_prompt'] = "professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting"
             if 'key' in data:
                 del data['key']
 
