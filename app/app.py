@@ -205,6 +205,7 @@ def transform_prompt(prompt_text):
     try:
         # Cargar datos étnicos
         ethnic_data = load_ethnic_data()
+        print("🔍 Ethnic data loaded successfully")
         
         # Detectar nacionalidad en el prompt
         nationality_mapping = {
@@ -339,23 +340,28 @@ def transform_prompt(prompt_text):
         }
         
         words = prompt_text.lower().split()
-        detected_nationality = None
+        print(f"🔤 Words detected: {words}")
         
+        detected_nationality = None
         for word in words:
             if word in nationality_mapping:
                 detected_nationality = nationality_mapping[word]
+                print(f"🎯 Nationality detected from mapping: {detected_nationality}")
                 break
             elif word in ethnic_data['countries']:
                 detected_nationality = word
+                print(f"🎯 Nationality detected directly: {detected_nationality}")
                 break
+        
+        print(f"🌍 Final detected nationality: {detected_nationality}")
         
         ethnic_description = ""
         if detected_nationality:
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            print(f"Características encontradas: {characteristics}")
+            print(f"👤 Ethnic characteristics found: {characteristics}")
             if characteristics:
                 ethnic_description = f"The person should have {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, and {characteristics['eye_color']} eyes, which are typical physical characteristics of their ethnicity."
-                print(f"Prompt modificado: {prompt_text}")
+                print(f"📝 Generated ethnic description: {ethnic_description}")
 
         # Añadir logging para debug
         print(f"Prompt original: {prompt_text}")
@@ -1167,15 +1173,31 @@ def select_ethnicity_by_weight(ethnicities):
     return selected
 
 def get_ethnic_characteristics(nationality, ethnic_data):
+    print(f"🔍 Looking for characteristics for nationality: {nationality}")
     country_data = ethnic_data['countries'].get(nationality)
+    print(f"📊 Country data found: {country_data}")
+    
     if not country_data:
+        print("❌ No country data found")
         return None
     
+    # Convertir el diccionario de etnias a lista de diccionarios con porcentajes
+    ethnicities = []
+    for name, percentage in country_data['ethnicities'].items():
+        ethnic_type = country_data['ethnic_references'].get(name)
+        if ethnic_type:
+            ethnicities.append({
+                'name': name,
+                'percentage': str(percentage),
+                'features': ethnic_data['ethnic_types'][ethnic_type]['features']
+            })
+    
     # Seleccionar una etnia basada en los pesos
-    selected_ethnicity = select_ethnicity_by_weight(country_data['ethnicities'])
+    selected_ethnicity = select_ethnicity_by_weight(ethnicities)
+    print(f"👥 Selected ethnicity: {selected_ethnicity}")
     
     return {
-        "skin_tone": selected_ethnicity.get('features', {}).get('skin_tones', [])[0],
-        "hair_color": selected_ethnicity.get('features', {}).get('hair_colors', [])[0],
-        "eye_color": selected_ethnicity.get('features', {}).get('eye_colors', [])[0]
+        "skin_tone": selected_ethnicity['features']['skin_tones'][0],
+        "hair_color": selected_ethnicity['features']['hair_colors'][0],
+        "eye_color": selected_ethnicity['features']['eye_colors'][0]
     }
