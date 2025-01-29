@@ -208,9 +208,134 @@ def transform_prompt(prompt_text):
         
         # Detectar nacionalidad en el prompt
         nationality_mapping = {
+            # América del Sur
             'argentinian': 'argentina',
             'argentine': 'argentina',
-            # ... añadir más mappings según necesites
+            'bolivia': 'bolivia',
+            'bolivian': 'bolivia',
+            'brazil': 'brazil',
+            'brazilian': 'brazil',
+            'chile': 'chile',
+            'chilean': 'chile',
+            'colombia': 'colombia',
+            'colombian': 'colombia',
+            'ecuador': 'ecuador',
+            'ecuadorian': 'ecuador',
+            'paraguay': 'paraguay',
+            'paraguayan': 'paraguay',
+            'peru': 'peru',
+            'peruvian': 'peru',
+            'uruguay': 'uruguay',
+            'uruguayan': 'uruguay',
+            'venezuela': 'venezuela',
+            'venezuelan': 'venezuela',
+            # América del Norte y Central
+            'mexico': 'mexico',
+            'mexican': 'mexican',
+            'usa': 'united_states',
+            'american': 'united_states',
+            'united states': 'united_states',
+            'canada': 'canada',
+            'canadian': 'canada',
+            'costa rica': 'costa_rica',
+            'costa rican': 'costa_rica',
+            'cuba': 'cuba',
+            'cuban': 'cuba',
+            'dominican': 'dominican_republic',
+            'guatemala': 'guatemala',
+            'guatemalan': 'guatemala',
+            'haiti': 'haiti',
+            'haitian': 'haiti',
+            'honduras': 'honduras',
+            'honduran': 'honduras',
+            'jamaica': 'jamaica',
+            'jamaican': 'jamaica',
+            'panama': 'panama',
+            'panamanian': 'panama',
+            # Europa
+            'spain': 'spain',
+            'spanish': 'spain',
+            'france': 'france',
+            'french': 'france',
+            'germany': 'germany',
+            'german': 'germany',
+            'italy': 'italy',
+            'italian': 'italy',
+            'uk': 'united_kingdom',
+            'british': 'united_kingdom',
+            'english': 'united_kingdom',
+            'scottish': 'united_kingdom',
+            'welsh': 'united_kingdom',
+            'ireland': 'ireland',
+            'irish': 'ireland',
+            'portugal': 'portugal',
+            'portuguese': 'portugal',
+            'greece': 'greece',
+            'greek': 'greece',
+            'netherlands': 'netherlands',
+            'dutch': 'netherlands',
+            'belgium': 'belgium',
+            'belgian': 'belgium',
+            'sweden': 'sweden',
+            'swedish': 'sweden',
+            'norway': 'norway',
+            'norwegian': 'norway',
+            'denmark': 'denmark',
+            'danish': 'denmark',
+            'finland': 'finland',
+            'finnish': 'finland',
+            'russia': 'russia',
+            'russian': 'russia',
+            'poland': 'poland',
+            'polish': 'poland',
+            # Asia
+            'china': 'china',
+            'chinese': 'china',
+            'japan': 'japan',
+            'japanese': 'japan',
+            'korea': 'south_korea',
+            'korean': 'south_korea',
+            'south korea': 'south_korea',
+            'india': 'india',
+            'indian': 'india',
+            'vietnam': 'vietnam',
+            'vietnamese': 'vietnam',
+            'thailand': 'thailand',
+            'thai': 'thailand',
+            'philippines': 'philippines',
+            'filipino': 'philippines',
+            'indonesian': 'indonesia',
+            'indonesia': 'indonesia',
+            'malaysia': 'malaysia',
+            'malaysian': 'malaysia',
+            # Medio Oriente
+            'iran': 'iran',
+            'iranian': 'iran',
+            'iraq': 'iraq',
+            'iraqi': 'iraq',
+            'saudi': 'saudi_arabia',
+            'saudi arabia': 'saudi_arabia',
+            'turkey': 'turkey',
+            'turkish': 'turkey',
+            'israel': 'israel',
+            'israeli': 'israel',
+            # África
+            'egypt': 'egypt',
+            'egyptian': 'egypt',
+            'morocco': 'morocco',
+            'moroccan': 'morocco',
+            'south africa': 'south_africa',
+            'south african': 'south_africa',
+            'nigeria': 'nigeria',
+            'nigerian': 'nigeria',
+            'kenya': 'kenya',
+            'kenyan': 'kenya',
+            # Oceanía
+            'australia': 'australia',
+            'australian': 'australia',
+            'new zealand': 'new_zealand',
+            'new zealander': 'new_zealand',
+            'kiwi': 'new_zealand'
         }
         
         words = prompt_text.lower().split()
@@ -226,9 +351,16 @@ def transform_prompt(prompt_text):
         
         if detected_nationality:
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            print(f"Características encontradas: {characteristics}")
             if characteristics:
                 ethnic_prompt = f", {characteristics['skin_tone']} skin tone, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
                 prompt_text += ethnic_prompt
+                print(f"Prompt modificado: {prompt_text}")
+
+        # Añadir logging para debug
+        print(f"Prompt original: {prompt_text}")
+        print(f"Palabras detectadas: {words}")
+        print(f"Nacionalidad detectada: {detected_nationality}")
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
