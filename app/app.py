@@ -476,7 +476,7 @@ def generate_images():
             )
 
             data['prompt'] = transformed_prompt
-            data['negative_prompt'] = "professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting"
+            data['negative_prompt'] = "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting"
             if 'key' in data:
                 del data['key']
 
