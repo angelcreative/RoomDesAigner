@@ -632,25 +632,25 @@ function getModelConfig(selectedModel) {
         "fluxpro-11": { 
             model_id: "fluxdev", 
             lora_model: "fluxpro-11,polyhedron-flux,ultrarealistic-lora-project", 
-            lora_strength: "1,0.7,0.5",
+            lora_strength: "0.7,0.3,0.3",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
         "fluxdevfashion": { 
             model_id: "fluxdev", 
             lora_model: "flux-fashion,polyhedron-flux", 
-            lora_strength: "1,0.7",
+            lora_strength: "0.7,0.3",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
         "iphone-photo-flux-realism-booster": { 
             model_id: "fluxdev",
             lora_model: "iphone-photo-flux-realism-booster,polyhedron-flux,ultrarealistic-lora-project",
-            lora_strength: "1,0.7,0.5",
+            lora_strength: "0.7,0.3,0.3",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
         "uncensored-flux-lora": { 
             model_id: "fluxdev", 
-            lora_model: "sldr_flux_nsfw_v2,polyhedron-flux,ultrarealistic-lora-project", 
-            lora_strength: "0.8,0.5,0.5",
+            lora_model: "uncensored-flux-lora,polyhedron-flux,ultrarealistic-lora-project", 
+            lora_strength: "0.7,0.3,0.3",
             steps: 28  // Usa fluxdev, por lo tanto 28 steps
         },
         "flux-pro-1.1-ultra": { 
