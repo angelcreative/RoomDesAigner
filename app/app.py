@@ -1886,6 +1886,10 @@ def fashion():
 def persona():
     return render_template('persona.html')
 
+# Cargar el archivo ethnic.json
+with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+    ethnic_data = json.load(f)
+
 @app.route('/generate-persona', methods=['POST'])
 def generate_persona():
     try:
@@ -1893,7 +1897,25 @@ def generate_persona():
         prompt = data.get('prompt')
         film_type = data.get('film_type')
         
-        print(f"Generating persona with {film_type} style. Prompt: {prompt}")
+        # Buscar si el prompt contiene alguna nacionalidad/etnia del ethnic.json
+        found_ethnic = None
+        prompt_lower = prompt.lower()
+        
+        for ethnic in ethnic_data:
+            keywords = [ethnic['nationality'].lower()] + [k.lower() for k in ethnic.get('keywords', [])]
+            if any(keyword in prompt_lower for keyword in keywords):
+                found_ethnic = ethnic
+                break
+        
+        # Construir el prompt final
+        if found_ethnic:
+            characteristics = found_ethnic['characteristics']
+            facial_features = characteristics.get('facial_features', [])
+            facial_features_text = ', '.join(facial_features)
+            
+            enhanced_prompt = f"{prompt}, {config['keyword']}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+        else:
+            enhanced_prompt = f"{prompt}, {config['keyword']}"
 
         # Configuración según el tipo de película
         film_configs = {
@@ -1933,7 +1955,7 @@ def generate_persona():
                 json={
                     "version": config['version'],
                     "input": {
-                        "prompt": f"{prompt}, {config['keyword']}",
+                        "prompt": enhanced_prompt,  # Usar el prompt mejorado
                         "num_outputs": 1,
                         "guidance_scale": 2,
                         "num_inference_steps": 28
