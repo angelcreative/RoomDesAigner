@@ -16,16 +16,18 @@
            ========================================================================== */
         
         .preview-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            justify-content: center;
             gap: 20px;
             padding: 20px;
-            max-width: 1200px;
+            width: 100%;
             margin: 0 auto;
         }
         
         .preview-box {
             aspect-ratio: 1;
+            width: 512px;
+            height: 512px;
             background: var(--bunker-800);
             border: 1px solid var(--bunker-600);
             border-radius: 12px;
@@ -251,6 +253,35 @@
             background: var(--bunker-700);
         }
         /* ========================================================================== */
+
+        /* Ajuste del layout principal */
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .left-column {
+            padding: 20px;
+            background: var(--bunker-900);
+        }
+
+        .center-column {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Estilos del selector de film */
+        .film-selector {
+            width: 100%;
+            padding: 12px;
+            background: var(--bunker-800);
+            border: 1px solid var(--bunker-700);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-top: 16px;
+        }
     </style>
 </head>
 <body>
@@ -309,24 +340,13 @@
                             </div>
                         </div>
                         
-                        <div class="mode-selector">
-                            <div class="mode-label">
-                                <span class="material-symbols-outlined">camera</span>
-                                <span>Film Type</span>
-                            </div>
-                            <div class="custom-dropdown dark" data-placeholder="Select the film">
-                                <div class="dropdown-selected">
-                                    <span class="selected-text">Select film style</span>
-                                </div>
-                                <div class="dropdown-options">
-                                    <div class="option" value="fuji">Fuji Film</div>
-                                    <div class="option" value="koda">Koda Film</div>
-                                    <div class="option" value="pola">Pola Film</div>
-                                    <div class="option" value="surreal">Surreal Film</div>
-                                </div>
-                                <input type="hidden" name="film_type" id="film_type">
-                            </div>
-                        </div>
+                        <select class="film-selector" id="film_type">
+                            <option value="" disabled selected>Select film style</option>
+                            <option value="fuji">Fuji Film</option>
+                            <option value="koda">Koda Film</option>
+                            <option value="pola">Pola Film</option>
+                            <option value="surreal">Surreal Film</option>
+                        </select>
                         
                         <button id="createPersona" class="generate-button">
                             Generate
@@ -338,67 +358,19 @@
             <div class="center-column">
                 <h2>Preview</h2>
                 <div class="preview-grid">
-                    <div class="preview-box" id="preview1">
+                    <div class="preview-box" id="preview">
                         <div class="preview-placeholder">
                             <span class="material-symbols-outlined">image</span>
                             <p>Image will be generated here</p>
                         </div>
-                        <img src="" alt="Generated image 1">
-                    </div>
-                    <div class="preview-box" id="preview2">
-                        <div class="preview-placeholder">
-                            <span class="material-symbols-outlined">image</span>
-                            <p>Image will be generated here</p>
+                        <div class="spinner-container" style="display: none;">
+                            <div class="spinner"></div>
+                            <div class="progress">0%</div>
                         </div>
-                        <img src="" alt="Generated image 2">
-                    </div>
-                    <div class="preview-box" id="preview3">
-                        <div class="preview-placeholder">
-                            <span class="material-symbols-outlined">image</span>
-                            <p>Image will be generated here</p>
-                        </div>
-                        <img src="" alt="Generated image 3">
-                    </div>
-                    <div class="preview-box" id="preview4">
-                        <div class="preview-placeholder">
-                            <span class="material-symbols-outlined">image</span>
-                            <p>Image will be generated here</p>
-                        </div>
-                        <img src="" alt="Generated image 4">
+                        <img src="" alt="Generated image">
                     </div>
                 </div>
             </div>
-
-            <aside class="right-column">
-                <h2>Settings</h2>
-                <div class="settings-group">
-                    <div class="custom-dropdown" data-placeholder="Select the film">
-                        <div class="dropdown-selected">
-                            <span class="selected-text">Select the film</span>
-                            <span class="clear-selection">×</span>
-                        </div>
-                        <div class="dropdown-options">
-                            <div class="option" value="fuji">
-                                <span class="material-symbols-outlined">camera</span>
-                                Fuji Film
-                            </div>
-                            <div class="option" value="koda">
-                                <span class="material-symbols-outlined">camera</span>
-                                Koda Film
-                            </div>
-                            <div class="option" value="pola">
-                                <span class="material-symbols-outlined">camera</span>
-                                Pola Film
-                            </div>
-                            <div class="option" value="surreal">
-                                <span class="material-symbols-outlined">camera</span>
-                                Surreal Film
-                            </div>
-                        </div>
-                        <input type="hidden" name="film_type" id="film_type">
-                    </div>
-                </div>
-            </aside>
         </div>
     </div>
 
@@ -417,32 +389,29 @@
             const createButton = document.getElementById('createPersona');
             const promptInput = document.getElementById('personaPrompt');
             const filmTypeInput = document.getElementById('film_type');
-            const previewGrid = document.querySelector('.preview-grid');
             
-            // Función para crear un nuevo conjunto de placeholders
-            function createNewPlaceholders() {
+            // Función para crear un nuevo placeholder
+            function createNewPlaceholder() {
                 const newGrid = document.createElement('div');
                 newGrid.className = 'preview-grid';
                 
-                for (let i = 1; i <= 4; i++) {
-                    const box = document.createElement('div');
-                    box.className = 'preview-box';
-                    box.id = `preview-${Date.now()}-${i}`;
-                    
-                    box.innerHTML = `
-                        <div class="preview-placeholder">
-                            <span class="material-symbols-outlined">image</span>
-                            <p>Image will be generated here</p>
-                        </div>
-                        <div class="spinner-container" style="display: none;">
-                            <div class="spinner"></div>
-                            <div class="progress">0%</div>
-                        </div>
-                        <img src="" alt="Generated image ${i}">
-                    `;
-                    
-                    newGrid.appendChild(box);
-                }
+                const box = document.createElement('div');
+                box.className = 'preview-box';
+                box.id = `preview-${Date.now()}`;
+                
+                box.innerHTML = `
+                    <div class="preview-placeholder">
+                        <span class="material-symbols-outlined">image</span>
+                        <p>Image will be generated here</p>
+                    </div>
+                    <div class="spinner-container" style="display: none;">
+                        <div class="spinner"></div>
+                        <div class="progress">0%</div>
+                    </div>
+                    <img src="" alt="Generated image">
+                `;
+                
+                newGrid.appendChild(box);
                 
                 // Insertar al inicio del contenedor
                 const centerColumn = document.querySelector('.center-column');
@@ -461,17 +430,13 @@
                     return;
                 }
                 
-                // Deshabilitar el botón mientras se generan las imágenes
                 createButton.disabled = true;
                 
-                // Crear nuevos placeholders
-                const newGrid = createNewPlaceholders();
-                const boxes = newGrid.querySelectorAll('.preview-box');
+                const newGrid = createNewPlaceholder();
+                const box = newGrid.querySelector('.preview-box');
                 
-                // Mostrar spinners
-                boxes.forEach(box => {
-                    box.querySelector('.spinner-container').style.display = 'flex';
-                });
+                // Mostrar spinner
+                box.querySelector('.spinner-container').style.display = 'flex';
                 
                 try {
                     const response = await fetch('/generate-persona', {
@@ -488,32 +453,26 @@
                     const data = await response.json();
                     
                     if (data.status === 'succeeded') {
-                        // Actualizar cada imagen cuando esté lista
-                        data.image_urls.forEach((url, index) => {
-                            const box = boxes[index];
-                            const img = box.querySelector('img');
-                            const spinner = box.querySelector('.spinner-container');
-                            
-                            img.src = url;
-                            img.onload = () => {
-                                spinner.style.display = 'none';
-                                box.classList.add('loaded');
-                            };
-                        });
+                        const img = box.querySelector('img');
+                        const spinner = box.querySelector('.spinner-container');
+                        
+                        img.src = data.image_url;
+                        img.onload = () => {
+                            spinner.style.display = 'none';
+                            box.classList.add('loaded');
+                        };
                     } else {
                         throw new Error(data.error || 'Generation failed');
                     }
                 } catch (error) {
                     console.error('Error:', error);
                     alert(error.message);
-                    // Remover los placeholders si hay error
                     newGrid.remove();
                 } finally {
                     createButton.disabled = false;
                 }
             }
             
-            // Event Listeners
             createButton.addEventListener('click', generateImages);
         });
     </script>

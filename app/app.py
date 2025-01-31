@@ -1934,7 +1934,7 @@ def generate_persona():
                     "version": config['version'],
                     "input": {
                         "prompt": f"{prompt}, {config['keyword']}",
-                        "num_outputs": 4,
+                        "num_outputs": 1,
                         "guidance_scale": 2,
                         "num_inference_steps": 28
                     }
