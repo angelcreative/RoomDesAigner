@@ -1986,10 +1986,10 @@ def generate_persona():
             if prediction['status'] == 'succeeded':
                 return jsonify({
                     "status": "succeeded",
-                    "image_url": prediction['output'][0]
+                    "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output']
                 }), 200
             elif prediction['status'] == 'failed':
-                raise Exception(f"Image generation failed for image {i+1}")
+                raise Exception("Image generation failed")
                 
             time.sleep(1)
 

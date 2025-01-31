@@ -490,7 +490,7 @@
                         const img = box.querySelector('img');
                         const spinner = box.querySelector('.spinner-container');
                         
-                        img.src = data.image_urls[0]; // Tomamos la primera imagen del array
+                        img.src = data.image_url; // Ahora recibimos una sola URL
                         img.onload = () => {
                             spinner.style.display = 'none';
                             box.classList.add('loaded');
