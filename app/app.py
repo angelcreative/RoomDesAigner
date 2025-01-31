@@ -1881,3 +1881,95 @@ def fashion():
     except Exception as e:
         print(f"Error in fashion endpoint: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/persona', methods=['GET'])
+def persona():
+    return render_template('persona.html')
+
+@app.route('/generate-persona', methods=['POST'])
+def generate_persona():
+    try:
+        data = request.get_json()
+        prompt = data.get('prompt')
+        film_type = data.get('film_type')
+        
+        print(f"Generating persona with {film_type} style. Prompt: {prompt}")
+
+        # Configuración según el tipo de película
+        film_configs = {
+            'fuji': {
+                'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
+                'keyword': "TOK"
+            },
+            'koda': {
+                'version': "1ba00ff40b6f4b603d1126bca1c75da7f0f9ff21eb1569e9adb4299c9f3e1166",
+                'keyword': "TOK"
+            },
+            'surreal': {
+                'version': "af9441cdc4a371dece5fbe6144d4587ccb68d7b00c2d573b206254180691f895",
+                'keyword': "surreal style"
+            },
+            'pola': {
+                'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
+                'keyword': "polaroid style"
+            }
+        }
+
+        if film_type not in film_configs:
+            raise Exception("Invalid film type selected")
+
+        config = film_configs[film_type]
+        
+        headers = {
+            "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+            "Content-Type": "application/json"
+        }
+        
+        # Generar 4 imágenes en paralelo
+        image_urls = []
+        for i in range(4):
+            response = requests.post(
+                "https://api.replicate.com/v1/predictions",
+                json={
+                    "version": config['version'],
+                    "input": {
+                        "prompt": f"{prompt}, {config['keyword']}",
+                        "num_outputs": 4,
+                        "guidance_scale": 2,
+                        "num_inference_steps": 28
+                    }
+                },
+                headers=headers
+            )
+            
+            if response.status_code != 201:
+                print(f"Error response: {response.text}")
+                raise Exception(f"Error creating prediction: {response.status_code}")
+                
+            prediction = response.json()
+            prediction_id = prediction['id']
+            
+            # Polling para cada imagen
+            while True:
+                response = requests.get(
+                    f"https://api.replicate.com/v1/predictions/{prediction_id}",
+                    headers=headers
+                )
+                prediction = response.json()
+                
+                if prediction['status'] == 'succeeded':
+                    image_urls.append(prediction['output'][0])
+                    break
+                elif prediction['status'] == 'failed':
+                    raise Exception(f"Image generation failed for image {i+1}")
+                    
+                time.sleep(1)
+
+        return jsonify({
+            "status": "succeeded",
+            "image_urls": image_urls
+        })
+
+    except Exception as e:
+        print(f"Error in generate-persona: {str(e)}")
+        return jsonify({"error": str(e)}), 500

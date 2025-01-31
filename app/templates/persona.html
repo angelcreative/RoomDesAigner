@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADEM Studio - Persona</title>
+    <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        /* ==========================================================================
+           Persona Template Styles - ADEM Studio
+           Designed for dynamic image generation preview
+           Version: 1.0.0
+           Author: ADEM Studio Team
+           ========================================================================== */
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .preview-box {
+            aspect-ratio: 1;
+            background: var(--bunker-800);
+            border: 1px solid var(--bunker-600);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preview-box:hover {
+            border-color: var(--bunker-400);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .preview-box img {
+            max-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .preview-box.loaded img {
+            opacity: 1;
+        }
+        
+        .preview-placeholder {
+            position: absolute;
+            color: var(--bunker-400);
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .preview-grid {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+        }
+        
+        .prompt-container {
+            padding: 20px;
+        }
+        
+        .prompt-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        #personaPrompt {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--bunker-600);
+            background: var(--bunker-800);
+            color: var(--bunker-100);
+            font-family: 'GeistMono', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        #personaPrompt:focus {
+            outline: none;
+            border-color: var(--prince-500);
+        }
+        
+        .primary-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--prince-500);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'GeistMono', monospace;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .primary-button:hover {
+            background: var(--prince-600);
+        }
+        
+        .primary-button:disabled {
+            background: var(--bunker-600);
+            cursor: not-allowed;
+        }
+        
+        /* Nuevo estilo moderno */
+        .prompt-wrapper {
+            background: var(--bunker-800);
+            border: 2px solid var(--bunker-600);
+            border-radius: 12px;
+            padding: 2px;
+            position: relative;
+        }
+        
+        .modern-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            font-family: inherit;
+        }
+        
+        .modern-input:focus {
+            outline: none;
+        }
+        
+        .ai-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--bunker-300);
+        }
+        
+        .toggle-switch input {
+            display: none;
+        }
+        
+        .toggle-switch label {
+            width: 40px;
+            height: 20px;
+            background: var(--bunker-600);
+            border-radius: 20px;
+            display: block;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .toggle-switch label:after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: 0.3s;
+        }
+        
+        .toggle-switch input:checked + label {
+            background: var(--prince-500);
+        }
+        
+        .toggle-switch input:checked + label:after {
+            left: calc(100% - 18px);
+        }
+        
+        .mode-selector {
+            background: var(--bunker-800);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .mode-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--bunker-300);
+            margin-bottom: 8px;
+        }
+        
+        .generate-button {
+            width: 100%;
+            padding: 16px;
+            background: var(--bunker-700);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .generate-button:hover {
+            background: var(--bunker-600);
+        }
+        
+        .generate-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .custom-dropdown.dark {
+            background: var(--bunker-900);
+            border: 1px solid var(--bunker-700);
+        }
+        
+        .custom-dropdown.dark .dropdown-selected {
+            padding: 12px;
+            color: white;
+        }
+        
+        .custom-dropdown.dark .dropdown-options {
+            background: var(--bunker-900);
+            border: 1px solid var(--bunker-700);
+        }
+        
+        .custom-dropdown.dark .option {
+            padding: 12px;
+            color: white;
+        }
+        
+        .custom-dropdown.dark .option:hover {
+            background: var(--bunker-700);
+        }
+        /* ========================================================================== */
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Top Bar -->
+        <header class="top-bar ignore">
+            <div>
+                <div class="usernameCredits">
+                    <span class="username">
+                        <span class="material-symbols-outlined">identity_platform</span>
+                        {{ username }}
+                    </span>
+                    <span class="creditsCoin" id="creditDisplay">
+                        <span class="material-symbols-outlined">toll</span>
+                        {{ credits }}
+                    </span>
+                </div>
+            </div>
+            <div class="logo">
+                <h1><img src="static/img/adem-img/logo_full_02.svg"></h1>
+                <div class="orb"></div>
+            </div>
+            <div class="user-profile">
+                <div class="logout">
+                    <div class="rightOff">
+                        <button class="menu-button" id="menuButton">
+                            <span class="material-symbols-outlined">menu</span>
+                        </button>
+                        <a href="{{ url_for('logout') }}">
+                            <span class="material-symbols-outlined" translate="no">logout</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <aside class="left-column">
+                <h2>Generate Images</h2>
+                <div class="prompt-container">
+                    <div class="prompt-input-group">
+                        <div class="prompt-wrapper">
+                            <textarea 
+                                id="personaPrompt" 
+                                placeholder="Describe your image or upload"
+                                rows="4"
+                                class="modern-input"
+                            ></textarea>
+                            <div class="ai-toggle">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="aiPrompt" checked>
+                                    <label for="aiPrompt"></label>
+                                </div>
+                                <span>AI-prompt</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mode-selector">
+                            <div class="mode-label">
+                                <span class="material-symbols-outlined">camera</span>
+                                <span>Film Type</span>
+                            </div>
+                            <div class="custom-dropdown dark" data-placeholder="Select the film">
+                                <div class="dropdown-selected">
+                                    <span class="selected-text">Select film style</span>
+                                </div>
+                                <div class="dropdown-options">
+                                    <div class="option" value="fuji">Fuji Film</div>
+                                    <div class="option" value="koda">Koda Film</div>
+                                    <div class="option" value="pola">Pola Film</div>
+                                    <div class="option" value="surreal">Surreal Film</div>
+                                </div>
+                                <input type="hidden" name="film_type" id="film_type">
+                            </div>
+                        </div>
+                        
+                        <button id="createPersona" class="generate-button">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="center-column">
+                <h2>Preview</h2>
+                <div class="preview-grid">
+                    <div class="preview-box" id="preview1">
+                        <div class="preview-placeholder">
+                            <span class="material-symbols-outlined">image</span>
+                            <p>Image will be generated here</p>
+                        </div>
+                        <img src="" alt="Generated image 1">
+                    </div>
+                    <div class="preview-box" id="preview2">
+                        <div class="preview-placeholder">
+                            <span class="material-symbols-outlined">image</span>
+                            <p>Image will be generated here</p>
+                        </div>
+                        <img src="" alt="Generated image 2">
+                    </div>
+                    <div class="preview-box" id="preview3">
+                        <div class="preview-placeholder">
+                            <span class="material-symbols-outlined">image</span>
+                            <p>Image will be generated here</p>
+                        </div>
+                        <img src="" alt="Generated image 3">
+                    </div>
+                    <div class="preview-box" id="preview4">
+                        <div class="preview-placeholder">
+                            <span class="material-symbols-outlined">image</span>
+                            <p>Image will be generated here</p>
+                        </div>
+                        <img src="" alt="Generated image 4">
+                    </div>
+                </div>
+            </div>
+
+            <aside class="right-column">
+                <h2>Settings</h2>
+                <div class="settings-group">
+                    <div class="custom-dropdown" data-placeholder="Select the film">
+                        <div class="dropdown-selected">
+                            <span class="selected-text">Select the film</span>
+                            <span class="clear-selection">×</span>
+                        </div>
+                        <div class="dropdown-options">
+                            <div class="option" value="fuji">
+                                <span class="material-symbols-outlined">camera</span>
+                                Fuji Film
+                            </div>
+                            <div class="option" value="koda">
+                                <span class="material-symbols-outlined">camera</span>
+                                Koda Film
+                            </div>
+                            <div class="option" value="pola">
+                                <span class="material-symbols-outlined">camera</span>
+                                Pola Film
+                            </div>
+                            <div class="option" value="surreal">
+                                <span class="material-symbols-outlined">camera</span>
+                                Surreal Film
+                            </div>
+                        </div>
+                        <input type="hidden" name="film_type" id="film_type">
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        const menuButton = document.getElementById('menuButton');
+        const layout = document.querySelector('.layout');
+
+        menuButton.addEventListener('click', () => {
+            layout.classList.toggle('show-aside');
+        });
+
+        // Funcionalidad de Persona Generator
+        document.addEventListener('DOMContentLoaded', function() {
+            const createButton = document.getElementById('createPersona');
+            const promptInput = document.getElementById('personaPrompt');
+            const filmTypeInput = document.getElementById('film_type');
+            const previewGrid = document.querySelector('.preview-grid');
+            
+            // Función para crear un nuevo conjunto de placeholders
+            function createNewPlaceholders() {
+                const newGrid = document.createElement('div');
+                newGrid.className = 'preview-grid';
+                
+                for (let i = 1; i <= 4; i++) {
+                    const box = document.createElement('div');
+                    box.className = 'preview-box';
+                    box.id = `preview-${Date.now()}-${i}`;
+                    
+                    box.innerHTML = `
+                        <div class="preview-placeholder">
+                            <span class="material-symbols-outlined">image</span>
+                            <p>Image will be generated here</p>
+                        </div>
+                        <div class="spinner-container" style="display: none;">
+                            <div class="spinner"></div>
+                            <div class="progress">0%</div>
+                        </div>
+                        <img src="" alt="Generated image ${i}">
+                    `;
+                    
+                    newGrid.appendChild(box);
+                }
+                
+                // Insertar al inicio del contenedor
+                const centerColumn = document.querySelector('.center-column');
+                centerColumn.insertBefore(newGrid, centerColumn.firstChild.nextSibling);
+                
+                return newGrid;
+            }
+            
+            // Función para generar imágenes
+            async function generateImages() {
+                const prompt = promptInput.value.trim();
+                const filmType = filmTypeInput.value;
+                
+                if (!prompt || !filmType) {
+                    alert('Please enter a prompt and select a film type');
+                    return;
+                }
+                
+                // Deshabilitar el botón mientras se generan las imágenes
+                createButton.disabled = true;
+                
+                // Crear nuevos placeholders
+                const newGrid = createNewPlaceholders();
+                const boxes = newGrid.querySelectorAll('.preview-box');
+                
+                // Mostrar spinners
+                boxes.forEach(box => {
+                    box.querySelector('.spinner-container').style.display = 'flex';
+                });
+                
+                try {
+                    const response = await fetch('/generate-persona', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            prompt: prompt,
+                            film_type: filmType
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.status === 'succeeded') {
+                        // Actualizar cada imagen cuando esté lista
+                        data.image_urls.forEach((url, index) => {
+                            const box = boxes[index];
+                            const img = box.querySelector('img');
+                            const spinner = box.querySelector('.spinner-container');
+                            
+                            img.src = url;
+                            img.onload = () => {
+                                spinner.style.display = 'none';
+                                box.classList.add('loaded');
+                            };
+                        });
+                    } else {
+                        throw new Error(data.error || 'Generation failed');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message);
+                    // Remover los placeholders si hay error
+                    newGrid.remove();
+                } finally {
+                    createButton.disabled = false;
+                }
+            }
+            
+            // Event Listeners
+            createButton.addEventListener('click', generateImages);
+        });
+    </script>
+</body>
+</html> 
