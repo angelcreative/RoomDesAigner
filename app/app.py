@@ -1897,26 +1897,6 @@ def generate_persona():
         prompt = data.get('prompt')
         film_type = data.get('film_type')
         
-        # Buscar si el prompt contiene alguna nacionalidad/etnia del ethnic.json
-        found_ethnic = None
-        prompt_lower = prompt.lower()
-        
-        for ethnic in ethnic_data:
-            keywords = [ethnic['nationality'].lower()] + [k.lower() for k in ethnic.get('keywords', [])]
-            if any(keyword in prompt_lower for keyword in keywords):
-                found_ethnic = ethnic
-                break
-        
-        # Construir el prompt final
-        if found_ethnic:
-            characteristics = found_ethnic['characteristics']
-            facial_features = characteristics.get('facial_features', [])
-            facial_features_text = ', '.join(facial_features)
-            
-            enhanced_prompt = f"{prompt}, {config['keyword']}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-        else:
-            enhanced_prompt = f"{prompt}, {config['keyword']}"
-
         # Configuración según el tipo de película
         film_configs = {
             'fuji': {
@@ -1942,55 +1922,76 @@ def generate_persona():
 
         config = film_configs[film_type]
         
+        # Buscar si el prompt contiene alguna nacionalidad del mapping
+        found_nationality = None
+        prompt_lower = prompt.lower()
+        
+        # Obtener las nacionalidades del ethnic.json
+        nationalities = ethnic_data.get('countries', {})
+        
+        # Buscar coincidencia en el prompt
+        for country_code, country_data in nationalities.items():
+            if country_code.lower() in prompt_lower:
+                found_nationality = country_code
+                break
+        
+        # Construir el prompt final
+        if found_nationality:
+            # Obtener características étnicas
+            country_data = nationalities[found_nationality]
+            # Seleccionar una etnia basada en los porcentajes
+            ethnic_characteristics = get_ethnic_characteristics(found_nationality, ethnic_data)
+            
+            if ethnic_characteristics:
+                enhanced_prompt = f"{prompt}, {config['keyword']}, average looking person with {ethnic_characteristics['skin_tone']} skin, {ethnic_characteristics['hair_color']} hair, {ethnic_characteristics['eye_color']} eyes, {ethnic_characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+            else:
+                enhanced_prompt = f"{prompt}, {config['keyword']}"
+        else:
+            enhanced_prompt = f"{prompt}, {config['keyword']}"
+
         headers = {
             "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
             "Content-Type": "application/json"
         }
         
-        # Generar 4 imágenes en paralelo
-        image_urls = []
-        for i in range(4):
-            response = requests.post(
-                "https://api.replicate.com/v1/predictions",
-                json={
-                    "version": config['version'],
-                    "input": {
-                        "prompt": enhanced_prompt,  # Usar el prompt mejorado
-                        "num_outputs": 1,
-                        "guidance_scale": 2,
-                        "num_inference_steps": 28
-                    }
-                },
+        response = requests.post(
+            "https://api.replicate.com/v1/predictions",
+            json={
+                "version": config['version'],
+                "input": {
+                    "prompt": enhanced_prompt,
+                    "num_outputs": 1,
+                    "guidance_scale": 2,
+                    "num_inference_steps": 28
+                }
+            },
+            headers=headers
+        )
+
+        if response.status_code != 201:
+            print(f"Error response: {response.text}")
+            raise Exception(f"Error creating prediction: {response.status_code}")
+            
+        prediction = response.json()
+        prediction_id = prediction['id']
+        
+        # Polling para cada imagen
+        while True:
+            response = requests.get(
+                f"https://api.replicate.com/v1/predictions/{prediction_id}",
                 headers=headers
             )
-            
-            if response.status_code != 201:
-                print(f"Error response: {response.text}")
-                raise Exception(f"Error creating prediction: {response.status_code}")
-                
             prediction = response.json()
-            prediction_id = prediction['id']
             
-            # Polling para cada imagen
-            while True:
-                response = requests.get(
-                    f"https://api.replicate.com/v1/predictions/{prediction_id}",
-                    headers=headers
-                )
-                prediction = response.json()
+            if prediction['status'] == 'succeeded':
+                return jsonify({
+                    "status": "succeeded",
+                    "image_url": prediction['output'][0]
+                }), 200
+            elif prediction['status'] == 'failed':
+                raise Exception(f"Image generation failed for image {i+1}")
                 
-                if prediction['status'] == 'succeeded':
-                    image_urls.append(prediction['output'][0])
-                    break
-                elif prediction['status'] == 'failed':
-                    raise Exception(f"Image generation failed for image {i+1}")
-                    
-                time.sleep(1)
-
-        return jsonify({
-            "status": "succeeded",
-            "image_urls": image_urls
-        })
+            time.sleep(1)
 
     except Exception as e:
         print(f"Error in generate-persona: {str(e)}")
