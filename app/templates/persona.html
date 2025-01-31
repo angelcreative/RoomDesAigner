@@ -44,11 +44,19 @@
         }
         
         .preview-box img {
-            max-width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0;
             transition: opacity 0.3s ease;
+            z-index: 2;
+        }
+        
+        .preview-box.loaded .preview-placeholder {
+            display: none;
         }
         
         .preview-box.loaded img {
@@ -56,11 +64,16 @@
         }
         
         .preview-placeholder {
-            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             color: var(--bunker-400);
             font-size: 14px;
             text-align: center;
             padding: 20px;
+            font-family: 'GeistMono', monospace;
         }
         
         /* Responsive adjustments */
