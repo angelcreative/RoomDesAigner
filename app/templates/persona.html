@@ -6,7 +6,6 @@
     <title>ADEM Studio - Persona</title>
     <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         /* ==========================================================================
            Persona Template Styles - ADEM Studio
@@ -132,6 +131,10 @@
             border-radius: 12px;
             padding: 2px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            height: 160px;
         }
         
         .modern-input {
@@ -152,8 +155,8 @@
         
         .ai-toggle {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            bottom: 10px;
+            left: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -273,6 +276,7 @@
 
         /* Estilos del selector de film */
         .film-selector {
+            display: block;
             width: 100%;
             padding: 12px;
             background: var(--bunker-800);
@@ -375,21 +379,38 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script>
-        const menuButton = document.getElementById('menuButton');
-        const layout = document.querySelector('.layout');
-
-        menuButton.addEventListener('click', () => {
-            layout.classList.toggle('show-aside');
-        });
-
-        // Funcionalidad de Persona Generator
         document.addEventListener('DOMContentLoaded', function() {
+            const menuButton = document.getElementById('menuButton');
+            const layout = document.querySelector('.layout');
             const createButton = document.getElementById('createPersona');
             const promptInput = document.getElementById('personaPrompt');
             const filmTypeInput = document.getElementById('film_type');
             
+            // Manejar el menú móvil
+            menuButton?.addEventListener('click', () => {
+                layout.classList.toggle('show-aside');
+            });
+
+            // Manejar el cambio en el selector de film
+            filmTypeInput?.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value) {
+                    createButton.disabled = false;
+                } else {
+                    createButton.disabled = true;
+                }
+            });
+
+            // Manejar cambios en el prompt
+            promptInput?.addEventListener('input', function() {
+                if (this.value.trim() && filmTypeInput.value) {
+                    createButton.disabled = false;
+                } else {
+                    createButton.disabled = true;
+                }
+            });
+
             // Función para crear un nuevo placeholder
             function createNewPlaceholder() {
                 const newGrid = document.createElement('div');
@@ -413,7 +434,6 @@
                 
                 newGrid.appendChild(box);
                 
-                // Insertar al inicio del contenedor
                 const centerColumn = document.querySelector('.center-column');
                 centerColumn.insertBefore(newGrid, centerColumn.firstChild.nextSibling);
                 
@@ -434,8 +454,6 @@
                 
                 const newGrid = createNewPlaceholder();
                 const box = newGrid.querySelector('.preview-box');
-                
-                // Mostrar spinner
                 box.querySelector('.spinner-container').style.display = 'flex';
                 
                 try {
@@ -456,7 +474,7 @@
                         const img = box.querySelector('img');
                         const spinner = box.querySelector('.spinner-container');
                         
-                        img.src = data.image_url;
+                        img.src = data.image_urls[0]; // Tomamos la primera imagen del array
                         img.onload = () => {
                             spinner.style.display = 'none';
                             box.classList.add('loaded');
@@ -473,7 +491,11 @@
                 }
             }
             
-            createButton.addEventListener('click', generateImages);
+            // Inicializar estado del botón
+            createButton.disabled = true;
+            
+            // Event Listeners
+            createButton?.addEventListener('click', generateImages);
         });
     </script>
 </body>
