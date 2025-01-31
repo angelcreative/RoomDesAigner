@@ -1792,13 +1792,36 @@ def load_ethnic_data():
         return json.load(f)
 
 def select_ethnicity_by_weight(ethnicities):
-    # Convertir porcentajes a pesos numéricos
-    total = sum(float(e['percentage'].strip('%')) for e in ethnicities)
-    weights = [float(e['percentage'].strip('%'))/total for e in ethnicities]
-    
-    # Seleccionar una etnia basada en los pesos
-    selected = random.choices(ethnicities, weights=weights, k=1)[0]
-    return selected
+    try:
+        # Convertir porcentajes a números flotantes
+        weights = []
+        for ethnicity in ethnicities:
+            percentage = ethnicity['percentage']
+            # Manejar tanto "45%" como "45" como formatos válidos
+            weight = float(percentage.strip('%') if isinstance(percentage, str) else percentage)
+            weights.append(weight)
+        
+        # Normalizar pesos para asegurar que suman 1.0
+        total = sum(weights)
+        normalized_weights = [w/total for w in weights]
+        
+        # Usar random.choices con los pesos normalizados
+        selected = random.choices(
+            population=ethnicities,
+            weights=normalized_weights,
+            k=1
+        )[0]
+        
+        print(f"Debug - Ethnicities and weights:")
+        for e, w in zip(ethnicities, normalized_weights):
+            print(f"Ethnicity: {e['name']}, Weight: {w:.2f}")
+        print(f"Selected: {selected['name']}")
+        
+        return selected
+    except Exception as e:
+        print(f"Error in select_ethnicity_by_weight: {str(e)}")
+        # En caso de error, seleccionar aleatoriamente sin pesos
+        return random.choice(ethnicities)
 
 def get_ethnic_characteristics(nationality, ethnic_data):
     print(f"🔍 Looking for characteristics for nationality: {nationality}")
