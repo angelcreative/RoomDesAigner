@@ -1041,17 +1041,16 @@ def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
     if not use_openai:
-        # Inicializar variables
+        # Detectar nacionalidad - buscar en toda la frase
         detected_nationality = None
         detected_gender = None
         
-        # Detectar nacionalidad - buscar en toda la frase
         for nationality in nationality_mapping.keys():
             if nationality in prompt_text.lower():
                 detected_nationality = nationality_mapping[nationality]
                 break
         
-        # Detectar género - buscar en toda la frase
+        # Detectar género
         if any(word in prompt_text.lower() for word in ["woman", "girl", "female", "she", "her"]):
             detected_gender = "female"
         elif any(word in prompt_text.lower() for word in ["man", "boy", "male", "he", "his"]):
@@ -1060,7 +1059,7 @@ def transform_prompt(prompt_text, use_openai=False):
         # Si hay nacionalidad y género, añadir características étnicas
         if detected_nationality and detected_gender:
             try:
-                ethnic_data = load_ethnic_data()
+                # Usar el ethnic_data global en lugar de cargarlo de nuevo
                 characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
                 size_info = calculate_body_size(detected_nationality, detected_gender, prompt_text)
                 
