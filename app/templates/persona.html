@@ -21,18 +21,19 @@
 
     /* Sidebar mejorado */
     .left-column {
-        position: fixed;
-        left: 0;
-        top: 60px; /* Ajustado para no solapar con el header */
-        height: calc(100vh - 60px); /* Altura ajustada */
-        width: 300px;
-        background: var(--bunker-900);
-        padding: 20px;
-        transition: transform 0.3s ease;
-        overflow-y: auto;
-        z-index: 10;
-    }
-
+    position: fixed;
+    left: 0;
+    top: 60px;
+    height: calc(100vh - 60px);
+    width: 300px;
+    background: var(--bunker-900);
+    padding: 20px;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    z-index: 310;
+    opacity: 1;
+    transform: none;
+}
     /* Contenido principal ajustado */
     .main-content {
         padding-top: 60px; /* Espacio para el header */
@@ -42,8 +43,11 @@
     }
 
     .center-column {
-        padding: 20px;
-    }
+    padding: 20px;
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
+}
 
     /* Header mejorado */
     .simple-header {
@@ -128,6 +132,47 @@
     .main-content.full-width {
         margin-left: 0;
     }
+
+
+    .prompt-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.prompt-wrapper {
+    height: auto;
+    min-height: 200px;
+    width: 100%;
+    border-radius: var(--xs);
+    overflow: hidden;
+}
+
+textarea#personaPrompt {
+    height: auto;
+    background: var(--bunker-800);
+    min-height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.prompt-container {
+    width: 100%;
+}
+
+select#film_type {
+    display: block;
+    margin: 0;
+    background: none;
+    border: none;
+    width: 100%;
+}
+
+button#createPersona {
+    font-size: medium;
+    width: 100%;
+    margin: 24px 0 0 0;
+}
 
     @media (max-width: 768px) {
         .preview-grid {
