@@ -45,7 +45,7 @@
 
     .center-column {
         padding: 20px;
-        width: 100%;
+        width:fit-content;
         height: calc(100vh - 60px);
         overflow-y: auto;
     }
@@ -170,7 +170,7 @@
     }
 
     .toggle-switch input:checked + label {
-        background-color: var(--primary-600);
+        background-color: var(--aztec-600);
     }
 
     .toggle-switch input:checked + label:before {
@@ -254,12 +254,16 @@ select#film_type {
     background: none;
     border: none;
     width: 100%;
+    padding-left: 32px;
 }
 
 button#createPersona {
     font-size: medium;
     width: 100%;
     margin: 24px 0 0 0;
+    background: var(--aztec-600);
+    color: white;
+    border: none;
 }
 
 .loaded img {
@@ -270,11 +274,6 @@ button#createPersona {
     left: 0;
 }
 
-button#createPersona {
-    font-size: medium;
-    width: 100%;
-    margin: 24px 0 0 0;
-}
 
     /* Ajuste responsive */
     @media (max-width: 1600px) {
@@ -331,15 +330,24 @@ button#createPersona {
                             <span>AI-prompt</span>
                         </div>
                         
-                        <div class="film-selector-wrapper">
-                            <select class="film-selector" id="film_type">
-                                <option value="" disabled selected>Select film style</option>
-                                <option value="fuji">Fuji Film</option>
-                                <option value="koda">Koda Film</option>
-                                <option value="pola">Pola Film</option>
-                                <option value="surreal">Surreal Film</option>
-                            </select>
-                        </div>
+                        <div class="film-selector-wrapper"><span class="material-symbols-outlined" style="
+                            color: var(--bunker-300);
+                            position: absolute;
+                            left: 8px;
+                            top: 10px;
+                        ">
+                        camera
+                        </span>
+                           <select class="film-selector" id="film_type">
+                                                        <option value="" disabled="" selected="">
+                        
+                        Select film style</option>
+                                                        <option value="fuji">Fuji Film</option>
+                                                        <option value="koda">Koda Film</option>
+                                                        <option value="pola">Pola Film</option>
+                                                        <option value="surreal">Surreal Film</option>
+                                                    </select>
+                                                </div>
                         
                         <button id="createPersona" class="generate-button">
                             Generate

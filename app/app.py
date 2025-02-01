@@ -4,6 +4,7 @@ from typing import Optional
 from flask_cors import CORS
 from functools import wraps
 from datetime import datetime
+from utils.size_utils import calculate_body_size
 import hmac
 import hashlib
 import requests
@@ -984,18 +985,34 @@ def transform_prompt(prompt_text, use_openai=False):
         # Detectar nacionalidad
         words = prompt_text.lower().split()
         detected_nationality = None
+        detected_gender = None
+
+        # Detectar género
+        if any(word in words for word in ["woman", "girl", "female"]):
+            detected_gender = "female"
+        elif any(word in words for word in ["man", "boy", "male"]):
+            detected_gender = "male"
+        
+        # Detectar nacionalidad
         for word in words:
             if word in nationality_mapping:
                 detected_nationality = nationality_mapping[word]
                 break
         
         # Si hay nacionalidad, añadir características étnicas
-        if detected_nationality:
+        if detected_nationality and detected_gender:
             ethnic_data = load_ethnic_data()
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            size_info = calculate_body_size(detected_nationality, detected_gender, prompt_text)
+
             if characteristics:
                 facial_features_text = ", ".join(characteristics['facial_features'])
-                return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+                size_text = ""
+                if size_info:
+                    height_cm = round(size_info["height"] * 100)
+                    weight_kg = round(size_info["weight"])
+                    size_text = f", {height_cm}cm tall"
+                return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
         
         return prompt_text
     
