@@ -1952,28 +1952,31 @@ def generate_persona():
         found_nationality = None
         prompt_lower = prompt.lower()
         
+        # Mapa de adjetivos de nacionalidad a códigos de país
+        nationality_map = {
+            'spanish': 'spain',
+            'french': 'france',
+            # Añadir más mapeos según sea necesario
+        }
+        
         # Obtener las nacionalidades del ethnic.json
         nationalities = ethnic_data.get('countries', {})
+        print(f"🌍 Searching for nationalities in prompt: {prompt_lower}")
         
-        # Buscar coincidencia en el prompt
-        for country_code, country_data in nationalities.items():
-            if country_code.lower() in prompt_lower:
-                found_nationality = country_code
+        # Primero buscar por adjetivos de nacionalidad
+        for adj, country in nationality_map.items():
+            if adj in prompt_lower:
+                print(f"✅ Found nationality match through adjective: {adj} -> {country}")
+                found_nationality = country
                 break
         
-        # Construir el prompt final
-        if found_nationality:
-            # Obtener características étnicas
-            country_data = nationalities[found_nationality]
-            # Seleccionar una etnia basada en los porcentajes
-            ethnic_characteristics = get_ethnic_characteristics(found_nationality, ethnic_data)
-            
-            if ethnic_characteristics:
-                enhanced_prompt = f"{prompt}, {config['keyword']}, average looking person with {ethnic_characteristics['skin_tone']} skin, {ethnic_characteristics['hair_color']} hair, {ethnic_characteristics['eye_color']} eyes, {ethnic_characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-            else:
-                enhanced_prompt = f"{prompt}, {config['keyword']}"
-        else:
-            enhanced_prompt = f"{prompt}, {config['keyword']}"
+        # Si no se encuentra por adjetivo, buscar por nombre de país
+        if not found_nationality:
+            for country_code in nationalities.keys():
+                if country_code.lower() in prompt_lower:
+                    print(f"✅ Found nationality match through country name: {country_code}")
+                    found_nationality = country_code
+                    break
 
         headers = {
             "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
@@ -1985,7 +1988,7 @@ def generate_persona():
             json={
                 "version": config['version'],
                 "input": {
-                    "prompt": enhanced_prompt,
+                    "prompt": prompt,
                     "num_outputs": 1,
                     "guidance_scale": 2,
                     "num_inference_steps": 28
