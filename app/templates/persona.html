@@ -9,47 +9,261 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   
   
-<!--styles-->
-
-<style>
-    /* Ajustes generales */
-    body {
-        margin: 0;
-        padding: 0;
-        background: var(--bunker-900);
-    }
-
-    /* Sidebar mejorado */
-    .left-column {
-    position: fixed;
-    left: 0;
-    top: 60px;
-    height: calc(100vh - 60px);
-    width: 300px;
-    background: var(--bunker-900);
-    padding: 20px;
-    transition: transform 0.3s ease;
-    overflow-y: auto;
-    z-index: 310;
-    opacity: 1;
-    transform: none;
-}
-    /* Contenido principal ajustado */
-    .main-content {
-        padding-top: 60px;
-        margin-left: 300px;
-        transition: margin-left 0.3s ease;
-        min-height: 100vh;
-        width: calc(100% - 300px);
-    }
-
-    .center-column {
-        padding: 20px;
-        width:fit-content;
+    <style>
+        /* Ajustes generales */
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bunker-900);
+        }
+    
+        /* Sidebar mejorado */
+        .left-column {
+        position: fixed;
+        left: 0;
+        top: 60px;
         height: calc(100vh - 60px);
+        width: 300px;
+        background: var(--bunker-900);
+        padding: 20px;
+        transition: transform 0.3s ease;
         overflow-y: auto;
+        z-index: 310;
+        opacity: 1;
+        transform: none;
     }
-
+        /* Contenido principal ajustado */
+        .main-content {
+            padding-top: 60px;
+            margin-left: 300px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+            width: calc(100% - 300px);
+        }
+    
+        .center-column {
+            padding: 20px;
+            width:fit-content;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+    
+        .loaded img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        /* Header mejorado */
+        .simple-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            padding: 0 20px;
+            background: var(--bunker-900);
+            border-bottom: 1px solid var(--bunker-700);
+            display: flex;
+            align-items: center;
+            z-index: 20;
+        }
+    
+        /* Preview grid mejorado */
+        .preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            justify-content: flex-start; /* Alinea desde la izquierda */
+            max-width: 100%;
+        }
+    
+        .preview-box {
+            width: 512px;
+            height: 512px;
+            flex: 0 0 auto;
+            background: var(--bunker-800);
+            border: 1px solid var(--bunker-600);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+    
+        /* Film selector con caret */
+        .film-selector {
+            position: relative;
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 32px !important;
+        }
+        
+        .film-selector-wrapper {
+        position: relative;
+        width: 100%;
+        background: var(--bunker-800);
+        padding: var(--3xs);
+        border-radius: var(--2xs);
+    }
+        
+        .film-selector-wrapper:after {
+            content: "expand_more";
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bunker-400);
+            pointer-events: none;
+        }
+    
+        /* AI toggle reposicionado */
+         /* Switch de AI */
+         .ai-toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px 0;
+            padding: 8px 12px;
+            background: var(--bunker-800);
+            border-radius: 8px;
+        }
+    
+        .toggle-switch {
+            position: relative;
+            width: 46px;
+            height: 24px;
+        }
+    /*saving tes*/
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+    
+        .toggle-switch label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bunker-700);
+            transition: .4s;
+            border-radius: 34px;
+        }
+    
+        .toggle-switch label:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+    
+        .toggle-switch input:checked + label {
+            background-color: var(--aztec-600);
+        }
+    
+        .toggle-switch input:checked + label:before {
+            transform: translateX(22px);
+        }
+    
+        /* Texto del switch */
+        .ai-toggle-container span {
+            color: var(--bunker-100);
+            font-size: 14px;
+        }
+    
+        /* Estados responsive */
+        .left-column.hidden {
+            transform: translateX(-300px);
+        }
+        
+        .main-content.full-width {
+            margin-left: 0;
+            width: 100%;
+        }
+    
+    
+        .prompt-input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .prompt-wrapper {
+        height: auto;
+        min-height: 200px;
+        width: 100%;
+        border-radius: var(--xs);
+        overflow: hidden;
+    }
+    
+    textarea#personaPrompt {
+        height: auto;
+        background: var(--bunker-800);
+        min-height: 200px;
+        width: 100%;
+        position: relative;
+    }
+    
+    .prompt-container {
+        width: 100%;
+    }
+    
+    
+    
+    .prompt-input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .prompt-wrapper {
+        height: auto;
+        min-height: 200px;
+        width: 100%;
+        border-radius: var(--xs);
+        overflow: hidden;
+    }
+    
+    textarea#personaPrompt {
+        height: auto;
+        background: var(--bunker-800);
+        min-height: 200px;
+        width: 100%;
+        position: relative;
+    }
+    
+    .prompt-container {
+        width: 100%;
+    }
+    
+    select#film_type {
+        display: block;
+        margin: 0;
+        background: none;
+        border: none;
+        width: 100%;
+        padding-left: 32px;
+    }
+    
+    button#createPersona {
+        font-size: medium;
+        width: 100%;
+        margin: 24px 0 0 0;
+        background: var(--aztec-600);
+        color: white;
+        border: none;
+    }
+    
     .loaded img {
         width: 100%;
         height: 100%;
@@ -57,243 +271,25 @@
         top: 0;
         left: 0;
     }
-    /* Header mejorado */
-    .simple-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        padding: 0 20px;
-        background: var(--bunker-900);
-        border-bottom: 1px solid var(--bunker-700);
-        display: flex;
-        align-items: center;
-        z-index: 20;
-    }
-
-    /* Preview grid mejorado */
-    .preview-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-        width: 100%;
-        justify-content: flex-start; /* Alinea desde la izquierda */
-        max-width: 100%;
-    }
-
-    .preview-box {
-        width: 512px;
-        height: 512px;
-        flex: 0 0 auto;
-        background: var(--bunker-800);
-        border: 1px solid var(--bunker-600);
-        border-radius: 12px;
-        overflow: hidden;
-        position: relative;
-    }
-
-    /* Film selector con caret */
-    .film-selector {
-        position: relative;
-        appearance: none;
-        -webkit-appearance: none;
-        padding-right: 32px !important;
-    }
     
-    .film-selector-wrapper {
-    position: relative;
-    width: 100%;
-    background: var(--bunker-800);
-    padding: var(--3xs);
-    border-radius: var(--2xs);
-}
     
-    .film-selector-wrapper:after {
-        content: "expand_more";
-        font-family: 'Material Symbols Outlined';
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--bunker-400);
-        pointer-events: none;
-    }
-
-    /* AI toggle reposicionado */
-     /* Switch de AI */
-     .ai-toggle-container {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin: 16px 0;
-        padding: 8px 12px;
-        background: var(--bunker-800);
-        border-radius: 8px;
-    }
-
-    .toggle-switch {
-        position: relative;
-        width: 46px;
-        height: 24px;
-    }
-/*saving tes*/
-    .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    .toggle-switch label {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: var(--bunker-700);
-        transition: .4s;
-        border-radius: 34px;
-    }
-
-    .toggle-switch label:before {
-        position: absolute;
-        content: "";
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
-
-    .toggle-switch input:checked + label {
-        background-color: var(--aztec-600);
-    }
-
-    .toggle-switch input:checked + label:before {
-        transform: translateX(22px);
-    }
-
-    /* Texto del switch */
-    .ai-toggle-container span {
-        color: var(--bunker-100);
-        font-size: 14px;
-    }
-
-    /* Estados responsive */
-    .left-column.hidden {
-        transform: translateX(-300px);
-    }
-    
-    .main-content.full-width {
-        margin-left: 0;
-        width: 100%;
-    }
-
-
-    .prompt-input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.prompt-wrapper {
-    height: auto;
-    min-height: 200px;
-    width: 100%;
-    border-radius: var(--xs);
-    overflow: hidden;
-}
-
-textarea#personaPrompt {
-    height: auto;
-    background: var(--bunker-800);
-    min-height: 200px;
-    width: 100%;
-    position: relative;
-}
-
-.prompt-container {
-    width: 100%;
-}
-
-
-
-.prompt-input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.prompt-wrapper {
-    height: auto;
-    min-height: 200px;
-    width: 100%;
-    border-radius: var(--xs);
-    overflow: hidden;
-}
-
-textarea#personaPrompt {
-    height: auto;
-    background: var(--bunker-800);
-    min-height: 200px;
-    width: 100%;
-    position: relative;
-}
-
-.prompt-container {
-    width: 100%;
-}
-
-select#film_type {
-    display: block;
-    margin: 0;
-    background: none;
-    border: none;
-    width: 100%;
-    padding-left: 32px;
-}
-
-button#createPersona {
-    font-size: medium;
-    width: 100%;
-    margin: 24px 0 0 0;
-    background: var(--aztec-600);
-    color: white;
-    border: none;
-}
-
-.loaded img {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-
-    /* Ajuste responsive */
-    @media (max-width: 1600px) {
-        .preview-box {
-            width: calc(50% - 10px);
-            height: auto;
-            aspect-ratio: 1;
+        /* Ajuste responsive */
+        @media (max-width: 1600px) {
+            .preview-box {
+                width: calc(50% - 10px);
+                height: auto;
+                aspect-ratio: 1;
+            }
         }
-    }
-
-    @media (max-width: 1024px) {
-        .preview-box {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1;
+    
+        @media (max-width: 1024px) {
+            .preview-box {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1;
+            }
         }
-    }
-</style>
-
-<!--//styles-->
+    </style>
 
 
 </head>
