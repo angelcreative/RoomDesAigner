@@ -1835,22 +1835,25 @@ def get_ethnic_characteristics(nationality, ethnic_data):
     # Convertir el diccionario de etnias a lista de diccionarios con porcentajes
     ethnicities = []
     for name, percentage in country_data['ethnicities'].items():
+        # Solo incluir etnias que tienen referencia étnica
         ethnic_type = country_data['ethnic_references'].get(name)
         if ethnic_type:
             ethnicities.append({
                 'name': name,
-                'percentage': str(percentage),
+                'percentage': percentage,  # Mantener como número
                 'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
                 'ethnic_type': ethnic_type,
-                'other_details': ethnic_data['ethnic_types'][ethnic_type].get('other_details') if name == 'indigenous' else None
+                'other_details': ethnic_data['ethnic_types'][ethnic_type].get('other_details', '')
             })
+    
+    print(f"🎲 Ethnicities before selection: {[(e['name'], e['percentage']) for e in ethnicities]}")
     
     # Seleccionar una etnia basada en los pesos
     selected_ethnicity = select_ethnicity_by_weight(ethnicities)
-    print(f"👥 Selected ethnicity: {selected_ethnicity}")
+    print(f"👥 Selected ethnicity: {selected_ethnicity['name']} with type {selected_ethnicity['ethnic_type']}")
     
     # Construir la descripción de herencia étnica
-    ethnic_description = f"of {selected_ethnicity['name']} heritage with {selected_ethnicity['ethnic_type'].replace('_', ' ')} features"
+    ethnic_description = f"of {selected_ethnicity['ethnic_type'].replace('_', ' ')} heritage with {selected_ethnicity['ethnic_type'].replace('_', ' ')} features"
     if selected_ethnicity.get('other_details'):
         ethnic_description += f", {selected_ethnicity['other_details']}"
     
