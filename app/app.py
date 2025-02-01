@@ -1922,7 +1922,7 @@ def generate_persona():
         data = request.get_json()
         prompt = data.get('prompt')
         film_type = data.get('film_type')
-        
+        use_ai_prompt = data.get('use_ai_prompt', True)  # Obtener el estado del toggle
         # Configuración según el tipo de película
         film_configs = {
             'fuji': {
@@ -1949,7 +1949,7 @@ def generate_persona():
         config = film_configs[film_type]
         
         # Usar la misma función que usa ModelsLab pero sin OpenAI
-        enhanced_prompt = transform_prompt(prompt, use_openai=False)
+        enhanced_prompt = transform_prompt(prompt, use_openai=use_ai_prompt)
         
         # Añadir el keyword del tipo de película
         final_prompt = f"{enhanced_prompt}, {config['keyword']}"

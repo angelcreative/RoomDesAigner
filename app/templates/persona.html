@@ -6,6 +6,7 @@
     <title>ADEM Studio - Persona</title>
     <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         /* ==========================================================================
            Persona Template Styles - ADEM Studio
@@ -234,6 +235,7 @@
             font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
+            margin: 0;
         }
         
         .generate-button:hover {
@@ -300,42 +302,106 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            margin-top: 16px;
+            margin: 0;
+        }
+
+        /* Header simplificado */
+        .simple-header {
+            padding: 20px;
+            background: var(--bunker-900);
+            border-bottom: 1px solid var(--bunker-700);
+        }
+        
+        .simple-header h1 {
+            font-size: 18px;
+            color: white;
+            font-family: 'GeistMono', monospace;
+            margin: 0;
+        }
+        
+        /* Menu button reposicionado */
+        .menu-button {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            z-index: 100;
+            background: transparent;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Sidebar siempre visible */
+        .left-column {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 300px;
+            background: var(--bunker-900);
+            padding-top: 80px;
+            transition: transform 0.3s ease;
+        }
+        
+        .left-column.hidden {
+            transform: translateX(-300px);
+        }
+        
+        /* Contenido principal ajustado */
+        .main-content {
+            margin-left: 300px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .main-content.full-width {
+            margin-left: 0;
+        }
+
+        /* Film selector con caret */
+        .film-selector {
+            position: relative;
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 32px !important;
+        }
+        
+        .film-selector-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .film-selector-wrapper:after {
+            content: "expand_more";
+            font-family: 'Material Symbols Outlined';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bunker-400);
+            pointer-events: none;
+        }
+
+        /* AI toggle reposicionado */
+        .ai-toggle-container {
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bunker-800);
+            border-radius: 8px;
+            border: 1px solid var(--bunker-700);
         }
     </style>
 </head>
 <body>
     <div class="layout">
         <!-- Top Bar -->
-        <header class="top-bar ignore">
-            <div>
-                <div class="usernameCredits">
-                    <span class="username">
-                        <span class="material-symbols-outlined">identity_platform</span>
-                        {{ username }}
-                    </span>
-                    <span class="creditsCoin" id="creditDisplay">
-                        <span class="material-symbols-outlined">toll</span>
-                        {{ credits }}
-                    </span>
-                </div>
-            </div>
-            <div class="logo">
-                <h1><img src="static/img/adem-img/logo_full_02.svg"></h1>
-                <div class="orb"></div>
-            </div>
-            <div class="user-profile">
-                <div class="logout">
-                    <div class="rightOff">
-                        <button class="menu-button" id="menuButton">
-                            <span class="material-symbols-outlined">menu</span>
-                        </button>
-                        <a href="{{ url_for('logout') }}">
-                            <span class="material-symbols-outlined" translate="no">logout</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        <header class="simple-header">
+            <button class="menu-button" id="menuButton">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <h1>Persona Project</h1>
         </header>
 
         <!-- Main Content -->
@@ -351,22 +417,25 @@
                                 rows="4"
                                 class="modern-input"
                             ></textarea>
-                            <div class="ai-toggle">
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="aiPrompt" checked>
-                                    <label for="aiPrompt"></label>
-                                </div>
-                                <span>AI-prompt</span>
+                        </div>
+
+                        <div class="ai-toggle-container">
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="aiPrompt" checked>
+                                <label for="aiPrompt"></label>
                             </div>
+                            <span>AI-prompt</span>
                         </div>
                         
-                        <select class="film-selector" id="film_type">
-                            <option value="" disabled selected>Select film style</option>
-                            <option value="fuji">Fuji Film</option>
-                            <option value="koda">Koda Film</option>
-                            <option value="pola">Pola Film</option>
-                            <option value="surreal">Surreal Film</option>
-                        </select>
+                        <div class="film-selector-wrapper">
+                            <select class="film-selector" id="film_type">
+                                <option value="" disabled selected>Select film style</option>
+                                <option value="fuji">Fuji Film</option>
+                                <option value="koda">Koda Film</option>
+                                <option value="pola">Pola Film</option>
+                                <option value="surreal">Surreal Film</option>
+                            </select>
+                        </div>
                         
                         <button id="createPersona" class="generate-button">
                             Generate
@@ -397,31 +466,36 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const menuButton = document.getElementById('menuButton');
-            const layout = document.querySelector('.layout');
-            const createButton = document.getElementById('createPersona');
-            const promptInput = document.getElementById('personaPrompt');
-            const filmTypeInput = document.getElementById('film_type');
+            const leftColumn = document.querySelector('.left-column');
+            const mainContent = document.querySelector('.main-content');
             
             // Manejar el menú móvil
             menuButton?.addEventListener('click', () => {
-                layout.classList.toggle('show-aside');
+                leftColumn.classList.toggle('hidden');
+                mainContent.classList.toggle('full-width');
             });
 
             // Manejar el cambio en el selector de film
+            const filmTypeInput = document.getElementById('film_type');
             filmTypeInput?.addEventListener('change', function() {
                 const selectedOption = this.options[this.selectedIndex];
                 if (selectedOption.value) {
+                    const createButton = document.getElementById('createPersona');
                     createButton.disabled = false;
                 } else {
+                    const createButton = document.getElementById('createPersona');
                     createButton.disabled = true;
                 }
             });
 
             // Manejar cambios en el prompt
+            const promptInput = document.getElementById('personaPrompt');
             promptInput?.addEventListener('input', function() {
-                if (this.value.trim() && filmTypeInput.value) {
+                if (this.value.trim() && document.getElementById('film_type').value) {
+                    const createButton = document.getElementById('createPersona');
                     createButton.disabled = false;
                 } else {
+                    const createButton = document.getElementById('createPersona');
                     createButton.disabled = true;
                 }
             });
@@ -459,12 +533,14 @@
             async function generateImages() {
                 const prompt = promptInput.value.trim();
                 const filmType = filmTypeInput.value;
-                
+                const aiPromptEnabled = document.getElementById('aiPrompt').checked;
+
                 if (!prompt || !filmType) {
                     alert('Please enter a prompt and select a film type');
                     return;
                 }
                 
+                const createButton = document.getElementById('createPersona');
                 createButton.disabled = true;
                 
                 const newGrid = createNewPlaceholder();
@@ -479,7 +555,8 @@
                         },
                         body: JSON.stringify({
                             prompt: prompt,
-                            film_type: filmType
+                            film_type: filmType,
+                            use_ai_prompt: aiPromptEnabled
                         })
                     });
                     
@@ -507,6 +584,7 @@
             }
             
             // Inicializar estado del botón
+            const createButton = document.getElementById('createPersona');
             createButton.disabled = true;
             
             // Event Listeners
