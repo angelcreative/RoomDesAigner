@@ -1948,35 +1948,11 @@ def generate_persona():
 
         config = film_configs[film_type]
         
-        # Buscar si el prompt contiene alguna nacionalidad del mapping
-        found_nationality = None
-        prompt_lower = prompt.lower()
+        # Usar la misma función que usa ModelsLab pero sin OpenAI
+        enhanced_prompt = transform_prompt(prompt, use_openai=False)
         
-        # Mapa de adjetivos de nacionalidad a códigos de país
-        nationality_map = {
-            'spanish': 'spain',
-            'french': 'france',
-            # Añadir más mapeos según sea necesario
-        }
-        
-        # Obtener las nacionalidades del ethnic.json
-        nationalities = ethnic_data.get('countries', {})
-        print(f"🌍 Searching for nationalities in prompt: {prompt_lower}")
-        
-        # Primero buscar por adjetivos de nacionalidad
-        for adj, country in nationality_map.items():
-            if adj in prompt_lower:
-                print(f"✅ Found nationality match through adjective: {adj} -> {country}")
-                found_nationality = country
-                break
-        
-        # Si no se encuentra por adjetivo, buscar por nombre de país
-        if not found_nationality:
-            for country_code in nationalities.keys():
-                if country_code.lower() in prompt_lower:
-                    print(f"✅ Found nationality match through country name: {country_code}")
-                    found_nationality = country_code
-                    break
+        # Añadir el keyword del tipo de película
+        final_prompt = f"{enhanced_prompt}, {config['keyword']}"
 
         headers = {
             "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
@@ -1988,7 +1964,7 @@ def generate_persona():
             json={
                 "version": config['version'],
                 "input": {
-                    "prompt": prompt,
+                    "prompt": final_prompt,
                     "num_outputs": 1,
                     "guidance_scale": 2,
                     "num_inference_steps": 28
