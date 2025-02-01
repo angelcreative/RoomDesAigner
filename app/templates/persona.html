@@ -46,10 +46,8 @@
     .center-column {
         padding: 20px;
         width: 100%;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
     }
 
     .loaded img {
@@ -77,25 +75,23 @@
     /* Preview grid mejorado */
     .preview-grid {
         display: flex;
-        justify-content: center;
+        flex-wrap: wrap;
         gap: 20px;
         padding: 20px;
         width: 100%;
+        justify-content: flex-start; /* Alinea desde la izquierda */
         max-width: 100%;
     }
 
     .preview-box {
-        aspect-ratio: 1;
         width: 512px;
         height: 512px;
+        flex: 0 0 auto;
         background: var(--bunker-800);
         border: 1px solid var(--bunker-600);
         border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
         overflow: hidden;
+        position: relative;
     }
 
     /* Film selector con caret */
@@ -126,15 +122,65 @@
     }
 
     /* AI toggle reposicionado */
-    .ai-toggle-container {
-        margin: 16px 0;
+     /* Switch de AI */
+     .ai-toggle-container {
         display: flex;
         align-items: center;
-        gap: 8px;
-        padding: 12px;
+        gap: 12px;
+        margin: 16px 0;
+        padding: 8px 12px;
         background: var(--bunker-800);
         border-radius: 8px;
-        border: 1px solid var(--bunker-700);
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 46px;
+        height: 24px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-switch label {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--bunker-700);
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .toggle-switch label:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + label {
+        background-color: var(--primary-600);
+    }
+
+    .toggle-switch input:checked + label:before {
+        transform: translateX(22px);
+    }
+
+    /* Texto del switch */
+    .ai-toggle-container span {
+        color: var(--bunker-100);
+        font-size: 14px;
     }
 
     /* Estados responsive */
@@ -230,14 +276,20 @@ button#createPersona {
     margin: 24px 0 0 0;
 }
 
-    @media (max-width: 768px) {
-        .preview-grid {
-            padding: 10px;
+    /* Ajuste responsive */
+    @media (max-width: 1600px) {
+        .preview-box {
+            width: calc(50% - 10px);
+            height: auto;
+            aspect-ratio: 1;
         }
-        
+    }
+
+    @media (max-width: 1024px) {
         .preview-box {
             width: 100%;
             height: auto;
+            aspect-ratio: 1;
         }
     }
 </style>
