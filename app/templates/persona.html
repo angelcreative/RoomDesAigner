@@ -7,392 +7,143 @@
     <link rel="icon" href="static/img/adem-img/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <style>
-        /* ==========================================================================
-           Persona Template Styles - ADEM Studio
-           Designed for dynamic image generation preview
-           Version: 1.0.0
-           Author: ADEM Studio Team
-           ========================================================================== */
-        
+  
+  
+<!--styles-->
+
+<style>
+    /* Ajustes generales */
+    body {
+        margin: 0;
+        padding: 0;
+        background: var(--bunker-900);
+    }
+
+    /* Sidebar mejorado */
+    .left-column {
+        position: fixed;
+        left: 0;
+        top: 60px; /* Ajustado para no solapar con el header */
+        height: calc(100vh - 60px); /* Altura ajustada */
+        width: 300px;
+        background: var(--bunker-900);
+        padding: 20px;
+        transition: transform 0.3s ease;
+        overflow-y: auto;
+        z-index: 10;
+    }
+
+    /* Contenido principal ajustado */
+    .main-content {
+        padding-top: 60px; /* Espacio para el header */
+        margin-left: 300px;
+        transition: margin-left 0.3s ease;
+        min-height: 100vh;
+    }
+
+    .center-column {
+        padding: 20px;
+    }
+
+    /* Header mejorado */
+    .simple-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        padding: 0 20px;
+        background: var(--bunker-900);
+        border-bottom: 1px solid var(--bunker-700);
+        display: flex;
+        align-items: center;
+        z-index: 20;
+    }
+
+    /* Preview grid mejorado */
+    .preview-grid {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .preview-box {
+        aspect-ratio: 1;
+        width: 512px;
+        height: 512px;
+        background: var(--bunker-800);
+        border: 1px solid var(--bunker-600);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Film selector con caret */
+    .film-selector {
+        position: relative;
+        appearance: none;
+        -webkit-appearance: none;
+        padding-right: 32px !important;
+    }
+    
+    .film-selector-wrapper {
+        position: relative;
+        width: 100%;
+    }
+    
+    .film-selector-wrapper:after {
+        content: "expand_more";
+        font-family: 'Material Symbols Outlined';
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--bunker-400);
+        pointer-events: none;
+    }
+
+    /* AI toggle reposicionado */
+    .ai-toggle-container {
+        margin: 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: var(--bunker-800);
+        border-radius: 8px;
+        border: 1px solid var(--bunker-700);
+    }
+
+    /* Estados responsive */
+    .left-column.hidden {
+        transform: translateX(-300px);
+    }
+    
+    .main-content.full-width {
+        margin-left: 0;
+    }
+
+    @media (max-width: 768px) {
         .preview-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-            width: 100%;
-            margin: 0 auto;
+            padding: 10px;
         }
         
         .preview-box {
-            aspect-ratio: 1;
-            width: 512px;
-            height: 512px;
-            background: var(--bunker-800);
-            border: 1px solid var(--bunker-600);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .preview-box:hover {
-            border-color: var(--bunker-400);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .preview-box img {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 2;
+            height: auto;
         }
-        
-        .preview-box.loaded .preview-placeholder {
-            display: none;
-        }
-        
-        .preview-box.loaded img {
-            opacity: 1;
-        }
-        
-        .preview-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            color: var(--bunker-400);
-            font-size: 14px;
-            text-align: center;
-            padding: 20px;
-            font-family: 'GeistMono', monospace;
-        }
-        
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .preview-grid {
-                grid-template-columns: 1fr;
-                padding: 10px;
-            }
-        }
-        
-        .prompt-container {
-            padding: 20px;
-        }
-        
-        .prompt-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        
-        #personaPrompt {
-            width: 100%;
-            min-height: 120px;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--bunker-600);
-            background: var(--bunker-800);
-            color: var(--bunker-100);
-            font-family: 'GeistMono', monospace;
-            font-size: 14px;
-            resize: vertical;
-        }
-        
-        #personaPrompt:focus {
-            outline: none;
-            border-color: var(--prince-500);
-        }
-        
-        .primary-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: var(--prince-500);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'GeistMono', monospace;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .primary-button:hover {
-            background: var(--prince-600);
-        }
-        
-        .primary-button:disabled {
-            background: var(--bunker-600);
-            cursor: not-allowed;
-        }
-        
-        /* Nuevo estilo moderno */
-        .prompt-wrapper {
-            background: var(--bunker-800);
-            border: 2px solid var(--bunker-600);
-            border-radius: 12px;
-            padding: 2px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            height: 160px;
-        }
-        
-        .modern-input {
-            width: 100%;
-            min-height: 100px;
-            padding: 16px;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 16px;
-            resize: none;
-            font-family: inherit;
-        }
-        
-        .modern-input:focus {
-            outline: none;
-        }
-        
-        .ai-toggle {
-            position: absolute;
-            bottom: 10px;
-            left: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--bunker-300);
-        }
-        
-        .toggle-switch input {
-            display: none;
-        }
-        
-        .toggle-switch label {
-            width: 40px;
-            height: 20px;
-            background: var(--bunker-600);
-            border-radius: 20px;
-            display: block;
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .toggle-switch label:after {
-            content: '';
-            width: 16px;
-            height: 16px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            transition: 0.3s;
-        }
-        
-        .toggle-switch input:checked + label {
-            background: var(--prince-500);
-        }
-        
-        .toggle-switch input:checked + label:after {
-            left: calc(100% - 18px);
-        }
-        
-        .mode-selector {
-            background: var(--bunker-800);
-            border-radius: 8px;
-            padding: 12px;
-        }
-        
-        .mode-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--bunker-300);
-            margin-bottom: 8px;
-        }
-        
-        .generate-button {
-            width: 100%;
-            padding: 16px;
-            background: var(--bunker-700);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin: 0;
-        }
-        
-        .generate-button:hover {
-            background: var(--bunker-600);
-        }
-        
-        .generate-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .custom-dropdown.dark {
-            background: var(--bunker-900);
-            border: 1px solid var(--bunker-700);
-        }
-        
-        .custom-dropdown.dark .dropdown-selected {
-            padding: 12px;
-            color: white;
-        }
-        
-        .custom-dropdown.dark .dropdown-options {
-            background: var(--bunker-900);
-            border: 1px solid var(--bunker-700);
-        }
-        
-        .custom-dropdown.dark .option {
-            padding: 12px;
-            color: white;
-        }
-        
-        .custom-dropdown.dark .option:hover {
-            background: var(--bunker-700);
-        }
-        /* ========================================================================== */
+    }
+</style>
 
-        /* Ajuste del layout principal */
-        .main-content {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 20px;
-        }
+<!--//styles-->
 
-        .left-column {
-            padding: 20px;
-            background: var(--bunker-900);
-        }
 
-        .center-column {
-            flex: 1;
-            padding: 20px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-
-        /* Estilos del selector de film */
-        .film-selector {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: var(--bunker-800);
-            border: 1px solid var(--bunker-700);
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            margin: 0;
-        }
-
-        /* Header simplificado */
-        .simple-header {
-            padding: 20px;
-            background: var(--bunker-900);
-            border-bottom: 1px solid var(--bunker-700);
-        }
-        
-        .simple-header h1 {
-            font-size: 18px;
-            color: white;
-            font-family: 'GeistMono', monospace;
-            margin: 0;
-        }
-        
-        /* Menu button reposicionado */
-        .menu-button {
-            position: fixed;
-            left: 20px;
-            top: 20px;
-            z-index: 100;
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-        }
-        
-        /* Sidebar siempre visible */
-        .left-column {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 300px;
-            background: var(--bunker-900);
-            padding-top: 80px;
-            transition: transform 0.3s ease;
-        }
-        
-        .left-column.hidden {
-            transform: translateX(-300px);
-        }
-        
-        /* Contenido principal ajustado */
-        .main-content {
-            margin-left: 300px;
-            transition: margin-left 0.3s ease;
-        }
-        
-        .main-content.full-width {
-            margin-left: 0;
-        }
-
-        /* Film selector con caret */
-        .film-selector {
-            position: relative;
-            appearance: none;
-            -webkit-appearance: none;
-            padding-right: 32px !important;
-        }
-        
-        .film-selector-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        
-        .film-selector-wrapper:after {
-            content: "expand_more";
-            font-family: 'Material Symbols Outlined';
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--bunker-400);
-            pointer-events: none;
-        }
-
-        /* AI toggle reposicionado */
-        .ai-toggle-container {
-            margin: 16px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px;
-            background: var(--bunker-800);
-            border-radius: 8px;
-            border: 1px solid var(--bunker-700);
-        }
-    </style>
 </head>
 <body>
     <div class="layout">
@@ -469,7 +220,6 @@
             const leftColumn = document.querySelector('.left-column');
             const mainContent = document.querySelector('.main-content');
             
-            // Manejar el menú móvil
             menuButton?.addEventListener('click', () => {
                 leftColumn.classList.toggle('hidden');
                 mainContent.classList.toggle('full-width');
