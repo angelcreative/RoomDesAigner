@@ -1965,7 +1965,7 @@ def fashion():
             "num_inference_steps": 21,
             "temp": "no"
         }
-        
+        #add
         print("Sending request to ModelsLab API...")
         response = requests.post(
             "https://modelslab.com/api/v6/image_editing/fashion",
