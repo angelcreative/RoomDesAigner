@@ -1011,7 +1011,7 @@ def transform_prompt(prompt_text, use_openai=False):
                 if size_info:
                     height_cm = round(size_info["height"] * 100)
                     weight_kg = round(size_info["weight"])
-                    size_text = f", {height_cm}cm tall"
+                    size_text = f", {height_cm}cm tall, {weight_kg}kg"
                 return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
         
         return prompt_text
