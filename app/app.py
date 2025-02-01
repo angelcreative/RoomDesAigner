@@ -1983,7 +1983,7 @@ def generate_persona():
                 'keyword': "polaroid style"
             },
             'analog': {
-                'version': "d0bee03de2b2a8098d4c30fe80705e2afdd16adfa56c4bde3bba0d8972ccb78a",
+                'version': "e489fed94f07ffa8037d3d31cc40e8539ea37f6a5d5275747eff6be384e511cb",
                 'keyword': "ANLG",
                 'params': {
                     "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
@@ -1994,7 +1994,7 @@ def generate_persona():
                 }
             },
             'disposable': {
-                'version': "c24cb30c2405f5f1e8358de0fe4039a6ddc5c4b0e6d056d314f14e87bd40141e",
+                'version': "4c851c9ca3c1167df599c400a277dc2b20b0ad166afc5c5d691e5bb64c46c254",
                 'keyword': "DISP",
                 'params': {
                     "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
