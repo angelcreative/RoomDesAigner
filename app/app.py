@@ -928,6 +928,19 @@ nationality_mapping = {
     'emirati': 'united_arab_emirates',
     'united_arab_emirates': 'united_arab_emirates',
     
+    # Variaciones para inglés/británico
+    "english": "united_kingdom",
+    "british": "united_kingdom",
+    "uk": "united_kingdom",
+    "united_kingdom": "united_kingdom",
+    
+    # Variaciones para americano/estadounidense
+    "american": "united_states",
+    "usa": "united_states",
+    "us": "united_states",
+    "united_states": "united_states",
+
+
     # Reino Unido
     'british': 'uk',
     'uk': 'uk',
