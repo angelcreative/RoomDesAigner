@@ -1962,7 +1962,8 @@ def generate_persona():
         data = request.get_json()
         prompt = data.get('prompt')
         film_type = data.get('film_type')
-        use_ai_prompt = data.get('use_ai_prompt', True)  # Obtener el estado del toggle
+        use_ai_prompt = data.get('use_ai_prompt', True)
+        
         # Configuración según el tipo de película
         film_configs = {
             'fuji': {
@@ -1983,11 +1984,25 @@ def generate_persona():
             },
             'analog': {
                 'version': "d0bee03de2b2a8098d4c30fe80705e2afdd16adfa56c4bde3bba0d8972ccb78a",
-                'keyword': "ANLG"
+                'keyword': "ANLG",
+                'params': {
+                    "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
+                    "width": 768,
+                    "height": 768,
+                    "num_inference_steps": 50,
+                    "guidance_scale": 7.5
+                }
             },
             'disposable': {
                 'version': "c24cb30c2405f5f1e8358de0fe4039a6ddc5c4b0e6d056d314f14e87bd40141e",
-                'keyword': "STL"
+                'keyword': "DISP",
+                'params': {
+                    "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
+                    "width": 768,
+                    "height": 768,
+                    "num_inference_steps": 50,
+                    "guidance_scale": 7.5
+                }
             }
         }
 
@@ -1995,30 +2010,31 @@ def generate_persona():
             raise Exception("Invalid film type selected")
 
         config = film_configs[film_type]
-        
-        # Usar la misma función que usa ModelsLab pero sin OpenAI
         enhanced_prompt = transform_prompt(prompt, use_openai=use_ai_prompt)
-        
-        # Añadir el keyword del tipo de película
         final_prompt = f"{enhanced_prompt}, {config['keyword']}"
 
-        headers = {
-            "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
-            "Content-Type": "application/json"
-        }
-        
+        # Preparar los parámetros según el modelo
+        if film_type in ['analog', 'disposable']:
+            input_params = config['params'].copy()
+            input_params['prompt'] = final_prompt
+        else:
+            input_params = {
+                "prompt": final_prompt,
+                "num_outputs": 1,
+                "guidance_scale": 2,
+                "num_inference_steps": 28
+            }
+
         response = requests.post(
             "https://api.replicate.com/v1/predictions",
             json={
                 "version": config['version'],
-                "input": {
-                    "prompt": final_prompt,
-                    "num_outputs": 1,
-                    "guidance_scale": 2,
-                    "num_inference_steps": 28
-                }
+                "input": input_params
             },
-            headers=headers
+            headers={
+                "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+                "Content-Type": "application/json"
+            }
         )
 
         if response.status_code != 201:
@@ -2032,7 +2048,10 @@ def generate_persona():
         while True:
             response = requests.get(
                 f"https://api.replicate.com/v1/predictions/{prediction_id}",
-                headers=headers
+                headers={
+                    "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+                    "Content-Type": "application/json"
+                }
             )
             prediction = response.json()
             
