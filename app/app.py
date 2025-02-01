@@ -1904,10 +1904,851 @@ def select_ethnicity_by_weight(ethnicities):
 
 def get_ethnic_characteristics(nationality, ethnic_data):
     """Obtiene características étnicas usando el mismo sistema que OpenAI"""
-    print(f"🔍 Looking for characteristics for nationality: {nationality}")
     
-    # Usar el mismo ethnic.json que usa OpenAI
-    country_data = ethnic_data['countries'].get(nationality)
+    # Mapeo de adjetivos de nacionalidad a países
+    nationality_to_country = {
+    # Afganistán
+    'afghan': 'afghanistan',
+    'afghanistan': 'afghanistan',
+    
+    # Albania
+    'albanian': 'albania',
+    'albania': 'albania',
+    
+    # Argelia
+    'algerian': 'algeria',
+    'algeria': 'algeria',
+    
+    # Andorra
+    'andorran': 'andorra',
+    'andorra': 'andorra',
+    
+    # Angola
+    'angolan': 'angola',
+    'angola': 'angola',
+    
+    # Antigua y Barbuda
+    'antiguan': 'antigua_and_barbuda',
+    'antigua_and_barbuda': 'antigua_and_barbuda',
+    
+    # Argentina
+    'argentinian': 'argentina',
+    'argentina': 'argentina',
+    
+    # Armenia
+    'armenian': 'armenia',
+    'armenia': 'armenia',
+    
+    # Australia
+    'australian': 'australia',
+    'australia': 'australia',
+    
+    # Austria
+    'austrian': 'austria',
+    'austria': 'austria',
+    
+    # Azerbaiyán
+    'azerbaijani': 'azerbaijan',
+    'azerbaijan': 'azerbaijan',
+    
+    # Bahamas
+    'bahamian': 'bahamas',
+    'bahamas': 'bahamas',
+    
+    # Bahrein
+    'bahraini': 'bahrain',
+    'bahrain': 'bahrain',
+    
+    # Bangladesh
+    'bangladeshi': 'bangladesh',
+    'bangladesh': 'bangladesh',
+    
+    # Barbados
+    'barbadian': 'barbados',
+    'barbados': 'barbados',
+    
+    # Bielorrusia
+    'belarusian': 'belarus',
+    'belarus': 'belarus',
+    
+    # Bélgica
+    'belgian': 'belgium',
+    'belgium': 'belgium',
+    
+    # Belice
+    'belizean': 'belize',
+    'belize': 'belize',
+    
+    # Benin
+    'beninese': 'benin',
+    'benin': 'benin',
+    
+    # Bhután
+    'bhutanese': 'bhutan',
+    'bhutan': 'bhutan',
+    
+    # Bolivia
+    'bolivian': 'bolivia',
+    'bolivia': 'bolivia',
+    
+    # Bosnia y Herzegovina
+    'bosnian': 'bosnia_and_herzegovina',
+    'bosnia_and_herzegovina': 'bosnia_and_herzegovina',
+    
+    # Botswana
+    'botswanan': 'botswana',
+    'botswana': 'botswana',
+    
+    # Brasil
+    'brazilian': 'brazil',
+    'brazil': 'brazil',
+    
+    # Brunei
+    'bruneian': 'brunei',
+    'brunei': 'brunei',
+    
+    # Bulgaria
+    'bulgarian': 'bulgaria',
+    'bulgaria': 'bulgaria',
+    
+    # Burkina Faso
+    'burkinabe': 'burkina_faso',
+    'burkina_faso': 'burkina_faso',
+    
+    # Burundi
+    'burundian': 'burundi',
+    'burundi': 'burundi',
+    
+    # Camboya
+    'cambodian': 'cambodia',
+    'cambodia': 'cambodia',
+    
+    # Camerún
+    'cameroonian': 'cameroon',
+    'cameroon': 'cameroon',
+    
+    # Canadá
+    'canadian': 'canada',
+    'canada': 'canada',
+    
+    # Cabo Verde
+    'cape_verdean': 'cape_verde',
+    'cape_verde': 'cape_verde',
+    
+    # República Centroafricana
+    'central_african': 'central_african_republic',
+    'central_african_republic': 'central_african_republic',
+    
+    # Chad
+    'chadian': 'chad',
+    'chad': 'chad',
+    
+    # Chile
+    'chilean': 'chile',
+    'chile': 'chile',
+    
+    # China
+    'chinese': 'china',
+    'china': 'china',
+    
+    # Colombia
+    'colombian': 'colombia',
+    'colombia': 'colombia',
+    
+    # Comoras
+    'comorian': 'comoros',
+    'comoros': 'comoros',
+    
+    # Congo
+    'congolese': 'congo',
+    'congo': 'congo',
+    
+    # Costa Rica
+    'costa_rican': 'costa_rica',
+    'costa_rica': 'costa_rica',
+    
+    # Croacia
+    'croatian': 'croatia',
+    'croatia': 'croatia',
+    
+    # Cuba
+    'cuban': 'cuba',
+    'cuba': 'cuba',
+    
+    # Chipre
+    'cypriot': 'cyprus',
+    'cyprus': 'cyprus',
+    
+    # República Checa
+    'czech': 'czech_republic',
+    'czech_republic': 'czech_republic',
+    
+    # Dinamarca
+    'danish': 'denmark',
+    'denmark': 'denmark',
+    
+    # Yibuti
+    'djiboutian': 'djibouti',
+    'djibouti': 'djibouti',
+    
+    # Dominica
+    'dominican': 'dominica',
+    'dominica': 'dominica',
+    
+    # República Dominicana
+    'dominican_republic': 'dominican_republic',
+    
+    # Timor Oriental
+    'east_timorese': 'east_timor',
+    'east_timor': 'east_timor',
+    
+    # Ecuador
+    'ecuadorian': 'ecuador',
+    'ecuador': 'ecuador',
+    
+    # Egipto
+    'egyptian': 'egypt',
+    'egypt': 'egypt',
+    
+    # El Salvador
+    'salvadoran': 'el_salvador',
+    'el_salvador': 'el_salvador',
+    
+    # Guinea Ecuatorial
+    'equatorial_guinean': 'equatorial_guinea',
+    'equatorial_guinea': 'equatorial_guinea',
+    
+    # Eritrea
+    'eritrean': 'eritrea',
+    'eritrea': 'eritrea',
+    
+    # Estonia
+    'estonian': 'estonia',
+    'estonia': 'estonia',
+    
+    # Etiopía
+    'ethiopian': 'ethiopia',
+    'ethiopia': 'ethiopia',
+    
+    # Fiji
+    'fijian': 'fiji',
+    'fiji': 'fiji',
+    
+    # Finlandia
+    'finnish': 'finland',
+    'finland': 'finland',
+    
+    # Francia
+    'french': 'france',
+    'france': 'france',
+    
+    # Gabón
+    'gabonese': 'gabon',
+    'gabon': 'gabon',
+    
+    # Gambia
+    'gambian': 'gambia',
+    'gambia': 'gambia',
+    
+    # Georgia
+    'georgian': 'georgia',
+    'georgia': 'georgia',
+    
+    # Alemania
+    'german': 'germany',
+    'germany': 'germany',
+    
+    # Ghana
+    'ghanaian': 'ghana',
+    'ghana': 'ghana',
+    
+    # Grecia
+    'greek': 'greece',
+    'greece': 'greece',
+    
+    # Granada
+    'grenadian': 'grenada',
+    'grenada': 'grenada',
+    
+    # Guatemala
+    'guatemalan': 'guatemala',
+    'guatemala': 'guatemala',
+    
+    # Guinea
+    'guinean': 'guinea',
+    'guinea': 'guinea',
+    
+    # Guinea-Bissau
+    'bissau_guinean': 'guinea_bissau',
+    'guinea_bissau': 'guinea_bissau',
+    
+    # Guyana
+    'guyanese': 'guyana',
+    'guyana': 'guyana',
+    
+    # Haití
+    'haitian': 'haiti',
+    'haiti': 'haiti',
+    
+    # Honduras
+    'honduran': 'honduras',
+    'honduras': 'honduras',
+    
+    # Hungría
+    'hungarian': 'hungary',
+    'hungary': 'hungary',
+    
+    # Islandia
+    'icelandic': 'iceland',
+    'iceland': 'iceland',
+    
+    # India
+    'indian': 'india',
+    'india': 'india',
+    
+    # Indonesia
+    'indonesian': 'indonesia',
+    'indonesia': 'indonesia',
+    
+    # Irán
+    'iranian': 'iran',
+    'iran': 'iran',
+    
+    # Iraq
+    'iraqi': 'iraq',
+    'iraq': 'iraq',
+    
+    # Irlanda
+    'irish': 'ireland',
+    'ireland': 'ireland',
+    
+    # Israel
+    'israeli': 'israel',
+    'israel': 'israel',
+    
+    # Italia
+    'italian': 'italy',
+    'italy': 'italy',
+    
+    # Jamaica
+    'jamaican': 'jamaica',
+    'jamaica': 'jamaica',
+    
+    # Japón
+    'japanese': 'japan',
+    'japan': 'japan',
+    
+    # Jordania
+    'jordanian': 'jordan',
+    'jordan': 'jordan',
+    
+    # Kazajistán
+    'kazakh': 'kazakhstan',
+    'kazakhstan': 'kazakhstan',
+    
+    # Kenia
+    'kenyan': 'kenya',
+    'kenya': 'kenya',
+    
+    # Kiribati
+    'i_kiribati': 'kiribati',
+    'kiribati': 'kiribati',
+    
+    # Corea del Norte
+    'north_korean': 'north_korea',
+    'north_korea': 'north_korea',
+    
+    # Corea del Sur
+    'south_korean': 'south_korea',
+    'south_korea': 'south_korea',
+    
+    # Kuwait
+    'kuwaiti': 'kuwait',
+    'kuwait': 'kuwait',
+    
+    # Kirguistán
+    'kyrgyz': 'kyrgyzstan',
+    'kyrgyzstan': 'kyrgyzstan',
+    
+    # Laos
+    'laotian': 'laos',
+    'laos': 'laos',
+    
+    # Letonia
+    'latvian': 'latvia',
+    'latvia': 'latvia',
+    
+    # Líbano
+    'lebanese': 'lebanon',
+    'lebanon': 'lebanon',
+    
+    # Lesoto
+    'basotho': 'lesotho',
+    'lesotho': 'lesotho',
+    
+    # Liberia
+    'liberian': 'liberia',
+    'liberia': 'liberia',
+    
+    # Libia
+    'libyan': 'libya',
+    'libya': 'libya',
+    
+    # Liechtenstein
+    'liechtensteiner': 'liechtenstein',
+    'liechtenstein': 'liechtenstein',
+    
+    # Lituania
+    'lithuanian': 'lithuania',
+    'lithuania': 'lithuania',
+    
+    # Luxemburgo
+    'luxembourger': 'luxembourg',
+    'luxembourg': 'luxembourg',
+    
+    # Macedonia del Norte
+    'macedonian': 'north_macedonia',
+    'north_macedonia': 'north_macedonia',
+    
+    # Madagascar
+    'malagasy': 'madagascar',
+    'madagascar': 'madagascar',
+    
+    # Malawi
+    'malawian': 'malawi',
+    'malawi': 'malawi',
+    
+    # Malasia
+    'malaysian': 'malaysia',
+    'malaysia': 'malaysia',
+    
+    # Maldivas
+    'maldivian': 'maldives',
+    'maldives': 'maldives',
+    
+    # Mali
+    'malian': 'mali',
+    'mali': 'mali',
+    
+    # Malta
+    'maltese': 'malta',
+    'malta': 'malta',
+    
+    # Islas Marshall
+    'marshallese': 'marshall_islands',
+    'marshall_islands': 'marshall_islands',
+    
+    # Mauritania
+    'mauritanian': 'mauritania',
+    'mauritania': 'mauritania',
+    
+    # Mauricio
+    'mauritian': 'mauritius',
+    'mauritius': 'mauritius',
+    
+    # México
+    'mexican': 'mexico',
+    'mexico': 'mexico',
+    
+    # Micronesia
+    'micronesian': 'micronesia',
+    'micronesia': 'micronesia',
+    
+    # Moldavia
+    'moldovan': 'moldova',
+    'moldova': 'moldova',
+    
+    # Mónaco
+    'monacan': 'monaco',
+    'monaco': 'monaco',
+    
+    # Mongolia
+    'mongolian': 'mongolia',
+    'mongolia': 'mongolia',
+    
+    # Montenegro
+    'montenegrin': 'montenegro',
+    'montenegro': 'montenegro',
+    
+    # Marruecos
+    'moroccan': 'morocco',
+    'morocco': 'morocco',
+    
+    # Mozambique
+    'mozambican': 'mozambique',
+    'mozambique': 'mozambique',
+    
+    # Myanmar (Birmania)
+    'myanmar': 'myanmar',
+    'burmese': 'myanmar',
+    
+    # Namibia
+    'namibian': 'namibia',
+    'namibia': 'namibia',
+    
+    # Nauru
+    'nauruan': 'nauru',
+    'nauru': 'nauru',
+    
+    # Nepal
+    'nepalese': 'nepal',
+    'nepali': 'nepal',
+    'nepal': 'nepal',
+    
+    # Países Bajos
+    'dutch': 'netherlands',
+    'netherlands': 'netherlands',
+    
+    # Nueva Zelanda
+    'new_zealander': 'new_zealand',
+    'new_zealand': 'new_zealand',
+    
+    # Nicaragua
+    'nicaraguan': 'nicaragua',
+    'nicaragua': 'nicaragua',
+    
+    # Níger
+    'nigerien': 'niger',
+    'niger': 'niger',
+    
+    # Nigeria
+    'nigerian': 'nigeria',
+    'nigeria': 'nigeria',
+    
+    # Noruega
+    'norwegian': 'norway',
+    'norway': 'norway',
+    
+    # Omán
+    'omani': 'oman',
+    'oman': 'oman',
+    
+    # Pakistán
+    'pakistani': 'pakistan',
+    'pakistan': 'pakistan',
+    
+    # Palau
+    'palauan': 'palau',
+    'palau': 'palau',
+    
+    # Palestina
+    'palestinian': 'palestine',
+    'palestine': 'palestine',
+    
+    # Panamá
+    'panamanian': 'panama',
+    'panama': 'panama',
+    
+    # Papúa Nueva Guinea
+    'papua_new_guinean': 'papua_new_guinea',
+    'papua_new_guinea': 'papua_new_guinea',
+    
+    # Paraguay
+    'paraguayan': 'paraguay',
+    'paraguay': 'paraguay',
+    
+    # Perú
+    'peruvian': 'peru',
+    'peru': 'peru',
+    
+    # Filipinas
+    'filipino': 'philippines',
+    'philippines': 'philippines',
+    
+    # Polonia
+    'polish': 'poland',
+    'poland': 'poland',
+    
+    # Portugal
+    'portuguese': 'portugal',
+    'portugal': 'portugal',
+    
+    # Qatar
+    'qatari': 'qatar',
+    'qatar': 'qatar',
+    
+    # Rumania
+    'romanian': 'romania',
+    'romania': 'romania',
+    
+    # Rusia
+    'russian': 'russia',
+    'russia': 'russia',
+    
+    # Ruanda
+    'rwandan': 'rwanda',
+    'rwanda': 'rwanda',
+    
+    # San Cristóbal y Nieves
+    'kittitian': 'saint_kitts_and_nevis',
+    'saint_kitts_and_nevis': 'saint_kitts_and_nevis',
+    
+    # Santa Lucía
+    'saint_lucian': 'saint_lucia',
+    'saint_lucia': 'saint_lucia',
+    
+    # San Vicente y las Granadinas
+    'vincentian': 'saint_vincent_and_the_grenadines',
+    'saint_vincent_and_the_grenadines': 'saint_vincent_and_the_grenadines',
+    
+    # Samoa
+    'samoan': 'samoa',
+    'samoa': 'samoa',
+    
+    # San Marino
+    'sammarinese': 'san_marino',
+    'san_marino': 'san_marino',
+    
+    # Santo Tomé y Príncipe
+    'sao_tomean': 'sao_tome_and_principe',
+    'sao_tome_and_principe': 'sao_tome_and_principe',
+    
+    # Arabia Saudita
+    'saudi': 'saudi_arabia',
+    'saudi_arabia': 'saudi_arabia',
+    
+    # Senegal
+    'senegalese': 'senegal',
+    'senegal': 'senegal',
+    
+    # Serbia
+    'serbian': 'serbia',
+    'serbia': 'serbia',
+    
+    # Seychelles
+    'seychellois': 'seychelles',
+    'seychelles': 'seychelles',
+    
+    # Sierra Leona
+    'sierra_leonean': 'sierra_leone',
+    'sierra_leone': 'sierra_leone',
+    
+    # Singapur
+    'singaporean': 'singapore',
+    'singapore': 'singapore',
+    
+    # Eslovaquia
+    'slovak': 'slovakia',
+    'slovakia': 'slovakia',
+    
+    # Eslovenia
+    'slovenian': 'slovenia',
+    'slovenia': 'slovenia',
+    
+    # Islas Salomón
+    'solomon_islander': 'solomon_islands',
+    'solomon_islands': 'solomon_islands',
+    
+    # Somalia
+    'somali': 'somalia',
+    'somalia': 'somalia',
+    
+    # Sudáfrica
+    'south_african': 'south_africa',
+    'south_africa': 'south_africa',
+    
+    # Sudán del Sur
+    'south_sudanese': 'south_sudan',
+    'south_sudan': 'south_sudan',
+    
+    # España
+    'spanish': 'spain',
+    'spain': 'spain',
+    
+    # Sri Lanka
+    'sri_lankan': 'sri_lanka',
+    'sri_lanka': 'sri_lanka',
+    
+    # Sudán
+    'sudanese': 'sudan',
+    'sudan': 'sudan',
+    
+    # Surinam
+    'surinamese': 'suriname',
+    'suriname': 'suriname',
+    
+    # Suecia
+    'swedish': 'sweden',
+    'sweden': 'sweden',
+    
+    # Suiza
+    'swiss': 'switzerland',
+    'switzerland': 'switzerland',
+    
+    # Siria
+    'syrian': 'syria',
+    'syria': 'syria',
+    
+    # Taiwán
+    'taiwanese': 'taiwan',
+    'taiwan': 'taiwan',
+    
+    # Tayikistán
+    'tajik': 'tajikistan',
+    'tajikistan': 'tajikistan',
+    
+    # Tanzania
+    'tanzanian': 'tanzania',
+    'tanzania': 'tanzania',
+    
+    # Tailandia
+    'thai': 'thailand',
+    'thailand': 'thailand',
+    
+    # Togo
+    'togolese': 'togo',
+    'togo': 'togo',
+    
+    # Tonga
+    'tongan': 'tonga',
+    'tonga': 'tonga',
+    
+    # Trinidad y Tobago
+    'trinidadian': 'trinidad_and_tobago',
+    'trinidad_and_tobago': 'trinidad_and_tobago',
+    
+    # Túnez
+    'tunisian': 'tunisia',
+    'tunisia': 'tunisia',
+    
+    # Turquía
+    'turkish': 'turkey',
+    'turkey': 'turkey',
+    
+    # Turkmenistán
+    'turkmen': 'turkmenistan',
+    'turkmenistan': 'turkmenistan',
+    
+    # Tuvalu
+    'tuvaluan': 'tuvalu',
+    'tuvalu': 'tuvalu',
+    
+    # Uganda
+    'ugandan': 'uganda',
+    'uganda': 'uganda',
+    
+    # Ucrania
+    'ukrainian': 'ukraine',
+    'ukraine': 'ukraine',
+    
+    # Emiratos Árabes Unidos
+    'emirati': 'united_arab_emirates',
+    'united_arab_emirates': 'united_arab_emirates',
+    
+    # Variaciones para inglés/británico
+    "english": "united_kingdom",
+    "british": "united_kingdom",
+    "uk": "united_kingdom",
+    "united_kingdom": "united_kingdom",
+
+    # Ciudades UK
+    "london": "united_kingdom",
+    "manchester": "united_kingdom",
+    "liverpool": "united_kingdom",
+    "birmingham": "united_kingdom",
+    "leeds": "united_kingdom",
+    "glasgow": "united_kingdom",
+    "edinburgh": "united_kingdom",
+    "cardiff": "united_kingdom",
+    "belfast": "united_kingdom",
+    "sheffield": "united_kingdom",
+    "bristol": "united_kingdom",
+    "oxford": "united_kingdom",
+    "nottingham": "united_kingdom",
+    "leicester": "united_kingdom",
+    "coventry": "united_kingdom",
+    "peterborough": "united_kingdom",
+    "wolverhampton": "united_kingdom",
+    "swansea": "united_kingdom",
+    "newcastle": "united_kingdom",
+    "bournemouth": "united_kingdom",
+    "brighton": "united_kingdom",
+    "milton_keynes": "united_kingdom",
+   
+    
+    # Variaciones para americano/estadounidense
+    "american": "united_states",
+    "usa": "united_states",
+    "us": "united_states",
+    "united_states": "united_states",
+
+    # Ciudades USA
+    "new_york": "united_states",
+    "nyc": "united_states",
+    "los_angeles": "united_states",
+    "la": "united_states",
+    "chicago": "united_states",
+    "houston": "united_states",
+    "miami": "united_states",
+    "boston": "united_states",
+    "seattle": "united_states",
+    "san_francisco": "united_states",
+    "las_vegas": "united_states",
+    "washington": "united_states",
+    "dallas": "united_states",
+    "atlanta": "united_states",
+    "philadelphia": "united_states",
+    "san_diego": "united_states",
+    "san_jose": "united_states",
+    "austin": "united_states",
+    "san_antonio": "united_states",
+   
+
+
+    # Reino Unido
+    'british': 'uk',
+    'uk': 'uk',
+    'english': 'uk',
+    'scottish': 'uk',
+    'welsh': 'uk',
+    
+    # Estados Unidos
+    'american': 'usa',
+    'usa': 'usa',
+    
+    # Uruguay
+    'uruguayan': 'uruguay',
+    'uruguay': 'uruguay',
+    
+    # Uzbekistán
+    'uzbek': 'uzbekistan',
+    'uzbekistan': 'uzbekistan',
+    
+    # Vanuatu
+    'ni_vanuatu': 'vanuatu',
+    'vanuatu': 'vanuatu',
+    
+    # Ciudad del Vaticano
+    'vatican': 'vatican_city',
+    'vatican_city': 'vatican_city',
+    
+    # Venezuela
+    'venezuelan': 'venezuela',
+    'venezuela': 'venezuela',
+    
+    # Vietnam
+    'vietnamese': 'vietnam',
+    'vietnam': 'vietnam',
+    
+    # Yemen
+    'yemeni': 'yemen',
+    'yemen': 'yemen',
+    
+    # Zambia
+    'zambian': 'zambia',
+    'zambia': 'zambia',
+    
+    # Zimbabue
+    'zimbabwean': 'zimbabwe',
+    'zimbabwe': 'zimbabwe'
+    }
+    
+    # Convertir nacionalidad a país
+    country = nationality_to_country.get(nationality, nationality)
+    print(f"🔍 Looking for characteristics for country: {country}")
+    
+    # Obtener datos del país
+    country_data = ethnic_data['countries'].get(country)
     print(f"📊 Country data found: {country_data}")
     
     if not country_data:
@@ -1927,10 +2768,13 @@ def get_ethnic_characteristics(nationality, ethnic_data):
             })
 
     # Seleccionar etnia basada en porcentajes reales
-    weights = [e['percentage'] for e in ethnicities]
-    selected_ethnicity = random.choices(ethnicities, weights=weights, k=1)[0]
+    weights = [float(e['percentage']) for e in ethnicities]
+    total = sum(weights)
+    normalized_weights = [w/total for w in weights]
+    
+    selected_ethnicity = random.choices(ethnicities, weights=normalized_weights, k=1)[0]
+    print(f"👥 Selected ethnicity: {selected_ethnicity['name']} ({selected_ethnicity['percentage']}%)")
 
-    # Construir descripción como lo hace OpenAI
     ethnic_description = f"of {selected_ethnicity['ethnic_type'].replace('_', ' ')} heritage with {selected_ethnicity['ethnic_type'].replace('_', ' ')} features"
 
     return {
@@ -2016,6 +2860,14 @@ def generate_persona():
             'pola': {
                 'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
                 'keyword': "polaroid style"
+            },
+            'analog': {
+                'version': "d0bee03de2b2a8098d4c30fe80705e2afdd16adfa56c4bde3bba0d8972ccb78a",
+                'keyword': "ANLG"
+            },
+            'disposable': {
+                'version': "c24cb30c2405f5f1e8358de0fe4039a6ddc5c4b0e6d056d314f14e87bd40141e",
+                'keyword': "STL"
             }
         }
 

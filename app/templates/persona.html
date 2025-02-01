@@ -39,13 +39,19 @@
             transition: margin-left 0.3s ease;
             min-height: 100vh;
             width: calc(100% - 300px);
+            display: block;
         }
     
         .center-column {
             padding: 20px;
-            width:fit-content;
+            width: 100%;
             height: calc(100vh - 60px);
             overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
         }
     
         .loaded img {
@@ -72,19 +78,18 @@
     
         /* Preview grid mejorado */
         .preview-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            width: 100%;
-            justify-content: flex-start; /* Alinea desde la izquierda */
+            display: block;
+            padding: 8px;
+            width: auto;
+             /* Alinea desde la izquierda */
             max-width: 100%;
+            margin: 0;
         }
     
         .preview-box {
-            width: 512px;
-            height: 512px;
-            flex: 0 0 auto;
+            width: 360px;
+            height: 360px;
+            display: block;
             background: var(--bunker-800);
             border: 1px solid var(--bunker-600);
             border-radius: 12px;
@@ -275,6 +280,10 @@
     div#preview { 
     display: none;
 }
+
+.preview-placeholder {
+    display: none;
+}
         /* Ajuste responsive */
         @media (max-width: 1600px) {
             .preview-box {
@@ -292,6 +301,7 @@
             }
         }
     </style>
+    
     
 
 
@@ -337,15 +347,15 @@
                         ">
                         camera
                         </span>
-                           <select class="film-selector" id="film_type">
-                                                        <option value="" disabled="" selected="">
-                        
-                        Select film style</option>
-                                                        <option value="fuji">Fuji Film</option>
-                                                        <option value="koda">Koda Film</option>
-                                                        <option value="pola">Pola Film</option>
-                                                        <option value="surreal">Surreal Film</option>
-                                                    </select>
+                        <select class="film-selector" id="film_type">
+                            <option value="" disabled selected>Select film style</option>
+                            <option value="fuji">Fuji Film</option>
+                            <option value="koda">Koda Film</option>
+                            <option value="pola">Pola Film</option>
+                            <option value="surreal">Surreal Film</option>
+                            <option value="analog">Analog Film</option>
+                            <option value="disposable">Disposable Camera</option>
+                        </select>
                                                 </div>
                         
                         <button id="createPersona" class="generate-button">
