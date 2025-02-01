@@ -933,12 +933,59 @@ nationality_mapping = {
     "british": "united_kingdom",
     "uk": "united_kingdom",
     "united_kingdom": "united_kingdom",
+
+    # Ciudades UK
+    "london": "united_kingdom",
+    "manchester": "united_kingdom",
+    "liverpool": "united_kingdom",
+    "birmingham": "united_kingdom",
+    "leeds": "united_kingdom",
+    "glasgow": "united_kingdom",
+    "edinburgh": "united_kingdom",
+    "cardiff": "united_kingdom",
+    "belfast": "united_kingdom",
+    "sheffield": "united_kingdom",
+    "bristol": "united_kingdom",
+    "oxford": "united_kingdom",
+    "nottingham": "united_kingdom",
+    "leicester": "united_kingdom",
+    "coventry": "united_kingdom",
+    "peterborough": "united_kingdom",
+    "wolverhampton": "united_kingdom",
+    "swansea": "united_kingdom",
+    "newcastle": "united_kingdom",
+    "bournemouth": "united_kingdom",
+    "brighton": "united_kingdom",
+    "milton_keynes": "united_kingdom",
+   
     
     # Variaciones para americano/estadounidense
     "american": "united_states",
     "usa": "united_states",
     "us": "united_states",
     "united_states": "united_states",
+
+    # Ciudades USA
+    "new_york": "united_states",
+    "nyc": "united_states",
+    "los_angeles": "united_states",
+    "la": "united_states",
+    "chicago": "united_states",
+    "houston": "united_states",
+    "miami": "united_states",
+    "boston": "united_states",
+    "seattle": "united_states",
+    "san_francisco": "united_states",
+    "las_vegas": "united_states",
+    "washington": "united_states",
+    "dallas": "united_states",
+    "atlanta": "united_states",
+    "philadelphia": "united_states",
+    "san_diego": "united_states",
+    "san_jose": "united_states",
+    "austin": "united_states",
+    "san_antonio": "united_states",
+   
 
 
     # Reino Unido
@@ -1856,39 +1903,36 @@ def select_ethnicity_by_weight(ethnicities):
         return random.choice(ethnicities)
 
 def get_ethnic_characteristics(nationality, ethnic_data):
+    """Obtiene características étnicas usando el mismo sistema que OpenAI"""
     print(f"🔍 Looking for characteristics for nationality: {nationality}")
+    
+    # Usar el mismo ethnic.json que usa OpenAI
     country_data = ethnic_data['countries'].get(nationality)
     print(f"📊 Country data found: {country_data}")
     
     if not country_data:
         print("❌ No country data found")
         return None
-    
-    # Convertir el diccionario de etnias a lista de diccionarios con porcentajes
+
+    # Convertir el diccionario de etnias a lista con porcentajes
     ethnicities = []
     for name, percentage in country_data['ethnicities'].items():
-        # Solo incluir etnias que tienen referencia étnica
         ethnic_type = country_data['ethnic_references'].get(name)
         if ethnic_type:
             ethnicities.append({
                 'name': name,
-                'percentage': percentage,  # Mantener como número
+                'percentage': percentage,
                 'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
-                'ethnic_type': ethnic_type,
-                'other_details': ethnic_data['ethnic_types'][ethnic_type].get('other_details', '')
+                'ethnic_type': ethnic_type
             })
-    
-    print(f"🎲 Ethnicities before selection: {[(e['name'], e['percentage']) for e in ethnicities]}")
-    
-    # Seleccionar una etnia basada en los pesos
-    selected_ethnicity = select_ethnicity_by_weight(ethnicities)
-    print(f"👥 Selected ethnicity: {selected_ethnicity['name']} with type {selected_ethnicity['ethnic_type']}")
-    
-    # Construir la descripción de herencia étnica
+
+    # Seleccionar etnia basada en porcentajes reales
+    weights = [e['percentage'] for e in ethnicities]
+    selected_ethnicity = random.choices(ethnicities, weights=weights, k=1)[0]
+
+    # Construir descripción como lo hace OpenAI
     ethnic_description = f"of {selected_ethnicity['ethnic_type'].replace('_', ' ')} heritage with {selected_ethnicity['ethnic_type'].replace('_', ' ')} features"
-    if selected_ethnicity.get('other_details'):
-        ethnic_description += f", {selected_ethnicity['other_details']}"
-    
+
     return {
         "skin_tone": random.choice(selected_ethnicity['features']['skin_tones']),
         "hair_color": random.choice(selected_ethnicity['features']['hair_colors']),
