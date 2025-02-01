@@ -980,39 +980,41 @@ nationality_mapping = {
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
-    # Si no usamos OpenAI, devolver el prompt original a menos que tenga nacionalidad
     if not use_openai:
-        # Detectar nacionalidad
-        words = prompt_text.lower().split()
+        # Inicializar variables
         detected_nationality = None
         detected_gender = None
-
-        # Detectar género
-        if any(word in words for word in ["woman", "girl", "female"]):
-            detected_gender = "female"
-        elif any(word in words for word in ["man", "boy", "male"]):
-            detected_gender = "male"
         
-        # Detectar nacionalidad
-        for word in words:
-            if word in nationality_mapping:
-                detected_nationality = nationality_mapping[word]
+        # Detectar nacionalidad - buscar en toda la frase
+        for nationality in nationality_mapping.keys():
+            if nationality in prompt_text.lower():
+                detected_nationality = nationality_mapping[nationality]
                 break
         
-        # Si hay nacionalidad, añadir características étnicas
+        # Detectar género - buscar en toda la frase
+        if any(word in prompt_text.lower() for word in ["woman", "girl", "female", "she", "her"]):
+            detected_gender = "female"
+        elif any(word in prompt_text.lower() for word in ["man", "boy", "male", "he", "his"]):
+            detected_gender = "male"
+        
+        # Si hay nacionalidad y género, añadir características étnicas
         if detected_nationality and detected_gender:
-            ethnic_data = load_ethnic_data()
-            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            size_info = calculate_body_size(detected_nationality, detected_gender, prompt_text)
-
-            if characteristics:
-                facial_features_text = ", ".join(characteristics['facial_features'])
-                size_text = ""
-                if size_info:
+            try:
+                ethnic_data = load_ethnic_data()
+                characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+                size_info = calculate_body_size(detected_nationality, detected_gender, prompt_text)
+                
+                if characteristics and size_info:
+                    facial_features_text = ", ".join(characteristics['facial_features'])
                     height_cm = round(size_info["height"] * 100)
                     weight_kg = round(size_info["weight"])
                     size_text = f", {height_cm}cm tall, {weight_kg}kg"
-                return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+                    
+                    enhanced_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+                    return enhanced_prompt
+            except Exception as e:
+                print(f"Error processing ethnic data: {str(e)}")
+                return prompt_text
         
         return prompt_text
     
