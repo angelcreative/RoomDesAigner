@@ -42,26 +42,26 @@ def get_build_description(base_weight, gender):
 
 def get_size_characteristics(nationality, gender, size_data):
     """Obtiene características de tamaño basadas en nacionalidad y género"""
+    print(f"🔍 Looking for size data: {nationality} ({gender})")
     
     # Intentar obtener datos específicos del país
     country_data = size_data.get(nationality)
     
     # Si no hay datos del país, usar datos del continente
     if not country_data:
-        continent_data = size_data.get('continents', {}).get(nationality.split('_')[0], {})
-        country_data = continent_data
+        continent = nationality.split('_')[0]
+        country_data = size_data.get('continents', {}).get(continent)
+        if country_data:
+            print(f"✅ Using continent data for {continent}")
     
-    if not country_data:
+    if not country_data or gender not in country_data:
+        print("❌ No size data found")
         return None
         
-    gender_data = country_data.get(gender)
-    if not gender_data:
-        return None
+    gender_data = country_data[gender]
     
-    base_height = gender_data['height']
-    base_weight = gender_data['weight']
+    # Generar descripciones de altura y complexión
+    height_desc = get_height_description(gender_data['height'], gender)
+    build_desc = get_build_description(gender_data['weight'], gender)
     
-    height_desc = get_height_description(base_height, gender)
-    build_desc = get_build_description(base_weight, gender)
-    
-    return f"{height_desc} {build_desc}"
+    return f"{height_desc} with {build_desc}"
