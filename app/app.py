@@ -2005,7 +2005,7 @@ def generate_persona():
                 }
             },
             'disposable': {
-                'version': "c24cb30c2405f5f1e8358de0fe4039a6ddc5c4b0e6d056d314f14e87bd40141e",
+                'version': "4c851c9ca3c1167df599c400a277dc2b20b0ad166afc5c5d691e5bb64c46c254",
                 'keyword': "DISP",
                 'params': {
                     "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
