@@ -1146,9 +1146,20 @@ def generate_openai_prompt(prompt_text):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": get_content_for_people()},
-                {"role": "user", "content": f"Enhance this image generation prompt while maintaining all ethnic and physical characteristics: {prompt_text}"}
+             messages=[
+                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
+                When the prompt includes a nationality, you MUST:
+                1. Detect the nationality and include appropriate ethnic features
+                2. Use skin tones, hair colors, eye colors typical of that ethnicity
+                3. Include appropriate facial features
+                4. Keep descriptions respectful and accurate
+                
+                For all prompts:
+                1. Enhance visual details
+                2. Keep language clear and direct
+                3. Focus on visual elements
+                4. Maintain the original intent"""},
+                {"role": "user", "content": f"Enhance this image generation prompt: {prompt_text}"}
             ],
             temperature=0.7,
             max_tokens=150
@@ -1947,48 +1958,7 @@ def get_ethnic_characteristics(country, ethnic_data):
         'ethnic_description': f"of {selected['ethnic_type'].replace('_', ' ')} heritage with {selected['ethnic_type'].replace('_', ' ')} features"
     }
 
-@app.route('/fashion')
-def fashion():
-    if request.method == 'GET':
-        print("Accessing fashion route...")  # Para debug
-        return render_template('fashion.html')
-    
-    try:
-        init_image = request.json.get('init_image')
-        cloth_image = request.json.get('cloth_image')
-        
-        if not init_image or not cloth_image:
-            return jsonify({"error": "Both model and clothing images are required"}), 400
-        
-        payload = {
-            "key": os.environ.get('MODELSLAB_API_KEY'), 
-            "prompt": "A realistic photo of a model wearing the clothing",
-            "negative_prompt": "Low quality, unrealistic, bad cloth, warped cloth",
-            "init_image": init_image,
-            "cloth_image": cloth_image,
-            "cloth_type": "upper_body",  # Podríamos hacer esto seleccionable
-            "guidance_scale": 7.5,
-            "num_inference_steps": 21,
-            "temp": "no"
-        }
-        #add
-        print("Sending request to ModelsLab API...")
-        response = requests.post(
-            "https://modelslab.com/api/v6/image_editing/fashion",
-            json=payload,
-            headers={'Content-Type': 'application/json'}
-        )
-        
-        if response.status_code != 200:
-            print(f"Error from ModelsLab API: {response.text}")
-            return jsonify({"error": "Error from ModelsLab API"}), response.status_code
-        
-        print(f"ModelsLab API response: {response.json()}")
-        return jsonify(response.json())
-        
-    except Exception as e:
-        print(f"Error in fashion endpoint: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/persona', methods=['GET'])
 def persona():
@@ -2049,7 +2019,7 @@ def generate_persona():
                 }
             },
             'flux': {
-                'version': "7df8cd78c8e3b06f1c7c2c8d2c9b3a0f2c9b3a0f2c9b3a0f2c9b3a0f2c9b3a0f",
+                'version': "39b3434f194f87a900d1bc2b6d4b983e90f0dde1d5022c27b52c143d670758fa",
                 'keyword': "FLUX",
                 'params': {
                     "prompt": "",  # Se llenará con el prompt generado
