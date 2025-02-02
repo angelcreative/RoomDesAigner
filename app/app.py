@@ -1042,70 +1042,26 @@ def transform_prompt(prompt_text, use_openai=False):
     
     if use_openai:
         print("🤖 Using OpenAI prompt generator")
-        try:
-            enhanced_prompt = generate_openai_prompt(prompt_text)
-            if enhanced_prompt:
-                print(f"✅ OpenAI enhanced prompt: {enhanced_prompt}")
-                return enhanced_prompt
-            return prompt_text  # Si OpenAI falla, usar el prompt original
-        except Exception as e:
-            print(f"❌ OpenAI error: {str(e)}")
-            return prompt_text
-    else:
-        # Cargar ethnic.json al inicio
-        try:
-            with open('static/ethnic.json', 'r', encoding='utf-8') as f:
-                ethnic_data = json.load(f)
-        except Exception as e:
-            print(f"❌ Error loading ethnic.json: {str(e)}")
-            return prompt_text
-
-        # Dividir el texto en palabras
+        enhanced_prompt = generate_openai_prompt(prompt_text)
+        return enhanced_prompt if enhanced_prompt else prompt_text
+    
+    # Si no usamos OpenAI, procesamos el prompt con ethnic.json
+    try:
+        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+            ethnic_data = json.load(f)
+            
         words = prompt_text.lower().split()
-        
-        # Detectar nacionalidad - buscar palabras completas
-        detected_nationality = None
-        for nationality in nationality_mapping.keys():
+        for nationality in nationality_mapping:
             if nationality in words:
-                detected_nationality = nationality_mapping[nationality]
-                print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
-                break
-        
-        if not detected_nationality:
-            print("❌ No nationality detected")
-            return prompt_text
-
-        # Detectar género
-        if any(word in words for word in ["woman", "girl", "female", "she", "her"]):
-            detected_gender = "female"
-            print("✅ Detected gender: female")
-        elif any(word in words for word in ["man", "boy", "male", "he", "his"]):
-            detected_gender = "male"
-            print("✅ Detected gender: male")
-        else:
-            print("❌ No gender detected")
-            return prompt_text
-
-        try:
-            print(f"🔍 Looking up ethnic data for: {detected_nationality}")
-            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-            if not characteristics:
-                print("❌ No ethnic characteristics found")
-                return prompt_text
-
-            print(f"✅ Found characteristics: {characteristics}")
-            
-            facial_features_text = ", ".join(characteristics['facial_features'])
-            
-            # Mantener el prompt original y añadir las características
-            enhanced_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-            
-            print(f"✅ Enhanced prompt: {enhanced_prompt}")
-            return enhanced_prompt
-            
-        except Exception as e:
-            print(f"❌ Error processing ethnic data: {str(e)}")
-            return prompt_text
+                country = nationality_mapping[nationality]
+                characteristics = get_ethnic_characteristics(country, ethnic_data)
+                if characteristics:
+                    facial_features = ", ".join(characteristics['facial_features'])
+                    return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+    except Exception as e:
+        print(f"Error processing ethnic data: {str(e)}")
+    
+    return prompt_text
 
 def generate_openai_prompt(prompt_text):
     try:
@@ -1885,38 +1841,29 @@ if __name__ == '__main__':
 with open('static/ethnic.json', 'r', encoding='utf-8') as f:
     ethnic_data = json.load(f)
 
-def get_ethnic_characteristics(nationality, ethnic_data):
-    """Obtiene características étnicas usando el mismo sistema que OpenAI"""
-    print(f"🔍 Processing nationality: {nationality}")
-    
-    # Obtener datos del país
-    country_data = ethnic_data['countries'].get(nationality)
+def get_ethnic_characteristics(country, ethnic_data):
+    country_data = ethnic_data['countries'].get(country)
     if not country_data:
-        print(f"❌ No data found for {nationality}")
         return None
-
-    # Obtener etnias y sus porcentajes
+        
     ethnicities = []
     for name, percentage in country_data['ethnicities'].items():
         ethnic_type = country_data['ethnic_references'].get(name)
-        if ethnic_type and ethnic_type in ethnic_data['ethnic_types']:
-            features = ethnic_data['ethnic_types'][ethnic_type]['features']
+        if ethnic_type in ethnic_data['ethnic_types']:
             ethnicities.append({
                 'name': name,
                 'percentage': float(percentage),
-                'features': features,
+                'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
                 'ethnic_type': ethnic_type
             })
-
+    
     if not ethnicities:
-        print("❌ No valid ethnicities found")
         return None
-
+        
     # Seleccionar etnia basada en porcentajes
     weights = [e['percentage'] for e in ethnicities]
     selected = random.choices(ethnicities, weights=weights, k=1)[0]
-    print(f"✅ Selected ethnicity: {selected['name']} ({selected['percentage']}%)")
-
+    
     return {
         'skin_tone': random.choice(selected['features']['skin_tones']),
         'hair_color': random.choice(selected['features']['hair_colors']),
