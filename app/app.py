@@ -2073,7 +2073,8 @@ def generate_persona():
         final_prompt = f"{enhanced_prompt}, {config['keyword']}"
 
         # Preparar los parámetros según el modelo
-        if film_type in ['analog', 'disposable']:
+        if film_type in ['analog', 'disposable', 'flux']:  # Añadimos 'flux' aquí
+
             input_params = config['params'].copy()
             input_params['prompt'] = final_prompt
         else:
