@@ -1053,6 +1053,8 @@ def transform_prompt(prompt_text, use_openai=False):
     try:
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
+        with open('static/sizes.json', 'r', encoding='utf-8') as f:
+            size_data = json.load(f)
     except Exception as e:
         print(f"❌ Error loading ethnic.json: {str(e)}")
         return f"{prompt_text}, "
@@ -1081,7 +1083,7 @@ def transform_prompt(prompt_text, use_openai=False):
             size_text = f", {size_desc}" if size_desc else ""
             
             # Construir el prompt base con características étnicas
-            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, {size_text}, casual appearance, everyday person, candid pose, natural lighting"
+            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}{size_text}, casual appearance, everyday person, candid pose, natural lighting"
             
             # Si usa OpenAI, mejorar el prompt
             if use_openai:
