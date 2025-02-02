@@ -989,15 +989,18 @@ nationality_mapping = {
 
 
     # Reino Unido
-    'british': 'uk',
-    'uk': 'uk',
-    'english': 'uk',
-    'scottish': 'uk',
-    'welsh': 'uk',
+    'british': 'united_kingdom',
+    'uk': 'united_kingdom',
+    'english': 'united_kingdom',
+    'scottish': 'united_kingdom',
+    'welsh': 'united_kingdom',
+    'united_kingdom': 'united_kingdom',
     
     # Estados Unidos
-    'american': 'usa',
-    'usa': 'usa',
+    'american': 'united_states',
+    'usa': 'united_states',
+    'us': 'united_states',
+    'united_states': 'united_states',
     
     # Uruguay
     'uruguayan': 'uruguay',
