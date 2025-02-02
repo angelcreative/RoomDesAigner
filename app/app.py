@@ -4,7 +4,7 @@ from typing import Optional
 from flask_cors import CORS
 from functools import wraps
 from datetime import datetime
-from utils.size_utils import calculate_body_size
+from utils.size_utils import get_size_characteristics, load_size_data
 import hmac
 import hashlib
 import requests
@@ -1064,6 +1064,14 @@ def transform_prompt(prompt_text, use_openai=False):
         # Obtener características étnicas basadas en probabilidad
         characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
         if characteristics:
+            
+            # Detectar género
+            gender = 'male' if any(word in words for word in ["man", "boy", "male"]) else 'female'
+            
+            # Obtener características de tamaño
+            size_desc = get_size_characteristics(detected_nationality, gender, load_size_data())
+            size_text = f", {size_desc}" if size_desc else ""
+            
             # Construir el prompt base con características étnicas
             ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
             
