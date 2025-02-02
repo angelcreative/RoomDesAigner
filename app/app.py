@@ -1039,6 +1039,12 @@ nationality_mapping = {
     'zimbabwe': 'zimbabwe'
 }
 
+# Definir palabras clave para género
+FEMALE_WORDS = ["woman", "girl", "female", "she", "her", "lady", "feminine"]
+MALE_WORDS = ["man", "boy", "male", "he", "his", "gentleman", "masculine"]
+
+
+
 # Main function to transform prompts
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
@@ -1049,7 +1055,7 @@ def transform_prompt(prompt_text, use_openai=False):
             ethnic_data = json.load(f)
     except Exception as e:
         print(f"❌ Error loading ethnic.json: {str(e)}")
-        return f"{prompt_text}, TOK"
+        return f"{prompt_text}, "
 
     # Detectar nacionalidad
     words = prompt_text.lower().split()
@@ -1065,30 +1071,32 @@ def transform_prompt(prompt_text, use_openai=False):
         characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
         if characteristics:
             
-            # Detectar género
-            gender = 'male' if any(word in words for word in ["man", "boy", "male"]) else 'female'
+            # Detectar género - mejorado
+            gender = 'male' if any(word in words for word in MALE_WORDS) else \
+                    'female' if any(word in words for word in FEMALE_WORDS) else \
+                    'female'  # default a female si no se especifica
             
             # Obtener características de tamaño
             size_desc = get_size_characteristics(detected_nationality, gender, load_size_data())
             size_text = f", {size_desc}" if size_desc else ""
             
             # Construir el prompt base con características étnicas
-            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, {size_text}, casual appearance, everyday person, candid pose, natural lighting"
             
             # Si usa OpenAI, mejorar el prompt
             if use_openai:
                 enhanced_prompt = generate_openai_prompt(ethnic_prompt)
-                return f"{enhanced_prompt}, TOK" if enhanced_prompt else f"{ethnic_prompt}, TOK"
+                return f"{enhanced_prompt}, " if enhanced_prompt else f"{ethnic_prompt}, "
             
             # Si no usa OpenAI, devolver el prompt étnico directamente
-            return f"{ethnic_prompt}, TOK"
+            return f"{ethnic_prompt}, "
     
     # Si no hay nacionalidad o falla algo, devolver el prompt original
     if use_openai:
         enhanced_prompt = generate_openai_prompt(prompt_text)
-        return f"{enhanced_prompt}, TOK" if enhanced_prompt else f"{prompt_text}, TOK"
+        return f"{enhanced_prompt}, " if enhanced_prompt else f"{prompt_text}, "
     
-    return f"{prompt_text}, TOK"
+    return f"{prompt_text}, "
 
 def get_ethnic_characteristics(country, ethnic_data):
     """Selecciona características étnicas basadas en probabilidades demográficas"""
