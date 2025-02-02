@@ -1077,7 +1077,7 @@ def transform_prompt(prompt_text, use_openai=False):
                     'female'
             print(f"✅ Detected gender: {gender}")
             
-            # Obtener características de tamaño directamente con size_data
+            # Obtener características de tamaño
             size_desc = get_size_characteristics(detected_nationality, gender, size_data)
             if size_desc:
                 print(f"✅ Size characteristics: {size_desc}")
@@ -1087,8 +1087,7 @@ def transform_prompt(prompt_text, use_openai=False):
                 size_text = ""
             
             # Construir el prompt con todas las características
-            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"            
-            
+            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
             # Si usa OpenAI, mejorar el prompt
             if use_openai:
                 enhanced_prompt = generate_openai_prompt(ethnic_prompt)
@@ -2054,7 +2053,7 @@ def generate_persona():
                 'keyword': "FLUX",
                 'params': {
                     "prompt": "",  # Se llenará con el prompt generado
-                    "negative_prompt": "ugly, deformed, noisy, blurry, distorted, grainy",
+                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
                     "width": 768,
                     "height": 768,
                     "num_inference_steps": 30,
