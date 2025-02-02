@@ -1040,23 +1040,41 @@ nationality_mapping = {
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
-    if not use_openai:
-        detected_nationality = None
-        detected_gender = None
-        
+    if use_openai:
+        print("🤖 Using OpenAI prompt generator")
+        try:
+            enhanced_prompt = generate_openai_prompt(prompt_text)
+            if enhanced_prompt:
+                print(f"✅ OpenAI enhanced prompt: {enhanced_prompt}")
+                return enhanced_prompt
+            return prompt_text  # Si OpenAI falla, usar el prompt original
+        except Exception as e:
+            print(f"❌ OpenAI error: {str(e)}")
+            return prompt_text
+    else:
+        # Cargar ethnic.json al inicio
+        try:
+            with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+                ethnic_data = json.load(f)
+        except Exception as e:
+            print(f"❌ Error loading ethnic.json: {str(e)}")
+            return prompt_text
+
         # Dividir el texto en palabras
         words = prompt_text.lower().split()
         
         # Detectar nacionalidad - buscar palabras completas
+        detected_nationality = None
         for nationality in nationality_mapping.keys():
-            if nationality in words:  # Buscar palabra completa
+            if nationality in words:
                 detected_nationality = nationality_mapping[nationality]
                 print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
                 break
         
         if not detected_nationality:
             print("❌ No nationality detected")
-        
+            return prompt_text
+
         # Detectar género
         if any(word in words for word in ["woman", "girl", "female", "she", "her"]):
             detected_gender = "female"
@@ -1064,50 +1082,37 @@ def transform_prompt(prompt_text, use_openai=False):
         elif any(word in words for word in ["man", "boy", "male", "he", "his"]):
             detected_gender = "male"
             print("✅ Detected gender: male")
-        
-        if not detected_gender:
+        else:
             print("❌ No gender detected")
+            return prompt_text
 
-        if detected_nationality and detected_gender:
-            try:
-                print(f"🔍 Looking up ethnic data for: {detected_nationality}")
-                characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
-                print(f"✅ Found characteristics: {characteristics}")
-                size_info = calculate_body_size(detected_nationality, detected_gender, prompt_text)
-                print(f"✅ Found size info: {size_info}")
-                
-                if characteristics and size_info:
-                    facial_features_text = ", ".join(characteristics['facial_features'])
-                    height_cm = round(size_info["height"] * 100)
-                    weight_kg = round(size_info["weight"])
-                    size_text = f", {height_cm}cm tall, {weight_kg}kg"
-                    
-                    enhanced_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-                    return enhanced_prompt
-            except Exception as e:
-                print(f"Error processing ethnic data: {str(e)}")
+        try:
+            print(f"🔍 Looking up ethnic data for: {detected_nationality}")
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+            if not characteristics:
+                print("❌ No ethnic characteristics found")
                 return prompt_text
-        
-        return prompt_text
 
+            print(f"✅ Found characteristics: {characteristics}")
+            
+            facial_features_text = ", ".join(characteristics['facial_features'])
+            
+            # Mantener el prompt original y añadir las características
+            enhanced_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features_text}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+            
+            print(f"✅ Enhanced prompt: {enhanced_prompt}")
+            return enhanced_prompt
+            
+        except Exception as e:
+            print(f"❌ Error processing ethnic data: {str(e)}")
+            return prompt_text
 
 def generate_openai_prompt(prompt_text):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
-                When the prompt includes a nationality, you MUST:
-                1. Detect the nationality and include appropriate ethnic features
-                2. Use skin tones, hair colors, eye colors typical of that ethnicity
-                3. Include appropriate facial features
-                4. Keep descriptions respectful and accurate
-                
-                For all prompts:
-                1. Enhance visual details
-                2. Keep language clear and direct
-                3. Focus on visual elements
-                4. Maintain the original intent"""},
+                {"role": "system", "content": get_content_for_people()},
                 {"role": "user", "content": f"Enhance this image generation prompt: {prompt_text}"}
             ],
             temperature=0.7,
@@ -1116,12 +1121,13 @@ def generate_openai_prompt(prompt_text):
         
         if response and response.choices and len(response.choices) > 0:
             enhanced_prompt = response.choices[0].message.content
+            print(f"🤖 OpenAI enhanced prompt: {enhanced_prompt}")
             return enhanced_prompt
+        print("❌ No response from OpenAI")
         return prompt_text
         
     except Exception as e:
-        print(f"Error transforming prompt: {str(e)}")
-        logging.error(f"Full error details: {e}", exc_info=True)
+        print(f"❌ Error with OpenAI: {str(e)}")
         return prompt_text
 
 @app.route('/gpt-talk', methods=['POST'])
@@ -1996,22 +2002,30 @@ def generate_persona():
                 'version': "e489fed94f07ffa8037d3d31cc40e8539ea37f6a5d5275747eff6be384e511cb",
                 'keyword': "ANLG",
                 'params': {
-                    "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
+                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
                     "width": 768,
                     "height": 768,
-                    "num_inference_steps": 50,
-                    "guidance_scale": 7.5
+                    "num_inference_steps": 28,
+                    "guidance_scale": 7.5,
+                    "model": "dev",
+                    "lora_scale": 1,
+                    "extra_lora_scale": 1,
+                    "num_inference_steps": 28
                 }
             },
             'disposable': {
                 'version': "4c851c9ca3c1167df599c400a277dc2b20b0ad166afc5c5d691e5bb64c46c254",
                 'keyword': "DISP",
                 'params': {
-                    "negative_prompt": "ugly, disfigured, low quality, blurry, nsfw",
+                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
                     "width": 768,
                     "height": 768,
-                    "num_inference_steps": 50,
-                    "guidance_scale": 7.5
+                    "num_inference_steps": 28,
+                    "guidance_scale": 7.5,
+                    "model": "dev",
+                    "lora_scale": 1,
+                    "extra_lora_scale": 1,
+                    "num_inference_steps": 28
                 }
             }
         }
