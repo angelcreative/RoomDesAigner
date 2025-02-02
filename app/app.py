@@ -2032,12 +2032,11 @@ def generate_persona():
                     "guidance_scale": 7.5,
                     "model": "dev",
                     "lora_scale": 1,
-                    "extra_lora_scale": 1,
-                    "num_inference_steps": 28
+                    "extra_lora_scale": 1
                 }
             },
             'disposable': {
-                'version': "4c851c9ca3c1167df599c400a277dc2b20b0ad166afc5c5d691e5bb64c46c254",
+                'version': "c24cb30c2405f5f1e8358de0fe4039a6ddc5c4b0e6d056d314f14e87bd40141e",
                 'keyword': "DISP",
                 'params': {
                     "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
@@ -2047,8 +2046,22 @@ def generate_persona():
                     "guidance_scale": 7.5,
                     "model": "dev",
                     "lora_scale": 1,
-                    "extra_lora_scale": 1,
-                    "num_inference_steps": 28
+                    "extra_lora_scale": 1
+                }
+            },
+            'flux': {
+                'version': "7df8cd78c8e3b06f1c7c2c8d2c9b3a0f2c9b3a0f2c9b3a0f2c9b3a0f2c9b3a0f",
+                'keyword': "FLUX",
+                'params': {
+                    "prompt": "",  # Se llenará con el prompt generado
+                    "negative_prompt": "ugly, deformed, noisy, blurry, distorted, grainy",
+                    "width": 768,
+                    "height": 768,
+                    "num_inference_steps": 30,
+                    "guidance_scale": 7.5,
+                    "seed": -1,  # -1 para aleatorio
+                    "num_outputs": 1,
+                    "scheduler": "DPM++ 2M Karras"
                 }
             }
         }
