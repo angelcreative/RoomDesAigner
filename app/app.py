@@ -1040,51 +1040,102 @@ nationality_mapping = {
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
-    if use_openai:
-        print("🤖 Using OpenAI prompt generator")
-        enhanced_prompt = generate_openai_prompt(prompt_text)
-        return enhanced_prompt if enhanced_prompt else prompt_text
-    
-    # Si no usamos OpenAI, procesamos el prompt con ethnic.json
+    # Cargar ethnic.json
     try:
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
-            
-        words = prompt_text.lower().split()
-        for nationality in nationality_mapping:
-            if nationality in words:
-                country = nationality_mapping[nationality]
-                characteristics = get_ethnic_characteristics(country, ethnic_data)
-                if characteristics:
-                    facial_features = ", ".join(characteristics['facial_features'])
-                    return f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {facial_features}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
     except Exception as e:
-        print(f"Error processing ethnic data: {str(e)}")
+        print(f"❌ Error loading ethnic.json: {str(e)}")
+        return f"{prompt_text}, TOK"
+
+    # Detectar nacionalidad
+    words = prompt_text.lower().split()
+    detected_nationality = None
+    for nationality in nationality_mapping:
+        if nationality in words:
+            detected_nationality = nationality_mapping[nationality]
+            print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
+            break
+
+    if detected_nationality:
+        # Obtener características étnicas basadas en probabilidad
+        characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+        if characteristics:
+            # Construir el prompt base con características étnicas
+            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+            
+            # Si usa OpenAI, mejorar el prompt
+            if use_openai:
+                enhanced_prompt = generate_openai_prompt(ethnic_prompt)
+                return f"{enhanced_prompt}, TOK" if enhanced_prompt else f"{ethnic_prompt}, TOK"
+            
+            # Si no usa OpenAI, devolver el prompt étnico directamente
+            return f"{ethnic_prompt}, TOK"
     
-    return prompt_text
+    # Si no hay nacionalidad o falla algo, devolver el prompt original
+    if use_openai:
+        enhanced_prompt = generate_openai_prompt(prompt_text)
+        return f"{enhanced_prompt}, TOK" if enhanced_prompt else f"{prompt_text}, TOK"
+    
+    return f"{prompt_text}, TOK"
+
+def get_ethnic_characteristics(country, ethnic_data):
+    """Selecciona características étnicas basadas en probabilidades demográficas"""
+    
+    # Obtener datos del país
+    country_data = ethnic_data['countries'].get(country)
+    if not country_data:
+        print(f"❌ No data found for {country}")
+        return None
+
+    # Convertir etnias a lista con sus porcentajes
+    ethnicities = []
+    for name, percentage in country_data['ethnicities'].items():
+        ethnic_type = country_data['ethnic_references'].get(name)
+        if ethnic_type in ethnic_data['ethnic_types']:
+            ethnicities.append({
+                'name': name,
+                'percentage': float(percentage),
+                'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
+                'ethnic_type': ethnic_type
+            })
+
+    if not ethnicities:
+        return None
+
+    # Seleccionar etnia basada en porcentajes
+    weights = [e['percentage'] for e in ethnicities]
+    selected = random.choices(ethnicities, weights=weights, k=1)[0]
+    print(f"✅ Selected ethnicity: {selected['name']} ({selected['percentage']}%)")
+
+    # Seleccionar características aleatorias de la etnia seleccionada
+    return {
+        'skin_tone': random.choice(selected['features']['skin_tones']),
+        'hair_color': random.choice(selected['features']['hair_colors']),
+        'eye_color': random.choice(selected['features']['eye_colors']),
+        'facial_features': selected['features']['facial_features'],
+        'ethnic_description': f"of {selected['ethnic_type'].replace('_', ' ')} heritage with {selected['ethnic_type'].replace('_', ' ')} features"
+    }
 
 def generate_openai_prompt(prompt_text):
+    """Mejora el prompt usando OpenAI manteniendo las características étnicas"""
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": get_content_for_people()},
-                {"role": "user", "content": f"Enhance this image generation prompt: {prompt_text}"}
+                {"role": "user", "content": f"Enhance this image generation prompt while maintaining all ethnic and physical characteristics: {prompt_text}"}
             ],
             temperature=0.7,
             max_tokens=150
         )
         
         if response and response.choices and len(response.choices) > 0:
-            enhanced_prompt = response.choices[0].message.content
-            print(f"🤖 OpenAI enhanced prompt: {enhanced_prompt}")
-            return enhanced_prompt
-        print("❌ No response from OpenAI")
-        return prompt_text
-        
+            return response.choices[0].message.content
+        return None
     except Exception as e:
         print(f"❌ Error with OpenAI: {str(e)}")
-        return prompt_text
+        return None
 
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
