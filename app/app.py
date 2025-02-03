@@ -1191,7 +1191,7 @@ def gpt_talk():
         # Añadimos los mensajes previos del historial de conversación
         for msg in conversation:
             messages.append({
-                "role": msg['role'],  # 'user' o 'assistant'
+                "role": msg['role'],  # 'user' o egg 'assistant'
                 "content": msg['content']
             })
 
