@@ -2085,16 +2085,18 @@ def generate_persona():
             )
             prediction = response.json()
             
+
             if prediction['status'] == 'succeeded':
                 return jsonify({
-                    "status": "succeeded",
-                    "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output']
-                }), 200
+                "status": "succeeded",
+                "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
+                "final_prompt": final_prompt.replace(config['keyword'], '').strip()  # Eliminar keyword
+            }), 200
             elif prediction['status'] == 'failed':
                 raise Exception("Image generation failed")
                 
             time.sleep(1)
-
+        
     except Exception as e:
         print(f"Error in generate-persona: {str(e)}")
         return jsonify({"error": str(e)}), 500

@@ -305,6 +305,131 @@
                 aspect-ratio: 1;
             }
         }
+
+        .preview-box {
+    position: relative;
+}
+
+.image-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.preview-box:hover .image-controls {
+    opacity: 1;
+}
+
+.control-button {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s ease;
+    position: relative;
+}
+
+.control-button:hover {
+    transform: scale(1.1);
+}
+
+
+
+.control-button:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* Modales */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bunker-900);
+    border-radius: 12px;
+    padding: 24px;
+    margin: auto;
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+    overflow: auto;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--bunker-400);
+    cursor: pointer;
+    font-size: 24px;
+}
+
+/* Modal específico para imagen */
+.image-modal .modal-content {
+    padding: 0;
+    background: none;
+}
+
+
+.image-modal img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+/* Modal específico para prompt */
+.prompt-modal .modal-content {
+    width: 600px;
+}
+
+.prompt-text {
+    background: var(--bunker-800);
+    padding: 16px;
+    border-radius: 8px;
+    color: var(--bunker-100);
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
     </style>
     
     
@@ -389,6 +514,22 @@
         </div>
     </div>
 
+    <!-- Modal info -->
+<div class="modal prompt-modal">
+    <div class="modal-content">
+        <button class="modal-close">×</button>
+        <h3>Generated Prompt</h3>
+        <div class="prompt-text"></div>
+    </div>
+</div>
+
+<div class="modal image-modal">
+    <div class="modal-content">
+        <button class="modal-close">×</button>
+        <img src="" alt="Full size image">
+    </div>
+</div>
+
     <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -437,14 +578,21 @@
                 
                 box.innerHTML = `
                     <div class="preview-placeholder">
-                        <span class="material-symbols-outlined">image</span>
-                        <p>Image will be generated here</p>
-                    </div>
-                    <div class="spinner-container" style="display: none;">
-                        <div class="spinner"></div>
-                    </div>
-                    <img src="" alt="Generated image">
+        <span class="material-symbols-outlined">image</span>
+        <p>Image will be generated here</p>
+    </div>
+    <div class="spinner-container" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+    <div class="image-controls">
+        <button class="control-button prompt-btn" data-tooltip="See prompt">✏️</button>
+        <button class="control-button flag-btn" data-tooltip=""></button>
+        <button class="control-button zoom-btn" data-tooltip="Zoom">🔍</button>
+    </div>
+    <img src="" alt="Generated image">
                 `;
+
+     
                 
                 newGrid.appendChild(box);
                 
@@ -495,6 +643,11 @@
                         img.onload = () => {
                             spinner.style.display = 'none';
                             box.classList.add('loaded');
+
+                            // Extraer nacionalidad del prompt
+                            const nationality = extractNationality(prompt);
+                            // Inicializar controles con el prompt final y la nacionalidad
+                            setupImageControls(box, data.final_prompt, nationality);
                         };
                     } else {
                         throw new Error(data.error || 'Generation failed');
@@ -515,6 +668,1900 @@
             // Event Listeners
             createButton?.addEventListener('click', generateImages);
         });
+
+        // Añadir el manejo de eventos
+        function setupImageControls(box, prompt, nationality) {
+            const promptBtn = box.querySelector('.prompt-btn');
+            const flagBtn = box.querySelector('.flag-btn');
+            const zoomBtn = box.querySelector('.zoom-btn');
+            const img = box.querySelector('img');
+
+            // Configurar bandera y tooltip
+            const countryCode = getCountryCode(nationality); // Función helper
+            flagBtn.textContent = getFlagEmoji(countryCode);
+            flagBtn.setAttribute('data-tooltip', nationality.replace('_', ' '));
+
+            // Manejadores de eventos
+            promptBtn.onclick = () => showPromptModal(prompt);
+            zoomBtn.onclick = () => showImageModal(img.src);
+        }
+
+        // Funciones helper
+        function getFlagEmoji(countryCode) {
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        }
+
+         // Función helper para extraer nacionalidad del prompt
+         function extractNationality(prompt) {
+            const words = prompt.toLowerCase().split(' ');
+            for (const word of words) {
+                if (nationality_mapping && nationality_mapping[word]) {
+                    return nationality_mapping[word];
+                }
+            }
+            return 'unknown';
+        }
+
+        function showPromptModal(prompt) {
+            const modal = document.querySelector('.prompt-modal');
+            modal.querySelector('.prompt-text').textContent = prompt;
+            modal.classList.add('active');
+        }
+
+        function showImageModal(src) {
+            const modal = document.querySelector('.image-modal');
+            modal.querySelector('img').src = src;
+            modal.classList.add('active');
+        }
+
+
+
+// MAPEO PARA BANDERAS Y MODALES Definir el nationality_mapping al inicio del archivo
+const nationality_mapping = {
+    //Afganistán
+    'afghan': 'afghanistan',
+    'afghanistan': 'afghanistan',
+    
+    //Albania
+    'albanian': 'albania',
+    'albania': 'albania',
+    
+    //Argelia
+    'algerian': 'algeria',
+    'algeria': 'algeria',
+    
+    //Andorra
+    'andorran': 'andorra',
+    'andorra': 'andorra',
+    
+    //Angola
+    'angolan': 'angola',
+    'angola': 'angola',
+    
+    //Antigua y Barbuda
+    'antiguan': 'antigua_and_barbuda',
+    'antigua_and_barbuda': 'antigua_and_barbuda',
+    
+    //Argentina
+    'argentinian': 'argentina',
+    'argentina': 'argentina',
+    
+    //Armenia
+    'armenian': 'armenia',
+    'armenia': 'armenia',
+    
+    //Australia
+    'australian': 'australia',
+    'australia': 'australia',
+    
+    //Austria
+    'austrian': 'austria',
+    'austria': 'austria',
+    
+    //Azerbaiyán
+    'azerbaijani': 'azerbaijan',
+    'azerbaijan': 'azerbaijan',
+    
+    //Bahamas
+    'bahamian': 'bahamas',
+    'bahamas': 'bahamas',
+    
+    //Bahrein
+    'bahraini': 'bahrain',
+    'bahrain': 'bahrain',
+    
+    //Bangladesh
+    'bangladeshi': 'bangladesh',
+    'bangladesh': 'bangladesh',
+    
+    //Barbados
+    'barbadian': 'barbados',
+    'barbados': 'barbados',
+    
+    //Bielorrusia
+    'belarusian': 'belarus',
+    'belarus': 'belarus',
+    
+    //Bélgica
+    'belgian': 'belgium',
+    'belgium': 'belgium',
+    
+    //Belice
+    'belizean': 'belize',
+    'belize': 'belize',
+    
+    //Benin
+    'beninese': 'benin',
+    'benin': 'benin',
+    
+    //Bhután
+    'bhutanese': 'bhutan',
+    'bhutan': 'bhutan',
+    
+    //Bolivia
+    'bolivian': 'bolivia',
+    'bolivia': 'bolivia',
+    
+    //Bosnia y Herzegovina
+    'bosnian': 'bosnia_and_herzegovina',
+    'bosnia_and_herzegovina': 'bosnia_and_herzegovina',
+    
+    //Botswana
+    'botswanan': 'botswana',
+    'botswana': 'botswana',
+    
+    //Brasil
+    'brazilian': 'brazil',
+    'brazil': 'brazil',
+    
+    //Brunei
+    'bruneian': 'brunei',
+    'brunei': 'brunei',
+    
+    //Bulgaria
+    'bulgarian': 'bulgaria',
+    'bulgaria': 'bulgaria',
+    
+    //Burkina Faso
+    'burkinabe': 'burkina_faso',
+    'burkina_faso': 'burkina_faso',
+    
+    //Burundi
+    'burundian': 'burundi',
+    'burundi': 'burundi',
+    
+    //Camboya
+    'cambodian': 'cambodia',
+    'cambodia': 'cambodia',
+    
+    //Camerún
+    'cameroonian': 'cameroon',
+    'cameroon': 'cameroon',
+    
+    //Canadá
+    'canadian': 'canada',
+    'canada': 'canada',
+    
+    //Cabo Verde
+    'cape_verdean': 'cape_verde',
+    'cape_verde': 'cape_verde',
+    
+    //República Centroafricana
+    'central_african': 'central_african_republic',
+    'central_african_republic': 'central_african_republic',
+    
+    //Chad
+    'chadian': 'chad',
+    'chad': 'chad',
+    
+    //Chile
+    'chilean': 'chile',
+    'chile': 'chile',
+    
+    //China
+    'chinese': 'china',
+    'china': 'china',
+    
+    //Colombia
+    'colombian': 'colombia',
+    'colombia': 'colombia',
+    
+    //Comoras
+    'comorian': 'comoros',
+    'comoros': 'comoros',
+    
+    //Congo
+    'congolese': 'congo',
+    'congo': 'congo',
+    
+    //Costa Rica
+    'costa_rican': 'costa_rica',
+    'costa_rica': 'costa_rica',
+    
+    //Croacia
+    'croatian': 'croatia',
+    'croatia': 'croatia',
+    
+    //Cuba
+    'cuban': 'cuba',
+    'cuba': 'cuba',
+    
+    //Chipre
+    'cypriot': 'cyprus',
+    'cyprus': 'cyprus',
+    
+    //República Checa
+    'czech': 'czech_republic',
+    'czech_republic': 'czech_republic',
+    
+    //Dinamarca
+    'danish': 'denmark',
+    'denmark': 'denmark',
+    
+    //Yibuti
+    'djiboutian': 'djibouti',
+    'djibouti': 'djibouti',
+    
+    //Dominica
+    'dominican': 'dominica',
+    'dominica': 'dominica',
+    
+    //República Dominicana
+    'dominican_republic': 'dominican_republic',
+    
+    //Timor Oriental
+    'east_timorese': 'east_timor',
+    'east_timor': 'east_timor',
+    
+    //Ecuador
+    'ecuadorian': 'ecuador',
+    'ecuador': 'ecuador',
+    
+    //Egipto
+    'egyptian': 'egypt',
+    'egypt': 'egypt',
+    
+    //El Salvador
+    'salvadoran': 'el_salvador',
+    'el_salvador': 'el_salvador',
+    
+    //Guinea Ecuatorial
+    'equatorial_guinean': 'equatorial_guinea',
+    'equatorial_guinea': 'equatorial_guinea',
+    
+    //Eritrea
+    'eritrean': 'eritrea',
+    'eritrea': 'eritrea',
+    
+    //Estonia
+    'estonian': 'estonia',
+    'estonia': 'estonia',
+    
+    //Etiopía
+    'ethiopian': 'ethiopia',
+    'ethiopia': 'ethiopia',
+    
+    //Fiji
+    'fijian': 'fiji',
+    'fiji': 'fiji',
+    
+    //Finlandia
+    'finnish': 'finland',
+    'finland': 'finland',
+    
+    //Francia
+    'french': 'france',
+    'france': 'france',
+    
+    //Gabón
+    'gabonese': 'gabon',
+    'gabon': 'gabon',
+    
+    //Gambia
+    'gambian': 'gambia',
+    'gambia': 'gambia',
+    
+    //Georgia
+    'georgian': 'georgia',
+    'georgia': 'georgia',
+    
+    //Alemania
+    'german': 'germany',
+    'germany': 'germany',
+    
+    //Ghana
+    'ghanaian': 'ghana',
+    'ghana': 'ghana',
+    
+    //Grecia
+    'greek': 'greece',
+    'greece': 'greece',
+    
+    //Granada
+    'grenadian': 'grenada',
+    'grenada': 'grenada',
+    
+    //Guatemala
+    'guatemalan': 'guatemala',
+    'guatemala': 'guatemala',
+    
+    //Guinea
+    'guinean': 'guinea',
+    'guinea': 'guinea',
+    
+    //Guinea-Bissau
+    'bissau_guinean': 'guinea_bissau',
+    'guinea_bissau': 'guinea_bissau',
+    
+    //Guyana
+    'guyanese': 'guyana',
+    'guyana': 'guyana',
+    
+    //Haití
+    'haitian': 'haiti',
+    'haiti': 'haiti',
+    
+    //Honduras
+    'honduran': 'honduras',
+    'honduras': 'honduras',
+    
+    //Hungría
+    'hungarian': 'hungary',
+    'hungary': 'hungary',
+    
+    //Islandia
+    'icelandic': 'iceland',
+    'iceland': 'iceland',
+    
+    //India
+    'indian': 'india',
+    'india': 'india',
+    
+    //Indonesia
+    'indonesian': 'indonesia',
+    'indonesia': 'indonesia',
+    
+    //Irán
+    'iranian': 'iran',
+    'iran': 'iran',
+    
+    //Iraq
+    'iraqi': 'iraq',
+    'iraq': 'iraq',
+    
+    //Irlanda
+    'irish': 'ireland',
+    'ireland': 'ireland',
+    
+    //Israel
+    'israeli': 'israel',
+    'israel': 'israel',
+    
+    //Italia
+    'italian': 'italy',
+    'italy': 'italy',
+    
+    //Jamaica
+    'jamaican': 'jamaica',
+    'jamaica': 'jamaica',
+    
+    //Japón
+    'japanese': 'japan',
+    'japan': 'japan',
+    
+    //Jordania
+    'jordanian': 'jordan',
+    'jordan': 'jordan',
+    
+    //Kazajistán
+    'kazakh': 'kazakhstan',
+    'kazakhstan': 'kazakhstan',
+    
+    //Kenia
+    'kenyan': 'kenya',
+    'kenya': 'kenya',
+    
+    //Kiribati
+    'i_kiribati': 'kiribati',
+    'kiribati': 'kiribati',
+    
+    //Corea del Norte
+    'north_korean': 'north_korea',
+    'north_korea': 'north_korea',
+    
+    //Corea del Sur
+    'south_korean': 'south_korea',
+    'south_korea': 'south_korea',
+    
+    //Kuwait
+    'kuwaiti': 'kuwait',
+    'kuwait': 'kuwait',
+    
+    //Kirguistán
+    'kyrgyz': 'kyrgyzstan',
+    'kyrgyzstan': 'kyrgyzstan',
+    
+    //Laos
+    'laotian': 'laos',
+    'laos': 'laos',
+    
+    //Letonia
+    'latvian': 'latvia',
+    'latvia': 'latvia',
+    
+    //Líbano
+    'lebanese': 'lebanon',
+    'lebanon': 'lebanon',
+    
+    //Lesoto
+    'basotho': 'lesotho',
+    'lesotho': 'lesotho',
+    
+    //Liberia
+    'liberian': 'liberia',
+    'liberia': 'liberia',
+    
+    //Libia
+    'libyan': 'libya',
+    'libya': 'libya',
+    
+    //Liechtenstein
+    'liechtensteiner': 'liechtenstein',
+    'liechtenstein': 'liechtenstein',
+    
+    //Lituania
+    'lithuanian': 'lithuania',
+    'lithuania': 'lithuania',
+    
+    //Luxemburgo
+    'luxembourger': 'luxembourg',
+    'luxembourg': 'luxembourg',
+    
+    //Macedonia del Norte
+    'macedonian': 'north_macedonia',
+    'north_macedonia': 'north_macedonia',
+    
+    //Madagascar
+    'malagasy': 'madagascar',
+    'madagascar': 'madagascar',
+    
+    //Malawi
+    'malawian': 'malawi',
+    'malawi': 'malawi',
+    
+    //Malasia
+    'malaysian': 'malaysia',
+    'malaysia': 'malaysia',
+    
+    //Maldivas
+    'maldivian': 'maldives',
+    'maldives': 'maldives',
+    
+    //Mali
+    'malian': 'mali',
+    'mali': 'mali',
+    
+    //Malta
+    'maltese': 'malta',
+    'malta': 'malta',
+    
+    //Islas Marshall
+    'marshallese': 'marshall_islands',
+    'marshall_islands': 'marshall_islands',
+    
+    //Mauritania
+    'mauritanian': 'mauritania',
+    'mauritania': 'mauritania',
+    
+    //Mauricio
+    'mauritian': 'mauritius',
+    'mauritius': 'mauritius',
+    
+    //México
+    'mexican': 'mexico',
+    'mexico': 'mexico',
+    
+    //Micronesia
+    'micronesian': 'micronesia',
+    'micronesia': 'micronesia',
+    
+    //Moldavia
+    'moldovan': 'moldova',
+    'moldova': 'moldova',
+    
+    //Mónaco
+    'monacan': 'monaco',
+    'monaco': 'monaco',
+    
+    //Mongolia
+    'mongolian': 'mongolia',
+    'mongolia': 'mongolia',
+    
+    //Montenegro
+    'montenegrin': 'montenegro',
+    'montenegro': 'montenegro',
+    
+    //Marruecos
+    'moroccan': 'morocco',
+    'morocco': 'morocco',
+    
+    //Mozambique
+    'mozambican': 'mozambique',
+    'mozambique': 'mozambique',
+    
+    //Myanmar (Birmania)
+    'myanmar': 'myanmar',
+    'burmese': 'myanmar',
+    
+    //Namibia
+    'namibian': 'namibia',
+    'namibia': 'namibia',
+    
+    //Nauru
+    'nauruan': 'nauru',
+    'nauru': 'nauru',
+    
+    //Nepal
+    'nepalese': 'nepal',
+    'nepali': 'nepal',
+    'nepal': 'nepal',
+    
+    //Países Bajos
+    'dutch': 'netherlands',
+    'netherlands': 'netherlands',
+    
+    //Nueva Zelanda
+    'new_zealander': 'new_zealand',
+    'new_zealand': 'new_zealand',
+    
+    //Nicaragua
+    'nicaraguan': 'nicaragua',
+    'nicaragua': 'nicaragua',
+    
+    //Níger
+    'nigerien': 'niger',
+    'niger': 'niger',
+    
+    //Nigeria
+    'nigerian': 'nigeria',
+    'nigeria': 'nigeria',
+    
+    //Noruega
+    'norwegian': 'norway',
+    'norway': 'norway',
+    
+    //Omán
+    'omani': 'oman',
+    'oman': 'oman',
+    
+    //Pakistán
+    'pakistani': 'pakistan',
+    'pakistan': 'pakistan',
+    
+    //Palau
+    'palauan': 'palau',
+    'palau': 'palau',
+    
+    //Palestina
+    'palestinian': 'palestine',
+    'palestine': 'palestine',
+    
+    //Panamá
+    'panamanian': 'panama',
+    'panama': 'panama',
+    
+    //Papúa Nueva Guinea
+    'papua_new_guinean': 'papua_new_guinea',
+    'papua_new_guinea': 'papua_new_guinea',
+    
+    //Paraguay
+    'paraguayan': 'paraguay',
+    'paraguay': 'paraguay',
+    
+    //Perú
+    'peruvian': 'peru',
+    'peru': 'peru',
+    
+    //Filipinas
+    'filipino': 'philippines',
+    'philippines': 'philippines',
+    
+    //Polonia
+    'polish': 'poland',
+    'poland': 'poland',
+    
+    //Portugal
+    'portuguese': 'portugal',
+    'portugal': 'portugal',
+    
+    //Qatar
+    'qatari': 'qatar',
+    'qatar': 'qatar',
+    
+    //Rumania
+    'romanian': 'romania',
+    'romania': 'romania',
+    
+    //Rusia
+    'russian': 'russia',
+    'russia': 'russia',
+    
+    //Ruanda
+    'rwandan': 'rwanda',
+    'rwanda': 'rwanda',
+    
+    //San Cristóbal y Nieves
+    'kittitian': 'saint_kitts_and_nevis',
+    'saint_kitts_and_nevis': 'saint_kitts_and_nevis',
+    
+    //Santa Lucía
+    'saint_lucian': 'saint_lucia',
+    'saint_lucia': 'saint_lucia',
+    
+    //San Vicente y las Granadinas
+    'vincentian': 'saint_vincent_and_the_grenadines',
+    'saint_vincent_and_the_grenadines': 'saint_vincent_and_the_grenadines',
+    
+    //Samoa
+    'samoan': 'samoa',
+    'samoa': 'samoa',
+    
+    //San Marino
+    'sammarinese': 'san_marino',
+    'san_marino': 'san_marino',
+    
+    //Santo Tomé y Príncipe
+    'sao_tomean': 'sao_tome_and_principe',
+    'sao_tome_and_principe': 'sao_tome_and_principe',
+    
+    //Arabia Saudita
+    'saudi': 'saudi_arabia',
+    'saudi_arabia': 'saudi_arabia',
+    
+    //Senegal
+    'senegalese': 'senegal',
+    'senegal': 'senegal',
+    
+    //Serbia
+    'serbian': 'serbia',
+    'serbia': 'serbia',
+    
+    //Seychelles
+    'seychellois': 'seychelles',
+    'seychelles': 'seychelles',
+    
+    //Sierra Leona
+    'sierra_leonean': 'sierra_leone',
+    'sierra_leone': 'sierra_leone',
+    
+    //Singapur
+    'singaporean': 'singapore',
+    'singapore': 'singapore',
+    
+    //Eslovaquia
+    'slovak': 'slovakia',
+    'slovakia': 'slovakia',
+    
+    //Eslovenia
+    'slovenian': 'slovenia',
+    'slovenia': 'slovenia',
+    
+    //Islas Salomón
+    'solomon_islander': 'solomon_islands',
+    'solomon_islands': 'solomon_islands',
+    
+    //Somalia
+    'somali': 'somalia',
+    'somalia': 'somalia',
+    
+    //Sudáfrica
+    'south_african': 'south_africa',
+    'south_africa': 'south_africa',
+    
+    //Sudán del Sur
+    'south_sudanese': 'south_sudan',
+    'south_sudan': 'south_sudan',
+    
+    //España
+    'spanish': 'spain',
+    'spain': 'spain',
+    
+    //Sri Lanka
+    'sri_lankan': 'sri_lanka',
+    'sri_lanka': 'sri_lanka',
+    
+    //Sudán
+    'sudanese': 'sudan',
+    'sudan': 'sudan',
+    
+    //Surinam
+    'surinamese': 'suriname',
+    'suriname': 'suriname',
+    
+    //Suecia
+    'swedish': 'sweden',
+    'sweden': 'sweden',
+    
+    //Suiza
+    'swiss': 'switzerland',
+    'switzerland': 'switzerland',
+    
+    //Siria
+    'syrian': 'syria',
+    'syria': 'syria',
+    
+    //Taiwán
+    'taiwanese': 'taiwan',
+    'taiwan': 'taiwan',
+    
+    //Tayikistán
+    'tajik': 'tajikistan',
+    'tajikistan': 'tajikistan',
+    
+    //Tanzania
+    'tanzanian': 'tanzania',
+    'tanzania': 'tanzania',
+    
+    //Tailandia
+    'thai': 'thailand',
+    'thailand': 'thailand',
+    
+    //Togo
+    'togolese': 'togo',
+    'togo': 'togo',
+    
+    //Tonga
+    'tongan': 'tonga',
+    'tonga': 'tonga',
+    
+    //Trinidad y Tobago
+    'trinidadian': 'trinidad_and_tobago',
+    'trinidad_and_tobago': 'trinidad_and_tobago',
+    
+    //Túnez
+    'tunisian': 'tunisia',
+    'tunisia': 'tunisia',
+    
+    //Turquía
+    'turkish': 'turkey',
+    'turkey': 'turkey',
+    
+    //Turkmenistán
+    'turkmen': 'turkmenistan',
+    'turkmenistan': 'turkmenistan',
+    
+    //Tuvalu
+    'tuvaluan': 'tuvalu',
+    'tuvalu': 'tuvalu',
+    
+    //Uganda
+    'ugandan': 'uganda',
+    'uganda': 'uganda',
+    
+    //Ucrania
+    'ukrainian': 'ukraine',
+    'ukraine': 'ukraine',
+    
+    //Emiratos Árabes Unidos
+    'emirati': 'united_arab_emirates',
+    'united_arab_emirates': 'united_arab_emirates',
+    
+    //Variaciones para inglés/británico
+    "english": "united_kingdom",
+    "british": "united_kingdom",
+    "uk": "united_kingdom",
+    "united_kingdom": "united_kingdom",
+
+    //Ciudades UK
+    "london": "united_kingdom",
+    "manchester": "united_kingdom",
+    "liverpool": "united_kingdom",
+    "birmingham": "united_kingdom",
+    "leeds": "united_kingdom",
+    "glasgow": "united_kingdom",
+    "edinburgh": "united_kingdom",
+    "cardiff": "united_kingdom",
+    "belfast": "united_kingdom",
+    "sheffield": "united_kingdom",
+    "bristol": "united_kingdom",
+    "oxford": "united_kingdom",
+    "nottingham": "united_kingdom",
+    "leicester": "united_kingdom",
+    "coventry": "united_kingdom",
+    "peterborough": "united_kingdom",
+    "wolverhampton": "united_kingdom",
+    "swansea": "united_kingdom",
+    "newcastle": "united_kingdom",
+    "bournemouth": "united_kingdom",
+    "brighton": "united_kingdom",
+    "milton_keynes": "united_kingdom",
+   
+    
+    //Variaciones para americano/estadounidense
+    "american": "united_states",
+    "usa": "united_states",
+    "us": "united_states",
+    "united_states": "united_states",
+
+    //Ciudades USA
+    "new_york": "united_states",
+    "nyc": "united_states",
+    "los_angeles": "united_states",
+    "la": "united_states",
+    "chicago": "united_states",
+    "houston": "united_states",
+    "miami": "united_states",
+    "boston": "united_states",
+    "seattle": "united_states",
+    "san_francisco": "united_states",
+    "las_vegas": "united_states",
+    "washington": "united_states",
+    "dallas": "united_states",
+    "atlanta": "united_states",
+    "philadelphia": "united_states",
+    "san_diego": "united_states",
+    "san_jose": "united_states",
+    "austin": "united_states",
+    "san_antonio": "united_states",
+   
+
+
+    //Reino Unido
+    'british': 'united_kingdom',
+    'uk': 'united_kingdom',
+    'english': 'united_kingdom',
+    'scottish': 'united_kingdom',
+    'welsh': 'united_kingdom',
+    'united_kingdom': 'united_kingdom',
+    
+    //Estados Unidos
+    'american': 'united_states',
+    'usa': 'united_states',
+    'us': 'united_states',
+    'united_states': 'united_states',
+    
+    //Uruguay
+    'uruguayan': 'uruguay',
+    'uruguay': 'uruguay',
+    
+    //Uzbekistán
+    'uzbek': 'uzbekistan',
+    'uzbekistan': 'uzbekistan',
+    
+    //Vanuatu
+    'ni_vanuatu': 'vanuatu',
+    'vanuatu': 'vanuatu',
+    
+    //Ciudad del Vaticano
+    'vatican': 'vatican_city',
+    'vatican_city': 'vatican_city',
+    
+    //Venezuela
+    'venezuelan': 'venezuela',
+    'venezuela': 'venezuela',
+    
+    //Vietnam
+    'vietnamese': 'vietnam',
+    'vietnam': 'vietnam',
+    
+    //Yemen
+    'yemeni': 'yemen',
+    'yemen': 'yemen',
+    
+    //Zambia
+    'zambian': 'zambia',
+    'zambia': 'zambia',
+    
+    //Zimbabue
+    'zimbabwean': 'zimbabwe',
+    'zimbabwe': 'zimbabwe'
+}
+
+
+    // Mapeo de países a códigos ISO
+    const countryToISO = {
+        'afghanistan': 'af',
+        'albania': 'al',
+        'algeria': 'dz',
+        'andorra': 'ad',
+        'angola': 'ao',
+        'argentina': 'ar',
+        'armenia': 'am',
+        'australia': 'au',
+        'austria': 'at',
+        'azerbaijan': 'az',
+        'bahamas': 'bs',
+        'bahrain': 'bh',
+        'bangladesh': 'bd',
+        'belarus': 'by',
+        'belgium': 'be',
+        'belize': 'bz',
+        'benin': 'bj',
+        'bhutan': 'bt',
+        'bolivia': 'bo',
+        'bosnia_and_herzegovina': 'ba',
+        'brazil': 'br',
+        'brunei': 'bn',
+        'bulgaria': 'bg',
+        'burkina_faso': 'bf',
+        'burundi': 'bi',
+        'cambodia': 'kh',
+        'cameroon': 'cm',
+        'canada': 'ca',
+        'chile': 'cl',
+        'china': 'cn',
+        'colombia': 'co',
+        'congo': 'cg',
+        'costa_rica': 'cr',
+        'croatia': 'hr',
+        'cuba': 'cu',
+        'cyprus': 'cy',
+        'czech_republic': 'cz',
+        'denmark': 'dk',
+        'ecuador': 'ec',
+        'egypt': 'eg',
+        'el_salvador': 'sv',
+        'estonia': 'ee',
+        'ethiopia': 'et',
+        'fiji': 'fj',
+        'finland': 'fi',
+        'france': 'fr',
+        'georgia': 'ge',
+        'germany': 'de',
+        'ghana': 'gh',
+        'greece': 'gr',
+        'guatemala': 'gt',
+        'haiti': 'ht',
+        'honduras': 'hn',
+        'hungary': 'hu',
+        'iceland': 'is',
+        'india': 'in',
+        'indonesia': 'id',
+        'iran': 'ir',
+        'iraq': 'iq',
+        'ireland': 'ie',
+        'israel': 'il',
+        'italy': 'it',
+        'jamaica': 'jm',
+        'japan': 'jp',
+        'jordan': 'jo',
+        'kazakhstan': 'kz',
+        'kenya': 'ke',
+        'kuwait': 'kw',
+        'kyrgyzstan': 'kg',
+        'laos': 'la',
+        'latvia': 'lv',
+        'lebanon': 'lb',
+        'libya': 'ly',
+        'liechtenstein': 'li',
+        'lithuania': 'lt',
+        'luxembourg': 'lu',
+        'madagascar': 'mg',
+        'malaysia': 'my',
+        'maldives': 'mv',
+        'mali': 'ml',
+        'malta': 'mt',
+        'mexico': 'mx',
+        'moldova': 'md',
+        'monaco': 'mc',
+        'mongolia': 'mn',
+        'montenegro': 'me',
+        'morocco': 'ma',
+        'mozambique': 'mz',
+        'myanmar': 'mm',
+        'nepal': 'np',
+        'netherlands': 'nl',
+        'new_zealand': 'nz',
+        'nicaragua': 'ni',
+        'nigeria': 'ng',
+        'north_korea': 'kp',
+        'norway': 'no',
+        'oman': 'om',
+        'pakistan': 'pk',
+        'panama': 'pa',
+        'paraguay': 'py',
+        'peru': 'pe',
+        'philippines': 'ph',
+        'poland': 'pl',
+        'portugal': 'pt',
+        'qatar': 'qa',
+        'romania': 'ro',
+        'russia': 'ru',
+        'saudi_arabia': 'sa',
+        'senegal': 'sn',
+        'serbia': 'rs',
+        'singapore': 'sg',
+        'slovakia': 'sk',
+        'slovenia': 'si',
+        'somalia': 'so',
+        'south_africa': 'za',
+        'south_korea': 'kr',
+        'spain': 'es',
+        'sri_lanka': 'lk',
+        'sudan': 'sd',
+        'sweden': 'se',
+        'switzerland': 'ch',
+        'syria': 'sy',
+        'taiwan': 'tw',
+        'tajikistan': 'tj',
+        'tanzania': 'tz',
+        'thailand': 'th',
+        'tunisia': 'tn',
+        'turkey': 'tr',
+        'turkmenistan': 'tm',
+        'uganda': 'ug',
+        'ukraine': 'ua',
+        'united_arab_emirates': 'ae',
+        'united_kingdom': 'gb',
+        'united_states': 'us',
+        'uruguay': 'uy',
+        'uzbekistan': 'uz',
+        'venezuela': 've',
+        'vietnam': 'vn',
+        'yemen': 'ye',
+        'zambia': 'zm',
+        'zimbabwe': 'zw'
+    };
+
+    // Función helper para obtener el código de país
+    function getCountryCode(nationality) {
+        return countryToISO[nationality] || nationality.substring(0, 2);
+    }
+
+    // Añadir manejo de cierre de modales
+    document.querySelectorAll('.modal-close').forEach(button => {
+        button.onclick = () => {
+            button.closest('.modal').classList.remove('active');
+        };
+    });
+
+    // Cerrar modal al hacer clic fuera
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        };
+    });
+
+    </script>
+</body>
+</html> 
+    'austria': 'austria',
+    
+    //Azerbaiyán
+    'azerbaijani': 'azerbaijan',
+    'azerbaijan': 'azerbaijan',
+    
+    //Bahamas
+    'bahamian': 'bahamas',
+    'bahamas': 'bahamas',
+    
+    //Bahrein
+    'bahraini': 'bahrain',
+    'bahrain': 'bahrain',
+    
+    //Bangladesh
+    'bangladeshi': 'bangladesh',
+    'bangladesh': 'bangladesh',
+    
+    //Barbados
+    'barbadian': 'barbados',
+    'barbados': 'barbados',
+    
+    //Bielorrusia
+    'belarusian': 'belarus',
+    'belarus': 'belarus',
+    
+    //Bélgica
+    'belgian': 'belgium',
+    'belgium': 'belgium',
+    
+    //Belice
+    'belizean': 'belize',
+    'belize': 'belize',
+    
+    //Benin
+    'beninese': 'benin',
+    'benin': 'benin',
+    
+    //Bhután
+    'bhutanese': 'bhutan',
+    'bhutan': 'bhutan',
+    
+    //Bolivia
+    'bolivian': 'bolivia',
+    'bolivia': 'bolivia',
+    
+    //Bosnia y Herzegovina
+    'bosnian': 'bosnia_and_herzegovina',
+    'bosnia_and_herzegovina': 'bosnia_and_herzegovina',
+    
+    //Botswana
+    'botswanan': 'botswana',
+    'botswana': 'botswana',
+    
+    //Brasil
+    'brazilian': 'brazil',
+    'brazil': 'brazil',
+    
+    //Brunei
+    'bruneian': 'brunei',
+    'brunei': 'brunei',
+    
+    //Bulgaria
+    'bulgarian': 'bulgaria',
+    'bulgaria': 'bulgaria',
+    
+    //Burkina Faso
+    'burkinabe': 'burkina_faso',
+    'burkina_faso': 'burkina_faso',
+    
+    //Burundi
+    'burundian': 'burundi',
+    'burundi': 'burundi',
+    
+    //Camboya
+    'cambodian': 'cambodia',
+    'cambodia': 'cambodia',
+    
+    //Camerún
+    'cameroonian': 'cameroon',
+    'cameroon': 'cameroon',
+    
+    //Canadá
+    'canadian': 'canada',
+    'canada': 'canada',
+    
+    //Cabo Verde
+    'cape_verdean': 'cape_verde',
+    'cape_verde': 'cape_verde',
+    
+    //República Centroafricana
+    'central_african': 'central_african_republic',
+    'central_african_republic': 'central_african_republic',
+    
+    //Chad
+    'chadian': 'chad',
+    'chad': 'chad',
+    
+    //Chile
+    'chilean': 'chile',
+    'chile': 'chile',
+    
+    //China
+    'chinese': 'china',
+    'china': 'china',
+    
+    //Colombia
+    'colombian': 'colombia',
+    'colombia': 'colombia',
+    
+    //Comoras
+    'comorian': 'comoros',
+    'comoros': 'comoros',
+    
+    //Congo
+    'congolese': 'congo',
+    'congo': 'congo',
+    
+    //Costa Rica
+    'costa_rican': 'costa_rica',
+    'costa_rica': 'costa_rica',
+    
+    //Croacia
+    'croatian': 'croatia',
+    'croatia': 'croatia',
+    
+    //Cuba
+    'cuban': 'cuba',
+    'cuba': 'cuba',
+    
+    //Chipre
+    'cypriot': 'cyprus',
+    'cyprus': 'cyprus',
+    
+    //República Checa
+    'czech': 'czech_republic',
+    'czech_republic': 'czech_republic',
+    
+    //Dinamarca
+    'danish': 'denmark',
+    'denmark': 'denmark',
+    
+    //Yibuti
+    'djiboutian': 'djibouti',
+    'djibouti': 'djibouti',
+    
+    //Dominica
+    'dominican': 'dominica',
+    'dominica': 'dominica',
+    
+    //República Dominicana
+    'dominican_republic': 'dominican_republic',
+    
+    //Timor Oriental
+    'east_timorese': 'east_timor',
+    'east_timor': 'east_timor',
+    
+    //Ecuador
+    'ecuadorian': 'ecuador',
+    'ecuador': 'ecuador',
+    
+    //Egipto
+    'egyptian': 'egypt',
+    'egypt': 'egypt',
+    
+    //El Salvador
+    'salvadoran': 'el_salvador',
+    'el_salvador': 'el_salvador',
+    
+    //Guinea Ecuatorial
+    'equatorial_guinean': 'equatorial_guinea',
+    'equatorial_guinea': 'equatorial_guinea',
+    
+    //Eritrea
+    'eritrean': 'eritrea',
+    'eritrea': 'eritrea',
+    
+    //Estonia
+    'estonian': 'estonia',
+    'estonia': 'estonia',
+    
+    //Etiopía
+    'ethiopian': 'ethiopia',
+    'ethiopia': 'ethiopia',
+    
+    //Fiji
+    'fijian': 'fiji',
+    'fiji': 'fiji',
+    
+    //Finlandia
+    'finnish': 'finland',
+    'finland': 'finland',
+    
+    //Francia
+    'french': 'france',
+    'france': 'france',
+    
+    //Gabón
+    'gabonese': 'gabon',
+    'gabon': 'gabon',
+    
+    //Gambia
+    'gambian': 'gambia',
+    'gambia': 'gambia',
+    
+    //Georgia
+    'georgian': 'georgia',
+    'georgia': 'georgia',
+    
+    //Alemania
+    'german': 'germany',
+    'germany': 'germany',
+    
+    //Ghana
+    'ghanaian': 'ghana',
+    'ghana': 'ghana',
+    
+    //Grecia
+    'greek': 'greece',
+    'greece': 'greece',
+    
+    //Granada
+    'grenadian': 'grenada',
+    'grenada': 'grenada',
+    
+    //Guatemala
+    'guatemalan': 'guatemala',
+    'guatemala': 'guatemala',
+    
+    //Guinea
+    'guinean': 'guinea',
+    'guinea': 'guinea',
+    
+    //Guinea-Bissau
+    'bissau_guinean': 'guinea_bissau',
+    'guinea_bissau': 'guinea_bissau',
+    
+    //Guyana
+    'guyanese': 'guyana',
+    'guyana': 'guyana',
+    
+    //Haití
+    'haitian': 'haiti',
+    'haiti': 'haiti',
+    
+    //Honduras
+    'honduran': 'honduras',
+    'honduras': 'honduras',
+    
+    //Hungría
+    'hungarian': 'hungary',
+    'hungary': 'hungary',
+    
+    //Islandia
+    'icelandic': 'iceland',
+    'iceland': 'iceland',
+    
+    //India
+    'indian': 'india',
+    'india': 'india',
+    
+    //Indonesia
+    'indonesian': 'indonesia',
+    'indonesia': 'indonesia',
+    
+    //Irán
+    'iranian': 'iran',
+    'iran': 'iran',
+    
+    //Iraq
+    'iraqi': 'iraq',
+    'iraq': 'iraq',
+    
+    //Irlanda
+    'irish': 'ireland',
+    'ireland': 'ireland',
+    
+    //Israel
+    'israeli': 'israel',
+    'israel': 'israel',
+    
+    //Italia
+    'italian': 'italy',
+    'italy': 'italy',
+    
+    //Jamaica
+    'jamaican': 'jamaica',
+    'jamaica': 'jamaica',
+    
+    //Japón
+    'japanese': 'japan',
+    'japan': 'japan',
+    
+    //Jordania
+    'jordanian': 'jordan',
+    'jordan': 'jordan',
+    
+    //Kazajistán
+    'kazakh': 'kazakhstan',
+    'kazakhstan': 'kazakhstan',
+    
+    //Kenia
+    'kenyan': 'kenya',
+    'kenya': 'kenya',
+    
+    //Kiribati
+    'i_kiribati': 'kiribati',
+    'kiribati': 'kiribati',
+    
+    //Corea del Norte
+    'north_korean': 'north_korea',
+    'north_korea': 'north_korea',
+    
+    //Corea del Sur
+    'south_korean': 'south_korea',
+    'south_korea': 'south_korea',
+    
+    //Kuwait
+    'kuwaiti': 'kuwait',
+    'kuwait': 'kuwait',
+    
+    //Kirguistán
+    'kyrgyz': 'kyrgyzstan',
+    'kyrgyzstan': 'kyrgyzstan',
+    
+    //Laos
+    'laotian': 'laos',
+    'laos': 'laos',
+    
+    //Letonia
+    'latvian': 'latvia',
+    'latvia': 'latvia',
+    
+    //Líbano
+    'lebanese': 'lebanon',
+    'lebanon': 'lebanon',
+    
+    //Lesoto
+    'basotho': 'lesotho',
+    'lesotho': 'lesotho',
+    
+    //Liberia
+    'liberian': 'liberia',
+    'liberia': 'liberia',
+    
+    //Libia
+    'libyan': 'libya',
+    'libya': 'libya',
+    
+    //Liechtenstein
+    'liechtensteiner': 'liechtenstein',
+    'liechtenstein': 'liechtenstein',
+    
+    //Lituania
+    'lithuanian': 'lithuania',
+    'lithuania': 'lithuania',
+    
+    //Luxemburgo
+    'luxembourger': 'luxembourg',
+    'luxembourg': 'luxembourg',
+    
+    //Macedonia del Norte
+    'macedonian': 'north_macedonia',
+    'north_macedonia': 'north_macedonia',
+    
+    //Madagascar
+    'malagasy': 'madagascar',
+    'madagascar': 'madagascar',
+    
+    //Malawi
+    'malawian': 'malawi',
+    'malawi': 'malawi',
+    
+    //Malasia
+    'malaysian': 'malaysia',
+    'malaysia': 'malaysia',
+    
+    //Maldivas
+    'maldivian': 'maldives',
+    'maldives': 'maldives',
+    
+    //Mali
+    'malian': 'mali',
+    'mali': 'mali',
+    
+    //Malta
+    'maltese': 'malta',
+    'malta': 'malta',
+    
+    //Islas Marshall
+    'marshallese': 'marshall_islands',
+    'marshall_islands': 'marshall_islands',
+    
+    //Mauritania
+    'mauritanian': 'mauritania',
+    'mauritania': 'mauritania',
+    
+    //Mauricio
+    'mauritian': 'mauritius',
+    'mauritius': 'mauritius',
+    
+    //México
+    'mexican': 'mexico',
+    'mexico': 'mexico',
+    
+    //Micronesia
+    'micronesian': 'micronesia',
+    'micronesia': 'micronesia',
+    
+    //Moldavia
+    'moldovan': 'moldova',
+    'moldova': 'moldova',
+    
+    //Mónaco
+    'monacan': 'monaco',
+    'monaco': 'monaco',
+    
+    //Mongolia
+    'mongolian': 'mongolia',
+    'mongolia': 'mongolia',
+    
+    //Montenegro
+    'montenegrin': 'montenegro',
+    'montenegro': 'montenegro',
+    
+    //Marruecos
+    'moroccan': 'morocco',
+    'morocco': 'morocco',
+    
+    //Mozambique
+    'mozambican': 'mozambique',
+    'mozambique': 'mozambique',
+    
+    //Myanmar (Birmania)
+    'myanmar': 'myanmar',
+    'burmese': 'myanmar',
+    
+    //Namibia
+    'namibian': 'namibia',
+    'namibia': 'namibia',
+    
+    //Nauru
+    'nauruan': 'nauru',
+    'nauru': 'nauru',
+    
+    //Nepal
+    'nepalese': 'nepal',
+    'nepali': 'nepal',
+    'nepal': 'nepal',
+    
+    //Países Bajos
+    'dutch': 'netherlands',
+    'netherlands': 'netherlands',
+    
+    //Nueva Zelanda
+    'new_zealander': 'new_zealand',
+    'new_zealand': 'new_zealand',
+    
+    //Nicaragua
+    'nicaraguan': 'nicaragua',
+    'nicaragua': 'nicaragua',
+    
+    //Níger
+    'nigerien': 'niger',
+    'niger': 'niger',
+    
+    //Nigeria
+    'nigerian': 'nigeria',
+    'nigeria': 'nigeria',
+    
+    //Noruega
+    'norwegian': 'norway',
+    'norway': 'norway',
+    
+    //Omán
+    'omani': 'oman',
+    'oman': 'oman',
+    
+    //Pakistán
+    'pakistani': 'pakistan',
+    'pakistan': 'pakistan',
+    
+    //Palau
+    'palauan': 'palau',
+    'palau': 'palau',
+    
+    //Palestina
+    'palestinian': 'palestine',
+    'palestine': 'palestine',
+    
+    //Panamá
+    'panamanian': 'panama',
+    'panama': 'panama',
+    
+    //Papúa Nueva Guinea
+    'papua_new_guinean': 'papua_new_guinea',
+    'papua_new_guinea': 'papua_new_guinea',
+    
+    //Paraguay
+    'paraguayan': 'paraguay',
+    'paraguay': 'paraguay',
+    
+    //Perú
+    'peruvian': 'peru',
+    'peru': 'peru',
+    
+    //Filipinas
+    'filipino': 'philippines',
+    'philippines': 'philippines',
+    
+    //Polonia
+    'polish': 'poland',
+    'poland': 'poland',
+    
+    //Portugal
+    'portuguese': 'portugal',
+    'portugal': 'portugal',
+    
+    //Qatar
+    'qatari': 'qatar',
+    'qatar': 'qatar',
+    
+    //Rumania
+    'romanian': 'romania',
+    'romania': 'romania',
+    
+    //Rusia
+    'russian': 'russia',
+    'russia': 'russia',
+    
+    //Ruanda
+    'rwandan': 'rwanda',
+    'rwanda': 'rwanda',
+    
+    //San Cristóbal y Nieves
+    'kittitian': 'saint_kitts_and_nevis',
+    'saint_kitts_and_nevis': 'saint_kitts_and_nevis',
+    
+    //Santa Lucía
+    'saint_lucian': 'saint_lucia',
+    'saint_lucia': 'saint_lucia',
+    
+    //San Vicente y las Granadinas
+    'vincentian': 'saint_vincent_and_the_grenadines',
+    'saint_vincent_and_the_grenadines': 'saint_vincent_and_the_grenadines',
+    
+    //Samoa
+    'samoan': 'samoa',
+    'samoa': 'samoa',
+    
+    //San Marino
+    'sammarinese': 'san_marino',
+    'san_marino': 'san_marino',
+    
+    //Santo Tomé y Príncipe
+    'sao_tomean': 'sao_tome_and_principe',
+    'sao_tome_and_principe': 'sao_tome_and_principe',
+    
+    //Arabia Saudita
+    'saudi': 'saudi_arabia',
+    'saudi_arabia': 'saudi_arabia',
+    
+    //Senegal
+    'senegalese': 'senegal',
+    'senegal': 'senegal',
+    
+    //Serbia
+    'serbian': 'serbia',
+    'serbia': 'serbia',
+    
+    //Seychelles
+    'seychellois': 'seychelles',
+    'seychelles': 'seychelles',
+    
+    //Sierra Leona
+    'sierra_leonean': 'sierra_leone',
+    'sierra_leone': 'sierra_leone',
+    
+    //Singapur
+    'singaporean': 'singapore',
+    'singapore': 'singapore',
+    
+    //Eslovaquia
+    'slovak': 'slovakia',
+    'slovakia': 'slovakia',
+    
+    //Eslovenia
+    'slovenian': 'slovenia',
+    'slovenia': 'slovenia',
+    
+    //Islas Salomón
+    'solomon_islander': 'solomon_islands',
+    'solomon_islands': 'solomon_islands',
+    
+    //Somalia
+    'somali': 'somalia',
+    'somalia': 'somalia',
+    
+    //Sudáfrica
+    'south_african': 'south_africa',
+    'south_africa': 'south_africa',
+    
+    //Sudán del Sur
+    'south_sudanese': 'south_sudan',
+    'south_sudan': 'south_sudan',
+    
+    //España
+    'spanish': 'spain',
+    'spain': 'spain',
+    
+    //Sri Lanka
+    'sri_lankan': 'sri_lanka',
+    'sri_lanka': 'sri_lanka',
+    
+    //Sudán
+    'sudanese': 'sudan',
+    'sudan': 'sudan',
+    
+    //Surinam
+    'surinamese': 'suriname',
+    'suriname': 'suriname',
+    
+    //Suecia
+    'swedish': 'sweden',
+    'sweden': 'sweden',
+    
+    //Suiza
+    'swiss': 'switzerland',
+    'switzerland': 'switzerland',
+    
+    //Siria
+    'syrian': 'syria',
+    'syria': 'syria',
+    
+    //Taiwán
+    'taiwanese': 'taiwan',
+    'taiwan': 'taiwan',
+    
+    //Tayikistán
+    'tajik': 'tajikistan',
+    'tajikistan': 'tajikistan',
+    
+    //Tanzania
+    'tanzanian': 'tanzania',
+    'tanzania': 'tanzania',
+    
+    //Tailandia
+    'thai': 'thailand',
+    'thailand': 'thailand',
+    
+    //Togo
+    'togolese': 'togo',
+    'togo': 'togo',
+    
+    //Tonga
+    'tongan': 'tonga',
+    'tonga': 'tonga',
+    
+    //Trinidad y Tobago
+    'trinidadian': 'trinidad_and_tobago',
+    'trinidad_and_tobago': 'trinidad_and_tobago',
+    
+    //Túnez
+    'tunisian': 'tunisia',
+    'tunisia': 'tunisia',
+    
+    //Turquía
+    'turkish': 'turkey',
+    'turkey': 'turkey',
+    
+    //Turkmenistán
+    'turkmen': 'turkmenistan',
+    'turkmenistan': 'turkmenistan',
+    
+    //Tuvalu
+    'tuvaluan': 'tuvalu',
+    'tuvalu': 'tuvalu',
+    
+    //Uganda
+    'ugandan': 'uganda',
+    'uganda': 'uganda',
+    
+    //Ucrania
+    'ukrainian': 'ukraine',
+    'ukraine': 'ukraine',
+    
+    //Emiratos Árabes Unidos
+    'emirati': 'united_arab_emirates',
+    'united_arab_emirates': 'united_arab_emirates',
+    
+    //Variaciones para inglés/británico
+    "english": "united_kingdom",
+    "british": "united_kingdom",
+    "uk": "united_kingdom",
+    "united_kingdom": "united_kingdom",
+
+    //Ciudades UK
+    "london": "united_kingdom",
+    "manchester": "united_kingdom",
+    "liverpool": "united_kingdom",
+    "birmingham": "united_kingdom",
+    "leeds": "united_kingdom",
+    "glasgow": "united_kingdom",
+    "edinburgh": "united_kingdom",
+    "cardiff": "united_kingdom",
+    "belfast": "united_kingdom",
+    "sheffield": "united_kingdom",
+    "bristol": "united_kingdom",
+    "oxford": "united_kingdom",
+    "nottingham": "united_kingdom",
+    "leicester": "united_kingdom",
+    "coventry": "united_kingdom",
+    "peterborough": "united_kingdom",
+    "wolverhampton": "united_kingdom",
+    "swansea": "united_kingdom",
+    "newcastle": "united_kingdom",
+    "bournemouth": "united_kingdom",
+    "brighton": "united_kingdom",
+    "milton_keynes": "united_kingdom",
+   
+    
+    //Variaciones para americano/estadounidense
+    "american": "united_states",
+    "usa": "united_states",
+    "us": "united_states",
+    "united_states": "united_states",
+
+    //Ciudades USA
+    "new_york": "united_states",
+    "nyc": "united_states",
+    "los_angeles": "united_states",
+    "la": "united_states",
+    "chicago": "united_states",
+    "houston": "united_states",
+    "miami": "united_states",
+    "boston": "united_states",
+    "seattle": "united_states",
+    "san_francisco": "united_states",
+    "las_vegas": "united_states",
+    "washington": "united_states",
+    "dallas": "united_states",
+    "atlanta": "united_states",
+    "philadelphia": "united_states",
+    "san_diego": "united_states",
+    "san_jose": "united_states",
+    "austin": "united_states",
+    "san_antonio": "united_states",
+   
+
+
+    //Reino Unido
+    'british': 'united_kingdom',
+    'uk': 'united_kingdom',
+    'english': 'united_kingdom',
+    'scottish': 'united_kingdom',
+    'welsh': 'united_kingdom',
+    'united_kingdom': 'united_kingdom',
+    
+    //Estados Unidos
+    'american': 'united_states',
+    'usa': 'united_states',
+    'us': 'united_states',
+    'united_states': 'united_states',
+    
+    //Uruguay
+    'uruguayan': 'uruguay',
+    'uruguay': 'uruguay',
+    
+    //Uzbekistán
+    'uzbek': 'uzbekistan',
+    'uzbekistan': 'uzbekistan',
+    
+    //Vanuatu
+    'ni_vanuatu': 'vanuatu',
+    'vanuatu': 'vanuatu',
+    
+    //Ciudad del Vaticano
+    'vatican': 'vatican_city',
+    'vatican_city': 'vatican_city',
+    
+    //Venezuela
+    'venezuelan': 'venezuela',
+    'venezuela': 'venezuela',
+    
+    //Vietnam
+    'vietnamese': 'vietnam',
+    'vietnam': 'vietnam',
+    
+    //Yemen
+    'yemeni': 'yemen',
+    'yemen': 'yemen',
+    
+    //Zambia
+    'zambian': 'zambia',
+    'zambia': 'zambia',
+    
+    //Zimbabue
+    'zimbabwean': 'zimbabwe',
+    'zimbabwe': 'zimbabwe'
+}
+
+
+    // Mapeo de países a códigos ISO
+    const countryToISO = {
+        'spain': 'es',
+        'united_kingdom': 'gb',
+        'united_states': 'us',
+        'france': 'fr',
+        // ... añadir más mapeos
+    };
+
+    function getCountryCode(nationality) {
+        return countryToISO[nationality] || nationality.substring(0, 2);
+    }
+
+    // Añadir manejo de cierre de modales
+    document.querySelectorAll('.modal-close').forEach(button => {
+        button.onclick = () => {
+            button.closest('.modal').classList.remove('active');
+        };
+    });
+
+    // Cerrar modal al hacer clic fuera
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        };
+    });
+
     </script>
 </body>
 </html> 
