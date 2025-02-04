@@ -2043,37 +2043,6 @@ if __name__ == '__main__':
 with open('static/ethnic.json', 'r', encoding='utf-8') as f:
     ethnic_data = json.load(f)
 
-def get_ethnic_characteristics(country, ethnic_data):
-    country_data = ethnic_data['countries'].get(country)
-    if not country_data:
-        return None
-        
-    ethnicities = []
-    for name, percentage in country_data['ethnicities'].items():
-        ethnic_type = country_data['ethnic_references'].get(name)
-        if ethnic_type in ethnic_data['ethnic_types']:
-            ethnicities.append({
-                'name': name,
-                'percentage': float(percentage),
-                'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
-                'ethnic_type': ethnic_type
-            })
-    
-    if not ethnicities:
-        return None
-        
-    # Seleccionar etnia basada en porcentajes
-    weights = [e['percentage'] for e in ethnicities]
-    selected = random.choices(ethnicities, weights=weights, k=1)[0]
-    
-    return {
-        'skin_tone': random.choice(selected['features']['skin_tones']),
-        'hair_color': random.choice(selected['features']['hair_colors']),
-        'eye_color': random.choice(selected['features']['eye_colors']),
-        'facial_features': selected['features']['facial_features'],
-        'ethnic_description': f"of {selected['ethnic_type'].replace('_', ' ')} heritage with {selected['ethnic_type'].replace('_', ' ')} features"
-    }
-
 
 
 @app.route('/persona', methods=['GET'])
