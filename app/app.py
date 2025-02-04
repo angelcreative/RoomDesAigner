@@ -1078,7 +1078,7 @@ specific_features = {
 FEMALE_WORDS = ["woman", "girl", "female", "she", "her", "lady", "feminine"]
 MALE_WORDS = ["man", "boy", "male", "he", "his", "gentleman", "masculine"]
 
-def get_random_features(racial_group=None):
+def get_random_features(racial_group=None, override_features=None):
     """Obtiene características aleatorias, opcionalmente de un grupo racial específico"""
     try:
         if racial_group:
@@ -1094,9 +1094,10 @@ def get_random_features(racial_group=None):
         # Obtener características físicas aleatorias
         size_features = get_random_size_features()
         if not size_features:
-            size_features = {'height': 'average', 'build': 'average'}  # valores por defecto
+            size_features = {'height': 'average', 'build': 'average'}
             
-        return {
+        # Características base
+        characteristics = {
             'skin_tone': random.choice(ethnic_type['features']['skin_tones']),
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
             'eye_color': random.choice(ethnic_type['features']['eye_colors']),
@@ -1104,6 +1105,15 @@ def get_random_features(racial_group=None):
             'ethnic_description': f"with {racial_group.replace('_', ' ') if racial_group else 'diverse'} features",
             'build': size_features
         }
+        
+        # Aplicar overrides si existen
+        if override_features:
+            for feature_type, value in override_features.items():
+                if feature_type in characteristics:
+                    characteristics[feature_type] = value
+                    
+        return characteristics
+        
     except Exception as e:
         print(f"Error getting random features: {str(e)}")
         return None
@@ -1197,9 +1207,7 @@ def get_random_size_features():
         return None
     
 def get_ethnic_characteristics(country, ethnic_data, override_features=None):
-    """
-    Versión mejorada que permite override de características específicas
-    """
+    """Versión mejorada que permite override de características específicas"""
     try:
         # Mantener lógica actual de selección por país
         country_data = ethnic_data['countries'].get(country)
