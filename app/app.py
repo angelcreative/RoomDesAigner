@@ -1050,13 +1050,28 @@ generic_person_words = {
     ]
 }
 
-racial_keywords = {
-    'white_european': ['blonde', 'blond', 'fair', 'pale', 'caucasian'],
+base_racial_keywords = {
     'african': ['black', 'african', 'dark_skinned'],
     'asian': ['asian', 'oriental'],
+    'white_european': ['caucasian', 'white'],
     'latin_american': ['latino', 'latina', 'hispanic'],
     'middle_eastern': ['arab', 'arabic', 'middle_eastern'],
     'south_asian': ['indian', 'pakistani', 'desi']
+}
+
+specific_features = {
+    'hair_color': {
+        'keywords': ['blonde', 'blond', 'brunette', 'red', 'ginger', 'white', 'gray', 'silver'],
+        'feature_key': 'hair_colors'
+    },
+    'eye_color': {
+        'keywords': ['blue', 'green', 'hazel', 'amber', 'gray'],
+        'feature_key': 'eye_colors'
+    },
+    'skin_tone': {
+        'keywords': ['fair', 'pale', 'tan', 'olive', 'brown'],
+        'feature_key': 'skin_tones'
+    }
 }
 
 # Definir palabras clave para género
@@ -1095,71 +1110,71 @@ def get_random_features(racial_group=None):
 
 # Main function to transform prompts
 def transform_prompt(prompt_text, use_openai=False):
+    """Versión mejorada que maneja características específicas"""
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
     
     try:
-        # Cargar ambos archivos JSON (mantener por compatibilidad)
-        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
-            ethnic_data = json.load(f)
-        with open('static/sizes.json', 'r', encoding='utf-8') as f:
-            size_data = json.load(f)
-    except Exception as e:
-        print(f"❌ Error loading data files: {str(e)}")
-        return f"{prompt_text}, "
+        words = prompt_text.lower().split()
+        override_features = {}
 
-    words = prompt_text.lower().split()
 
-    # 1. Primero buscar palabras clave raciales
-    for word in words:
-        for racial_group, keywords in racial_keywords.items():
-            if word in keywords:
-                features = get_random_features(racial_group)
-                if features:
-                    ethnic_prompt = f"{prompt_text}, average looking person with {features['skin_tone']} skin, {features['hair_color']} hair, {features['eye_color']} eyes, and common facial features including {', '.join(features['facial_features'])}, {features['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-                    return generate_openai_prompt(ethnic_prompt) if use_openai else f"{ethnic_prompt}, "
+    # 1. Detectar características específicas para override
+        for word in words:
+            for feature_type, feature_info in specific_features.items():
+                if word in feature_info['keywords']:
+                    override_features[feature_type] = word
 
-    # 2. Mantener la lógica existente de nacionalidad
-    detected_nationality = None
-    for nationality in nationality_mapping:
-        if nationality in words:
-            detected_nationality = nationality_mapping[nationality]
-            print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
-            break
+    # 2. Buscar nacionalidad (prioridad más alta)
+        detected_nationality = None
+        for nationality in nationality_mapping:
+            if nationality in words:
+                detected_nationality = nationality_mapping[nationality]
+                print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
+                break
 
-    if detected_nationality:
-        characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data)
+    # 3. Buscar raza base si no hay nacionalidad
+        base_race = None
+        if not detected_nationality:
+            for race, keywords in base_racial_keywords.items():
+                if any(word in words for word in keywords):
+                    base_race = race
+                    print(f"✅ Detected base race: {base_race}")
+                    break
+    # 4. Generar características
+        if detected_nationality:
+            characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data, override_features)
+        elif base_race:
+            characteristics = get_random_features(base_race, override_features)
+        else:
+            # Si solo hay características específicas o palabras genéricas
+            characteristics = get_random_features(override_features=override_features)
+
         if characteristics:
             gender = 'male' if any(word in words for word in MALE_WORDS) else \
                     'female' if any(word in words for word in FEMALE_WORDS) else \
                     'female'
-            print(f"✅ Detected gender: {gender}")
             
-            size_desc = get_size_characteristics(detected_nationality, gender, size_data)
+            size_desc = get_size_characteristics(detected_nationality, gender, size_data) if detected_nationality \
+                       else get_random_size_features()
+
+            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, "\
+                          f"{characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, "\
+                          f"and common facial features including {', '.join(characteristics['facial_features'])}, "\
+                          f"{characteristics['ethnic_description']}, "
+
             if size_desc:
-                print(f"✅ Size characteristics: {size_desc}")
-                size_text = f", {size_desc}"
-            else:
-                print("❌ No size data found")
-                size_text = ""
-            
-            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin{size_text}, {characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, and common facial features including {', '.join(characteristics['facial_features'])}, {characteristics['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
+                ethnic_prompt += f"{size_desc}, "
+
+            ethnic_prompt += "casual appearance, everyday person, candid pose, natural lighting"
+
             return generate_openai_prompt(ethnic_prompt) if use_openai else f"{ethnic_prompt}, "
 
-    # 3. Si no hay nacionalidad ni palabra racial, buscar palabras genéricas de persona
-    for word in words:
-        if word in generic_person_words['singular'] or word in generic_person_words['plural']:
-            features = get_random_features()
-            if features:
-                ethnic_prompt = f"{prompt_text}, average looking person with {features['skin_tone']} skin, {features['hair_color']} hair, {features['eye_color']} eyes, and common facial features including {', '.join(features['facial_features'])}, {features['ethnic_description']}, casual appearance, everyday person, candid pose, natural lighting"
-                return generate_openai_prompt(ethnic_prompt) if use_openai else f"{ethnic_prompt}, "
+        return f"{prompt_text}, "
 
-    # Si no hay matches, mantener comportamiento original
-    if use_openai:
-        enhanced_prompt = generate_openai_prompt(prompt_text)
-        return f"{enhanced_prompt}, " if enhanced_prompt else f"{prompt_text}, "
+    except Exception as e:
+        print(f"Error transforming prompt: {str(e)}")
+        return f"{prompt_text}, "
     
-    return f"{prompt_text}, "
-
 def get_random_size_features():
     """Obtiene características de tamaño aleatorias"""
     try:
@@ -1181,43 +1196,58 @@ def get_random_size_features():
         print(f"Error getting random size features: {str(e)}")
         return None
     
-def get_ethnic_characteristics(country, ethnic_data):
-    """Selecciona características étnicas basadas en probabilidades demográficas"""
-    
-    # Obtener datos del país
-    country_data = ethnic_data['countries'].get(country)
-    if not country_data:
-        print(f"❌ No data found for {country}")
-        return None
+def get_ethnic_characteristics(country, ethnic_data, override_features=None):
+    """
+    Versión mejorada que permite override de características específicas
+    """
+    try:
+        # Mantener lógica actual de selección por país
+        country_data = ethnic_data['countries'].get(country)
+        if not country_data:
+            return None
 
-    # Convertir etnias a lista con sus porcentajes
-    ethnicities = []
-    for name, percentage in country_data['ethnicities'].items():
-        ethnic_type = country_data['ethnic_references'].get(name)
-        if ethnic_type in ethnic_data['ethnic_types']:
-            ethnicities.append({
-                'name': name,
-                'percentage': float(percentage),
-                'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
-                'ethnic_type': ethnic_type
-            })
+        ethnicities = []
+        for name, percentage in country_data['ethnicities'].items():
+            ethnic_type = country_data['ethnic_references'].get(name)
+            if ethnic_type in ethnic_data['ethnic_types']:
+                ethnicities.append({
+                    'name': name,
+                    'percentage': float(percentage),
+                    'features': ethnic_data['ethnic_types'][ethnic_type]['features'],
+                    'ethnic_type': ethnic_type
+                })
 
-    if not ethnicities:
-        return None
+        if not ethnicities:
+            return None
 
     # Seleccionar etnia basada en porcentajes
-    weights = [e['percentage'] for e in ethnicities]
-    selected = random.choices(ethnicities, weights=weights, k=1)[0]
-    print(f"✅ Selected ethnicity: {selected['name']} ({selected['percentage']}%)")
+        weights = [e['percentage'] for e in ethnicities]
+        selected = random.choices(ethnicities, weights=weights, k=1)[0]
+        print(f"✅ Selected ethnicity: {selected['name']} ({selected['percentage']}%)")
 
-    # Seleccionar características aleatorias de la etnia seleccionada
-    return {
-        'skin_tone': random.choice(selected['features']['skin_tones']),
-        'hair_color': random.choice(selected['features']['hair_colors']),
-        'eye_color': random.choice(selected['features']['eye_colors']),
-        'facial_features': selected['features']['facial_features'],
-        'ethnic_description': f"of {selected['ethnic_type'].replace('_', ' ')} heritage with {selected['ethnic_type'].replace('_', ' ')} features"
-    }
+    
+
+# Aplicar características base
+        characteristics = {
+            'skin_tone': random.choice(selected['features']['skin_tones']),
+            'hair_color': random.choice(selected['features']['hair_colors']),
+            'eye_color': random.choice(selected['features']['eye_colors']),
+            'facial_features': selected['features']['facial_features'],
+            'ethnic_description': f"of {selected['ethnic_type'].replace('_', ' ')} heritage"
+        }
+
+        # Aplicar overrides si existen
+        if override_features:
+            for feature_type, value in override_features.items():
+                if feature_type in characteristics:
+                    characteristics[feature_type] = value
+
+        return characteristics
+
+    except Exception as e:
+        print(f"Error in get_ethnic_characteristics: {str(e)}")
+        return None
+    
 
 def generate_openai_prompt(prompt_text):
     """Mejora el prompt usando OpenAI manteniendo las características étnicas"""
