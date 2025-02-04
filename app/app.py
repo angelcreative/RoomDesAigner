@@ -1091,16 +1091,17 @@ nationality_mapping = {
 }
 
 
-
-
 def get_random_features(racial_group=None, override_features=None):
     """Obtiene características aleatorias, opcionalmente de un grupo racial específico"""
     try:
         if racial_group:
             ethnic_type = ethnic_data['ethnic_types'].get(racial_group)
+            ethnic_description = f"of {racial_group.replace('_', ' ')} heritage"
         else:
             available_types = list(ethnic_data['ethnic_types'].keys())
-            ethnic_type = ethnic_data['ethnic_types'][random.choice(available_types)]
+            selected_type = random.choice(available_types)
+            ethnic_type = ethnic_data['ethnic_types'][selected_type]
+            ethnic_description = "with diverse features"
         
         if not ethnic_type:
             return None
@@ -1116,7 +1117,7 @@ def get_random_features(racial_group=None, override_features=None):
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
             'eye_color': random.choice(ethnic_type['features']['eye_colors']),
             'facial_features': ethnic_type['features']['facial_features'],  # Asegurarnos de incluir esto
-            'ethnic_description': f"with {racial_group.replace('_', ' ') if racial_group else 'diverse'} features",
+            'ethnic_description': ethnic_description,
             'build': size_features
         }
         
@@ -1165,6 +1166,7 @@ def transform_prompt(prompt_text, use_openai=False):
                     break
 
         # 4. Generar características
+        characteristics = None
         if detected_nationality:
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data, override_features)
         elif base_race:
@@ -1180,10 +1182,15 @@ def transform_prompt(prompt_text, use_openai=False):
             size_desc = get_size_characteristics(detected_nationality, gender, size_data) if detected_nationality \
                        else get_random_size_features()
 
+            # CAMBIO AQUÍ: Asegurarnos de incluir facial_features siempre
             ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, "\
-                          f"{characteristics['hair_color']} hair, {characteristics['eye_color']} eyes, "\
-                          f"and common facial features including {', '.join(characteristics['facial_features'])}, "\
-                          f"{characteristics['ethnic_description']}"
+                          f"{characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
+            
+            # Añadir rasgos faciales si existen
+            if 'facial_features' in characteristics and characteristics['facial_features']:
+                ethnic_prompt += f", and common facial features including {', '.join(characteristics['facial_features'])}"
+            
+            ethnic_prompt += f", {characteristics['ethnic_description']}"
 
             if size_desc:
                 ethnic_prompt += f", {size_desc}"
@@ -1197,7 +1204,7 @@ def transform_prompt(prompt_text, use_openai=False):
     except Exception as e:
         print(f"Error transforming prompt: {str(e)}")
         return f"{prompt_text}, "
-    
+
 def get_random_size_features():
     """Obtiene características de tamaño aleatorias"""
     try:
