@@ -1111,28 +1111,47 @@ def get_random_features(racial_group=None, override_features=None):
         if not size_features:
             size_features = {'height': 'average', 'build': 'average'}
             
-        # Características base
+        # Características base según el grupo étnico
         characteristics = {
             'skin_tone': random.choice(ethnic_type['features']['skin_tones']),
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
             'eye_color': random.choice(ethnic_type['features']['eye_colors']),
-            'facial_features': ethnic_type['features']['facial_features'],  # Asegurarnos de incluir esto
+            'facial_features': ethnic_type['features']['facial_features'],
             'ethnic_description': ethnic_description,
             'build': size_features
         }
         
-        # Aplicar overrides si existen
-        if override_features:
+        # Preservar características raciales al aplicar overrides
+        if override_features and racial_group:
+            # Guardar características raciales importantes
+            base_skin_tone = characteristics['skin_tone']
+            base_facial_features = characteristics['facial_features']
+            
+            # Aplicar overrides solo para características no raciales
             for feature_type, value in override_features.items():
-                if feature_type in characteristics:
+                if feature_type in ['hair_color', 'eye_color']:  # Solo permitir cambios en pelo y ojos
                     characteristics[feature_type] = value
                     print(f"✅ Applied override: {feature_type} -> {value}")
+            
+            # Restaurar características raciales
+            characteristics['skin_tone'] = base_skin_tone
+            characteristics['facial_features'] = base_facial_features
+            
+            # Asegurar coherencia racial según el grupo
+            if racial_group == 'african':
+                characteristics['skin_tone'] = 'dark'
+            elif racial_group == 'asian':
+                characteristics['skin_tone'] = 'light tan'
+            elif racial_group == 'white_european':
+                characteristics['skin_tone'] = 'fair'
+            # Añadir más casos según sea necesario
                     
         return characteristics
         
     except Exception as e:
         print(f"Error getting random features: {str(e)}")
         return None
+
 
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
