@@ -1096,13 +1096,6 @@ nationality_mapping = {
 def get_random_features(racial_group=None, override_features=None):
     """Obtiene características aleatorias, opcionalmente de un grupo racial específico"""
     try:
-        # Si hay override de características específicas sin grupo racial,
-        # seleccionar un grupo étnico apropiado
-        if not racial_group and override_features:
-            if 'hair_color' in override_features and override_features['hair_color'] in ['blonde', 'blond']:
-                racial_group = 'white_european'
-            # Añadir más casos según necesidad...
-
         if racial_group:
             ethnic_type = ethnic_data['ethnic_types'].get(racial_group)
         else:
@@ -1122,7 +1115,7 @@ def get_random_features(racial_group=None, override_features=None):
             'skin_tone': random.choice(ethnic_type['features']['skin_tones']),
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
             'eye_color': random.choice(ethnic_type['features']['eye_colors']),
-            'facial_features': ethnic_type['features']['facial_features'],
+            'facial_features': ethnic_type['features']['facial_features'],  # Asegurarnos de incluir esto
             'ethnic_description': f"with {racial_group.replace('_', ' ') if racial_group else 'diverse'} features",
             'build': size_features
         }
