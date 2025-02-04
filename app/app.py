@@ -43,11 +43,25 @@ generic_person_words = {
 # Palabras clave raciales base
 base_racial_keywords = {
     'african': ['black', 'african', 'dark_skinned'],
-    'asian': ['asian', 'oriental'],
+    'asian': ['asian', 'oriental', 'east_asian'],
     'white_european': ['caucasian', 'white'],
     'latin_american': ['latino', 'latina', 'hispanic'],
-    'middle_eastern': ['arab', 'arabic', 'middle_eastern'],
-    'south_asian': ['indian', 'pakistani', 'desi']
+    'middle_eastern': ['arab', 'arabic', 'middle_eastern', 'persian'],
+    'south_asian': ['indian', 'pakistani', 'bangladeshi', 'sri_lankan'],
+    'southeast_asian': ['thai', 'vietnamese', 'filipino', 'indonesian', 'malaysian'],
+    'pacific_islander': ['polynesian', 'micronesian', 'melanesian', 'maori'],
+    'central_asian': ['kazakh', 'uzbek', 'kyrgyz', 'turkmen'],
+    'slavic': ['russian', 'ukrainian', 'polish', 'serbian', 'croatian'],
+    'nordic': ['scandinavian', 'norwegian', 'swedish', 'danish', 'icelandic'],
+    'mediterranean': ['greek', 'italian', 'spanish', 'portuguese'],
+    'jewish': ['jewish', 'semitic', 'hebrew'],
+    'native_american': ['indigenous', 'american_indian', 'first_nations'],
+    'inuit': ['eskimo', 'arctic_native', 'inuit'],
+    'aboriginal': ['australian_aboriginal', 'indigenous_australian'],
+    'caribbean': ['afro_caribbean', 'west_indian'],
+    'himalayan': ['nepalese', 'tibetan', 'bhutanese'],
+    'central_african': ['bantu', 'nilotic', 'cushitic'],
+    'horn_of_africa': ['ethiopian', 'eritrean', 'somali']
 }
 
 # Características específicas que pueden ser override
@@ -1094,64 +1108,127 @@ nationality_mapping = {
 def get_random_features(racial_group=None, override_features=None):
     """Obtiene características aleatorias, opcionalmente de un grupo racial específico"""
     try:
+        # Mapeo de características raciales base
+        racial_base_features = {
+            'african': {
+                'skin_tone': ['dark', 'deep brown', 'rich brown', 'ebony'],
+                'facial_features': ['full lips', 'broad nose bridge', 'pronounced cheekbones']
+            },
+            'asian': {
+                'skin_tone': ['light tan', 'warm beige', 'golden'],
+                'facial_features': ['almond-shaped eyes', 'high cheekbones', 'flat nose bridge']
+            },
+            'white_european': {
+                'skin_tone': ['fair', 'pale', 'light'],
+                'facial_features': ['defined nose bridge', 'thin lips', 'angular facial structure']
+            },
+            'latin_american': {
+                'skin_tone': ['olive', 'tan', 'bronze', 'warm brown'],
+                'facial_features': ['strong jawline', 'full lips', 'defined cheekbones']
+            },
+            'middle_eastern': {
+                'skin_tone': ['olive', 'medium tan', 'golden brown'],
+                'facial_features': ['prominent nose', 'strong eyebrows', 'defined facial features']
+            },
+            'south_asian': {
+                'skin_tone': ['brown', 'golden brown', 'deep tan'],
+                'facial_features': ['large expressive eyes', 'defined nose', 'full lips']
+            },
+            'southeast_asian': {
+                'skin_tone': ['light brown', 'tan', 'golden'],
+                'facial_features': ['round face', 'high cheekbones', 'wide-set eyes']
+            },
+            'pacific_islander': {
+                'skin_tone': ['brown', 'deep tan', 'golden brown'],
+                'facial_features': ['broad nose', 'strong jawline', 'pronounced cheekbones']
+            },
+            'central_asian': {
+                'skin_tone': ['light tan', 'olive', 'golden'],
+                'facial_features': ['high cheekbones', 'almond eyes', 'strong facial structure']
+            },
+            'slavic': {
+                'skin_tone': ['fair', 'pale', 'light'],
+                'facial_features': ['high cheekbones', 'strong jawline', 'deep-set eyes']
+            },
+            'nordic': {
+                'skin_tone': ['very fair', 'pale', 'light'],
+                'facial_features': ['strong jawline', 'high forehead', 'straight nose']
+            },
+            'mediterranean': {
+                'skin_tone': ['olive', 'medium', 'tan'],
+                'facial_features': ['defined features', 'strong nose', 'expressive eyes']
+            },
+            'jewish': {
+                'skin_tone': ['fair to olive', 'medium', 'light tan'],
+                'facial_features': ['prominent nose', 'expressive eyes', 'defined features']
+            },
+            'native_american': {
+                'skin_tone': ['copper', 'tan', 'reddish-brown'],
+                'facial_features': ['high cheekbones', 'strong nose bridge', 'defined features']
+            },
+            'inuit': {
+                'skin_tone': ['light brown', 'copper', 'golden'],
+                'facial_features': ['round face', 'flat nose bridge', 'high cheekbones']
+            },
+            'aboriginal': {
+                'skin_tone': ['dark brown', 'deep tan', 'rich brown'],
+                'facial_features': ['broad nose', 'strong brow', 'defined cheekbones']
+            },
+            'caribbean': {
+                'skin_tone': ['brown', 'deep brown', 'rich tan'],
+                'facial_features': ['full lips', 'broad nose', 'strong facial features']
+            },
+            'himalayan': {
+                'skin_tone': ['light tan', 'golden', 'medium'],
+                'facial_features': ['high cheekbones', 'almond eyes', 'defined features']
+            },
+            'central_african': {
+                'skin_tone': ['very dark', 'deep brown', 'ebony'],
+                'facial_features': ['broad nose', 'full lips', 'defined cheekbones']
+            },
+            'horn_of_africa': {
+                'skin_tone': ['dark brown', 'rich brown', 'deep copper'],
+                'facial_features': ['narrow face', 'defined features', 'high cheekbones']
+            }
+        }
+
         if racial_group:
             ethnic_type = ethnic_data['ethnic_types'].get(racial_group)
             ethnic_description = f"of {racial_group.replace('_', ' ')} heritage"
+            # Usar características raciales base
+            base_features = racial_base_features.get(racial_group, {})
         else:
             available_types = list(ethnic_data['ethnic_types'].keys())
             selected_type = random.choice(available_types)
             ethnic_type = ethnic_data['ethnic_types'][selected_type]
             ethnic_description = "with diverse features"
+            base_features = {}
         
         if not ethnic_type:
             return None
             
-        # Obtener características físicas aleatorias
-        size_features = get_random_size_features()
-        if not size_features:
-            size_features = {'height': 'average', 'build': 'average'}
-            
-        # Características base según el grupo étnico
+        # Características base según el grupo racial
         characteristics = {
-            'skin_tone': random.choice(ethnic_type['features']['skin_tones']),
+            'skin_tone': random.choice(base_features.get('skin_tone', ethnic_type['features']['skin_tones'])),
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
             'eye_color': random.choice(ethnic_type['features']['eye_colors']),
-            'facial_features': ethnic_type['features']['facial_features'],
+            'facial_features': base_features.get('facial_features', ethnic_type['features']['facial_features']),
             'ethnic_description': ethnic_description,
-            'build': size_features
+            'build': get_random_size_features() or {'height': 'average', 'build': 'average'}
         }
         
-        # Preservar características raciales al aplicar overrides
+        # Aplicar overrides solo para pelo y ojos
         if override_features and racial_group:
-            # Guardar características raciales importantes
-            base_skin_tone = characteristics['skin_tone']
-            base_facial_features = characteristics['facial_features']
-            
-            # Aplicar overrides solo para características no raciales
             for feature_type, value in override_features.items():
-                if feature_type in ['hair_color', 'eye_color']:  # Solo permitir cambios en pelo y ojos
+                if feature_type in ['hair_color', 'eye_color']:
                     characteristics[feature_type] = value
                     print(f"✅ Applied override: {feature_type} -> {value}")
-            
-            # Restaurar características raciales
-            characteristics['skin_tone'] = base_skin_tone
-            characteristics['facial_features'] = base_facial_features
-            
-            # Asegurar coherencia racial según el grupo
-            if racial_group == 'african':
-                characteristics['skin_tone'] = 'dark'
-            elif racial_group == 'asian':
-                characteristics['skin_tone'] = 'light tan'
-            elif racial_group == 'white_european':
-                characteristics['skin_tone'] = 'fair'
-            # Añadir más casos según sea necesario
                     
         return characteristics
         
     except Exception as e:
         print(f"Error getting random features: {str(e)}")
         return None
-
 
 def transform_prompt(prompt_text, use_openai=False):
     print(f"🔄 Processing prompt: {prompt_text} (OpenAI: {use_openai})")
@@ -1167,16 +1244,18 @@ def transform_prompt(prompt_text, use_openai=False):
                     override_features[feature_type] = word
                     print(f"✅ Detected override: {feature_type} -> {word}")
 
-        # 2. Buscar nacionalidad (prioridad más alta)
+        # 2. Buscar nacionalidad o raza base
         detected_nationality = None
+        base_race = None
+        
+        # Primero buscar nacionalidad
         for nationality in nationality_mapping:
             if nationality in words:
                 detected_nationality = nationality_mapping[nationality]
                 print(f"✅ Detected nationality: {nationality} -> {detected_nationality}")
                 break
-
-        # 3. Buscar raza base si no hay nacionalidad
-        base_race = None
+                
+        # Si no hay nacionalidad, buscar raza base
         if not detected_nationality:
             for race, keywords in base_racial_keywords.items():
                 if any(word in words for word in keywords):
@@ -1184,7 +1263,7 @@ def transform_prompt(prompt_text, use_openai=False):
                     print(f"✅ Detected base race: {base_race}")
                     break
 
-        # 4. Generar características
+        # 3. Generar características
         characteristics = None
         if detected_nationality:
             characteristics = get_ethnic_characteristics(detected_nationality, ethnic_data, override_features)
@@ -1194,27 +1273,27 @@ def transform_prompt(prompt_text, use_openai=False):
             characteristics = get_random_features(override_features=override_features)
 
         if characteristics:
-            gender = 'male' if any(word in words for word in MALE_WORDS) else \
-                    'female' if any(word in words for word in FEMALE_WORDS) else \
-                    'female'
+            # Construir el prompt con todas las características
+            ethnic_prompt = f"{prompt_text}, person with "
             
-            size_desc = get_size_characteristics(detected_nationality, gender, size_data) if detected_nationality \
-                       else get_random_size_features()
-
-            # CAMBIO AQUÍ: Asegurarnos de incluir facial_features siempre
-            ethnic_prompt = f"{prompt_text}, average looking person with {characteristics['skin_tone']} skin, "\
-                          f"{characteristics['hair_color']} hair, {characteristics['eye_color']} eyes"
+            # Añadir características físicas base
+            ethnic_prompt += f"{characteristics['skin_tone']} skin tone, "
+            ethnic_prompt += f"{characteristics['hair_color']} hair, "
+            ethnic_prompt += f"{characteristics['eye_color']} eyes"
             
-            # Añadir rasgos faciales si existen
-            if 'facial_features' in characteristics and characteristics['facial_features']:
-                ethnic_prompt += f", and common facial features including {', '.join(characteristics['facial_features'])}"
+            # Siempre incluir rasgos faciales si están disponibles
+            if characteristics.get('facial_features'):
+                ethnic_prompt += f", with facial features including {', '.join(characteristics['facial_features'])}"
             
+            # Añadir descripción étnica
             ethnic_prompt += f", {characteristics['ethnic_description']}"
-
-            if size_desc:
-                ethnic_prompt += f", {size_desc}"
-
-            ethnic_prompt += ", casual appearance, everyday person, candid pose, natural lighting"
+            
+            # Añadir características de tamaño si están disponibles
+            if characteristics.get('build'):
+                ethnic_prompt += f", {characteristics['build'].get('height', 'average')} height"
+                ethnic_prompt += f", {characteristics['build'].get('build', 'average')} build"
+            
+            ethnic_prompt += ", natural appearance, candid pose"
 
             return generate_openai_prompt(ethnic_prompt) if use_openai else f"{ethnic_prompt}, "
 
