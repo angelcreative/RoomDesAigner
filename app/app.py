@@ -1078,7 +1078,9 @@ def get_random_features(racial_group=None):
             
         # Obtener características físicas aleatorias
         size_features = get_random_size_features()
-        
+        if not size_features:
+            size_features = {'height': 'average', 'build': 'average'}  # valores por defecto
+            
         return {
             'skin_tone': random.choice(ethnic_type['features']['skin_tones']),
             'hair_color': random.choice(ethnic_type['features']['hair_colors']),
@@ -1158,7 +1160,27 @@ def transform_prompt(prompt_text, use_openai=False):
     
     return f"{prompt_text}, "
 
-
+def get_random_size_features():
+    """Obtiene características de tamaño aleatorias"""
+    try:
+        with open('static/sizes.json', 'r', encoding='utf-8') as f:
+            size_data = json.load(f)
+            
+        # Obtener listas de alturas y complexiones
+        heights = size_data.get('heights', [])
+        builds = size_data.get('builds', [])
+        
+        if not heights or not builds:
+            return None
+            
+        return {
+            'height': random.choice(heights),
+            'build': random.choice(builds)
+        }
+    except Exception as e:
+        print(f"Error getting random size features: {str(e)}")
+        return None
+    
 def get_ethnic_characteristics(country, ethnic_data):
     """Selecciona características étnicas basadas en probabilidades demográficas"""
     
