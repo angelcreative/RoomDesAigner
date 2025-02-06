@@ -20,6 +20,7 @@ import base64
 import time
 import openai
 from pathlib import Path
+from PyPDF2 import PdfReader
 
 
 # Añadir después de los imports y antes de la carga de archivos
@@ -192,14 +193,14 @@ if __name__ == '__main__':
 
     
     
-openai_api_key = os.environ.get('OPENAI_API_KEY')
-if openai_api_key:
+openai.api_key = os.environ.get('OPENAI_API_KEY')
+if openai.api_key:
     logging.debug("OpenAI API Key is set.")
 else:
     logging.debug("OpenAI API Key is NOT set.")
 
 # Set the API key for OpenAI
-openai.api_key = openai_api_key
+openai.api_key = openai.api_key
 
 # Define content structures for different categories
 def get_content_for_people():
@@ -2295,3 +2296,51 @@ def generate_persona():
     except Exception as e:
         print(f"Error in generate-persona: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/analyze-pdf', methods=['POST'])
+def analyze_pdf():
+    try:
+        if 'pdf' not in request.files:
+            return jsonify({'error': 'No PDF file uploaded'}), 400
+            
+        pdf_file = request.files['pdf']
+        if pdf_file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+            
+        # Leer el PDF
+        pdf_reader = PdfReader(pdf_file)
+        text_content = ""
+        for page in pdf_reader.pages:
+            text_content += page.extract_text()
+
+        # Usar OpenAI para analizar el contenido
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {
+                    "role": "system",
+                    "content": """Create a concise persona description (max 400 chars) from the provided text. 
+                    Include ONLY: sex, age, nationality, dressing style, and environment/background. 
+                    DO NOT include: racial traits, objects in hands, or verbose details.
+                    Format example: "Create a 29-year-old Spanish woman wearing a stylish yet casual outfit with a light linen shirt and relaxed jeans. She stands in a cozy, well-lit kitchen with a minimalist yet warm aesthetic."
+                    """
+                },
+                {
+                    "role": "user",
+                    "content": text_content
+                }
+            ],
+            temperature=0.7,
+            max_tokens=200
+        )
+
+        prompt = response.choices[0].message.content.strip()
+        
+        return jsonify({
+            'status': 'success',
+            'prompt': prompt
+        })
+        
+    except Exception as e:
+        print(f"Error analyzing PDF: {str(e)}")
+        return jsonify({'error': str(e)}), 500

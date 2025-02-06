@@ -455,6 +455,43 @@
     border-radius: 8px;
     white-space: pre-wrap;
 }
+
+/* PDF Upload styles */
+.pdf-upload-container {
+    margin: 16px 0;
+    padding: 8px 12px;
+    background: var(--bunker-800);
+    border-radius: 8px;
+}
+
+.file-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.file-input-wrapper input[type="file"] {
+    display: none;
+}
+
+.file-input-wrapper label {
+    cursor: pointer;
+    color: var(--bunker-100);
+    font-size: 14px;
+}
+
+#pdfPrompt {
+    margin-top: 8px;
+    padding: 8px;
+    background: var(--bunker-700);
+    border-radius: 4px;
+}
+
+.pdf-prompt-text {
+    color: var(--bunker-100);
+    font-size: 12px;
+    margin: 0;
+}
     </style>
     
     
@@ -492,6 +529,18 @@
                                 <label for="aiPrompt"></label>
                             </div>
                             <span>AI-prompt</span>
+                        </div>
+                        
+                        <!-- PDF Upload Section -->
+                        <div class="pdf-upload-container">
+                            <div class="file-input-wrapper">
+                                <span class="material-symbols-outlined">description</span>
+                                <input type="file" id="pdfFile" accept=".pdf">
+                                <label for="pdfFile">Upload PDF (optional)</label>
+                            </div>
+                            <div id="pdfPrompt" style="display: none;">
+                                <p class="pdf-prompt-text"></p>
+                            </div>
                         </div>
                         
                         <div class="film-selector-wrapper"><span class="material-symbols-outlined" style="
@@ -1769,6 +1818,94 @@ const nationality_mapping = {
             }
         };
     });
+
+    // Añadir después de DOMContentLoaded
+    document.getElementById('pdfFile').addEventListener('change', async function(e) {
+        if (this.files.length > 0) {
+            const formData = new FormData();
+            formData.append('pdf', this.files[0]);
+            
+            try {
+                const response = await fetch('/analyze-pdf', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                if (data.prompt) {
+                    const pdfPrompt = document.getElementById('pdfPrompt');
+                    pdfPrompt.style.display = 'block';
+                    pdfPrompt.querySelector('.pdf-prompt-text').textContent = data.prompt;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error processing PDF');
+            }
+        }
+    });
+
+    // Modificar la función generateImages para incluir el prompt del PDF
+    async function generateImages() {
+        const prompt = promptInput.value.trim();
+        const filmType = filmTypeInput.value;
+        const aiPromptEnabled = document.getElementById('aiPrompt').checked;
+        
+        // Obtener el prompt del PDF si existe
+        const pdfPromptText = document.querySelector('.pdf-prompt-text')?.textContent || '';
+        const finalPrompt = pdfPromptText ? `${pdfPromptText} ${prompt}` : prompt;
+
+        if (!finalPrompt || !filmType) {
+            alert('Please enter a prompt and select a film type');
+            return;
+        }
+        
+        const createButton = document.getElementById('createPersona');
+        createButton.disabled = true;
+        
+        const newGrid = createNewPlaceholder();
+        const box = newGrid.querySelector('.preview-box');
+        box.querySelector('.spinner-container').style.display = 'flex';
+        
+        try {
+            const response = await fetch('/generate-persona', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    prompt: finalPrompt,
+                    film_type: filmType,
+                    use_ai_prompt: aiPromptEnabled
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.status === 'succeeded') {
+                const img = box.querySelector('img');
+                const spinner = box.querySelector('.spinner-container');
+                
+                img.src = data.image_url; // Ahora recibimos una sola URL
+                img.onload = () => {
+                    spinner.style.display = 'none';
+                    box.classList.add('loaded');
+
+                    // Extraer nacionalidad del prompt
+                    const nationality = extractNationality(finalPrompt);
+                    // Inicializar controles con el prompt final y la nacionalidad
+                    setupImageControls(box, data.final_prompt, nationality);
+                };
+            } else {
+                throw new Error(data.error || 'Generation failed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert(error.message);
+            newGrid.remove();
+        } finally {
+            createButton.disabled = false;
+        }
+    }
 
     </script>
 </body>
