@@ -2353,3 +2353,43 @@ def analyze_pdf():
     except Exception as e:
         print(f"Error analyzing PDF: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+def extract_nationality(prompt):
+    # Lista de palabras clave de nacionalidad del nationality_mapping
+    nationalities = list(nationality_mapping.keys())
+    
+    # Convertir el prompt a minúsculas y dividir en palabras
+    words = prompt.lower().split()
+    
+    # Buscar coincidencias de nacionalidad
+    for word in words:
+        # Comprobar coincidencias directas
+        if word in nationalities:
+            return word
+        
+        # Comprobar coincidencias con guiones bajos
+        word_with_underscore = word.replace(' ', '_')
+        if word_with_underscore in nationalities:
+            return word_with_underscore
+        
+        # Comprobar coincidencias sin guiones bajos
+        word_without_underscore = word.replace('_', ' ')
+        if word_without_underscore in nationalities:
+            return word_without_underscore
+    
+    return 'unknown'
+
+def get_ethnicity(nationality):
+    # Mapeo simple de nacionalidad a etnicidad
+    ethnicity_mapping = {
+        'spanish': 'spanish',
+        'italian': 'italian',
+        'french': 'french',
+        'swedish': 'swedish',
+        'norwegian': 'norwegian',
+        'danish': 'danish',
+        # ... puedes añadir más mapeos según necesites
+        'unknown': 'unknown'
+    }
+    
+    return ethnicity_mapping.get(nationality, nationality)
