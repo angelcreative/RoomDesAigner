@@ -681,6 +681,13 @@
                         <div class="spinner-container" style="display: none;">
                             <div class="spinner"></div>
                         </div>
+                        <div class="image-controls">
+                            <button class="control-button prompt-btn" data-tooltip="See prompt">✏️</button>
+                            <button class="control-button flag-btn" data-tooltip=""></button>
+                            <button class="control-button zoom-btn" data-tooltip="Zoom">🔍</button>
+                            <button class="control-button download-btn" data-tooltip="Download">⬇️</button>
+                            <button class="control-button remove-btn" data-tooltip="Remove">🗑️</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -765,6 +772,8 @@
         <button class="control-button prompt-btn" data-tooltip="See prompt">✏️</button>
         <button class="control-button flag-btn" data-tooltip=""></button>
         <button class="control-button zoom-btn" data-tooltip="Zoom">🔍</button>
+        <button class="control-button download-btn" data-tooltip="Download">⬇️</button>
+        <button class="control-button remove-btn" data-tooltip="Remove">🗑️</button>
     </div>
     <img src="" alt="Generated image">
                 `;
@@ -849,6 +858,8 @@
             const promptBtn = box.querySelector('.prompt-btn');
             const flagBtn = box.querySelector('.flag-btn');
             const zoomBtn = box.querySelector('.zoom-btn');
+            const downloadBtn = box.querySelector('.download-btn');
+            const removeBtn = box.querySelector('.remove-btn');
             const img = box.querySelector('img');
 
             // Configurar bandera y tooltip
@@ -859,6 +870,21 @@
             // Manejadores de eventos
             promptBtn.onclick = () => showPromptModal(prompt);
             zoomBtn.onclick = () => showImageModal(img.src);
+
+            // Manejador para descargar imagen
+            downloadBtn.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.href = img.src;
+                link.download = `persona_${Date.now()}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            // Manejador para eliminar imagen
+            removeBtn.addEventListener('click', () => {
+                box.closest('.preview-grid').remove();
+            });
         }
 
         // Funciones helper
