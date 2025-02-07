@@ -286,11 +286,12 @@
     
     button#createPersona {
         font-size: medium;
-        width: 100%;
-        margin: 24px 0 0 0;
-        background: var(--aztec-600);
-        color: white;
-        border: none;
+    width: 100%;
+    margin: 24px 0 0 0;
+    background: var(--aztec-600);
+    color: white;
+    border: none;
+    padding: var(--s);
     }
     
     .loaded img {
@@ -458,10 +459,11 @@
 
 /* PDF Upload styles */
 .pdf-upload-container {
-    margin: 16px 0;
-    padding: 8px 12px;
+    margin: 0 auto var(--s);
+    padding: var(--xs) 0 var(--xs) var(--xs);
     background: var(--bunker-800);
     border-radius: 8px;
+    width: 100%;
 }
 
 .file-input-wrapper {
@@ -469,6 +471,7 @@
     align-items: center;
     gap: 8px;
     position: relative;
+    color: var(--bunker-300);
 }
 
 .file-input-wrapper input[type="file"] {
@@ -477,7 +480,7 @@
 
 .file-input-wrapper label {
     cursor: pointer;
-    color: var(--bunker-100);
+    color: var(--bunker-400);
     font-size: 14px;
 }
 
@@ -498,9 +501,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--bunker-700);
-    padding: 4px 8px;
+    background: none;
     border-radius: 4px;
+    color: var(--aztec-400);
+    justify-content: flex-start;
+    position: relative;
+    padding: var(--xs);
 }
 
 .success-icon {
@@ -516,10 +522,13 @@
     padding: 2px;
     display: flex;
     align-items: center;
+    margin: 0;
+    position: absolute;
+    right: 8px;
 }
 
 .pdf-progress {
-    margin-top: 8px;
+    margin: 0 0 var(--xs);
 }
 
 .progress-bar {
