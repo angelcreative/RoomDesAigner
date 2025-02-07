@@ -2336,9 +2336,14 @@ def analyze_pdf():
 
         prompt = response.choices[0].message.content.strip()
         
+        # Asegurarse de que el prompt comience con "Create a"
+        if not prompt.lower().startswith("create a"):
+            prompt = "Create a " + prompt
+
         return jsonify({
             'status': 'success',
-            'prompt': prompt
+            'prompt': prompt,
+            'original_text': text_content[:200] + "..." if len(text_content) > 200 else text_content
         })
         
     except Exception as e:

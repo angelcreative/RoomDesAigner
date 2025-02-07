@@ -468,6 +468,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
 }
 
 .file-input-wrapper input[type="file"] {
@@ -491,6 +492,55 @@
     color: var(--bunker-100);
     font-size: 12px;
     margin: 0;
+}
+
+.pdf-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bunker-700);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.success-icon {
+    color: #4CAF50;
+    font-size: 18px;
+}
+
+.remove-pdf {
+    background: none;
+    border: none;
+    color: var(--bunker-400);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+}
+
+.pdf-progress {
+    margin-top: 8px;
+}
+
+.progress-bar {
+    height: 4px;
+    background: var(--bunker-700);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--aztec-600);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: var(--bunker-400);
+    margin-top: 4px;
+    display: block;
 }
     </style>
     
@@ -536,13 +586,22 @@
                             <div class="file-input-wrapper">
                                 <span class="material-symbols-outlined">description</span>
                                 <input type="file" id="pdfFile" accept=".pdf">
-                                <label for="pdfFile">Upload PDF (optional)</label>
+                                <label for="pdfFile" id="pdfLabel">Upload PDF (optional)</label>
                             </div>
-                            <div id="pdfPrompt" style="display: none;">
-                                <p class="pdf-prompt-text"></p>
+                            <div class="pdf-status" style="display: none;">
+                                <span class="file-name"></span>
+                                <span class="material-symbols-outlined success-icon">check_circle</span>
+                                <button class="remove-pdf">
+                                    <span class="material-symbols-outlined">close</span>
+                                </button>
                             </div>
                         </div>
-                        
+                        <div class="pdf-progress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <span class="progress-text">Processing PDF...</span>
+                        </div>
                         <div class="film-selector-wrapper"><span class="material-symbols-outlined" style="
                             color: var(--bunker-300);
                             position: absolute;
@@ -681,11 +740,13 @@
             
             // Función para generar imágenes
             async function generateImages() {
-                const prompt = promptInput.value.trim();
-                const filmType = filmTypeInput.value;
+                const promptInput = document.getElementById('personaPrompt');
+                const filmType = document.getElementById('film_type').value;
                 const aiPromptEnabled = document.getElementById('aiPrompt').checked;
-
-                if (!prompt || !filmType) {
+                
+                const finalPrompt = promptInput.value.trim();
+                
+                if (!finalPrompt || !filmType) {
                     alert('Please enter a prompt and select a film type');
                     return;
                 }
@@ -704,7 +765,7 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            prompt: prompt,
+                            prompt: finalPrompt,
                             film_type: filmType,
                             use_ai_prompt: aiPromptEnabled
                         })
@@ -716,15 +777,11 @@
                         const img = box.querySelector('img');
                         const spinner = box.querySelector('.spinner-container');
                         
-                        img.src = data.image_url; // Ahora recibimos una sola URL
+                        img.src = data.image_url;
                         img.onload = () => {
                             spinner.style.display = 'none';
                             box.classList.add('loaded');
-
-                            // Extraer nacionalidad del prompt
-                            const nationality = extractNationality(prompt);
-                            // Inicializar controles con el prompt final y la nacionalidad
-                            setupImageControls(box, data.final_prompt, nationality);
+                            setupImageControls(box, data.final_prompt, extractNationality(finalPrompt));
                         };
                     } else {
                         throw new Error(data.error || 'Generation failed');
@@ -1822,91 +1879,70 @@ const nationality_mapping = {
     // Añadir después de DOMContentLoaded
     document.getElementById('pdfFile').addEventListener('change', async function(e) {
         if (this.files.length > 0) {
+            const file = this.files[0];
+            
+            // Mostrar nombre del archivo y estado
+            const fileName = document.querySelector('.file-name');
+            fileName.textContent = file.name;
+            const pdfStatus = document.querySelector('.pdf-status');
+            pdfStatus.style.display = 'flex';
+            
+            // Mostrar barra de progreso
+            const pdfProgress = document.querySelector('.pdf-progress');
+            pdfProgress.style.display = 'block';
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = '30%';
+            const progressText = document.querySelector('.progress-text');
+            progressText.textContent = 'Uploading PDF...';
+
             const formData = new FormData();
-            formData.append('pdf', this.files[0]);
+            formData.append('pdf', file);
             
             try {
+                progressBar.style.width = '60%';
+                progressText.textContent = 'Analyzing content...';
+                
                 const response = await fetch('/analyze-pdf', {
                     method: 'POST',
                     body: formData
                 });
                 
+                progressBar.style.width = '90%';
+                progressText.textContent = 'Generating summary...';
+                
                 const data = await response.json();
                 if (data.prompt) {
-                    const pdfPrompt = document.getElementById('pdfPrompt');
-                    pdfPrompt.style.display = 'block';
-                    pdfPrompt.querySelector('.pdf-prompt-text').textContent = data.prompt;
+                    const pdfPromptText = data.prompt;
+                    progressBar.style.width = '100%';
+                    progressText.textContent = 'Ready!';
+                    
+                    // Actualizar el prompt en el textarea
+                    const promptInput = document.getElementById('personaPrompt');
+                    promptInput.value = pdfPromptText + (promptInput.value ? ' ' + promptInput.value : '');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error processing PDF');
+                progressText.textContent = 'Error processing PDF';
+                progressBar.style.backgroundColor = '#ff4444';
             }
         }
     });
 
-    // Modificar la función generateImages para incluir el prompt del PDF
-    async function generateImages() {
-        const prompt = promptInput.value.trim();
-        const filmType = filmTypeInput.value;
-        const aiPromptEnabled = document.getElementById('aiPrompt').checked;
-        
-        // Obtener el prompt del PDF si existe
-        const pdfPromptText = document.querySelector('.pdf-prompt-text')?.textContent || '';
-        const finalPrompt = pdfPromptText ? `${pdfPromptText} ${prompt}` : prompt;
+    // Manejar eliminación del PDF
+    const removeButton = document.querySelector('.remove-pdf');
+    removeButton.addEventListener('click', () => {
+        const pdfFile = document.getElementById('pdfFile');
+        pdfFile.value = '';
+        const pdfStatus = document.querySelector('.pdf-status');
+        pdfStatus.style.display = 'none';
+        const pdfProgress = document.querySelector('.pdf-progress');
+        pdfProgress.style.display = 'none';
+        const progressBar = document.querySelector('.progress-fill');
+        progressBar.style.width = '0%';
+        document.getElementById('personaPrompt').value = '';
+    });
 
-        if (!finalPrompt || !filmType) {
-            alert('Please enter a prompt and select a film type');
-            return;
-        }
-        
-        const createButton = document.getElementById('createPersona');
-        createButton.disabled = true;
-        
-        const newGrid = createNewPlaceholder();
-        const box = newGrid.querySelector('.preview-box');
-        box.querySelector('.spinner-container').style.display = 'flex';
-        
-        try {
-            const response = await fetch('/generate-persona', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    prompt: finalPrompt,
-                    film_type: filmType,
-                    use_ai_prompt: aiPromptEnabled
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.status === 'succeeded') {
-                const img = box.querySelector('img');
-                const spinner = box.querySelector('.spinner-container');
-                
-                img.src = data.image_url; // Ahora recibimos una sola URL
-                img.onload = () => {
-                    spinner.style.display = 'none';
-                    box.classList.add('loaded');
-
-                    // Extraer nacionalidad del prompt
-                    const nationality = extractNationality(finalPrompt);
-                    // Inicializar controles con el prompt final y la nacionalidad
-                    setupImageControls(box, data.final_prompt, nationality);
-                };
-            } else {
-                throw new Error(data.error || 'Generation failed');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert(error.message);
-            newGrid.remove();
-        } finally {
-            createButton.disabled = false;
-        }
-    }
-
+    });
     </script>
 </body>
 </html>
