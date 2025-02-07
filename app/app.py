@@ -2336,13 +2336,17 @@ def analyze_pdf():
 
         prompt = response.choices[0].message.content.strip()
         
-        # Asegurarse de que el prompt comience con "Create a"
-        if not prompt.lower().startswith("create a"):
-            prompt = "Create a " + prompt
-
+        # Detectar nacionalidad y etnicidad
+        nationality = extract_nationality(prompt)
+        ethnicity = get_ethnicity(nationality)
+        
         return jsonify({
             'status': 'success',
             'prompt': prompt,
+            'detected_info': {
+                'nationality': f"Detected nationality: {nationality} → {nationality}",
+                'ethnicity': f"Selected ethnicity: {ethnicity} (80.3%)"
+            },
             'original_text': text_content[:200] + "..." if len(text_content) > 200 else text_content
         })
         

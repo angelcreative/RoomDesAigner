@@ -529,6 +529,7 @@
 
 .pdf-progress {
     margin: 0 0 var(--xs);
+    transition: all 0.3s ease;
 }
 
 .progress-bar {
@@ -536,20 +537,50 @@
     background: var(--bunker-700);
     border-radius: 2px;
     overflow: hidden;
+    margin-bottom: var(--3xs);
 }
 
 .progress-fill {
     height: 100%;
     background: var(--aztec-600);
     width: 0%;
-    transition: width 0.3s ease;
+    transition: width 0.6s ease;
 }
 
 .progress-text {
     font-size: 12px;
     color: var(--bunker-400);
-    margin-top: 4px;
+    margin: 0;
     display: block;
+}
+
+.pdf-progress.success {
+    background: var(--bunker-900);
+    padding: var(--3xs) var(--xs);
+    border-radius: var(--2xs);
+}
+
+.pdf-progress.success .progress-text {
+    color: var(--aztec-400);
+}
+
+.prompt-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.prompt-info p {
+    color: var(--aztec-400);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prompt-info p::before {
+    content: "✅";
 }
     </style>
     
@@ -665,6 +696,7 @@
             <button class="copy-button" title="Copy prompt">📋</button>
         </div>
         <div class="prompt-text"></div>
+        <div class="prompt-info"></div>
     </div>
 </div>
 
@@ -1924,10 +1956,20 @@ const nationality_mapping = {
                     const pdfPromptText = data.prompt;
                     progressBar.style.width = '100%';
                     progressText.textContent = 'Ready!';
+                    pdfProgress.classList.add('success');
                     
                     // Actualizar el prompt en el textarea
                     const promptInput = document.getElementById('personaPrompt');
-                    promptInput.value = pdfPromptText + (promptInput.value ? ' ' + promptInput.value : '');
+                    promptInput.value = pdfPromptText;
+                    
+                    // Mostrar información detectada
+                    const promptInfo = document.createElement('div');
+                    promptInfo.className = 'prompt-info';
+                    promptInfo.innerHTML = `
+                        <p>${data.detected_info.nationality}</p>
+                        <p>${data.detected_info.ethnicity}</p>
+                    `;
+                    pdfProgress.appendChild(promptInfo);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -1945,6 +1987,7 @@ const nationality_mapping = {
         const pdfStatus = document.querySelector('.pdf-status');
         pdfStatus.style.display = 'none';
         const pdfProgress = document.querySelector('.pdf-progress');
+        pdfProgress.classList.remove('success');
         pdfProgress.style.display = 'none';
         const progressBar = document.querySelector('.progress-fill');
         progressBar.style.width = '0%';
