@@ -2348,7 +2348,24 @@ def analyze_pdf():
             
         # Obtener grupo étnico del país
         country_data = ethnic_data.get('countries', {}).get(nationality, {})
-        ethnic_reference = country_data.get('ethnic_references', {}).get('mainland', 'latin_american')
+        # Obtener distribución étnica del país
+        ethnicities = country_data.get('ethnicities', {})
+        
+        # Seleccionar etnicidad basada en probabilidades
+        if ethnicities:
+            total = sum(ethnicities.values())
+            rand = random.uniform(0, total)
+            cumsum = 0
+            selected_ethnicity = 'unknown'
+            
+            for ethnicity, probability in ethnicities.items():
+                cumsum += probability
+                if rand <= cumsum:
+                    selected_ethnicity = ethnicity
+                    break
+        
+        # Obtener referencia étnica basada en la etnicidad seleccionada
+        ethnic_reference = country_data.get('ethnic_references', {}).get(selected_ethnicity, 'unknown')
         
         # Obtener características étnicas
         ethnic_features = ethnic_data['ethnic_types'].get(ethnic_reference, {}).get('features', {})
