@@ -2348,7 +2348,7 @@ def analyze_pdf():
             
         # Obtener grupo étnico del país
         country_data = ethnic_data.get('countries', {}).get(nationality, {})
-        ethnic_reference = country_data.get('ethnic_references', {}).get('spanish', 'mediterranean_european')
+        ethnic_reference = country_data.get('ethnic_references', {}).get('mainland', 'latin_american')
         
         # Obtener características étnicas
         ethnic_features = ethnic_data['ethnic_types'].get(ethnic_reference, {}).get('features', {})
@@ -2360,14 +2360,13 @@ def analyze_pdf():
             'status': 'success',
             'prompt': prompt,
             'detected_info': {
-                'nationality': f"✅ nationality -> {nationality} > {nationality_mapping.get(nationality, nationality)}",
+                'nationality': f"✅ nationality -> {nationality} > {nationality}",
                 'ethnicity': f"✅ ethnicity -> {ethnic_reference}",
-                'ethnic_features': {
-                    'skin_tone': ethnic_features.get('skin_tones', ['unknown'])[0],
-                    'hair_color': ethnic_features.get('hair_colors', ['unknown'])[0],
-                    'eye_color': ethnic_features.get('eye_colors', ['unknown'])[0],
-                    'facial_features': ', '.join(ethnic_features.get('facial_features', ['unknown']))
-                },
+                'ethnic_features': f"✅ {ethnic_reference} features:\n" +
+                    f"   - skin tone: {ethnic_features.get('skin_tones', ['unknown'])[0]}\n" +
+                    f"   - hair color: {ethnic_features.get('hair_colors', ['unknown'])[0]}\n" +
+                    f"   - eye color: {ethnic_features.get('eye_colors', ['unknown'])[0]}\n" +
+                    f"   - facial features: {', '.join(ethnic_features.get('facial_features', ['unknown']))}",
                 'physical': f"✅ physical build: {size_characteristics['height_desc']} ({size_characteristics['height']}), {size_characteristics['body_type']}"
             },
             'original_text': text_content[:200] + "..." if len(text_content) > 200 else text_content
@@ -2378,29 +2377,35 @@ def analyze_pdf():
         return jsonify({'error': str(e)}), 500
 
 def extract_nationality(prompt):
-    # Lista de palabras clave de nacionalidad del nationality_mapping
-    nationalities = list(nationality_mapping.keys())
-    
-    # Convertir el prompt a minúsculas y dividir en palabras
-    words = prompt.lower().split()
-    
-    # Buscar coincidencias de nacionalidad
-    for word in words:
-        # Comprobar coincidencias directas
-        if word in nationalities:
-            return word
+    try:
+        # Cargar datos étnicos una sola vez
+        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+            ethnic_data = json.load(f)
         
-        # Comprobar coincidencias con guiones bajos
-        word_with_underscore = word.replace(' ', '_')
-        if word_with_underscore in nationalities:
-            return word_with_underscore
+        # Convertir el prompt a minúsculas y dividir en palabras
+        words = prompt.lower().split()
         
-        # Comprobar coincidencias sin guiones bajos
-        word_without_underscore = word.replace('_', ' ')
-        if word_without_underscore in nationalities:
-            return word_without_underscore
+        # Buscar coincidencias en los países de ethnic.json
+        countries = ethnic_data.get('countries', {}).keys()
+        
+        for word in words:
+            if word in countries:
+                return word
+            
+            # Comprobar coincidencias con guiones bajos
+            word_with_underscore = word.replace(' ', '_')
+            if word_with_underscore in countries:
+                return word_with_underscore
+            
+            # Comprobar coincidencias sin guiones bajos
+            word_without_underscore = word.replace('_', ' ')
+            if word_without_underscore in countries:
+                return word_without_underscore
     
-    return 'unknown'
+        return 'unknown'
+    except Exception as e:
+        print(f"Error extracting nationality: {str(e)}")
+        return 'unknown'
 
 def get_ethnicity(nationality):
     # Mapeo simple de nacionalidad a etnicidad
