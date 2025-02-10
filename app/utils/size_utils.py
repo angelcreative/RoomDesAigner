@@ -55,31 +55,56 @@ def get_continent_for_country(country):
     
     return continent_map.get(country, "europe")
 
-def get_size_characteristics(nationality, gender, size_data):
+def get_size_characteristics(nationality='unknown', gender='female', size_data=None):
     """Obtiene características de tamaño basadas en nacionalidad y género"""
     try:
+        # Si no se proporcionan datos de tamaño, cargarlos
+        if size_data is None:
+            size_data = load_size_data()
+
         # Obtener datos base
         country_data = size_data.get("countries", {}).get(nationality)
         if not country_data:
             continent = get_continent_for_country(nationality)
             country_data = size_data.get("continents", {}).get(continent, {})
         
+        # Si no hay datos específicos, usar valores por defecto
         if not country_data or gender not in country_data:
-            return None
-
+            return {
+                'height': '170cm',
+                'height_desc': 'average height',
+                'body_type': 'average build'
+            }
+        
         base_data = country_data[gender]
-        height = base_data["height"]
-        weight = calculate_weight_variation(base_data)
+        height = base_data.get("height", "170")
+        
+        # Convertir altura a descripción semántica
+        height_value = float(str(height).replace('cm', ''))
+        if height_value > 180:
+            height_desc = 'tall'
+        elif height_value < 160:
+            height_desc = 'petite'
+        else:
+            height_desc = 'average height'
 
-        # Convertir medidas a descripciones
-        height_desc = get_height_description(height)
-        build_desc = get_build_description(weight, base_data["weight"])
+        # Generar descripción de constitución corporal
+        build_types = ['slender', 'athletic', 'average build', 'curvy', 'full-figured']
+        body_type = random.choice(build_types)
 
-        return f"{height_desc} with {build_desc}"
+        return {
+            'height': f"{height}cm",
+            'height_desc': height_desc,
+            'body_type': body_type
+        }
 
     except Exception as e:
         print(f"Error getting size characteristics: {str(e)}")
-        return None
+        return {
+            'height': '170cm',
+            'height_desc': 'average height',
+            'body_type': 'average build'
+        }
 
 def get_height_description(height):
     """Convierte altura en descripción"""

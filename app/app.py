@@ -2340,12 +2340,33 @@ def analyze_pdf():
         nationality = extract_nationality(prompt)
         ethnicity = get_ethnicity(nationality)
         
+        # Cargar datos étnicos
+        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+            ethnic_data = json.load(f)
+            
+        # Obtener grupo étnico del país
+        country_data = ethnic_data['countries'].get(nationality, {})
+        ethnic_reference = country_data.get('ethnic_references', {}).get('mainland', 'unknown')
+        
+        # Obtener características étnicas
+        ethnic_features = ethnic_data['ethnic_types'].get(ethnic_reference, {}).get('features', {})
+        
+        # Obtener características de tamaño
+        size_characteristics = get_size_characteristics(nationality=nationality, gender=gender, size_data=size_data)
+
         return jsonify({
             'status': 'success',
             'prompt': prompt,
             'detected_info': {
-                'nationality': f"Detected nationality: {nationality} → {nationality}",
-                'ethnicity': f"Selected ethnicity: {ethnicity} (80.3%)"
+                'nationality': f"✅ nationality -> {nationality} > {nationality_mapping.get(nationality, nationality)}",
+                'ethnicity': f"✅ ethnicity -> {ethnic_reference}",
+                'ethnic_features': {
+                    'skin_tone': ethnic_features.get('skin_tones', ['unknown'])[0],
+                    'hair_color': ethnic_features.get('hair_colors', ['unknown'])[0],
+                    'eye_color': ethnic_features.get('eye_colors', ['unknown'])[0],
+                    'facial_features': ', '.join(ethnic_features.get('facial_features', ['unknown']))
+                },
+                'physical': f"✅ physical build: {size_characteristics['height_desc']} ({size_characteristics['height']}), {size_characteristics['body_type']}"
             },
             'original_text': text_content[:200] + "..." if len(text_content) > 200 else text_content
         })
