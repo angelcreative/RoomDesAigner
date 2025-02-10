@@ -2172,15 +2172,51 @@ def generate_persona():
         film_configs = {
             'fuji': {
                 'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
-                'keyword': "TOK"
+                'keyword': "TOK",
+                'params': {
+                    "disable_safety_checker": "true",
+                    "go_fast": "true",
+                    "megapixels": "1",
+                    "lora_scale": 0.99,
+                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
+                    "extra_lora_scale": 0.5,
+                    "guidance_scale": 7.5,
+                    "num_inference_steps": 28,
+                    "width": 768,
+                    "height": 768
+                }
             },
             'koda': {
                 'version': "1ba00ff40b6f4b603d1126bca1c75da7f0f9ff21eb1569e9adb4299c9f3e1166",
-                'keyword': "TOK"
+                'keyword': "TOK",
+                'params': {
+                   "disable_safety_checker": "true",
+                    "go_fast": "true",
+                    "megapixels": "1",
+                    "lora_scale": 0.99,
+                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
+                    "extra_lora_scale": 0.5,
+                    "guidance_scale": 7.5,
+                    "num_inference_steps": 28,
+                    "width": 768,
+                    "height": 768
+                }
             },
             'surreal': {
                 'version': "af9441cdc4a371dece5fbe6144d4587ccb68d7b00c2d573b206254180691f895",
-                'keyword': "surreal style"
+                'keyword': "surreal style",
+                'params': {
+                   "disable_safety_checker": "true",
+                    "go_fast": "true",
+                    "megapixels": "1",
+                    "lora_scale": 0.99,
+                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
+                    "extra_lora_scale": 0.5,
+                    "guidance_scale": 7.5,
+                    "num_inference_steps": 28,
+                    "width": 768,
+                    "height": 768
+                }
             },
             'pola': {
                 'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
@@ -2357,11 +2393,13 @@ def analyze_pdf():
             rand = random.uniform(0, total)
             cumsum = 0
             selected_ethnicity = 'unknown'
+            ethnicity_percentage = 0
             
             for ethnicity, probability in ethnicities.items():
                 cumsum += probability
                 if rand <= cumsum:
                     selected_ethnicity = ethnicity
+                    ethnicity_percentage = probability
                     break
         
         # Obtener referencia étnica basada en la etnicidad seleccionada
@@ -2378,7 +2416,8 @@ def analyze_pdf():
             'prompt': prompt,
             'detected_info': {
                 'nationality': f"✅ nationality -> {nationality} > {nationality}",
-                'ethnicity': f"✅ ethnicity -> {ethnic_reference}",
+                'ethnicity': f"✅ ethnicity -> {selected_ethnicity} ({ethnicity_percentage:.1f}%)",
+                'ethnic_group': f"✅ ethnic group -> {ethnic_reference}",
                 'ethnic_features': f"✅ {ethnic_reference} features:\n" +
                     f"   - skin tone: {ethnic_features.get('skin_tones', ['unknown'])[0]}\n" +
                     f"   - hair color: {ethnic_features.get('hair_colors', ['unknown'])[0]}\n" +
