@@ -2336,17 +2336,19 @@ def analyze_pdf():
 
         prompt = response.choices[0].message.content.strip()
         
-        # Detectar nacionalidad y etnicidad
+        # Detectar género del texto
+        gender = 'female' if any(word in prompt.lower() for word in FEMALE_WORDS) else 'male'
+        
+        # Detectar nacionalidad y obtener características
         nationality = extract_nationality(prompt)
-        ethnicity = get_ethnicity(nationality)
         
         # Cargar datos étnicos
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
             
         # Obtener grupo étnico del país
-        country_data = ethnic_data['countries'].get(nationality, {})
-        ethnic_reference = country_data.get('ethnic_references', {}).get('mainland', 'unknown')
+        country_data = ethnic_data.get('countries', {}).get(nationality, {})
+        ethnic_reference = country_data.get('ethnic_references', {}).get('spanish', 'mediterranean_european')
         
         # Obtener características étnicas
         ethnic_features = ethnic_data['ethnic_types'].get(ethnic_reference, {}).get('features', {})
