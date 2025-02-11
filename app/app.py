@@ -2174,14 +2174,18 @@ def generate_persona():
                 'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
                 'keyword': "TOK",
                 'params': {
-                    "disable_safety_checker": "true",
-                    "go_fast": "true",
+                    "disable_safety_checker": true,
+                    "go_fast": false,
                     "megapixels": "1",
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
                     "guidance_scale": 7.5,
                     "num_inference_steps": 28,
+                    "prompt_strength": 0.8,
+                    "aspect_ratio": "1:1",
+                    "output_format": "webp",
+                    "output_quality": 80,
                     "width": 768,
                     "height": 768
                 }
@@ -2190,37 +2194,52 @@ def generate_persona():
                 'version': "1ba00ff40b6f4b603d1126bca1c75da7f0f9ff21eb1569e9adb4299c9f3e1166",
                 'keyword': "TOK",
                 'params': {
-                   "disable_safety_checker": "true",
-                    "go_fast": "true",
-                    "megapixels": "1",
+                    "disable_safety_checker": true,
+                    "go_fast": false,
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
+                    "prompt_strength": 0.8,
+                    "aspect_ratio": "1:1",
+                    "output_format": "webp",
+                    "output_quality": 80,
                     "guidance_scale": 7.5,
-                    "num_inference_steps": 28,
-                    "width": 768,
-                    "height": 768
+                    "num_inference_steps": 28
                 }
             },
             'surreal': {
                 'version': "af9441cdc4a371dece5fbe6144d4587ccb68d7b00c2d573b206254180691f895",
                 'keyword': "surreal style",
                 'params': {
-                   "disable_safety_checker": "true",
-                    "go_fast": "true",
-                    "megapixels": "1",
+                    "disable_safety_checker": true,
+                    "go_fast": false,
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
+                    "prompt_strength": 0.8,
+                    "aspect_ratio": "1:1",
+                    "output_format": "webp",
+                    "output_quality": 80,
                     "guidance_scale": 7.5,
-                    "num_inference_steps": 28,
-                    "width": 768,
-                    "height": 768
+                    "num_inference_steps": 28
                 }
             },
             'pola': {
                 'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
-                'keyword': "polaroid style"
+                'keyword': "polaroid style",
+                'params': {
+                    "disable_safety_checker": true,
+                    "go_fast": false,
+                    "lora_scale": 0.99,
+                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
+                    "extra_lora_scale": 0.5,
+                    "prompt_strength": 0.8,
+                    "aspect_ratio": "1:1",
+                    "output_format": "webp",
+                    "output_quality": 80,
+                    "guidance_scale": 7.5,
+                    "num_inference_steps": 28
+                }
             },
             'analog': {
                 'version': "e489fed94f07ffa8037d3d31cc40e8539ea37f6a5d5275747eff6be384e511cb",
@@ -2417,8 +2436,8 @@ def analyze_pdf():
             'status': 'success',
             'prompt': prompt,
             'detected_info': {
-                'nationality': f"✅ nationality -> {nationality} > {nationality}",
-                'ethnicity': f"✅ ethnicity -> {selected_ethnicity} ({ethnicity_percentage:.1f}%)",
+                'nationality': f"✅ Detected nationality: {word} -> {nationality}",
+                'ethnicity': f"✅ Selected ethnicity: {selected_ethnicity} ({ethnicity_percentage:.1f}%)",
                 'ethnic_group': f"✅ ethnic group -> {ethnic_reference}",
                 'ethnic_features': f"✅ {ethnic_reference} features:\n" +
                     f"   - skin tone: {ethnic_features.get('skin_tones', ['unknown'])[0]}\n" +
@@ -2443,24 +2462,27 @@ def extract_nationality(prompt):
         # Convertir el prompt a minúsculas y dividir en palabras
         words = prompt.lower().split()
         
-        # Buscar coincidencias en los países de ethnic.json
-        countries = ethnic_data.get('countries', {}).keys()
+        # Generar mapeo de gentilicios automáticamente
+        nationality_mapping = {}
+        for country in ethnic_data.get('countries', {}):
+            # Convertir país a gentilicio (ej: 'panama' -> 'panamanian')
+            if country.endswith('a'):
+                gentilicio = f"{country[:-1]}n"
+            else:
+                gentilicio = f"{country}ian"
+            nationality_mapping[gentilicio] = country
         
         for word in words:
-            if word in countries:
+            # Primero revisar el mapeo de gentilicios
+            if word in nationality_mapping:
+                return nationality_mapping[word]
+            
+            # Buscar coincidencias en los países de ethnic.json
+            if word in ethnic_data.get('countries', {}):
                 return word
-            
-            # Comprobar coincidencias con guiones bajos
-            word_with_underscore = word.replace(' ', '_')
-            if word_with_underscore in countries:
-                return word_with_underscore
-            
-            # Comprobar coincidencias sin guiones bajos
-            word_without_underscore = word.replace('_', ' ')
-            if word_without_underscore in countries:
-                return word_without_underscore
-    
+
         return 'unknown'
+
     except Exception as e:
         print(f"Error extracting nationality: {str(e)}")
         return 'unknown'
@@ -3305,6 +3327,6 @@ def get_ethnicity(nationality):
     # Zimbabue
     'zimbabwean': 'zimbabwe',
     'zimbabwe': 'zimbabwe'
-    }
+}
     
     return ethnicity_mapping.get(nationality, nationality)
