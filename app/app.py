@@ -2174,8 +2174,8 @@ def generate_persona():
                 'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
                 'keyword': "TOK",
                 'params': {
-                    "disable_safety_checker": true,
-                    "go_fast": false,
+                    "disable_safety_checker": True,
+                    "go_fast": False,
                     "megapixels": "1",
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
@@ -2194,8 +2194,8 @@ def generate_persona():
                 'version': "1ba00ff40b6f4b603d1126bca1c75da7f0f9ff21eb1569e9adb4299c9f3e1166",
                 'keyword': "TOK",
                 'params': {
-                    "disable_safety_checker": true,
-                    "go_fast": false,
+                    "disable_safety_checker": True,
+                    "go_fast": False,
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
@@ -2211,8 +2211,8 @@ def generate_persona():
                 'version': "af9441cdc4a371dece5fbe6144d4587ccb68d7b00c2d573b206254180691f895",
                 'keyword': "surreal style",
                 'params': {
-                    "disable_safety_checker": true,
-                    "go_fast": false,
+                    "disable_safety_checker": True,
+                    "go_fast": False,
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
@@ -2228,8 +2228,8 @@ def generate_persona():
                 'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
                 'keyword': "polaroid style",
                 'params': {
-                    "disable_safety_checker": true,
-                    "go_fast": false,
+                    "disable_safety_checker": True,
+                    "go_fast": False,
                     "lora_scale": 0.99,
                     "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
                     "extra_lora_scale": 0.5,
