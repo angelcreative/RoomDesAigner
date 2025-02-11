@@ -1105,6 +1105,15 @@ nationality_mapping = {
     'zimbabwe': 'zimbabwe'
 }
 
+# Mapeo de nacionalidades y gentilicios
+ethnicity_mapping = {
+    # Afganistán
+    'afghan': 'afghanistan',
+    'afghanistan': 'afghanistan',
+    # ... resto del mapeo ...
+    'zimbabwean': 'zimbabwe',
+    'zimbabwe': 'zimbabwe'
+}
 
 def get_random_features(racial_group=None, override_features=None):
     """Obtiene características aleatorias, opcionalmente de un grupo racial específico"""
@@ -2291,13 +2300,12 @@ def extract_nationality(prompt):
                 if country in ethnic_data.get('countries', {}):
                     return country
         
-        # Usar el mapeo existente de ethnicity_mapping
-        nationality_mapping = ethnicity_mapping
+        # Usar el mapeo global de ethnicity_mapping
         
         # Buscar gentilicios o países directamente
         for word in words:
-            if word in nationality_mapping:
-                return nationality_mapping[word]
+            if word in ethnicity_mapping:  # Usar directamente ethnicity_mapping
+                return ethnicity_mapping[word]
             if word in ethnic_data.get('countries', {}):
                 return word
 
