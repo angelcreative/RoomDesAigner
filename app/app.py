@@ -2397,6 +2397,10 @@ def analyze_pdf():
         # Detectar nacionalidad y obtener características
         nationality = extract_nationality(prompt)
         
+        # Obtener el gentilicio original del prompt
+        original_nationality = next((word for word in prompt.lower().split() 
+            if word in nationality_mapping or word in ethnic_data.get('countries', {})), nationality)
+        
         # Cargar datos étnicos
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
@@ -2436,7 +2440,7 @@ def analyze_pdf():
             'status': 'success',
             'prompt': prompt,
             'detected_info': {
-                'nationality': f"✅ Detected nationality: {word} -> {nationality}",
+                'nationality': f"✅ Detected nationality: {original_nationality} -> {nationality}",
                 'ethnicity': f"✅ Selected ethnicity: {selected_ethnicity} ({ethnicity_percentage:.1f}%)",
                 'ethnic_group': f"✅ ethnic group -> {ethnic_reference}",
                 'ethnic_features': f"✅ {ethnic_reference} features:\n" +
