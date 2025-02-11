@@ -2306,16 +2306,22 @@ def generate_persona():
                 "num_inference_steps": 28
             }
 
-        response = requests.post(
-            "https://api.replicate.com/v1/predictions",
-            json={
-                "version": config['version'],
-                "input": input_params
-            },
-            headers={
-                "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
-                "Content-Type": "application/json"
-            }
+        # Obtener configuración del modelo
+        film_config = film_configs.get(film_type)
+        if not film_config:
+            return jsonify({'error': 'Invalid film type'}), 400
+
+        # Construir input con todos los parámetros
+        model_input = {
+            "prompt": f"{prompt}, {enhanced_prompt}, {film_config['keyword']}",
+            "num_outputs": 1,
+            **film_config['params']  # Desempaquetar todos los parámetros configurados
+        }
+        
+        # Ejecutar el modelo con los parámetros completos
+        output = replicate.run(
+            f"aramintak/flux-film-foto:{film_config['version']}",
+            input=model_input
         )
 
         if response.status_code != 201:
