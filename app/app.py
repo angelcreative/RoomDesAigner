@@ -2361,7 +2361,12 @@ def analyze_pdf():
         pdf_file = request.files['pdf']
         if pdf_file.filename == '':
             return jsonify({'error': 'No file selected'}), 400
-            
+
+
+        # Cargar datos étnicos primero
+        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+            ethnic_data = json.load(f)
+
         # Leer el PDF
         pdf_reader = PdfReader(pdf_file)
         text_content = ""
@@ -2401,9 +2406,7 @@ def analyze_pdf():
         original_nationality = next((word for word in prompt.lower().split() 
             if word in nationality_mapping or word in ethnic_data.get('countries', {})), nationality)
         
-        # Cargar datos étnicos
-        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
-            ethnic_data = json.load(f)
+       
             
         # Obtener grupo étnico del país
         country_data = ethnic_data.get('countries', {}).get(nationality, {})
