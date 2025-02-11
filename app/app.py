@@ -3155,7 +3155,35 @@ def generate_persona():
         prompt = data.get('prompt')
         film_type = data.get('film_type')
         use_ai_prompt = data.get('use_ai_prompt', True)
+
+        # Cargar datos étnicos
+        with open('static/ethnic.json', 'r', encoding='utf-8') as f:
+            ethnic_data = json.load(f)
+
+        # Detectar nacionalidad
+        nationality = extract_nationality(prompt)
         
+        # Obtener grupo étnico del país
+        country_data = ethnic_data.get('countries', {}).get(nationality, {})
+        
+        # Obtener distribución étnica y características
+        ethnicities = country_data.get('ethnicities', {})
+        selected_ethnicity = next(iter(ethnicities)) if ethnicities else 'unknown'
+        ethnic_reference = country_data.get('ethnic_references', {}).get(selected_ethnicity, 'unknown')
+        
+        # Obtener características étnicas y físicas
+        ethnic_features = ethnic_data.get('ethnic_types', {}).get(ethnic_reference, {}).get('features', {})
+        size_characteristics = get_size_characteristics(nationality=nationality, gender='unknown')
+        
+        # Construir el prompt mejorado con todas las características
+        enhanced_prompt = f"{prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
+            f"{ethnic_features.get('hair_colors', ['unknown'])[0]} hair, " + \
+            f"{ethnic_features.get('eye_colors', ['unknown'])[0]} eyes, " + \
+            f"with facial features including {', '.join(ethnic_features.get('facial_features', ['unknown']))}, " + \
+            f"of {ethnic_reference} heritage, " + \
+            f"{size_characteristics['height_desc']} build ({size_characteristics['height']}), {size_characteristics['body_type']}, " + \
+            "natural appearance, candid pose"
+
         # Configuración según el tipo de película
         film_configs = {
             'fuji': {
@@ -3278,7 +3306,6 @@ def generate_persona():
             raise Exception("Invalid film type selected")
 
         config = film_configs[film_type]
-        enhanced_prompt = transform_prompt(prompt, use_openai=use_ai_prompt)
         final_prompt = f"{enhanced_prompt}, {config['keyword']}"
 
         # Preparar los parámetros según el modelo
