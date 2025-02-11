@@ -1449,7 +1449,7 @@ def gpt_talk():
 
         # Llamada a la API de OpenAI
         response = openai.ChatCompletion.create(
-            model="gpt-4o-mini" if image_data else "gpt-4o-mini",
+            model="gpt-4o-mini" if image_data else "gpt-3.5-turbo",
             messages=messages,
             temperature=1,
             max_tokens=2048,
@@ -2351,7 +2351,7 @@ def analyze_pdf():
 
         # Usar OpenAI para analizar el contenido
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",
@@ -2387,13 +2387,15 @@ def analyze_pdf():
         # Obtener distribución étnica del país
         ethnicities = country_data.get('ethnicities', {})
         
+        # Inicializar variables con valores por defecto
+        selected_ethnicity = 'unknown'
+        ethnicity_percentage = 0.0
+        
         # Seleccionar etnicidad basada en probabilidades
         if ethnicities:
             total = sum(ethnicities.values())
             rand = random.uniform(0, total)
             cumsum = 0
-            selected_ethnicity = 'unknown'
-            ethnicity_percentage = 0
             
             for ethnicity, probability in ethnicities.items():
                 cumsum += probability
