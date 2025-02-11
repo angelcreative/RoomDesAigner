@@ -1376,7 +1376,7 @@ def generate_openai_prompt(prompt_text):
     """Mejora el prompt usando OpenAI manteniendo las características étnicas"""
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
              messages=[
                 {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
                 When the prompt includes a nationality, you MUST:
@@ -1449,7 +1449,7 @@ def gpt_talk():
 
         # Llamada a la API de OpenAI
         response = openai.ChatCompletion.create(
-            model="gpt-4-turbo" if image_data else "gpt-4-turbo",
+            model="gpt-4o-mini" if image_data else "gpt-4o-mini",
             messages=messages,
             temperature=1,
             max_tokens=2048,
