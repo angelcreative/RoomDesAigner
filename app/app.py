@@ -3186,6 +3186,9 @@ def generate_persona():
 
         # Configuración según el tipo de película
         film_configs = {
+            'google/imagen-3': {
+                'version': "65efe09feb6bf759132ac61818c85c56b12c7dfacebdc0cdd9e933b7e3abcc48", 
+            },
             'fuji': {
                 'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
                 'keyword': "TOK",
