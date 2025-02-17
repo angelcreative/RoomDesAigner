@@ -3187,9 +3187,9 @@ def generate_persona():
         # Configuración según el tipo de película
         film_configs = {
             'google/imagen-3': {
-                'version': "65efe09feb6bf759132ac61818c85c56b12c7dfacebdc0cdd9e933b7e3abcc48", 
+                'version': "65efe09feb6bf759132ac61818c85c56b12c7dfacebdc0cdd9e933b7e3abcc48",
                 'params': {
-                    'aspect_ratio': "1:1",
+                    "aspect_ratio": "1:1",
                     "safety_filter_level": "block_only_high",
                 }
             },
@@ -3339,12 +3339,12 @@ def generate_persona():
         response = requests.post(
             "https://api.replicate.com/v1/predictions",
             json={
-                "version": film_config['version'],
+                "version": film_config['version'],  # Ahora google/imagen-3 tendrá su versión
                 "input": {
                     "prompt": final_prompt,
-                    **(film_config['params'] if film_type != 'google/imagen-3' else {
-                        "aspect_ratio": "1:1",
-                        "safety_filter_level": "block_only_high"
+                    **(film_config['params'] if film_type == 'google/imagen-3' else {
+                        **film_config['params'],
+                        "prompt": final_prompt
                     })
                 }
             },
