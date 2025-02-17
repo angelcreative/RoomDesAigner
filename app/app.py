@@ -3188,12 +3188,9 @@ def generate_persona():
         film_configs = {
             'google/imagen-3': {
                 'version': "65efe09feb6bf759132ac61818c85c56b12c7dfacebdc0cdd9e933b7e3abcc48", 
-                'keyword': "Imagen-3",
                 'params': {
-                    "prompt": "",  # Se llenará con el prompt generado
                     'aspect_ratio': "1:1",
                     "safety_filter_level": "block_only_high",
-                    "num_outputs": 1
                 }
             },
             'fuji': {
@@ -3315,13 +3312,13 @@ def generate_persona():
         if film_type not in film_configs:
             raise Exception("Invalid film type selected")
 
-        config = film_configs[film_type]
-        final_prompt = f"{enhanced_prompt}, {config['keyword']}"
+        film_config = film_configs[film_type]
+        final_prompt = enhanced_prompt if film_type == 'google/imagen-3' else f"{enhanced_prompt}, {film_config.get('keyword', '')}"
 
         # Preparar los parámetros según el modelo
         if film_type in ['analog', 'disposable', 'flux']:  # Añadimos 'flux' aquí
 
-            input_params = config['params'].copy()
+            input_params = film_config['params'].copy()
             input_params['prompt'] = final_prompt
         else:
             input_params = {
@@ -3331,14 +3328,9 @@ def generate_persona():
                 "num_inference_steps": 28
             }
 
-        # Obtener configuración del modelo
-        film_config = film_configs.get(film_type)
-        if not film_config:
-            return jsonify({'error': 'Invalid film type'}), 400
-
         # Construir input con todos los parámetros
         model_input = {
-            "prompt": f"{prompt}, {enhanced_prompt}, {film_config['keyword']}",
+            "prompt": f"{prompt}, {enhanced_prompt}, {film_config.get('keyword', '')}",
             "num_outputs": 1,
             **film_config['params']  # Desempaquetar todos los parámetros configurados
         }
@@ -3349,8 +3341,11 @@ def generate_persona():
             json={
                 "version": film_config['version'],
                 "input": {
-                    "prompt": enhanced_prompt if film_type == 'google/imagen-3' else f"{prompt}, {enhanced_prompt}, {film_config['keyword']}",
-                    **film_config['params']
+                    "prompt": final_prompt,
+                    **(film_config['params'] if film_type != 'google/imagen-3' else {
+                        "aspect_ratio": "1:1",
+                        "safety_filter_level": "block_only_high"
+                    })
                 }
             },
             headers={
@@ -3382,7 +3377,7 @@ def generate_persona():
                 return jsonify({
                 "status": "succeeded",
                 "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
-                "final_prompt": final_prompt.replace(config['keyword'], '').strip()  # Eliminar keyword
+                "final_prompt": final_prompt.replace(film_config.get('keyword', ''), '').strip()  # Eliminar keyword
             }), 200
             elif prediction['status'] == 'failed':
                 raise Exception("Image generation failed")
