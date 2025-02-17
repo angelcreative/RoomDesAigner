@@ -116,7 +116,42 @@ function handleSubmit(event) {
           console.error("Error en la subida de la imagen:", error.message);
         });
     } else {
-      generateImages(null, selectedValues, isImg2Img, processedPrompt, useOpenAI);
+      // Verificar si es google-imagen-3
+      const selectedModel = document.querySelector('input[name="model"]:checked').value;
+      if (selectedModel === 'google-imagen-3') {
+        fetch('/generate-imagen3', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            prompt: processedPrompt,
+            film_type: 'google/imagen-3',
+            params: {
+              "aspect_ratio": "1:1",
+              "safety_filter_level": "block_only_high"
+            }
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'succeeded') {
+            const imageGrid = document.getElementById('imageGrid');
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-container';
+            const img = document.createElement('img');
+            img.src = data.image_url;
+            imageContainer.appendChild(img);
+            imageGrid.appendChild(imageContainer);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          handleError(error.message);
+        });
+      } else {
+        generateImages(null, selectedValues, isImg2Img, processedPrompt, useOpenAI);
+      }
     }
   });
 }
@@ -611,6 +646,12 @@ function updateCreditsDisplay(remainingCredits) {
     
 function getModelConfig(selectedModel) {
     const models = {
+        "google-imagen-3": {
+            model_id: "google-imagen-3",
+            lora_model: null,
+            lora_strength: null,
+            steps: 30  // Valor por defecto para imagen-3
+        },
         "flux": { 
             model_id: "flux", 
             lora_model: null, 

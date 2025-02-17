@@ -3419,3 +3419,59 @@ def extract_nationality(prompt):
     except Exception as e:
         print(f"Error extracting nationality: {str(e)}")
         return 'unknown'
+
+@app.route('/generate-imagen3', methods=['POST'])
+def generate_imagen3():
+    try:
+        data = request.get_json()
+        prompt = data.get('prompt')
+        film_type = data.get('film_type')
+        params = data.get('params', {})
+ 
+        # Si es google/imagen-3, usar la configuración específica
+        if film_type == 'google/imagen-3':
+            response = requests.post(
+                "https://api.replicate.com/v1/predictions",
+                json={
+                    "version": "google/imagen-3",
+                    "input": {
+                        "prompt": prompt,
+                        **params
+                    }
+                },
+                headers={
+                    "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+                    "Content-Type": "application/json"
+                }
+            )
+ 
+            if response.status_code != 201:
+                raise Exception(f"Error creating prediction: {response.status_code}")
+ 
+            prediction = response.json()
+            prediction_id = prediction['id']
+ 
+            # Polling para la imagen
+            while True:
+                response = requests.get(
+                    f"https://api.replicate.com/v1/predictions/{prediction_id}",
+                    headers={
+                        "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+                        "Content-Type": "application/json"
+                    }
+                )
+                prediction = response.json()
+ 
+                if prediction['status'] == 'succeeded':
+                    return jsonify({
+                        "status": "succeeded",
+                        "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output']
+                    }), 200
+                elif prediction['status'] == 'failed':
+                    raise Exception("Image generation failed")
+ 
+                time.sleep(1)
+ 
+    except Exception as e:
+        print(f"Error in generate-image: {str(e)}")
+        return jsonify({"error": str(e)}), 500
