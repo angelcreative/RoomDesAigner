@@ -3190,8 +3190,10 @@ def generate_persona():
                 'version': "65efe09feb6bf759132ac61818c85c56b12c7dfacebdc0cdd9e933b7e3abcc48", 
                 'keyword': "Imagen-3",
                 'params': {
-                    "safety_filter_level": "block_only_high"
-                   
+                    "prompt": "",  # Se llenará con el prompt generado
+                    'aspect_ratio': "1:1",
+                    "safety_filter_level": "block_only_high",
+                    "num_outputs": 1
                 }
             },
             'fuji': {
@@ -3347,9 +3349,8 @@ def generate_persona():
             json={
                 "version": film_config['version'],
                 "input": {
-                    "prompt": f"{prompt}, {enhanced_prompt}, {film_config['keyword']}",
-                    "num_outputs": 1,
-                    **film_config['params']  # Desempaquetar todos los parámetros configurados
+                    "prompt": enhanced_prompt if film_type == 'google/imagen-3' else f"{prompt}, {enhanced_prompt}, {film_config['keyword']}",
+                    **film_config['params']
                 }
             },
             headers={
