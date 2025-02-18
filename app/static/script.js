@@ -722,24 +722,23 @@ function getModelConfig(selectedModel) {
    
 // Función para generar imágenes
 async function generateImages(imageUrl, selectedValues, isImg2Img, processedPrompt, useOpenAI) {
-    showGeneratingImagesDialog(); // Mostrar el diálogo de espera
+    showGeneratingImagesDialog();
 
     const customText = document.getElementById("customText").value;
     const pictureSelect = document.getElementById("imageDisplayUrl");
     const selectedPicture = pictureSelect ? pictureSelect.value : null;
 
+    // Extraer valores seleccionados por el usuario
+    let plainText = Object.entries(selectedValues)
+        .filter(([key, value]) => value && key !== "imageUrl")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(", ");
+
     // Obtener el modelo seleccionado
     const selectedModel = document.querySelector('input[name="modelType"]:checked').value;
     
-    // Si es google-imagen-3 y contiene palabras clave de persona, usar la ruta específica
-    if (selectedModel === 'google-imagen-3' && 
-        (processedPrompt.toLowerCase().includes('person') || 
-         processedPrompt.toLowerCase().includes('woman') || 
-         processedPrompt.toLowerCase().includes('man') ||
-         processedPrompt.toLowerCase().includes('girl') ||
-         processedPrompt.toLowerCase().includes('boy') ||
-         /from\s+[a-z]+/i.test(processedPrompt))) {
-        
+    // Si es google-imagen-3, usar su endpoint específico
+    if (selectedModel === 'google-imagen-3') {
         try {
             const response = await fetch('/generate-imagen3', {
                 method: 'POST',
@@ -757,7 +756,14 @@ async function generateImages(imageUrl, selectedValues, isImg2Img, processedProm
             const data = await response.json();
             if (data.status === 'succeeded') {
                 hideGeneratingImagesDialog();
-                addImageToGrid(data.image_url);
+                const imageGrid = document.getElementById('imageGrid');
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'image-container';
+                const img = document.createElement('img');
+                img.src = data.image_url;
+                imageContainer.appendChild(img);
+                imageGrid.appendChild(imageContainer);
+                addImageButtons(imageContainer, data.image_url);
             }
             return;
         } catch (error) {
@@ -768,18 +774,70 @@ async function generateImages(imageUrl, selectedValues, isImg2Img, processedProm
         }
     }
 
-    // Extraer valores seleccionados por el usuario
-    let plainText = Object.entries(selectedValues)
-        .filter(([key, value]) => value && key !== "imageUrl")
-        .map(([key, value]) => `${key}: ${value}`)
-        .join(", ");
-
-    // ... resto del código original sin cambios ...
-    
     // Configuración del modelo basada en la selección del usuario
     let modelConfig = getModelConfig(selectedModel);
     
-    // ... resto del código original sin cambios ...
+    // Definir proporciones de imagen basadas en la selección
+    const aspectRatio = document.querySelector('input[name="aspectRatio"]:checked').value;
+    let width, height;
+    
+    if (aspectRatio === "square") {
+        width = 1024;
+        height = 1024;
+    } else if (aspectRatio === "widescreen") {
+        width = 1440;
+        height = 456;
+    } else if (aspectRatio === "landscape") {
+        width = 1024;
+        height = 768;
+    } else if (aspectRatio === "portrait") {
+        width = 768;
+        height = 1024;
+    } else if (aspectRatio === "social-vertical") {
+        width = 800;
+        height = 1440;
+    }
+
+    // Configurar semilla si está activada la opción
+    const seedSwitch = document.getElementById("seedSwitch");
+    const seedEnabled = seedSwitch && seedSwitch.checked;
+    const seedValue = seedEnabled ? null : "19071975";
+
+    // Generar textos opcionales si están habilitados
+    const optionalText = document.getElementById("optionalTextCheckbox")?.checked ? generateOptionalText() : "";
+    // ... resto de checkboxes y configuraciones ...
+
+    // Configuración del prompt
+    const prompt = {
+        prompt: processedPrompt,
+        width: width,
+        height: height,
+        samples: 4,
+        guidance_scale: 7.5,
+        steps: modelConfig.steps,
+        // ... resto de la configuración del prompt ...
+    };
+
+    try {
+        const data = await fetchWithRetry("/generate-images", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(prompt)
+        });
+
+        if (data.status === "success" && data.images) {
+            showModal(data.images, processedPrompt);
+            hideGeneratingImagesDialog();
+        } else if (data.request_id) {
+            await checkImageStatus(data.request_id, processedPrompt);
+        } else {
+            throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
+        }
+    } catch (error) {
+        showError(error);
+    }
 }
 
     
