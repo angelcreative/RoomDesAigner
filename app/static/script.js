@@ -805,18 +805,48 @@ async function generateImages(imageUrl, selectedValues, isImg2Img, processedProm
 
     // Generar textos opcionales si están habilitados
     const optionalText = document.getElementById("optionalTextCheckbox")?.checked ? generateOptionalText() : "";
-    // ... resto de checkboxes y configuraciones ...
+    const fractalText = document.getElementById("fractalTextCheckbox")?.checked ? generateFractalText() : "";
+    const blurredBackground = document.getElementById("blurredTextCheckbox")?.checked ? generateBlurredBackground() : "";
+    const bokehBackground = document.getElementById("bokehCheckbox")?.checked ? generateBokehBackground() : "";
+    const sheet = document.getElementById("sheetCheckbox")?.checked ? generateSheet() : "";
+    const miniature = document.getElementById("miniatureCheckbox")?.checked ? generateMiniature() : "";
+    const tilt = document.getElementById("tiltCheckbox")?.checked ? generateTilt() : "";
+    const uxui = document.getElementById("uxuiCheckbox")?.checked ? generateUxui() : "";
+    const uxuiWeb = document.getElementById("uxuiWebCheckbox")?.checked ? generateUxuiWeb() : "";
+    const viewRendering = document.getElementById("viewRenderingCheckbox")?.checked ? generateViewRendering() : "";
+    const productView = document.getElementById("productViewCheckbox")?.checked ? generateProductView() : "";
+    const evolutionCycle = document.getElementById("evolutionCycleCheckbox")?.checked ? generateEvo() : "";
+    const r3d = document.getElementById("r3dCheckbox")?.checked ? generateR3d() : "";
+
+    // Construir el texto del prompt final
+    const promptText = `${plainText} ${customText} ${fractalText} ${blurredBackground} ${bokehBackground} ${miniature} ${sheet} ${tilt} ${evolutionCycle} ${uxui} ${r3d} ${uxuiWeb} ${viewRendering} ${productView} ${optionalText}`;
 
     // Configuración del prompt
     const prompt = {
-        prompt: processedPrompt,
+        prompt: promptText,
         width: width,
         height: height,
         samples: 4,
         guidance_scale: 7.5,
         steps: modelConfig.steps,
-        // ... resto de la configuración del prompt ...
+        model_id: modelConfig.model_id,  // Añadir el model_id al payload
+        use_karras_sigmas: "yes",
+        tomesd: "yes",
+        seed: seedValue,
+        lora_model: modelConfig.lora_model,
+        lora_strength: modelConfig.lora_strength,
+        scheduler: "EulerDiscreteScheduler",
+        safety_checker: "no",
+        enhance_prompt: "no",
+        use_openai: useOpenAI
     };
+
+    // Si es img2img, añadir la configuración correspondiente
+    if (isImg2Img && imageUrl) {
+        const strengthSlider = document.getElementById("strengthSlider");
+        prompt.init_image = imageUrl;
+        prompt.strength = parseFloat(strengthSlider.value);
+    }
 
     try {
         const data = await fetchWithRetry("/generate-images", {
@@ -828,10 +858,10 @@ async function generateImages(imageUrl, selectedValues, isImg2Img, processedProm
         });
 
         if (data.status === "success" && data.images) {
-            showModal(data.images, processedPrompt);
+            showModal(data.images, promptText);
             hideGeneratingImagesDialog();
         } else if (data.request_id) {
-            await checkImageStatus(data.request_id, processedPrompt);
+            await checkImageStatus(data.request_id, promptText);
         } else {
             throw new Error(data.error || 'Error inesperado en la generación de imágenes.');
         }

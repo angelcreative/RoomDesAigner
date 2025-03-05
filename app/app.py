@@ -2309,6 +2309,10 @@ def generate_images():
             )
 
             data['prompt'] = transformed_prompt
+            # Asegurarse de que model_id esté presente en los datos
+            if not data.get('model_id'):
+                return jsonify({"error": "Missing model_id"}), 400
+                
             data['negative_prompt'] = "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting"
             if 'key' in data:
                 del data['key']
@@ -2320,6 +2324,9 @@ def generate_images():
                 else 'https://modelslab.com/api/v6/images/text2img'
             )
 
+            # Imprimir los datos que se envían para depuración
+            print(f"Sending data to ModelLabs: {data}")
+            
             response = requests.post(url, json=data, timeout=180)
 
             if response.status_code == 200:
