@@ -2077,9 +2077,12 @@ def transform_prompt(prompt, use_openai=True, is_flux_model=False):
     Ahora acepta un parámetro para indicar si es un modelo flux.
     """
     try:
+        # Primero, aplicar OpenAI para mejorar el prompt si está activado
+        enhanced_prompt = generate_openai_prompt(prompt) if use_openai else prompt
+        
         # Si es un modelo flux, no aplicar transformaciones étnicas
         if is_flux_model:
-            return prompt
+            return enhanced_prompt
             
         # Detectar si el prompt menciona una persona
         contains_person = any(word in prompt.lower() for word in 
@@ -2087,13 +2090,13 @@ def transform_prompt(prompt, use_openai=True, is_flux_model=False):
         
         # Si no menciona una persona, devolver el prompt original
         if not contains_person:
-            return prompt
+            return enhanced_prompt
             
         # Resto del código de transformación étnica sin cambios...
         # ...
     except Exception as e:
         print(f"Error transforming prompt: {str(e)}")
-        return prompt  # En caso de error, devolver el prompt original
+        return enhanced_prompt  # En caso de error, devolver el prompt mejorado
 
 def get_random_size_features():
     """Obtiene características de tamaño aleatorias"""

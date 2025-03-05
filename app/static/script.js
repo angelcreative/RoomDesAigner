@@ -140,6 +140,7 @@ function handleSubmit(event) {
           body: JSON.stringify({
             prompt: processedPrompt,
             film_type: 'google/imagen-3',
+            use_openai: useOpenAI,  // Añadir el estado del switch OpenAI
             params: {
               "aspect_ratio": "1:1",
               "safety_filter_level": "block_only_high"
@@ -753,6 +754,7 @@ async function generateImages(imageUrl, selectedValues, isImg2Img, processedProm
                 body: JSON.stringify({
                     prompt: processedPrompt,
                     film_type: 'google/imagen-3',
+                    use_openai: useOpenAI,  // Añadir el estado del switch OpenAI
                     params: {
                         "aspect_ratio": "1:1",
                         "safety_filter_level": "block_only_high"
