@@ -2164,35 +2164,37 @@ def get_ethnic_characteristics(country, ethnic_data, override_features=None):
         return None
     
 def generate_openai_prompt(prompt_text):
-    """Mejora el prompt usando OpenAI manteniendo las características étnicas"""
+    """
+    Utiliza OpenAI para mejorar el prompt.
+    """
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-             messages=[
-                {"role": "system", "content": """You are a helpful assistant that enhances image generation prompts. 
-                When the prompt includes a nationality, you MUST:
-                1. Detect the nationality and include appropriate ethnic features
-                2. Use skin tones, hair colors, eye colors typical of that ethnicity
-                3. Include appropriate facial features
-                4. Keep descriptions respectful and accurate
-                
-                For all prompts:
-                1. Enhance visual details
-                2. Keep language clear and direct
-                3. Focus on visual elements
-                4. Maintain the original intent"""},
-                {"role": "user", "content": f"Enhance this image generation prompt: {prompt_text}"}
+        # Verificar que la API key de OpenAI esté configurada
+        if not os.environ.get("OPENAI_API_KEY"):
+            print("⚠️ OPENAI_API_KEY no está configurada. Usando prompt original.")
+            return prompt_text
+            
+        # Configurar el cliente de OpenAI
+        client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        
+        # Crear la solicitud a OpenAI
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant that improves image generation prompts to be more detailed and descriptive."},
+                {"role": "user", "content": f"Improve this image generation prompt, adding more details and descriptive language: '{prompt_text}'"}
             ],
-            temperature=0.7,
-            max_tokens=150
+            max_tokens=150,
+            temperature=0.7
         )
         
-        if response and response.choices and len(response.choices) > 0:
-            return response.choices[0].message.content
-        return None
+        # Extraer y devolver el prompt mejorado
+        improved_prompt = response.choices[0].message.content.strip()
+        print(f"✅ Prompt mejorado con OpenAI: {improved_prompt}")
+        return improved_prompt
+        
     except Exception as e:
-        print(f"❌ Error with OpenAI: {str(e)}")
-        return None
+        print(f"❌ Error al mejorar el prompt con OpenAI: {str(e)}")
+        return prompt_text  # En caso de error, devolver el prompt original
 
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
@@ -3387,8 +3389,13 @@ def generate_imagen3():
     try:
         data = request.get_json()
         prompt = data.get('prompt')
+        use_openai = data.get('use_openai', False)
         film_type = data.get('film_type')
         params = data.get('params', {})
+ 
+        # Mejorar el prompt con OpenAI si está activado
+        if use_openai:
+            prompt = generate_openai_prompt(prompt)
  
         # Si es google/imagen-3, usar la configuración específica
         if film_type == 'google/imagen-3':
