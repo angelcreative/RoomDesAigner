@@ -129,6 +129,9 @@ function handleSubmit(event) {
            // Añadir más palabras clave de persona según necesites
            /from\s+[a-z]+/i.test(processedPrompt))) {  // Detecta patrones como "from spain", "from china", etc.
         
+        // Mostrar el modal de carga
+        showGeneratingImagesDialog();
+        
         fetch('/generate-imagen3', {
           method: 'POST',
           headers: {
@@ -146,6 +149,8 @@ function handleSubmit(event) {
         .then(response => response.json())
         .then(data => {
           if (data.status === 'succeeded') {
+            // Ocultar el modal de carga cuando la imagen está lista
+            hideGeneratingImagesDialog();
             const imageGrid = document.getElementById('imageGrid');
             const imageContainer = document.createElement('div');
             imageContainer.className = 'image-container';
@@ -153,11 +158,13 @@ function handleSubmit(event) {
             img.src = data.image_url;
             imageContainer.appendChild(img);
             imageGrid.appendChild(imageContainer);
+            addImageButtons(imageContainer, data.image_url);
           }
         })
         .catch(error => {
           console.error('Error:', error);
           handleError(error.message);
+          hideGeneratingImagesDialog();
         });
       } else {
         // Usar la lógica original para otros modelos
