@@ -2077,11 +2077,20 @@ def transform_prompt(prompt, use_openai=True, is_flux_model=False):
     Ahora acepta un parámetro para indicar si es un modelo flux.
     """
     try:
+        print(f"🔄 transform_prompt: prompt={prompt}, use_openai={use_openai}, is_flux_model={is_flux_model}")
+        
         # Primero, aplicar OpenAI para mejorar el prompt si está activado
-        enhanced_prompt = generate_openai_prompt(prompt) if use_openai else prompt
+        if use_openai:
+            print(f"🔄 Llamando a generate_openai_prompt con: {prompt}")
+            enhanced_prompt = generate_openai_prompt(prompt)
+            print(f"🔄 Prompt mejorado: {enhanced_prompt}")
+        else:
+            enhanced_prompt = prompt
+            print(f"🔄 OpenAI no activado, usando prompt original: {prompt}")
         
         # Si es un modelo flux, no aplicar transformaciones étnicas
         if is_flux_model:
+            print(f"🔄 Es modelo flux, devolviendo prompt mejorado sin características étnicas")
             return enhanced_prompt
             
         # Detectar si el prompt menciona una persona
@@ -2177,18 +2186,44 @@ def generate_openai_prompt(prompt_text):
             return prompt_text
             
         # Configurar el cliente de OpenAI
-        client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        try:
+            client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        except Exception as e:
+            print(f"❌ Error al configurar el cliente de OpenAI: {str(e)}")
+            # Intentar con la configuración antigua
+            openai.api_key = os.environ.get("OPENAI_API_KEY")
+            return prompt_text
         
         # Crear la solicitud a OpenAI
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that improves image generation prompts to be more detailed and descriptive."},
-                {"role": "user", "content": f"Improve this image generation prompt, adding more details and descriptive language: '{prompt_text}'"}
-            ],
-            max_tokens=150,
-            temperature=0.7
-        )
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that improves image generation prompts to be more detailed and descriptive."},
+                    {"role": "user", "content": f"Improve this image generation prompt, adding more details and descriptive language: '{prompt_text}'"}
+                ],
+                max_tokens=150,
+                temperature=0.7
+            )
+        except Exception as e:
+            print(f"❌ Error al llamar a la API de OpenAI: {str(e)}")
+            # Intentar con la API antigua
+            try:
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant that improves image generation prompts to be more detailed and descriptive."},
+                        {"role": "user", "content": f"Improve this image generation prompt, adding more details and descriptive language: '{prompt_text}'"}
+                    ],
+                    max_tokens=150,
+                    temperature=0.7
+                )
+                improved_prompt = response.choices[0].message.content.strip()
+                print(f"✅ Prompt mejorado con OpenAI (API antigua): {improved_prompt}")
+                return improved_prompt
+            except Exception as e2:
+                print(f"❌ Error al llamar a la API antigua de OpenAI: {str(e2)}")
+                return prompt_text
         
         # Extraer y devolver el prompt mejorado
         improved_prompt = response.choices[0].message.content.strip()
@@ -2299,7 +2334,7 @@ def generate_images():
             data = request.get_json()
 
             prompt_text = data.get('prompt')
-            use_openai = data.get('use_openai', True)
+            use_openai = data.get('use_openai', False)
             model_id = data.get('model_id', '')
             
             # Determinar si es un modelo flux/ModelLabs
