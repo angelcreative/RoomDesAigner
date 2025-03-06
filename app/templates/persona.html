@@ -2164,6 +2164,88 @@ const nationality_mapping = {
             toast.style.display = 'none';
         }, 300);
     }
+
+    // Añadir evento a los botones de Clarity Upscale
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar los botones existentes
+        initClarityButtons();
+        
+        // Observar cambios en el DOM para inicializar nuevos botones
+        const observer = new MutationObserver(function() {
+            initClarityButtons();
+        });
+        
+        // Observar el contenedor de imágenes
+        const imageGrid = document.getElementById('imageGrid');
+        if (imageGrid) {
+            observer.observe(imageGrid, { childList: true, subtree: true });
+        }
+    });
+    
+    // Función para inicializar los botones de Clarity
+    function initClarityButtons() {
+        document.querySelectorAll('.clarity-btn').forEach(button => {
+            // Evitar añadir múltiples event listeners al mismo botón
+            if (!button.hasAttribute('data-clarity-initialized')) {
+                button.setAttribute('data-clarity-initialized', 'true');
+                button.addEventListener('click', handleClarityUpscale);
+            }
+        });
+    }
+    
+    // Función para manejar el clic en el botón de Clarity Upscale
+    function handleClarityUpscale(event) {
+        const button = event.currentTarget;
+        const imageContainer = button.closest('.image-container');
+        const img = imageContainer.querySelector('img');
+        const imageUrl = img.src;
+        
+        console.log('Clarity upscale clicked for image:', imageUrl);
+        
+        // Mostrar el toast con spinner
+        showClarityToast();
+        
+        // Mostrar estado de procesamiento en el botón
+        button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = '⏳';
+        
+        // Llamar a la API de Clarity Upscale
+        fetch('/clarity-upscale', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image_url: imageUrl })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success' && data.upscaled_url) {
+                // Abrir la imagen en una nueva pestaña
+                window.open(data.upscaled_url, '_blank');
+            } else {
+                throw new Error(data.error || 'Clarity upscale failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error during Clarity upscale: ' + error.message);
+        })
+        .finally(() => {
+            // Ocultar el toast
+            hideClarityToast();
+            
+            // Restaurar el botón
+            button.disabled = false;
+            button.textContent = originalText;
+        });
+    }
     </script>
+
+    <!-- Toast para mostrar el estado del upscale -->
+    <div id="clarityToast" class="toast" style="display: none;">
+        <div class="toast-content">
+            <div class="spinner"></div>
+            <span>Escalando imagen...</span>
+        </div>
+    </div>
 </body>
 </html>
