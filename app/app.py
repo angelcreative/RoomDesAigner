@@ -3161,7 +3161,7 @@ def generate_persona():
     try:
         data = request.get_json()
         prompt = data.get('prompt')
-        use_openai = data.get('use_openai', False)  # Obtener el estado del switch
+        use_openai = data.get('use_openai', False)
         film_type = data.get('film_type')
         
         # Mejorar el prompt con OpenAI si está activado
@@ -3176,11 +3176,8 @@ def generate_persona():
         # Verificar si es un modelo flux
         is_flux_model = film_type.startswith('flux')
         
-        # Transformar el prompt con las características étnicas si es necesario
-        final_prompt = transform_prompt(enhanced_prompt, use_openai=False, is_flux_model=is_flux_model)
-
-        if not final_prompt:
-            raise Exception("Error transforming prompt")
+        # No necesitamos transformar el prompt aquí, ya que vamos a añadir las características étnicas después
+        final_prompt = enhanced_prompt
 
         # Cargar datos étnicos
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
@@ -3202,7 +3199,7 @@ def generate_persona():
         size_characteristics = get_size_characteristics(nationality=nationality, gender='unknown')
         
         # Construir el prompt mejorado con todas las características
-        enhanced_prompt = f"{final_prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
+        final_prompt = f"{final_prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
             f"{ethnic_features.get('hair_colors', ['unknown'])[0]} hair, " + \
             f"{ethnic_features.get('eye_colors', ['unknown'])[0]} eyes, " + \
             f"with facial features including {', '.join(ethnic_features.get('facial_features', ['unknown']))}, " + \
