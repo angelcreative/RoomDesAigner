@@ -2062,112 +2062,97 @@ const nationality_mapping = {
         document.getElementById('personaPrompt').value = '';
     });
 
-    // Función para añadir botones a una imagen
-    function addImageButtons(imageContainer, imageUrl) {
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'image-buttons';
-        
-        // Botón de upscale existente (si lo hay)
-        const upscaleButton = document.createElement('button');
-        upscaleButton.className = 'gradient-animation';
-        upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
-        upscaleButton.title = 'Upscale Image';
-        
-        upscaleButton.onclick = async function() {
-            try {
-                // Mostrar estado de procesamiento
-                upscaleButton.disabled = true;
-                upscaleButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
-                
-                const response = await fetch('/upscale', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image_url: imageUrl })
-                });
-                
-                const data = await response.json();
-                
-                if (data.status === 'success' && data.upscaled_url) {
-                    // Abrir la imagen en una nueva pestaña
-                    window.open(data.upscaled_url, '_blank');
-                } else {
-                    throw new Error(data.error || 'Upscale failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error during upscale: ' + error.message);
-            } finally {
-                upscaleButton.disabled = false;
-                upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
-            }
-        };
-        
-        // Nuevo botón de Clarity Upscale
-        const clarityButton = document.createElement('button');
-        clarityButton.className = 'gradient-animation';
-        clarityButton.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span>';
-        clarityButton.title = 'Clarity Upscale';
-        
-        clarityButton.onclick = async function() {
-            try {
-                // Mostrar el toast con spinner
-                showClarityToast();
-                
-                // Mostrar estado de procesamiento en el botón
-                clarityButton.disabled = true;
-                clarityButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
-                
-                const response = await fetch('/clarity-upscale', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ image_url: imageUrl })
-                });
-                
-                const data = await response.json();
-                
-                if (data.status === 'success' && data.upscaled_url) {
-                    // Abrir la imagen en una nueva pestaña
-                    window.open(data.upscaled_url, '_blank');
-                } else {
-                    throw new Error(data.error || 'Clarity upscale failed');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error during Clarity upscale: ' + error.message);
-            } finally {
-                // Ocultar el toast
-                hideClarityToast();
-                
-                // Restaurar el botón
-                clarityButton.disabled = false;
-                clarityButton.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span>';
-            }
-        };
-        
-        // Añadir botones al contenedor
-        buttonContainer.appendChild(upscaleButton);
-        buttonContainer.appendChild(clarityButton);
-        imageContainer.appendChild(buttonContainer);
-    }
-    
-    // Funciones para mostrar y ocultar el toast
-    function showClarityToast() {
-        const toast = document.getElementById('clarityToast');
-        toast.style.display = 'block';
-        toast.style.opacity = '1';
-    }
-    
-    function hideClarityToast() {
-        const toast = document.getElementById('clarityToast');
-        toast.style.opacity = '0';
-        setTimeout(() => {
-            toast.style.display = 'none';
-        }, 300);
-    }
-
-    // Añadir evento a los botones de Clarity Upscale
+    // Añadir manejadores de eventos directamente a los botones
     document.addEventListener('DOMContentLoaded', function() {
-        // Inicializar los botones existentes
+        console.log('DOM cargado, inicializando botones de Clarity');
+        
+        // Función para inicializar los botones de Clarity
+        function initClarityButtons() {
+            console.log('Buscando botones de Clarity...');
+            const clarityButtons = document.querySelectorAll('.clarity-btn');
+            console.log('Botones encontrados:', clarityButtons.length);
+            
+            clarityButtons.forEach(function(button) {
+                // Evitar añadir múltiples event listeners
+                if (!button.hasAttribute('data-clarity-initialized')) {
+                    console.log('Inicializando botón de Clarity');
+                    button.setAttribute('data-clarity-initialized', 'true');
+                    
+                    button.addEventListener('click', function() {
+                        console.log('Botón de Clarity clickeado');
+                        
+                        // Encontrar la imagen asociada al botón
+                        const imageContainer = this.closest('.preview-box');
+                        if (!imageContainer) {
+                            console.error('No se encontró el contenedor de imagen (.preview-box)');
+                            return;
+                        }
+                        
+                        const img = imageContainer.querySelector('img');
+                        if (!img) {
+                            console.error('No se encontró la imagen dentro del contenedor');
+                            return;
+                        }
+                        
+                        const imageUrl = img.src;
+                        console.log('URL de la imagen a escalar:', imageUrl);
+                        
+                        // Mostrar toast
+                        const toast = document.getElementById('clarityToast');
+                        if (toast) {
+                            toast.style.display = 'block';
+                            toast.style.opacity = '1';
+                        } else {
+                            console.error('No se encontró el elemento toast');
+                        }
+                        
+                        // Cambiar estado del botón
+                        this.disabled = true;
+                        const originalText = this.textContent;
+                        this.textContent = '⏳';
+                        
+                        // Llamar a la API de Clarity Upscale
+                        fetch('/clarity-upscale', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ image_url: imageUrl })
+                        })
+                        .then(response => {
+                            console.log('Respuesta recibida de /clarity-upscale');
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Datos recibidos de /clarity-upscale:', data);
+                            if (data.status === 'success' && data.upscaled_url) {
+                                console.log('Abriendo imagen escalada:', data.upscaled_url);
+                                window.open(data.upscaled_url, '_blank');
+                            } else {
+                                throw new Error(data.error || 'Clarity upscale failed');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error en Clarity upscale:', error);
+                            alert('Error during Clarity upscale: ' + error.message);
+                        })
+                        .finally(() => {
+                            // Ocultar toast
+                            if (toast) {
+                                toast.style.opacity = '0';
+                                setTimeout(() => {
+                                    toast.style.display = 'none';
+                                }, 300);
+                            }
+                            
+                            // Restaurar botón
+                            this.disabled = false;
+                            this.textContent = originalText;
+                        });
+                    });
+                }
+            });
+        }
+        
+        // Inicializar botones existentes
         initClarityButtons();
         
         // Observar cambios en el DOM para inicializar nuevos botones
@@ -2179,65 +2164,12 @@ const nationality_mapping = {
         const imageGrid = document.getElementById('imageGrid');
         if (imageGrid) {
             observer.observe(imageGrid, { childList: true, subtree: true });
+        } else {
+            console.error('No se encontró el elemento #imageGrid');
+            // Intentar observar todo el body como fallback
+            observer.observe(document.body, { childList: true, subtree: true });
         }
     });
-    
-    // Función para inicializar los botones de Clarity
-    function initClarityButtons() {
-        document.querySelectorAll('.clarity-btn').forEach(button => {
-            // Evitar añadir múltiples event listeners al mismo botón
-            if (!button.hasAttribute('data-clarity-initialized')) {
-                button.setAttribute('data-clarity-initialized', 'true');
-                button.addEventListener('click', handleClarityUpscale);
-            }
-        });
-    }
-    
-    // Función para manejar el clic en el botón de Clarity Upscale
-    function handleClarityUpscale(event) {
-        const button = event.currentTarget;
-        const imageContainer = button.closest('.image-container');
-        const img = imageContainer.querySelector('img');
-        const imageUrl = img.src;
-        
-        console.log('Clarity upscale clicked for image:', imageUrl);
-        
-        // Mostrar el toast con spinner
-        showClarityToast();
-        
-        // Mostrar estado de procesamiento en el botón
-        button.disabled = true;
-        const originalText = button.textContent;
-        button.textContent = '⏳';
-        
-        // Llamar a la API de Clarity Upscale
-        fetch('/clarity-upscale', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ image_url: imageUrl })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success' && data.upscaled_url) {
-                // Abrir la imagen en una nueva pestaña
-                window.open(data.upscaled_url, '_blank');
-            } else {
-                throw new Error(data.error || 'Clarity upscale failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error during Clarity upscale: ' + error.message);
-        })
-        .finally(() => {
-            // Ocultar el toast
-            hideClarityToast();
-            
-            // Restaurar el botón
-            button.disabled = false;
-            button.textContent = originalText;
-        });
-    }
     </script>
 
     <!-- Toast para mostrar el estado del upscale -->
