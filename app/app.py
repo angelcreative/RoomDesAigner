@@ -2191,7 +2191,7 @@ def get_ethnic_characteristics(country, ethnic_data, override_features=None):
     
 def generate_openai_prompt(prompt_text):
     """
-    Utiliza OpenAI para mejorar el prompt.
+    Utiliza OpenAI para mejorar el prompt con lenguaje más descriptivo y semántico.
     """
     try:
         # Asegurarse de que prompt_text no sea None
@@ -2199,17 +2199,18 @@ def generate_openai_prompt(prompt_text):
             print("⚠️ prompt_text es None o vacío")
             return ""
             
-        # Usar una API key hardcodeada para pruebas
-        api_key = "sk-..." # Reemplaza con tu API key real
-        os.environ["OPENAI_API_KEY"] = api_key
-        print(f"🔑 Usando API key: {api_key[:5]}...")
+        # Configurar la API key de OpenAI
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            print("⚠️ OPENAI_API_KEY no está configurada")
+            return prompt_text
             
-        # Configurar la API key de OpenAI (método antiguo que sabemos que funciona)
-        openai.api_key = os.environ["OPENAI_API_KEY"]
+        # Configurar el cliente de OpenAI
+        openai.api_key = api_key
         
         print(f"🔄 Llamando a OpenAI con prompt: {prompt_text}")
         
-        # Usar directamente la API antigua de OpenAI que sabemos que funciona
+        # Llamar a la API de OpenAI
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -2228,26 +2229,7 @@ def generate_openai_prompt(prompt_text):
     except Exception as e:
         print(f"❌ Error al mejorar el prompt con OpenAI: {str(e)}")
         print(f"❌ Detalles del error: {str(e)}")
-        # Intentar un enfoque alternativo en caso de error
-        try:
-            # Simular una mejora básica del prompt
-            print("🔄 Intentando mejora alternativa del prompt")
-            words = prompt_text.split()
-            if len(words) < 5:
-                # Si el prompt es muy corto, añadir algunos adjetivos descriptivos
-                descriptive_terms = [
-                    "detailed", "high quality", "intricate", "photorealistic",
-                    "stunning", "beautiful", "dramatic lighting", "professional photography"
-                ]
-                improved = f"{prompt_text}, {', '.join(random.sample(descriptive_terms, 3))}"
-                print(f"✅ Prompt mejorado alternativamente: {improved}")
-                return improved
-            else:
-                # Si no podemos mejorar el prompt, devolver el original
-                return prompt_text
-        except:
-            # Si todo falla, devolver el prompt original
-            return prompt_text
+        return prompt_text  # En caso de error, devolver el prompt original
 
 @app.route('/gpt-talk', methods=['POST'])
 def gpt_talk():
@@ -2390,7 +2372,7 @@ def generate_images():
 
             # Imprimir los datos que se envían para depuración
             print(f"Sending data to ModelLabs: {data}")
-            
+
             response = requests.post(url, json=data, timeout=180)
 
             if response.status_code == 200:
