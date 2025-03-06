@@ -3161,15 +3161,33 @@ def generate_persona():
     try:
         data = request.get_json()
         prompt = data.get('prompt')
+        use_openai = data.get('use_openai', False)  # Obtener el estado del switch
         film_type = data.get('film_type')
-        use_ai_prompt = data.get('use_ai_prompt', True)
+        
+        # Mejorar el prompt con OpenAI si está activado
+        if use_openai:
+            print(f"🔄 Mejorando prompt con OpenAI: {prompt}")
+            enhanced_prompt = generate_openai_prompt(prompt)
+            print(f"✅ Prompt mejorado: {enhanced_prompt}")
+        else:
+            enhanced_prompt = prompt
+            print(f"ℹ️ OpenAI no activado, usando prompt original: {prompt}")
+
+        # Verificar si es un modelo flux
+        is_flux_model = film_type.startswith('flux')
+        
+        # Transformar el prompt con las características étnicas si es necesario
+        final_prompt = transform_prompt(enhanced_prompt, use_openai=False, is_flux_model=is_flux_model)
+
+        if not final_prompt:
+            raise Exception("Error transforming prompt")
 
         # Cargar datos étnicos
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
 
         # Detectar nacionalidad
-        nationality = extract_nationality(prompt)
+        nationality = extract_nationality(final_prompt)
         
         # Obtener grupo étnico del país
         country_data = ethnic_data.get('countries', {}).get(nationality, {})
@@ -3184,7 +3202,7 @@ def generate_persona():
         size_characteristics = get_size_characteristics(nationality=nationality, gender='unknown')
         
         # Construir el prompt mejorado con todas las características
-        enhanced_prompt = f"{prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
+        enhanced_prompt = f"{final_prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
             f"{ethnic_features.get('hair_colors', ['unknown'])[0]} hair, " + \
             f"{ethnic_features.get('eye_colors', ['unknown'])[0]} eyes, " + \
             f"with facial features including {', '.join(ethnic_features.get('facial_features', ['unknown']))}, " + \

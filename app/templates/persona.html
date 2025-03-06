@@ -617,10 +617,10 @@
 
                         <div class="ai-toggle-container">
                             <div class="toggle-switch">
-                                <input type="checkbox" id="aiPrompt" checked>
-                                <label for="aiPrompt"></label>
+                                <input type="checkbox" id="useOpenAI" checked>
+                                <label for="useOpenAI"></label>
                             </div>
-                            <span>AI-prompt</span>
+                            <span>Use AI Prompt Enhancer</span>
                         </div>
                         
                         <!-- PDF Upload Section -->
@@ -795,7 +795,7 @@
             async function generateImages() {
                 const promptInput = document.getElementById('personaPrompt');
                 const filmType = document.getElementById('film_type').value;
-                const aiPromptEnabled = document.getElementById('aiPrompt').checked;
+                const useOpenAI = document.getElementById('useOpenAI').checked;
                 
                 const finalPrompt = promptInput.value.trim();
                 
@@ -820,7 +820,7 @@
                         body: JSON.stringify({
                             prompt: finalPrompt,
                             film_type: filmType,
-                            use_ai_prompt: aiPromptEnabled
+                            use_openai: useOpenAI  // Añadir el estado del switch al payload
                         })
                     });
                     
