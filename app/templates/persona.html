@@ -339,6 +339,7 @@
     bottom: 10px;
     right: 10px;
     display: flex;
+    flex-direction: column;
     gap: 8px;
     z-index: 10;
     opacity: 0;
@@ -585,76 +586,41 @@
     margin-top: 2px;
 }
 
-/* Añadir el toast para mostrar el estado del upscale */
-<div id="clarityToast" class="toast" style="display: none;">
-    <div class="toast-content">
-        <div class="spinner"></div>
-        <span>Escalando imagen...</span>
-    </div>
-</div>
+/* Estilos para el toast y spinner */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s ease;
+}
 
-/* Añadir estilos para el toast y el spinner */
-<style>
-    .toast {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        transition: opacity 0.3s ease;
-    }
-    
-    .toast-content {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    
-    .spinner {
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top-color: white;
-        animation: spin 1s ease-in-out infinite;
-    }
-    
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-    
-    .image-buttons {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        display: flex;
-        gap: 8px;
-    }
-    
-    .image-buttons button {
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    
-    .image-buttons button:hover {
-        background: rgba(0, 0, 0, 0.8);
-    }
-</style>
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
     </style>
     
     
@@ -760,6 +726,7 @@
                             <button class="control-button flag-btn" data-tooltip=""></button>
                             <button class="control-button zoom-btn" data-tooltip="Zoom">🔍</button>
                             <button class="control-button download-btn" data-tooltip="Download">⬇️</button>
+                            <button class="control-button clarity-btn" data-tooltip="Clarity Upscale">✨</button>
                             <button class="control-button remove-btn" data-tooltip="Remove">🗑️</button>
                         </div>
                     </div>
@@ -847,6 +814,7 @@
         <button class="control-button flag-btn" data-tooltip=""></button>
         <button class="control-button zoom-btn" data-tooltip="Zoom">🔍</button>
         <button class="control-button download-btn" data-tooltip="Download">⬇️</button>
+        <button class="control-button clarity-btn" data-tooltip="Clarity Upscale">✨</button>
         <button class="control-button remove-btn" data-tooltip="Remove">🗑️</button>
     </div>
     <img src="" alt="Generated image">
