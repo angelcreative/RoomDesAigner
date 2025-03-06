@@ -3517,7 +3517,7 @@ def clarity_upscale_image():
 
         # Usar el modelo Clarity Upscaler con replicate.run()
         output = replicate.run(
-            "philz1337x/clarity-upscaler",
+            "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
             input={
                 "image": image_url,
                 "seed": 1337,
