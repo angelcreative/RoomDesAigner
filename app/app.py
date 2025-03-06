@@ -3503,3 +3503,63 @@ def generate_imagen3():
     except Exception as e:
         print(f"Error in generate-image: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+@app.route('/clarity-upscale', methods=['POST'])
+def clarity_upscale_image():
+    try:
+        data = request.json
+        image_url = data.get('image_url')
+        
+        if not image_url:
+            return jsonify({'error': 'No image URL provided'}), 400
+
+        print(f"🔄 Procesando imagen con Clarity Upscaler: {image_url}")
+
+        # Usar el modelo Clarity Upscaler con replicate.run()
+        output = replicate.run(
+            "philz1337x/clarity-upscaler",
+            input={
+                "image": image_url,
+                "seed": 1337,
+                "prompt": "masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>",
+                "dynamic": 6,
+                "handfix": "disabled",
+                "pattern": False,
+                "sharpen": 0,
+                "sd_model": "juggernaut_reborn.safetensors [338b85bc4f]",
+                "scheduler": "DPM++ 3M SDE Karras",
+                "creativity": 0.35,
+                "lora_links": "",
+                "downscaling": False,
+                "resemblance": 0.6,
+                "scale_factor": 2,
+                "tiling_width": 112,
+                "output_format": "png",
+                "tiling_height": 144,
+                "negative_prompt": "(worst quality, low quality, normal quality:2) JuggernautNegative-neg",
+                "num_inference_steps": 18,
+                "downscaling_resolution": 768
+            }
+        )
+
+        print(f"✅ Respuesta de Clarity Upscaler: {output}")
+
+        # La salida es una lista de URLs
+        if isinstance(output, list) and len(output) > 0:
+            output_url = output[0]
+        else:
+            output_url = output
+
+        print(f"✅ URL final de imagen mejorada: {output_url}")
+        
+        return jsonify({
+            'status': 'success',
+            'upscaled_url': output_url
+        })
+
+    except Exception as e:
+        print(f"❌ Error en Clarity Upscale: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500

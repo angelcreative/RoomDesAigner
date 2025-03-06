@@ -584,6 +584,77 @@
     
     margin-top: 2px;
 }
+
+/* Añadir el toast para mostrar el estado del upscale */
+<div id="clarityToast" class="toast" style="display: none;">
+    <div class="toast-content">
+        <div class="spinner"></div>
+        <span>Escalando imagen...</span>
+    </div>
+</div>
+
+/* Añadir estilos para el toast y el spinner */
+<style>
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: opacity 0.3s ease;
+    }
+    
+    .toast-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    .image-buttons {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: flex;
+        gap: 8px;
+    }
+    
+    .image-buttons button {
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .image-buttons button:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+</style>
     </style>
     
     
@@ -2023,6 +2094,108 @@ const nationality_mapping = {
         document.getElementById('personaPrompt').value = '';
     });
 
+    // Función para añadir botones a una imagen
+    function addImageButtons(imageContainer, imageUrl) {
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'image-buttons';
+        
+        // Botón de upscale existente (si lo hay)
+        const upscaleButton = document.createElement('button');
+        upscaleButton.className = 'gradient-animation';
+        upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+        upscaleButton.title = 'Upscale Image';
+        
+        upscaleButton.onclick = async function() {
+            try {
+                // Mostrar estado de procesamiento
+                upscaleButton.disabled = true;
+                upscaleButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
+                
+                const response = await fetch('/upscale', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_url: imageUrl })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.upscaled_url) {
+                    // Abrir la imagen en una nueva pestaña
+                    window.open(data.upscaled_url, '_blank');
+                } else {
+                    throw new Error(data.error || 'Upscale failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error during upscale: ' + error.message);
+            } finally {
+                upscaleButton.disabled = false;
+                upscaleButton.innerHTML = '<span class="material-symbols-outlined">high_quality</span>';
+            }
+        };
+        
+        // Nuevo botón de Clarity Upscale
+        const clarityButton = document.createElement('button');
+        clarityButton.className = 'gradient-animation';
+        clarityButton.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span>';
+        clarityButton.title = 'Clarity Upscale';
+        
+        clarityButton.onclick = async function() {
+            try {
+                // Mostrar el toast con spinner
+                showClarityToast();
+                
+                // Mostrar estado de procesamiento en el botón
+                clarityButton.disabled = true;
+                clarityButton.innerHTML = '<span class="material-symbols-outlined">hourglass_empty</span>';
+                
+                const response = await fetch('/clarity-upscale', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image_url: imageUrl })
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.upscaled_url) {
+                    // Abrir la imagen en una nueva pestaña
+                    window.open(data.upscaled_url, '_blank');
+                } else {
+                    throw new Error(data.error || 'Clarity upscale failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error during Clarity upscale: ' + error.message);
+            } finally {
+                // Ocultar el toast
+                hideClarityToast();
+                
+                // Restaurar el botón
+                clarityButton.disabled = false;
+                clarityButton.innerHTML = '<span class="material-symbols-outlined">auto_awesome</span>';
+            }
+        };
+        
+        // Añadir botones al contenedor
+        buttonContainer.appendChild(upscaleButton);
+        buttonContainer.appendChild(clarityButton);
+        imageContainer.appendChild(buttonContainer);
+    }
+    
+    // Funciones para mostrar y ocultar el toast
+    function showClarityToast() {
+        const toast = document.getElementById('clarityToast');
+        toast.style.display = 'block';
+        toast.style.opacity = '1';
+    }
+    
+    function hideClarityToast() {
+        const toast = document.getElementById('clarityToast');
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 300);
+    }
     </script>
 </body>
 </html>
