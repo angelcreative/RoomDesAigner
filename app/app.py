@@ -3519,7 +3519,7 @@ def clarity_upscale_image():
         response = requests.post(
             "https://api.replicate.com/v1/predictions",
             json={
-                "version": "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
+                "version": "dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
                 "input": {
                     "image": image_url,
                     "seed": 1337,
@@ -3538,6 +3538,7 @@ def clarity_upscale_image():
                     "tiling_width": 112,
                     "output_format": "png",
                     "tiling_height": 144,
+                    "custom_sd_model": "",
                     "negative_prompt": "(worst quality, low quality, normal quality:2) JuggernautNegative-neg",
                     "num_inference_steps": 18,
                     "downscaling_resolution": 768
@@ -3555,6 +3556,7 @@ def clarity_upscale_image():
             
         prediction = response.json()
         prediction_id = prediction['id']
+        print(f"✅ Predicción creada con ID: {prediction_id}")
         
         # Polling para cada imagen
         while True:
@@ -3569,16 +3571,21 @@ def clarity_upscale_image():
             
 
             if prediction['status'] == 'succeeded':
+                output_url = prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output']
+                print(f"✅ URL final de imagen mejorada: {output_url}")
+                
                 return jsonify({
-                "status": "succeeded",
-                "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
-                "final_prompt": final_prompt.replace(film_config.get('keyword', ''), '').strip()  # Eliminar keyword
-            }), 200
+                    'status': 'success',
+                    'upscaled_url': output_url
+                })
             elif prediction['status'] == 'failed':
-                raise Exception("Image generation failed")
+                raise Exception(f"Image upscaling failed: {prediction.get('error', 'Unknown error')}")
                 
             time.sleep(1)
         
     except Exception as e:
-        print(f"Error in clarity-upscale: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        print(f"❌ Error en Clarity Upscale: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
