@@ -3519,9 +3519,28 @@ def clarity_upscale_image():
         response = requests.post(
             "https://api.replicate.com/v1/predictions",
             json={
-                "version": "philz1337x/clarity-upscaler",
+                "version": "philz1337x/clarity-upscaler:dfad41707589d68ecdccd1dfa600d55a208f9310748e44bfe35b4a6291453d5e",
                 "input": {
-                    "image": image_url
+                    "image": image_url,
+                    "seed": 1337,
+                    "prompt": "masterpiece, best quality, highres, <lora:more_details:0.5> <lora:SDXLrender_v2.0:1>",
+                    "dynamic": 6,
+                    "handfix": "disabled",
+                    "pattern": False,
+                    "sharpen": 0,
+                    "sd_model": "juggernaut_reborn.safetensors [338b85bc4f]",
+                    "scheduler": "DPM++ 3M SDE Karras",
+                    "creativity": 0.35,
+                    "lora_links": "",
+                    "downscaling": False,
+                    "resemblance": 0.6,
+                    "scale_factor": 2,
+                    "tiling_width": 112,
+                    "output_format": "png",
+                    "tiling_height": 144,
+                    "negative_prompt": "(worst quality, low quality, normal quality:2) JuggernautNegative-neg",
+                    "num_inference_steps": 18,
+                    "downscaling_resolution": 768
                 }
             },
             headers={
@@ -3531,13 +3550,13 @@ def clarity_upscale_image():
         )
 
         if response.status_code != 201:
-            raise Exception(f"Error creating prediction: {response.status_code} - {response.text}")
-
+            print(f"Error response: {response.text}")
+            raise Exception(f"Error creating prediction: {response.status_code}")
+            
         prediction = response.json()
         prediction_id = prediction['id']
-        print(f"✅ Predicción creada con ID: {prediction_id}")
-
-        # Polling para obtener el resultado
+        
+        # Polling para cada imagen
         while True:
             response = requests.get(
                 f"https://api.replicate.com/v1/predictions/{prediction_id}",
@@ -3547,32 +3566,19 @@ def clarity_upscale_image():
                 }
             )
             prediction = response.json()
+            
 
             if prediction['status'] == 'succeeded':
-                output = prediction['output']
-                print(f"✅ Respuesta de Clarity Upscaler: {output}")
-                
-                # La salida es una lista de URLs
-                if isinstance(output, list) and len(output) > 0:
-                    output_url = output[0]
-                else:
-                    output_url = output
-                break
+                return jsonify({
+                "status": "succeeded",
+                "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
+                "final_prompt": final_prompt.replace(film_config.get('keyword', ''), '').strip()  # Eliminar keyword
+            }), 200
             elif prediction['status'] == 'failed':
-                raise Exception(f"Image upscaling failed: {prediction.get('error', 'Unknown error')}")
-
+                raise Exception("Image generation failed")
+                
             time.sleep(1)
-
-        print(f"✅ URL final de imagen mejorada: {output_url}")
         
-        return jsonify({
-            'status': 'success',
-            'upscaled_url': output_url
-        })
-
     except Exception as e:
-        print(f"❌ Error en Clarity Upscale: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'error': str(e)
-        }), 500
+        print(f"Error in clarity-upscale: {str(e)}")
+        return jsonify({"error": str(e)}), 500
