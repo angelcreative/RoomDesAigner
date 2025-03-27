@@ -3173,238 +3173,104 @@ def generate_persona():
             enhanced_prompt = prompt
             print(f"ℹ️ OpenAI no activado, usando prompt original: {prompt}")
 
-        # Verificar si es un modelo flux
-        is_flux_model = film_type.startswith('flux')
-        
-        # No necesitamos transformar el prompt aquí, ya que vamos a añadir las características étnicas después
-        final_prompt = enhanced_prompt
-
         # Cargar datos étnicos
         with open('static/ethnic.json', 'r', encoding='utf-8') as f:
             ethnic_data = json.load(f)
 
         # Detectar nacionalidad
-        nationality = extract_nationality(final_prompt)
+        nationality = extract_nationality(enhanced_prompt)
         
         # Obtener grupo étnico del país
         country_data = ethnic_data.get('countries', {}).get(nationality, {})
+        print(f"Country data: {country_data}")
         
-        # Obtener distribución étnica y características
+        # Obtener distribución étnica del país
         ethnicities = country_data.get('ethnicities', {})
-        selected_ethnicity = next(iter(ethnicities)) if ethnicities else 'unknown'
-        ethnic_reference = country_data.get('ethnic_references', {}).get(selected_ethnicity, 'unknown')
+        print(f"Ethnicities: {ethnicities}")
         
-        # Obtener características étnicas y físicas
-        ethnic_features = ethnic_data.get('ethnic_types', {}).get(ethnic_reference, {}).get('features', {})
+        # Seleccionar etnicidad basada en probabilidades
+        selected_ethnicity = None
+        ethnic_reference = None
+        if ethnicities:
+            total = sum(ethnicities.values())
+            rand = random.uniform(0, total)
+            cumsum = 0
+            for ethnicity, probability in ethnicities.items():
+                cumsum += probability
+                if rand <= cumsum:
+                    selected_ethnicity = ethnicity
+                    ethnic_reference = country_data.get('ethnic_references', {}).get(ethnicity)
+                    break
+
+        # Obtener características étnicas
+        ethnic_features = None
+        if ethnic_reference:
+            ethnic_features = ethnic_data.get('ethnic_types', {}).get(ethnic_reference, {}).get('features', {})
+            print(f"Ethnic features: {ethnic_features}")
+
+        # Obtener características de tamaño
         size_characteristics = get_size_characteristics(nationality=nationality, gender='unknown')
-        
-        # Construir el prompt mejorado con todas las características
-        final_prompt = f"{final_prompt}, person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
-            f"{ethnic_features.get('hair_colors', ['unknown'])[0]} hair, " + \
-            f"{ethnic_features.get('eye_colors', ['unknown'])[0]} eyes, " + \
-            f"with facial features including {', '.join(ethnic_features.get('facial_features', ['unknown']))}, " + \
-            f"of {ethnic_reference} heritage, " + \
-            f"{size_characteristics['height_desc']} build ({size_characteristics['height']}), {size_characteristics['body_type']}, " + \
-            "natural appearance, candid pose"
+        print(f"Size characteristics: {size_characteristics}")
 
-        # Configuración según el tipo de película
-        film_configs = {
-            'google/imagen-3': {
-                'params': {
-                    "aspect_ratio": "1:1",
-                    "safety_filter_level": "block_only_high",
-                }
-            },
-            'fuji': {
-                'version': "f43477e89617ab7bc66f93731b5027d6e46c116ff7b7dce7f5ffccb39a01b375",
-                'keyword': "TOK",
-                'params': {
-                    "disable_safety_checker": True,
-                    "go_fast": False,
-                    "megapixels": "1",
-                    "lora_scale": 0.99,
-                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
-                    "extra_lora_scale": 0.5,
-                    "guidance_scale": 7.5,
-                    "num_inference_steps": 28,
-                    "prompt_strength": 0.8,
-                    "aspect_ratio": "1:1",
-                    "output_format": "webp",
-                    "output_quality": 80,
-                    "width": 768,
-                    "height": 768
-                }
-            },
-            'koda': {
-                'version': "1ba00ff40b6f4b603d1126bca1c75da7f0f9ff21eb1569e9adb4299c9f3e1166",
-                'keyword': "TOK",
-                'params': {
-                    "disable_safety_checker": True,
-                    "go_fast": False,
-                    "lora_scale": 0.99,
-                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
-                    "extra_lora_scale": 0.5,
-                    "prompt_strength": 0.8,
-                    "aspect_ratio": "1:1",
-                    "output_format": "webp",
-                    "output_quality": 80,
-                    "guidance_scale": 7.5,
-                    "num_inference_steps": 28
-                }
-            },
-            'surreal': {
-                'version': "af9441cdc4a371dece5fbe6144d4587ccb68d7b00c2d573b206254180691f895",
-                'keyword': "surreal style",
-                'params': {
-                    "disable_safety_checker": True,
-                    "go_fast": False,
-                    "lora_scale": 0.99,
-                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
-                    "extra_lora_scale": 0.5,
-                    "prompt_strength": 0.8,
-                    "aspect_ratio": "1:1",
-                    "output_format": "webp",
-                    "output_quality": 80,
-                    "guidance_scale": 7.5,
-                    "num_inference_steps": 28
-                }
-            },
-            'pola': {
-                'version': "67c27855ad0334cbca0f35cd5192777d885d5351e1d3e7149fe208d88db51bad",
-                'keyword': "polaroid style",
-                'params': {
-                    "disable_safety_checker": True,
-                    "go_fast": False,
-                    "lora_scale": 0.99,
-                    "extra_lora": "https://huggingface.co/jo8888/flux-polyhedronall-perfect-skin-perfect-hands-perfect-eyes-mf",
-                    "extra_lora_scale": 0.5,
-                    "prompt_strength": 0.8,
-                    "aspect_ratio": "1:1",
-                    "output_format": "webp",
-                    "output_quality": 80,
-                    "guidance_scale": 7.5,
-                    "num_inference_steps": 28
-                }
-            },
-            'analog': {
-                'version': "e489fed94f07ffa8037d3d31cc40e8539ea37f6a5d5275747eff6be384e511cb",
-                'keyword': "ANLG",
-                'params': {
-                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
-                    "width": 768,
-                    "height": 768,
-                    "num_inference_steps": 28,
-                    "guidance_scale": 7.5,
-                    "model": "dev",
-                    "lora_scale": 1,
-                    "extra_lora_scale": 1
-                }
-            },
-            'disposable': {
-                'version': "4c851c9ca3c1167df599c400a277dc2b20b0ad166afc5c5d691e5bb64c46c254",
-                'keyword': "DISP",
-                'params': {
-                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
-                    "width": 768,
-                    "height": 768,
-                    "num_inference_steps": 28,
-                    "guidance_scale": 7.5,
-                    "model": "dev",
-                    "lora_scale": 1,
-                    "extra_lora_scale": 1
-                }
-            },
-            'flux': {
-                'version': "39b3434f194f87a900d1bc2b6d4b983e90f0dde1d5022c27b52c143d670758fa",
-                'keyword': "FLUX",
-                'params': {
-                    "prompt": "",  # Se llenará con el prompt generado
-                    "negative_prompt": "cleft chin, professional model, perfect features, glamour, magazine style, fashion model, advertisement, perfect symmetry, flawless skin, perfect makeup, perfect teeth, high fashion, beauty standards, instagram filter, photoshoot, studio lighting",
-                    "width": 768,
-                    "height": 768,
-                    "num_inference_steps": 30,
-                    "guidance_scale": 7.5,
-                    "seed": -1,  # -1 para aleatorio
-                    "num_outputs": 1,
-                    "scheduler": "DPM++ 2M Karras"
-                }
-            }
-        }
+        # Construir el prompt final con todas las características
+        ethnic_description = ""
+        if ethnic_features and size_characteristics:
+            ethnic_description = f"{nationality} person with {ethnic_features.get('skin_tones', ['unknown'])[0]} skin tone, " + \
+                f"{ethnic_features.get('hair_colors', ['unknown'])[0]} hair, " + \
+                f"{ethnic_features.get('eye_colors', ['unknown'])[0]} eyes, " + \
+                f"{', '.join(ethnic_features.get('facial_features', ['unknown']))}, " + \
+                f"of {ethnic_reference} heritage, " + \
+                f"{size_characteristics['height_desc']} build ({size_characteristics['height']}), {size_characteristics['body_type']}"
 
-        if film_type not in film_configs:
-            raise Exception("Invalid film type selected")
+        final_prompt = f"{enhanced_prompt}, {ethnic_description}"
 
-        film_config = film_configs[film_type]
-        final_prompt = enhanced_prompt if film_type == 'google/imagen-3' else f"{enhanced_prompt}, {film_config.get('keyword', '')}"
-
-        # Preparar los parámetros según el modelo
-        if film_type in ['analog', 'disposable', 'flux']:  # Añadimos 'flux' aquí
-
-            input_params = film_config['params'].copy()
-            input_params['prompt'] = final_prompt
-        else:
-            input_params = {
-                "prompt": final_prompt,
-                "num_outputs": 1,
-                "guidance_scale": 2,
-                "num_inference_steps": 28
-            }
-
-        # Construir input con todos los parámetros
-        model_input = {
-            "prompt": f"{prompt}, {enhanced_prompt}, {film_config.get('keyword', '')}",
-            "num_outputs": 1,
-            **film_config['params']  # Desempaquetar todos los parámetros configurados
-        }
-        
-        # Construir el request con todos los parámetros
-        response = requests.post(
-            "https://api.replicate.com/v1/predictions",
-            json={
-                "version": "google/imagen-3" if film_type == 'google/imagen-3' else film_config['version'],
-                "input": {
-                    "prompt": final_prompt,
-                    **(film_config['params'] if film_type == 'google/imagen-3' else {
-                        **film_config['params'],
-                        "prompt": final_prompt
-                    })
-                }
-            },
-            headers={
-                "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
-                "Content-Type": "application/json"
-            }
-        )
-
-        if response.status_code != 201:
-            print(f"Error response: {response.text}")
-            raise Exception(f"Error creating prediction: {response.status_code}")
-            
-        prediction = response.json()
-        prediction_id = prediction['id']
-        
-        # Polling para cada imagen
-        while True:
-            response = requests.get(
-                f"https://api.replicate.com/v1/predictions/{prediction_id}",
+        # Resto del código para generar la imagen con Replicate...
+        if film_type == 'google/imagen-3':
+            response = requests.post(
+                "https://api.replicate.com/v1/predictions",
+                json={
+                    "version": "google/imagen-3",
+                    "input": {
+                        "prompt": final_prompt,
+                        "aspect_ratio": "1:1",
+                        "safety_filter_level": "block_only_high"
+                    }
+                },
                 headers={
                     "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
                     "Content-Type": "application/json"
                 }
             )
-            prediction = response.json()
-            
 
-            if prediction['status'] == 'succeeded':
-                return jsonify({
-                "status": "succeeded",
-                "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
-                "final_prompt": final_prompt.replace(film_config.get('keyword', ''), '').strip()  # Eliminar keyword
-            }), 200
-            elif prediction['status'] == 'failed':
-                raise Exception("Image generation failed")
+            if response.status_code != 201:
+                print(f"Error response: {response.text}")
+                raise Exception(f"Error creating prediction: {response.status_code}")
+            
+            prediction = response.json()
+            prediction_id = prediction['id']
+            print(f"✅ Predicción creada con ID: {prediction_id}")
+            
+            # Polling para la imagen
+            while True:
+                response = requests.get(
+                    f"https://api.replicate.com/v1/predictions/{prediction_id}",
+                    headers={
+                        "Authorization": f"Token {os.environ['REPLICATE_API_TOKEN']}",
+                        "Content-Type": "application/json"
+                    }
+                )
+                prediction = response.json()
+
+                if prediction['status'] == 'succeeded':
+                    return jsonify({
+                        "status": "succeeded",
+                        "image_url": prediction['output'][0] if isinstance(prediction['output'], list) else prediction['output'],
+                        "final_prompt": final_prompt
+                    }), 200
+                elif prediction['status'] == 'failed':
+                    raise Exception("Image generation failed")
                 
-            time.sleep(1)
+                time.sleep(1)
         
     except Exception as e:
         print(f"Error in generate-persona: {str(e)}")
